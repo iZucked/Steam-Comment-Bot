@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -237,7 +238,7 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 		final Command mostRecentCommand = commandStack.getMostRecentCommand();
 		final Collection<?> result = mostRecentCommand.getResult();
 		for (final Object o : result) {
-			if (o instanceof ScheduleModel) {
+			if (o instanceof ScheduleModel || o instanceof Schedule) {
 				refreshViewer();
 				return;
 			}
