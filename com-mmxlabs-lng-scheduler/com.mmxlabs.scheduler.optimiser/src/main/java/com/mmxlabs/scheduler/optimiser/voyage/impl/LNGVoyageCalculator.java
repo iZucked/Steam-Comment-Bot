@@ -654,7 +654,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @since 2.0
 	 * 
 	 */
-	
+	@Override
 	public final List<Object> generateFuelCostCalculatedSequence(final Object... baseSequence) {
 		List<Object> result = new ArrayList<Object>(baseSequence.length);
 		for (final Object element : baseSequence) {
