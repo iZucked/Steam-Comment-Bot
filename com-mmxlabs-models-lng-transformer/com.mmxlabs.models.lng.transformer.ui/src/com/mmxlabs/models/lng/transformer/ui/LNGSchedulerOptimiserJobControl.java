@@ -21,6 +21,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -85,7 +86,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		optimiser.init();
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
-		LNGSchedulerJobUtils.saveInitialSolution(injector, scenario, editingDomain, entities, startSolution, 0);
+		LNGSchedulerJobUtils.exportSolution(injector, scenario, editingDomain, entities, startSolution, 0);
 	}
 
 	/*
@@ -122,7 +123,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			// export final state
 
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(editingDomain, jobDescriptor.getLockKey(), 100);
-			LNGSchedulerJobUtils.saveInitialSolution(injector, scenario, editingDomain, entities, optimiser.getBestSolution(true), 100);
+			LNGSchedulerJobUtils.exportSolution(injector, scenario, editingDomain, entities, optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			// scheduleModel.setDirty(false);

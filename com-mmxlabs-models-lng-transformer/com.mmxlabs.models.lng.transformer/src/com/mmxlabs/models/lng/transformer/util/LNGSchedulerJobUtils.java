@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui;
+package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,17 +50,29 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.PostExportProcessorModule;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.OptimisationContext;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 
 /**
  * @author Simon Goodall
  * @noextend This class is not intended to be subclassed by clients.
+ * @since 3.0
  * 
  */
 public class LNGSchedulerJobUtils {
@@ -79,7 +91,7 @@ public class LNGSchedulerJobUtils {
 	 * @param LABEL_PREFIX
 	 * @return
 	 */
-	public static Schedule saveInitialSolution(final Injector injector, final MMXRootObject scenario, final EditingDomain editingDomain, final ModelEntityMap entities, final IAnnotatedSolution solution,
+	public static Schedule exportSolution(final Injector injector, final MMXRootObject scenario, final EditingDomain editingDomain, final ModelEntityMap entities, final IAnnotatedSolution solution,
 			final int solutionCurrentProgress) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
@@ -357,4 +369,43 @@ public class LNGSchedulerJobUtils {
 		return cmd;
 
 	}
+
+	public static IAnnotatedSolution evaluateCurrentState(final LNGTransformer transformer) {
+		final ModelEntityMap entities = transformer.getEntities();
+		final IOptimisationData data = transformer.getOptimisationData();
+		final Injector injector = transformer.getInjector();
+		/**
+		 * Start the full evaluation process.
+		 */
+
+		// Step 1. Get or derive the initial sequences from the input scenario data
+		final IModifiableSequences sequences = new ModifiableSequences(transformer.getOptimisationTransformer().createInitialSequences(data, entities));
+
+		// Run through the sequences manipulator of things such as start/end port replacement
+
+		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+		manipulator.init(data);
+		// this will set the return elements to the right places, and remove the start elements.
+		manipulator.manipulate(sequences);
+
+		// run a scheduler on the sequences - there is no SchedulerFitnessEvaluator to guide it!
+		final ISequenceScheduler scheduler = injector.getInstance(DirectRandomSequenceScheduler.class);
+		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
+
+		// Make sure a schedule was created.
+		if (scheduledSequences == null) {
+			// Error scheduling
+			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
+		}
+
+		// Get a ScheduleCalculator to process the schedule and obtain output data
+		final ScheduleCalculator scheduleCalculator = injector.getInstance(ScheduleCalculator.class);
+
+		// The output data structured, a solution with all the output data as annotations
+		final AnnotatedSolution solution = (AnnotatedSolution) scheduleCalculator.calculateSchedule(sequences, scheduledSequences);
+		// Create a fake context
+		solution.setContext(new OptimisationContext(data, null, null, null, null, null, null, null));
+		return solution;
+	}
+
 }

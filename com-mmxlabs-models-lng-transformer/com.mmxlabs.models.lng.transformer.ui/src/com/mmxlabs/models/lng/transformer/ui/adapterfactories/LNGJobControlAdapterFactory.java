@@ -7,10 +7,10 @@ package com.mmxlabs.models.lng.transformer.ui.adapterfactories;
 import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerEvaluationJobControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerOptimiserJobControl;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 
 /**
  * {@link IAdapterFactory} to convert a {@link LNGSchedulerJobDescriptor} into an {@link IJobControl} - specifically a {@link LNGSchedulerJobUtils}.

@@ -13,14 +13,18 @@ import java.util.concurrent.TimeUnit;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 
-import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -69,19 +73,15 @@ import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
-import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 
@@ -659,6 +659,11 @@ public class ScenarioTools {
 	 */
 	public static Schedule evaluate(final MMXRootObject scenario) {
 
+		// String[] hints = null;
+		// if (optimise) {
+		// hints= new String[] { LNGTransformer.HINT_OPTIMISE_LSO}
+		// }
+		//
 		final LNGTransformer transformer = new LNGTransformer(scenario, new TransformerExtensionTestModule());
 
 		// Code to dump out the scenario to disk
@@ -672,22 +677,15 @@ public class ScenarioTools {
 		}
 
 		final ModelEntityMap entities = transformer.getEntities();
+		final IAnnotatedSolution startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 
-		final IOptimisationContext context = transformer.getOptimisationContext();
-		final LocalSearchOptimiser optimiser = transformer.getOptimiser();
+		// Construct internal command stack to generate correct output schedule
+		final BasicCommandStack commandStack = new BasicCommandStack();
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
-
-		optimiser.init();
-		final IAnnotatedSolution startSolution = optimiser.start(context);
-
-		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		final Injector childInjector = transformer.getInjector().createChildInjector(new ExporterExtensionsModule());
-		childInjector.injectMembers(exporter);
-
-		final Schedule schedule = exporter.exportAnnotatedSolution(entities, startSolution);
-
-		return schedule;
+		return LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, ed, entities, startSolution, 0);// Solution(ed, scenario, schedule, scenario.getSubModel(InputModel.class),
 	}
 
 	/**
@@ -809,10 +807,10 @@ public class ScenarioTools {
 			} else if (e instanceof SlotVisit) {
 				final SlotVisit sv = (SlotVisit) e;
 				System.err.println("SlotVisit:");
-				Slot slot = sv.getSlotAllocation().getSlot();
-				CargoAllocation ca = sv.getSlotAllocation().getCargoAllocation();
-				String description = (slot instanceof LoadSlot ? "load: " : "discharge: ");
-				int volume = (slot instanceof LoadSlot ? ca.getLoadVolume() : ca.getDischargeVolume());
+				final Slot slot = sv.getSlotAllocation().getSlot();
+				final CargoAllocation ca = sv.getSlotAllocation().getCargoAllocation();
+				final String description = (slot instanceof LoadSlot ? "load: " : "discharge: ");
+				final int volume = (slot instanceof LoadSlot ? ca.getLoadVolume() : ca.getDischargeVolume());
 				System.err.println("\tDuration: " + sv.getDuration() + ", " + description + volume);
 			} else if (e instanceof SlotVisit) {
 				final SlotVisit pv = (SlotVisit) e;
