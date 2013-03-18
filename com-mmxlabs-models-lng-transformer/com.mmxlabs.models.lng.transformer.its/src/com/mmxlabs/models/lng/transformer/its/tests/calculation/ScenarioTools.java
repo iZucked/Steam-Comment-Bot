@@ -60,6 +60,7 @@ import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -801,6 +802,7 @@ public class ScenarioTools {
 				final Journey j = (Journey) e;
 				System.err.println("Journey:");
 				System.err.println("\tDuration: " + j.getDuration() + ", distance: " + j.getDistance() + ", ports: " + j.getPort().getName() + " -> " + j.getDestination().getName());
+				System.err.println("\tDepart: " + j.getStart() + ", Arrive: " + j.getEnd());
 
 				ScenarioTools.printFuel(j.getFuels());
 
@@ -816,9 +818,17 @@ public class ScenarioTools {
 				final SlotVisit pv = (SlotVisit) e;
 				System.err.println("SlotVisit:");
 				System.err.println("\tDuration: " + pv.getDuration());
+			} else if (e instanceof Cooldown) {
+				final Cooldown cd = (Cooldown) e;
+				System.err.println("Cooldown:");
+				System.err.println("\tDuration: " + cd.getDuration());
+				System.err.println("\tStart: " + cd.getStart() + ", End: " + cd.getEnd());
+				ScenarioTools.printFuel(cd.getFuels());
+				
 			} else {
 				System.err.println("Unknown:");
 				System.err.println("\t" + e.getClass());
+				System.err.println("\tStart: " + e.getStart() + ", End: " + e.getEnd());
 			}
 		}
 	}
