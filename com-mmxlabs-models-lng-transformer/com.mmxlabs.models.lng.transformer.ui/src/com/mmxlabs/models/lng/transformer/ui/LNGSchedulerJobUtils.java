@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.management.timer.Timer;
-
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -23,19 +20,11 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.progress.IProgressConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
-import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -61,112 +50,37 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.PostExportProcessorModule;
-import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
-import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 
-public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
+/**
+ * @author Simon Goodall
+ * @noextend This class is not intended to be subclassed by clients.
+ * 
+ */
+public class LNGSchedulerJobUtils {
+
 	private static final String LABEL_PREFIX = "Optimised: ";
 
-	private static final Logger log = LoggerFactory.getLogger(LNGSchedulerJobControl.class);
-
-	private static final int REPORT_PERCENTAGE = 1;
-	private int currentProgress = 0;
-
-	private final LNGSchedulerJobDescriptor jobDescriptor;
-
-	private final ScenarioInstance scenarioInstance;
-
-	private final MMXRootObject scenario;
-
-	private ModelEntityMap entities;
-
-	private LocalSearchOptimiser optimiser;
-
-	private long startTimeMillis;
-
-	private final EditingDomain editingDomain;
-
-	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
-	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
-
-	private Injector injector = null;
-
-	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
-		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY,
-				(jobDescriptor.isOptimising() ? imgOpti : imgEval)));
-		this.jobDescriptor = jobDescriptor;
-		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.scenario = (MMXRootObject) scenarioInstance.getInstance();
-		editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
-	}
-
-	@Override
-	protected void reallyPrepare() {
-		scenarioInstance.getLock(jobDescriptor.getLockKey()).awaitClaim();
-		startTimeMillis = System.currentTimeMillis();
-
-		final LNGTransformer transformer = new LNGTransformer(scenario);
-
-		injector = transformer.getInjector();
-
-		// final IOptimisationData data = transformer.getOptimisationData();
-		entities = transformer.getEntities();
-
-		final IOptimisationContext context = transformer.getOptimisationContext();
-		optimiser = transformer.getOptimiser();
-
-		// because we are driving the optimiser ourself, so we can be paused, we
-		// don't actually get progress callbacks.
-		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
-
-		optimiser.init();
-		final IAnnotatedSolution startSolution = optimiser.start(context);
-
-		saveInitialSolution(startSolution, 0);
-	}
-
-	private Schedule saveInitialSolution(final IAnnotatedSolution solution, final int solutionCurrentProgress) {
-
-		final EditingDomain domain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
-		try {
-
-			if (domain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) domain).setAdaptersEnabled(false);
-			}
-
-			// Rollback last "save" and re-apply to avoid long history of undos
-			if (solutionCurrentProgress != 0) {
-				final Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
-				if (mostRecentCommand != null) {
-					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
-						final CommandStack stack = editingDomain.getCommandStack();
-						if (stack instanceof MMXAdaptersAwareCommandStack) {
-							// this is needed because we have claimed the lock under the given key
-							// so if we undo using EDITORS as the lock, we spin forever.
-							((MMXAdaptersAwareCommandStack) stack).undo(jobDescriptor.getLockKey());
-						} else {
-							stack.undo();
-						}
-					}
-				}
-			}
-
-		} finally {
-			if (domain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) domain).setAdaptersEnabled(true, true);
-			}
-		}
+	/**
+	 * 
+	 * @param injector
+	 * @param scenario
+	 * @param editingDomain
+	 * @param entities
+	 * @param solution
+	 * @param lockKey
+	 * @param solutionCurrentProgress
+	 * @param LABEL_PREFIX
+	 * @return
+	 */
+	public static Schedule saveInitialSolution(final Injector injector, final MMXRootObject scenario, final EditingDomain editingDomain, final ModelEntityMap entities, final IAnnotatedSolution solution,
+			final int solutionCurrentProgress) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		{
@@ -183,8 +97,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		try {
 
-			if (domain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) domain).setCommandProvidersDisabled(true);
+			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
 			}
 			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
 
@@ -201,11 +115,11 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				postExportProcessors = null;
 			}
 
-			command.append(derive(editingDomain, schedule, inputModel, cargoModel, postExportProcessors));
+			command.append(derive(editingDomain, scenario, schedule, inputModel, cargoModel, postExportProcessors));
 			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 		} finally {
-			if (domain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) domain).setCommandProvidersDisabled(false);
+			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
 			}
 		}
 		editingDomain.getCommandStack().execute(command);
@@ -216,96 +130,40 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		return schedule;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#step()
-	 */
-	@Override
-	protected boolean step() {
-		// final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-		if (jobDescriptor.isOptimising() == false) {
-			// scheduleModel.setDirty(false);
-			// log.debug("Cleared dirty bit on " + scheduleModel);
-			// clear lock
-			scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
-			return false; // if we are not optimising, finish.
-		}
-		optimiser.step(REPORT_PERCENTAGE);
-		currentProgress += REPORT_PERCENTAGE;
+	public static void undoPreviousOptimsationStep(final EditingDomain editingDomain, final String lockKey, final int solutionCurrentProgress) {
+		// Undo previous optimisation step if possible
+		try {
 
-		// if ((currentProgress % 5) == 0) {
-		// Disable intermediate solution exporting. This is to avoid various concurrency issues caused by UI updating at the same time as a new solution is exported.
-		// See e.g. FogBugz: 830, 838, 847, 848
+			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(false);
+			}
 
-		// saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
-		// }
+			// Rollback last "save" and re-apply to avoid long history of undos
+			if (solutionCurrentProgress != 0) {
+				final Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
+				if (mostRecentCommand != null) {
+					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
+						final CommandStack stack = editingDomain.getCommandStack();
+						if (stack instanceof MMXAdaptersAwareCommandStack) {
+							// this is needed because we have claimed the lock under the given key
+							// so if we undo using EDITORS as the lock, we spin forever.
+							((MMXAdaptersAwareCommandStack) stack).undo(lockKey);
+						} else {
+							stack.undo();
+						}
+					}
+				}
+			}
 
-		// System.err.println("current fitness " +
-		// optimiser.getFitnessEvaluator().getCurrentFitness() + ", best " +
-		// optimiser.getFitnessEvaluator().getBestFitness());
-
-		super.setProgress(currentProgress);
-		if (optimiser.isFinished()) {
-			// export final state
-			saveInitialSolution(optimiser.getBestSolution(true), 100);
-			optimiser = null;
-			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
-			// scheduleModel.setDirty(false);
-			// log.debug("Cleared dirty bit on " + scheduleModel);
-			super.setProgress(100);
-			scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
-			return false;
-		} else {
-			return true;
+		} finally {
+			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(true, true);
+			}
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#kill()
-	 */
-	@Override
-	protected void kill() {
-		if (optimiser != null) {
-			optimiser.dispose();
-			optimiser = null;
-		}
-		scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
-	}
-
-	@Override
-	public void dispose() {
-
-		kill();
-		if (this.entities != null) {
-			this.entities.dispose();
-			this.entities = null;
-		}
-
-		// TODO: this.scenario = null;
-		this.optimiser = null;
-
-		super.dispose();
-	}
-
-	@Override
-	public final MMXRootObject getJobOutput() {
-		return scenario;
-	}
-
-	@Override
-	public IJobDescriptor getJobDescriptor() {
-		return jobDescriptor;
-	}
-
-	@Override
-	public boolean isPauseable() {
-		return true;
-	}
-
-	private Command derive(final EditingDomain domain, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel, final Iterable<IPostExportProcessor> postExportProcessors) {
+	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel,
+			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
 		final HashSet<UUIDObject> previouslyLocked = new HashSet<UUIDObject>();

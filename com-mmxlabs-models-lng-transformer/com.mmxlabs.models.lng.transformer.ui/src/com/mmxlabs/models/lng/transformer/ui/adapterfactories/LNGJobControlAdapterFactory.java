@@ -7,11 +7,13 @@ package com.mmxlabs.models.lng.transformer.ui.adapterfactories;
 import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobControl;
+import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobUtils;
+import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerEvaluationJobControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerOptimiserJobControl;
 
 /**
- * {@link IAdapterFactory} to convert a {@link LNGSchedulerJobDescriptor} into an {@link IJobControl} - specifically a {@link LNGSchedulerJobControl}.
+ * {@link IAdapterFactory} to convert a {@link LNGSchedulerJobDescriptor} into an {@link IJobControl} - specifically a {@link LNGSchedulerJobUtils}.
  * 
  * @author Simon Goodall
  * 
@@ -24,7 +26,11 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 		if (adaptableObject instanceof LNGSchedulerJobDescriptor) {
 
 			final LNGSchedulerJobDescriptor descriptor = (LNGSchedulerJobDescriptor) adaptableObject;
-			return new LNGSchedulerJobControl(descriptor);
+			if (descriptor.isOptimising()) {
+				return new LNGSchedulerOptimiserJobControl(descriptor);
+			} else {
+				return new LNGSchedulerEvaluationJobControl(descriptor);
+			}
 		}
 		return null;
 	}
