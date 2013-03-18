@@ -77,9 +77,13 @@ import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
  */
 public class LNGSchedulerJobUtils {
 
+	/**
+	 * Label used to prefix optimisation update commands so they can be undone later if possible to avoid a history of commands for each report interval.
+	 */
 	private static final String LABEL_PREFIX = "Optimised: ";
 
 	/**
+	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link InputModel})
 	 * 
 	 * @param injector
 	 * @param scenario
@@ -174,6 +178,17 @@ public class LNGSchedulerJobUtils {
 		}
 	}
 
+	/**
+	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the {@link InputModel} for assignment changes. Back link the {@link CargoModel} to the {@link Schedule}
+	 * 
+	 * @param domain
+	 * @param scenario
+	 * @param schedule
+	 * @param inputModel
+	 * @param cargoModel
+	 * @param postExportProcessors
+	 * @return
+	 */
 	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
