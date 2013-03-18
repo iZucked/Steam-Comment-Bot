@@ -19,7 +19,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolum
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.FastCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -412,7 +412,7 @@ public final class SchedulerUtils {
 	public static DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> components, final int vpoCacheSize) {
 
 		final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
-		final ScheduleEvaluator evaluator = new ScheduleEvaluator();
+		final ScheduleFitnessEvaluator evaluator = new ScheduleFitnessEvaluator();
 
 		// set up scheduler
 		setDataComponentProviders(data, scheduler);

@@ -37,7 +37,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -101,7 +101,7 @@ public class ScheduleTestModule extends AbstractModule {
 			@Override
 			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
 
-				final ScheduleEvaluator scheduleEvaluator = new ScheduleEvaluator();
+				final ScheduleFitnessEvaluator scheduleEvaluator = new ScheduleFitnessEvaluator();
 				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
 				scheduleEvaluator.setFitnessComponents(schedulerComponents);
 				injector.injectMembers(scheduleEvaluator);

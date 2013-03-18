@@ -43,7 +43,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**

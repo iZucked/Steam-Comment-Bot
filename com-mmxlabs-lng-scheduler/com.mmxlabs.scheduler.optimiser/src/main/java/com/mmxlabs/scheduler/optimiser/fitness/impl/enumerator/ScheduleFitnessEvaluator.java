@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
@@ -18,15 +19,10 @@ import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * This is similar to the IndividualEvaluator, but just uses a schedule The IE could probably be refactored to use this, but it's a bit tangled at the moment
- * 
- * (C) Minimax labs inc. 2010
- * 
- * @author hinton
- * 
- * @param
+ * The {@link ScheduleFitnessEvaluator} evaluates the linear fitness (using {@link ICargoSchedulerFitnessComponent}s) of a {@link ScheduledSequences} after the {@link ScheduleCalculator} has processed
+ * it. It is intended to be used within a {@link ISequenceScheduler} to compare one {@link ScheduledSequences} to another one.
  */
-public class ScheduleEvaluator {
+public class ScheduleFitnessEvaluator {
 
 	@Inject
 	private ScheduleCalculator scheduleCalculator;
@@ -36,11 +32,13 @@ public class ScheduleEvaluator {
 
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
-	private long[] fitnesses;
-
 	public long evaluateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution solution) {
 
+		// Process the schedule
 		scheduleCalculator.calculateSchedule(sequences, scheduledSequences, solution);
+
+		// Evaluate fitness components
+		final long[] fitnesses = new long[fitnessComponents.size()];
 
 		if (!iterateSchedulerComponents(vpIterator, fitnessComponents, scheduledSequences, fitnesses)) {
 			return Long.MAX_VALUE;
@@ -49,6 +47,7 @@ public class ScheduleEvaluator {
 		long total = 0;
 		for (final long l : fitnesses) {
 			if (l == Long.MAX_VALUE) {
+				// Abort!
 				return Long.MAX_VALUE;
 			}
 			total += l;
@@ -63,36 +62,6 @@ public class ScheduleEvaluator {
 
 	public void setFitnessComponents(final Collection<ICargoSchedulerFitnessComponent> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
-		this.fitnesses = new long[fitnessComponents.size()];
-	}
-
-	/**
-	 * Iterate a bunch of scheduler components
-	 * 
-	 * @param components
-	 * @param sequences
-	 */
-	private static boolean iterateSchedulerComponents(final VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences) {
-
-		if (sequences == null) {
-			return false;
-		}
-
-		for (final ICargoSchedulerFitnessComponent component : components) {
-			component.startEvaluation();
-		}
-
-		for (final ScheduledSequence sequence : sequences) {
-			if (!iterateSchedulerComponents(vpItr, components, sequence)) {
-				return false;
-			}
-		}
-
-		for (final ICargoSchedulerFitnessComponent component : components) {
-			component.endEvaluationAndGetCost();
-		}
-
-		return true;
 	}
 
 	/**

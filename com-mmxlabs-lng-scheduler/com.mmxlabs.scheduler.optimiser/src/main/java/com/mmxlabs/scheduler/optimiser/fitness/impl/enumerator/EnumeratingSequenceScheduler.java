@@ -153,8 +153,8 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * The sequences being evaluated at the moment
 	 */
 	private ISequences sequences;
-	//
-	private ScheduleEvaluator evaluator;
+
+	private ScheduleFitnessEvaluator evaluator;
 
 	/**
 	 * the fitness of the best result in the cycle
@@ -227,7 +227,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		if (bestResult == null) {
 			return null;
 		}
-		evaluator.evaluateSchedule(sequences, bestResult, solution);
+		if (evaluator != null) {
+			evaluator.evaluateSchedule(sequences, bestResult, solution);
+		}
 		return bestResult;
 	}
 
@@ -511,7 +513,11 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			scheduledSequences.set(index, sequence);
 		}
 
-		lastValue = evaluator.evaluateSchedule(sequences, scheduledSequences, null);
+		if (evaluator != null) {
+			lastValue = evaluator.evaluateSchedule(sequences, scheduledSequences, null);
+		} else {
+			lastValue = 0;
+		}
 
 		logValue(lastValue);
 
@@ -595,11 +601,11 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	}
 
-	public ScheduleEvaluator getScheduleEvaluator() {
+	public ScheduleFitnessEvaluator getScheduleEvaluator() {
 		return evaluator;
 	}
 
-	public void setScheduleEvaluator(final ScheduleEvaluator evaluator) {
+	public void setScheduleEvaluator(final ScheduleFitnessEvaluator evaluator) {
 		this.evaluator = evaluator;
 	}
 
