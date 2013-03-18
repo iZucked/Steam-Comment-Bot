@@ -400,7 +400,6 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);				
 	}
 
-	@Ignore("Look at this Simon Goodall! It does not load enough LNG!")
 	@Test
 	public void testFBODesirable() {
 		System.err.println("Use FBO for both trips after loading");
@@ -432,8 +431,8 @@ public class ShippingCalculationsTest {
 		final int [] expectedJourneyCosts = { 1500, 630, 315 };
 		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
 		
-		// idle LNG consumption is 10, plus 30 + 15 for journeys 
-		int [] expectedloadDischargeVolumes = { 10000, -9945 };
+		// idle LNG consumption is 10, plus 30 + 15 for journeys and 500 min heel
+		int [] expectedloadDischargeVolumes = { 10000, -9445 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);

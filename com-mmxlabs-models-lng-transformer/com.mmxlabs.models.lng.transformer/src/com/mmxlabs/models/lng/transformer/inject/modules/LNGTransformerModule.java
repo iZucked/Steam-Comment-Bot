@@ -30,7 +30,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -75,7 +75,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
 
-		bind(ICargoAllocator.class).to(UnconstrainedCargoAllocator.class).in(Singleton.class);
+		bind(IVolumeAllocator.class).to(UnconstrainedCargoAllocator.class).in(Singleton.class);
 
 		bind(VoyagePlanOptimiser.class);
 
