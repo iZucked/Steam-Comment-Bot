@@ -28,7 +28,7 @@ public interface ILNGVoyageCalculator {
 	void init();
 
 	/**
-	 * Calculate the fuel requirements, speed and times for the port to port journey options defined in {@link VoyageOptions} and store the results in {@link IVoyageDetails}.
+	 * Calculate the fuel requirements, speed and times for the port to port journey options defined in {@link VoyageOptions} and store the results in {@link VoyageDetails}.
 	 * 
 	 * @param options
 	 * @param output
