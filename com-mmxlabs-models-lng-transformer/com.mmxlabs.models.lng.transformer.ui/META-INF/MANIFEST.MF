@@ -27,7 +27,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.liveevaluator;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.mmxcore.validation;bundle-version="3.0.0",
  com.mmxlabs.models.lng.spotmarkets;bundle-version="[3.0.0,4.0.0)",
- com.mmxlabs.models.lng.pricing;bundle-version="[3.0.0,4.0.0)"
+ com.mmxlabs.models.lng.pricing;bundle-version="[3.0.0,4.0.0)",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[4.0.0,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.common;version="1.0.0",
@@ -35,6 +36,5 @@ Import-Package: com.mmxlabs.common;version="1.0.0",
  com.mmxlabs.optimiser.core.impl;version="1.1.0",
  com.mmxlabs.optimiser.core.scenario;version="1.1.0",
  com.mmxlabs.optimiser.lso.impl;version="1.1.0",
- com.mmxlabs.scheduler.optimiser.scheduleprocessor;version="3.0.1",
  org.slf4j;version="1.6.4"
 Service-Component: OSGI-INF/*.xml
