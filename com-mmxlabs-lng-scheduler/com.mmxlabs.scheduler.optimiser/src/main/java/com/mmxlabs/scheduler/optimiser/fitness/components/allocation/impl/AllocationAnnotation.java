@@ -17,6 +17,9 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	private IDischargeOption dischargeSlot;
 
 	private long fuelVolumeInM3;
+
+	private long remainingHeelVolumeInM3;
+
 	private long dischargeVolumeInM3;
 
 	private int loadTime;
@@ -63,7 +66,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	@Override
 	public long getLoadVolumeInM3() {
-		return getFuelVolumeInM3() + getDischargeVolumeInM3();
+		return getFuelVolumeInM3() + getDischargeVolumeInM3() + getRemainingHeelVolumeInM3();
 	}
 
 	@Override
@@ -105,6 +108,15 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	@Override
 	public String toString() {
 		return loadSlot.getId() + "@" + loadTime + " to " + dischargeSlot.getId() + "@" + dischargeTime + ", loaded " + getLoadVolumeInM3() + ", used " + getFuelVolumeInM3()
-				+ " for fuel, discharged " + getDischargeVolumeInM3();
+				+ " for fuel, discharged " + getDischargeVolumeInM3() + ", remaining heel " + getRemainingHeelVolumeInM3();
+	}
+
+	@Override
+	public long getRemainingHeelVolumeInM3() {
+		return remainingHeelVolumeInM3;
+	}
+
+	public void setRemainingHeelVolumeInM3(final long remainingHeelVolumeInM3) {
+		this.remainingHeelVolumeInM3 = remainingHeelVolumeInM3;
 	}
 }

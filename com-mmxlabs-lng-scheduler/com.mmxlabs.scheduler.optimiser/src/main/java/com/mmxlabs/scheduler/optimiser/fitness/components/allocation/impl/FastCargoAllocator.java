@@ -100,7 +100,7 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 			// constraint
 			// second = discharge slot constraint
 			// we can just knock this off the remaining volume at the start.
-			final long fuelVolume = forcedLoadVolumeInM3.get(variable);
+			final long fuelVolume = forcedLoadVolumeInM3.get(variable) + remainingHeelVolumeInM3.get(variable);
 			if (constraintIndices.getFirst() != null) {
 				remainders[constraintIndices.getFirst()] -= fuelVolume;
 			}
@@ -131,7 +131,7 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 		// Now run through variables (remember they are sorted in decreasing
 		// unit value)
 		for (final int variable : variables) {
-			final long fuelRequired = forcedLoadVolumeInM3.get(variable);
+			final long fuelRequired = forcedLoadVolumeInM3.get(variable) + remainingHeelVolumeInM3.get(variable);
 			final Pair<Integer, Integer> constraintIndices = cargoConstraints.get(variable);
 			// This is however much is left in the load-side summed volume
 			// constraint

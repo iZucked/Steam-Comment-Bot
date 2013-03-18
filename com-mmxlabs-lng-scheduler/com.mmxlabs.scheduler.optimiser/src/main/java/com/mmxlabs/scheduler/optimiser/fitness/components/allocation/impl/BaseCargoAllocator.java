@@ -5,8 +5,10 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -32,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
 
 /**
  * Base class for allocating load/discharge volumes; doesn't implement the solve() method, but does do various book-keeping tasks.
@@ -57,6 +60,9 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	 * Contains the quantity of LNG which <em>must</em> be loaded for a given cargo (by cargo index/LP variable, see {@link #variableTable})
 	 */
 	final ArrayList<Long> forcedLoadVolumeInM3 = new ArrayList<Long>();
+	
+	final ArrayList<Long> remainingHeelVolumeInM3 = new ArrayList<Long>();
+
 	/**
 	 * Contains the capacity of the vessel carrying the cargo, by cargo index.
 	 */
@@ -129,6 +135,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		dischargeSlots.clear();
 		vesselCapacityInM3.clear();
 		forcedLoadVolumeInM3.clear();
+		remainingHeelVolumeInM3.clear();
 
 		loadPricesPerM3.clear();
 		dischargePricesPerM3.clear();
@@ -371,6 +378,16 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
+		long remainingHeelInM3 = plan.getRemainingHeelInM3();
+		
+		// We need to include this as part of the load volume, but it is otherwise discarded.
+		// Note: We need to model the other heel type here for min quantities, however the current allocators do not take this into account.
+		if (plan.getRemainingHeelType() == HeelType.END) {
+			remainingHeelVolumeInM3.add(remainingHeelInM3);
+		} else {
+			remainingHeelVolumeInM3.add(0l);
+		}
+		
 		// compute purchase price from contract
 		// this is not ideal.
 		final int dischargePricePerMMBtu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, dischargeTime);
@@ -445,6 +462,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		// We have to load this much LNG no matter what
 		forcedLoadVolumeInM3.add(0l);
 		this.vesselCapacityInM3.add(Long.MAX_VALUE);
+		remainingHeelVolumeInM3.add(0l);
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
@@ -536,6 +554,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 						annotation.setLoadSlot(loadSlot);
 						annotation.setDischargeSlot(dischargeSlot);
 						annotation.setFuelVolumeInM3(forcedLoadVolumeInM3.get(allocationIndex));
+						annotation.setRemainingHeelVolumeInM3(remainingHeelVolumeInM3.get(allocationIndex));
 
 						// TODO recompute load price here; this is not necessarily right
 						annotation.setLoadPricePerM3(loadPricesPerM3.get(allocationIndex));

@@ -14,32 +14,61 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
  * 
  */
 public interface IAllocationAnnotation {
-	public ILoadOption getLoadOption();
+	ILoadOption getLoadOption();
 
-	public IDischargeOption getDischargeOption();
-
-	public long getLoadVolumeInM3();
-
-	public long getFuelVolumeInM3();
-
-	public long getDischargeVolumeInM3();
+	IDischargeOption getDischargeOption();
 
 	/**
+	 * Returns the total load volume in M3. This is the sum of the discharge volume, fuel volume and the remaining heel.
+	 * 
+	 */
+	long getLoadVolumeInM3();
+
+	/**
+	 * Returns the total LNG in m3 used as fuel during this cargo.
+	 * 
+	 * @return
+	 */
+	long getFuelVolumeInM3();
+
+	/**
+	 * Returns the quantity of LNG left as heel in m3 with no where to go (i.e. lost).
+	 * 
+	 * @return
+	 */
+	long getRemainingHeelVolumeInM3();
+
+	/**
+	 * Returns the quantity of LNG in m3 that has been discharged.
+	 * 
+	 * @return
+	 */
+	long getDischargeVolumeInM3();
+
+	/**
+	 * Returns the time loading began
+	 * 
 	 * @return
 	 */
 	int getLoadTime();
 
 	/**
+	 * Returns the time discharging began
+	 * 
 	 * @return
 	 */
 	int getDischargeTime();
 
 	/**
+	 * Returns the price/m3 at load
+	 * 
 	 * @return
 	 */
 	int getLoadPricePerM3();
 
 	/**
+	 * Returns the price/m3 at discharge
+	 * 
 	 * @return
 	 */
 	int getDischargePricePerM3();

@@ -530,31 +530,32 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					// If this is a ballast leg, then the min heel continues until we get to our final destination - then whatever is left is lost.
 
 					// First of all, determine how much heel is left over from travel
-					long remaningHeelInM3 = 0;
+					long remainingHeelInM3 = 0;
 					final VoyageDetails voyageDetails = (VoyageDetails) e;
 					final long idleNBOInM3 = voyageDetails.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3);
 					if (idleNBOInM3 == 0) {
 						// As we have detected some NBO use, but it is not idle, then it must be travel NBO, therefore full heel is available.
 						// current lngConsumedInM3 value will not include min heel
 						assert voyageDetails.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3) > 0;
-						remaningHeelInM3 = minHeelInM3;
+						remainingHeelInM3 = minHeelInM3;
 					} else if (idleNBOInM3 < minHeelInM3) {
 						// Partial use during voyage idle time - current lngConsumedInM3 value will include some of min heel
-						remaningHeelInM3 = minHeelInM3 - idleNBOInM3;
+						remainingHeelInM3 = minHeelInM3 - idleNBOInM3;
 					} else {
 						// Assume heel fully consumed - current lngConsumedInM3 value will include min heel
-						remaningHeelInM3 = 0;
+						remainingHeelInM3 = 0;
 					}
 					// If we have some heel left, so allcoate it depending on laden or ballast legs
-					if (remaningHeelInM3 > 0) {
+					if (remainingHeelInM3 > 0) {
 						if (voyageDetails.getOptions().getVesselState() == VesselState.Laden) {
 							// Discharge the heel, make money!
-							minDischargeVolumeInM3 += remaningHeelInM3;
+							minDischargeVolumeInM3 += remainingHeelInM3;
+							voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.DISCHARGE);
 						} else {
 							// Add heel to the voyage consumed quantity for capacity constraint purposes. However it is not tracked otherwise
-							// TODO: Record the remaining heel!
 							// TODO: Roll over into new voyage plan
-							lngConsumedInM3 += remaningHeelInM3;
+							lngConsumedInM3 += remainingHeelInM3;
+							voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.END);
 						}
 					}
 				} else {
@@ -702,8 +703,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(fuelConsumptions[fc.ordinal()], dischargeM3Price));
 
 		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
-
-		voyagePlan.setLNGFuelVolume(lngConsumedInM3);
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
 
