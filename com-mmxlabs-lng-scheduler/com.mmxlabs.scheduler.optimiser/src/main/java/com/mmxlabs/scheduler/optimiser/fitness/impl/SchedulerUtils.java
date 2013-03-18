@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.FastCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
@@ -423,7 +423,7 @@ public final class SchedulerUtils {
 
 		final ITotalVolumeLimitProvider tvlp = data.getDataComponentProvider(SchedulerConstants.DCP_totalVolumeLimitProvider, ITotalVolumeLimitProvider.class);
 
-		ICargoAllocator allocator;
+		IVolumeAllocator allocator;
 		if (tvlp.isEmpty()) {
 			allocator = new UnconstrainedCargoAllocator();
 		} else {

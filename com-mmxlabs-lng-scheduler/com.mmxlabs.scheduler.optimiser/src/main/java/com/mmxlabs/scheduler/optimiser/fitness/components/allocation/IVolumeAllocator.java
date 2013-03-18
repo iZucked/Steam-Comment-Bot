@@ -12,12 +12,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * Interface for cargo allocation logic.
+ * Interface for volume allocation logic.
  * 
  * @author hinton
  * 
  */
-public interface ICargoAllocator {
+public interface IVolumeAllocator {
 	/**
 	 * Set the {@link ITotalVolumeLimitProvider} which informs the allocator of any global constraints on load/discharge volumes
 	 * 

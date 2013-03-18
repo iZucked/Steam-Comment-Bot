@@ -9,7 +9,7 @@ import java.util.Map;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public class ComparingCargoAllocator implements ICargoAllocator {
+public class ComparingCargoAllocator implements IVolumeAllocator {
 	private final FastCargoAllocator fastAllocator = new FastCargoAllocator();
 
 	// private final SimplexCargoAllocator simplexAllocator = new SimplexCargoAllocator();

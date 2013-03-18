@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
@@ -47,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class ScheduleCalculator {
 
 	@Inject
-	private ICargoAllocator cargoAllocator;
+	private IVolumeAllocator cargoAllocator;
 
 	@Inject
 	private ICalculatorProvider calculatorProvider;

@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -42,7 +42,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
  * @author hinton
  * 
  */
-public abstract class BaseCargoAllocator implements ICargoAllocator {
+public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 	@Inject
 	ITotalVolumeLimitProvider cargoAllocationProvider;

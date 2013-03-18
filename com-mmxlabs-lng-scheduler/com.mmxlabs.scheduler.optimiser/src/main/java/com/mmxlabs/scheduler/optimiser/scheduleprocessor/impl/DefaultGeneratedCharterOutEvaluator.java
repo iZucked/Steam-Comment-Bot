@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -41,7 +41,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private IEntityValueCalculator entityValueCalculator;
 
 	@Inject
-	private ICargoAllocator cargoAllocator;
+	private IVolumeAllocator cargoAllocator;
 
 	@Inject
 	private ICharterMarketProvider charterMarketProvider;
