@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.Arrays;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -21,6 +22,27 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  */
 public final class VoyagePlan implements Cloneable {
 
+	/**
+	 * An enum for use with remaining heel to denote it's allocation.
+	 * 
+	 */
+	public enum HeelType {
+
+		/**
+		 * No heel, nothing to do.
+		 */
+		NONE,
+
+		/**
+		 * Remaining heel is left at end of voyage. It should be included in total consumed voyage gas, then discarded
+		 */
+		END,
+		/**
+		 * Remaining heel will be discharged.
+		 */
+		DISCHARGE
+	}
+
 	private Object[] sequence;
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
 	private final LongFastEnumMap<FuelComponent> routeAdditionalConsumption;
@@ -28,6 +50,10 @@ public final class VoyagePlan implements Cloneable {
 	private long lngFuelVolume;
 	private int capacityViolations;
 	private boolean ignoreEnd;
+
+	private long remainingHeelInM3;
+
+	private HeelType remainingHeelType = HeelType.NONE;
 
 	public VoyagePlan() {
 		fuelConsumptions = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
@@ -37,7 +63,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> routeAdditionalConsumption,
-			final LongFastEnumMap<FuelComponent> fuelCosts, final int capacityViolations, final boolean ignoreEnd) {
+			final LongFastEnumMap<FuelComponent> fuelCosts, final int capacityViolations, final boolean ignoreEnd, final long remainingHeelInM3, final HeelType remainingHeelType) {
 		super();
 		this.sequence = sequence;
 		this.fuelConsumptions = fuelConsumptions;
@@ -46,6 +72,8 @@ public final class VoyagePlan implements Cloneable {
 		this.lngFuelVolume = fuelVolume;
 		this.capacityViolations = capacityViolations;
 		this.ignoreEnd = ignoreEnd;
+		this.remainingHeelInM3 = remainingHeelInM3;
+		this.remainingHeelType = remainingHeelType;
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -92,28 +120,20 @@ public final class VoyagePlan implements Cloneable {
 	public final boolean equals(final Object obj) {
 
 		if (obj instanceof VoyagePlan) {
-			final VoyagePlan p = (VoyagePlan) obj;
+			final VoyagePlan plan = (VoyagePlan) obj;
 
-			if (p.lngFuelVolume != lngFuelVolume) {
-				return false;
-			}
-
-			if (!Equality.isEqual(sequence, p.sequence)) {
-				return false;
-			}
-			if (!Equality.isEqual(capacityViolations, p.capacityViolations)) {
-				return false;
-			}
-			if (!Equality.isEqual(fuelConsumptions, p.fuelConsumptions)) {
-				return false;
-			}
-			if (!Equality.isEqual(routeAdditionalConsumption, p.routeAdditionalConsumption)) {
-				return false;
-			}
-			if (!Equality.isEqual(fuelCosts, p.fuelCosts)) {
-				return false;
-			}
-			return true;
+			// Ensure all fields are present here
+			// @formatter:off
+			return Objects.equal(lngFuelVolume, plan.lngFuelVolume)
+					&& Objects.equal(sequence, plan.sequence)
+					&& Objects.equal(capacityViolations, plan.capacityViolations)
+					&& Objects.equal(fuelConsumptions, plan.fuelConsumptions)
+					&& Objects.equal(routeAdditionalConsumption, plan.routeAdditionalConsumption)
+					&& Objects.equal(fuelCosts, plan.fuelCosts)
+					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
+					&& Objects.equal(remainingHeelType, plan.remainingHeelType)
+					;
+			// @formatter:on
 		}
 
 		return false;
@@ -138,7 +158,7 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, capacityViolations, ignoreEnd);
+		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, capacityViolations, ignoreEnd, remainingHeelInM3, remainingHeelType);
 	}
 
 	/**
@@ -179,5 +199,25 @@ public final class VoyagePlan implements Cloneable {
 
 	public void setIgnoreEnd(final boolean ignoreEnd) {
 		this.ignoreEnd = ignoreEnd;
+	}
+
+	public long getRemainingHeelInM3() {
+		return remainingHeelInM3;
+	}
+
+	/**
+	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel class min heel. This heel may be discharged or discarded depending where in the voyage plan it
+	 * occurred (where is not tracked explicitly).
+	 * 
+	 * @param remainingHeelInM3
+	 * @param remainingHeelType
+	 */
+	public void setRemainingHeelInM3(final long remainingHeelInM3, final HeelType remainingHeelType) {
+		this.remainingHeelInM3 = remainingHeelInM3;
+		this.remainingHeelType = remainingHeelType;
+	}
+
+	public HeelType getRemainingHeelType() {
+		return remainingHeelType;
 	}
 }
