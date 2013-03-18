@@ -52,7 +52,10 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -112,6 +115,7 @@ public class DefaultScenarioCreator {
 	public final DefaultFleetCreator fleetCreator = new DefaultFleetCreator();
 	public final DefaultPortCreator portCreator = new DefaultPortCreator();
 	public final DefaultCargoCreator cargoCreator = new DefaultCargoCreator();
+	public final DefaultPricingCreator pricingCreator = new DefaultPricingCreator();
 
 	public MinimalScenarioSetup minimalScenarioSetup;
 	
@@ -205,6 +209,25 @@ public class DefaultScenarioCreator {
 			Date endDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
 			
 			fleetCreator.setAvailability(vessel, originPort, startDate, originPort, endDate);			
+		}
+		
+		/**
+		 * Sets up a cooldown pricing model including an index
+		 */
+		public void setupCooldown(double value) {
+			final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+			final PortModel portModel = scenario.getSubModel(PortModel.class);
+
+			final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultIndex("cooldown", value);
+			
+			final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
+			price.setIndex(cooldownIndex);
+			
+			for (Port port: portModel.getPorts()) {
+				price.getPorts().add(port);
+			}
+
+			pricingModel.getCooldownPrices().add(price);		
 		}
 	}
 	
@@ -488,25 +511,6 @@ public class DefaultScenarioCreator {
 	}
 
 	
-	public Integer getDistance(Port p1, Port p2, Route r) {
-		if (r == null) {
-			final PortModel portModel = scenario.getSubModel(PortModel.class);
-			r = portModel.getRoutes().get(0);
-		}
-		
-		for (RouteLine line: r.getLines()) {
-			if (line.getFrom() == p1 && line.getTo() == p2) {
-				return line.getDistance();
-			}
-		}
-		
-		return null;
-	}
-
-	public Integer getTravelTime(Port p1, Port p2, Route r, int speed) {
-		return getDistance(p1, p2, r) / speed;
-	}
-
 	public class DefaultPortCreator {
 		// for auto-generated distances, we can supply a base multiplier so
 		// that distances are integer multiples of vessel speeds
@@ -709,6 +713,30 @@ public class DefaultScenarioCreator {
 		}
 	}
 	
+	public class DefaultPricingCreator {
+		public DataIndex<Double> createDefaultIndex(String name, double value) {
+			final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+
+			IndexPoint<Double> startPoint = PricingFactory.eINSTANCE.createIndexPoint(); 
+			IndexPoint<Double> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
+			
+			startPoint.setDate(new Date(0));
+			startPoint.setValue(value);
+			
+			endPoint.setDate(new Date(Long.MAX_VALUE));
+			endPoint.setValue(value);
+			
+			DataIndex<Double> result = PricingFactory.eINSTANCE.createDataIndex();
+			
+			result.getPoints().add(startPoint);
+			result.getPoints().add(endPoint);
+			
+			pricingModel.getCommodityIndices().add(result);
+			
+			return result;
+		}
+	}
+	
 	// /**
 	// * Add a canal to all vessel classes.
 	// */
@@ -723,6 +751,25 @@ public class DefaultScenarioCreator {
 	// public void addCanal(final VesselClass vc, final VesselClassCost canalCost) {
 	// vc.getCanalCosts().add(canalCost);
 	// }
+
+	public Integer getTravelTime(Port p1, Port p2, Route r, int speed) {
+		return getDistance(p1, p2, r) / speed;
+	}
+
+	public Integer getDistance(Port p1, Port p2, Route r) {
+		if (r == null) {
+			final PortModel portModel = scenario.getSubModel(PortModel.class);
+			r = portModel.getRoutes().get(0);
+		}
+		
+		for (RouteLine line: r.getLines()) {
+			if (line.getFrom() == p1 && line.getTo() == p2) {
+				return line.getDistance();
+			}
+		}
+		
+		return null;
+	}
 
 	public DryDockEvent addDryDock(final Port startPort, final Date start, final int durationDays) {
 
