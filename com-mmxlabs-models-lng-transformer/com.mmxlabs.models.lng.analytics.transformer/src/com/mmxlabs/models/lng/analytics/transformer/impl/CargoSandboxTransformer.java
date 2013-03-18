@@ -123,7 +123,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.Uncons
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -736,7 +736,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			protected void configure() {
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
-				bind(ScheduleEvaluator.class);
+				bind(ScheduleFitnessEvaluator.class);
 				bind(ICargoAllocator.class).to(UnconstrainedCargoAllocator.class);
 				bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 
