@@ -499,7 +499,7 @@ public class ShippingCalculationsTest {
 
 	@Test
 	public void testPlentyStartHeel() {
-		System.err.println("\n\nGenerous Start Heel");
+		System.err.println("\n\nGenerous Start Heel Means NBO on First Voyage");
 		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
 		final MMXRootObject scenario = dsc.buildScenario();
 		
@@ -766,7 +766,7 @@ public class ShippingCalculationsTest {
 		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
 		
 		// idle LNG consumption is 10, plus 30 + 15 for journeys and 500 min heel
-		int [] expectedloadDischargeVolumes = { 10000, -9945 };
+		int [] expectedloadDischargeVolumes = { 10000, -9445 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 	
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -1164,15 +1164,173 @@ public class ShippingCalculationsTest {
 		// change from default scenario: sequence daily hire rate should be set
 		Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
 	}
+	
+	
+	@Test
+	public void testVesselStartsAnywhere() {
+		System.err.println("\n\nVessel starts anywhere.");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		
+		mss.vessel.getAvailability().getStartAt().clear();
+	
+		final SequenceTester checker = getDefaultTester();		
 
-	/*
-	 * We need to create a barebones scenario with a single vessel schedule.
-	 * Then the scenario needs to be evaluated to test correct calculation of:
-	 *  - Fuel costs
-	 *  - Port costs
-	 *  - Route costs
-	 *  - NBO rates
-	 */
+		// change from default scenario: vessel makes only two journeys
+		Class<?> [] expectedClasses = { 
+				StartEvent.class, Idle.class, SlotVisit.class, 
+				Journey.class, Idle.class, SlotVisit.class, 
+				Journey.class, Idle.class, 
+				EndEvent.class 
+		};
 
+		checker.setClasses(expectedClasses);
+		
+		// expected durations of journeys
+		final int [] expectedJourneyDurations = { 2, 1 };
+		checker.setExpectedDurations(Journey.class, expectedJourneyDurations);
+	
+		// expected FBO consumptions of journeys
+		// none (not economical in default)
+		final int [] expectedFboJourneyConsumptions = { 0, 0 };
+		checker.setExpectedFboConsumptions(Journey.class, expectedFboJourneyConsumptions);
+	
+		// expected NBO consumptions of journeys
+		// 0 (no start heel)
+		// 20 = 
+		final int [] expectedNboJourneyConsumptions = { 20, 0 };
+		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
+	
+		final int [] expectedBaseFuelJourneyConsumptions = { 10, 15 };
+		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
+	
+		// expected costs of journeys
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }  
+		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }   
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }  
+		final int [] expectedJourneyCosts = { 520, 150 };
+		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);			
+	
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);			
+				
+		final Sequence sequence = schedule.getSequences().get(0);
+		
+		checker.check(sequence);				
+	
+	}
+
+	@Test
+	public void testVesselEndsAnywhere() {
+		System.err.println("\n\nVessel ends anywhere.");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		
+		mss.vessel.getAvailability().getEndAt().clear();
+	
+		// expected classes of the sequence elements
+		Class<?> [] expectedClasses = { 
+				StartEvent.class, 
+				Journey.class, Idle.class, SlotVisit.class, 
+				Journey.class, Idle.class, SlotVisit.class, 
+				Journey.class, Idle.class,
+				EndEvent.class 
+		};
+	
+		final SequenceTester checker = new SequenceTester(expectedClasses);
+	
+		// expected durations of journeys
+		final int [] expectedJourneyDurations = { 1, 2, 2 };
+		checker.setExpectedDurations(Journey.class, expectedJourneyDurations);
+	
+		// expected FBO consumptions of journeys
+		// none (not economical in default)
+		final int [] expectedFboJourneyConsumptions = { 0, 0, 0 };
+		checker.setExpectedFboConsumptions(Journey.class, expectedFboJourneyConsumptions);
+	
+		// expected NBO consumptions of journeys
+		// 0 (no start heel)
+		// 20 = 
+		final int [] expectedNboJourneyConsumptions = { 0, 20, 0 };
+		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
+	
+		final int [] expectedBaseFuelJourneyConsumptions = { 15, 10, 30 };
+		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
+	
+		// expected costs of journeys
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }  
+		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }   
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }  
+		final int [] expectedJourneyCosts = { 150, 520, 300 };
+		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
+	
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);			
+				
+		final Sequence sequence = schedule.getSequences().get(0);
+		
+		checker.check(sequence);				
+	
+	}
+
+	@Test
+	public void testLimitedStartHeelForcesBfIdle() {
+		System.err.println("\n\nLimited Start Heel, should NBO travel and BF on idle");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		
+		// change from default scenario
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		
+		final Vessel vessel = mss.vessel;
+		vessel.getStartHeel().setVolumeAvailable(10);
+		vessel.getStartHeel().setPricePerMMBTU(1);
+		
+		// change from default scenario: set a "return after" date 
+		// somewhat later than the end of the discharge window 
+		VesselAvailability av = mss.vessel.getAvailability();
+		Date startLoad = mss.cargo.getLoadSlot().getWindowStartWithSlotOrPortTime();
+		
+		// start 3 hrs before load window begins
+		Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
+		av.setStartBy(startDate);
+		System.err.println("Vessel to start before: " + startDate);
+				
+		final SequenceTester checker = getDefaultTester();
+				
+		// change from default scenario
+		// first journey should use NBO and base fuel
+		final int [] expectedNboJourneyConsumptions = { 10, 20, 0 };
+		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
+	
+		final int [] expectedBaseFuelJourneyConsumptions = { 5, 10, 15 };
+		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
+		
+		// change from default scenario
+		final int [] expectedJourneyCosts = { 260, 520, 150 };
+		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
+		
+		// change from default: BF idle consumption at load port after arrival
+		// (idle at discharge port is NBO)
+		final int [] expectedBaseFuelIdleConsumptions = { 10, 0, 0 };
+		checker.setExpectedBaseFuelConsumptions(Idle.class, expectedBaseFuelIdleConsumptions);
+	
+		// change from default: idle at load port after arrival
+		final int [] expectedIdleTimes = { 2, 2, 0 };
+		checker.setExpectedDurations(Idle.class, expectedIdleTimes);
+	
+		// change from default: idle cost at load port
+		final int [] expectedIdleCosts = { 100, 210, 0 }; 
+		checker.setExpectedFuelCosts(Idle.class, expectedIdleCosts);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);				
+				
+		final Sequence sequence = schedule.getSequences().get(0);
+	
+		checker.check(sequence);				
+	}
+	
 }
-// THIS IS THE CURRENT SIMON MCG VERSION
