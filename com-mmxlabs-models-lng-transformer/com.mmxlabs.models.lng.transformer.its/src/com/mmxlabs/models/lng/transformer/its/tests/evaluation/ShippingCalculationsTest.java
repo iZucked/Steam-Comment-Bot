@@ -1277,16 +1277,7 @@ public class ShippingCalculationsTest {
 		
 		mss.vessel.getAvailability().getEndAt().clear();
 	
-		// expected classes of the sequence elements
-		Class<?> [] expectedClasses = { 
-				StartEvent.class, 
-				Journey.class, Idle.class, SlotVisit.class, 
-				Journey.class, Idle.class, SlotVisit.class, 
-				Journey.class, Idle.class,
-				EndEvent.class 
-		};
-	
-		final SequenceTester checker = new SequenceTester(expectedClasses);
+		final SequenceTester checker = getDefaultTester();		
 	
 		// change from default: final journey is 2hrs
 		checker.setExpectedValue(2, Expectations.DURATIONS, Journey.class, 2);	
