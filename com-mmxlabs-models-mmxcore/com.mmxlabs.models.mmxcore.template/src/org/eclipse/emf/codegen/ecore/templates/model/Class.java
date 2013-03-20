@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package org.eclipse.emf.codegen.ecore.templates.model;
 
 import org.eclipse.emf.ecore.*;
