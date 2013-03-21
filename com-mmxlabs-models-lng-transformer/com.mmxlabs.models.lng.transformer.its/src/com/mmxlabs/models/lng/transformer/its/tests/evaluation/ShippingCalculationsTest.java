@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -41,6 +40,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator.MinimalScenarioSetup;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -108,7 +108,7 @@ public class ShippingCalculationsTest {
 	public void checkLoadDischargeVolumes(List<? extends SlotVisit> events, int[] volumes) {
 		for (int i = 0; i < volumes.length; i++) {
 			SlotVisit event = events.get(i);
-			CargoAllocation ca = event.getSlotAllocation().getCargoAllocation();
+			SimpleCargoAllocation ca = new SimpleCargoAllocation(event.getSlotAllocation().getCargoAllocation());
 			Slot slot = event.getSlotAllocation().getSlot();
 			
 			int volume = 0;
@@ -785,7 +785,7 @@ public class ShippingCalculationsTest {
 		MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
 		
 		// change from default scenario: add a maximum load volume
-		mss.cargo.getLoadSlot().setMaxQuantity(500);
+		mss.cargo.getSlots().get(0).setMaxQuantity(500);
 	
 		final SequenceTester checker = getDefaultTester();
 		
@@ -810,7 +810,7 @@ public class ShippingCalculationsTest {
 		MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
 		
 		// change from default scenario: add a maximum load volume
-		mss.cargo.getDischargeSlot().setMaxQuantity(500);
+		mss.cargo.getSlots().get(1).setMaxQuantity(500);
 	
 		final SequenceTester checker = getDefaultTester();
 		
@@ -842,7 +842,7 @@ public class ShippingCalculationsTest {
 		fuelPrice.setPrice(100);
 		
 		// but minimum discharge volume means that it causes a capacity violation
-		mss.cargo.getDischargeSlot().setMinQuantity(9965);
+		mss.cargo.getSlots().get(1).setMinQuantity(9965);
 		
 		// for the moment, set min heel to zero since it causes problems in the volume calculations
 		mss.vc.setMinHeel(0);
@@ -873,7 +873,7 @@ public class ShippingCalculationsTest {
 		MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
 		
 		// change from default scenario: add a maximum load volume
-		mss.cargo.getLoadSlot().setMaxQuantity(20);
+		mss.cargo.getSlots().get(0).setMaxQuantity(20);
 	
 		final SequenceTester checker = getDefaultTester();
 		
@@ -898,7 +898,7 @@ public class ShippingCalculationsTest {
 		// change from default scenario: set a "return after" date 
 		// somewhat later than the end of the discharge window 
 		VesselAvailability av = mss.vessel.getAvailability();
-		Date endDischarge = mss.cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
+		Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 		
 		// return 3 hrs after discharge window ends
 		Date returnDate = new Date(endDischarge.getTime() + 3 * 3600 * 1000);
@@ -938,7 +938,7 @@ public class ShippingCalculationsTest {
 		// change from default scenario: set a "return after" date 
 		// somewhat later than the end of the discharge window 
 		VesselAvailability av = mss.vessel.getAvailability();
-		Date startLoad = mss.cargo.getLoadSlot().getWindowStartWithSlotOrPortTime();
+		Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 		
 		// start 3 hrs before load window begins
 		Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
@@ -979,8 +979,8 @@ public class ShippingCalculationsTest {
 		// change from default scenario: set a "return after" date 
 		// somewhat later than the end of the discharge window 
 		VesselAvailability av = mss.vessel.getAvailability();
-		Date startLoad = mss.cargo.getLoadSlot().getWindowStartWithSlotOrPortTime();
-		Date endDischarge = mss.cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
+		Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 		
 		// start within 5 hrs before load window starts
 		Date startDate = new Date(startLoad.getTime() - 5 * 3600 * 1000);
@@ -1291,7 +1291,7 @@ public class ShippingCalculationsTest {
 		// change from default scenario: set a "return after" date 
 		// somewhat later than the end of the discharge window 
 		VesselAvailability av = mss.vessel.getAvailability();
-		Date startLoad = mss.cargo.getLoadSlot().getWindowStartWithSlotOrPortTime();
+		Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 		
 		// start 3 hrs before load window begins
 		Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);

@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -56,7 +57,7 @@ public class MinMaxSpeedTest {
 		// set the travel time to be one hour too little
 		final int travelTime = (distanceBetweenPorts / maxSpeed) - 1;
 
-		final CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
+		final SimpleCargoAllocation a =new SimpleCargoAllocation( test(testName, travelTime, baseFuelExpensive));
 
 		Assert.assertTrue("Laden leg travels at max speed", a.getLadenLeg().getSpeed() == maxSpeed);
 		Assert.assertTrue("Ballast leg travels at max speed", a.getBallastLeg().getSpeed() == maxSpeed);
@@ -72,7 +73,7 @@ public class MinMaxSpeedTest {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 1;
 
-		final CargoAllocation a = test(testName, travelTime, baseFuelCheap);
+		final SimpleCargoAllocation a =new SimpleCargoAllocation( test(testName, travelTime, baseFuelCheap));
 
 		// assert that base fuel is used on the ballast leg as it is cheaper than LNG
 		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
@@ -105,7 +106,7 @@ public class MinMaxSpeedTest {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
 
-		final CargoAllocation a = test(testName, travelTime, baseFuelExpensive);
+		final SimpleCargoAllocation a =new SimpleCargoAllocation(test(testName, travelTime, baseFuelExpensive));
 
 		// assert that NBO is used on the ballast leg as it is cheaper than base fuel
 		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
@@ -143,7 +144,7 @@ public class MinMaxSpeedTest {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
 
-		final CargoAllocation a = test(testName, travelTime, baseFuelCheap);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(test(testName, travelTime, baseFuelCheap));
 
 		// Base fuel used on ballast as it is cheaper than LNG
 		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {

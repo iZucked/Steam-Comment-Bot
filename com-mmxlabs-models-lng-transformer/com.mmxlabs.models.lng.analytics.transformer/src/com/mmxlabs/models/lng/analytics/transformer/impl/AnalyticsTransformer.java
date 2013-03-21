@@ -67,6 +67,7 @@ import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -291,7 +292,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 					int counter = 0;
 					for (final int minTimeLD : minTimesLD) {
-						final int ladenAllowance = (int) Math.round((double) minTimeLD * spec.getLadenTimeAllowance());
+						final int ladenAllowance = (int) Math.round(minTimeLD * spec.getLadenTimeAllowance());
 						for (final int minTimeDL : minTimesDL) {
 							// create round trip cargo
 							final String id = (counter++) + "-" + loadPort.getName() + "-to-" + dischargePort.getName();
@@ -300,7 +301,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 									OptimiserUnitConvertor.convertToInternalConversionFactor(spec.isSetCvValue() ? spec.getCvValue() : loadPort.getCvValue()), loadPort.getLoadDuration(), false,
 									false, false);
 
-							final int ballastAllowance = (int) Math.round((double) minTimeDL * spec.getBallastTimeAllowance());
+							final int ballastAllowance = (int) Math.round(minTimeDL * spec.getBallastTimeAllowance());
 
 							final int timeAtDischarge = loadPort.getLoadDuration() + minTimeLD + ladenAllowance;
 							final ITimeWindow dischargeWindow = builder.createTimeWindow(timeAtDischarge, timeAtDischarge);
@@ -312,7 +313,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 									OptimiserUnitConvertor.convertToInternalVolume(spec.getMinimumDischarge()), OptimiserUnitConvertor.convertToInternalVolume(spec.getMaximumDischarge()), minCv,
 									maxCv, dischargeCalculator, dischargePort.getDischargeDuration(), false);
 
-							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
+							final ICargo cargo = builder.createCargo(false, loadSlot, dischargeSlot);
 							cargoes.add(cargo);
 
 							// create vessel
@@ -345,14 +346,15 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
 					// set up sequence and arrival times
 					sequence.add(startEndProvider.getStartElement(resource));
-					sequence.add(slotProvider.getElement(cargo.getLoadOption()));
-					sequence.add(slotProvider.getElement(cargo.getDischargeOption()));
-					sequence.add(startEndProvider.getEndElement(resource));
-
+					int tIndex = 0;
 					final int[] times = arrivalTimes[index++];
-					times[0] = 0;
-					times[1] = cargo.getDischargeOption().getTimeWindow().getStart();
-					times[2] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
+					times[tIndex++] = 0;
+					for (IPortSlot slot : cargo.getPortSlots()) {
+						sequence.add(slotProvider.getElement(slot));
+						times[tIndex++] = slot.getTimeWindow().getStart();
+					}
+					sequence.add(startEndProvider.getEndElement(resource));
+					times[tIndex++] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
 				}
 				/*
 				 * Create a fitness core and evaluate+annotate the sequences

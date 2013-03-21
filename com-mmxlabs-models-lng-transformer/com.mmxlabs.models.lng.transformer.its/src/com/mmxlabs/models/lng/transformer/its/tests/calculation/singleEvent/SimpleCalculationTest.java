@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -52,8 +53,9 @@ public class SimpleCalculationTest {
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
-		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printCargoAllocation("testLNGSelection", a);
+		CargoAllocation cargoAllocation = result.getCargoAllocations().get(0);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(cargoAllocation);
+		ScenarioTools.printCargoAllocation("testLNGSelection", cargoAllocation);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
@@ -79,8 +81,9 @@ public class SimpleCalculationTest {
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
-		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printCargoAllocation("testBaseSelection", a);
+		CargoAllocation cargoAllocation = result.getCargoAllocations().get(0);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(cargoAllocation);
+		ScenarioTools.printCargoAllocation("testBaseSelection", cargoAllocation);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.NBO);

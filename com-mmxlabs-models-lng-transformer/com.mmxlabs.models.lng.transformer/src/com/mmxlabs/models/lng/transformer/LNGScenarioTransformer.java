@@ -466,8 +466,10 @@ public class LNGScenarioTransformer {
 				if (!freeze && freezeDate != null) {
 					if (o instanceof Cargo) {
 						final Cargo cargo = (Cargo) o;
-						if (cargo.getLoadSlot().getWindowStart().before(freezeDate)) {
-							freeze = true;
+						if (!cargo.getSlots().isEmpty()) {
+							if (cargo.getSlots().get(0).getWindowStart().before(freezeDate)) {
+								freeze = true;
+							}
 						}
 					} else if (o instanceof VesselEvent) {
 						final VesselEvent vesselEvent = (VesselEvent) o;
@@ -503,14 +505,21 @@ public class LNGScenarioTransformer {
 				}
 
 				if (o instanceof Cargo) {
-					final ICargo cargo = entities.getOptimiserObject(o, ICargo.class);
-					if (cargo != null) {
-						// bind slots to vessel
-						builder.constrainSlotToVessels(cargo.getLoadOption(), Collections.singleton(vessel));
-						builder.constrainSlotToVessels(cargo.getDischargeOption(), Collections.singleton(vessel));
-						// bind sequencing as well - this forces
-						// previousSlot to come before currentSlot.
-						builder.constrainSlotAdjacency(cargo.getLoadOption(), cargo.getDischargeOption());
+					Cargo cargo = (Cargo) o;
+					IPortSlot prevSlot = null;
+					for (Slot slot : cargo.getSlots()) {
+						final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+						if (cargo != null) {
+							// bind slots to vessel
+							builder.constrainSlotToVessels(portSlot, Collections.singleton(vessel));
+							// bind sequencing as well - this forces
+							// previousSlot to come before currentSlot.
+							if (prevSlot != null) {
+								builder.constrainSlotAdjacency(prevSlot, portSlot);
+
+							}
+							prevSlot = portSlot;
+						}
 					}
 				} else if (o instanceof VesselEvent) {
 					final IVesselEventPortSlot slot = entities.getOptimiserObject(o, IVesselEventPortSlot.class);
@@ -683,62 +692,89 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		// TODO: Refactor into Load and Discharge slot creation before cargo paring
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
-			if (eCargo.getLoadSlot().getWindowStartWithSlotOrPortTime().after(latestDate)) {
+
+			if (eCargo.getSlots().get(0).getWindowStartWithSlotOrPortTime().after(latestDate)) {
 				continue;
 			}
-			final ILoadOption load;
-			final LoadSlot loadSlot = eCargo.getLoadSlot();
-			{
 
-				load = createLoadOption(builder, portAssociation, contractTransformers, entities, loadSlot);
-				usedLoadSlots.add(loadSlot);
-			}
-			final DischargeSlot dischargeSlot = eCargo.getDischargeSlot();
-			final IDischargeOption discharge;
-			{
-				discharge = createDischargeOption(builder, portAssociation, contractTransformers, entities, dischargeSlot);
-				usedDischargeSlots.add(dischargeSlot);
-			}
-			// Bind FOB/DES slots to resource
-			if (loadSlot.isDESPurchase()) {
-				if (loadSlot instanceof SpotLoadSlot) {
-					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
-					final Set<IPort> marketPorts = new HashSet<IPort>();
+			final List<ILoadOption> loadOptions = new LinkedList<ILoadOption>();
+			final List<IDischargeOption> dischargeOptions = new LinkedList<IDischargeOption>();
+			final List<IPortSlot> slots = new ArrayList<IPortSlot>(eCargo.getSlots().size());
+			final Map<Slot, IPortSlot> slotMap = new HashMap<Slot, IPortSlot>();
+			for (final Slot slot : eCargo.getSlots()) {
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
 					{
-						final ASpotMarket market = spotLoadSlot.getMarket();
-						if (market instanceof DESPurchaseMarket) {
-							final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
-							final Set<APort> portSet = SetUtils.getPorts(desPurchaseMarket.getDestinationPorts());
-							for (final APort ap : portSet) {
-								if (ap instanceof Port) {
-									final IPort ip = portAssociation.lookup((Port) ap);
-									if (ip != null) {
-										marketPorts.add(ip);
-									}
-								}
-							}
-						}
-
+						final ILoadOption load = createLoadOption(builder, portAssociation, contractTransformers, entities, loadSlot);
+						usedLoadSlots.add(loadSlot);
+						loadOptions.add(load);
+						slotMap.put(loadSlot, load);
 					}
-					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
-				} else {
-					if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
-						// Redirection contracts can go to anywhere
-						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
-					} else {
-						// Bind to this port -- TODO: Fix to discharge?
-						builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(discharge.getPort()));
+
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					{
+						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, contractTransformers, entities, dischargeSlot);
+						usedDischargeSlots.add(dischargeSlot);
+						dischargeOptions.add(discharge);
+						slotMap.put(dischargeSlot, discharge);
 					}
 				}
 			}
-			if (dischargeSlot.isFOBSale()) {
-				builder.bindLoadSlotsToFOBSale(discharge, load.getPort());
+
+			for (final Slot slot : eCargo.getSlots()) {
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					// Bind FOB/DES slots to resource
+					final ILoadOption load = (ILoadOption) slotMap.get(loadSlot);
+					if (loadSlot.isDESPurchase()) {
+						if (loadSlot instanceof SpotLoadSlot) {
+							final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
+							final Set<IPort> marketPorts = new HashSet<IPort>();
+							{
+								final ASpotMarket market = spotLoadSlot.getMarket();
+								if (market instanceof DESPurchaseMarket) {
+									final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+									final Set<APort> portSet = SetUtils.getPorts(desPurchaseMarket.getDestinationPorts());
+									for (final APort ap : portSet) {
+										if (ap instanceof Port) {
+											final IPort ip = portAssociation.lookup((Port) ap);
+											if (ip != null) {
+												marketPorts.add(ip);
+											}
+										}
+									}
+								}
+
+							}
+							builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
+						} else {
+							if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
+								// Redirection contracts can go to anywhere
+								builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
+							} else {
+								// Bind to this port -- TODO: Fix to discharge?
+								final Set<IPort> ports = new LinkedHashSet<IPort>();
+								for (final IDischargeOption discharge : dischargeOptions) {
+									ports.add(discharge.getPort());
+								}
+								builder.bindDischargeSlotsToDESPurchase(load, ports);
+							}
+						}
+					}
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					if (dischargeSlot.isFOBSale()) {
+						for (final IPortSlot load : loadOptions) {
+							builder.bindLoadSlotsToFOBSale((IDischargeOption) slotMap.get(dischargeSlot), load.getPort());
+						}
+					}
+				}
 			}
 
-			final ICargo cargo = builder.createCargo(eCargo.getName(), load, discharge, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
+			ICargo cargo = builder.createCargo(slots, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
 			entities.addModelObject(eCargo, cargo);
 			if (eCargo.getCargoType() == CargoType.FLEET) {
@@ -749,7 +785,7 @@ public class LNGScenarioTransformer {
 					for (final AVessel v : allowedVessels) {
 						vesselsForCargo.add(vesselAssociation.lookup((Vessel) v));
 					}
-					builder.setCargoVesselRestriction(cargo, vesselsForCargo);
+					builder.setCargoVesselRestriction(slots, vesselsForCargo);
 				}
 			}
 		}

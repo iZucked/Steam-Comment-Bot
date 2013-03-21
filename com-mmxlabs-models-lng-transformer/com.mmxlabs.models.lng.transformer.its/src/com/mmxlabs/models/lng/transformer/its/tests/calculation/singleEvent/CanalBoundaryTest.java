@@ -11,6 +11,7 @@ import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -38,7 +39,7 @@ public class CanalBoundaryTest {
 		final int distanceBetweenPorts = 1000;
 		final int canalDistance = 999;
 
-		final CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
 		Assert.assertTrue("Laden leg travels down canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels down canal", canalName.equals(a.getBallastLeg().getRoute()));
@@ -56,7 +57,7 @@ public class CanalBoundaryTest {
 		final int distanceBetweenPorts = 999;
 		final int canalDistance = 1000;
 
-		final CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
 		Assert.assertTrue("Laden leg travels on open sea", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on open sea", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
@@ -74,7 +75,7 @@ public class CanalBoundaryTest {
 		final int distanceBetweenPorts = 1000;
 		final int canalDistance = 1010;
 
-		final CargoAllocation a = testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testSimpleCanalDistance(testName, canalDistance, distanceBetweenPorts));
 
 		Assert.assertTrue("Laden leg travels on open sea", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on open sea", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
@@ -123,7 +124,7 @@ public class CanalBoundaryTest {
 		final int canalTranistFuel = 0;
 		final int canalTransitTimePerHour = 0;
 
-		final CargoAllocation a = testCanalCost(testName, canalCost, canalTranistFuel, canalTransitTimePerHour);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalTranistFuel, canalTransitTimePerHour));
 
 		Assert.assertTrue("Laden leg travels in canal", canalName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels in canal", canalName.equals(a.getBallastLeg().getRoute()));
@@ -140,7 +141,7 @@ public class CanalBoundaryTest {
 		final int canalFuelPerHour = 0;
 		final int canalTransitTimeHours = 0;
 
-		final CargoAllocation a = testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
 		Assert.assertTrue("Laden leg travels on canal", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on canal", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
@@ -157,7 +158,7 @@ public class CanalBoundaryTest {
 		final int canalFuelPerHour = 21;
 		final int canalTransitTimeHours = 5;
 
-		final CargoAllocation a = testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
 		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
@@ -174,7 +175,7 @@ public class CanalBoundaryTest {
 		final int canalFuelPerHour = 19;
 		final int canalTransitTimeHours = 5;
 
-		final CargoAllocation a = testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testCanalCost(testName, canalCost, canalFuelPerHour, canalTransitTimeHours));
 
 		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
 		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
@@ -248,13 +249,13 @@ public class CanalBoundaryTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
+		final MMXRootObject canalScenario = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed,
+				capacity, speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed,
+				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 
-		final MMXRootObject canalScenario = ScenarioTools.createScenarioWithCanal(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
-				speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed, fuelTravelConsumptionPerDay, speed,
-				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
-		
-		CustomScenarioCreator.createCanalAndCost(canalScenario, canalName, ScenarioTools.A, ScenarioTools.B, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelPerDay, NBOTravelRatePerDay, canalTransitTime);
-		
+		CustomScenarioCreator.createCanalAndCost(canalScenario, canalName, ScenarioTools.A, ScenarioTools.B, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelPerDay,
+				NBOTravelRatePerDay, canalTransitTime);
+
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
 		// there will be a single cargo allocation for this cargo

@@ -11,6 +11,7 @@ import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -64,7 +65,7 @@ public class RouteSameCostTest {
 		final int fuelTravelConsumptionPerHour = 10;
 		final int NBORatePerHour = 5;
 
-		final CargoAllocation a = testEquallyPricedRoutes(testName, portDistances, params, fuelTravelConsumptionPerHour, NBORatePerHour);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testEquallyPricedRoutes(testName, portDistances, params, fuelTravelConsumptionPerHour, NBORatePerHour));
 
 		// check same price
 		final long canalPrice = getPriceOfCanal(testName, params, fuelTravelConsumptionPerHour, NBORatePerHour);
@@ -106,7 +107,7 @@ public class RouteSameCostTest {
 		final int fuelConsumptionHours = 10;
 		final int NBORateHours = 10;
 
-		final CargoAllocation a = testEquallyPricedRoutes(testName, portDistances, params, fuelConsumptionHours, NBORateHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testEquallyPricedRoutes(testName, portDistances, params, fuelConsumptionHours, NBORateHours));
 
 		// check same price
 		final long canalPrice = getPriceOfCanal(testName, params, fuelConsumptionHours, NBORateHours);
@@ -197,7 +198,7 @@ public class RouteSameCostTest {
 	 * @return The total cost for the route, including idles.
 	 */
 	private long getPriceOfCanal(final String testName, final CanalParameters canalCost, final int fuelTravelConsumptionPerHour, final int NBORatePerHour) {
-		final CargoAllocation a = testEquallyPricedRoutes(testName + ": get canal price", new int[] { 10000 }, canalCost , fuelTravelConsumptionPerHour, NBORatePerHour);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testEquallyPricedRoutes(testName + ": get canal price", new int[] { 10000 }, canalCost , fuelTravelConsumptionPerHour, NBORatePerHour));
 
 		return getCargoAllocationCost(a);
 	}
@@ -212,7 +213,7 @@ public class RouteSameCostTest {
 	 * @return The total cost for the route, including idles.
 	 */
 	private long getPriceOfOcean(final String testName, final int distance, final int fuelTravelConsumptionPerHour, final int NBORatePerHour) {
-		final CargoAllocation a = testEquallyPricedRoutes(testName + ": get ocean price", new int[] { distance }, null, fuelTravelConsumptionPerHour, NBORatePerHour);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testEquallyPricedRoutes(testName + ": get ocean price", new int[] { distance }, null, fuelTravelConsumptionPerHour, NBORatePerHour));
 
 		return getCargoAllocationCost(a);
 
@@ -224,7 +225,7 @@ public class RouteSameCostTest {
 		}
 	}
 	
-	long getCargoAllocationCost(CargoAllocation a) {
+	long getCargoAllocationCost(SimpleCargoAllocation a) {
 		
 		long total = 0;
 		

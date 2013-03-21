@@ -68,6 +68,7 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
@@ -76,6 +77,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
@@ -371,8 +373,8 @@ public class ScenarioTools {
 		final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
 		final DischargeSlot dis = CargoFactory.eINSTANCE.createDischargeSlot();
 
-		cargo.setLoadSlot(load);
-		cargo.setDischargeSlot(dis);
+		cargo.getSlots().add(load);
+		cargo.getSlots().add(dis);
 
 		load.setPort(A);
 		dis.setPort(B);
@@ -697,12 +699,13 @@ public class ScenarioTools {
 	 * @param a
 	 *            The cargo allocation to print to console.
 	 */
-	public static void printCargoAllocation(final String testName, final CargoAllocation a) {
+	public static void printCargoAllocation(final String testName, final CargoAllocation ca) {
 		System.err.println(testName);
-		System.err.println("Allocation " + a.getName());
+		System.err.println("Allocation " + ca.getName());
 		// FIXME: Update for API changes
 		// System.err.println("Total cost: " + a.getTotalCost() + ", Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
 
+		SimpleCargoAllocation a= new SimpleCargoAllocation(ca);
 		if (a.getLadenLeg() != null) {
 			printJourney("Laden Leg", a.getLadenLeg());
 		}
@@ -809,10 +812,10 @@ public class ScenarioTools {
 			} else if (e instanceof SlotVisit) {
 				final SlotVisit sv = (SlotVisit) e;
 				System.err.println("SlotVisit:");
-				final Slot slot = sv.getSlotAllocation().getSlot();
-				final CargoAllocation ca = sv.getSlotAllocation().getCargoAllocation();
+				SlotAllocation slotAllocation = sv.getSlotAllocation();
+				final Slot slot = slotAllocation.getSlot();
 				final String description = (slot instanceof LoadSlot ? "load: " : "discharge: ");
-				final int volume = (slot instanceof LoadSlot ? ca.getLoadVolume() : ca.getDischargeVolume());
+				final int volume = slotAllocation.getVolumeTransferred();
 				System.err.println("\tDuration: " + sv.getDuration() + ", " + description + volume);
 			} else if (e instanceof SlotVisit) {
 				final SlotVisit pv = (SlotVisit) e;
@@ -824,7 +827,7 @@ public class ScenarioTools {
 				System.err.println("\tDuration: " + cd.getDuration());
 				System.err.println("\tStart: " + cd.getStart() + ", End: " + cd.getEnd());
 				ScenarioTools.printFuel(cd.getFuels());
-				
+
 			} else {
 				System.err.println("Unknown:");
 				System.err.println("\t" + e.getClass());
@@ -902,5 +905,7 @@ public class ScenarioTools {
 		// System.err.println("time: " + (System.currentTimeMillis() - l));
 		manifestResource.save(null);
 	}
+
+	
 
 }

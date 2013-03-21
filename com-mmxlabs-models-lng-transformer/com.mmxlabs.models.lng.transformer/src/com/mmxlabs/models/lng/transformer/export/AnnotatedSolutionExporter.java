@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -260,16 +261,40 @@ public class AnnotatedSolutionExporter {
 						return 1;
 					}
 
-					// idle must come after journey
-					if (arg0 instanceof Idle)
-						return (arg1 instanceof Idle) ? 0 : -1;
-					if (arg1 instanceof Idle)
-						return 1;
+					// Sort by Journey -> idle -> SlotVisit
+					if (arg0 instanceof Journey) {
+						if (arg1 instanceof Journey) {
+							return 0;
+						}
+						if (arg1 instanceof Idle) {
+							return -1;
+						}
+						if (arg1 instanceof SlotVisit) {
+							return -1;
+						}
+					}
 
-					if (arg0 instanceof Journey)
-						return (arg1 instanceof Journey) ? 0 : -1;
-					if (arg1 instanceof Journey)
-						return 1;
+					else if (arg0 instanceof Idle) {
+						if (arg1 instanceof Journey) {
+							return 1;
+						}
+						if (arg1 instanceof Idle) {
+							return 0;
+						}
+						if (arg1 instanceof SlotVisit) {
+							return -1;
+						}
+					} else if (arg0 instanceof SlotVisit) {
+						if (arg1 instanceof Journey) {
+							return 1;
+						}
+						if (arg1 instanceof Idle) {
+							return 1;
+						}
+						if (arg1 instanceof SlotVisit) {
+							return 0;
+						}
+					}
 
 					return 0;
 				}
@@ -363,25 +388,31 @@ public class AnnotatedSolutionExporter {
 		for (final Sequence eSequence : output.getSequences()) {
 			CargoAllocation allocation = null;
 			for (final Event event : eSequence.getEvents()) {
-				if (event instanceof SlotVisit) {
-					final SlotVisit visit = (SlotVisit) event;
-					allocation = visit.getSlotAllocation().getCargoAllocation();
-					allocation.setSequence(eSequence);
+				if (event instanceof PortVisit) {
+					if (event instanceof SlotVisit) {
+						final SlotVisit visit = (SlotVisit) event;
+						allocation = visit.getSlotAllocation().getCargoAllocation();
+						allocation.setSequence(eSequence);
+					} else {
+						allocation = null;
+					}
 				} else if (event instanceof Journey && allocation != null) {
-					if (allocation.getLadenLeg() == null) {
-						allocation.setLadenLeg((Journey) event);
-					} else if (allocation.getBallastLeg() == null) {
-						allocation.setBallastLeg((Journey) event);
-					}
+					allocation.getEvents().add(event);
+					// if (allocation.getLadenLeg() == null) {
+					// allocation.setLadenLeg((Journey) event);
+					// } else if (allocation.getBallastLeg() == null) {
+					// allocation.setBallastLeg((Journey) event);
+					// }
 				} else if (event instanceof Idle && allocation != null) {
-					if (allocation.getLadenIdle() == null) {
-						allocation.setLadenIdle((Idle) event);
-					} else if (allocation.getBallastIdle() == null) {
-						allocation.setBallastIdle((Idle) event);
-					}
+					allocation.getEvents().add(event);
+					// if (allocation.getLadenIdle() == null) {
+					// allocation.setLadenIdle((Idle) event);
+					// } else if (allocation.getBallastIdle() == null) {
+					// allocation.setBallastIdle((Idle) event);
+					// }
 				}
-				if (allocation != null && allocation.getBallastLeg() != null && allocation.getLadenLeg() != null && allocation.getLadenIdle() != null && allocation.getBallastIdle() != null)
-					allocation = null;
+				// if (allocation != null && allocation.getBallastLeg() != null && allocation.getLadenLeg() != null && allocation.getLadenIdle() != null && allocation.getBallastIdle() != null)
+				// allocation = null;
 			}
 		}
 

@@ -377,8 +377,8 @@ public class CustomScenarioCreator {
 		final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
 		final DischargeSlot dis = CargoFactory.eINSTANCE.createDischargeSlot();
 
-		cargo.setLoadSlot(load);
-		cargo.setDischargeSlot(dis);
+		cargo.getSlots().add(load);
+		cargo.getSlots().add(dis);
 
 		load.setPort(loadPort);
 		dis.setPort(dischargePort);

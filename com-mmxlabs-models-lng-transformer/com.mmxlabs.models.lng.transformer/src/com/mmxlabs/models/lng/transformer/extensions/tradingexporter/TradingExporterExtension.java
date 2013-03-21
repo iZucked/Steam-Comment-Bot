@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.TypesFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -88,9 +87,11 @@ public class TradingExporterExtension implements IExporterExtension {
 					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
 					CargoAllocation cargoAllocation = null;
 					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-						if (allocation.getLoadAllocation().getSlot() == modelSlot || allocation.getDischargeAllocation().getSlot() == modelSlot) {
-							cargoAllocation = allocation;
-							break;
+						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+							if (slotAllocation.getSlot() == modelSlot) {
+								cargoAllocation = allocation;
+								break;
+							}
 						}
 					}
 					if (cargoAllocation != null) {
@@ -210,18 +211,19 @@ public class TradingExporterExtension implements IExporterExtension {
 					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
 					CargoAllocation cargoAllocation = null;
 					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-						if (allocation.getLoadAllocation().getSlot() == modelSlot || allocation.getDischargeAllocation().getSlot() == modelSlot) {
-							cargoAllocation = allocation;
-							break;
+						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+							if (slotAllocation.getSlot() == modelSlot) {
+								cargoAllocation = allocation;
+								break;
+							}
 						}
 					}
 					if (cargoAllocation != null) {
-
-						// TODO: Quick hack to find the charter event. Should do better search in case it is not here!
-						final SlotVisit slotVisit = cargoAllocation.getDischargeAllocation().getSlotVisit();
-						final Event nextEvent = slotVisit.getNextEvent().getNextEvent();
-						if (nextEvent instanceof GeneratedCharterOut) {
-							setPandLentries(generatedCharterOutProfitAndLoss, (ExtraDataContainer) nextEvent);
+						for (final Event event : cargoAllocation.getEvents()) {
+							// TODO: Quick hack to find the charter event. Should do better search in case it is not here!
+							if (event instanceof GeneratedCharterOut) {
+								setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) event);
+							}
 						}
 					}
 				}

@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -95,7 +96,8 @@ public class MultipleCargoFuelConsumptionTest {
 		final int expectedIdleNBO = 10;
 
 		// add assertions on results
-		for (final CargoAllocation ca : result.getCargoAllocations()) {
+		for (final CargoAllocation cargoAllocation : result.getCargoAllocations()) {
+			final SimpleCargoAllocation ca = new SimpleCargoAllocation(cargoAllocation);
 			// expect only NBO to be used always
 
 			// check the laden journey
@@ -260,8 +262,8 @@ public class MultipleCargoFuelConsumptionTest {
 		final int expectedIdleNBO = 10;
 
 		// add assertions on results
-		for (final CargoAllocation ca : result.getCargoAllocations()) {
-
+		for (final CargoAllocation cargoAllocation : result.getCargoAllocations()) {
+			final SimpleCargoAllocation ca = new SimpleCargoAllocation(cargoAllocation);
 			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRoute());
 			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRoute());
 

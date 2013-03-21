@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -33,7 +34,7 @@ public class DistanceRoundingTest {
 		final int travelTime = 1;
 		final int speed = 10;
 
-		final CargoAllocation a = test(testName, distanceBetweenPorts, travelTime, speed);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(test(testName, distanceBetweenPorts, travelTime, speed));
 
 		// The expected duration, if an int, will be rounded to zero.
 		final int expectedDuration = distanceBetweenPorts / speed;
