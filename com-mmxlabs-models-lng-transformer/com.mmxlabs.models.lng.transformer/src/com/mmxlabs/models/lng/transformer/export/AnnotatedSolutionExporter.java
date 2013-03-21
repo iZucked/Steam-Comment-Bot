@@ -261,7 +261,7 @@ public class AnnotatedSolutionExporter {
 						return 1;
 					}
 
-					// Sort by Journey -> idle -> SlotVisit
+					// Sort by Journey -> idle -> PortVisit
 					if (arg0 instanceof Journey) {
 						if (arg1 instanceof Journey) {
 							return 0;
@@ -269,7 +269,7 @@ public class AnnotatedSolutionExporter {
 						if (arg1 instanceof Idle) {
 							return -1;
 						}
-						if (arg1 instanceof SlotVisit) {
+						if (arg1 instanceof PortVisit) {
 							return -1;
 						}
 					}
@@ -281,17 +281,17 @@ public class AnnotatedSolutionExporter {
 						if (arg1 instanceof Idle) {
 							return 0;
 						}
-						if (arg1 instanceof SlotVisit) {
+						if (arg1 instanceof PortVisit) {
 							return -1;
 						}
-					} else if (arg0 instanceof SlotVisit) {
+					} else if (arg0 instanceof PortVisit) {
 						if (arg1 instanceof Journey) {
 							return 1;
 						}
 						if (arg1 instanceof Idle) {
 							return 1;
 						}
-						if (arg1 instanceof SlotVisit) {
+						if (arg1 instanceof PortVisit) {
 							return 0;
 						}
 					}
