@@ -65,104 +65,33 @@ public class CargoAllocationItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLoadAllocationPropertyDescriptor(object);
-			addDischargeAllocationPropertyDescriptor(object);
-			addLoadVolumePropertyDescriptor(object);
-			addDischargeVolumePropertyDescriptor(object);
+			addSlotAllocationsPropertyDescriptor(object);
 			addInputCargoPropertyDescriptor(object);
-			addLadenLegPropertyDescriptor(object);
-			addBallastLegPropertyDescriptor(object);
-			addLadenIdlePropertyDescriptor(object);
-			addBallastIdlePropertyDescriptor(object);
+			addEventsPropertyDescriptor(object);
 			addSequencePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Load Allocation feature.
+	 * This adds a property descriptor for the Slot Allocations feature.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLoadAllocationPropertyDescriptor(Object object) {
+	protected void addSlotAllocationsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_loadAllocation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadAllocation_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_ALLOCATION,
+				 getString("_UI_CargoAllocation_slotAllocations_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_slotAllocations_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__SLOT_ALLOCATIONS,
 				 true,
 				 false,
 				 true,
 				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Discharge Allocation feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDischargeAllocationPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_dischargeAllocation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeAllocation_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_ALLOCATION,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Load Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLoadVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_loadVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_loadVolume_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Discharge Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDischargeVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_dischargeVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_dischargeVolume_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -190,85 +119,20 @@ public class CargoAllocationItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Laden Leg feature.
+	 * This adds a property descriptor for the Events feature.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLadenLegPropertyDescriptor(Object object) {
+	protected void addEventsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_ladenLeg_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ladenLeg_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_LEG,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Ballast Leg feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBallastLegPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_ballastLeg_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ballastLeg_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_LEG,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Laden Idle feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLadenIdlePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_ladenIdle_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ladenIdle_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_IDLE,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Ballast Idle feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBallastIdlePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_ballastIdle_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ballastIdle_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_IDLE,
+				 getString("_UI_CargoAllocation_events_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_events_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__EVENTS,
 				 true,
 				 false,
 				 true,
@@ -312,8 +176,6 @@ public class CargoAllocationItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
-			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_ALLOCATION);
-			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_ALLOCATION);
 			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__INPUT_CARGO);
 		}
 		return childrenFeatures;
@@ -352,7 +214,7 @@ public class CargoAllocationItemProvider
 	@Override
 	public String getText(Object object) {
 		CargoAllocation cargoAllocation = (CargoAllocation)object;
-		String text = getString("_UI_CargoAllocation_type") + " " + cargoAllocation.getLoadVolume();
+		String text = getString("_UI_CargoAllocation_type");
 		Cargo cargo = cargoAllocation.getInputCargo();
 		if (cargo != null) {
 			text += " " + cargo.getName();
@@ -372,10 +234,6 @@ public class CargoAllocationItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoAllocation.class)) {
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_VOLUME:
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;

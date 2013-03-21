@@ -3,12 +3,14 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cargo" nsURI="http://www.mmxlabs.com/models/lng/cargo/1/" nsPrefix="lng.cargo">
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ACargo">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" lowerBound="1"
+        eType="#//LoadSlot" eOpposite="#//LoadSlot/cargo"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" lowerBound="1"
+        eType="#//DischargeSlot" eOpposite="#//DischargeSlot/cargo"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowRewiring" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1"
-        eType="#//Slot" eOpposite="#//Slot/cargo"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASlot platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eOperations name="getSlotOrPortDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -40,8 +42,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
-        eOpposite="#//Cargo/slots"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//Slot">
     <eOperations name="getSlotOrPortCV" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
@@ -49,9 +49,13 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="arriveCold" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
+        eOpposite="#//Cargo/loadSlot"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="DESPurchase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot" eSuperTypes="#//Slot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
+        eOpposite="#//Cargo/dischargeSlot"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="FOBSale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="false" unsettable="true"/>

@@ -16,13 +16,12 @@ import javax.management.timer.Timer;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -38,12 +37,13 @@ public class AssignmentEditorHelper {
 	public static Date getStartDate(final UUIDObject task) {
 
 		if (task instanceof Cargo) {
-			final LoadSlot loadSlot = ((Cargo) task).getLoadSlot();
-			if (loadSlot == null) {
-				// This may happen during a sequence of notifications
+			final Cargo cargo = (Cargo) task;
+			final EList<Slot> slots = cargo.getSlots();
+			if (slots.isEmpty()) {
 				return null;
 			}
-			return loadSlot.getWindowStartWithSlotOrPortTime();
+			final Slot firstSlot = slots.get(0);
+			return firstSlot.getWindowStartWithSlotOrPortTime();
 		} else if (task instanceof VesselEvent) {
 			return ((VesselEvent) task).getStartBy();
 		} else if (task instanceof Slot) {
@@ -55,12 +55,13 @@ public class AssignmentEditorHelper {
 
 	public static Date getEndDate(final UUIDObject task) {
 		if (task instanceof Cargo) {
-			final DischargeSlot dischargeSlot = ((Cargo) task).getDischargeSlot();
-			if (dischargeSlot == null) {
-				// TODO: Maybe use the Load slot?
+			final Cargo cargo = (Cargo) task;
+			final EList<Slot> slots = cargo.getSlots();
+			if (slots.isEmpty()) {
 				return null;
 			}
-			return dischargeSlot.getWindowEndWithSlotOrPortTime();
+			final Slot lastSlot = slots.get(slots.size() - 1);
+			return lastSlot.getWindowEndWithSlotOrPortTime();
 		} else if (task instanceof VesselEvent) {
 			return new Date(((VesselEvent) task).getStartBy().getTime() + Timer.ONE_DAY * ((VesselEvent) task).getDurationInDays());
 		} else if (task instanceof Slot) {

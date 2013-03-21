@@ -7,7 +7,6 @@ import com.mmxlabs.models.lng.types.ASlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.port.Port;
-
 import java.util.Date;
 
 /**
@@ -28,6 +27,7 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
  * </ul>
  * </p>
  *
@@ -518,6 +518,36 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetPriceExpression();
+
+	/**
+	 * Returns the value of the '<em><b>Cargo</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo</em>' reference.
+	 * @see #setCargo(Cargo)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Cargo()
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSlots
+	 * @model opposite="slots"
+	 * @generated
+	 */
+	Cargo getCargo();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo</em>' reference.
+	 * @see #getCargo()
+	 * @generated
+	 */
+	void setCargo(Cargo value);
 
 	/**
 	 * <!-- begin-user-doc -->

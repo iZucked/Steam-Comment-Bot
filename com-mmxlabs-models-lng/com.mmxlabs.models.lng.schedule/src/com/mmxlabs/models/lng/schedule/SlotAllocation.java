@@ -5,10 +5,23 @@
 package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import java.util.Calendar;
+import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import java.util.Calendar;
+import java.util.Calendar;
+
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,6 +36,7 @@ import java.util.Calendar;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotVisit <em>Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}</li>
  * </ul>
  * </p>
  *
@@ -243,6 +257,34 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	void setPrice(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume Transferred</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Transferred</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Transferred</em>' attribute.
+	 * @see #setVolumeTransferred(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_VolumeTransferred()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getVolumeTransferred();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Transferred</em>' attribute.
+	 * @see #getVolumeTransferred()
+	 * @generated
+	 */
+	void setVolumeTransferred(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -82,7 +82,7 @@ public class LoadSlotViewer extends ScenarioTableViewerPane {
 		addTypicalColumn("Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain));
 
 		addTypicalColumn("Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain));
-		addTypicalColumn("Cargo ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain), pkg.getLoadSlot_Cargo());
+		addTypicalColumn("Cargo ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain), pkg.getSlot_Cargo());
 		addTypicalColumn("Optional", new BooleanAttributeManipulator(pkg.getSlot_Optional(), editingDomain));
 
 		// final InputModel input = part.getRootObject().getSubModel(InputModel.class);

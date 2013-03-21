@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Port;
 
 /**
  * <!-- begin-user-doc -->

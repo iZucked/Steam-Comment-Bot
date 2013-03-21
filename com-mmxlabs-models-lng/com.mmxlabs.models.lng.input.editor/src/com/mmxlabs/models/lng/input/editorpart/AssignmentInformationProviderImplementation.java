@@ -9,8 +9,11 @@ import java.util.HashMap;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -35,12 +38,12 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 	 */
 	private final MMXRootObject rootObject;
 	private final InputModel modelObject;
-	private HashMap<Pair<Port, Port>, Integer> minTravelTimes = new HashMap<Pair<Port, Port>, Integer>();
+	private final HashMap<Pair<Port, Port>, Integer> minTravelTimes = new HashMap<Pair<Port, Port>, Integer>();
 
 	/**
 	 * @param inputJointModelEditorContribution
 	 */
-	public AssignmentInformationProviderImplementation(MMXRootObject rootObject) {
+	public AssignmentInformationProviderImplementation(final MMXRootObject rootObject) {
 		this.rootObject = rootObject;
 		this.modelObject = rootObject.getSubModel(InputModel.class);
 		updateMinTravelTimes();
@@ -72,7 +75,13 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 
 	private Port getEndPort(final UUIDObject task) {
 		if (task instanceof Cargo) {
-			return ((Cargo) task).getDischargeSlot().getPort();
+			final Cargo cargo = (Cargo) task;
+			final EList<Slot> slots = cargo.getSlots();
+			if (slots.isEmpty()) {
+				return null;
+			}
+			final Slot lastSlot = slots.get(slots.size() - 1);
+			return lastSlot.getPort();
 		} else if (task instanceof CharterOutEvent) {
 			return ((CharterOutEvent) task).getEndPort();
 		} else if (task instanceof VesselEvent) {
@@ -84,7 +93,13 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 
 	private Port getStartPort(final UUIDObject task) {
 		if (task instanceof Cargo) {
-			return ((Cargo) task).getLoadSlot().getPort();
+			final Cargo cargo = (Cargo) task;
+			final EList<Slot> slots = cargo.getSlots();
+			if (slots.isEmpty()) {
+				return null;
+			}
+			final Slot firstSlot = slots.get(0);
+			return firstSlot.getPort();
 		} else if (task instanceof VesselEvent) {
 			return ((VesselEvent) task).getPort();
 		} else {
@@ -96,7 +111,17 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 	public String getTooltip(final UUIDObject task) {
 		String secondLine = "";
 		if (task instanceof Cargo) {
-			secondLine = "\n" + ((Cargo) task).getLoadSlot().getPort().getName() + " to " + ((Cargo) task).getDischargeSlot().getPort().getName();
+			final Cargo cargo = (Cargo) task;
+			boolean first = true;
+			for (final Slot slot : cargo.getSlots()) {
+				if (first) {
+					secondLine += "\n";
+				} else {
+					secondLine += " to ";
+				}
+				secondLine += slot.getPort().getName();
+				first = false;
+			}
 		} else if (task instanceof VesselEvent) {
 			secondLine = "\n" + ((VesselEvent) task).getPort().getName();
 			if (task instanceof CharterOutEvent) {

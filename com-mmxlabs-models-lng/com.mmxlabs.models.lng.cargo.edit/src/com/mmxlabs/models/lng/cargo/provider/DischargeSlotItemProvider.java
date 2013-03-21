@@ -59,33 +59,10 @@ public class DischargeSlotItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addCargoPropertyDescriptor(object);
 			addFOBSalePropertyDescriptor(object);
 			addPurchaseDeliveryTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Cargo feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCargoPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_DischargeSlot_cargo_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_DischargeSlot_cargo_feature", "_UI_DischargeSlot_type"),
-				 CargoPackage.Literals.DISCHARGE_SLOT__CARGO,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**

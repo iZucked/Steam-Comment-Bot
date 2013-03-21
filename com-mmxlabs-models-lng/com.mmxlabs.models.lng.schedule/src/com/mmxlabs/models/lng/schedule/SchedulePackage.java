@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -13,6 +11,8 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -2104,7 +2104,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2114,7 +2113,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Resolve Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2124,7 +2122,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Restore Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2134,7 +2131,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2144,7 +2140,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2154,7 +2149,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2164,7 +2158,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2174,7 +2167,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2184,7 +2176,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2194,7 +2185,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Duration</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2204,7 +2194,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Local Start</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2214,7 +2203,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2224,7 +2212,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2234,7 +2221,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2244,7 +2230,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Hire Cost</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2254,7 +2239,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Data With Path</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2264,7 +2248,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Data With Key</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2274,7 +2257,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2284,7 +2266,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2294,7 +2275,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2304,7 +2284,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Generated Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2721,40 +2700,14 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__EXTRA_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
+	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LOAD_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__DISCHARGE_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Load Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__LOAD_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__DISCHARGE_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
@@ -2763,43 +2716,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Laden Leg</b></em>' reference.
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LADEN_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Leg</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__BALLAST_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Laden Idle</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__LADEN_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Idle</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__BALLAST_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -2808,7 +2735,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -2817,7 +2744,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -2946,22 +2873,13 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
 
 	/**
-	 * The operation id for the '<em>Get Type</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
-
-	/**
 	 * The number of operations of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 7;
+	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
@@ -3037,13 +2955,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION__PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Volume Transferred</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__VOLUME_TRANSFERRED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Slot Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -4973,48 +4900,16 @@ public interface SchedulePackage extends EPackage {
 	EClass getCargoAllocation();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadAllocation <em>Load Allocation</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadAllocation()
+	 * @return the meta object for the reference list '<em>Slot Allocations</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations()
 	 * @see #getCargoAllocation()
 	 * @generated
 	 */
-	EReference getCargoAllocation_LoadAllocation();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeAllocation <em>Discharge Allocation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeAllocation()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_DischargeAllocation();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadVolume <em>Load Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Load Volume</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadVolume()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EAttribute getCargoAllocation_LoadVolume();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeVolume <em>Discharge Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Discharge Volume</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeVolume()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EAttribute getCargoAllocation_DischargeVolume();
+	EReference getCargoAllocation_SlotAllocations();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}'.
@@ -5028,48 +4923,16 @@ public interface SchedulePackage extends EPackage {
 	EReference getCargoAllocation_InputCargo();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents <em>Events</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Laden Leg</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenLeg()
+	 * @return the meta object for the reference list '<em>Events</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents()
 	 * @see #getCargoAllocation()
 	 * @generated
 	 */
-	EReference getCargoAllocation_LadenLeg();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Ballast Leg</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_BallastLeg();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Laden Idle</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_LadenIdle();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Ballast Idle</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_BallastIdle();
+	EReference getCargoAllocation_Events();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}'.
@@ -5091,16 +4954,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getCargoAllocation__GetName();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getType() <em>Get Type</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Type</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getType()
-	 * @generated
-	 */
-	EOperation getCargoAllocation__GetType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotAllocation <em>Slot Allocation</em>}'.
@@ -5166,6 +5019,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlotAllocation_Price();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Transferred</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EAttribute getSlotAllocation_VolumeTransferred();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPort() <em>Get Port</em>}' operation.
@@ -5938,36 +5802,13 @@ public interface SchedulePackage extends EPackage {
 		EClass CARGO_ALLOCATION = eINSTANCE.getCargoAllocation();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Allocation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Slot Allocations</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CARGO_ALLOCATION__LOAD_ALLOCATION = eINSTANCE.getCargoAllocation_LoadAllocation();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Allocation</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__DISCHARGE_ALLOCATION = eINSTANCE.getCargoAllocation_DischargeAllocation();
-
-		/**
-		 * The meta object literal for the '<em><b>Load Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CARGO_ALLOCATION__LOAD_VOLUME = eINSTANCE.getCargoAllocation_LoadVolume();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CARGO_ALLOCATION__DISCHARGE_VOLUME = eINSTANCE.getCargoAllocation_DischargeVolume();
+		EReference CARGO_ALLOCATION__SLOT_ALLOCATIONS = eINSTANCE.getCargoAllocation_SlotAllocations();
 
 		/**
 		 * The meta object literal for the '<em><b>Input Cargo</b></em>' reference feature.
@@ -5978,36 +5819,13 @@ public interface SchedulePackage extends EPackage {
 		EReference CARGO_ALLOCATION__INPUT_CARGO = eINSTANCE.getCargoAllocation_InputCargo();
 
 		/**
-		 * The meta object literal for the '<em><b>Laden Leg</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Events</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CARGO_ALLOCATION__LADEN_LEG = eINSTANCE.getCargoAllocation_LadenLeg();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Leg</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__BALLAST_LEG = eINSTANCE.getCargoAllocation_BallastLeg();
-
-		/**
-		 * The meta object literal for the '<em><b>Laden Idle</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__LADEN_IDLE = eINSTANCE.getCargoAllocation_LadenIdle();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Idle</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__BALLAST_IDLE = eINSTANCE.getCargoAllocation_BallastIdle();
+		EReference CARGO_ALLOCATION__EVENTS = eINSTANCE.getCargoAllocation_Events();
 
 		/**
 		 * The meta object literal for the '<em><b>Sequence</b></em>' reference feature.
@@ -6024,14 +5842,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation CARGO_ALLOCATION___GET_NAME = eINSTANCE.getCargoAllocation__GetName();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Type</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation CARGO_ALLOCATION___GET_TYPE = eINSTANCE.getCargoAllocation__GetType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
@@ -6082,6 +5892,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT_ALLOCATION__PRICE = eINSTANCE.getSlotAllocation_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Transferred</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ALLOCATION__VOLUME_TRANSFERRED = eINSTANCE.getSlotAllocation_VolumeTransferred();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Port</b></em>' operation.

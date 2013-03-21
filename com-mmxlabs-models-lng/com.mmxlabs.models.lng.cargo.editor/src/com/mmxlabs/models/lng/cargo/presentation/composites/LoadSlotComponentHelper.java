@@ -74,7 +74,6 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
-		add_cargoEditor(detailComposite, topClass);
 		add_DESPurchaseEditor(detailComposite, topClass);
 	}
 

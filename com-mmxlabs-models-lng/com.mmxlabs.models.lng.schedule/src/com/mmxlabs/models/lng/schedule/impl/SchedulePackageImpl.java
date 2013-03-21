@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -845,10 +844,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCargoAllocation_LoadAllocation() {
+	public EReference getCargoAllocation_SlotAllocations() {
 		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -857,71 +857,18 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCargoAllocation_DischargeAllocation() {
+	public EReference getCargoAllocation_InputCargo() {
 		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCargoAllocation_LoadVolume() {
-		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCargoAllocation_DischargeVolume() {
-		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCargoAllocation_InputCargo() {
-		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCargoAllocation_LadenLeg() {
-		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCargoAllocation_BallastLeg() {
-		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCargoAllocation_LadenIdle() {
-		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCargoAllocation_BallastIdle() {
-		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(8);
+	public EReference getCargoAllocation_Events() {
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -930,7 +877,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	public EReference getCargoAllocation_Sequence() {
-		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(9);
+		return (EReference)cargoAllocationEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -940,15 +887,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EOperation getCargoAllocation__GetName() {
 		return cargoAllocationEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getCargoAllocation__GetType() {
-		return cargoAllocationEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -1003,6 +941,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getSlotAllocation_Price() {
 		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlotAllocation_VolumeTransferred() {
+		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1305,18 +1253,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(cooldownEClass, COOLDOWN__COST);
 
 		cargoAllocationEClass = createEClass(CARGO_ALLOCATION);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_ALLOCATION);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_ALLOCATION);
-		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__LOAD_VOLUME);
-		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__DISCHARGE_VOLUME);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SLOT_ALLOCATIONS);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__INPUT_CARGO);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LADEN_LEG);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_LEG);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__LADEN_IDLE);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_IDLE);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__EVENTS);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SEQUENCE);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_NAME);
-		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_TYPE);
 
 		slotAllocationEClass = createEClass(SLOT_ALLOCATION);
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT);
@@ -1324,6 +1265,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__CARGO_ALLOCATION);
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT_VISIT);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__PRICE);
+		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__VOLUME_TRANSFERRED);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_START);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_END);
@@ -1508,20 +1450,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getCooldown_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoAllocationEClass, CargoAllocation.class, "CargoAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCargoAllocation_LoadAllocation(), this.getSlotAllocation(), null, "loadAllocation", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_DischargeAllocation(), this.getSlotAllocation(), null, "dischargeAllocation", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCargoAllocation_LoadVolume(), ecorePackage.getEInt(), "loadVolume", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCargoAllocation_DischargeVolume(), ecorePackage.getEInt(), "dischargeVolume", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_SlotAllocations(), this.getSlotAllocation(), null, "slotAllocations", null, 1, -1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoAllocation_InputCargo(), theTypesPackage.getACargo(), null, "inputCargo", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_LadenLeg(), this.getJourney(), null, "ladenLeg", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_BallastLeg(), this.getJourney(), null, "ballastLeg", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_LadenIdle(), this.getIdle(), null, "ladenIdle", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_BallastIdle(), this.getIdle(), null, "ballastIdle", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_Events(), this.getEvent(), null, "events", null, 1, -1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoAllocation_Sequence(), this.getSequence(), null, "sequence", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCargoAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getCargoAllocation__GetType(), ecorePackage.getEString(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(slotAllocationEClass, SlotAllocation.class, "SlotAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotAllocation_Slot(), theTypesPackage.getASlot(), null, "slot", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1529,6 +1463,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSlotAllocation_CargoAllocation(), this.getCargoAllocation(), null, "cargoAllocation", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotAllocation_SlotVisit(), this.getSlotVisit(), this.getSlotVisit_SlotAllocation(), "slotVisit", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotAllocation_VolumeTransferred(), ecorePackage.getEInt(), "volumeTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlotAllocation__GetPort(), theTypesPackage.getAPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 

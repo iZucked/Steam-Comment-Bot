@@ -4,6 +4,24 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.lng.types.impl.ASlotImpl;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +30,7 @@ import java.util.TimeZone;
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -44,6 +63,7 @@ import com.mmxlabs.models.lng.types.impl.ASlotImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPriceExpression <em>Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
  * </ul>
  * </p>
  *
@@ -277,6 +297,17 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean priceExpressionESet;
+
+	/**
+	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getCargo()
+	 * @generated
+	 * @ordered
+	 */
+	protected Cargo cargo;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -693,6 +724,70 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Cargo getCargo() {
+		if (cargo != null && cargo.eIsProxy()) {
+			InternalEObject oldCargo = (InternalEObject)cargo;
+			cargo = (Cargo)eResolveProxy(oldCargo);
+			if (cargo != oldCargo) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__CARGO, oldCargo, cargo));
+			}
+		}
+		return cargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Cargo basicGetCargo() {
+		return cargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCargo(Cargo newCargo, NotificationChain msgs) {
+		Cargo oldCargo = cargo;
+		cargo = newCargo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CARGO, oldCargo, newCargo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargo(Cargo newCargo) {
+		if (newCargo != cargo) {
+			NotificationChain msgs = null;
+			if (cargo != null)
+				msgs = ((InternalEObject)cargo).eInverseRemove(this, CargoPackage.CARGO__SLOTS, Cargo.class, msgs);
+			if (newCargo != null)
+				msgs = ((InternalEObject)newCargo).eInverseAdd(this, CargoPackage.CARGO__SLOTS, Cargo.class, msgs);
+			msgs = basicSetCargo(newCargo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CARGO, newCargo, newCargo));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -764,6 +859,36 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.SLOT__CARGO:
+				if (cargo != null)
+					msgs = ((InternalEObject)cargo).eInverseRemove(this, CargoPackage.CARGO__SLOTS, Cargo.class, msgs);
+				return basicSetCargo((Cargo)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.SLOT__CARGO:
+				return basicSetCargo(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -792,6 +917,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return isOptional();
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 				return getPriceExpression();
+			case CargoPackage.SLOT__CARGO:
+				if (resolve) return getCargo();
+				return basicGetCargo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -832,6 +960,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 				setPriceExpression((String)newValue);
+				return;
+			case CargoPackage.SLOT__CARGO:
+				setCargo((Cargo)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -874,6 +1005,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 				unsetPriceExpression();
 				return;
+			case CargoPackage.SLOT__CARGO:
+				setCargo((Cargo)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -905,6 +1039,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 				return isSetPriceExpression();
+			case CargoPackage.SLOT__CARGO:
+				return cargo != null;
 		}
 		return super.eIsSet(featureID);
 	}

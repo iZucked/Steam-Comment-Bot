@@ -16,6 +16,8 @@ import com.mmxlabs.common.parser.IFunctionFactory;
 import com.mmxlabs.common.parser.IInfixOperatorFactory;
 import com.mmxlabs.common.parser.IPrefixOperatorFactory;
 import com.mmxlabs.common.parser.ITermFactory;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
@@ -24,6 +26,7 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 /**
  * Utility class to calculate schedule exposure to market indices. Provides static methods
@@ -339,26 +342,25 @@ public class Exposures {
 	public static Map<MonthYear, Double> getExposuresByMonth(Schedule schedule, Index<?> index) {
 		CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();
 
-		for (CargoAllocation allocation : schedule.getCargoAllocations()) {
-			// calculate purchase and sales exposures separately
-			int loadVolume = allocation.getLoadVolume();
-			int dischargeVolume = allocation.getDischargeVolume();
-
-			double purchaseExposureCoefficient = getExposureCoefficient(allocation.getLoadAllocation().getSlot(), index);
-			double salesExposureCoefficient = getExposureCoefficient(allocation.getDischargeAllocation().getSlot(), index);
-
-			// purchase is positive exposure, sales is negative
-			double purchaseExposure = loadVolume * purchaseExposureCoefficient;
-			double salesExposure = -dischargeVolume * salesExposureCoefficient;
-
-			// find the months associated with the sales and the purchase
-			Date purchaseDate = allocation.getLoadAllocation().getSlotVisit().getStart();
-			Date salesDate = allocation.getDischargeAllocation().getSlotVisit().getStart();
-
-			// add the exposure figures into the totals per month
-			result.plusEquals(new MonthYear(purchaseDate), purchaseExposure);
-			result.plusEquals(new MonthYear(salesDate), salesExposure);
-
+		for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+			for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				int volume = slotAllocation.getVolumeTransfered();
+				Slot slot = slotAllocation.getSlot();
+				double exposureCoefficient = getExposureCoefficient(slot, index);
+				double exposure = exposureCoefficient * volume;
+				
+				if (slot instanceof LoadSlot) {
+					// +ve exposure
+				} else if (slot instanceof DischargeSlot) {
+					// -ve exposure
+					exposure = -exposure;
+				} else {
+					// Unknown slot type!
+					throw new IllegalStateException("Unsupported slot type");
+				}
+				Date date = slotAllocation.getSlotVisit().getStart();
+				result.plusEquals(new MonthYear(date), exposure);
+			}
 		}
 
 		return result;

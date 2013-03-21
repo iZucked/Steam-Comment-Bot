@@ -209,6 +209,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the cargo feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_cargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CARGO));
+	}
+
+	/**
 	 * Create the editor for the fixedPrice feature on Slot
 	 * 
 	 * @generated NOT

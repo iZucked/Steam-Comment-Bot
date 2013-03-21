@@ -99,7 +99,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="amounts" upperBound="-1"
         eType="#//FuelAmount" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="FuelUnit">
+  <eClassifiers xsi:type="ecore:EEnum" name="FuelUnit" instanceTypeName="FuelUnit">
     <eLiterals name="M3" literal="m3"/>
     <eLiterals name="MT" value="1" literal="MT"/>
     <eLiterals name="MMBTU" value="2" literal="MMBTU"/>
@@ -111,13 +111,26 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" lowerBound="1"
-        upperBound="-1" eType="#//SlotAllocation"/>
+    <eOperations name="getType" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadAllocation" lowerBound="1"
+        eType="#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeAllocation" lowerBound="1"
+        eType="#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadVolume" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargeVolume" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputCargo" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ACargo"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="events" lowerBound="1"
-        upperBound="-1" eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenLeg" lowerBound="1"
+        eType="#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastLeg" lowerBound="1"
+        eType="#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ladenIdle" lowerBound="1"
+        eType="#//Idle"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastIdle" lowerBound="1"
+        eType="#//Idle"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" lowerBound="1"
         eType="#//Sequence" unsettable="true"/>
   </eClassifiers>
@@ -137,8 +150,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotVisit" lowerBound="1"
         eType="#//SlotVisit" unsettable="true" eOpposite="#//SlotVisit/slotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeTransferred" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FuelAmount">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" lowerBound="1" eType="#//FuelUnit"/>

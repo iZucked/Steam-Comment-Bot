@@ -119,31 +119,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO__OTHER_NAMES = TypesPackage.ACARGO__OTHER_NAMES;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__LOAD_SLOT = TypesPackage.ACARGO_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__DISCHARGE_SLOT = TypesPackage.ACARGO_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOW_REWIRING = TypesPackage.ACARGO_FEATURE_COUNT + 2;
+	int CARGO__ALLOW_REWIRING = TypesPackage.ACARGO_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -152,7 +134,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = TypesPackage.ACARGO_FEATURE_COUNT + 3;
+	int CARGO__ALLOWED_VESSELS = TypesPackage.ACARGO_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__SLOTS = TypesPackage.ACARGO_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -161,7 +153,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 4;
+	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -400,13 +392,23 @@ public interface CargoPackage extends EPackage {
 	int SLOT__PRICE_EXPRESSION = TypesPackage.ASLOT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__CARGO = TypesPackage.ASLOT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 10;
+	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -699,6 +701,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__PRICE_EXPRESSION = SLOT__PRICE_EXPRESSION;
 
 	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CARGO = SLOT__CARGO;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -717,22 +728,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__ARRIVE_COLD = SLOT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__CARGO = SLOT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>DES Purchase</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__DES_PURCHASE = SLOT_FEATURE_COUNT + 3;
+	int LOAD_SLOT__DES_PURCHASE = SLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
@@ -741,7 +743,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 4;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -1049,7 +1051,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT__CARGO = SLOT_FEATURE_COUNT + 0;
+	int DISCHARGE_SLOT__CARGO = SLOT__CARGO;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -1058,7 +1060,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT__FOB_SALE = SLOT_FEATURE_COUNT + 1;
+	int DISCHARGE_SLOT__FOB_SALE = SLOT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
@@ -1068,7 +1070,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 2;
+	int DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Discharge Slot</em>' class.
@@ -1077,7 +1079,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
+	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -1660,6 +1662,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__PRICE_EXPRESSION = LOAD_SLOT__PRICE_EXPRESSION;
 
 	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__CARGO = LOAD_SLOT__CARGO;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1676,15 +1687,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__ARRIVE_COLD = LOAD_SLOT__ARRIVE_COLD;
-
-	/**
-	 * The feature id for the '<em><b>Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__CARGO = LOAD_SLOT__CARGO;
 
 	/**
 	 * The feature id for the '<em><b>DES Purchase</b></em>' attribute.
@@ -2370,28 +2372,6 @@ public interface CargoPackage extends EPackage {
 	EClass getCargo();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Slot</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot()
-	 * @see #getCargo()
-	 * @generated
-	 */
-	EReference getCargo_LoadSlot();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Slot</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot()
-	 * @see #getCargo()
-	 * @generated
-	 */
-	EReference getCargo_DischargeSlot();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2412,6 +2392,18 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargo_AllowedVessels();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSlots()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EReference getCargo_Slots();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType() <em>Get Cargo Type</em>}' operation.
@@ -2556,6 +2548,18 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_PriceExpression();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Cargo</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getCargo()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_Cargo();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2648,17 +2652,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_ArriveCold();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cargo</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getCargo()
-	 * @see #getLoadSlot()
-	 * @generated
-	 */
-	EReference getLoadSlot_Cargo();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2688,17 +2681,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDischargeSlot();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cargo</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EReference getDischargeSlot_Cargo();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isFOBSale <em>FOB Sale</em>}'.
@@ -2882,22 +2864,6 @@ public interface CargoPackage extends EPackage {
 		EClass CARGO = eINSTANCE.getCargo();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Slot</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO__LOAD_SLOT = eINSTANCE.getCargo_LoadSlot();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Slot</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO__DISCHARGE_SLOT = eINSTANCE.getCargo_DischargeSlot();
-
-		/**
 		 * The meta object literal for the '<em><b>Allow Rewiring</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2912,6 +2878,15 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO__ALLOWED_VESSELS = eINSTANCE.getCargo_AllowedVessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Slots</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO__SLOTS = eINSTANCE.getCargo_Slots();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Cargo Type</b></em>' operation.
@@ -3013,6 +2988,15 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__PRICE_EXPRESSION = eINSTANCE.getSlot_PriceExpression();
 
 		/**
+		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__CARGO = eINSTANCE.getSlot_Cargo();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3087,14 +3071,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute LOAD_SLOT__ARRIVE_COLD = eINSTANCE.getLoadSlot_ArriveCold();
 
 		/**
-		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference LOAD_SLOT__CARGO = eINSTANCE.getLoadSlot_Cargo();
-
-		/**
 		 * The meta object literal for the '<em><b>DES Purchase</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3119,14 +3095,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DISCHARGE_SLOT = eINSTANCE.getDischargeSlot();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DISCHARGE_SLOT__CARGO = eINSTANCE.getDischargeSlot_Cargo();
 
 		/**
 		 * The meta object literal for the '<em><b>FOB Sale</b></em>' attribute feature.

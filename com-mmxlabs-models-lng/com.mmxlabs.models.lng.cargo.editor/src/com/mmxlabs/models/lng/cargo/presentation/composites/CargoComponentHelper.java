@@ -161,4 +161,13 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
+
+	/**
+	 * Create the editor for the slots feature on Cargo
+	 *
+	 * @generated
+	 */
+	protected void add_slotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__SLOTS));
+	}
 }

@@ -61,7 +61,6 @@ public class LoadSlotItemProvider
 
 			addCargoCVPropertyDescriptor(object);
 			addArriveColdPropertyDescriptor(object);
-			addCargoPropertyDescriptor(object);
 			addDESPurchasePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -107,28 +106,6 @@ public class LoadSlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Cargo feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCargoPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_LoadSlot_cargo_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_cargo_feature", "_UI_LoadSlot_type"),
-				 CargoPackage.Literals.LOAD_SLOT__CARGO,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}

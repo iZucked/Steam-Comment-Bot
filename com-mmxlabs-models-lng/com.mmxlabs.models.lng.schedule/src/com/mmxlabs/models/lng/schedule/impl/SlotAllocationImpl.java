@@ -3,6 +3,40 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 
@@ -20,7 +54,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.ASpotMarket;
@@ -38,6 +71,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlotVisit <em>Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getVolumeTransferred <em>Volume Transferred</em>}</li>
  * </ul>
  * </p>
  *
@@ -130,6 +164,28 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected double price = PRICE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeTransferred() <em>Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VOLUME_TRANSFERRED_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVolumeTransferred() <em>Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected int volumeTransferred = VOLUME_TRANSFERRED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -449,6 +505,29 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getVolumeTransferred() {
+		return volumeTransferred;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeTransferred(int newVolumeTransferred) {
+		int oldVolumeTransferred = volumeTransferred;
+		volumeTransferred = newVolumeTransferred;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED, oldVolumeTransferred, volumeTransferred));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -574,6 +653,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return basicGetSlotVisit();
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 				return getPrice();
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+				return getVolumeTransferred();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -600,6 +681,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 				setPrice((Double)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+				setVolumeTransferred((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -628,6 +712,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 				setPrice(PRICE_EDEFAULT);
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+				setVolumeTransferred(VOLUME_TRANSFERRED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -650,6 +737,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return isSetSlotVisit();
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 				return price != PRICE_EDEFAULT;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+				return volumeTransferred != VOLUME_TRANSFERRED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -688,6 +777,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (price: ");
 		result.append(price);
+		result.append(", volumeTransferred: ");
+		result.append(volumeTransferred);
 		result.append(')');
 		return result.toString();
 	}

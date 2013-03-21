@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,7 +38,7 @@ public interface FuelAmount extends EObject {
 	 * @see com.mmxlabs.models.lng.schedule.FuelUnit
 	 * @see #setUnit(FuelUnit)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelAmount_Unit()
-	 * @model dataType="com.mmxlabs.models.lng.schedule.FuelUnit" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
 	FuelUnit getUnit();

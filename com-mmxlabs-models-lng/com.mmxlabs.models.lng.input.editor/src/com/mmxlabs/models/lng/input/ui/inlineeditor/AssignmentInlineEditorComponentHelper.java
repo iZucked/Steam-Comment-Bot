@@ -18,6 +18,7 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,6 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -283,10 +285,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			if (object instanceof Cargo) {
 
 				final Cargo cargo = (Cargo) object;
-				if (cargo.getLoadSlot() != null && cargo.getLoadSlot().isDESPurchase()) {
-					setEditorEnabled(false);
-				}
-				if (cargo.getDischargeSlot() != null && cargo.getDischargeSlot().isFOBSale()) {
+				if (cargo.getCargoType() != CargoType.FLEET) {
 					setEditorEnabled(false);
 				}
 			}
@@ -407,10 +406,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 			if (cargo != null) {
 
-				if (cargo.getLoadSlot() != null && cargo.getLoadSlot().isDESPurchase()) {
-					enabled = false;
-				}
-				if (cargo.getDischargeSlot() != null && cargo.getDischargeSlot().isFOBSale()) {
+				if (cargo.getCargoType() != CargoType.FLEET) {
 					enabled = false;
 				}
 			}

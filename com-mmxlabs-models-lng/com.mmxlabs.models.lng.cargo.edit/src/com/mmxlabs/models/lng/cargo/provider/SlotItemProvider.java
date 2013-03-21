@@ -70,6 +70,7 @@ public class SlotItemProvider
 			addMaxQuantityPropertyDescriptor(object);
 			addOptionalPropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
+			addCargoPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -291,6 +292,29 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cargo feature.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_cargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_cargo_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__CARGO,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

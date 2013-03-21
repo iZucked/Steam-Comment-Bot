@@ -6,6 +6,9 @@ package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.types.ACargo;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import org.eclipse.emf.common.util.EList;
+import com.mmxlabs.models.lng.types.ACargo;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,10 +18,9 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}</li>
  * </ul>
  * </p>
  *
@@ -27,62 +29,6 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface Cargo extends ACargo {
-	/**
-	 * Returns the value of the '<em><b>Load Slot</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Load Slot</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Slot</em>' reference.
-	 * @see #setLoadSlot(LoadSlot)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_LoadSlot()
-	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getCargo
-	 * @model opposite="cargo" required="true"
-	 * @generated
-	 */
-	LoadSlot getLoadSlot();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Slot</em>' reference.
-	 * @see #getLoadSlot()
-	 * @generated
-	 */
-	void setLoadSlot(LoadSlot value);
-
-	/**
-	 * Returns the value of the '<em><b>Discharge Slot</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Discharge Slot</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Discharge Slot</em>' reference.
-	 * @see #setDischargeSlot(DischargeSlot)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_DischargeSlot()
-	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo
-	 * @model opposite="cargo" required="true"
-	 * @generated
-	 */
-	DischargeSlot getDischargeSlot();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Discharge Slot</em>' reference.
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	void setDischargeSlot(DischargeSlot value);
-
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -151,6 +97,25 @@ public interface Cargo extends ACargo {
 	 * @generated
 	 */
 	EList<AVesselSet> getAllowedVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Slots</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Slot}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Slots</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Slots</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_Slots()
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getCargo
+	 * @model opposite="cargo"
+	 * @generated
+	 */
+	EList<Slot> getSlots();
 
 	/**
 	 * <!-- begin-user-doc -->

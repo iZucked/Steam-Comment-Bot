@@ -68,7 +68,6 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_cargoEditor(detailComposite, topClass);
 		add_FOBSaleEditor(detailComposite, topClass);
 		add_PurchaseDeliveryTypeEditor(detailComposite, topClass);
 	}

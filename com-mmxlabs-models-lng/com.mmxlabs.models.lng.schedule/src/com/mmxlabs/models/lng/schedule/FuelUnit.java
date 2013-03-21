@@ -16,7 +16,7 @@ import org.eclipse.emf.common.util.Enumerator;
  * and utility methods for working with them.
  * <!-- end-user-doc -->
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelUnit()
- * @model instanceClass="com.mmxlabs.models.lng.schedule.FuelUnit"
+ * @model
  * @generated
  */
 public enum FuelUnit implements Enumerator {

@@ -3,6 +3,54 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import java.io.Serializable;
+import java.lang.Iterable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import java.io.Serializable;
+import java.lang.Iterable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import java.io.Serializable;
 import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
@@ -15,12 +63,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -39,15 +87,9 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getExtraData <em>Extra Data</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLoadAllocation <em>Load Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getDischargeAllocation <em>Discharge Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLoadVolume <em>Load Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getDischargeVolume <em>Discharge Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getInputCargo <em>Input Cargo</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLadenLeg <em>Laden Leg</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getBallastLeg <em>Ballast Leg</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLadenIdle <em>Laden Idle</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getBallastIdle <em>Ballast Idle</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSequence <em>Sequence</em>}</li>
  * </ul>
  * </p>
@@ -66,64 +108,15 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	protected EList<ExtraData> extraData;
 
 	/**
-	 * The cached value of the '{@link #getLoadAllocation() <em>Load Allocation</em>}' reference.
+	 * The cached value of the '{@link #getSlotAllocations() <em>Slot Allocations</em>}' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
-	 * @see #getLoadAllocation()
+	 * @see #getSlotAllocations()
 	 * @generated
 	 * @ordered
 	 */
-	protected SlotAllocation loadAllocation;
-
-	/**
-	 * The cached value of the '{@link #getDischargeAllocation() <em>Discharge Allocation</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDischargeAllocation()
-	 * @generated
-	 * @ordered
-	 */
-	protected SlotAllocation dischargeAllocation;
-
-	/**
-	 * The default value of the '{@link #getLoadVolume() <em>Load Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLoadVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int LOAD_VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getLoadVolume() <em>Load Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLoadVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int loadVolume = LOAD_VOLUME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getDischargeVolume() <em>Discharge Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDischargeVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int DISCHARGE_VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getDischargeVolume() <em>Discharge Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDischargeVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int dischargeVolume = DISCHARGE_VOLUME_EDEFAULT;
+	protected EList<SlotAllocation> slotAllocations;
 
 	/**
 	 * The cached value of the '{@link #getInputCargo() <em>Input Cargo</em>}' reference.
@@ -145,44 +138,15 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	protected boolean inputCargoESet;
 
 	/**
-	 * The cached value of the '{@link #getLadenLeg() <em>Laden Leg</em>}' reference.
+	 * The cached value of the '{@link #getEvents() <em>Events</em>}' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
-	 * @see #getLadenLeg()
+	 * @see #getEvents()
 	 * @generated
 	 * @ordered
 	 */
-	protected Journey ladenLeg;
-
-	/**
-	 * The cached value of the '{@link #getBallastLeg() <em>Ballast Leg</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBallastLeg()
-	 * @generated
-	 * @ordered
-	 */
-	protected Journey ballastLeg;
-
-	/**
-	 * The cached value of the '{@link #getLadenIdle() <em>Laden Idle</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLadenIdle()
-	 * @generated
-	 * @ordered
-	 */
-	protected Idle ladenIdle;
-
-	/**
-	 * The cached value of the '{@link #getBallastIdle() <em>Ballast Idle</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBallastIdle()
-	 * @generated
-	 * @ordered
-	 */
-	protected Idle ballastIdle;
+	protected EList<Event> events;
 
 	/**
 	 * The cached value of the '{@link #getSequence() <em>Sequence</em>}' reference.
@@ -220,124 +184,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	@Override
 	protected EClass eStaticClass() {
 		return SchedulePackage.Literals.CARGO_ALLOCATION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SlotAllocation getLoadAllocation() {
-		if (loadAllocation != null && loadAllocation.eIsProxy()) {
-			InternalEObject oldLoadAllocation = (InternalEObject)loadAllocation;
-			loadAllocation = (SlotAllocation)eResolveProxy(oldLoadAllocation);
-			if (loadAllocation != oldLoadAllocation) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION, oldLoadAllocation, loadAllocation));
-			}
-		}
-		return loadAllocation;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SlotAllocation basicGetLoadAllocation() {
-		return loadAllocation;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setLoadAllocation(SlotAllocation newLoadAllocation) {
-		SlotAllocation oldLoadAllocation = loadAllocation;
-		loadAllocation = newLoadAllocation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION, oldLoadAllocation, loadAllocation));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SlotAllocation getDischargeAllocation() {
-		if (dischargeAllocation != null && dischargeAllocation.eIsProxy()) {
-			InternalEObject oldDischargeAllocation = (InternalEObject)dischargeAllocation;
-			dischargeAllocation = (SlotAllocation)eResolveProxy(oldDischargeAllocation);
-			if (dischargeAllocation != oldDischargeAllocation) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__DISCHARGE_ALLOCATION, oldDischargeAllocation, dischargeAllocation));
-			}
-		}
-		return dischargeAllocation;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SlotAllocation basicGetDischargeAllocation() {
-		return dischargeAllocation;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDischargeAllocation(SlotAllocation newDischargeAllocation) {
-		SlotAllocation oldDischargeAllocation = dischargeAllocation;
-		dischargeAllocation = newDischargeAllocation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__DISCHARGE_ALLOCATION, oldDischargeAllocation, dischargeAllocation));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getLoadVolume() {
-		return loadVolume;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setLoadVolume(int newLoadVolume) {
-		int oldLoadVolume = loadVolume;
-		loadVolume = newLoadVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LOAD_VOLUME, oldLoadVolume, loadVolume));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getDischargeVolume() {
-		return dischargeVolume;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDischargeVolume(int newDischargeVolume) {
-		int oldDischargeVolume = dischargeVolume;
-		dischargeVolume = newDischargeVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME, oldDischargeVolume, dischargeVolume));
 	}
 
 	/**
@@ -405,154 +251,15 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Journey getLadenLeg() {
-		if (ladenLeg != null && ladenLeg.eIsProxy()) {
-			InternalEObject oldLadenLeg = (InternalEObject)ladenLeg;
-			ladenLeg = (Journey)eResolveProxy(oldLadenLeg);
-			if (ladenLeg != oldLadenLeg) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LADEN_LEG, oldLadenLeg, ladenLeg));
-			}
+	public EList<Event> getEvents() {
+		if (events == null) {
+			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.CARGO_ALLOCATION__EVENTS);
 		}
-		return ladenLeg;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Journey basicGetLadenLeg() {
-		return ladenLeg;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setLadenLeg(Journey newLadenLeg) {
-		Journey oldLadenLeg = ladenLeg;
-		ladenLeg = newLadenLeg;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LADEN_LEG, oldLadenLeg, ladenLeg));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Journey getBallastLeg() {
-		if (ballastLeg != null && ballastLeg.eIsProxy()) {
-			InternalEObject oldBallastLeg = (InternalEObject)ballastLeg;
-			ballastLeg = (Journey)eResolveProxy(oldBallastLeg);
-			if (ballastLeg != oldBallastLeg) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG, oldBallastLeg, ballastLeg));
-			}
-		}
-		return ballastLeg;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Journey basicGetBallastLeg() {
-		return ballastLeg;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setBallastLeg(Journey newBallastLeg) {
-		Journey oldBallastLeg = ballastLeg;
-		ballastLeg = newBallastLeg;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG, oldBallastLeg, ballastLeg));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Idle getLadenIdle() {
-		if (ladenIdle != null && ladenIdle.eIsProxy()) {
-			InternalEObject oldLadenIdle = (InternalEObject)ladenIdle;
-			ladenIdle = (Idle)eResolveProxy(oldLadenIdle);
-			if (ladenIdle != oldLadenIdle) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE, oldLadenIdle, ladenIdle));
-			}
-		}
-		return ladenIdle;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Idle basicGetLadenIdle() {
-		return ladenIdle;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setLadenIdle(Idle newLadenIdle) {
-		Idle oldLadenIdle = ladenIdle;
-		ladenIdle = newLadenIdle;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE, oldLadenIdle, ladenIdle));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Idle getBallastIdle() {
-		if (ballastIdle != null && ballastIdle.eIsProxy()) {
-			InternalEObject oldBallastIdle = (InternalEObject)ballastIdle;
-			ballastIdle = (Idle)eResolveProxy(oldBallastIdle);
-			if (ballastIdle != oldBallastIdle) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE, oldBallastIdle, ballastIdle));
-			}
-		}
-		return ballastIdle;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Idle basicGetBallastIdle() {
-		return ballastIdle;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setBallastIdle(Idle newBallastIdle) {
-		Idle oldBallastIdle = ballastIdle;
-		ballastIdle = newBallastIdle;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE, oldBallastIdle, ballastIdle));
+		return events;
 	}
 
 	/**
@@ -632,15 +339,15 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
-	public String getName() {
-		if (isSetInputCargo()) {
-			return getInputCargo().getName();
-		} else {
-			return getLoadAllocation().getName();
+	public EList<SlotAllocation> getSlotAllocations() {
+		if (slotAllocations == null) {
+			slotAllocations = new EObjectResolvingEList<SlotAllocation>(SlotAllocation.class, this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS);
 		}
+		return slotAllocations;
 	}
 
 	/**
@@ -648,12 +355,16 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public String getType() {
+	public String getName() {
 		if (isSetInputCargo()) {
-			return getInputCargo().getCargoType().toString();
-		} 
-		return "Unknown";
-		
+			return getInputCargo().getName();
+		} else {
+			for (SlotAllocation slotAllocation : getSlotAllocations()) {
+				// TODO: First load allocation?
+				return slotAllocation.getName();
+			}
+		}
+		return "";
 	}
 
 	/**
@@ -745,31 +456,13 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				return getExtraData();
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
-				if (resolve) return getLoadAllocation();
-				return basicGetLoadAllocation();
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_ALLOCATION:
-				if (resolve) return getDischargeAllocation();
-				return basicGetDischargeAllocation();
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_VOLUME:
-				return getLoadVolume();
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
-				return getDischargeVolume();
+			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
+				return getSlotAllocations();
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				if (resolve) return getInputCargo();
 				return basicGetInputCargo();
-			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
-				if (resolve) return getLadenLeg();
-				return basicGetLadenLeg();
-			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
-				if (resolve) return getBallastLeg();
-				return basicGetBallastLeg();
-			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
-				if (resolve) return getLadenIdle();
-				return basicGetLadenIdle();
-			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
-				if (resolve) return getBallastIdle();
-				return basicGetBallastIdle();
+			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
+				return getEvents();
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				if (resolve) return getSequence();
 				return basicGetSequence();
@@ -790,32 +483,16 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				getExtraData().clear();
 				getExtraData().addAll((Collection<? extends ExtraData>)newValue);
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
-				setLoadAllocation((SlotAllocation)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_ALLOCATION:
-				setDischargeAllocation((SlotAllocation)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_VOLUME:
-				setLoadVolume((Integer)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
-				setDischargeVolume((Integer)newValue);
+			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
+				getSlotAllocations().clear();
+				getSlotAllocations().addAll((Collection<? extends SlotAllocation>)newValue);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				setInputCargo((Cargo)newValue);
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
-				setLadenLeg((Journey)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
-				setBallastLeg((Journey)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
-				setLadenIdle((Idle)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
-				setBallastIdle((Idle)newValue);
+			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
+				getEvents().clear();
+				getEvents().addAll((Collection<? extends Event>)newValue);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				setSequence((Sequence)newValue);
@@ -835,32 +512,14 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				getExtraData().clear();
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
-				setLoadAllocation((SlotAllocation)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_ALLOCATION:
-				setDischargeAllocation((SlotAllocation)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_VOLUME:
-				setLoadVolume(LOAD_VOLUME_EDEFAULT);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
-				setDischargeVolume(DISCHARGE_VOLUME_EDEFAULT);
+			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
+				getSlotAllocations().clear();
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				unsetInputCargo();
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
-				setLadenLeg((Journey)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
-				setBallastLeg((Journey)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
-				setLadenIdle((Idle)null);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
-				setBallastIdle((Idle)null);
+			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
+				getEvents().clear();
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				unsetSequence();
@@ -879,24 +538,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				return extraData != null && !extraData.isEmpty();
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
-				return loadAllocation != null;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_ALLOCATION:
-				return dischargeAllocation != null;
-			case SchedulePackage.CARGO_ALLOCATION__LOAD_VOLUME:
-				return loadVolume != LOAD_VOLUME_EDEFAULT;
-			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
-				return dischargeVolume != DISCHARGE_VOLUME_EDEFAULT;
+			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
+				return slotAllocations != null && !slotAllocations.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				return isSetInputCargo();
-			case SchedulePackage.CARGO_ALLOCATION__LADEN_LEG:
-				return ladenLeg != null;
-			case SchedulePackage.CARGO_ALLOCATION__BALLAST_LEG:
-				return ballastLeg != null;
-			case SchedulePackage.CARGO_ALLOCATION__LADEN_IDLE:
-				return ladenIdle != null;
-			case SchedulePackage.CARGO_ALLOCATION__BALLAST_IDLE:
-				return ballastIdle != null;
+			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
+				return events != null && !events.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				return isSetSequence();
 		}
@@ -961,13 +608,11 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @generated
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"rawtypes", "unchecked" })
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case SchedulePackage.CARGO_ALLOCATION___GET_NAME:
 				return getName();
-			case SchedulePackage.CARGO_ALLOCATION___GET_TYPE:
-				return getType();
 			case SchedulePackage.CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE:
 				return getDataWithPath((Iterable<String>)arguments.get(0));
 			case SchedulePackage.CARGO_ALLOCATION___GET_DATA_WITH_KEY__STRING:
@@ -980,24 +625,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return getValueWithPathAs((Iterable<String>)arguments.get(0), (Class)arguments.get(1), arguments.get(2));
 		}
 		return super.eInvoke(operationID, arguments);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (loadVolume: ");
-		result.append(loadVolume);
-		result.append(", dischargeVolume: ");
-		result.append(dischargeVolume);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of CargoAllocationImpl

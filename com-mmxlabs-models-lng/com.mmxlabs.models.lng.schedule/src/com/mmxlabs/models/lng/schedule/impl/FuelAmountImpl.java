@@ -6,13 +6,25 @@ package com.mmxlabs.models.lng.schedule.impl;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,6 +42,17 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	/**
+	 * The default value of the '{@link #getUnit() <em>Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final FuelUnit UNIT_EDEFAULT = FuelUnit.M3;
+
+	/**
 	 * The cached value of the '{@link #getUnit() <em>Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -37,7 +60,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * @generated
 	 * @ordered
 	 */
-	protected FuelUnit unit;
+	protected FuelUnit unit = UNIT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getQuantity() <em>Quantity</em>}' attribute.
@@ -94,7 +117,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 */
 	public void setUnit(FuelUnit newUnit) {
 		FuelUnit oldUnit = unit;
-		unit = newUnit == null ? null : newUnit;
+		unit = newUnit == null ? UNIT_EDEFAULT : newUnit;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.FUEL_AMOUNT__UNIT, oldUnit, unit));
 	}
@@ -163,7 +186,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case SchedulePackage.FUEL_AMOUNT__UNIT:
-				setUnit((FuelUnit)null);
+				setUnit(UNIT_EDEFAULT);
 				return;
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
 				setQuantity(QUANTITY_EDEFAULT);
@@ -181,7 +204,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case SchedulePackage.FUEL_AMOUNT__UNIT:
-				return unit != null;
+				return unit != UNIT_EDEFAULT;
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
 				return quantity != QUANTITY_EDEFAULT;
 		}
