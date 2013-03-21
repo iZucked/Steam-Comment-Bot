@@ -301,14 +301,15 @@ public interface ISchedulerBuilder {
 	IXYPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, float x, float y);
 
 	/**
-	 * Create a cargo with the specific from and to ports and associated time windows.
+	 * Create a cargo with the initial port slots. If allowRewiring is false, bind the slot sequence.
 	 * 
-	 * @param id
-	 * @param loadOption
-	 * @param dischargeOption
+	 * @param slots
+	 *            A {@link Collection} of {@link ILoadOption}s and {@link IDischargeOption}s
 	 * @return
 	 */
-	ICargo createCargo(String id, ILoadOption loadOption, IDischargeOption dischargeOption, boolean allowRewiring);
+	ICargo createCargo(final Collection<IPortSlot> slots, final boolean allowRewiring);
+
+	ICargo createCargo(final boolean allowRewiring, final IPortSlot... slots);
 
 	/**
 	 * Restrict the set of vessels which can carry this cargo to those in the second argument.
@@ -320,7 +321,7 @@ public interface ISchedulerBuilder {
 	 * @param vessels
 	 *            a set of vessels on which this cargo may be carried
 	 */
-	void setCargoVesselRestriction(ICargo cargo, Set<IVessel> vessels);
+	void setCargoVesselRestriction(Collection<IPortSlot> cargoSlots, Set<IVessel> vessels);
 
 	/**
 	 * Create a time window with the specified start and end time.
@@ -440,11 +441,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
-	IDischargeSlot createDischargeSlot(String id, IPort port,
-			ITimeWindow window, long minVolumeInM3, long maxVolumeInM3,
-			long minCvValue, long maxCvValue,
-			ISalesPriceCalculator pricePerMMBTu, int durationHours,
-			boolean optional);
+	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue, ISalesPriceCalculator pricePerMMBTu,
+			int durationHours, boolean optional);
 
 	/**
 	 * 
@@ -458,10 +456,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
-	IDischargeOption createFOBSaleDischargeSlot(String id, IPort port,
-			ITimeWindow window, long minVolume, long maxVolume,
-			long minCvValue, long maxCvValue,
-			ISalesPriceCalculator priceCalculator, boolean slotIsOptional);
+	IDischargeOption createFOBSaleDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue, ISalesPriceCalculator priceCalculator,
+			boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
@@ -644,8 +640,10 @@ public interface ISchedulerBuilder {
 
 	/**
 	 * Set the default CV value for a port.
+	 * 
 	 * @param port
-	 * @param cv value
+	 * @param cv
+	 *            value
 	 * @since 2.0
 	 */
 	void setPortCV(IPort port, int convertToInternalConversionFactor);

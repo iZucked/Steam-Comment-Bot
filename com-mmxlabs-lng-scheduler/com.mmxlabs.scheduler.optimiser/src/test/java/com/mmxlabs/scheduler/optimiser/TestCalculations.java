@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -131,7 +132,7 @@ public class TestCalculations {
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, false);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
+		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
 		builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 24);
 		builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 24);
@@ -559,7 +560,7 @@ public class TestCalculations {
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, false);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
+		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
 		builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
 		builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 25);
@@ -988,7 +989,7 @@ public class TestCalculations {
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, false);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
+		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
 		builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
 		builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 25);
@@ -1377,12 +1378,12 @@ public class TestCalculations {
 	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences,  final IAnnotatedSolution solution) {
+		public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources,  final IAnnotatedSolution solution) {
+		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 

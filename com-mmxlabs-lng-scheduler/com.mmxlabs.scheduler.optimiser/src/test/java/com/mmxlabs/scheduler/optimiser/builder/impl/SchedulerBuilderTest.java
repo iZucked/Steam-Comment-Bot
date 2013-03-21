@@ -17,8 +17,6 @@ import org.junit.runner.RunWith;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -103,44 +101,6 @@ public class SchedulerBuilderTest {
 		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
 
 		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, false);
-	}
-
-	@Ignore
-	@Test
-	public void testCreateCargo() {
-		fail("Not yet implemented");
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateCargo2() {
-
-		final SchedulerBuilder builder = createScheduleBuilder();
-
-		final IPort port = builder.createPort("port", false, null);
-		final ITimeWindow window = builder.createTimeWindow(0, 0);
-
-		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
-
-		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
-
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, false);
-
-		builder.createCargo("id", loadSlot, dischargeSlot, false);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateCargo3() {
-
-		final SchedulerBuilder builder = createScheduleBuilder();
-
-		final IPort port = builder.createPort("port", false, null);
-		final ITimeWindow window = builder.createTimeWindow(0, 0);
-		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
-
-		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, false);
-		final IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
-
-		builder.createCargo("id", loadSlot, dischargeSlot, false);
 	}
 
 	@Ignore

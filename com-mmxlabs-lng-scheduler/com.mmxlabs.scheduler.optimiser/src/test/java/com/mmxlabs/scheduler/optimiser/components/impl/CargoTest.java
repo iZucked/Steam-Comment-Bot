@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.List;
+
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -11,8 +13,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.google.common.collect.Lists;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 @RunWith(JMock.class)
 public class CargoTest {
@@ -20,32 +23,13 @@ public class CargoTest {
 	Mockery context = new JUnit4Mockery();
 
 	@Test
-	public void testGetSetId() {
+	public void testGetSlots() {
 
-		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getId());
-		final String id = "id";
-		cargo.setId(id);
-		Assert.assertSame(id, cargo.getId());
-	}
-
-	@Test
-	public void testGetSetLoadSlot() {
-
-		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getLoadOption());
 		final ILoadSlot slot = context.mock(ILoadSlot.class);
-		cargo.setLoadOption(slot);
-		Assert.assertSame(slot, cargo.getLoadOption());
-	}
-
-	@Test
-	public void testGetSetDischargeSlot() {
-
-		final Cargo cargo = new Cargo();
-		Assert.assertNull(cargo.getDischargeOption());
-		final IDischargeSlot slot = context.mock(IDischargeSlot.class);
-		cargo.setDischargeOption(slot);
-		Assert.assertSame(slot, cargo.getDischargeOption());
+		final Cargo cargo = new Cargo(Lists.<IPortSlot> newArrayList(slot));
+		List<IPortSlot> portSlots = cargo.getPortSlots();
+		Assert.assertNotNull(portSlots);
+		Assert.assertEquals(1, portSlots.size());
+		Assert.assertSame(slot, portSlots.get(0));
 	}
 }

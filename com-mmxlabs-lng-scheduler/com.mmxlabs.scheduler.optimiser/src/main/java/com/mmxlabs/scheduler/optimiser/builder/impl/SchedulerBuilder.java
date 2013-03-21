@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
@@ -400,8 +401,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
-			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final boolean slotIsOptional) {
+	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final long minCvValue, final long maxCvValue,
+			final ISalesPriceCalculator priceCalculator, final boolean slotIsOptional) {
 
 		if (port == null) {
 			port = ANYWHERE;
@@ -458,9 +459,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final long minCvValue, final long maxCvValue,
-			final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final boolean optional) {
+	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final long minCvValue,
+			final long maxCvValue, final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -479,24 +479,25 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ICargo createCargo(final String id, final ILoadOption loadOption, final IDischargeOption dischargeOption, final boolean allowRewiring) {
+	public ICargo createCargo(final boolean allowRewiring, final IPortSlot... slots) {
+		return createCargo(Lists.newArrayList(slots), allowRewiring);
+	}
 
-		if (!loadSlots.contains(loadOption)) {
-			throw new IllegalArgumentException(loadOption.getClass().getSimpleName() + " was not created by this builder");
-		}
-		if (!dischargeSlots.contains(dischargeOption)) {
-			throw new IllegalArgumentException(dischargeOption.getClass().getSimpleName() + " was not created by this builder");
-		}
+	@Override
+	public ICargo createCargo(final Collection<IPortSlot> slots, final boolean allowRewiring) {
 
-		final Cargo cargo = new Cargo();
-		cargo.setId(id);
-		cargo.setLoadOption(loadOption);
-		cargo.setDischargeOption(dischargeOption);
-
+		final Cargo cargo = new Cargo(new ArrayList<IPortSlot>(slots));
 		cargoes.add(cargo);
 
 		if (!allowRewiring) {
-			constrainSlotAdjacency(loadOption, dischargeOption);
+
+			IPortSlot prevSlot = null;
+			for (final IPortSlot slot : slots) {
+				if (prevSlot != null) {
+					constrainSlotAdjacency(prevSlot, slot);
+				}
+				prevSlot = slot;
+			}
 		}
 
 		return cargo;
@@ -867,11 +868,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		int latestDischarge = 0;
 		IPort loadPort = null, dischargePort = null;
 		for (final ICargo cargo : cargoes) {
-			final int endOfDischargeWindow = cargo.getDischargeOption().getTimeWindow().getEnd();
-			if (endOfDischargeWindow > latestDischarge) {
-				latestDischarge = endOfDischargeWindow;
-				loadPort = cargo.getLoadOption().getPort();
-				dischargePort = cargo.getDischargeOption().getPort();
+			if (cargo.getPortSlots().size() > 1) {
+				final IPortSlot end = cargo.getPortSlots().get(cargo.getPortSlots().size() - 1);
+				final IPortSlot endMinus1 = cargo.getPortSlots().get(cargo.getPortSlots().size() - 2);
+				final int endOfDischargeWindow = end.getTimeWindow().getEnd();
+				if (endOfDischargeWindow > latestDischarge) {
+					latestDischarge = endOfDischargeWindow;
+					loadPort = endMinus1.getPort();
+					dischargePort = end.getPort();
+				}
 			}
 		}
 		/**
@@ -1110,14 +1115,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		final VesselClass vc = (VesselClass) vesselClass;
-		
 
 		vc.setNBORate(state, nboRateInM3PerHour);
 		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
 		vc.setMinNBOSpeed(state, nboSpeed);
-		
+
 	}
 
 	/**
@@ -1131,7 +1135,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param consumptionCalculatorInMTPerHour
 	 * @since 2.0
 	 */
-	
+
 	@Override
 	public void setVesselClassStateParameters(final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour, final int idleConsumptionRateInMTPerHour,
 			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
@@ -1141,22 +1145,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
 
-		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour,
-				nboSpeed);
+		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour, nboSpeed);
 	}
 
 	/**
 	 * @since 2.0
 	 */
 	@Override
-	public void setVesselClassPortTypeParameters(IVesselClass vc,
-			PortType portType, int inPortConsumptionRateInMTPerHour) {
-		
-		
-		((VesselClass) vc).setInPortConsumptionRate(portType, inPortConsumptionRateInMTPerHour);		
+	public void setVesselClassPortTypeParameters(final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerHour) {
+
+		((VesselClass) vc).setInPortConsumptionRate(portType, inPortConsumptionRateInMTPerHour);
 	}
-	
-	
+
 	@Override
 	public void setVesselClassInaccessiblePorts(final IVesselClass vc, final Set<IPort> inaccessiblePorts) {
 		this.portExclusionProvider.setExcludedPorts(vc, inaccessiblePorts);
@@ -1365,12 +1365,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setCargoVesselRestriction(final ICargo cargo, final Set<IVessel> vessels) {
-		final ILoadOption loadSlot = cargo.getLoadOption();
-		final IDischargeOption dischargeSlot = cargo.getDischargeOption();
+	public void setCargoVesselRestriction(final Collection<IPortSlot> cargoSlots, final Set<IVessel> vessels) {
 
-		constrainSlotToVessels(loadSlot, vessels);
-		constrainSlotToVessels(dischargeSlot, vessels);
+		for (final IPortSlot slot : cargoSlots) {
+			constrainSlotToVessels(slot, vessels);
+
+		}
 	}
 
 	@Override

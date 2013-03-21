@@ -545,7 +545,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// Assume heel fully consumed - current lngConsumedInM3 value will include min heel
 						remainingHeelInM3 = 0;
 					}
-					// If we have some heel left, so allcoate it depending on laden or ballast legs
+					// If we have some heel left, so allocate it depending on laden or ballast legs
 					if (remainingHeelInM3 > 0) {
 						if (voyageDetails.getOptions().getVesselState() == VesselState.Laden) {
 							// Discharge the heel, make money!
