@@ -41,7 +41,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 	@Override
 	protected boolean shouldFlattenReference(final EReference reference) {
-		return super.shouldFlattenReference(reference) || reference == CargoPackage.eINSTANCE.getCargo_LoadSlot() || reference == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
+		return super.shouldFlattenReference(reference) || reference == CargoPackage.eINSTANCE.getCargo_Slots();
 	}
 
 	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots, final MMXRootObject root) {
@@ -55,7 +55,7 @@ public class CargoImporter extends DefaultClassImporter {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
 					final Map<String, String> subMap = super.exportObjects(Collections.singleton(slot), root).iterator().next();
 					for (final Map.Entry<String, String> e : subMap.entrySet()) {
-						result.put(CargoPackage.eINSTANCE.getCargo_LoadSlot().getName() + DefaultClassImporter.DOT + e.getKey(), e.getValue());
+						result.put("LoadSlot" + DefaultClassImporter.DOT + e.getKey(), e.getValue());
 					}
 					data.add(result);
 				}
@@ -67,7 +67,7 @@ public class CargoImporter extends DefaultClassImporter {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
 					final Map<String, String> subMap = super.exportObjects(Collections.singleton(slot), root).iterator().next();
 					for (final Map.Entry<String, String> e : subMap.entrySet()) {
-						result.put(CargoPackage.eINSTANCE.getCargo_DischargeSlot().getName() + DefaultClassImporter.DOT + e.getKey(), e.getValue());
+						result.put("DischargeSlot" + DefaultClassImporter.DOT + e.getKey(), e.getValue());
 					}
 					data.add(result);
 				}
@@ -112,8 +112,7 @@ public class CargoImporter extends DefaultClassImporter {
 			}
 		}
 		if (!keepCargo) {
-			cargo.setLoadSlot(null);
-			cargo.setDischargeSlot(null);
+			cargo.getSlots().clear();
 		} else {
 			newResults.add(cargo);
 		}

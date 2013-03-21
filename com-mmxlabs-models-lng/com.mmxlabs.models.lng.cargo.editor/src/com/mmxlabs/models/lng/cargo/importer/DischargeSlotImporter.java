@@ -16,14 +16,14 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 public class DischargeSlotImporter extends DefaultClassImporter {
 	@Override
 	protected boolean shouldImportReference(final EReference reference) {
-		if (reference == CargoPackage.eINSTANCE.getDischargeSlot_Cargo())
+		if (reference == CargoPackage.eINSTANCE.getSlot_Cargo())
 			return false;
 		return super.shouldImportReference(reference);
 	}
 
 	@Override
 	protected boolean shouldExportFeature(EStructuralFeature feature) {
-		if (feature == CargoPackage.eINSTANCE.getDischargeSlot_Cargo())
+		if (feature == CargoPackage.eINSTANCE.getSlot_Cargo())
 			return false;
 		return super.shouldExportFeature(feature);
 	}
