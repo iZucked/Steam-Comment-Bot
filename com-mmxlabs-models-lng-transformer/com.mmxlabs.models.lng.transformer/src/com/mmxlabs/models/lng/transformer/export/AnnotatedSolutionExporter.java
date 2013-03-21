@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -260,16 +261,40 @@ public class AnnotatedSolutionExporter {
 						return 1;
 					}
 
-					// idle must come after journey
-					if (arg0 instanceof Idle)
-						return (arg1 instanceof Idle) ? 0 : -1;
-					if (arg1 instanceof Idle)
-						return 1;
+					// Sort by Journey -> idle -> PortVisit
+					if (arg0 instanceof Journey) {
+						if (arg1 instanceof Journey) {
+							return 0;
+						}
+						if (arg1 instanceof Idle) {
+							return -1;
+						}
+						if (arg1 instanceof PortVisit) {
+							return -1;
+						}
+					}
 
-					if (arg0 instanceof Journey)
-						return (arg1 instanceof Journey) ? 0 : -1;
-					if (arg1 instanceof Journey)
-						return 1;
+					else if (arg0 instanceof Idle) {
+						if (arg1 instanceof Journey) {
+							return 1;
+						}
+						if (arg1 instanceof Idle) {
+							return 0;
+						}
+						if (arg1 instanceof PortVisit) {
+							return -1;
+						}
+					} else if (arg0 instanceof PortVisit) {
+						if (arg1 instanceof Journey) {
+							return 1;
+						}
+						if (arg1 instanceof Idle) {
+							return 1;
+						}
+						if (arg1 instanceof PortVisit) {
+							return 0;
+						}
+					}
 
 					return 0;
 				}
