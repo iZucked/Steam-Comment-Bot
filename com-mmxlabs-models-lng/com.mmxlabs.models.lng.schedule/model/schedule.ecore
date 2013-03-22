@@ -99,7 +99,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="amounts" upperBound="-1"
         eType="#//FuelAmount" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="FuelUnit" instanceTypeName="FuelUnit">
+  <eClassifiers xsi:type="ecore:EEnum" name="FuelUnit">
     <eLiterals name="M3" literal="m3"/>
     <eLiterals name="MT" value="1" literal="MT"/>
     <eLiterals name="MMBTU" value="2" literal="MMBTU"/>
@@ -167,7 +167,7 @@
     <eLiterals name="NBO" value="2" literal="NBO"/>
     <eLiterals name="PilotLight" value="3" literal="PilotLight"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//Event">
+  <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//Event #//CapacityViolationsHolder">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCost" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
@@ -189,5 +189,21 @@
     <eLiterals name="DES_PURCHASE" value="2"/>
     <eLiterals name="FOB_SALE" value="3"/>
     <eLiterals name="CARGO_SHORTS" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CapacityViolationsHolder" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="violations" upperBound="-1"
+        eType="#//CapacityMapEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CapacityViolationType">
+    <eLiterals name="MAX_LOAD"/>
+    <eLiterals name="MAX_DISCHARGE" value="1"/>
+    <eLiterals name="MIN_LOAD" value="2"/>
+    <eLiterals name="MIN_DISCHARGE" value="3"/>
+    <eLiterals name="MAX_HEEL" value="4" literal=""/>
+    <eLiterals name="FORCED_COOLDOWN" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CapacityMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//CapacityViolationType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
   </eClassifiers>
 </ecore:EPackage>

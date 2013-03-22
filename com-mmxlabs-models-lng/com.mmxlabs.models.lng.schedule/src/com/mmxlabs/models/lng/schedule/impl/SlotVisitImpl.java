@@ -3,16 +3,21 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -34,6 +39,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getFuels <em>Fuels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
@@ -51,6 +57,15 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * @ordered
 	 */
 	protected EList<FuelQuantity> fuels;
+	/**
+	 * The cached value of the '{@link #getViolations() <em>Violations</em>}' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getViolations()
+	 * @generated
+	 * @ordered
+	 */
+	protected EMap<CapacityViolationType, Long> violations;
 	/**
 	 * The default value of the '{@link #getPortCost() <em>Port Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -107,6 +122,18 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.SLOT_VISIT__FUELS);
 		}
 		return fuels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EMap<CapacityViolationType, Long> getViolations() {
+		if (violations == null) {
+			violations = new EcoreEMap<CapacityViolationType,Long>(SchedulePackage.Literals.CAPACITY_MAP_ENTRY, CapacityMapEntryImpl.class, this, SchedulePackage.SLOT_VISIT__VIOLATIONS);
+		}
+		return violations;
 	}
 
 	/**
@@ -229,6 +256,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		switch (featureID) {
 			case SchedulePackage.SLOT_VISIT__FUELS:
 				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
+				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				return basicSetSlotAllocation(null, msgs);
 		}
@@ -245,6 +274,9 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		switch (featureID) {
 			case SchedulePackage.SLOT_VISIT__FUELS:
 				return getFuels();
+			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
+				if (coreType) return getViolations();
+				else return getViolations().map();
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 				return getPortCost();
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
@@ -267,6 +299,9 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				getFuels().clear();
 				getFuels().addAll((Collection<? extends FuelQuantity>)newValue);
 				return;
+			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
+				((EStructuralFeature.Setting)getViolations()).set(newValue);
+				return;
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 				setPortCost((Integer)newValue);
 				return;
@@ -288,6 +323,9 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			case SchedulePackage.SLOT_VISIT__FUELS:
 				getFuels().clear();
 				return;
+			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
+				getViolations().clear();
+				return;
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
@@ -308,6 +346,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		switch (featureID) {
 			case SchedulePackage.SLOT_VISIT__FUELS:
 				return fuels != null && !fuels.isEmpty();
+			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
+				return violations != null && !violations.isEmpty();
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
@@ -326,6 +366,12 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		if (baseClass == FuelUsage.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.SLOT_VISIT__FUELS: return SchedulePackage.FUEL_USAGE__FUELS;
+				default: return -1;
+			}
+		}
+		if (baseClass == CapacityViolationsHolder.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.SLOT_VISIT__VIOLATIONS: return SchedulePackage.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS;
 				default: return -1;
 			}
 		}
@@ -351,6 +397,12 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				default: return -1;
 			}
 		}
+		if (baseClass == CapacityViolationsHolder.class) {
+			switch (baseFeatureID) {
+				case SchedulePackage.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS: return SchedulePackage.SLOT_VISIT__VIOLATIONS;
+				default: return -1;
+			}
+		}
 		if (baseClass == PortVisit.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.SLOT_VISIT__PORT_COST;
@@ -370,6 +422,11 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		if (baseClass == FuelUsage.class) {
 			switch (baseOperationID) {
 				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.SLOT_VISIT___GET_FUEL_COST;
+				default: return -1;
+			}
+		}
+		if (baseClass == CapacityViolationsHolder.class) {
+			switch (baseOperationID) {
 				default: return -1;
 			}
 		}

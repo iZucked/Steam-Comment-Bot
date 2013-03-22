@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import java.util.Map;
 import javax.xml.bind.DatatypeConverter;
 
 import org.eclipse.emf.ecore.EClass;
@@ -112,6 +113,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.PORT_VISIT: return createPortVisit();
 			case SchedulePackage.START_EVENT: return createStartEvent();
 			case SchedulePackage.END_EVENT: return createEndEvent();
+			case SchedulePackage.CAPACITY_VIOLATIONS_HOLDER: return createCapacityViolationsHolder();
+			case SchedulePackage.CAPACITY_MAP_ENTRY: return (EObject)createCapacityMapEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -131,6 +134,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return createFuelFromString(eDataType, initialValue);
 			case SchedulePackage.SEQUENCE_TYPE:
 				return createSequenceTypeFromString(eDataType, initialValue);
+			case SchedulePackage.CAPACITY_VIOLATION_TYPE:
+				return createCapacityViolationTypeFromString(eDataType, initialValue);
 			case SchedulePackage.CALENDAR:
 				return createCalendarFromString(eDataType, initialValue);
 			case SchedulePackage.ITERABLE:
@@ -156,6 +161,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return convertFuelToString(eDataType, instanceValue);
 			case SchedulePackage.SEQUENCE_TYPE:
 				return convertSequenceTypeToString(eDataType, instanceValue);
+			case SchedulePackage.CAPACITY_VIOLATION_TYPE:
+				return convertCapacityViolationTypeToString(eDataType, instanceValue);
 			case SchedulePackage.CALENDAR:
 				return convertCalendarToString(eDataType, instanceValue);
 			case SchedulePackage.ITERABLE:
@@ -363,6 +370,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CapacityViolationsHolder createCapacityViolationsHolder() {
+		CapacityViolationsHolderImpl capacityViolationsHolder = new CapacityViolationsHolderImpl();
+		return capacityViolationsHolder;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<CapacityViolationType, Long> createCapacityMapEntry() {
+		CapacityMapEntryImpl capacityMapEntry = new CapacityMapEntryImpl();
+		return capacityMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public FuelUnit createFuelUnitFromString(EDataType eDataType, String initialValue) {
 		FuelUnit result = FuelUnit.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -417,6 +444,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	public String convertSequenceTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CapacityViolationType createCapacityViolationTypeFromString(EDataType eDataType, String initialValue) {
+		CapacityViolationType result = CapacityViolationType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertCapacityViolationTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

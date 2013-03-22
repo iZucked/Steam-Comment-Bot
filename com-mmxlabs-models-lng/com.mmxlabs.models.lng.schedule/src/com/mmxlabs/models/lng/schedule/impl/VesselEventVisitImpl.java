@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import java.io.Serializable;
 import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
@@ -11,10 +13,13 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
@@ -37,6 +42,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getExtraData <em>Extra Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getVesselEvent <em>Vessel Event</em>}</li>
@@ -46,6 +52,16 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  * @generated
  */
 public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit {
+	/**
+	 * The cached value of the '{@link #getViolations() <em>Violations</em>}' map.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getViolations()
+	 * @generated
+	 * @ordered
+	 */
+	protected EMap<CapacityViolationType, Long> violations;
 	/**
 	 * The default value of the '{@link #getPortCost() <em>Port Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -100,6 +116,19 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	@Override
 	protected EClass eStaticClass() {
 		return SchedulePackage.Literals.VESSEL_EVENT_VISIT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EMap<CapacityViolationType, Long> getViolations() {
+		if (violations == null) {
+			violations = new EcoreEMap<CapacityViolationType,Long>(SchedulePackage.Literals.CAPACITY_MAP_ENTRY, CapacityMapEntryImpl.class, this, SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS);
+		}
+		return violations;
 	}
 
 	/**
@@ -246,6 +275,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
+				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.VESSEL_EVENT_VISIT__EXTRA_DATA:
 				return ((InternalEList<?>)getExtraData()).basicRemove(otherEnd, msgs);
 		}
@@ -260,6 +291,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
+				if (coreType) return getViolations();
+				else return getViolations().map();
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				return getPortCost();
 			case SchedulePackage.VESSEL_EVENT_VISIT__EXTRA_DATA:
@@ -280,6 +314,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
+				((EStructuralFeature.Setting)getViolations()).set(newValue);
+				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				setPortCost((Integer)newValue);
 				return;
@@ -302,6 +339,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
+				getViolations().clear();
+				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
@@ -323,6 +363,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
+				return violations != null && !violations.isEmpty();
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.VESSEL_EVENT_VISIT__EXTRA_DATA:
@@ -340,6 +382,12 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == CapacityViolationsHolder.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS: return SchedulePackage.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS;
+				default: return -1;
+			}
+		}
 		if (baseClass == PortVisit.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
@@ -362,6 +410,12 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == CapacityViolationsHolder.class) {
+			switch (baseFeatureID) {
+				case SchedulePackage.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS: return SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS;
+				default: return -1;
+			}
+		}
 		if (baseClass == PortVisit.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST;
@@ -384,6 +438,11 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 */
 	@Override
 	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == CapacityViolationsHolder.class) {
+			switch (baseOperationID) {
+				default: return -1;
+			}
+		}
 		if (baseClass == PortVisit.class) {
 			switch (baseOperationID) {
 				default: return -1;

@@ -925,13 +925,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_VISIT__FUELS = EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Violations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
+	int SLOT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -940,7 +949,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 2;
+	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Slot Visit</em>' class.
@@ -949,7 +958,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -1187,13 +1196,22 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
+	 * The feature id for the '<em><b>Violations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__VIOLATIONS = EVENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 0;
+	int VESSEL_EVENT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
@@ -1202,7 +1220,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__EXTRA_DATA = EVENT_FEATURE_COUNT + 1;
+	int VESSEL_EVENT_VISIT__EXTRA_DATA = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -1211,7 +1229,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 2;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -1220,7 +1238,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -3445,13 +3463,22 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
+	 * The feature id for the '<em><b>Violations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__VIOLATIONS = EVENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 0;
+	int PORT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Port Visit</em>' class.
@@ -3460,7 +3487,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
+	int PORT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -3698,13 +3725,22 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__FUELS = EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Violations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 1;
+	int START_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
@@ -3713,7 +3749,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__EXTRA_DATA = EVENT_FEATURE_COUNT + 2;
+	int START_EVENT__EXTRA_DATA = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -3722,7 +3758,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 3;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -3731,7 +3767,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -4023,13 +4059,22 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__FUELS = EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Violations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 1;
+	int END_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
@@ -4038,7 +4083,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__EXTRA_DATA = EVENT_FEATURE_COUNT + 2;
+	int END_EVENT__EXTRA_DATA = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -4047,7 +4092,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 3;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -4056,7 +4101,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -4257,6 +4302,179 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 6;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationsHolder()
+	 * @generated
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER = 19;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Violations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Capacity Violations Holder</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Capacity Violations Holder</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_VIOLATIONS_HOLDER_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl <em>Capacity Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityMapEntry()
+	 * @generated
+	 */
+	int CAPACITY_MAP_ENTRY = 20;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Capacity Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Capacity Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPACITY_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4264,7 +4482,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 19;
+	int FUEL_UNIT = 21;
 
 
 	/**
@@ -4275,7 +4493,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 20;
+	int FUEL = 22;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4286,7 +4504,17 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 21;
+	int SEQUENCE_TYPE = 23;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
+	 * @generated
+	 */
+	int CAPACITY_VIOLATION_TYPE = 24;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4296,7 +4524,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 22;
+	int CALENDAR = 25;
 
 
 	/**
@@ -4307,7 +4535,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 23;
+	int ITERABLE = 26;
 
 
 	/**
@@ -4318,7 +4546,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 24;
+	int OBJECT = 27;
 
 
 	/**
@@ -5334,6 +5562,61 @@ public interface SchedulePackage extends EPackage {
 	EReference getEndEvent_SlotAllocation();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder <em>Capacity Violations Holder</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Capacity Violations Holder</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationsHolder
+	 * @generated
+	 */
+	EClass getCapacityViolationsHolder();
+
+	/**
+	 * Returns the meta object for the map '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder#getViolations <em>Violations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Violations</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationsHolder#getViolations()
+	 * @see #getCapacityViolationsHolder()
+	 * @generated
+	 */
+	EReference getCapacityViolationsHolder_Violations();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Capacity Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Capacity Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="com.mmxlabs.models.lng.schedule.CapacityViolationType"
+	 *        valueDataType="org.eclipse.emf.ecore.ELongObject"
+	 * @generated
+	 */
+	EClass getCapacityMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getCapacityMapEntry()
+	 * @generated
+	 */
+	EAttribute getCapacityMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getCapacityMapEntry()
+	 * @generated
+	 */
+	EAttribute getCapacityMapEntry_Value();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5363,6 +5646,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getSequenceType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Capacity Violation Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
+	 * @generated
+	 */
+	EEnum getCapacityViolationType();
 
 	/**
 	 * Returns the meta object for data type '{@link java.util.Calendar <em>Calendar</em>}'.
@@ -6222,6 +6515,50 @@ public interface SchedulePackage extends EPackage {
 		EReference END_EVENT__SLOT_ALLOCATION = eINSTANCE.getEndEvent_SlotAllocation();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationsHolder()
+		 * @generated
+		 */
+		EClass CAPACITY_VIOLATIONS_HOLDER = eINSTANCE.getCapacityViolationsHolder();
+
+		/**
+		 * The meta object literal for the '<em><b>Violations</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS = eINSTANCE.getCapacityViolationsHolder_Violations();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl <em>Capacity Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityMapEntry()
+		 * @generated
+		 */
+		EClass CAPACITY_MAP_ENTRY = eINSTANCE.getCapacityMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CAPACITY_MAP_ENTRY__KEY = eINSTANCE.getCapacityMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CAPACITY_MAP_ENTRY__VALUE = eINSTANCE.getCapacityMapEntry_Value();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6251,6 +6588,16 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum SEQUENCE_TYPE = eINSTANCE.getSequenceType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
+		 * @generated
+		 */
+		EEnum CAPACITY_VIOLATION_TYPE = eINSTANCE.getCapacityViolationType();
 
 		/**
 		 * The meta object literal for the '<em>Calendar</em>' data type.

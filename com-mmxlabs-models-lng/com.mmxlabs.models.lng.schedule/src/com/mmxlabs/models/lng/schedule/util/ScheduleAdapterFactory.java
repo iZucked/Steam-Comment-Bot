@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -167,6 +168,14 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseEndEvent(EndEvent object) {
 				return createEndEventAdapter();
+			}
+			@Override
+			public Adapter caseCapacityViolationsHolder(CapacityViolationsHolder object) {
+				return createCapacityViolationsHolderAdapter();
+			}
+			@Override
+			public Adapter caseCapacityMapEntry(Map.Entry<CapacityViolationType, Long> object) {
+				return createCapacityMapEntryAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -472,6 +481,34 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEndEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder <em>Capacity Violations Holder</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationsHolder
+	 * @generated
+	 */
+	public Adapter createCapacityViolationsHolderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Capacity Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createCapacityMapEntryAdapter() {
 		return null;
 	}
 
