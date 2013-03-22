@@ -109,20 +109,15 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		final List<IResource> resources = sequences.getResources();
 
-		try {
-			for (int i = 0; i < sequences.size(); i++) {
-				final ISequence sequence = sequences.getSequence(i);
-				final IResource resource = resources.get(i);
-	
-				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
-				if (scheduledSequence == null) {
-					return null;
-				}
-				result.add(scheduledSequence);
+		for (int i = 0; i < sequences.size(); i++) {
+			final ISequence sequence = sequences.getSequence(i);
+			final IResource resource = resources.get(i);
+
+			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+			if (scheduledSequence == null) {
+				return null;
 			}
-		}
-		catch (InfeasibleVoyageException e) {
-			return null;
+			result.add(scheduledSequence);
 		}
 
 		return result;
@@ -291,7 +286,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 * @return
 	 * @throws InfeasibleVoyageException 
 	 */
-	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) throws InfeasibleVoyageException {
+	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
 		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
@@ -397,8 +392,10 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
 				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 				if (!shortCargoEnd) {
-					voyagePlans.add(getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser));
-					//optimiseSequence(voyagePlans, voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+					//voyagePlans.add(getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser));
+					if (!optimiseSequence(voyagePlans, voyageOrPortOptions, currentTimes, voyagePlanOptimiser)) {
+						return null;
+					}
 				} 
 
 				if (isShortsSequence) {
@@ -441,14 +438,16 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			voyagePlans.add(getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser));
-			//optimiseSequence(voyagePlans, voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+			//voyagePlans.add(getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser));
+			if (!optimiseSequence(voyagePlans, voyageOrPortOptions, currentTimes, voyagePlanOptimiser)) {
+				return null;
+			}
 		}
 		
 		return new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes);
 	}
 
-	public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser) throws InfeasibleVoyageException  {
+	public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser)  {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
@@ -470,9 +469,8 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				// "Duration should exceed available time less one, but is "
 				// + duration + " vs " + availableTime; // hack
 				if (duration > availableTime) {
-					throw new InfeasibleVoyageException();
 					// TODO: replace by throwing an exception, since if any one subsequence is infeasible, the whole sequence is infeasible
-					// return null;
+					return null;
 				}
 			}
 		}
@@ -484,7 +482,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		
 	}
 	
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) throws InfeasibleVoyageException  {
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser)  {
 		VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser);
 		if (plan == null) {
 			return false;
@@ -677,5 +675,4 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		voyagePlanOptimiser = null;
 	}
 
-	public class InfeasibleVoyageException extends Exception {}
 }
