@@ -99,9 +99,9 @@ public class DefaultClassImporter implements IClassImporter {
 			}
 		}
 		// All registry packages...
-		for (Object obj : Registry.INSTANCE.values()) {
+		for (final Object obj : Registry.INSTANCE.values()) {
 			if (obj instanceof EPackage) {
-				EPackage ePackage2 = (EPackage) obj;
+				final EPackage ePackage2 = (EPackage) obj;
 				for (final EClassifier classifier : ePackage2.getEClassifiers()) {
 					if (classifier instanceof EClass) {
 						final EClass possibleSubClass = (EClass) classifier;
@@ -161,31 +161,53 @@ public class DefaultClassImporter implements IClassImporter {
 				}
 			} else {
 				// The reference is missing entirely
-				if (reference.isMany()) {
-					continue;
-				}
 				// Maybe it is a sub-object; find any sub-keys
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 
-				if (subKeys.isEmpty()) {
-					if (reference.isContainment()) {
-						populateWithBlank(instance, reference);
-
-						notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
-
+				if (reference.isMany()) {
+					// continue;
+					if (subKeys.containsKey("count")) {
+						final int count = Integer.parseInt(subKeys.get("count"));
+						final List<EObject> references = new LinkedList<EObject>();
+						for (int i = 0; i < count; ++i) {
+							final IFieldMap childMap = subKeys.getSubMap(i + DOT);
+							final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
+							final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), childMap, context);
+							final Iterator<EObject> iterator = values.iterator();
+							final EObject importObject = iterator.next();
+							references.add(importObject);
+							if (reference.isContainment() == false) {
+								results.add(importObject);
+							}
+							while (iterator.hasNext()) {
+								results.add(importObject);
+							}
+						}
+						instance.eSet(reference, references);
 					}
-
-					context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 				} else {
-					final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
-					final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), subKeys, context);
-					final Iterator<EObject> iterator = values.iterator();
-					instance.eSet(reference, iterator.next());
-					if (reference.isContainment() == false) {
-						results.add((EObject) instance.eGet(reference));
-					}
-					while (iterator.hasNext()) {
-						results.add(iterator.next());
+
+					if (subKeys.isEmpty()) {
+						if (reference.isContainment()) {
+
+							populateWithBlank(instance, reference);
+
+							notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
+
+						}
+
+						context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
+					} else {
+						final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
+						final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), subKeys, context);
+						final Iterator<EObject> iterator = values.iterator();
+						instance.eSet(reference, iterator.next());
+						if (reference.isContainment() == false) {
+							results.add((EObject) instance.eGet(reference));
+						}
+						while (iterator.hasNext()) {
+							results.add(iterator.next());
+						}
 					}
 				}
 			}
