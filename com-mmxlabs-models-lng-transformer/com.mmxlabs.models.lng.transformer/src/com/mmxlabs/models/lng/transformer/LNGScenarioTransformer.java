@@ -711,6 +711,7 @@ public class LNGScenarioTransformer {
 						usedLoadSlots.add(loadSlot);
 						loadOptions.add(load);
 						slotMap.put(loadSlot, load);
+						slots.add(load);
 					}
 
 				} else if (slot instanceof DischargeSlot) {
@@ -720,7 +721,10 @@ public class LNGScenarioTransformer {
 						usedDischargeSlots.add(dischargeSlot);
 						dischargeOptions.add(discharge);
 						slotMap.put(dischargeSlot, discharge);
+						slots.add(discharge);
 					}
+				} else {
+					throw new IllegalArgumentException("Unexpected Slot type");
 				}
 			}
 
