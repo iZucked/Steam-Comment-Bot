@@ -34,7 +34,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * The {@link ScenarioInstanceMigrator} controls the migration process for a {@link ScenarioInstance}. It will attempt to migrate a scenario if required. It will create a copy of the scenario data to
- * migrate and only overwrite the orginal when the migration process completes without an {@link Exception}. Note, incorrectly coded migration steps could still corrupt a scenario.
+ * migrate and only overwrite the original when the migration process completes without an {@link Exception}. Note, incorrectly coded migration steps could still corrupt a scenario.
  * 
  * @since 2.0
  */
