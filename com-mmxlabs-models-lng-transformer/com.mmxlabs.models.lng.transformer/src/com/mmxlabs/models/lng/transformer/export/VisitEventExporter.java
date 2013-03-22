@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.export;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,10 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -60,6 +64,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 	@Override
 	public Event export(final ISequenceElement element, final Map<String, Object> annotations) {
 
+		// "element" represents an IPortSlot
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
 
 		if (slot == null) {
@@ -92,7 +97,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			portVisit = sv;
 
 			// Output allocation info.
-			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
+			final IAllocationAnnotation allocation = (IAllocationAnnotation)annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
+						
 			eAllocation = allocations.get(slot);
 
 			if (eAllocation == null) {
@@ -190,6 +196,39 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime() + 1));
 		} else {
 			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
+		}
+		
+		
+		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
+		if (capacityViolationAnnotation != null) {
+			Collection<ICapacityEntry> capacityViolations = capacityViolationAnnotation.getEntries();
+			for (ICapacityEntry violation: capacityViolations) {
+				com.mmxlabs.models.lng.schedule.CapacityViolationType type = null;
+				CapacityViolationType x = violation.getType();
+				switch (x) {
+				case FORCED_COOLDOWN:
+					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.FORCED_COOLDOWN;
+					break;
+				case MAX_DISCHARGE:
+					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MAX_DISCHARGE;
+					break;
+				case MIN_DISCHARGE:
+					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MIN_DISCHARGE;
+					break;					
+				case MAX_LOAD:
+					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MAX_LOAD;
+					break;
+				case MIN_LOAD:
+					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MIN_LOAD;
+					break;					
+				case MAX_HEEL:
+					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MAX_HEEL;
+					break;
+				}
+
+				long volume = OptimiserUnitConvertor.convertToExternalVolume(violation.getVolume());
+				portVisit.getViolations().put(type, volume);
+			}
 		}
 
 		final IPortCostAnnotation cost = (IPortCostAnnotation) annotations.get(SchedulerConstants.AI_portCostInfo);
