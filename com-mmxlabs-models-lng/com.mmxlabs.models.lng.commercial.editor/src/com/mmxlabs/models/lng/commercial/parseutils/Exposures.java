@@ -344,7 +344,7 @@ public class Exposures {
 
 		for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-				int volume = slotAllocation.getVolumeTransfered();
+				int volume = slotAllocation.getVolumeTransferred();
 				Slot slot = slotAllocation.getSlot();
 				double exposureCoefficient = getExposureCoefficient(slot, index);
 				double exposure = exposureCoefficient * volume;
