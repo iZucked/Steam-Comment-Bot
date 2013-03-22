@@ -109,18 +109,55 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		final List<IResource> resources = sequences.getResources();
 
-		for (int i = 0; i < sequences.size(); i++) {
-			final ISequence sequence = sequences.getSequence(i);
-			final IResource resource = resources.get(i);
-
-			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
-			if (scheduledSequence == null) {
-				return null;
+		try {
+			for (int i = 0; i < sequences.size(); i++) {
+				final ISequence sequence = sequences.getSequence(i);
+				final IResource resource = resources.get(i);
+	
+				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+				if (scheduledSequence == null) {
+					return null;
+				}
+				result.add(scheduledSequence);
 			}
-			result.add(scheduledSequence);
+		}
+		catch (InfeasibleVoyageException e) {
+			return null;
 		}
 
 		return result;
+	}
+
+	public ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
+		// Virtual vessels are those operated by a third party, for FOB and DES situations.
+		// Should we compute a schedule for them anyway? The arrival times don't mean much,
+		// but contracts need this kind of information to make up numbers with.
+		final List<Object> currentSequence = new ArrayList<Object>(5);
+		final VoyagePlan currentPlan = new VoyagePlan();
+
+		boolean startSet = false;
+		int startTime = 0;
+		for (final ISequenceElement element : sequence) {
+
+			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+
+			// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window
+			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
+				startTime = thisPortSlot.getTimeWindow().getStart();
+				startSet = true;
+			}
+			final PortOptions portOptions = new PortOptions();
+			final PortDetails portDetails = new PortDetails();
+			portDetails.setOptions(portOptions);
+			portOptions.setVisitDuration(0);
+			portOptions.setPortSlot(thisPortSlot);
+			currentSequence.add(portDetails);
+
+		}
+		int times[] = new int[sequence.size()];
+		Arrays.fill(times, startTime);
+		currentPlan.setSequence(currentSequence.toArray());
+		return new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);		
 	}
 
 	/**
@@ -132,44 +169,21 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 * @param sequence
 	 * @param arrivalTimes
 	 * @return
+	 * @throws InfeasibleVoyageException 
 	 */
-	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) throws InfeasibleVoyageException {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
 		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			// Virtual vessels are those operated by a third party, for FOB and DES situations.
 			// Should we compute a schedule for them anyway? The arrival times don't mean much,
 			// but contracts need this kind of information to make up numbers with.
-			final List<Object> currentSequence = new ArrayList<Object>(5);
-			final VoyagePlan currentPlan = new VoyagePlan();
-
-			boolean startSet = false;
-			int startTime = 0;
-			for (final ISequenceElement element : sequence) {
-
-				final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
-
-				// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window
-				if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
-					startTime = thisPortSlot.getTimeWindow().getStart();
-					startSet = true;
-				}
-				final PortOptions portOptions = new PortOptions();
-				final PortDetails portDetails = new PortDetails();
-				portDetails.setOptions(portOptions);
-				portOptions.setVisitDuration(0);
-				portOptions.setPortSlot(thisPortSlot);
-				currentSequence.add(portDetails);
-
-			}
-			int times[] = new int[sequence.size()];
-			Arrays.fill(times, startTime);
-			currentPlan.setSequence(currentSequence.toArray());
-			return new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
-
+			return desOrFobSchedule(resource, sequence);
 		}
 
 		boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+
+		// TODO: document this code path
 		if (isShortsSequence && arrivalTimes.length == 0) {
 			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan> emptyList(), new int[] { 0 });
 		}
@@ -178,7 +192,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		final int startTime = arrivalTimes[0];
 
 		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
-		final List<Object> currentSequence = new ArrayList<Object>(5);
+		final List<Object> voyageOrPortOptions = new ArrayList<Object>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
 
 		IPort prevPort = null;
@@ -323,7 +337,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 					voyagePlanOptimiser.addChoice(new RouteVoyagePlanChoice(options, distances));
 				}
 
-				currentSequence.add(options);
+				voyageOrPortOptions.add(options);
 				previousOptions = options;
 			}
 
@@ -343,17 +357,15 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				currentTimes.add(arrivalTimes[idx]);
 			}
 			// currentSequence.add(portDetails);
-			currentSequence.add(portOptions);
+			voyageOrPortOptions.add(portOptions);
 
-			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)
+			if (((voyageOrPortOptions.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)
 					|| (portType == PortType.Other) || (portType == PortType.Short_Cargo_End)) {
 
 				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
 				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
-				if (((PortOptions) currentSequence.get(0)).getPortSlot().getPortType() != PortType.Short_Cargo_End) {
-					if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
-						return null;
-					}
+				if (((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() != PortType.Short_Cargo_End) {
+					optimiseSequence(voyagePlans, voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
 				} else {
 					// if (!optimiseSequence(voyagePlans, Collections.singletonList(currentSequence.get(0)), currentTimes, voyagePlanOptimiser)) {
 					// return null;
@@ -368,11 +380,11 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				useNBO = false;
 				previousOptions = null;
 
-				currentSequence.clear();
+				voyageOrPortOptions.clear();
 				currentTimes.clear();
 
 				// if (!isShortsSequence) {
-				currentSequence.add(portOptions);
+				voyageOrPortOptions.add(portOptions);
 				currentTimes.add(arrivalTimes[idx]);
 				// } else {
 				// final int visitDuration = durationsProvider.getElementDuration(element, resource);
@@ -409,27 +421,26 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		// Populate final plan details
 		// if (!currentSequence.isEmpty()) {
-		if (currentSequence.size() > 1) {
-			if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
-				return null;
-			}
+		if (voyageOrPortOptions.size() > 1) {
+			optimiseSequence(voyagePlans, voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
 		}
 
 		if (!voyagePlans.isEmpty()) {
 			// Include very last element in a sequence
 			// voyagePlans.get(voyagePlans.size() - 1).setIgnoreEnd(false);
 		}
+		
 		return new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes);
 	}
 
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) {
+	public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortDetailsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser) throws InfeasibleVoyageException  {
 		// Run sequencer evaluation
-		optimiser.setBasicSequence(currentSequence);
-		optimiser.setArrivalTimes(currentTimes);
+		optimiser.setBasicSequence(voyageOrPortDetailsSubsequence);
+		optimiser.setArrivalTimes(arrivalTimes);
 		optimiser.init();
-		final VoyagePlan currentPlan = optimiser.optimise();
+		final VoyagePlan result = optimiser.optimise();
 
-		final Object[] sequence = currentPlan.getSequence();
+		final Object[] sequence = result.getSequence();
 		for (int i = 0; i < sequence.length; ++i) {
 			final Object obj = sequence[i];
 			if (obj instanceof VoyageDetails) {
@@ -444,16 +455,28 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				// "Duration should exceed available time less one, but is "
 				// + duration + " vs " + availableTime; // hack
 				if (duration > availableTime) {
-					return false;
+					throw new InfeasibleVoyageException();
+					// TODO: replace by throwing an exception, since if any one subsequence is infeasible, the whole sequence is infeasible
+					// return null;
 				}
 			}
 		}
-		voyagePlans.add(currentPlan);
 
 		// Reset VPO ready for next iteration
 		optimiser.reset();
 
-		return true;
+		return result;
+		
+	}
+	
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) throws InfeasibleVoyageException  {
+		VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser);
+		if (plan == null) {
+			return false;
+		}
+		
+		voyagePlans.add(plan);
+		return true;		
 	}
 
 	public final IPortSlotProvider getPortSlotProvider() {
@@ -638,4 +661,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		distanceProvider = null;
 		voyagePlanOptimiser = null;
 	}
+
+	public class InfeasibleVoyageException extends Exception {}
 }
