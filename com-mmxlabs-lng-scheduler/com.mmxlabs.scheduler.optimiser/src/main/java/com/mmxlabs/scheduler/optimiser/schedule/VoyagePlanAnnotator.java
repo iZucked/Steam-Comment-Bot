@@ -301,7 +301,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 		{
 			final long quantity = plan.getCapacityViolation(cvt);
 			if (quantity > 0) {
-				final ICapacityEntry e = new CapacityEntry(cvt.getDisplayName(), quantity);
+				final ICapacityEntry e = new CapacityEntry(cvt, quantity);
 				entries.add(e);
 			}
 		}

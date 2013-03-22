@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.capacity;
 
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
+
 /**
  * A record of capacity violation type and quantity.
  * 
@@ -17,7 +19,7 @@ public interface ICapacityEntry {
 	 * 
 	 * @return
 	 */
-	String getType();
+	CapacityViolationType getType();
 
 	/**
 	 * Returns the excess volume causing the violation

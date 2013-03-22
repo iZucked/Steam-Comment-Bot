@@ -7,11 +7,13 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
+
 public class CapacityEntryTest {
 
 	@Test
 	public void testCapacityEntry() {
-		final String type = "type";
+		final CapacityViolationType type = CapacityViolationType.FORCED_COOLDOWN;
 		final long volume = 123456;
 		final CapacityEntry entry = new CapacityEntry(type, volume);
 
