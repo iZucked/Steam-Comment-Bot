@@ -489,8 +489,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
 
-		//int loadIdx = -1;
-		//int dischargeIdx = -1;
 		final int loadIdx = findLoadIndex(sequence);
 		final int dischargeIdx = findDischargeIndex(sequence);
 		sanityCheckVesselState(loadIdx, dischargeIdx, sequence);
@@ -506,52 +504,33 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		int routeCostAccumulator = 0;
 
+		// block to force limited scope for temporary local variables 
+		{
+			final PortDetails details = (PortDetails) sequence[0];
+			final IPortSlot slot = details.getOptions().getPortSlot();
+			// set available heel if we start from a heel options slot
+			if ((slot instanceof IHeelOptionsPortSlot)) {
+				availableHeelinM3 = ((IHeelOptionsPortSlot) slot).getHeelOptions().getHeelLimit();
+			}
+		}
+		
 		// The index of the last sequence element that used some kind of boil-off
 		Object lastBoiloffElement = null;
 
+		// add up route cost and find the last boiloff element
 		for (int i = 0; i < sequence.length; ++i) {
-			if ((i % 2) == 0) {
-				// Port Slot
-				final PortDetails details = (PortDetails) sequence[i];
-				final IPortSlot slot = details.getOptions().getPortSlot();
-				if (slot instanceof ILoadSlot) {
-					if (i == (sequence.length - 1)) {
-						// End of run, so skip
-					} else {
-						//loadIdx = i;
-					}
-				} else if (slot instanceof IDischargeSlot) {
-					//dischargeIdx = i;
-				} else if ((i == 0) && (slot instanceof IHeelOptionsPortSlot)) {
-					availableHeelinM3 = ((IHeelOptionsPortSlot) slot).getHeelOptions().getHeelLimit();
-				}
-
-			} else {
+			if ((i % 2) == 1) {
 				// Voyage
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 				// add route cost
 				routeCostAccumulator += details.getRouteCost();
-				for (final FuelComponent fc : FuelComponent.values()) {
+				for (final FuelComponent fc: FuelComponent.getLNGFuelComponents()) {
 					final long fuelConsumption = details.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 					// If this is some sort of boil-off, then record the use
-					if (fuelConsumption > 0 && FuelComponent.isLNGFuelComponent(fc)) {
+					if (fuelConsumption > 0) {
 						lastBoiloffElement = details;
 					}
-				}
-
-				// TODO: Assert that if discharge.heelOut set, then future
-				// voyages have no LNG
-				/*
-				 * assert dischargeIdx == -1 || ((IDischargeSlot)sequence[dischargeIdx]).getHeelOut() == false || (details.getFuelConsumption(FuelComponent.NBO) == 0 && details
-				 * .getFuelConsumption(FuelComponent.FBO) == 0 && details .getFuelConsumption(FuelComponent.IdleNBO) == 0);
-				 */
-
-				/*
-				// Assert Laden/Ballast state switches after load and discharge
-				assert ((loadIdx == -1) && (dischargeIdx == -1) && (details.getOptions().getVesselState() == VesselState.Ballast))
-						|| ((loadIdx > -1) && (dischargeIdx == -1) && (details.getOptions().getVesselState() == VesselState.Laden))
-						|| ((loadIdx > -1) && (dischargeIdx > -1) && (details.getOptions().getVesselState() == VesselState.Ballast));
-				*/
+				}				
 			}
 		}
 
