@@ -176,6 +176,7 @@ public class CargoItemProvider
 
 		switch (notification.getFeatureID(Cargo.class)) {
 			case CargoPackage.CARGO__ALLOW_REWIRING:
+			case CargoPackage.CARGO__SLOTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
