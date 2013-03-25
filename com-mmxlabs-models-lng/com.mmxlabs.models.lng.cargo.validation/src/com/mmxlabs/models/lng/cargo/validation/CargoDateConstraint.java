@@ -5,13 +5,13 @@
 package com.mmxlabs.models.lng.cargo.validation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -39,7 +40,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
  * @author Tom Hinton
  * 
  */
-public class CargoDateConstraint extends AbstractModelConstraint {
+public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 	private static final String DATE_ORDER_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_order";
 	private static final String TRAVEL_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_travel_time";
@@ -58,14 +59,13 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private IStatus validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final int availableTime, final boolean inDialog) {
+	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, Slot slot, final int availableTime, final boolean inDialog, List<IStatus> failures) {
 		if (availableTime < 0) {
 			final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()), severity);
-			status.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
-			return status;
+			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+			failures.add(status);
 		}
-		return ctx.createSuccessStatus();
 	}
 
 	private String formatHours(final int hours) {
@@ -90,7 +90,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private IStatus validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, final int availableTime, final boolean inDialog) {
+	private void validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, Slot from, Slot to, final int availableTime, final boolean inDialog, List<IStatus> failures) {
 		if (availableTime >= 0) {
 
 			final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
@@ -101,7 +101,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 
 				if (fleetModel.getVesselClasses().isEmpty()) {
 					// Cannot perform our validation, so return
-					return ctx.createSuccessStatus();
+					return;
 				}
 
 				for (final VesselClass vc : fleetModel.getVesselClasses()) {
@@ -110,7 +110,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 
 				@SuppressWarnings("unchecked")
 				Map<Pair<Port, Port>, Integer> minTimes = (Map<Pair<Port, Port>, Integer>) ctx.getCurrentConstraintData();
-				final Pair<Port, Port> key = new Pair<Port, Port>(cargo.getLoadSlot().getPort(), cargo.getDischargeSlot().getPort());
+				final Pair<Port, Port> key = new Pair<Port, Port>(from.getPort(), to.getPort());
 				if (minTimes == null) {
 					minTimes = new HashMap<Pair<Port, Port>, Integer>();
 
@@ -138,21 +138,20 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					// seems like a waste to run the same code twice
 					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(cargo.getName(), "infinity", formatHours(availableTime));
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, severity);
-					dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port());
-					return dsd;
+					dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_Port());
+					failures.add(dsd);
 				} else {
 					if (time > availableTime) {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), formatHours(time),
 								formatHours(availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
-						dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
-						dsd.addEObjectAndFeature(cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
-						return dsd;
+						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
+						dsd.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
+						failures.add(dsd);
 					}
 
 				}
 			}
 		}
-		return ctx.createSuccessStatus();
 	}
 
 	private void collectMinTimes(final Map<Pair<Port, Port>, Integer> minTimes, final Route d, final int extraTime, final double maxSpeed) {
@@ -173,25 +172,19 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private IStatus validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final int availableTime, final boolean inDialog) {
+	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, Slot slot, final int availableTime, final boolean inDialog, List<IStatus> failures) {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 			final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), availableTime / 24, SENSIBLE_TRAVEL_TIME),
 					severity);
-			status.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
-			return status;
+			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+			failures.add(status);
 		}
 
-		return ctx.createSuccessStatus();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
-	 */
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	protected String validate(IValidationContext ctx, List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		boolean inDialog = false;
 
@@ -201,30 +194,38 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 		}
 
 		if (object instanceof Cargo) {
+			final String constraintID = ctx.getCurrentConstraintId();
 			final Cargo cargo = (Cargo) object;
-			final Slot loadSlot = cargo.getLoadSlot();
-			final Slot dischargeSlot = cargo.getDischargeSlot();
-			if (cargo.getCargoType().equals(CargoType.FLEET) && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
-				final String constraintID = ctx.getCurrentConstraintId();
+			// final Slot loadSlot = cargo.getLoadSlot();
+			// final Slot dischargeSlot = cargo.getDischargeSlot();
+			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 
-				final Port loadPort = loadSlot.getPort();
-				final Port dischargePort = dischargeSlot.getPort();
-				if ((loadPort != null) && (dischargePort != null)) {
+				// && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
+				// }
+				Slot prevSlot = null;
+				for (Slot slot : cargo.getSlots()) {
+					if (prevSlot != null) {
+						final Port loadPort = prevSlot.getPort();
+						final Port dischargePort = slot.getPort();
+						if ((loadPort != null) && (dischargePort != null)) {
 
-					final int availableTime = (int) ((dischargeSlot.getWindowEndWithSlotOrPortTime().getTime() - loadSlot.getWindowStartWithSlotOrPortTime().getTime()) / Timer.ONE_HOUR)
-							- (loadSlot.getSlotOrPortDuration());
+							final int availableTime = (int) ((slot.getWindowEndWithSlotOrPortTime().getTime() - prevSlot.getWindowStartWithSlotOrPortTime().getTime()) / Timer.ONE_HOUR)
+									- (prevSlot.getSlotOrPortDuration());
 
-					if (constraintID.equals(DATE_ORDER_ID)) {
-						return validateSlotOrder(ctx, cargo, availableTime, inDialog);
-					} else if (constraintID.equals(TRAVEL_TIME_ID)) {
-						return validateSlotTravelTime(ctx, cargo, availableTime, inDialog);
-					} else if (constraintID.equals(AVAILABLE_TIME_ID)) {
-						return validateSlotAvailableTime(ctx, cargo, availableTime, inDialog);
+							if (constraintID.equals(DATE_ORDER_ID)) {
+								validateSlotOrder(ctx, cargo, prevSlot, availableTime, inDialog, failures);
+							} else if (constraintID.equals(TRAVEL_TIME_ID)) {
+								validateSlotTravelTime(ctx, cargo, prevSlot, slot, availableTime, inDialog, failures);
+							} else if (constraintID.equals(AVAILABLE_TIME_ID)) {
+								validateSlotAvailableTime(ctx, cargo, prevSlot, availableTime, inDialog, failures);
+							}
+						}
 					}
+					prevSlot = slot;
 				}
 			}
 		}
 
-		return ctx.createSuccessStatus();
+		return Activator.PLUGIN_ID;
 	}
 }

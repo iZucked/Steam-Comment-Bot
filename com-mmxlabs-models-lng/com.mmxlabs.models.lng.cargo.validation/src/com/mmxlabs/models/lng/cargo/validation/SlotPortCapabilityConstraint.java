@@ -21,18 +21,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-/**
- * A model constraint for checking that a slot's minimum and maximum volumes are sensible (0 <= min <= max)
- * 
- * @author Tom Hinton
- * 
- */
 public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
-	 */
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
@@ -54,7 +43,7 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 							final Cargo cargo = ((LoadSlot) slot).getCargo();
 							if (cargo != null) {
-								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_LoadSlot());
+								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
 							}
 							return dsd;
 						}
@@ -66,7 +55,7 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 							final Cargo cargo = ((DischargeSlot) slot).getCargo();
 							if (cargo != null) {
-								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot());
+								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
 							}
 							return dsd;
 						}

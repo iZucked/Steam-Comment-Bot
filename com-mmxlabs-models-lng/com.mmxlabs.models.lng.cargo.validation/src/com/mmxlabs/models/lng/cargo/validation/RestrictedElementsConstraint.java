@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
@@ -35,12 +34,12 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof Cargo) {
 			final Cargo cargo = (Cargo) target;
 
-			final LoadSlot loadSlot = cargo.getLoadSlot();
-			final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-
-			if (loadSlot != null && dischargeSlot != null) {
-				checkSlot(ctx, loadSlot.getContract(), dischargeSlot, statuses);
-				checkSlot(ctx, dischargeSlot.getContract(), loadSlot, statuses);
+			for (int i = 0; i < cargo.getSlots().size(); ++i) {
+				for (int j = i + 1; j < cargo.getSlots().size(); ++j) {
+					final Slot slotI = cargo.getSlots().get(i);
+					final Slot slotJ = cargo.getSlots().get(j);
+					checkSlot(ctx, slotI.getContract(), slotJ, statuses);
+				}
 			}
 		}
 

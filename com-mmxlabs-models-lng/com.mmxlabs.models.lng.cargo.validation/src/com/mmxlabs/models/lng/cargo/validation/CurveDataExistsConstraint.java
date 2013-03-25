@@ -36,8 +36,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A model constraint for checking that curves which are attached to objects have data for
- * the dates associated with those objects.
+ * A model constraint for checking that curves which are attached to objects have data for the dates associated with those objects.
  * 
  * @author Simon McGregor
  * 
@@ -186,19 +185,20 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 		final MMXRootObject rootObject = extraValidationContext.getRootObject();
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 
-		final Slot loadSlot = cargo.getLoadSlot();
+		for (final Slot slot : cargo.getSlots()) {
 
-		final Date date = loadSlot.getWindowStartWithSlotOrPortTime();
-		final LegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
+			final Date date = slot.getWindowStartWithSlotOrPortTime();
+			final LegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
 
-		// check entity tax rates
-		if (!curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
-			String format = "There is no tax data in shipping entity '%s' for '%s' (the load date for cargo '%s').";
-			final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
-			dsd.addEObjectAndFeature(loadSlot, CargoPackage.Literals.SLOT__WINDOW_START);
-			dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
-			failures.add(dsd);
+			// check entity tax rates
+			if (!curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
+				String format = "There is no tax data in shipping entity '%s' for '%s' (the load date for cargo '%s').";
+				final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
+				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
+				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
+				failures.add(dsd);
+			}
 		}
 	}
 
