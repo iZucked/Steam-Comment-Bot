@@ -273,43 +273,55 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		}
 		
 		return options;
-	}
+	}	
+	
 	
 	/**
-	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
-	 * between elements may be too short (i.e. because the vessel is already travelling at max speed). In such cases, if adjustArrivals is true, then arrival times will be adjusted in the
-	 * {@link VoyagePlan}s. Otherwise null will be returned.
+	 * Returns an array of boolean values indicating whether, for each index of the vessel location sequence, 
+	 * a sequence break occurs at that location (separating one cargo from the next one).
+	 * 
+	 * @param sequence
+	 * @return
+	 */
+	public boolean [] findSequenceBreaks(final ISequence sequence) {
+		final boolean [] result = new boolean [sequence.size()];
+		
+		int idx = 0;
+		for (ISequenceElement element: sequence) {
+			final PortType portType = portTypeProvider.getPortType(element);
+			switch (portType) {
+				case Load:
+					result[idx] = (idx > 0); // don't break on first load port
+					break;
+				case CharterOut: case DryDock: case Maintenance: case Short_Cargo_End:
+					result[idx] = true;
+					break;
+				default:
+					result[idx] = false;
+					break;
+			}	
+			idx++;
+		}
+		
+		return result;
+	}
+	/**
+	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations
+	 * into single conceptual cargo voyages.
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @param arrivalTimes
 	 * @return
-	 * @throws InfeasibleVoyageException 
 	 */
-	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+	public List<VoyagePlan> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
-
-		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-			// Virtual vessels are those operated by a third party, for FOB and DES situations.
-			// Should we compute a schedule for them anyway? The arrival times don't mean much,
-			// but contracts need this kind of information to make up numbers with.
-			return desOrFobSchedule(resource, sequence);
-		}
-
 		boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
-
-		// TODO: document this code path
-		if (isShortsSequence && arrivalTimes.length == 0) {
-			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan> emptyList(), new int[] { 0 });
-		}
-
-		// Get start time
-		final int startTime = arrivalTimes[0];
 
 		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
 		final List<Object> voyageOrPortOptions = new ArrayList<Object>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
-
+		final boolean [] breakSequence = findSequenceBreaks(sequence); 
 		
 		ISequenceElement prevElement = null;
 		IPort prevPort = null;
@@ -319,7 +331,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		VesselState vesselState = VesselState.Ballast;
 		VoyageOptions previousOptions = null;
 
-		voyagePlanOptimiser.setVessel(vessel, startTime);
 
 		boolean useNBO = false;
 
@@ -382,20 +393,21 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			voyageOrPortOptions.add(portOptions);
 
 			// decide whether to end the current subsequence and generate a voyage plan from it 
-			boolean breakSequence = ((voyageOrPortOptions.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)
-					|| (portType == PortType.Other) || (portType == PortType.Short_Cargo_End);
+			//boolean breakSequence = ((voyageOrPortOptions.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)
+			//		|| (portType == PortType.Other) || (portType == PortType.Short_Cargo_End);
 			
-			if (breakSequence) {
+			if (breakSequence[idx]) {
 
 				boolean shortCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Short_Cargo_End;
 				
 				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
 				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 				if (!shortCargoEnd) {
-					//voyagePlans.add(getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser));
-					if (!optimiseSequence(voyagePlans, voyageOrPortOptions, currentTimes, voyagePlanOptimiser)) {
+					VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+					if (plan == null) {
 						return null;
 					}
+					voyagePlans.add(plan);
 				} 
 
 				if (isShortsSequence) {
@@ -438,15 +450,64 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			//voyagePlans.add(getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser));
-			if (!optimiseSequence(voyagePlans, voyageOrPortOptions, currentTimes, voyagePlanOptimiser)) {
+			VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+			if (plan == null) {
 				return null;
 			}
+			voyagePlans.add(plan);
+		}
+		
+		return voyagePlans;		
+	}
+	
+	/**
+	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
+	 * between elements may be too short (i.e. because the vessel is already travelling at max speed). In such cases, if adjustArrivals is true, then arrival times will be adjusted in the
+	 * {@link VoyagePlan}s. Otherwise null will be returned.
+	 * 
+	 * @param resource
+	 * @param sequence
+	 * @param arrivalTimes
+	 * @return
+	 * @throws InfeasibleVoyageException 
+	 */
+	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+		final IVessel vessel = vesselProvider.getVessel(resource);
+
+		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			// Virtual vessels are those operated by a third party, for FOB and DES situations.
+			// Should we compute a schedule for them anyway? The arrival times don't mean much,
+			// but contracts need this kind of information to make up numbers with.
+			return desOrFobSchedule(resource, sequence);
+		}
+
+		boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+
+		// TODO: document this code path
+		if (isShortsSequence && arrivalTimes.length == 0) {
+			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan> emptyList(), new int[] { 0 });
+		}
+
+		// Get start time
+		final int startTime = arrivalTimes[0];
+		voyagePlanOptimiser.setVessel(vessel, startTime);
+
+		List<VoyagePlan> voyagePlans = makeVoyagePlans(resource, sequence, arrivalTimes);
+		if (voyagePlans == null) {
+			return null;
 		}
 		
 		return new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes);
 	}
 
+	/**
+	 * Returns a VoyagePlan produced by the optimiser from a cargo itinerary.
+	 * 
+	 * @param voyageOrPortOptionsSubsequence An alternating list of PortOptions and VoyageOptions objects
+	 * @param arrivalTimes
+	 * @param optimiser
+	 * @return An optimised VoyagePlan
+	 */
 	public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser)  {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
