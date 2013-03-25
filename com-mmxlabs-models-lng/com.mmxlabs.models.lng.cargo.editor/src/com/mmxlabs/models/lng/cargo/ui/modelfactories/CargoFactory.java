@@ -47,8 +47,8 @@ public class CargoFactory extends DefaultModelFactory {
 
 		for (final ISetting setting : superSetting) {
 			if (setting.getInstance() instanceof Cargo) {
-				((Cargo) setting.getInstance()).setLoadSlot(load);
-				((Cargo) setting.getInstance()).setDischargeSlot(discharge);
+				((Cargo) setting.getInstance()).getSlots().add(load);
+				((Cargo) setting.getInstance()).getSlots().add(discharge);
 			}
 		}
 
