@@ -63,7 +63,13 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 				if (slot.getCargo() != null) {
 					final Cargo cargo = slot.getCargo();
 					final ElementAssignment assignment = getAssignmentForCargo(overrides, inputModel, cargo);
-					final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+					DischargeSlot dischargeSlot = null;
+					for (Slot slot2 : cargo.getSlots()) {
+						if (slot2 instanceof DischargeSlot) {
+							dischargeSlot = (DischargeSlot) slot2;
+							break;
+						}
+					}
 					if (dischargeSlot != null) {
 
 						if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
@@ -126,7 +132,13 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 					final Cargo cargo = slot.getCargo();
 
 					final ElementAssignment assignment = getAssignmentForCargo(overrides, inputModel, cargo);
-					final LoadSlot loadSlot = cargo.getLoadSlot();
+					LoadSlot loadSlot = null;
+					for (Slot slot2 : cargo.getSlots()) {
+						if (slot2 instanceof LoadSlot) {
+							loadSlot = (LoadSlot) slot2;
+							break;
+						}
+					}
 					if (loadSlot != null) {
 
 						if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
