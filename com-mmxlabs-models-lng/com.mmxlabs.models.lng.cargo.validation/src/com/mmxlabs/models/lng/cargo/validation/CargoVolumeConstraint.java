@@ -12,6 +12,8 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -32,25 +34,52 @@ public class CargoVolumeConstraint extends AbstractModelConstraint {
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof Cargo) {
+
 			final Cargo cargo = (Cargo) object;
-			final Slot loadSlot = cargo.getLoadSlot();
-			final Slot dischargeSlot = cargo.getDischargeSlot();
 
-			if (loadSlot != null && dischargeSlot != null) {
-
-				if (loadSlot.getSlotOrContractMaxQuantity() < dischargeSlot.getSlotOrContractMinQuantity()) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getName() + " max load quantity is less than the minimum discharge quantity."));
-					status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-					status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-					return status;
-				}
-				if (loadSlot.getSlotOrContractMinQuantity() > dischargeSlot.getSlotOrContractMaxQuantity()) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getName() + " min load quantity is greater than the maximum discharge quantity."));
-					status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-					status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-					return status;
+			int loadMinVolume = 0;
+			int loadMaxVolume = 0;
+			int dischargeMinVolume = 0;
+			int dischargeMaxVolume = 0;
+			for (final Slot slot : cargo.getSlots()) {
+				if (slot instanceof LoadSlot) {
+					loadMinVolume += slot.getSlotOrContractMinQuantity();
+					loadMaxVolume += slot.getSlotOrContractMaxQuantity();
+				} else if (slot instanceof DischargeSlot) {
+					dischargeMinVolume += slot.getSlotOrContractMinQuantity();
+					dischargeMaxVolume += slot.getSlotOrContractMaxQuantity();
 				}
 			}
+			if (loadMaxVolume > dischargeMinVolume) {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getName()
+						+ " max load quantity is less than the minimum discharge quantity."));
+
+				for (final Slot slot : cargo.getSlots()) {
+					if (slot instanceof LoadSlot) {
+						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+					} else if (slot instanceof DischargeSlot) {
+						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+
+					}
+				}
+
+				return status;
+			}
+			if (loadMinVolume > dischargeMaxVolume) {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getName()
+						+ " min load quantity is greater than the maximum discharge quantity."));
+				for (final Slot slot : cargo.getSlots()) {
+					if (slot instanceof LoadSlot) {
+						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					} else if (slot instanceof DischargeSlot) {
+						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+
+					}
+				}
+
+				return status;
+			}
+
 		}
 		return ctx.createSuccessStatus();
 	}
