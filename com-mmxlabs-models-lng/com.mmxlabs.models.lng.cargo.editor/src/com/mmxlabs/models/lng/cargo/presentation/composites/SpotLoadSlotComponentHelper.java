@@ -81,9 +81,8 @@ public class SpotLoadSlotComponentHelper extends BaseComponentHelper {
 			final Cargo cargo = loadSlot.getCargo();
 			if (cargo != null) {
 				external.add(cargo);
-				if (cargo.getDischargeSlot() != null) {
-					external.add(cargo.getDischargeSlot());
-				}
+				external.addAll(cargo.getSlots());
+				external.remove(value);
 			}
 		}
 		external.addAll(super.getExternalEditingRange(root, value));

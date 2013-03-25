@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 /**
-s * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ s * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
@@ -61,7 +61,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);
 	}
 
 	/**
@@ -71,7 +71,8 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
 		add_DESPurchaseEditor(detailComposite, topClass);
@@ -125,9 +126,8 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 			final Cargo cargo = loadSlot.getCargo();
 			if (cargo != null) {
 				external.add(cargo);
-				if (cargo.getDischargeSlot() != null) {
-					external.add(cargo.getDischargeSlot());
-				}
+				external.addAll(cargo.getSlots());
+				external.remove(value);
 			}
 		}
 		external.addAll(super.getExternalEditingRange(root, value));
