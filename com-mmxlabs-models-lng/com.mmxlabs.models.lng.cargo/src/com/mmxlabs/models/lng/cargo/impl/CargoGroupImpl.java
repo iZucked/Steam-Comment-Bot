@@ -11,16 +11,6 @@ import java.util.Collection;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import java.util.Collection;
-
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoGroup;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
