@@ -37,6 +37,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	protected IDisplayComposite topLevel = null;
 	protected List<EReference> childReferences = new LinkedList<EReference>();
 	protected List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
+	/**
+	 * @since 3.0
+	 */
+	protected List<EObject> childObjects = new LinkedList<EObject>();
 	protected ICommandHandler commandHandler;
 	protected IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 	protected IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
@@ -61,11 +65,11 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		createChildComposites(root, object, eClass, this);
 
 		topLevel.display(location, root, object, range);
-		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
+		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
-		while (refs.hasNext()) {
-			children.next().display(location, root, (EObject) object.eGet(refs.next()), range);
+		while (childObjectsItr.hasNext()) {
+			children.next().display(location, root, childObjectsItr.next(), range);
 		}
 
 		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
@@ -74,21 +78,36 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
-				final EObject value = (EObject) object.eGet(ref);
-				if (value != null) {
-					final Group g2 = new Group(parent, SWT.NONE);
-					g2.setText(EditorUtils.unmangle(ref.getName()));
-					g2.setLayout(new FillLayout());
-					g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
+				if (ref.isMany()) {
+					final List values = (List) object.eGet(ref);
+					for (Object o : values) {
+						if (o instanceof EObject) {
+							createChildArea(root, object, parent, ref, (EObject) o);
+						}
+					}
+				} else {
+					final EObject value = (EObject) object.eGet(ref);
 
-					final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(), location);
-
-					sub.setCommandHandler(commandHandler);
-					sub.setEditorWrapper(editorWrapper);
-					childReferences.add(ref);
-					childComposites.add(sub);
+					createChildArea(root, object, parent, ref, value);
 				}
 			}
+		}
+	}
+
+	private void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+		if (value != null) {
+			final Group g2 = new Group(parent, SWT.NONE);
+			g2.setText(EditorUtils.unmangle(ref.getName()));
+			g2.setLayout(new FillLayout());
+			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
+
+			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(), location);
+
+			sub.setCommandHandler(commandHandler);
+			sub.setEditorWrapper(editorWrapper);
+			childReferences.add(ref);
+			childComposites.add(sub);
+			childObjects.add(value);
 		}
 	}
 
