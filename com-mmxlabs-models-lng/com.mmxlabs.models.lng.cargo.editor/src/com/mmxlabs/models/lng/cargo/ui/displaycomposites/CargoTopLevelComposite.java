@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EClass;
@@ -75,9 +76,9 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		// Initialise middle composite
 		middle = new Composite(this, SWT.NONE);
 		// We know there is only the load and discharge slot, so two columns
-		middle.setLayout(new GridLayout(2, true));
 
 		createChildComposites(root, object, eClass, middle);
+		middle.setLayout(new GridLayout(childObjects.size(), true));
 
 		// Additional Group for the bottom section
 		final Group g2 = new Group(this, SWT.NONE);
@@ -92,11 +93,11 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.display(location, root, object, range);
 		bottomLevel.display(location, root, object, range);
 
-		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
+		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
-		while (refs.hasNext()) {
-			children.next().display(location, root, (EObject) object.eGet(refs.next()), range);
+		while (childObjectsItr.hasNext()) {
+			children.next().display(location, root, childObjectsItr.next(), range);
 		}
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
