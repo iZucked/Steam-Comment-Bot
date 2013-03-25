@@ -35,7 +35,10 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) target;
 
 			for (int i = 0; i < cargo.getSlots().size(); ++i) {
-				for (int j = i + 1; j < cargo.getSlots().size(); ++j) {
+				for (int j = 0; j < cargo.getSlots().size(); ++j) {
+					if (i == j) {
+						continue;
+					}
 					final Slot slotI = cargo.getSlots().get(i);
 					final Slot slotJ = cargo.getSlots().get(j);
 					checkSlot(ctx, slotI.getContract(), slotJ, statuses);
