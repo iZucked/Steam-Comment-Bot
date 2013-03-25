@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDiagram;
 
 /**
  * s A control for drawing a wiring diagram. This just displays an arbitrary bipartite graph / matching.
