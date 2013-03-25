@@ -305,6 +305,53 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		
 		return result;
 	}
+	
+	/**
+	 * Returns an array of vessel states determining, for each index of the vessel location sequence,
+	 * whether the vessel arrives at that location with LNG cargo on board for resale or not 
+	 * 
+	 * @param sequence
+	 * @return
+	 */
+	public VesselState [] findVesselStates(final ISequence sequence) {
+		VesselState [] result = new VesselState[sequence.size()];
+		
+		VesselState state = VesselState.Ballast;
+		int possiblePartialDischargeIndex = -1;
+		
+		int idx = 0;
+		for (ISequenceElement element: sequence) {
+			result[idx] = state;
+			// Determine vessel state changes from this location
+			switch (portTypeProvider.getPortType(element)) {
+				case Load:
+					state = VesselState.Laden;
+					possiblePartialDischargeIndex = -1; // forget about any previous discharge, it was correctly set to a full discharge
+					break;
+				case Discharge:
+					// we'll assume this is a full discharge
+					state = VesselState.Ballast;
+					// but the last discharge which might have been partial *was* a partial discharge
+					if (possiblePartialDischargeIndex > -1) {
+						result[possiblePartialDischargeIndex] = VesselState.Laden;
+					}
+					// and this one might be too
+					possiblePartialDischargeIndex = idx;
+					break;					
+				case CharterOut: case DryDock: case Maintenance: case Short_Cargo_End:
+					state = VesselState.Ballast;			
+					possiblePartialDischargeIndex = -1; // forget about any previous discharge, it was correctly set to a full discharge
+					break;
+				default:
+					break;
+			}
+			
+			idx++;
+		}
+		return result;
+	}
+	
+	
 	/**
 	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations
 	 * into single conceptual cargo voyages.
@@ -322,16 +369,13 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		final List<Object> voyageOrPortOptions = new ArrayList<Object>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
 		final boolean [] breakSequence = findSequenceBreaks(sequence); 
+		final VesselState[] states = findVesselStates(sequence);
 		
 		ISequenceElement prevElement = null;
 		IPort prevPort = null;
-
 		IPort prev2Port = null;
 
-		VesselState vesselState = VesselState.Ballast;
 		VoyageOptions previousOptions = null;
-
-
 		boolean useNBO = false;
 
 		int prevVisitDuration = 0;
@@ -366,7 +410,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 					shortCargoReturnArrivalTime = arrivalTimes[idx - 1] + prevVisitDuration + availableTime;
 				} 
 
-				VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vessel, vesselState, availableTime, element, prevElement, previousOptions, voyagePlanOptimiser, useNBO);
+				VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vessel, states[idx], availableTime, element, prevElement, previousOptions, voyagePlanOptimiser, useNBO);
 				useNBO = options.useNBOForTravel();
 				
 
@@ -376,9 +420,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 			final int visitDuration = durationsProvider.getElementDuration(element, resource);
 
-			/*
-			 * final PortDetails portDetails = new PortDetails(); portDetails.setOptions(new PortOptions());
-			 */
 			final PortOptions portOptions = new PortOptions();
 			portOptions.setVisitDuration(visitDuration);
 			portOptions.setPortSlot(thisPortSlot);
@@ -389,13 +430,8 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			} else {
 				currentTimes.add(arrivalTimes[idx]);
 			}
-			// currentSequence.add(portDetails);
 			voyageOrPortOptions.add(portOptions);
 
-			// decide whether to end the current subsequence and generate a voyage plan from it 
-			//boolean breakSequence = ((voyageOrPortOptions.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)
-			//		|| (portType == PortType.Other) || (portType == PortType.Short_Cargo_End);
-			
 			if (breakSequence[idx]) {
 
 				boolean shortCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Short_Cargo_End;
@@ -432,18 +468,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			prevPort = thisPort;
 			prevVisitDuration = visitDuration;
 			prevElement = element;
-			
-			// Update vessel state
-			switch (portType) {
-				case Load:
-					vesselState = VesselState.Laden;
-					break;
-				case Discharge: case CharterOut: case DryDock: case Maintenance: case Short_Cargo_End:
-					vesselState = VesselState.Ballast;			
-					break;
-				default:
-					break;
-			}
 		}
 
 		// TODO: Do we need to run optimiser when we only have a load port here?
@@ -737,4 +761,3 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	}
 
 }
-// WORKING VERSION
