@@ -105,7 +105,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() || ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
+		return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_Slots();
 	}
 
 	@Override

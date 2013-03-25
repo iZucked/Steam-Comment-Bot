@@ -46,8 +46,7 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 		if (value instanceof Cargo) {
 			final Cargo cargo = (Cargo) value;
 
-			external.add(cargo.getLoadSlot());
-			external.add(cargo.getDischargeSlot());
+			external.addAll(cargo.getSlots());
 		}
 
 		return external;
