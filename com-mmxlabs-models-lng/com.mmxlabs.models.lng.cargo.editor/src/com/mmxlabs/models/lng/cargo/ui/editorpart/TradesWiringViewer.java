@@ -132,11 +132,11 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
 
-//	private final List<List<Integer>> wiring = new ArrayList<List<Integer>>();
+	// private final List<List<Integer>> wiring = new ArrayList<List<Integer>>();
 	private TradesWiringDiagram wiringDiagram;
 
-//	private final ArrayList<Boolean> leftTerminalsExist = new ArrayList<Boolean>();
-//	private final ArrayList<Boolean> rightTerminalsExist = new ArrayList<Boolean>();
+	// private final ArrayList<Boolean> leftTerminalsExist = new ArrayList<Boolean>();
+	// private final ArrayList<Boolean> rightTerminalsExist = new ArrayList<Boolean>();
 	protected RootData rootData;
 
 	private final Set<GridColumn> loadColumns = new HashSet<GridColumn>();
@@ -228,9 +228,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		}
 
-//		this.rightTerminalsExist.clear();
-//		this.leftTerminalsExist.clear();
-//		this.wiring.clear();
+		// this.rightTerminalsExist.clear();
+		// this.leftTerminalsExist.clear();
+		// this.wiring.clear();
 
 		this.rootData = null;
 
@@ -319,7 +319,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							((EObject) newInput).eAdapters().add(cargoChangeAdapter);
 						}
 
-//						wiring.clear();
+						// wiring.clear();
 					}
 
 					@Override
@@ -353,37 +353,37 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 						final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
-//						wiring.clear();
-//						leftTerminalsExist.clear();
-//						rightTerminalsExist.clear();
+						// wiring.clear();
+						// leftTerminalsExist.clear();
+						// rightTerminalsExist.clear();
 
 						final RootData root = setCargoes(inputModel, cargoModel);
-//						for (int i = 0; i < root.getRows().size(); ++i) {
-//							leftTerminalsExist.add(root.getRows().get(i).loadSlot != null);
-//							rightTerminalsExist.add(root.getRows().get(i).dischargeSlot != null);
-//							if (root.getRows().get(i).cargo != null) {
-//								wiring.add(i);
-//							} else {
-//								wiring.add(-1);
-//							}
-//							terminalColors.add(new Pair<Color, Color>(green, green));
-//							terminalOptionals.add(new Pair<Boolean, Boolean>(false, false));
-//							wireColors.add(black);
-//
-//						}
+						// for (int i = 0; i < root.getRows().size(); ++i) {
+						// leftTerminalsExist.add(root.getRows().get(i).loadSlot != null);
+						// rightTerminalsExist.add(root.getRows().get(i).dischargeSlot != null);
+						// if (root.getRows().get(i).cargo != null) {
+						// wiring.add(i);
+						// } else {
+						// wiring.add(-1);
+						// }
+						// terminalColors.add(new Pair<Color, Color>(green, green));
+						// terminalOptionals.add(new Pair<Boolean, Boolean>(false, false));
+						// wireColors.add(black);
+						//
+						// }
 						wiringDiagram.setWiring(root);
 
-//						final Color addColor = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
-//
-//						terminalColors.add(new Pair<Color, Color>(addColor, addColor));
-//						terminalColors.add(new Pair<Color, Color>(addColor, addColor));
-//
-//						wiringDiagram.setWireColors(wireColors);
-//						wiringDiagram.setTerminalColors(terminalColors);
-//						wiringDiagram.setTerminalOptionals(terminalOptionals);
-//
-//						wiringDiagram.setTerminalsValid(leftTerminalsExist, rightTerminalsExist);
-//						updateWiringColours(wiringDiagram, wiring, root);
+						// final Color addColor = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+						//
+						// terminalColors.add(new Pair<Color, Color>(addColor, addColor));
+						// terminalColors.add(new Pair<Color, Color>(addColor, addColor));
+						//
+						// wiringDiagram.setWireColors(wireColors);
+						// wiringDiagram.setTerminalColors(terminalColors);
+						// wiringDiagram.setTerminalOptionals(terminalOptionals);
+						//
+						// wiringDiagram.setTerminalsValid(leftTerminalsExist, rightTerminalsExist);
+						// updateWiringColours(wiringDiagram, wiring, root);
 						wiringDiagram.redraw();
 
 						TradesWiringViewer.this.rootData = root;
@@ -392,7 +392,36 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 				}, commandStack);
+				// Get default comparator
+				final ViewerComparator vc = getComparator();
+				// Wrap around with group sorter
+				setComparator(new ViewerComparator() {
+					@Override
+					public int compare(final Viewer viewer, final Object e1, final Object e2) {
 
+						int comparison = 0;
+						GroupData g1 = null;
+						GroupData g2 = null;
+						if (e1 instanceof RowData) {
+							g1 = ((RowData) e1).getGroup();
+						}
+						if (e2 instanceof RowData) {
+							g2 = ((RowData) e2).getGroup();
+						}
+						if (g1 == g2) {
+							return vc.compare(viewer, e1, e2);
+						} else {
+							if (g1 == null) {
+								comparison = -1;
+							} else if (g2 == null) {
+								comparison = 1;
+							} else {
+								return vc.compare(viewer, g1.getRows().get(0), g2.getRows().get(0));
+							}
+						}
+						return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
+					}
+				});
 			}
 
 			// @Override
@@ -541,36 +570,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return aSet;
 			}
 		});
-		// Get default comparator
-		final ViewerComparator vc = scenarioViewer.getComparator();
-		// Wrap around with group sorter
-		scenarioViewer.setComparator(new ViewerComparator() {
-			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 
-				int comparison = 0;
-				GroupData g1 = null;
-				GroupData g2 = null;
-				if (e1 instanceof RowData) {
-					g1 = ((RowData) e1).getGroup();
-				}
-				if (e2 instanceof RowData) {
-					g2 = ((RowData) e2).getGroup();
-				}
-				if (g1 == g2) {
-					return vc.compare(scenarioViewer, e1, e2);
-				} else {
-					if (g1 == null) {
-						comparison = -1;
-					} else if (g2 == null) {
-						comparison = 1;
-					} else {
-						return vc.compare(scenarioViewer, g1.getRows().get(0), g2.getRows().get(0));
-					}
-				}
-				return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
-			}
-		});
 		return scenarioViewer;
 	}
 
@@ -857,57 +857,57 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		});
 	}
 
-//	private synchronized void updateWiringColours(final TradesWiringDiagram diagram, final List<List<Integer>> wiring, final RootData root) {
-//		final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-//		final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
-//		final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-//		final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-//
-//		for (int i = 0; i < root.getRows().size(); ++i) {
-//			final RowData rd = root.getRows().get(i);
-//			final LoadSlot loadSlot = rd.loadSlot;
-//			final DischargeSlot dischargeSlot = rd.dischargeSlot;
-////			if (loadSlot != null && loadSlot.isOptional()) {
-////				diagram.setLeftTerminalColor(i, green);
-////				diagram.setLeftTerminalOptional(i, true);
-////			} else {
-////				diagram.setLeftTerminalColor(i, red);
-////				diagram.setLeftTerminalOptional(i, false);
-////			}
-////			if (dischargeSlot != null && dischargeSlot.isOptional()) {
-////				diagram.setRightTerminalColor(i, green);
-////				diagram.setRightTerminalOptional(i, true);
-////			} else {
-////				diagram.setRightTerminalColor(i, red);
-////				diagram.setRightTerminalOptional(i, false);
-////			}
-//			final int j = wiring.get(i);
-//			if (j == -1) {
-//				continue;
-//			}
-//
-//			if (loadSlot == null) {
-//				continue;
-//			}
-//			if (dischargeSlot == null) {
-//				continue;
-//			}
-//
-//			diagram.setLeftTerminalColor(i, green);
-//			diagram.setRightTerminalColor(j, green);
-//
-//			if (isWiringValid(root.getCargoes().get(i), loadSlot, dischargeSlot)) {
-//				if (root.getCargoes().get(i).isAllowRewiring()) {
-//					diagram.setWireColor(i, black);
-//				} else {
-//					diagram.setWireColor(i, gray);
-//				}
-//			} else {
-//				diagram.setWireColor(i, red);
-//			}
-//		}
-//		diagram.redraw();
-//	}
+	// private synchronized void updateWiringColours(final TradesWiringDiagram diagram, final List<List<Integer>> wiring, final RootData root) {
+	// final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	// final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+	// final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+	// final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+	//
+	// for (int i = 0; i < root.getRows().size(); ++i) {
+	// final RowData rd = root.getRows().get(i);
+	// final LoadSlot loadSlot = rd.loadSlot;
+	// final DischargeSlot dischargeSlot = rd.dischargeSlot;
+	// // if (loadSlot != null && loadSlot.isOptional()) {
+	// // diagram.setLeftTerminalColor(i, green);
+	// // diagram.setLeftTerminalOptional(i, true);
+	// // } else {
+	// // diagram.setLeftTerminalColor(i, red);
+	// // diagram.setLeftTerminalOptional(i, false);
+	// // }
+	// // if (dischargeSlot != null && dischargeSlot.isOptional()) {
+	// // diagram.setRightTerminalColor(i, green);
+	// // diagram.setRightTerminalOptional(i, true);
+	// // } else {
+	// // diagram.setRightTerminalColor(i, red);
+	// // diagram.setRightTerminalOptional(i, false);
+	// // }
+	// final int j = wiring.get(i);
+	// if (j == -1) {
+	// continue;
+	// }
+	//
+	// if (loadSlot == null) {
+	// continue;
+	// }
+	// if (dischargeSlot == null) {
+	// continue;
+	// }
+	//
+	// diagram.setLeftTerminalColor(i, green);
+	// diagram.setRightTerminalColor(j, green);
+	//
+	// if (isWiringValid(root.getCargoes().get(i), loadSlot, dischargeSlot)) {
+	// if (root.getCargoes().get(i).isAllowRewiring()) {
+	// diagram.setWireColor(i, black);
+	// } else {
+	// diagram.setWireColor(i, gray);
+	// }
+	// } else {
+	// diagram.setWireColor(i, red);
+	// }
+	// }
+	// diagram.redraw();
+	// }
 
 	private void performControlUpdate(final boolean rowAdded) {
 
@@ -944,10 +944,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
 
 		for (int i = 0; i < rootData.getRows().size(); ++i) {
-//			if (wiring.get(i).equals(newWiring.get(i))) {
-//				// No change
-//				continue;
-//			}
+			// if (wiring.get(i).equals(newWiring.get(i))) {
+			// // No change
+			// continue;
+			// }
 
 			final RowData rowI = rootData.getRows().get(i);
 
@@ -1107,7 +1107,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 	}
 
-	
 	private GridViewerColumn addWiringColumn() {
 		final GridViewerColumn wiringColumn = getScenarioViewer().addSimpleColumn("", false);
 		wiringColumn.getColumn().setMinimumWidth(100);
