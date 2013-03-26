@@ -48,9 +48,9 @@ import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
-import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
-import com.mmxlabs.models.ui.tabular.BooleanAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 public class LoadSlotViewer extends ScenarioTableViewerPane {

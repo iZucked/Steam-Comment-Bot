@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.actions.DeleteSelectedCargoAction;
-import com.mmxlabs.models.lng.cargo.ui.actions.RotateSlotsAction;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
@@ -56,10 +55,10 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
-import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.BasicOperationRenderer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
-import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicOperationRenderer;
+import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 public class CargoModelViewer extends ScenarioTableViewerPane {
@@ -84,11 +83,10 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
 		// final RewireAction rewireAction = new RewireAction(getJointModelEditorPart());
-		final RotateSlotsAction rotate = new RotateSlotsAction(getJointModelEditorPart());
-		viewer.addSelectionChangedListener(rotate);
+//		viewer.addSelectionChangedListener(rotate);
 		// viewer.addSelectionChangedListener(rewireAction);
 		// getToolBarManager().appendToGroup("edit", rewireAction);
-		getToolBarManager().appendToGroup("edit", rotate);
+//		getToolBarManager().appendToGroup("edit", rotate);
 		getToolBarManager().update(true);
 		final MMXCorePackage mmx = MMXCorePackage.eINSTANCE;
 		final CargoPackage pkg = CargoPackage.eINSTANCE;
@@ -141,7 +139,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		final InputModel input = part.getRootObject().getSubModel(InputModel.class);
 
 		if (input != null) {
-			addTypicalColumn("Vessel", new AssignmentManipulator(part));
+			addTypicalColumn("Vessel", new AssignmentManipulator(part)); 	
 		}
 
 		// Add action to create and edit cargo groups

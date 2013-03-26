@@ -17,8 +17,8 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
-import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 
 public class ContractEditorPane extends ScenarioTableViewerPane {
 	public ContractEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
