@@ -10,14 +10,11 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
@@ -315,19 +312,20 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 
 	protected Command createSetCommand() {
 
-		final CompoundCommand cmd = new CompoundCommand("Change cargo type");
-		if (shippedButton.getSelection()) {
-			cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), false)));
-			cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), false)));
-		} else if (desButton.getSelection()) {
-			cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), true)));
-			cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), false)));
-		} else if (fobButton.getSelection()) {
-			cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), false)));
-			cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), true)));
-		}
-
-		return cmd;
+		// final CompoundCommand cmd = new CompoundCommand("Change cargo type");
+		// if (shippedButton.getSelection()) {
+		// cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), false)));
+		// cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), false)));
+		// } else if (desButton.getSelection()) {
+		// cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), true)));
+		// cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), false)));
+		// } else if (fobButton.getSelection()) {
+		// cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), false)));
+		// cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), true)));
+		// }
+		//
+		// return cmd;
+		throw new UnsupportedOperationException("Not implemented");
 	}
 
 	//
@@ -473,12 +471,12 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 	@Override
 	public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
