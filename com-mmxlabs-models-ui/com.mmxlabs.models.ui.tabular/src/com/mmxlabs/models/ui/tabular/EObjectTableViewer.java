@@ -63,7 +63,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		@Override
 		public void commandStackChanged(final EventObject event) {
 
-			// TODO: This is fairly coarse grained check -perhaps we should check the mostRecentCommand result and check to see if it contains the conainer - OR contained elements?
+			// TODO: This is fairly coarse grained check -perhaps we should check the mostRecentCommand result and check to see if it contains the container - OR contained elements?
 
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
