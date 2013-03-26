@@ -245,7 +245,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 	@Override
 	protected Action createDeleteAction() {
-		return new DeleteSelectedCargoAction(jointModelEditorPart, viewer);
+		return new DeleteSelectedCargoAction(scenarioEditingLocation, viewer);
 	}
 
 	@Override
