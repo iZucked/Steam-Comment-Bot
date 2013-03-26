@@ -92,9 +92,9 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	 */
 	protected ScenarioTableViewer scenarioViewer;
 	/**
-	 * @since 2.0
+	 * @since 3.0
 	 */
-	protected final IScenarioEditingLocation jointModelEditorPart;
+	protected final IScenarioEditingLocation scenarioEditingLocation;
 
 	/**
 	 * @since 2.0
@@ -141,7 +141,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 	public ScenarioTableViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part);
-		this.jointModelEditorPart = location;
+		this.scenarioEditingLocation = location;
 		this.actionBars = actionBars;
 		page.addPostSelectionListener(selectionListener);
 	}
@@ -268,25 +268,25 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 					if (structuredSelection.isEmpty() == false) {
 						if (structuredSelection.size() == 1) {
-							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
+							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
 							try {
-								jointModelEditorPart.getEditorLock().claim();
-								jointModelEditorPart.setDisableUpdates(true);
-								dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
+								scenarioEditingLocation.getEditorLock().claim();
+								scenarioEditingLocation.setDisableUpdates(true);
+								dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
 							} finally {
-								jointModelEditorPart.setDisableUpdates(false);
-								jointModelEditorPart.getEditorLock().release();
+								scenarioEditingLocation.setDisableUpdates(false);
+								scenarioEditingLocation.getEditorLock().release();
 							}
 						} else {
 							try {
-								jointModelEditorPart.getEditorLock().claim();
+								scenarioEditingLocation.getEditorLock().claim();
 								if (scenarioViewer.isLocked() == false) {
-									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
+									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
 											.getDefaultCommandHandler());
-									mdd.open(jointModelEditorPart, structuredSelection.toList());
+									mdd.open(scenarioEditingLocation, structuredSelection.toList());
 								}
 							} finally {
-								jointModelEditorPart.getEditorLock().release();
+								scenarioEditingLocation.getEditorLock().release();
 							}
 						}
 					}
@@ -296,7 +296,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
+		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation);
 	}
 
 	public <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
@@ -308,19 +308,19 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	public EditingDomain getEditingDomain() {
-		return jointModelEditorPart.getEditingDomain();
+		return scenarioEditingLocation.getEditingDomain();
 	}
 
 	public AdapterFactory getAdapterFactory() {
-		return jointModelEditorPart.getAdapterFactory();
+		return scenarioEditingLocation.getAdapterFactory();
 	}
 
 	public IReferenceValueProviderProvider getReferenceValueProviderCache() {
-		return jointModelEditorPart.getReferenceValueProviderCache();
+		return scenarioEditingLocation.getReferenceValueProviderCache();
 	}
 
 	public IScenarioEditingLocation getJointModelEditorPart() {
-		return jointModelEditorPart;
+		return scenarioEditingLocation;
 	}
 
 	protected void addNameManipulator(final String nameName) {
@@ -360,7 +360,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		final Action addAction = AddModelAction.create(containment.getEReferenceType(), new IAddContext() {
 			@Override
 			public MMXRootObject getRootObject() {
-				return jointModelEditorPart.getRootObject();
+				return scenarioEditingLocation.getRootObject();
 			}
 
 			@Override
@@ -375,12 +375,12 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 			@Override
 			public ICommandHandler getCommandHandler() {
-				return jointModelEditorPart.getDefaultCommandHandler();
+				return scenarioEditingLocation.getDefaultCommandHandler();
 			}
 
 			@Override
 			public IScenarioEditingLocation getEditorPart() {
-				return jointModelEditorPart;
+				return scenarioEditingLocation;
 			}
 
 			@Override
@@ -460,7 +460,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	protected Action createImportAction() {
-		return new SimpleImportAction(jointModelEditorPart, scenarioViewer);
+		return new SimpleImportAction(scenarioEditingLocation, scenarioViewer);
 	}
 
 	protected Action createDeleteAction() {
@@ -480,13 +480,13 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					@Override
 					public void run() {
 
-						final ScenarioLock editorLock = jointModelEditorPart.getEditorLock();
+						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 						editorLock.awaitClaim();
 						getJointModelEditorPart().setDisableUpdates(true);
 						try {
 							final ISelection sel = getLastSelection();
 							if (sel instanceof IStructuredSelection) {
-								final EditingDomain ed = jointModelEditorPart.getEditingDomain();
+								final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 								// Copy selection
 								final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
 
@@ -516,7 +516,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	@Override
 	protected void requestActivation() {
 		super.requestActivation();
-		jointModelEditorPart.setCurrentViewer(scenarioViewer);
+		scenarioEditingLocation.setCurrentViewer(scenarioViewer);
 
 		if (actionBars != null) {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
