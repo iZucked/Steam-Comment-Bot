@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +18,7 @@ import com.mmxlabs.common.Pair;
  * Editor for enums
  * 
  * @author hinton
+ * @since 3.0
  * 
  */
 public class EnumAttributeManipulator extends ValueListAttributeManipulator {

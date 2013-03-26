@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Label;
 
 /**
  * @author hinton
+ * @since 3.0
  * 
  */
 public abstract class DialogFeatureManipulator extends BasicAttributeManipulator {

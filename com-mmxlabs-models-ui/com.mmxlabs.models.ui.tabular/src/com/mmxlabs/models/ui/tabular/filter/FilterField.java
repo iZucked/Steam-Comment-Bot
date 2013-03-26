@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 
-import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 
 /**
  * Wraps up a text box, actions, events etc for a filter
@@ -39,7 +39,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 	private final FilterProposalProvider proposals;
 	private final GridData layoutData;
 
-	private EObjectTableViewer viewer = null;
+	private EObjectTableViewerFilterSupport filterSupport = null;
 	private final ContentProposalAdapter adapter;
 
 	public FilterField(final Composite textContainer) {
@@ -82,13 +82,16 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 		);
 	}
 
-	public EObjectTableViewer getViewer() {
-		return viewer;
-	}
+	// public EObjectTableViewer getViewer() {
+	// return viewer;
+	// }
 
-	public void setViewer(final EObjectTableViewer viewer) {
-		this.viewer = viewer;
-		proposals.setViewer(viewer);
+	/**
+	 * @since 3.0
+	 */
+	public void setFilterSupport(final EObjectTableViewerFilterSupport filterSupport) {
+		this.filterSupport = filterSupport;
+		proposals.setFilterSupport(filterSupport);
 	}
 
 	@Override
@@ -102,8 +105,8 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 	@Override
 	public void modifyText(final ModifyEvent e) {
 		if (e.widget == text) {
-			if (viewer != null) {
-				viewer.setFilterString(text.isVisible() ? text.getText() : "");
+			if (filterSupport != null) {
+				filterSupport.setFilterString(text.isVisible() ? text.getText() : "");
 			}
 		}
 	}
@@ -150,8 +153,8 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 		layoutData.exclude = !layoutData.exclude;
 		text.getParent().layout(true);
 		if (text.isVisible() == false) {
-			if (viewer != null) {
-				viewer.setFilterString("");
+			if (filterSupport != null) {
+				filterSupport.setFilterString("");
 			}
 		} else {
 			text.setFocus();

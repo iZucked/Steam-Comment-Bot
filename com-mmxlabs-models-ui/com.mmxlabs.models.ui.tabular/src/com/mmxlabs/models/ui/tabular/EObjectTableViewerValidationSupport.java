@@ -1,0 +1,120 @@
+package com.mmxlabs.models.ui.tabular;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+
+import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
+import com.mmxlabs.models.ui.validation.IStatusProvider;
+import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
+
+/**
+ * Validation related code for the {@link EObjectTableViewer}
+ * 
+ * @author Simon Goodall
+ * @since 3.0
+ * 
+ */
+public class EObjectTableViewerValidationSupport {
+
+	private final GridTableViewer viewer;
+
+	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
+
+		@Override
+		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
+			final HashSet<Object> updates = new HashSet<Object>();
+			for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
+				if (!entry.getValue().isOK())
+					updates.add(entry.getKey());
+			}
+
+			validationErrors.clear();
+
+			processStatus(status, true);
+		}
+	};
+
+	private IStatusProvider statusProvider;
+
+	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
+
+	public EObjectTableViewerValidationSupport(EObjectTableViewer viewer) {
+		this.viewer = viewer;
+	}
+
+	protected void processStatus(final boolean update) {
+		if (statusProvider != null) {
+			processStatus(statusProvider.getStatus(), update);
+		}
+	}
+
+	protected void processStatus(final IStatus status, final boolean update) {
+		if (status == null)
+			return;
+		if (status.isMultiStatus()) {
+			for (final IStatus s : status.getChildren()) {
+				processStatus(s, update);
+			}
+		}
+		if (status instanceof IDetailConstraintStatus) {
+			final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
+			if (!status.isOK()) {
+				updateObject(getElementForValidationTarget(detailConstraintStatus.getTarget()), status, update);
+
+				for (final EObject e : detailConstraintStatus.getObjects()) {
+					updateObject(getElementForValidationTarget(e), status, update);
+				}
+			}
+		}
+	}
+
+	public EObject getElementForValidationTarget(EObject e) {
+		return e;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public void setStatus(final Object e, final IStatus s) {
+		final IStatus existing = validationErrors.get(e);
+		if (existing == null || s.getSeverity() > existing.getSeverity()) {
+			validationErrors.put(e, s);
+		}
+	}
+
+	public void setStatusProvider(final IStatusProvider statusProvider) {
+		this.statusProvider = statusProvider;
+		statusProvider.addStatusChangedListener(statusChangedListener);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	protected void updateObject(final EObject object, final IStatus status, final boolean update) {
+		if (object != null) {
+			setStatus(object, status);
+			if (update) {
+				viewer.update(object, null);
+			}
+		}
+	}
+
+	public IStatusProvider getStatusProvider() {
+		return statusProvider;
+	}
+
+	public Map<Object, IStatus> getValidationErrors() {
+		return validationErrors;
+	}
+
+	public void dispose() {
+		if (statusProvider != null) {
+			statusProvider.removeStatusChangedListener(statusChangedListener);
+		}
+	}
+}

@@ -49,8 +49,8 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 
 	@Override
 	public Color getBackground(final Object element) {
-		if (this.eObjectTableViewer.validationErrors.containsKey(element)) {
-			final IStatus s = this.eObjectTableViewer.validationErrors.get(element);
+		if (this.eObjectTableViewer.getValidationSupport().getValidationErrors().containsKey(element)) {
+			final IStatus s = this.eObjectTableViewer.getValidationSupport().getValidationErrors().get(element);
 			if (s.getSeverity() == IStatus.ERROR) {
 				return errorColour;
 			} else if (s.getSeverity() == IStatus.WARNING) {
@@ -75,8 +75,8 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 
 	@Override
 	public String getToolTipText(final Object element) {
-		if (this.eObjectTableViewer.validationErrors.containsKey(element)) {
-			final IStatus s = this.eObjectTableViewer.validationErrors.get(element);
+		if (this.eObjectTableViewer.getValidationSupport().getValidationErrors().containsKey(element)) {
+			final IStatus s = this.eObjectTableViewer.getValidationSupport().getValidationErrors().get(element);
 			if (!s.isOK()) {
 				return getMessages(s);
 			}

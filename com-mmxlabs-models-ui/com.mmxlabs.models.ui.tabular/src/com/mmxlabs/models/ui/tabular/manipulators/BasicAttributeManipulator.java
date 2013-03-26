@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,11 +21,14 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.tabular.ICellManipulator;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * Displays a textbox for editing an EAttribute.
  * 
  * @author hinton
+ * @since 3.0
  * 
  */
 public class BasicAttributeManipulator implements ICellManipulator, ICellRenderer {

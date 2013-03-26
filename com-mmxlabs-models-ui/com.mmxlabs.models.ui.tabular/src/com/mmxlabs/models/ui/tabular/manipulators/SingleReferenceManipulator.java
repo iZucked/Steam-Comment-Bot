@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  * Uses {@link ComboBoxCellEditor} for its edit control, and takes the values from an {@link IReferenceValueProvider}.
  * 
  * @author hinton
+ * @since 3.0
  * 
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {

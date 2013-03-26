@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
@@ -20,11 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.ui.tabular.ICellManipulator;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * Displays a text box for rendering the result of an {@link EOperation}
  * 
  * @author Simon Goodall
+ * @since 3.0
  * 
  */
 public class BasicOperationRenderer implements ICellManipulator, ICellRenderer {

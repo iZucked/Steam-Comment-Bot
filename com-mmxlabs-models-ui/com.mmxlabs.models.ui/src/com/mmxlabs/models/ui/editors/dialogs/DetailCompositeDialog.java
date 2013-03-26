@@ -25,10 +25,6 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.validation.model.EvaluationMode;
-import org.eclipse.emf.validation.service.IBatchValidator;
-import org.eclipse.emf.validation.service.IValidator;
-import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
@@ -75,8 +71,6 @@ import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
-import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 /**
@@ -104,44 +98,30 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	private int selectedObjectIndex = 0;
 
-	/**
-	 * A validator used to check whether the OK button should be enabled.
-	 */
-	final IValidator<EObject> validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
-
-	final ValidationHelper validationHelper = new ValidationHelper();
-
 	private ICommandHandler commandHandler;
 
 	/**
 	 * This is the list of all input objects passed in for editing
 	 */
-	private List<EObject> inputs = new ArrayList<EObject>();
+	private final List<EObject> inputs = new ArrayList<EObject>();
 
 	/**
 	 * A map from duplicated input objects to original input objects
 	 */
-	private Map<EObject, EObject> duplicateToOriginal = new HashMap<EObject, EObject>();
+	private final Map<EObject, EObject> duplicateToOriginal = new HashMap<EObject, EObject>();
 	/**
 	 * A map from original input objects to duplicated ones.
 	 */
-	private Map<EObject, EObject> originalToDuplicate = new HashMap<EObject, EObject>();
-
-	/**
-	 * A map from objects to validity; says whether the current state is valid
-	 */
-	private Map<EObject, Boolean> objectValidity = new HashMap<EObject, Boolean>();
+	private final Map<EObject, EObject> originalToDuplicate = new HashMap<EObject, EObject>();
 
 	/**
 	 * The objects which are currently being edited (duplicates)
 	 */
-	private List<EObject> currentEditorTargets = new ArrayList<EObject>();
+	private final List<EObject> currentEditorTargets = new ArrayList<EObject>();
 
 	private IDisplayCompositeFactory displayCompositeFactory;
 
-	private Map<EObject, Collection<EObject>> ranges = new HashMap<EObject, Collection<EObject>>();
-
-	private DefaultExtraValidationContext validationContext;
+	private final Map<EObject, Collection<EObject>> ranges = new HashMap<EObject, Collection<EObject>>();
 
 	private boolean displaySidebarList = false;
 
@@ -152,16 +132,18 @@ public class DetailCompositeDialog extends Dialog {
 	/**
 	 * Contains elements which have been removed from {@link #inputs}, which will be deleted if the dialog is OKed.
 	 */
-	private List<EObject> deletedInputs = new ArrayList<EObject>();
+	private final List<EObject> deletedInputs = new ArrayList<EObject>();
 
 	/**
 	 * Contains elements which have been added (these will actually be added into the model, so they must be deleted on cancel)
 	 */
-	private List<EObject> addedInputs = new ArrayList<EObject>();
+	private final List<EObject> addedInputs = new ArrayList<EObject>();
 
 	private Text errorText;
 
 	private CopyDialogToClipboard copyDialogToClipboardEditorWrapper;
+
+	private DialogValidationSupport dialogValidationSupport;
 
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input object.
@@ -199,7 +181,7 @@ public class DetailCompositeDialog extends Dialog {
 			final List<EObject> duplicateRange = new ArrayList<EObject>(EcoreUtil.copyAll(reducedRange));
 
 			// fix crossreferences to existing duplicates
-			TreeIterator<EObject> allDuplicates = EcoreUtil.getAllContents(duplicateRange);
+			final TreeIterator<EObject> allDuplicates = EcoreUtil.getAllContents(duplicateRange);
 			while (allDuplicates.hasNext()) {
 				pointReferencesToExistingDuplicates(allDuplicates.next());
 			}
@@ -219,7 +201,7 @@ public class DetailCompositeDialog extends Dialog {
 				duplicateToOriginal.put(duplicateOne, originalOne);
 				originalToDuplicate.put(originalOne, duplicateOne);
 				if (returnDuplicates) {
-					validationContext.setApparentContainment(duplicateOne, originalOne.eContainer(), (EReference) originalOne.eContainingFeature());
+					dialogValidationSupport.getValidationContext().setApparentContainment(duplicateOne, originalOne.eContainer(), (EReference) originalOne.eContainingFeature());
 				}
 			}
 			final Iterator<EObject> rangeIterator2 = range.iterator();
@@ -238,7 +220,7 @@ public class DetailCompositeDialog extends Dialog {
 				final EObject original2 = rangeIterator2.next();
 				final EObject duplicate = duplicateIterator.next();
 				if (!returnDuplicates) {
-					validationContext.replace(original2, duplicate);
+					dialogValidationSupport.getValidationContext().replace(original2, duplicate);
 					if (domain != null) {
 						domain.setOverride(original2, duplicate);
 					}
@@ -293,7 +275,9 @@ public class DetailCompositeDialog extends Dialog {
 				// so (a) no undo needed and (b) don't want to make the command
 				// stack dirty.
 				command.execute();
+
 				validate();
+
 				if (selectionViewer != null)
 					selectionViewer.refresh(true);
 			}
@@ -308,7 +292,6 @@ public class DetailCompositeDialog extends Dialog {
 				return commandHandler.getEditingDomain();
 			}
 		};
-		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 	}
 
 	@Override
@@ -320,59 +303,8 @@ public class DetailCompositeDialog extends Dialog {
 		resizeAndCenter();
 	}
 
-	private void validate() {
-		final IStatus status = validationHelper.runValidation(validator, validationContext, currentEditorTargets);
-
-		if (errorText != null) {
-			if (status.isOK()) {
-				errorText.setText("");
-				errorText.setVisible(false);
-				((GridData) errorText.getLayoutData()).heightHint = 0;
-				getContents().pack();
-				resizeAndCenter();
-			} else {
-
-				StringBuilder sb = new StringBuilder();
-				processMessages(sb, status);
-
-				errorText.setText(sb.toString());
-				errorText.setVisible(true);
-				((GridData) errorText.getLayoutData()).heightHint = 50;
-				getContents().pack();
-				resizeAndCenter();
-			}
-		}
-
-		final boolean problem = status.matches(IStatus.ERROR);
-		for (final EObject object : currentEditorTargets) {
-			objectValidity.put(object, !problem);
-		}
-
-		if (displayComposite != null)
-			displayComposite.displayValidationStatus(status);
-
-		checkButtonEnablement();
-	}
-
-	private void processMessages(StringBuilder sb, IStatus status) {
-		if (status.isMultiStatus()) {
-			for (IStatus s : status.getChildren()) {
-				processMessages(sb, s);
-			}
-		} else {
-			sb.append(status.getMessage());
-			sb.append("\n");
-		}
-	}
-
-	private void checkButtonEnablement() {
-		for (final boolean b : objectValidity.values()) {
-			if (!b) {
-				getButton(IDialogConstants.OK_ID).setEnabled(false);
-				return;
-			}
-		}
-		getButton(IDialogConstants.OK_ID).setEnabled(!lockedForEditing);
+	private void checkButtonEnablement(final boolean enabled) {
+		getButton(IDialogConstants.OK_ID).setEnabled(enabled && !lockedForEditing);
 	}
 
 	/**
@@ -417,6 +349,7 @@ public class DetailCompositeDialog extends Dialog {
 		for (final EObject o : range) {
 			currentEditorTargets.add(originalToDuplicate.get(o));
 		}
+		dialogValidationSupport.setValidationTargets(currentEditorTargets);
 
 		displayComposite.setCommandHandler(commandHandler);
 
@@ -427,7 +360,7 @@ public class DetailCompositeDialog extends Dialog {
 		if (false) {
 			errorText = new Text(dialogArea, SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
 			{
-				GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
+				final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 				gd.heightHint = 0;
 				errorText.setLayoutData(gd);
 			}
@@ -440,7 +373,7 @@ public class DetailCompositeDialog extends Dialog {
 		validate();
 
 		if (lockedForEditing) {
-			String text = getShell().getText();
+			final String text = getShell().getText();
 			getShell().setText(text + " (Editor Locked - reopen to edit)");
 			disableControls(displayComposite.getComposite());
 		}
@@ -485,7 +418,7 @@ public class DetailCompositeDialog extends Dialog {
 		if (displaySidebarList) {
 			sidebarSash = new Composite(c, SWT.NONE);
 			{
-				GridLayout layout = new GridLayout(2, false);
+				final GridLayout layout = new GridLayout(2, false);
 				layout.marginHeight = layout.marginWidth = 0;
 				sidebarSash.setLayout(layout);
 			}
@@ -511,7 +444,7 @@ public class DetailCompositeDialog extends Dialog {
 
 			selectionViewer.setLabelProvider(new LabelProvider() {
 				@Override
-				public String getText(Object element) {
+				public String getText(final Object element) {
 					if (originalToDuplicate.containsKey(element)) {
 						return ((NamedObject) originalToDuplicate.get(element)).getName();
 					} else {
@@ -555,7 +488,7 @@ public class DetailCompositeDialog extends Dialog {
 
 			barManager.createControl(c).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
-			Action copy = new Action("Copy") {
+			final Action copy = new Action("Copy") {
 				@Override
 				public void run() {
 					copyDialogToClipboardEditorWrapper.copyToClipboard();
@@ -620,7 +553,7 @@ public class DetailCompositeDialog extends Dialog {
 				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
 				selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 					@Override
-					public void selectionChanged(SelectionChangedEvent event) {
+					public void selectionChanged(final SelectionChangedEvent event) {
 						setEnabled(event.getSelection().isEmpty() == false);
 					}
 				});
@@ -632,7 +565,7 @@ public class DetailCompositeDialog extends Dialog {
 				if (selection instanceof IStructuredSelection) {
 					final Object element = ((IStructuredSelection) selection).getFirstElement();
 					if (element instanceof EObject) {
-						int elementIndex = inputs.indexOf(element);
+						final int elementIndex = inputs.indexOf(element);
 						if (selectedObjectIndex >= elementIndex) {
 							selectedObjectIndex--;
 						}
@@ -644,13 +577,11 @@ public class DetailCompositeDialog extends Dialog {
 							// o is the duplicate for a real thing,
 							// which is being deleted; forget about
 							// both sides.
-							EObject original = duplicateToOriginal.get(o);
+							final EObject original = duplicateToOriginal.get(o);
 							originalToDuplicate.remove(original);
 							duplicateToOriginal.remove(o);
-							validationContext.ignore(o);
-							validationContext.ignore(original);
-							objectValidity.remove(o);
-							objectValidity.remove(original);
+							dialogValidationSupport.getValidationContext().ignore(o);
+							dialogValidationSupport.getValidationContext().ignore(original);
 						}
 
 						ranges.remove(element);
@@ -736,8 +667,7 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	public int open(final IScenarioEditingLocation part, final MMXRootObject rootObject, final EObject container, final EReference containment) {
 		this.scenarioEditingLocation = part;
-
-		validationContext = new DefaultExtraValidationContext(scenarioEditingLocation.getExtraValidationContext());
+		dialogValidationSupport = new DialogValidationSupport(scenarioEditingLocation.getExtraValidationContext());
 		this.rootObject = rootObject;
 		lockedForEditing = false;
 		this.inputs.clear();
@@ -749,7 +679,7 @@ public class DetailCompositeDialog extends Dialog {
 		this.sidebarContainer = container;
 		this.sidebarContainment = containment;
 
-		scenarioEditingLocation.pushExtraValidationContext(validationContext);
+		scenarioEditingLocation.pushExtraValidationContext(dialogValidationSupport.getValidationContext());
 		try {
 			final int value = open();
 			if (value == OK) {
@@ -771,7 +701,7 @@ public class DetailCompositeDialog extends Dialog {
 				// delete any objects which have been removed from the sidebar
 				// list
 				if (!deletedInputs.isEmpty()) {
-					Command cmd = DeleteCommand.create(commandHandler.getEditingDomain(), deletedInputs);
+					final Command cmd = DeleteCommand.create(commandHandler.getEditingDomain(), deletedInputs);
 					if (cmd != null) {
 						cc.append(cmd);
 					}
@@ -785,7 +715,7 @@ public class DetailCompositeDialog extends Dialog {
 				// we want to directly execute the command so that it doesn't go
 				// into the undo stack.
 				if (!addedInputs.isEmpty()) {
-					Command delete = DeleteCommand.create(commandHandler.getEditingDomain(), addedInputs);
+					final Command delete = DeleteCommand.create(commandHandler.getEditingDomain(), addedInputs);
 					if (delete.canExecute()) {
 						// System.err.println("Execute delete");
 						delete.execute();
@@ -823,8 +753,8 @@ public class DetailCompositeDialog extends Dialog {
 
 	public int open(final IScenarioEditingLocation part, final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
 		this.scenarioEditingLocation = part;
-		validationContext = new DefaultExtraValidationContext(scenarioEditingLocation.getExtraValidationContext());
-		scenarioEditingLocation.pushExtraValidationContext(validationContext);
+		dialogValidationSupport = new DialogValidationSupport(scenarioEditingLocation.getExtraValidationContext());
+		scenarioEditingLocation.pushExtraValidationContext(dialogValidationSupport.getValidationContext());
 		this.rootObject = rootObject;
 		lockedForEditing = locked;
 		this.inputs.clear();
@@ -1060,5 +990,14 @@ public class DetailCompositeDialog extends Dialog {
 		} else {
 			return null;
 		}
+	}
+
+	private void validate() {
+		final IStatus status = dialogValidationSupport.validate();
+		if (displayComposite != null) {
+			displayComposite.displayValidationStatus(status);
+		}
+
+		checkButtonEnablement(!status.matches(IStatus.ERROR));
 	}
 }

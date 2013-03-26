@@ -14,7 +14,7 @@ import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 
 /**
  * Provide a bunch of filter suggestions
@@ -24,19 +24,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
  */
 public class FilterProposalProvider implements IContentProposalProvider {
 	private final List<Pair<String, String>> proposals = new ArrayList<Pair<String, String>>();
-	private EObjectTableViewer viewer = null;
-
-	public EObjectTableViewer getViewer() {
-		return viewer;
-	}
-
-	/**
-	 * @param viewer
-	 *            the viewer to set
-	 */
-	public void setViewer(final EObjectTableViewer viewer) {
-		this.viewer = viewer;
-	}
+	private EObjectTableViewerFilterSupport filterSupport = null;
 
 	public void setProposals(final Map<String, List<String>> map) {
 		proposals.clear();
@@ -49,7 +37,7 @@ public class FilterProposalProvider implements IContentProposalProvider {
 
 	@Override
 	public IContentProposal[] getProposals(final String contents, final int position) {
-		setProposals(viewer.getColumnMnemonics());
+		setProposals(filterSupport.getColumnMnemonics());
 		final List<ContentProposal> out = new ArrayList<ContentProposal>();
 
 		int spaceBefore = contents.substring(0, position).lastIndexOf(' ');
@@ -75,11 +63,11 @@ public class FilterProposalProvider implements IContentProposalProvider {
 	}
 
 	private IContentProposal[] getValues(final String columnName) {
-		if (viewer == null) {
+		if (filterSupport == null) {
 			return new IContentProposal[0];
 		}
 
-		final Set<String> values = viewer.getDistinctValues(columnName);
+		final Set<String> values = filterSupport.getDistinctValues(columnName);
 
 		final IContentProposal[] result = new IContentProposal[values.size()];
 		int index = 0;
@@ -108,5 +96,19 @@ public class FilterProposalProvider implements IContentProposalProvider {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public EObjectTableViewerFilterSupport getFilterSupport() {
+		return filterSupport;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public void setFilterSupport(EObjectTableViewerFilterSupport filterSupport) {
+		this.filterSupport = filterSupport;
 	}
 }
