@@ -8,6 +8,9 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -22,6 +25,10 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class CargoModelRowTransformer {
+	final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+	final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+	final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	private final Comparator<? extends Slot> slotComparator = new Comparator<Slot>() {
 
@@ -75,9 +82,29 @@ public class CargoModelRowTransformer {
 
 			}
 
+			boolean validCargo = isWiringValid(cargo);
+			for (final Object slot : cargo.getSlots()) {
+
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					for (final Object slot2 : cargo.getSlots()) {
+						if (slot2 instanceof DischargeSlot) {
+							final DischargeSlot dischargeSlot = (DischargeSlot) slot2;
+							final WireData wire = new WireData();
+							wire.loadSlot = loadSlot;
+							wire.dischargeSlot = dischargeSlot;
+							group.getWires().add(wire);
+							wire.colour = validCargo ? (cargo.isAllowRewiring() ? gray : black) : red;
+						}
+					}
+				}
+
+			}
+
 			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
 				final RowData row = new RowData();
 				row.setGroup(group);
+				group.getRows().add(row);
 				root.getRows().add(row);
 
 				row.cargo = cargo;
@@ -90,6 +117,18 @@ public class CargoModelRowTransformer {
 				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
 				if (elementAssignment != null) {
 					row.elementAssignment = elementAssignment;
+				}
+
+				row.loadTerminalColour = green;
+				row.dischargeTerminalColour = green;
+
+				for (WireData wire : group.getWires()) {
+					if (wire.loadSlot != null && wire.loadSlot == row.loadSlot) {
+						wire.loadRowData = row;
+					}
+					if (wire.dischargeSlot != null && wire.dischargeSlot == row.dischargeSlot) {
+						wire.dischargeRowData = row;
+					}
 				}
 			}
 
@@ -106,6 +145,9 @@ public class CargoModelRowTransformer {
 				row.setGroup(group);
 				root.getRows().add(row);
 				row.loadSlot = slot;
+
+				row.loadTerminalColour = red;
+				row.dischargeTerminalColour = red;
 			}
 		}
 
@@ -120,6 +162,9 @@ public class CargoModelRowTransformer {
 				row.setGroup(group);
 				root.getRows().add(row);
 				row.dischargeSlot = slot;
+
+				row.loadTerminalColour = red;
+				row.dischargeTerminalColour = red;
 			}
 		}
 
@@ -140,6 +185,10 @@ public class CargoModelRowTransformer {
 		LoadSlot loadSlot;
 		DischargeSlot dischargeSlot;
 		ElementAssignment elementAssignment;
+
+		// GUI STATE
+		Color loadTerminalColour;
+		Color dischargeTerminalColour;
 
 		/**
 		 * This is used in the {@link EObjectTableViewer} implementation of {@link ViewerComparator} for the fixed sort order.
@@ -198,10 +247,21 @@ public class CargoModelRowTransformer {
 
 	}
 
+	public static class WireData {
+
+		Color colour;
+		LoadSlot loadSlot;
+		RowData loadRowData;
+		DischargeSlot dischargeSlot;
+		RowData dischargeRowData;
+
+	}
+
 	public static class GroupData extends EObjectImpl {
 
 		private final List<RowData> rows = new ArrayList<RowData>();
 		private final List<EObject> objects = new ArrayList<EObject>();
+		private final List<WireData> wires = new ArrayList<WireData>();
 
 		public List<EObject> getObjects() {
 			return objects;
@@ -209,6 +269,10 @@ public class CargoModelRowTransformer {
 
 		public List<RowData> getRows() {
 			return rows;
+		}
+
+		public List<WireData> getWires() {
+			return wires;
 		}
 
 	}
@@ -280,4 +344,49 @@ public class CargoModelRowTransformer {
 	public enum Type {
 		CARGO, LOAD, DISCHARGE, ASSIGNMENT
 	}
+
+	boolean isWiringValid(Cargo cargo) {
+
+		// if (rootData == null || rootData.getRows() == null) {
+		// return true;
+		// }
+		//
+		// final Map<Object, IStatus> validationMap = getScenarioViewer().getValidationSupport().getValidationErrors();
+		// if (cargo == null) {
+		// return false;
+		// } else {
+		// final int indexOf = rootData.getCargoes().indexOf(cargo);
+		// if (indexOf >= 0 && indexOf < rootData.getRows().size()) {
+		// final RowData rd = rootData.getRows().get(indexOf);
+		// if (validationMap.containsKey(rd)) {
+		// return false;
+		// }
+		// }
+		// }
+		// if (loadSlot == null) {
+		// return false;
+		// } else {
+		// final int indexOf = rootData.getLoadSlots().indexOf(loadSlot);
+		// if (indexOf >= 0 && indexOf < rootData.getRows().size()) {
+		// final RowData rd = rootData.getRows().get(indexOf);
+		// if (validationMap.containsKey(rd)) {
+		// return false;
+		// }
+		// }
+		// }
+		// if (dischargeSlot == null) {
+		// return false;
+		// } else {
+		// final int indexOf = rootData.getDischargeSlots().indexOf(dischargeSlot);
+		// if (indexOf >= 0 && indexOf < rootData.getRows().size()) {
+		// final RowData rd = rootData.getRows().get(indexOf);
+		// if (validationMap.containsKey(rd)) {
+		// return false;
+		// }
+		// }
+		// }
+
+		return true;
+	}
+
 }
