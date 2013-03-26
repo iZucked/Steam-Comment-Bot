@@ -90,6 +90,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.LDDEditor;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
@@ -539,6 +540,36 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return aSet;
 			}
 		});
+		// Get default comparator
+		final ViewerComparator vc = scenarioViewer.getComparator();
+		// Wrap around with group sorter
+		scenarioViewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+
+				int comparison = 0;
+				GroupData g1 = null;
+				GroupData g2 = null;
+				if (e1 instanceof RowData) {
+					g1 = ((RowData) e1).getGroup();
+				}
+				if (e2 instanceof RowData) {
+					g2 = ((RowData) e2).getGroup();
+				}
+				if (g1 == g2) {
+					return vc.compare(scenarioViewer, e1, e2);
+				} else {
+					if (g1 == null) {
+						comparison = -1;
+					} else if (g2 == null) {
+						comparison = 1;
+					} else {
+						return vc.compare(scenarioViewer, g1.getRows().get(0), g2.getRows().get(0));
+					}
+				}
+				return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
+			}
+		});
 		return scenarioViewer;
 	}
 
@@ -785,11 +816,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								final RowData rd = (RowData) obj;
 								if (rd.cargo != null) {
 									target = rd.cargo;
-									if (rd.cargo.getSlots().size() > 2) {
-
-										menuHelper.editLDDCargo(rd.cargo);
-										return;
-									}
 								} else if (rd.loadSlot != null) {
 									target = rd.loadSlot;
 								} else if (rd.dischargeSlot != null) {
@@ -827,7 +853,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			}
 
-			
 		});
 	}
 
