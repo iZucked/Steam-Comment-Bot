@@ -123,7 +123,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		return result;
 	}
 
-	public ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
+	final public ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
 		// Virtual vessels are those operated by a third party, for FOB and DES situations.
 		// Should we compute a schedule for them anyway? The arrival times don't mean much,
 		// but contracts need this kind of information to make up numbers with.
@@ -168,7 +168,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 * @param useNBO
 	 * @return
 	 */
-	public VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVessel vessel, final VesselState vesselState, final int availableTime, final ISequenceElement element, final ISequenceElement prevElement, VoyageOptions previousOptions, IVoyagePlanOptimiser optimiser, boolean useNBO) {
+	final public VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVessel vessel, final VesselState vesselState, final int availableTime, final ISequenceElement element, final ISequenceElement prevElement, VoyageOptions previousOptions, IVoyagePlanOptimiser optimiser, boolean useNBO) {
 		final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(vesselState);
 
 		final IPort thisPort = portProvider.getPortForElement(element);
@@ -283,7 +283,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 * @param sequence
 	 * @return
 	 */
-	public boolean [] findSequenceBreaks(final ISequence sequence) {
+	final public boolean [] findSequenceBreaks(final ISequence sequence) {
 		final boolean [] result = new boolean [sequence.size()];
 		
 		int idx = 0;
@@ -313,7 +313,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 * @param sequence
 	 * @return
 	 */
-	public VesselState [] findVesselStates(final ISequence sequence) {
+	final public VesselState [] findVesselStates(final ISequence sequence) {
 		VesselState [] result = new VesselState[sequence.size()];
 		
 		VesselState state = VesselState.Ballast;
@@ -361,7 +361,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	public List<VoyagePlan> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+	final public List<VoyagePlan> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
@@ -532,7 +532,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 * @param optimiser
 	 * @return An optimised VoyagePlan
 	 */
-	public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser)  {
+	final public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser)  {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
