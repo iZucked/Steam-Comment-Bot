@@ -421,7 +421,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return fuelConsumptions;	
 	}
 	
-	public List<Integer> findLoadIndices(List<Integer> storage, Object... sequence) {
+	final public List<Integer> findLoadIndices(List<Integer> storage, Object... sequence) {
 		if (storage == null) {
 			storage = new ArrayList<Integer>();
 		}
@@ -444,7 +444,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return storage;
 	}
 	
-	public List<Integer> findDischargeIndices(List<Integer> storage, Object... sequence) {
+	final public List<Integer> findDischargeIndices(List<Integer> storage, Object... sequence) {
 		if (storage == null) {
 			storage = new ArrayList<Integer>();
 		}
@@ -464,7 +464,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return storage;
 	}
 	
-	public int findLoadIndex(Object... sequence) {
+	final public int findLoadIndex(Object... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
 			if ((i % 2) == 0) {
 				// Port Slot
@@ -483,7 +483,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return -1;
 	}
 				
-	public int findDischargeIndex(Object... sequence) {
+	final public int findDischargeIndex(Object... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
 			if ((i % 2) == 0) {
 				// Port Slot
@@ -516,7 +516,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		
 	}
 
-	public int calculateCooldownPrices(final IVesselClass vesselClass, final int[] arrivalTimes, Object...sequence) {
+	final public int calculateCooldownPrices(final IVesselClass vesselClass, final int[] arrivalTimes, Object...sequence) {
 		int cooldownM3Price = 0;
 
 		for (int i = 0; i < sequence.length; ++i) {
@@ -564,7 +564,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
 	 */
-	public int [] getLngEffectivePrices(List<Integer> loadIndices, List<Integer> dischargeIndices, int [] arrivalTimes, final Object...sequence) {
+	final public int [] getLngEffectivePrices(List<Integer> loadIndices, List<Integer> dischargeIndices, int [] arrivalTimes, final Object...sequence) {
 		// TODO: does not need to be this long
 		int [] result = new int [sequence.length];
 		
