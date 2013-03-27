@@ -17,6 +17,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -139,6 +141,13 @@ public class ScheduleCalculator {
 		calculateProfitAndLoss(scheduledSequences, allocations, annotatedSolution);
 	}
 
+	private boolean detailsMatchAllocation(PortDetails firstDetails, PortDetails lastDetails, IAllocationAnnotation allocation) {
+		if (allocation == null) {
+			return false;
+		}
+		return (firstDetails.getOptions().getPortSlot() == allocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == allocation.getDischargeOption());
+	}
+	
 	// TODO: Push into entity value calculator?
 	private void calculateProfitAndLoss(final ScheduledSequences scheduledSequences, final Map<VoyagePlan, IAllocationAnnotation> allocations, final IAnnotatedSolution annotatedSolution) {
 
@@ -161,22 +170,24 @@ public class ScheduleCalculator {
 					PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
 					PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
 
+					// TODO: this logic looks decidedly shaky
+					boolean isDesFobCase = ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 4); 
+					
 					final IAllocationAnnotation currentAllocation = allocations.get(plan);
-
-					if ((currentAllocation != null)
-							&& ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
+					
+					if (detailsMatchAllocation(firstDetails, lastDetails, currentAllocation)) {
 						cargo = true;
 						final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
 						firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
-					} else if ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 4) {
+					} else if (isDesFobCase) {
 						firstDetails = (PortDetails) plan.getSequence()[1];
 						lastDetails = (PortDetails) plan.getSequence()[2];
-						if ((currentAllocation != null)
-								&& ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
+						if (detailsMatchAllocation(firstDetails, lastDetails, currentAllocation)) {
 							cargo = true;
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getLoadTime(), annotatedSolution);
+							ILoadOption loadSlot = currentAllocation.getLoadOption();
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
 							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
 						}
 					}

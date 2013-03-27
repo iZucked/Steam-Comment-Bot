@@ -17,8 +17,10 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * 
  */
 public interface IAllocationAnnotation {
+	@Deprecated
 	ILoadOption getLoadOption();
 
+	@Deprecated
 	IDischargeOption getDischargeOption();
 	
 	List<IPortSlot> getSlots();
@@ -51,22 +53,17 @@ public interface IAllocationAnnotation {
 	long getDischargeVolumeInM3();
 
 	/**
-	 * Returns the time loading began
+	 * Returns the time a load or discharge began
 	 * 
 	 * @return
 	 */
-	@Deprecated
-	int getLoadTime();
-
-	/**
-	 * Returns the time discharging began
-	 * 
-	 * @return
-	 */
-	@Deprecated
-	int getDischargeTime();
-
 	int getSlotTime(IPortSlot slot);
 
+	/**
+	 * Returns the price per M3 for LNG bought or sold at this slot
+	 * 
+	 * @param slot
+	 * @return
+	 */
 	int getSlotPricePerM3(IPortSlot slot);
 }

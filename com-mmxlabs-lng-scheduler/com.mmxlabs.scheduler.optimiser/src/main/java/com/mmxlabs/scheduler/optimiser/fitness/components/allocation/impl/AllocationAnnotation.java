@@ -20,13 +20,11 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
  */
 public class AllocationAnnotation implements IAllocationAnnotation {
 	public class SlotAllocationAnnotation {
-		public long volumeInM3;
+		// public long volumeInM3;
 		public int pricePerM3;
 		public int startTime;
 	}
 
-	//private ILoadOption loadSlot;
-	//private IDischargeOption dischargeSlot;
 	private final Map<IPortSlot, SlotAllocationAnnotation> slotAllocations = new HashMap<IPortSlot, SlotAllocationAnnotation>();
 	private List<IPortSlot> slots = new ArrayList<IPortSlot>(2);
 
@@ -35,12 +33,6 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	private long remainingHeelVolumeInM3;
 
 	private long dischargeVolumeInM3;
-
-	//private int loadTime;
-	//private int dischargeTime;
-
-	//private int loadPricePerM3;
-	//private int dischargePricePerM3;
 
 	@Override
 	public ILoadOption getLoadOption() {
@@ -78,50 +70,8 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public int getLoadTime() {
-		//return loadTime;
-		return getSlotTime(getLoadOption());
-	}
-
-	@Override
-	public int getDischargeTime() {
-		//return dischargeTime;
-		return getSlotTime(getLoadOption());
-	}
-
-	/*
-	@Override
-	public int getLoadPricePerM3() {
-		return getSlotPricePerM3(getLoadOption());
-		//return loadPricePerM3;
-	}
-	*/
-
-	/*
-	public void setLoadPricePerM3(final int loadM3Price) {
-		setSlotPricePerM3(getLoadOption(), loadM3Price);
-		//this.loadPricePerM3 = loadM3Price;
-	}
-	*/
-
-	/*
-	@Override
-	public int getDischargePricePerM3() {
-		return getSlotPricePerM3(getDischargeOption());
-		//return dischargePricePerM3;
-	}
-	*/
-
-	/*
-	public void setDischargePricePerM3(final int dischargeM3Price) {
-		setSlotPricePerM3(getDischargeOption(), dischargeM3Price);
-		//this.dischargePricePerM3 = dischargeM3Price;
-	}
-	*/
-
-	@Override
 	public String toString() {
-		return getLoadOption().getId() + "@" + getLoadTime() + " to " + getDischargeOption().getId() + "@" + getDischargeTime() + ", loaded " + getLoadVolumeInM3() + ", used " + getFuelVolumeInM3()
+		return getLoadOption().getId() + "@" + getSlotTime(getLoadOption()) + " to " + getDischargeOption().getId() + "@" + getSlotTime(getDischargeOption()) + ", loaded " + getLoadVolumeInM3() + ", used " + getFuelVolumeInM3()
 				+ " for fuel, discharged " + getDischargeVolumeInM3() + ", remaining heel " + getRemainingHeelVolumeInM3();
 	}
 

@@ -339,10 +339,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		annotation.setFuelVolumeInM3(forcedLoadVolumeInM3);
 
 		// TODO recompute load price here; this is not necessarily right
-		//annotation.setSlotPricePerM3(loadSlot, loadPricePerM3);
-		//annotation.setSlotPricePerM3(dischargeSlot, dischargePricePerM3);
-		annotation.setLoadPricePerM3(loadPricePerM3);
-		annotation.setDischargePricePerM3(dischargePricePerM3);
+		annotation.setSlotPricePerM3(loadSlot, loadPricePerM3);
+		annotation.setSlotPricePerM3(dischargeSlot, dischargePricePerM3);
+		//annotation.setLoadPricePerM3(loadPricePerM3);
+		//annotation.setDischargePricePerM3(dischargePricePerM3);
 		annotation.setSlotTime(loadSlot, loadTime);
 		annotation.setSlotTime(dischargeSlot, dischargeTime);		
 		//annotation.setLoadTime(loadTime);
@@ -560,19 +560,17 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 						annotation.getSlots().clear();
 						annotation.getSlots().add(loadSlot);
 						annotation.getSlots().add(dischargeSlot);
-						//annotation.setLoadSlot(loadSlot);
-						//annotation.setDischargeSlot(dischargeSlot);
+
 						annotation.setFuelVolumeInM3(forcedLoadVolumeInM3.get(allocationIndex));
 						annotation.setRemainingHeelVolumeInM3(remainingHeelVolumeInM3.get(allocationIndex));
 
 						// TODO recompute load price here; this is not necessarily right
-						//annotation.setSlotPricePerM3(loadSlot, loadPricesPerM3.get(allocationIndex));
-						//annotation.setSlotPricePerM3(dischargeSlot, dischargePricesPerM3.get(allocationIndex));
-						annotation.setLoadPricePerM3(loadPricesPerM3.get(allocationIndex));
-						annotation.setDischargePricePerM3(dischargePricesPerM3.get(allocationIndex));
+						annotation.setSlotPricePerM3(loadSlot, loadPricesPerM3.get(allocationIndex));
+						annotation.setSlotPricePerM3(dischargeSlot, dischargePricesPerM3.get(allocationIndex));
+
 						annotation.setSlotTime(loadSlot, slotTimes.get(loadSlot));
 						annotation.setSlotTime(dischargeSlot, slotTimes.get(dischargeSlot));
-						//annotation.setSlotVolumeInM3(dischargeSlot, allocation[allocationIndex++]);
+
 						annotation.setDischargeVolumeInM3(allocation[allocationIndex++]);
 
 						return new Pair<VoyagePlan, IAllocationAnnotation>(voyagePlansIterator.next(), annotation);
