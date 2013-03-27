@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -26,6 +28,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class CargoModelRowTransformer {
 	final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	final Color darkRed = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 	final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
 	final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
@@ -53,12 +56,14 @@ public class CargoModelRowTransformer {
 		}
 	};
 
-	public RootData transform(final InputModel inputModel, final CargoModel cargoModel) {
-		return transform(inputModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots());
+	public RootData transform(final InputModel inputModel, final CargoModel cargoModel, final Map<Object, IStatus> validationInfo) {
+		return transform(inputModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), validationInfo);
 
 	}
 
-	public RootData transform(final InputModel inputModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots) {
+	public RootData transform(final InputModel inputModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots,
+			final Map<Object, IStatus> validationInfo) {
+		System.out.println("trasform");
 
 		final RootData root = new RootData();
 
@@ -82,7 +87,6 @@ public class CargoModelRowTransformer {
 
 			}
 
-			boolean validCargo = isWiringValid(cargo);
 			for (final Object slot : cargo.getSlots()) {
 
 				if (slot instanceof LoadSlot) {
@@ -94,12 +98,11 @@ public class CargoModelRowTransformer {
 							wire.loadSlot = loadSlot;
 							wire.dischargeSlot = dischargeSlot;
 							group.getWires().add(wire);
-							wire.colour = validCargo ? (cargo.isAllowRewiring() ? gray : black) : red;
 						}
 					}
 				}
-
 			}
+			setWiringColour(validationInfo, group);
 
 			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
 				final RowData row = new RowData();
@@ -122,7 +125,7 @@ public class CargoModelRowTransformer {
 				row.loadTerminalColour = green;
 				row.dischargeTerminalColour = green;
 
-				for (WireData wire : group.getWires()) {
+				for (final WireData wire : group.getWires()) {
 					if (wire.loadSlot != null && wire.loadSlot == row.loadSlot) {
 						wire.loadRowData = row;
 					}
@@ -345,48 +348,33 @@ public class CargoModelRowTransformer {
 		CARGO, LOAD, DISCHARGE, ASSIGNMENT
 	}
 
-	boolean isWiringValid(Cargo cargo) {
+	public void updateWiringValidity(final RootData rootData, final Map<Object, IStatus> validationInformation) {
 
-		// if (rootData == null || rootData.getRows() == null) {
-		// return true;
-		// }
-		//
-		// final Map<Object, IStatus> validationMap = getScenarioViewer().getValidationSupport().getValidationErrors();
-		// if (cargo == null) {
-		// return false;
-		// } else {
-		// final int indexOf = rootData.getCargoes().indexOf(cargo);
-		// if (indexOf >= 0 && indexOf < rootData.getRows().size()) {
-		// final RowData rd = rootData.getRows().get(indexOf);
-		// if (validationMap.containsKey(rd)) {
-		// return false;
-		// }
-		// }
-		// }
-		// if (loadSlot == null) {
-		// return false;
-		// } else {
-		// final int indexOf = rootData.getLoadSlots().indexOf(loadSlot);
-		// if (indexOf >= 0 && indexOf < rootData.getRows().size()) {
-		// final RowData rd = rootData.getRows().get(indexOf);
-		// if (validationMap.containsKey(rd)) {
-		// return false;
-		// }
-		// }
-		// }
-		// if (dischargeSlot == null) {
-		// return false;
-		// } else {
-		// final int indexOf = rootData.getDischargeSlots().indexOf(dischargeSlot);
-		// if (indexOf >= 0 && indexOf < rootData.getRows().size()) {
-		// final RowData rd = rootData.getRows().get(indexOf);
-		// if (validationMap.containsKey(rd)) {
-		// return false;
-		// }
-		// }
-		// }
-
-		return true;
+		for (final GroupData g : rootData.getGroups()) {
+			setWiringColour(validationInformation, g);
+		}
 	}
 
+	private void setWiringColour(final Map<Object, IStatus> validationInformation, final GroupData g) {
+		boolean validWire = true;
+		Cargo c = null;
+		for (final Object obj : g.getObjects()) {
+
+			if (obj instanceof Cargo) {
+				c = (Cargo) obj;
+			}
+
+			if (validationInformation.containsKey(obj)) {
+				final IStatus status = validationInformation.get(obj);
+				if (status.matches(IStatus.ERROR)) {
+					validWire = false;
+				}
+			}
+		}
+		if (c != null) {
+			for (final WireData wire : g.getWires()) {
+				wire.colour = validWire ? (c.isAllowRewiring() ? gray : black) : darkRed;
+			}
+		}
+	}
 }
