@@ -19,7 +19,6 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -62,13 +61,11 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -79,7 +76,6 @@ import org.eclipse.ui.menus.IMenuService;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -104,8 +100,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -135,11 +129,8 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
 
-	// private final List<List<Integer>> wiring = new ArrayList<List<Integer>>();
 	private TradesWiringDiagram wiringDiagram;
 
-	// private final ArrayList<Boolean> leftTerminalsExist = new ArrayList<Boolean>();
-	// private final ArrayList<Boolean> rightTerminalsExist = new ArrayList<Boolean>();
 	protected RootData rootData;
 
 	private final Set<GridColumn> loadColumns = new HashSet<GridColumn>();
@@ -160,44 +151,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private final Object updateLock = new Object();
 
-	private final MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
-
-		protected void missedNotifications(final List<Notification> missed) {
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					synchronized (updateLock) {
-						refreshContent();
-					}
-				}
-			});
-		}
-
-		@Override
-		public synchronized void reallyNotifyChanged(final Notification notification) {
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					synchronized (updateLock) {
-						localNotifyChanged(notification);
-						// performControlUpdate(false);
-
-					}
-				}
-			});
-		}
-
-		public synchronized void localNotifyChanged(final Notification notification) {
-
-			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
-				return;
-			}
-			performControlUpdate(false);
-		}
-	};
-
 	private IStatusChangedListener statusChangedListener;
 
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
@@ -210,32 +163,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	@Override
 	public void dispose() {
-
-		// this.location.getStatusProvider().removeStatusChangedListener(statusChangedListener);
-
-		if (this.scenarioEditingLocation != null) {
-			final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-			if (rootObject != null) {
-				final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-				if (cargoModel != null) {
-					cargoModel.eAdapters().remove(cargoChangeAdapter);
-					for (final Cargo c : cargoModel.getCargoes()) {
-						c.eAdapters().remove(cargoChangeAdapter);
-					}
-				}
-			}
-
-			for (final Cargo c : rootData.getCargoes()) {
-				if (c != null) {
-					c.eAdapters().remove(cargoChangeAdapter);
-				}
-			}
-
-		}
-
-		// this.rightTerminalsExist.clear();
-		// this.leftTerminalsExist.clear();
-		// this.wiring.clear();
 
 		this.rootData = null;
 
@@ -314,86 +241,21 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 					@Override
-					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-						if (oldInput instanceof EObject) {
-							((EObject) oldInput).eAdapters().remove(cargoChangeAdapter);
-						}
-
-						if (newInput instanceof EObject) {
-							((EObject) newInput).eAdapters().add(cargoChangeAdapter);
-						}
-
-						// wiring.clear();
-					}
-
-					@Override
 					public Object[] getElements(final Object inputElement) {
-						if (rootData != null) {
-							for (final Cargo c : rootData.getCargoes()) {
-								if (c != null) {
-									c.eAdapters().remove(cargoChangeAdapter);
-								}
-							}
-						}
-
-						final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-						if (rootObject != null) {
-							final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-							if (cargoModel != null) {
-								cargoModel.eAdapters().remove(cargoChangeAdapter);
-								cargoModel.eAdapters().add(cargoChangeAdapter);
-								for (final Cargo c : cargoModel.getCargoes()) {
-									c.eAdapters().remove(cargoChangeAdapter);
-									c.eAdapters().add(cargoChangeAdapter);
-								}
-							}
-						}
 
 						final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
 						final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
-						final ArrayList<Pair<Color, Color>> terminalColors = new ArrayList<Pair<Color, Color>>();
-						final ArrayList<Pair<Boolean, Boolean>> terminalOptionals = new ArrayList<Pair<Boolean, Boolean>>();
-						final ArrayList<Color> wireColors = new ArrayList<Color>();
-						final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
-						final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-
-						// wiring.clear();
-						// leftTerminalsExist.clear();
-						// rightTerminalsExist.clear();
 
 						final RootData root = setCargoes(inputModel, cargoModel);
-						// for (int i = 0; i < root.getRows().size(); ++i) {
-						// leftTerminalsExist.add(root.getRows().get(i).loadSlot != null);
-						// rightTerminalsExist.add(root.getRows().get(i).dischargeSlot != null);
-						// if (root.getRows().get(i).cargo != null) {
-						// wiring.add(i);
-						// } else {
-						// wiring.add(-1);
-						// }
-						// terminalColors.add(new Pair<Color, Color>(green, green));
-						// terminalOptionals.add(new Pair<Boolean, Boolean>(false, false));
-						// wireColors.add(black);
-						//
-						// }
-						// wiringDiagram.setWiring(root);
-
-						// final Color addColor = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
-						//
-						// terminalColors.add(new Pair<Color, Color>(addColor, addColor));
-						// terminalColors.add(new Pair<Color, Color>(addColor, addColor));
-						//
-						// wiringDiagram.setWireColors(wireColors);
-						// wiringDiagram.setTerminalColors(terminalColors);
-						// wiringDiagram.setTerminalOptionals(terminalOptionals);
-						//
-						// wiringDiagram.setTerminalsValid(leftTerminalsExist, rightTerminalsExist);
-						// updateWiringColours(wiringDiagram, wiring, root);
-						// wiringDiagram.redraw();
 
 						TradesWiringViewer.this.rootData = root;
 
 						return rootData.getRows().toArray();
+					}
+
+					@Override
+					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+
 					}
 
 				}, commandStack);
@@ -592,23 +454,22 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		getScenarioViewer().init(adapterFactory, commandStack, new EReference[0]);
 
-		IStatusProvider statusProvider = scenarioEditingLocation.getStatusProvider();
+		final IStatusProvider statusProvider = scenarioEditingLocation.getStatusProvider();
 		getScenarioViewer().setStatusProvider(statusProvider);
-		
+
 		if (statusProvider != null) {
 			statusChangedListener = new IStatusChangedListener() {
-				
+
 				@Override
-				public void onStatusChanged(IStatusProvider provider, IStatus status) {
+				public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
 					// TODO Auto-generated method stub
-					CargoModelRowTransformer transformer = new CargoModelRowTransformer();
+					final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
 					transformer.updateWiringValidity(rootData, getScenarioViewer().getValidationSupport().getValidationErrors());
 					wiringDiagram.redraw();
 				}
 			};
 			statusProvider.addStatusChangedListener(statusChangedListener);
 		}
-		
 
 		final Grid table = getScenarioViewer().getGrid();
 
@@ -742,7 +603,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			protected List<Float> getTerminalPositions(RootData rootData) {
+			protected List<Float> getTerminalPositions(final RootData rootData) {
 
 				// Determine the mid-point in each row and generate an ordered list of heights.
 
