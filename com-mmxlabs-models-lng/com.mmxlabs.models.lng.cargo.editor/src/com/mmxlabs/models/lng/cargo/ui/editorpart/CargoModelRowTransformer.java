@@ -24,57 +24,53 @@ import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
+/**
+ * A class to transform the {@link CargoModel} lists of {@link Cargo}, {@link LoadSlot} and {@link DischargeSlot}s into a single table - complete with vessel {@link ElementAssignment}. The
+ * {@link #transform(InputModel, List, List, List, Map)} method returns a {@link RootData} object which encodes a {@link RowData} for each table row, a {@link GroupData} defining related rows and the
+ * wiring, colour information for terminal and wiring colouring.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class CargoModelRowTransformer {
-	final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-	final Color darkRed = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
-	final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
-	final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-	final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-
-	private final Comparator<? extends Slot> slotComparator = new Comparator<Slot>() {
-
-		@Override
-		public int compare(final Slot o1, final Slot o2) {
-			if (o1 == null) {
-				return -1;
-			} else if (o2 == null) {
-				return 1;
-			} else {
-				final Date d1 = o1.getWindowStartWithSlotOrPortTime();
-				final Date d2 = o1.getWindowStartWithSlotOrPortTime();
-
-				if (d1 == null) {
-					return -1;
-				} else if (d2 == null) {
-					return 1;
-				} else {
-					return d1.compareTo(d2);
-				}
-			}
-		}
-	};
+	private final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	private final Color darkRed = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
+	private final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	public RootData transform(final InputModel inputModel, final CargoModel cargoModel, final Map<Object, IStatus> validationInfo) {
 		return transform(inputModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), validationInfo);
 
 	}
 
+	/**
+	 * Perform the List to {@link RootData} transformation.
+	 * 
+	 * @param inputModel
+	 * @param cargoes
+	 * @param allLoadSlots
+	 * @param allDischargeSlots
+	 * @param validationInfo
+	 * @return
+	 */
 	public RootData transform(final InputModel inputModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots,
 			final Map<Object, IStatus> validationInfo) {
-		System.out.println("trasform");
 
 		final RootData root = new RootData();
 
+		// Loop through all cargoes first, generating full cargo row items
 		for (final Cargo cargo : cargoes) {
 			final GroupData group = new GroupData();
 			root.getGroups().add(group);
 			group.getObjects().add(cargo);
 
+			// Build up list of slots assigned to cargo, sorting into loads and discharges
 			final List<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
 			final List<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
-
 			for (final Object slot : cargo.getSlots()) {
 				if (slot instanceof LoadSlot) {
 					loadSlots.add((LoadSlot) slot);
@@ -87,6 +83,8 @@ public class CargoModelRowTransformer {
 
 			}
 
+			// Generate the wiring - currently this is the full many-many mapping between loads and discharges.
+			// In future this should be better (in some way...)
 			for (final Object slot : cargo.getSlots()) {
 
 				if (slot instanceof LoadSlot) {
@@ -102,8 +100,10 @@ public class CargoModelRowTransformer {
 					}
 				}
 			}
+			// Set the colour for all cargo wires.
 			setWiringColour(validationInfo, group);
 
+			// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
 			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
 				final RowData row = new RowData();
 				row.setGroup(group);
@@ -111,20 +111,24 @@ public class CargoModelRowTransformer {
 				root.getRows().add(row);
 
 				row.cargo = cargo;
+				// Add slot if possible
 				if (i < loadSlots.size()) {
 					row.loadSlot = loadSlots.get(i);
 				}
 				if (i < dischargeSlots.size()) {
 					row.dischargeSlot = dischargeSlots.get(i);
 				}
+				// Add element assignment to all rows (TODO: just add it once?)
 				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
 				if (elementAssignment != null) {
 					row.elementAssignment = elementAssignment;
 				}
 
+				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
 				row.loadTerminalColour = green;
 				row.dischargeTerminalColour = green;
 
+				// patch up the WireData information with the new RowData objects
 				for (final WireData wire : group.getWires()) {
 					if (wire.loadSlot != null && wire.loadSlot == row.loadSlot) {
 						wire.loadRowData = row;
@@ -134,9 +138,9 @@ public class CargoModelRowTransformer {
 					}
 				}
 			}
-
 		}
 
+		// Process all loads without a cargo
 		for (final LoadSlot slot : allLoadSlots) {
 			if (slot.getCargo() == null) {
 
@@ -154,6 +158,7 @@ public class CargoModelRowTransformer {
 			}
 		}
 
+		// Process all discharges without a cargo
 		for (final DischargeSlot slot : allDischargeSlots) {
 			if (slot.getCargo() == null) {
 
@@ -171,6 +176,7 @@ public class CargoModelRowTransformer {
 			}
 		}
 
+		// Construct arrays of data so that index X across all arrays points to the same row
 		for (final RowData rd : root.getRows()) {
 			root.getCargoes().add(rd.getCargo());
 			root.getLoadSlots().add(rd.getLoadSlot());
@@ -181,6 +187,10 @@ public class CargoModelRowTransformer {
 		return root;
 	}
 
+	/**
+	 * The {@link RowData} represents a single row in the trades viewer. It extends EObject for use with {@link EMFPath}, and specifically {@link RowDataEMFPath}
+	 * 
+	 */
 	public static class RowData extends EObjectImpl {
 
 		GroupData group;
@@ -250,6 +260,10 @@ public class CargoModelRowTransformer {
 
 	}
 
+	/**
+	 * Represents a "wire" in the wiring diagram
+	 * 
+	 */
 	public static class WireData {
 
 		Color colour;
@@ -260,6 +274,12 @@ public class CargoModelRowTransformer {
 
 	}
 
+	/**
+	 * Represents a single cargo (or a single slot). For simple L->D cargoes this will contain one slot. For complex cargoes, there may be multiple rows.
+	 * 
+	 * @author sg
+	 * 
+	 */
 	public static class GroupData extends EObjectImpl {
 
 		private final List<RowData> rows = new ArrayList<RowData>();
@@ -280,6 +300,10 @@ public class CargoModelRowTransformer {
 
 	}
 
+	/**
+	 * The top node in the data structure.
+	 * 
+	 */
 	public static class RootData extends EObjectImpl {
 
 		private final List<RowData> rows = new ArrayList<RowData>();
@@ -297,20 +321,25 @@ public class CargoModelRowTransformer {
 			return rows;
 		}
 
-		public ArrayList<Cargo> getCargoes() {
+		public List<Cargo> getCargoes() {
 			return cargoes;
 		}
 
-		public ArrayList<LoadSlot> getLoadSlots() {
+		public List<LoadSlot> getLoadSlots() {
 			return loadSlots;
 		}
 
-		public ArrayList<DischargeSlot> getDischargeSlots() {
+		public List<DischargeSlot> getDischargeSlots() {
 			return dischargeSlots;
 		}
 
 	}
 
+	/**
+	 * The {@link RowDataEMFPath} class is used to bridge our custom {@link RowData} objects with our reflective EMF based UI. This permits the step from {@link RowData} -> EObject , then on to the
+	 * normal EMF Path navigation. This can be passed into the normal {@link EObjectTableViewer} and {@link BasicAttributeManipulator} based API's.
+	 * 
+	 */
 	public static class RowDataEMFPath extends EMFPath {
 
 		private final Type type;
@@ -348,6 +377,12 @@ public class CargoModelRowTransformer {
 		CARGO, LOAD, DISCHARGE, ASSIGNMENT
 	}
 
+	/**
+	 * Method to update wiring colours without rebuilding the {@link RootData} object (e.g. after the validation status has changed).
+	 * 
+	 * @param rootData
+	 * @param validationInformation
+	 */
 	public void updateWiringValidity(final RootData rootData, final Map<Object, IStatus> validationInformation) {
 
 		for (final GroupData g : rootData.getGroups()) {
@@ -355,6 +390,12 @@ public class CargoModelRowTransformer {
 		}
 	}
 
+	/**
+	 * Method to query the validation information for issues with a cargo and update the wiring colour as appropriate
+	 * 
+	 * @param validationInformation
+	 * @param g
+	 */
 	private void setWiringColour(final Map<Object, IStatus> validationInformation, final GroupData g) {
 		boolean validWire = true;
 		Cargo c = null;
