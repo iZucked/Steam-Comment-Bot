@@ -34,6 +34,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	private long dischargeVolumeInM3;
 
+	/*
 	@Override
 	public ILoadOption getLoadOption() {
 		assert(slots.size() == 2);
@@ -45,6 +46,8 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		assert(slots.size() == 2);
 		return (IDischargeOption) slots.get(1);
 	}
+	*/
+	
 
 	@Override
 	public long getDischargeVolumeInM3() {
@@ -71,8 +74,26 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	@Override
 	public String toString() {
-		return getLoadOption().getId() + "@" + getSlotTime(getLoadOption()) + " to " + getDischargeOption().getId() + "@" + getSlotTime(getDischargeOption()) + ", loaded " + getLoadVolumeInM3() + ", used " + getFuelVolumeInM3()
-				+ " for fuel, discharged " + getDischargeVolumeInM3() + ", remaining heel " + getRemainingHeelVolumeInM3();
+		StringBuilder builder = new StringBuilder();
+		String slotFormat = "%s@%d (%s %d)";
+		boolean firstLoop = true;
+		for (IPortSlot slot: slots) {
+			SlotAllocationAnnotation slotAllocation = slotAllocations.get(slot);
+			if (!firstLoop) {
+				builder.append(" to ");				
+			}
+			else {
+				firstLoop = false;
+			}
+			
+			String action = (slot instanceof IDischargeOption) ? "discharged" : (slot instanceof ILoadOption ? "loaded" : "???");
+			long volume =  (slot instanceof IDischargeOption) ? getDischargeVolumeInM3() : (slot instanceof ILoadOption ? getLoadVolumeInM3() : -1);
+			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.startTime, action, volume));
+		}
+		
+		String endFormat = ", used %d for fuel, remaining heel %d";
+		builder.append(String.format(endFormat, getFuelVolumeInM3(), getRemainingHeelVolumeInM3()));
+		return builder.toString();
 	}
 
 	@Override

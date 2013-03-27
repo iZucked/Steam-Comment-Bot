@@ -17,11 +17,13 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * 
  */
 public interface IAllocationAnnotation {
+	/*
 	@Deprecated
 	ILoadOption getLoadOption();
 
 	@Deprecated
 	IDischargeOption getDischargeOption();
+	*/
 	
 	List<IPortSlot> getSlots();
 

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Provider;
@@ -17,8 +18,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -28,9 +29,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -131,8 +130,14 @@ public class ScheduleCalculator {
 			// now add some more data for each load slot
 			final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
 			for (final IAllocationAnnotation annotation : allocations.values()) {
-				final ISequenceElement loadElement = portSlotProvider.getElement(annotation.getLoadOption());
-				final ISequenceElement dischargeElement = portSlotProvider.getElement(annotation.getDischargeOption());
+				List<IPortSlot> slots = annotation.getSlots();
+				// for now, only handle single load/discharge case
+				assert(slots.size() == 2);
+				IPortSlot loadSlot = slots.get(0);
+				IPortSlot dischargeSlot = slots.get(1);
+				
+				final ISequenceElement loadElement = portSlotProvider.getElement(loadSlot);
+				final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeSlot);
 				elementAnnotations.setAnnotation(loadElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
 				elementAnnotations.setAnnotation(dischargeElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
 			}
@@ -145,7 +150,9 @@ public class ScheduleCalculator {
 		if (allocation == null) {
 			return false;
 		}
-		return (firstDetails.getOptions().getPortSlot() == allocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == allocation.getDischargeOption());
+		// for now, only handle single load/discharge case
+		assert(allocation.getSlots().size() == 2);
+		return (firstDetails.getOptions().getPortSlot() == allocation.getSlots().get(0)) && (lastDetails.getOptions().getPortSlot() == allocation.getSlots().get(1));
 	}
 	
 	// TODO: Push into entity value calculator?
@@ -184,9 +191,12 @@ public class ScheduleCalculator {
 						lastDetails = (PortDetails) plan.getSequence()[2];
 						if (detailsMatchAllocation(firstDetails, lastDetails, currentAllocation)) {
 							cargo = true;
+							
+							// for now, only handle single load/discharge case
+							assert(currentAllocation.getSlots().size() == 2);
+							ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
-							ILoadOption loadSlot = currentAllocation.getLoadOption();
 							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
 							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
 						}

@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.entities.impl;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -81,14 +83,20 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getShippingEntity();
 		// get each entity
-		final IDischargeOption dischargeOption = currentAllocation.getDischargeOption();
-		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
-		final IEntity upstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getLoadOption());
-
-		final int cvValue = currentAllocation.getLoadOption().getCargoCVValue();
+		List<IPortSlot> slots = currentAllocation.getSlots();
+		// only handle single load / discharge case
+		assert(slots.size() == 2);
 		
-		ILoadOption loadSlot = currentAllocation.getLoadOption();
-		IDischargeOption dischargeSlot = currentAllocation.getDischargeOption();
+		final ILoadOption loadOption = (ILoadOption) slots.get(0);
+		final IDischargeOption dischargeOption = (IDischargeOption) slots.get(1);
+		
+		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
+		final IEntity upstreamEntity = entityProvider.getEntityForSlot(loadOption);
+
+		final int cvValue = loadOption.getCargoCVValue();
+		
+		final ILoadOption loadSlot = loadOption;
+		final IDischargeOption dischargeSlot = dischargeOption;
 
 		final int dischargePricePerM3 = currentAllocation.getSlotPricePerM3(dischargeOption);
 		final int dischargePricePerMMBTu = Calculator.costPerMMBTuFromM3(dischargePricePerM3, cvValue);
@@ -134,7 +142,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		if (annotatedSolution != null) {
 			{
-				final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
+				final ISequenceElement element = slotProvider.getElement(loadOption);
 
 				final LinkedList<IProfitAndLossEntry> entries = new LinkedList<IProfitAndLossEntry>();
 
@@ -168,7 +176,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(dischargeTime, entries);
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
 
-				final ILoadOption loadOption = currentAllocation.getLoadOption();
 				if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
 					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, loadTime,
 							currentAllocation.getSlotTime(dischargeSlot), dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3, vessel, plan, shippingDetails);
@@ -186,7 +193,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, taxedCharterRevenue, details);
 				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(loadTime, Collections.singleton(entry));
-				final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
+				final ISequenceElement element = slotProvider.getElement(loadOption);
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss, annotation);
 			}
 		}
