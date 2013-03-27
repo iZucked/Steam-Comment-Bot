@@ -4,14 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -138,13 +135,13 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 				final Object[] newSequence = currentSequence.clone();
 				final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
-				final int cvValue = currentAllocation.getFirstLoadSlot().getCargoCVValue();
-				// for now, only handle single load / discharge case
-				List<IPortSlot> slots = currentAllocation.getSlots();
-				IPortSlot loadSlot = slots.get(0);
-				IPortSlot dischargeSlot = slots.get(1);
-				final long dischargeVolume = currentAllocation.getSlotVolumeInM3(dischargeSlot);
-				final long loadVolume = currentAllocation.getSlotVolumeInM3(loadSlot);
+				final int cvValue = currentAllocation.getLoadOption().getCargoCVValue();
+				final long dischargeVolume = currentAllocation.getDischargeVolumeInM3();
+				final long loadVolume = currentAllocation.getLoadVolumeInM3();
+				
+				ILoadOption loadSlot = currentAllocation.getLoadOption();
+				IDischargeOption dischargeSlot = currentAllocation.getDischargeOption();
+				
 
 				if (missingPurchasePrice) {
 

@@ -66,19 +66,7 @@ public interface IAllocationAnnotation {
 	@Deprecated
 	int getDischargeTime();
 
-	/**
-	 * Returns the price/m3 at load
-	 * 
-	 * @return
-	 */
-	int getLoadPricePerM3();
-
-	/**
-	 * Returns the price/m3 at discharge
-	 * 
-	 * @return
-	 */
-	int getDischargePricePerM3();
-
 	int getSlotTime(IPortSlot slot);
+
+	int getSlotPricePerM3(IPortSlot slot);
 }

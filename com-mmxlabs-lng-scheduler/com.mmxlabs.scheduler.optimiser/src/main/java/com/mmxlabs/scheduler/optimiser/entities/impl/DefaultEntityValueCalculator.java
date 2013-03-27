@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.entities.impl;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,7 +30,6 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -82,25 +80,22 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 */
 	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getShippingEntity();
-		
-		List<IPortSlot> slots = currentAllocation.getSlots();
-
-		assert (slots.size() == 2); 
 		// get each entity
-		final IDischargeOption dischargeOption = (IDischargeOption) slots.get(1);
+		final IDischargeOption dischargeOption = currentAllocation.getDischargeOption();
 		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
-		
-		final ILoadOption loadOption = (ILoadOption) slots.get(0);
-		final IEntity upstreamEntity = entityProvider.getEntityForSlot(loadOption);
+		final IEntity upstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getLoadOption());
 
-		final int cvValue = loadOption.getCargoCVValue();
+		final int cvValue = currentAllocation.getLoadOption().getCargoCVValue();
+		
+		ILoadOption loadSlot = currentAllocation.getLoadOption();
+		IDischargeOption dischargeSlot = currentAllocation.getDischargeOption();
 
 		final int dischargePricePerM3 = currentAllocation.getSlotPricePerM3(dischargeOption);
 		final int dischargePricePerMMBTu = Calculator.costPerMMBTuFromM3(dischargePricePerM3, cvValue);
 
-		final long dischargeVolumeInM3 = currentAllocation.getSlotVolumeInM3(dischargeOption);
-		final long loadVolumeInM3 = currentAllocation.getSlotVolumeInM3(loadOption);
-		final int loadPricePerM3 = currentAllocation.getSlotPricePerM3(loadOption);
+		final long dischargeVolumeInM3 = currentAllocation.getDischargeVolumeInM3();
+		final long loadVolumeInM3 = currentAllocation.getLoadVolumeInM3();
+		final int loadPricePerM3 = currentAllocation.getSlotPricePerM3(loadSlot);
 
 		// TODO should we be thinking in $/m3 or /mmbtu?
 		// TODO regas comes in here.
@@ -124,7 +119,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		final long shippingTotalPretaxProfit = shippingGasBalance - shippingCosts;
 
-		final int taxTime = currentAllocation.getSlotTime(dischargeOption);
+		final int dischargeTime = currentAllocation.getSlotTime(dischargeSlot);
+		final int loadTime = currentAllocation.getSlotTime(loadSlot);
+		
+		final int taxTime = dischargeTime;
 		final long upstreamProfit = upstreamEntity.getTaxedProfit(upstreamTotalPretaxProfit, taxTime);
 		final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
 		final long downstreamProfit = downstreamEntity.getTaxedProfit(downstreamTotalPretaxProfit, taxTime);
@@ -136,7 +134,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		if (annotatedSolution != null) {
 			{
-				final ISequenceElement element = slotProvider.getElement(loadOption);
+				final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
 
 				final LinkedList<IProfitAndLossEntry> entries = new LinkedList<IProfitAndLossEntry>();
 
@@ -157,7 +155,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// new ShippingCostAnnotation(currentAllocation.getLoadTime(), costNoBoiloff, detailsRef[0]));
 				final long costIncBoiloff = getShippingCosts(plan, vessel, true, vesselStartTime, detailsRef);
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
-						new ShippingCostAnnotation(currentAllocation.getSlotTime(loadOption), costIncBoiloff, detailsRef[0]));
+						new ShippingCostAnnotation(loadTime, costIncBoiloff, detailsRef[0]));
 
 				downstreamDetails.addChild(shippingToDownstream);
 				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolumeInM3, dischargePricePerM3, cvValue));
@@ -167,14 +165,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				entries.add(new ProfitAndLossEntry(downstreamEntity, downstreamProfit, downstreamDetails));
 				// add entry for each entity
 
-				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getSlotTime(dischargeOption), entries);
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(dischargeTime, entries);
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
 
+				final ILoadOption loadOption = currentAllocation.getLoadOption();
 				if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
-					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, currentAllocation.getSlotTime(loadOption),
-							currentAllocation.getSlotTime(dischargeOption), dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3, vessel, plan, shippingDetails);
+					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, loadTime,
+							currentAllocation.getSlotTime(dischargeSlot), dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3, vessel, plan, shippingDetails);
 				} else {
-					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getSlotTime(loadOption), dischargePricePerMMBTu, currentAllocation.getSlotVolumeInM3(loadOption),
+					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, loadTime, dischargePricePerMMBTu, currentAllocation.getLoadVolumeInM3(),
 							shippingDetails);
 				}
 			}
@@ -186,8 +185,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				details.addChild(new DetailTree("Charter Out", new TotalCostDetailElement(charterRevenue)));
 
 				final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, taxedCharterRevenue, details);
-				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getSlotTime(loadOption), Collections.singleton(entry));
-				final ISequenceElement element = slotProvider.getElement(loadOption);
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(loadTime, Collections.singleton(entry));
+				final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss, annotation);
 			}
 		}

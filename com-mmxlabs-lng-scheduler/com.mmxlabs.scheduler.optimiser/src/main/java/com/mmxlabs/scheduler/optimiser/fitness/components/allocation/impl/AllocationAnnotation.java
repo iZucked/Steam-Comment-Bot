@@ -39,8 +39,8 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	//private int loadTime;
 	//private int dischargeTime;
 
-	private int loadPricePerM3;
-	private int dischargePricePerM3;
+	//private int loadPricePerM3;
+	//private int dischargePricePerM3;
 
 	@Override
 	public ILoadOption getLoadOption() {
@@ -48,30 +48,10 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return (ILoadOption) slots.get(0);
 	}
 
-	@Deprecated
-	public void setLoadSlot(final ILoadOption loadSlot) {
-		if (slots.size() < 1) {
-			slots.add(loadSlot);
-		}
-		else {
-			slots.set(0, loadSlot);
-		}
-	}
-
 	@Override
 	public IDischargeOption getDischargeOption() {
 		assert(slots.size() == 2);
 		return (IDischargeOption) slots.get(1);
-	}
-
-	@Deprecated
-	public void setDischargeSlot(final IDischargeOption dischargeSlot) {
-		if (slots.size() < 2) {
-			slots.add(dischargeSlot);
-		}
-		else {
-			slots.set(1, dischargeSlot);
-		}
 	}
 
 	@Override
@@ -103,41 +83,41 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return getSlotTime(getLoadOption());
 	}
 
-	@Deprecated
-	public void setLoadTime(final int loadTime) {
-		setSlotTime(getLoadOption(), loadTime);
-		//this.loadTime = loadTime;
-	}
-
 	@Override
 	public int getDischargeTime() {
 		//return dischargeTime;
 		return getSlotTime(getLoadOption());
 	}
 
-	@Deprecated
-	public void setDischargeTime(final int dischargeTime) {
-		//this.dischargeTime = dischargeTime;
-		setSlotTime(getDischargeOption(), dischargeTime);
-	}
-
+	/*
 	@Override
 	public int getLoadPricePerM3() {
-		return loadPricePerM3;
+		return getSlotPricePerM3(getLoadOption());
+		//return loadPricePerM3;
 	}
+	*/
 
+	/*
 	public void setLoadPricePerM3(final int loadM3Price) {
-		this.loadPricePerM3 = loadM3Price;
+		setSlotPricePerM3(getLoadOption(), loadM3Price);
+		//this.loadPricePerM3 = loadM3Price;
 	}
+	*/
 
+	/*
 	@Override
 	public int getDischargePricePerM3() {
-		return dischargePricePerM3;
+		return getSlotPricePerM3(getDischargeOption());
+		//return dischargePricePerM3;
 	}
+	*/
 
+	/*
 	public void setDischargePricePerM3(final int dischargeM3Price) {
-		this.dischargePricePerM3 = dischargeM3Price;
+		setSlotPricePerM3(getDischargeOption(), dischargeM3Price);
+		//this.dischargePricePerM3 = dischargeM3Price;
 	}
+	*/
 
 	@Override
 	public String toString() {
@@ -182,5 +162,18 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		getOrCreateSlotAllocation(slot).startTime = time;
 	}
 
+	@Override
+	public int getSlotPricePerM3(IPortSlot slot) {
+		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+		if (allocation != null) {
+			return allocation.pricePerM3;
+		}
+		// TODO: throw an exception instead of returning magic value
+		return -1;
+	}
+	
+	public void setSlotPricePerM3(IPortSlot slot, int price) {
+		getOrCreateSlotAllocation(slot).pricePerM3 = price;
+	}
 	
 }

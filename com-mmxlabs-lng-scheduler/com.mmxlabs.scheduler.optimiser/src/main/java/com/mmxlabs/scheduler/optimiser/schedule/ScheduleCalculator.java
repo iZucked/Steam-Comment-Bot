@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Provider;
@@ -18,7 +17,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -131,29 +129,14 @@ public class ScheduleCalculator {
 			// now add some more data for each load slot
 			final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
 			for (final IAllocationAnnotation annotation : allocations.values()) {
-				List<IPortSlot> slots = annotation.getSlots();
-				// for now, only handle single load / single discharge case
-				assert(slots.size() == 2);
-				
-				final ISequenceElement loadElement = portSlotProvider.getElement(slots.get(0));
-				final ISequenceElement dischargeElement = portSlotProvider.getElement(slots.get(1));
+				final ISequenceElement loadElement = portSlotProvider.getElement(annotation.getLoadOption());
+				final ISequenceElement dischargeElement = portSlotProvider.getElement(annotation.getDischargeOption());
 				elementAnnotations.setAnnotation(loadElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
 				elementAnnotations.setAnnotation(dischargeElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
 			}
 		}
 
 		calculateProfitAndLoss(scheduledSequences, allocations, annotatedSolution);
-	}
-	
-	private boolean detailsMatchAllocation(PortDetails firstDetails, PortDetails lastDetails, IAllocationAnnotation allocation) {
-		if (allocation == null) {
-			return false;
-		}
-		List<IPortSlot> slots = allocation.getSlots();
-		// for now, only handle single load / single discharge case
-		assert(slots.size() == 2);
-		
-		return (firstDetails.getOptions().getPortSlot() == slots.get(0)) && (lastDetails.getOptions().getPortSlot() == slots.get(1));
 	}
 
 	// TODO: Push into entity value calculator?
@@ -179,19 +162,21 @@ public class ScheduleCalculator {
 					PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
 
 					final IAllocationAnnotation currentAllocation = allocations.get(plan);
-					
-					if (detailsMatchAllocation(firstDetails, lastDetails, currentAllocation)) {
+
+					if ((currentAllocation != null)
+							&& ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
 						cargo = true;
 						final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
 						firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
 					} else if ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 4) {
 						firstDetails = (PortDetails) plan.getSequence()[1];
 						lastDetails = (PortDetails) plan.getSequence()[2];
-						if (detailsMatchAllocation(firstDetails, lastDetails, currentAllocation)) {
+						if ((currentAllocation != null)
+								&& ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
 							cargo = true;
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getSlotTime(currentAllocation.getFirstLoadSlot()), annotatedSolution);
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getLoadTime(), annotatedSolution);
 							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
 						}
 					}
