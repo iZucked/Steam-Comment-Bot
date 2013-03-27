@@ -724,7 +724,11 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @generated NOT
 	 */
 	public Date getWindowEndWithSlotOrPortTime() {
-		return new Date(getWindowStartWithSlotOrPortTime().getTime()
+		final Date startTime = getWindowStartWithSlotOrPortTime();
+		if (startTime == null) {
+			return null;
+		}
+		return new Date(startTime.getTime()
 				+ Timer.ONE_HOUR * getSlotOrPortWindowSize());
 	}
 
@@ -734,9 +738,13 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @generated NOT
 	 */
 	public Date getWindowStartWithSlotOrPortTime() {
+		Date wStart = getWindowStart();
+		if (wStart == null) {
+			return null;
+		}
 		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
 		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
-		calendar.setTime(getWindowStart());
+		calendar.setTime(wStart);
 //		if (calendar.get(Calendar.HOUR_OF_DAY) != 0) System.err.println("This should never happen : " + calendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.HOUR_OF_DAY, startTime);
 		return calendar.getTime();
