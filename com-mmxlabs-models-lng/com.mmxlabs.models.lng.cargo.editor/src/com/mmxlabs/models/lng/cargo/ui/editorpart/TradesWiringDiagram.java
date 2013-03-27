@@ -26,7 +26,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDiagram;
@@ -34,38 +33,27 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireData;
 
 /**
- * s A control for drawing a wiring diagram. This just displays an arbitrary bipartite graph / matching.
+ * A control for drawing a wiring diagram. This just displays an arbitrary bipartite graph / matching.
  * 
- * The graph must have equal numbers of vertices on each side, which are identified by the integers from 0 to n-1. The wiring itself is described in the {@link #wiring} list. The ith element of the
+ * The graph must have equal numbers of vertices on each side, which are identified by the integers from 0 to n-1. The wiring itself is described in the {@link #rootData} list. The ith element of the
  * list contains the index of the right-hand element to which left hand element i is connected, or -1 if there is no connection.
  * 
  * Thus wiring.get(1) gives the right-hand node connected to left-hand node 1, and wiring.indexOf(1) gives the left-hand node connected to right-hand node 1.
  * 
  * TODO allow mismatched states, where there may be differing numbers of left-hand and right-hand terminals.
  * 
- * @author Tom Hinton
+ * @author Simon Goodall (original work by Tom Hinton)
  * 
  *         FIXME: Fork of {@link WiringDiagram} as which this does work as is, partial re-paints do not work - bg fill is ok, but terminals and lines are only partially drawn if at all. Unknown why
  *         this is the case as it is the same listener code on a canvas, but the objects are separated. Disabling double buffer does not help. Only idea is that some methods are synchronized - it
  *         maybe by splitting the classes code which was previously synchronious can now be executed in parallel.
  */
 public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener {
-	/**
-	 * Contains pairs whose first element is left terminal colour and second is right terminal colour, for each element in {@link #wiring}
-	 */
-	// private final List<Pair<Color, Color>> terminalColours = new ArrayList<Pair<Color, Color>>();
-	// private final List<Pair<Boolean, Boolean>> terminalOptionals = new ArrayList<Pair<Boolean, Boolean>>();
-	// private final List<Boolean> leftTerminalValid = new ArrayList<Boolean>();
-	// private final List<Boolean> rightTerminalValid = new ArrayList<Boolean>();
 
-	/**
-	 * Contains the colour for each wire; the ith colour applies to the wire from the ith left hand terminal
-	 */
-	// private final List<Color> wireColours = new ArrayList<Color>();
 	/**
 	 * The actual wiring permutation; if the ith element is j, left hand terminal i is wired to right hand terminal j. If the ith element is -1, the ith element is not connected to anywhere.
 	 */
-	private RootData wiring = new RootData();
+	private RootData rootData = new RootData();
 
 	private int terminalSize = 9;
 	private int pathWidth = 2;
@@ -96,85 +84,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		canvas.addMouseListener(this);
 		canvas.addMouseMoveListener(this);
 	}
-
-	// /**
-	// * Set the colour of left hand terminal i to the given color. Doesn't refresh.
-	// *
-	// * @param i
-	// * @param color
-	// */
-	// public synchronized void setLeftTerminalColor(final int index, final Color color) {
-	// terminalColours.get(index).setFirst(color);
-	// }
-
-	// /**
-	// * Set the colour of right hand terminal i to the given color. Doesn't refresh
-	// *
-	// * @param i
-	// * @param color
-	// */
-	// public synchronized void setRightTerminalColor(final int index, final Color color) {
-	// terminalColours.get(index).setSecond(color);
-	// }
-	//
-	// public void setLeftTerminalOptional(int i, boolean b) {
-	//
-	// terminalOptionals.get(i).setFirst(b);
-	// }
-	//
-	// public void setRightTerminalOptional(int i, boolean b) {
-	//
-	// terminalOptionals.get(i).setSecond(b);
-	// }
-
-	// /**
-	// * Set all the terminal colours at once; the ith element is a pair, whose first member is the left hand colour.
-	// *
-	// * The list of colours should be the same size as the wiring list last passed to {@link #setWiring(List)}
-	// *
-	// * @param colours
-	// */
-	// public synchronized void setTerminalColors(final List<Pair<Color, Color>> colours) {
-	// terminalColours.clear();
-	// terminalColours.addAll(colours);
-	// }
-	//
-	// public synchronized void setTerminalOptionals(final List<Pair<Boolean, Boolean>> vals) {
-	// terminalOptionals.clear();
-	// terminalOptionals.addAll(vals);
-	// }
-	//
-	// public synchronized void setWireColor(final int index, final Color color) {
-	// wireColours.set(index, color);
-	// }
-	//
-	// public synchronized void setWireColors(final List<Color> colours) {
-	// wireColours.clear();
-	// wireColours.addAll(colours);
-	// }
-	//
-	// public synchronized void setLeftTerminalValid(final int index, final boolean valid) {
-	// leftTerminalValid.set(index, valid);
-	// }
-	//
-	// public synchronized void setRightTerminalValid(final int index, final boolean valid) {
-	// rightTerminalValid.set(index, valid);
-	// }
-	//
-	// public synchronized void setTerminalsValid(final List<Boolean> leftTerminalsValid, final List<Boolean> rightTerminalsValid) {
-	// this.leftTerminalValid.clear();
-	// this.leftTerminalValid.addAll(leftTerminalsValid);
-	// this.rightTerminalValid.clear();
-	// this.rightTerminalValid.addAll(rightTerminalsValid);
-	// }
-
-	// public synchronized void setWiring(final RootData wiring) {
-	// this.wiring = wiring;
-	// }
-
-	// public List<List<Integer>> getWiring() {
-	// return Collections.unmodifiableList(wiring);
-	// }
 
 	public int getTerminalSize() {
 		return terminalSize;
@@ -209,14 +118,10 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	@Override
 	public synchronized void paintControl(final PaintEvent e) {
 		// Get a list of terminal positions from subclass
-		final List<Float> terminalPositions = getTerminalPositions(wiring);
+		final List<Float> terminalPositions = getTerminalPositions(rootData);
 
 		// Copy ref in case of concurrent change during paint
-		final RootData root = wiring;
-		// final List<Boolean> leftTerminalValid2 = new ArrayList<Boolean>(leftTerminalValid);
-		// final List<Pair<Color, Color>> terminalColours2 = new ArrayList<Pair<Color, Color>>(terminalColours);
-		// final List<Pair<Boolean, Boolean>> terminalOptionals2 = new ArrayList<Pair<Boolean, Boolean>>(terminalOptionals);
-		// final List<Boolean> rightTerminalValid2 = new ArrayList<Boolean>(rightTerminalValid);
+		RootData root = rootData;
 
 		final GC graphics = e.gc;
 
@@ -268,51 +173,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			}
 		}
 
-		// for (int rawI = 0; rawI < wiring2.getRows().size(); rawI++) {
-		//
-		// // Map back between current row (sorted) and data (unsorted)
-		// int i = reverseSortedIndices == null ? rawI : reverseSortedIndices[rawI];
-		//
-		// // -1 indicates filtered row
-		// if (i == -1) {
-		// continue;
-		// }
-		//
-		// // See if there is a valid wire
-		// RowData rowData = wiring2.getRows().get(rawI);
-		//
-		// if (rowData.getCargo() == null) {
-		// continue;
-		// }
-		//
-		// for (Integer destinationInteger : destinationIntegers) {
-		// final int destination = destinationInteger.intValue();
-		// if (destination < 0) {
-		// continue; // no wire
-		// }
-		// // Map back between current row (sorted) and data (unsorted)
-		// int rawDestination = sortedIndices == null ? destination : sortedIndices[destination];
-		//
-		// // If this is the wire currently being dragged, skip and handle in next code block
-		// if (dragging) {
-		// if (draggingFromLeft && draggingFrom == rawI) {
-		// continue;
-		// } else if (!draggingFromLeft && rawDestination == draggingFrom) {
-		// continue;
-		// }
-		// }
-		//
-		// final float startMid = terminalPositions.get(rawI);
-		// final float endMid = terminalPositions.get(rawDestination);
-		//
-		// // Draw wire - offset by ca.x to as x pos is relative to left hand side
-		// final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
-		//
-		// graphics.setForeground(wireColours.get(i));
-		// graphics.drawPath(path);
-		// path.dispose();
-		// }
-		// }
 		// Clear clip rect for dragged wire
 		graphics.setClipping((Rectangle) null);
 
@@ -397,7 +257,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		// determine which row ( if any )
 		int terminal = 0;
-		final List<Float> positions = getTerminalPositions(wiring);
+		final List<Float> positions = getTerminalPositions(rootData);
 		for (final float y : positions) {
 			if (e.y >= (y - terminalSize / 2) && e.y <= (y + terminalSize / 2)) {
 				break;
@@ -455,7 +315,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		onMouseup();
 
 		if (e.button == 3) {
-			final List<Float> positions = getTerminalPositions(wiring);
+			final List<Float> positions = getTerminalPositions(rootData);
 
 			int terminal = 0;
 
@@ -466,12 +326,9 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				terminal++;
 			}
 
-			RowData rowData = wiring.getRows().get(terminal);
+			RowData rowData = rootData.getRows().get(terminal);
 			final boolean draggedToNowhere = terminal >= positions.size() || !(draggingFromLeft ? rowData.dischargeSlot != null : rowData.loadSlot != null);
 
-			if (!draggedToNowhere) {
-				openContextMenu(draggingFromLeft, terminal, e.x, e.y);
-			}
 			return;
 
 		}
@@ -480,7 +337,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		if (dragging) {
 			dragging = false;
 
-			final List<Float> positions = getTerminalPositions(wiring);
+			final List<Float> positions = getTerminalPositions(rootData);
 
 			int terminal = 0;
 
@@ -491,77 +348,39 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				terminal++;
 			}
 
+			// Map back from the sorted display order to the raw data order
 			if (!(terminal >= positions.size()) && reverseSortedIndices != null) {
 				terminal = reverseSortedIndices[terminal];
 			}
-			RowData toRowData = terminal >= wiring.getRows().size() ? null : wiring.getRows().get(terminal);
+			RowData toRowData = terminal >= rootData.getRows().size() ? null : rootData.getRows().get(terminal);
 			final boolean draggedToNowhere = terminal >= positions.size() || !(draggingFromLeft ? toRowData.dischargeSlot != null : toRowData.loadSlot != null);
 
 			final Rectangle ca = getCanvasClientArea();
 
 			// final boolean control = (e.stateMask & SWT.CONTROL) != 0;
 
+			// Map back from the sorted display order to the raw data order
 			int sortedIndex = reverseSortedIndices == null ? draggingFrom : reverseSortedIndices[draggingFrom];
 
 			// New Load -> Discharge pairing
 			// May contain a null key!
 			Map<RowData, RowData> newWiring = new HashMap<RowData, RowData>();
-			// Sorting?
-			RowData fromRowData = wiring.getRows().get(sortedIndex);
+
+			RowData fromRowData = rootData.getRows().get(sortedIndex);
 
 			// now find column
 			if (!draggedToNowhere && !draggingFromLeft && (e.x >= ca.x + terminalSize && e.x <= ca.x + 2 * terminalSize)) {
-
+				// arrived in left column from right
 				newWiring.put(fromRowData, null);
 				newWiring.put(toRowData, fromRowData);
 				newWiring.put(null, toRowData);
-				//
-				// // arrived in left column from right
-				// RowData leftRowData = wiring.getRows().get(sortedIndex);
-				// newWiring.put(leftRowData, targetRowData);
-				// LoadSlot loadSlot = leftRowData.getLoadSlot();
-				// final int ix = wiring.indexOf(sortedIndex);
-				// if (control) {
-				// if (ix >= 0) {
-				// wiring.set(ix, wiring.get(terminal));
-				// }
-				// } else {
-				// if (ix >= 0) {
-				// wiring.set(ix, -1);
-				// }
-				// }
-				// if (leftRowData != null) {
-				// }
-				// wiring.set( leftRowData);
-				// newWiring.put(leftRowData, targetRowData);
-				// newWiring.put(targetRowData, null);
 			} else if (!draggedToNowhere && draggingFromLeft && (e.x >= ca.x + ca.width - terminalSize * 2 && e.x <= ca.x + ca.width - terminalSize)) {
-				// // arrived in right column
-				// final int ix = wiring.indexOf(terminal);
-				// if (control) {
-				// if (ix >= 0) {
-				// wiring.set(ix, wiring.get(sortedIndex));
-				// }
-				// } else {
-				// if (ix >= 0) {
-				// wiring.set(ix, -1);
-				// }
-				// }
-				// wiring.set(sortedIndex, terminal);
-
+				// arrived in right column
 				newWiring.put(fromRowData, toRowData);
 				newWiring.put(toRowData, null);
 				newWiring.put(null, fromRowData);
 			} else {
 				// clear wire
-				// if (draggingFromLeft) {
-				// wiring.set(sortedIndex, -1);
-				// } else {
-				// final int ix = wiring.indexOf(sortedIndex);
-				// if (ix >= 0) {
-				// wiring.set(ix, -1);
-				// }
-				// }
 				newWiring.put(fromRowData, null);
 				newWiring.put(null, fromRowData);
 			}
@@ -574,23 +393,21 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	}
 
 	/**
-	 * subclassses should use this to provide the vertical positions of the terminals.
+	 * subclassses should use this to provide the vertical positions of the terminals given the input {@link RootData} object.
 	 * 
 	 * @return
 	 */
 	protected abstract List<Float> getTerminalPositions(RootData rootData);
 
 	/**
-	 * called to tell subclasses wiring has changed. Probably should use listener pattern really. Called just before a redraw, so setting colours will take effect immediately;
+	 * called to tell subclasses wiring has changed. Probably should use listener pattern really. The format of the map is the new mapping between left and right side based on the {@link RowData}
+	 * instances. For example, given two rows, A and B - rewiring Load A to discharge B will give a map with a <key,value> pair of <A,B> (the new link) and two additional <key,value> pairs of <null,
+	 * A> (representing the disconnected discharge on A) and <B, null> (representing the disconnected load on B).
 	 */
 	protected abstract void wiringChanged(final Map<RowData, RowData> newWiring);
 
-	protected void openContextMenu(final boolean leftSide, final int terminal, final int mouseX, final int mouseY) {
-	}
-
 	public void setLocked(final boolean locked) {
 		this.locked = locked;
-
 	}
 
 	public synchronized void redraw() {
@@ -598,7 +415,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	}
 
 	public synchronized void setSortOrder(RootData rootData, int[] sortedIndices, int[] reverseSortedIndices) {
-		this.wiring = rootData;
+		this.rootData = rootData;
 		this.sortedIndices = sortedIndices;
 		this.reverseSortedIndices = reverseSortedIndices;
 	}
