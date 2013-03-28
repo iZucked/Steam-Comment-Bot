@@ -34,8 +34,8 @@ import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -125,13 +125,13 @@ public class ShippingCostRowViewerPane extends ScenarioTableViewerPane {
 					@Override
 					public void run() {
 
-						final ScenarioLock editorLock = jointModelEditorPart.getEditorLock();
+						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 						editorLock.awaitClaim();
 						getJointModelEditorPart().setDisableUpdates(true);
 						try {
 							final ISelection sel = getLastSelection();
 							if (sel instanceof IStructuredSelection) {
-								final EditingDomain ed = jointModelEditorPart.getEditingDomain();
+								final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 								// Copy selection
 								@SuppressWarnings("unchecked")
 								final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());

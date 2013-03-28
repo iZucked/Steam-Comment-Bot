@@ -47,9 +47,9 @@ import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
-import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -363,6 +363,6 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		return new LocalScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
+		return new LocalScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation);
 	}
 }
