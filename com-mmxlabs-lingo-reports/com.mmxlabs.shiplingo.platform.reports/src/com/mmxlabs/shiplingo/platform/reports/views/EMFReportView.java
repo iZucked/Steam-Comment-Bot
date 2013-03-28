@@ -443,7 +443,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			};
 		};
 
-		filterField.setViewer(viewer);
+		filterField.setFilterSupport(viewer.getFilterSupport());
 
 		viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
 
