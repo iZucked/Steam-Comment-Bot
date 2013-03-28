@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EClass;
@@ -61,7 +60,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		String groupName = EditorUtils.unmangle(eClass.getName());
 		if (object instanceof Cargo) {
-			CargoType cargoType = ((Cargo) object).getCargoType();
+			final CargoType cargoType = ((Cargo) object).getCargoType();
 			groupName += " Type: " + cargoType.getName();
 		}
 
@@ -75,9 +74,9 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Initialise middle composite
 		middle = new Composite(this, SWT.NONE);
-		// We know there is only the load and discharge slot, so two columns
 
 		createChildComposites(root, object, eClass, middle);
+		// We know there are n slots, so n columns
 		middle.setLayout(new GridLayout(childObjects.size(), true));
 
 		// Additional Group for the bottom section
