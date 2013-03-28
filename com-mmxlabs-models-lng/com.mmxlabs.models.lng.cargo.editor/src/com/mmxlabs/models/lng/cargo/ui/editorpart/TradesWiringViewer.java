@@ -97,6 +97,9 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -569,28 +572,26 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(loadColumns, "L-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
-		addTradesColumn(loadColumns, "Buy Price",
-				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain)), new RowDataEMFPath(
-						Type.LOAD_ALLOCATION, true));
+		addTradesColumn(loadColumns, "Buy Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
+				editingDomain)), new RowDataEMFPath(Type.LOAD_ALLOCATION, true));
 		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
 		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
-		addTradesColumn(loadColumns, "Sell Price",
-				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain)), new RowDataEMFPath(
-						Type.DISCHARGE_ALLOCATION, true));
+		addTradesColumn(loadColumns, "Sell Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
+				editingDomain)), new RowDataEMFPath(Type.DISCHARGE_ALLOCATION, true));
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		{
-			AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
-			RowDataEMFPath assignmentPath = new RowDataEMFPath(Type.CARGO, true);
-			GridViewerColumn assignmentColumn = addTradesColumn("Assignment", assignmentManipulator, assignmentPath);
+			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(Type.CARGO, true);
+			final GridViewerColumn assignmentColumn = addTradesColumn("Assignment", assignmentManipulator, assignmentPath);
 			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
 				@Override
-				public Image getImage(Object element) {
+				public Image getImage(final Object element) {
 
 					if (element instanceof RowData) {
 						final RowData rowDataItem = (RowData) element;
@@ -606,6 +607,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			});
 		}
+
+		addPNLColumn("P&L", new BasicAttributeManipulator(TypesPackage.eINSTANCE.getExtraDataContainer_ExtraData(), editingDomain), new RowDataEMFPath(Type.CARGO_ALLOCATION, true));
+
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override
@@ -705,12 +709,50 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram.setSortOrder(rootData, sortedIndices, reverseSortedIndices);
 	}
 
+	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final T manipulator, final EMFPath path) {
+
+		ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
+			@Override
+			public Comparable getComparable(Object element) {
+				Object object = path.get((EObject) element);
+				if (object instanceof ExtraDataContainer) {
+					final ExtraDataContainer container = (ExtraDataContainer) object;
+					final ExtraData data = container.getDataWithKey("GroupValue");
+					if (data != null) {
+						return data.getValueAs(Integer.class);
+					}
+				}
+				return super.getComparable(element);
+			}
+		};
+
+		final GridViewerColumn col = addTradesColumn(columnName, wrapper, path);
+		col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, path) {
+
+			@Override
+			public String getText(final Object element) {
+
+				Object object = path.get((EObject) element);
+				if (object instanceof ExtraDataContainer) {
+					final ExtraDataContainer container = (ExtraDataContainer) object;
+					final ExtraData data = container.getDataWithKey("GroupValue");
+					if (data != null) {
+						return data.formatValue();
+					}
+				}
+				return super.getText(element);
+			}
+
+		});
+		return col;
+	}
+
 	/**
 	 * Set the cargoes, and reset the wiring to match these cargoes.
 	 * 
 	 * @param newCargoes
 	 */
-	public RootData setCargoes(final InputModel inputModel, final CargoModel cargoModel, ScheduleModel scheduleModel) {
+	public RootData setCargoes(final InputModel inputModel, final CargoModel cargoModel, final ScheduleModel scheduleModel) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
 		return transformer.transform(inputModel, cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors());
 	}
