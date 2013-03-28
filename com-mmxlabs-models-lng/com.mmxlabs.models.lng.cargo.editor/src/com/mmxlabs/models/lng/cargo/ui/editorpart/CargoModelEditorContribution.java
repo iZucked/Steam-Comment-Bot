@@ -20,31 +20,28 @@ import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class CargoModelEditorContribution extends BaseJointModelEditorContribution<CargoModel> {
-	private int cargoPageNumber = -1;
+	// private int cargoPageNumber = -1;
 	private int loadSlotPageNumber = -1;
 	private int dischargeSlotPageNumber = -1;
-	private int wiringPageNumber = -1;
 	private int tradesViewerPageNumber = -1;
-	private CargoModelViewer cargoViewerPane;
+	// private CargoModelViewer cargoViewerPane;
 	private LoadSlotViewer loadSlotViewerPane;
 	private DischargeSlotViewer dischargeSlotViewerPane;
-	private CargoWiringViewer wiringViewer;
 	private TradesWiringViewer tradesViewer;
 
 	// Temp flag to turn on/off load/discharge slots during development
 	private static final boolean showSlotTabs = false;
-	private static final boolean useNewTradesEditor = true;
 
 	@Override
 	public void addPages(final Composite parent) {
-		{
-			this.cargoViewerPane = new CargoModelViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			cargoViewerPane.createControl(parent);
-			cargoViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargoes()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
-			cargoViewerPane.getViewer().setInput(modelObject);
-			cargoPageNumber = editorPart.addPage(cargoViewerPane.getControl());
-			editorPart.setPageText(cargoPageNumber, "Cargoes");
-		}
+		// {
+		// this.cargoViewerPane = new CargoModelViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		// cargoViewerPane.createControl(parent);
+		// cargoViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargoes()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		// cargoViewerPane.getViewer().setInput(modelObject);
+		// cargoPageNumber = editorPart.addPage(cargoViewerPane.getControl());
+		// editorPart.setPageText(cargoPageNumber, "Cargoes");
+		// }
 		if (showSlotTabs) {
 			this.loadSlotViewerPane = new LoadSlotViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			loadSlotViewerPane.createControl(parent);
@@ -63,30 +60,20 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
 		}
 
-		if (!useNewTradesEditor) {
-			wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			wiringPageNumber = editorPart.addPage(wiringViewer);
-			editorPart.setPageText(wiringPageNumber, "Trades");
-		}
-		if (useNewTradesEditor) {
-			this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-			tradesViewer.createControl(parent);
-			tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
-			tradesViewer.getViewer().setInput(modelObject);
-			tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
-			editorPart.setPageText(tradesViewerPageNumber, "Trades");
-		}
+		this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		tradesViewer.createControl(parent);
+		tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		tradesViewer.getViewer().setInput(modelObject);
+		tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
+		editorPart.setPageText(tradesViewerPageNumber, "Trades");
 	}
 
 	@Override
 	public void setLocked(final boolean locked) {
-		cargoViewerPane.setLocked(locked);
+//		 cargoViewerPane.setLocked(locked);
 		if (showSlotTabs) {
 			loadSlotViewerPane.setLocked(locked);
 			dischargeSlotViewerPane.setLocked(locked);
-		}
-		if (wiringViewer != null) {
-			wiringViewer.setLocked(locked);
 		}
 		if (tradesViewer != null) {
 			tradesViewer.setLocked(locked);
@@ -130,9 +117,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				if (tradesViewer != null) {
 					editorPart.setActivePage(tradesViewerPageNumber);
 					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
-				} else {
-					editorPart.setActivePage(cargoPageNumber);
-					cargoViewerPane.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
+					// } else {
+					// editorPart.setActivePage(cargoPageNumber);
+					// cargoViewerPane.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
 				}
 			} else if (loadSlot != null) {
 				if (tradesViewer != null) {
