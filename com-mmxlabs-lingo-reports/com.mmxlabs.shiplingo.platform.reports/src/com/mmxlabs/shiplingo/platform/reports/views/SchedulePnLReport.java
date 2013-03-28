@@ -382,21 +382,28 @@ public class SchedulePnLReport extends EMFReportView {
 			if (a instanceof CargoAllocation) {
 				final CargoAllocation allocation = (CargoAllocation) a;
 
-				setInputEquivalents(
-						allocation,
-						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
-								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
-								allocation.getInputCargo() }));
+				final List<Object> equivalents = new LinkedList<Object>();
+				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+					equivalents.add(slotAllocation.getSlot());
+					equivalents.add(slotAllocation.getSlotVisit());
+				}
+				equivalents.addAll(allocation.getEvents());
+				equivalents.add(allocation.getInputCargo());
+				setInputEquivalents(allocation, equivalents);
 			} else if (a instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) a;
 
 				final CargoAllocation allocation = slotVisit.getSlotAllocation().getCargoAllocation();
 
-				setInputEquivalents(
-						allocation,
-						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
-								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
-								allocation.getInputCargo() }));
+				
+				final List<Object> equivalents = new LinkedList<Object>();
+				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+					equivalents.add(slotAllocation.getSlot());
+					equivalents.add(slotAllocation.getSlotVisit());
+				}
+				equivalents.addAll(allocation.getEvents());
+				equivalents.add(allocation.getInputCargo());
+				setInputEquivalents(allocation, equivalents);
 			} else if (a instanceof VesselEventVisit) {
 				final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
 				setInputEquivalents(vesselEventVisit, Lists.<Object> newArrayList(vesselEventVisit.getVesselEvent()));

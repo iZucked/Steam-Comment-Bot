@@ -6,6 +6,7 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -216,11 +217,14 @@ public class CargoReportView extends EMFReportView {
 			if (a instanceof CargoAllocation) {
 				final CargoAllocation allocation = (CargoAllocation) a;
 
-				setInputEquivalents(
-						allocation,
-						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
-								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
-								allocation.getInputCargo() }));
+				final List<Object> equivalents = new LinkedList<Object>();
+				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+					equivalents.add(slotAllocation.getSlot());
+					equivalents.add(slotAllocation.getSlotVisit());
+				}
+				equivalents.addAll(allocation.getEvents());
+				equivalents.add(allocation.getInputCargo());
+				setInputEquivalents(allocation, equivalents);
 			}
 		}
 	}
