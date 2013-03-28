@@ -64,9 +64,13 @@ public class EObjectTableViewerValidationSupport {
 		if (status instanceof IDetailConstraintStatus) {
 			final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
 			if (!status.isOK()) {
+				// Set raw object...
+				setStatus(detailConstraintStatus.getTarget(), status);
+				// ..also the transformed object. In some cases we the transformed object could be an table local data such as an artificial row object
 				updateObject(getElementForValidationTarget(detailConstraintStatus.getTarget()), status, update);
 
 				for (final EObject e : detailConstraintStatus.getObjects()) {
+					setStatus(e, status);
 					updateObject(getElementForValidationTarget(e), status, update);
 				}
 			}

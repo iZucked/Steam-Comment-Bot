@@ -146,4 +146,8 @@ public class EObjectTableViewerSortingSupport {
 			}
 		};
 	}
+
+	public boolean isSortDescending() {
+		return sortDescending;
+	}
 }

@@ -156,15 +156,22 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	public EObjectTableViewer(final Composite parent, final int style) {
 		super(parent, style);
-		this.validationSupport = new EObjectTableViewerValidationSupport(this) {
+		this.validationSupport = createValidationSupport();
+		this.filterSupport = new EObjectTableViewerFilterSupport(this);
+		ColumnViewerToolTipSupport.enableFor(this);
+	}
 
-			@Override 
+	/**
+	 * @since 3.0
+	 */
+	protected EObjectTableViewerValidationSupport createValidationSupport() {
+		return new EObjectTableViewerValidationSupport(this) {
+
+			@Override
 			public EObject getElementForValidationTarget(EObject source) {
 				return getElementForNotificationTarget(source);
 			}
 		};
-		this.filterSupport = new EObjectTableViewerFilterSupport(this);
-		ColumnViewerToolTipSupport.enableFor(this);
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
@@ -339,6 +346,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 				if (oldInput == null) {
 					Display.getDefault().asyncExec(new Runnable() {
+						@Override
 						public void run() {
 							if (!viewer.getControl().isDisposed()) {
 								if (viewer instanceof GridTableViewer) {
