@@ -56,7 +56,7 @@ public class ScenarioInstanceMigrator {
 		assert context != null;
 
 		final int latestVersion = migrationRegistry.getLatestContextVersion(context);
-		final int scenarioVersion = scenarioInstance.getScenarioVersion();
+		 int scenarioVersion = scenarioInstance.getScenarioVersion();
 		final EList<String> subModelURIs = scenarioInstance.getSubModelURIs();
 
 		final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
@@ -88,7 +88,10 @@ public class ScenarioInstanceMigrator {
 			}
 
 			assert tmpURIs.size() == uris.size();
-
+			if (scenarioVersion < 0) {
+				int lastReleaseVersion = migrationRegistry.getLastReleaseVersion(context);
+				scenarioVersion = lastReleaseVersion;
+			}
 			// Apply Migration Chain
 			final int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
 
