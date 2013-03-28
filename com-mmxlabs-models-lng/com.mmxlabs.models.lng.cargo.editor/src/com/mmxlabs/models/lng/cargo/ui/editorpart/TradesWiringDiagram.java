@@ -314,25 +314,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		}
 		onMouseup();
 
-		if (e.button == 3) {
-			final List<Float> positions = getTerminalPositions(rootData);
-
-			int terminal = 0;
-
-			for (final float y : positions) {
-				if (e.y >= (y - terminalSize / 2) && e.y <= (y + terminalSize / 2)) {
-					break;
-				}
-				terminal++;
-			}
-
-			RowData rowData = rootData.getRows().get(terminal);
-			final boolean draggedToNowhere = terminal >= positions.size() || !(draggingFromLeft ? rowData.dischargeSlot != null : rowData.loadSlot != null);
-
-			return;
-
-		}
-
 		// if we are dragging, awesome, we have finished.
 		if (dragging) {
 			dragging = false;
