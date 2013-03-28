@@ -35,6 +35,7 @@ public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRender
 		return wrapped.render(object);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Comparable getComparable(final Object object) {
 		return wrapped.getComparable(object);
