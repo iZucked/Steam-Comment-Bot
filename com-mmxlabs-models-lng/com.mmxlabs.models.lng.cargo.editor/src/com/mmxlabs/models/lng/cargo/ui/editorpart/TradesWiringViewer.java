@@ -91,9 +91,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootD
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
-import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -110,6 +108,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
@@ -536,42 +535,42 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final CargoPackage pkg = CargoPackage.eINSTANCE;
 		final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
-//
-//		final GridViewerColumn state = getScenarioViewer().addSimpleColumn("", false);
-//		state.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
-//
-//			@Override
-//			public String getText(final Object element) {
-//				return null;
-//			}
-//
-//			@Override
-//			public Image getImage(final Object element) {
-//
-//				if (element instanceof RowData) {
-//					final RowData rowDataItem = (RowData) element;
-//					if (rowDataItem.cargo != null) {
-//						final Cargo cargo = rowDataItem.cargo;
-//						final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
-//						final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
-//						if (assignment != null && assignment.isLocked()) {
-//							return lockedImage;
-//						} else if (!cargo.isAllowRewiring()) {
-//							return wiredImage;
-//
-//						}
-//					}
-//				}
-//
-//				return super.getImage(element);
-//			}
-//		});
+		//
+		// final GridViewerColumn state = getScenarioViewer().addSimpleColumn("", false);
+		// state.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
+		//
+		// @Override
+		// public String getText(final Object element) {
+		// return null;
+		// }
+		//
+		// @Override
+		// public Image getImage(final Object element) {
+		//
+		// if (element instanceof RowData) {
+		// final RowData rowDataItem = (RowData) element;
+		// if (rowDataItem.cargo != null) {
+		// final Cargo cargo = rowDataItem.cargo;
+		// final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
+		// final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
+		// if (assignment != null && assignment.isLocked()) {
+		// return lockedImage;
+		// } else if (!cargo.isAllowRewiring()) {
+		// return wiredImage;
+		//
+		// }
+		// }
+		// }
+		//
+		// return super.getImage(element);
+		// }
+		// });
 
 		addTradesColumn(loadColumns, "L-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Buy Price",
-				new ReadOnlyManipulator<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain)), new RowDataEMFPath(
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain)), new RowDataEMFPath(
 						Type.LOAD_ALLOCATION, true));
 		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
 
@@ -580,7 +579,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(loadColumns, "Sell Price",
-				new ReadOnlyManipulator<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain)), new RowDataEMFPath(
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain)), new RowDataEMFPath(
 						Type.DISCHARGE_ALLOCATION, true));
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
@@ -1296,7 +1295,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		@Override
 		public void run() {
 
-			final DetailCompositeDialog dcd = new DetailCompositeDialog(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
 			try {
 				scenarioEditingLocation.getEditorLock().claim();
 				scenarioEditingLocation.setDisableUpdates(true);
@@ -1330,7 +1328,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 
 				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-				dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(cargo), scenarioEditingLocation.isLocked());
 			} finally {
 				scenarioEditingLocation.setDisableUpdates(false);
 				scenarioEditingLocation.getEditorLock().release();
