@@ -1,8 +1,7 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +22,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -42,8 +45,8 @@ public class CargoModelRowTransformer {
 	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
-	public RootData transform(final InputModel inputModel, final CargoModel cargoModel, final Map<Object, IStatus> validationInfo) {
-		return transform(inputModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), validationInfo);
+	public RootData transform(final InputModel inputModel, final CargoModel cargoModel, ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo) {
+		return transform(inputModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo);
 
 	}
 
@@ -57,10 +60,21 @@ public class CargoModelRowTransformer {
 	 * @param validationInfo
 	 * @return
 	 */
-	public RootData transform(final InputModel inputModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots,
+	public RootData transform(final InputModel inputModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, Schedule schedule,
 			final Map<Object, IStatus> validationInfo) {
 
 		final RootData root = new RootData();
+
+		Map<Cargo, CargoAllocation> cargoAllocationMap = new HashMap<Cargo, CargoAllocation>();
+		Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<Slot, SlotAllocation>();
+		if (schedule != null) {
+			for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+				cargoAllocationMap.put(cargoAllocation.getInputCargo(), cargoAllocation);
+			}
+			for (SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
+				slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
+			}
+		}
 
 		// Loop through all cargoes first, generating full cargo row items
 		for (final Cargo cargo : cargoes) {
@@ -182,6 +196,11 @@ public class CargoModelRowTransformer {
 			root.getLoadSlots().add(rd.getLoadSlot());
 			root.getDischargeSlots().add(rd.getDischargeSlot());
 
+			// Hook up allocation objects
+			rd.cargoAllocation = cargoAllocationMap.get(rd.cargo);
+			rd.loadAllocation = slotAllocationMap.get(rd.loadSlot);
+			rd.dischargeAllocation = slotAllocationMap.get(rd.dischargeSlot);
+
 		}
 
 		return root;
@@ -195,8 +214,12 @@ public class CargoModelRowTransformer {
 
 		GroupData group;
 		Cargo cargo;
+		CargoAllocation cargoAllocation;
 		LoadSlot loadSlot;
+		SlotAllocation loadAllocation;
 		DischargeSlot dischargeSlot;
+		SlotAllocation dischargeAllocation;
+
 		ElementAssignment elementAssignment;
 
 		// GUI STATE
@@ -367,6 +390,12 @@ public class CargoModelRowTransformer {
 					return super.get(((RowData) root).dischargeSlot, depth);
 				case LOAD:
 					return super.get(((RowData) root).loadSlot, depth);
+				case CARGO_ALLOCATION:
+					return super.get(((RowData) root).cargoAllocation, depth);
+				case DISCHARGE_ALLOCATION:
+					return super.get(((RowData) root).dischargeAllocation, depth);
+				case LOAD_ALLOCATION:
+					return super.get(((RowData) root).loadAllocation, depth);
 				}
 			}
 			return super.get(root, depth);
@@ -374,7 +403,7 @@ public class CargoModelRowTransformer {
 	}
 
 	public enum Type {
-		CARGO, LOAD, DISCHARGE, ASSIGNMENT
+		CARGO, LOAD, DISCHARGE, ASSIGNMENT, CARGO_ALLOCATION, LOAD_ALLOCATION, DISCHARGE_ALLOCATION
 	}
 
 	/**

@@ -95,6 +95,8 @@ import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -245,8 +247,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
 						final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
+						final ScheduleModel scheduleModel = scenarioEditingLocation.getRootObject().getSubModel(ScheduleModel.class);
 
-						final RootData root = setCargoes(inputModel, cargoModel);
+						final RootData root = setCargoes(inputModel, cargoModel, scheduleModel);
 
 						TradesWiringViewer.this.rootData = root;
 
@@ -533,51 +536,77 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final CargoPackage pkg = CargoPackage.eINSTANCE;
 		final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
-
-		final GridViewerColumn state = getScenarioViewer().addSimpleColumn("", false);
-		state.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
-
-			@Override
-			public String getText(final Object element) {
-				return null;
-			}
-
-			@Override
-			public Image getImage(final Object element) {
-
-				if (element instanceof RowData) {
-					final RowData rowDataItem = (RowData) element;
-					if (rowDataItem.cargo != null) {
-						final Cargo cargo = rowDataItem.cargo;
-						final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
-						final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
-						if (assignment != null && assignment.isLocked()) {
-							return lockedImage;
-						} else if (!cargo.isAllowRewiring()) {
-							return wiredImage;
-
-						}
-					}
-				}
-
-				return super.getImage(element);
-			}
-		});
+//
+//		final GridViewerColumn state = getScenarioViewer().addSimpleColumn("", false);
+//		state.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
+//
+//			@Override
+//			public String getText(final Object element) {
+//				return null;
+//			}
+//
+//			@Override
+//			public Image getImage(final Object element) {
+//
+//				if (element instanceof RowData) {
+//					final RowData rowDataItem = (RowData) element;
+//					if (rowDataItem.cargo != null) {
+//						final Cargo cargo = rowDataItem.cargo;
+//						final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
+//						final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
+//						if (assignment != null && assignment.isLocked()) {
+//							return lockedImage;
+//						} else if (!cargo.isAllowRewiring()) {
+//							return wiredImage;
+//
+//						}
+//					}
+//				}
+//
+//				return super.getImage(element);
+//			}
+//		});
 
 		addTradesColumn(loadColumns, "L-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
+		addTradesColumn(loadColumns, "Buy Price",
+				new ReadOnlyManipulator<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain)), new RowDataEMFPath(
+						Type.LOAD_ALLOCATION, true));
 		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
 		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		addTradesColumn(loadColumns, "Sell Price",
+				new ReadOnlyManipulator<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain)), new RowDataEMFPath(
+						Type.DISCHARGE_ALLOCATION, true));
+
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		{
+			AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
+			RowDataEMFPath assignmentPath = new RowDataEMFPath(Type.CARGO, true);
+			GridViewerColumn assignmentColumn = addTradesColumn("Assignment", assignmentManipulator, assignmentPath);
+			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
+				@Override
+				public Image getImage(Object element) {
 
-		addTradesColumn("Assignment", new AssignmentManipulator(scenarioEditingLocation), new RowDataEMFPath(Type.CARGO, true));
+					if (element instanceof RowData) {
+						final RowData rowDataItem = (RowData) element;
+						if (rowDataItem.elementAssignment != null) {
+							if (rowDataItem.elementAssignment != null && rowDataItem.elementAssignment.isLocked()) {
+								return lockedImage;
+							}
+						}
+					}
 
+					return super.getImage(element);
+
+				}
+			});
+		}
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override
@@ -682,9 +711,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * 
 	 * @param newCargoes
 	 */
-	public RootData setCargoes(final InputModel inputModel, final CargoModel cargoModel) {
+	public RootData setCargoes(final InputModel inputModel, final CargoModel cargoModel, ScheduleModel scheduleModel) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
-		return transformer.transform(inputModel, cargoModel, getScenarioViewer().getValidationSupport().getValidationErrors());
+		return transformer.transform(inputModel, cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors());
 	}
 
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack) {
