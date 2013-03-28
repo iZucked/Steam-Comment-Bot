@@ -62,13 +62,6 @@ public class CargoEditorMenuHelper {
 		@Override
 		public void run() {
 
-			if (target instanceof Cargo) {
-				if (((Cargo) target).getSlots().size() > 2) {
-					editLDDCargo((Cargo) target);
-					return;
-				}
-			}
-
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(shell, scenarioEditingLocation.getDefaultCommandHandler());
 			try {
 				scenarioEditingLocation.getEditorLock().claim();
@@ -79,6 +72,24 @@ public class CargoEditorMenuHelper {
 				scenarioEditingLocation.setDisableUpdates(false);
 				scenarioEditingLocation.getEditorLock().release();
 			}
+		}
+	}
+
+	private final class EditLDDAction extends Action {
+		private final EObject target;
+
+		private EditLDDAction(final String text, final EObject target) {
+			super(text);
+			this.target = target;
+		}
+
+		@Override
+		public void run() {
+
+			if (target instanceof Cargo) {
+				editLDDCargo((Cargo) target);
+			}
+
 		}
 	}
 
@@ -208,6 +219,9 @@ public class CargoEditorMenuHelper {
 		newMenuManager.add(new Separator());
 		newMenuManager.add(new EditAction("Edit Slot", slot));
 		if (cargo != null) {
+			if (cargo.getSlots().size() > 2) {
+				newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
+			}
 			newMenuManager.add(new EditAction("Edit Cargo", cargo));
 		}
 	}
