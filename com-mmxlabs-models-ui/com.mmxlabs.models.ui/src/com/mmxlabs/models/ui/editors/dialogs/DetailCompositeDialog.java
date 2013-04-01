@@ -69,6 +69,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
+import com.mmxlabs.models.ui.editors.util.DialogEcoreCopier;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -129,6 +130,8 @@ public class DetailCompositeDialog extends Dialog {
 
 	private TableViewer selectionViewer;
 
+	private DialogEcoreCopier dialogEcoreCopier = new DialogEcoreCopier();
+
 	/**
 	 * Contains elements which have been removed from {@link #inputs}, which will be deleted if the dialog is OKed.
 	 */
@@ -178,13 +181,13 @@ public class DetailCompositeDialog extends Dialog {
 				index++;
 			}
 
-			final List<EObject> duplicateRange = new ArrayList<EObject>(EcoreUtil.copyAll(reducedRange));
+			final List<EObject> duplicateRange = new ArrayList<EObject>(dialogEcoreCopier.copyAll(reducedRange));
 
 			// fix crossreferences to existing duplicates
 			final TreeIterator<EObject> allDuplicates = EcoreUtil.getAllContents(duplicateRange);
-			while (allDuplicates.hasNext()) {
-				pointReferencesToExistingDuplicates(allDuplicates.next());
-			}
+			// while (allDuplicates.hasNext()) {
+			// pointReferencesToExistingDuplicates(allDuplicates.next());
+			// }
 
 			// re-insert the duplicates back into the range
 			for (final Pair<Integer, EObject> duplicated : alreadyDuplicated) {
@@ -230,6 +233,7 @@ public class DetailCompositeDialog extends Dialog {
 				}
 			}
 		}
+
 		return originalToDuplicate.get(original);
 	}
 
@@ -342,6 +346,7 @@ public class DetailCompositeDialog extends Dialog {
 		displayComposite.setEditorWrapper(copyDialogToClipboardEditorWrapper);
 
 		final EObject duplicate = getDuplicate(selection, displayComposite);
+		dialogEcoreCopier.record();
 
 		currentEditorTargets.clear();
 		final Collection<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, selection);
@@ -684,15 +689,27 @@ public class DetailCompositeDialog extends Dialog {
 			final int value = open();
 			if (value == OK) {
 				final CompoundCommand cc = new CompoundCommand();
-				// cc.append(IdentityCommand.INSTANCE);
-				for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
-					final EObject original = entry.getKey();
-					final EObject duplicate = entry.getValue();
-					if (!original.equals(duplicate)) {
-						final Command makeEqualizer = makeEqualizer(original, duplicate);
-						if (makeEqualizer != null) {
-							cc.append(makeEqualizer);
-						}
+				// // cc.append(IdentityCommand.INSTANCE);
+				// for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
+				// final EObject original = entry.getKey();
+				// final EObject duplicate = entry.getValue();
+				// if (!original.equals(duplicate)) {
+				// final Command makeEqualizer = makeEqualizer(original, duplicate);
+				// if (makeEqualizer != null) {
+				// cc.append(makeEqualizer);
+				// }
+				// }
+				// }
+
+				final EditingDomain editingDomain = commandHandler.getEditingDomain();
+				if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+					((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
+				}
+				try {
+					cc.append(dialogEcoreCopier.createEditCommand());
+				} finally {
+					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+						((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
 					}
 				}
 
@@ -724,9 +741,9 @@ public class DetailCompositeDialog extends Dialog {
 					}
 				}
 
-				for (final EObject duplicate : duplicateToOriginal.keySet()) {
-					clearReferences(duplicate);
-				}
+				// for (final EObject duplicate : duplicateToOriginal.keySet()) {
+				// clearReferences(duplicate);
+				// }
 			}
 			return value;
 		} finally {
@@ -786,14 +803,26 @@ public class DetailCompositeDialog extends Dialog {
 					}
 
 				} else {
-					correctCrossReferences();
+					// correctCrossReferences();
 
 					final CompoundCommand cc = new CompoundCommand();
-					for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
-						final EObject original = entry.getKey();
-						final EObject duplicate = entry.getValue();
-						if (!original.equals(duplicate)) {
-							cc.append(makeEqualizer(original, duplicate));
+					// for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
+					// final EObject original = entry.getKey();
+					// final EObject duplicate = entry.getValue();
+					// if (!original.equals(duplicate)) {
+					// cc.append(makeEqualizer(original, duplicate));
+					// }
+					// }
+
+					final EditingDomain editingDomain = commandHandler.getEditingDomain();
+					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+						((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
+					}
+					try {
+						cc.append(dialogEcoreCopier.createEditCommand());
+					} finally {
+						if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+							((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
 						}
 					}
 
@@ -812,9 +841,9 @@ public class DetailCompositeDialog extends Dialog {
 					}
 				}
 			} else {
-				for (final EObject duplicate : duplicateToOriginal.keySet()) {
-					clearReferences(duplicate);
-				}
+				// for (final EObject duplicate : duplicateToOriginal.keySet()) {
+				// clearReferences(duplicate);
+				// }
 			}
 			return value;
 		} finally {
@@ -838,159 +867,168 @@ public class DetailCompositeDialog extends Dialog {
 		}
 	}
 
-	/**
-	 * If we are modifying duplicates and then applying the change back to the originals, any internal cross-references will need adjusting back to the originals or the refs won't be valid.
-	 * 
-	 * This method takes all non-containment references between duplicates and fixes them
-	 */
-	private void correctCrossReferences() {
-		final Map<EObject, Collection<Setting>> xrefs = EcoreUtil.CrossReferencer.find(duplicateToOriginal.keySet());
-
-		for (final Map.Entry<EObject, Collection<Setting>> xref : xrefs.entrySet()) {
-			final EObject target = xref.getKey();
-			final EObject original = duplicateToOriginal.get(target);
-			if (original == null)
-				continue;
-			final Collection<Setting> refs = xref.getValue();
-			for (final Setting setting : refs) {
-				final EStructuralFeature feature = setting.getEStructuralFeature();
-				if (feature instanceof EReference) {
-					final EReference reference = (EReference) feature;
-					if (reference.isContainment() == false) {
-						if (reference.isMany()) {
-							final List l = (List) setting.getEObject().eGet(reference);
-							int x;
-							while ((x = l.indexOf(target)) != -1) {
-								l.set(x, original);
-							}
-						} else {
-							setting.getEObject().eSet(reference, original);
-						}
-					}
-				}
-			}
-		}
-	}
+	// /**
+	// * If we are modifying duplicates and then applying the change back to the originals, any internal cross-references will need adjusting back to the originals or the refs won't be valid.
+	// *
+	// * This method takes all non-containment references between duplicates and fixes them
+	// */
+	// private void correctCrossReferences() {
+	// final Map<EObject, Collection<Setting>> xrefs = EcoreUtil.CrossReferencer.find(duplicateToOriginal.keySet());
+	//
+	// for (final Map.Entry<EObject, Collection<Setting>> xref : xrefs.entrySet()) {
+	// final EObject target = xref.getKey();
+	// final EObject original = duplicateToOriginal.get(target);
+	// if (original == null)
+	// continue;
+	// final Collection<Setting> refs = xref.getValue();
+	// for (final Setting setting : refs) {
+	// final EStructuralFeature feature = setting.getEStructuralFeature();
+	// if (feature instanceof EReference) {
+	// final EReference reference = (EReference) feature;
+	// if (reference.isContainment() == false) {
+	// if (reference.isMany()) {
+	// final List l = (List) setting.getEObject().eGet(reference);
+	// int x;
+	// while ((x = l.indexOf(target)) != -1) {
+	// l.set(x, original);
+	// }
+	// } else {
+	// setting.getEObject().eSet(reference, original);
+	// }
+	// }
+	// }
+	// }
+	// }
+	// }
 
 	private void executeFinalCommand(final CompoundCommand cc) {
 		commandHandler.getEditingDomain().getCommandStack().execute(cc);
 	}
 
-	/**
-	 * Make a command to set the fields on the first argument to be equal to the fields on the second argument. Presumes both arguments have the same eclass
-	 * 
-	 * TODO this may be a bit slow, as it just checks at the toplevel; to make it faster, we need to establish a mapping between all objects and their duplicates, including contained objects, and then
-	 * use the information given to the processor to only generate set commands for changed attributes.
-	 * 
-	 * This will do for now.
-	 * 
-	 * TODO fix so that references to duplicates are pointed back
-	 * 
-	 * @param eObject
-	 *            the object to be adjusted
-	 * @param eObject2
-	 *            the object from which to copy the adjustment
-	 * @return
-	 */
-	private Command makeEqualizer(final EObject original, final EObject duplicate) {
-		if (original == null && duplicate == null) {
-			return null;// IdentityCommand.INSTANCE;
-		}
-		final EditingDomain editingDomain = commandHandler.getEditingDomain();
-		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-			((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
-		}
-		try {
-			// return replaceOriginals(editingDomain, rootObject)
-			return makeEqualizer2(original, duplicate, editingDomain);
-		} finally {
-			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
-			}
-		}
-	}
+	//
+	// /**
+	// * Make a command to set the fields on the first argument to be equal to the fields on the second argument. Presumes both arguments have the same eclass
+	// *
+	// * TODO this may be a bit slow, as it just checks at the toplevel; to make it faster, we need to establish a mapping between all objects and their duplicates, including contained objects, and
+	// then
+	// * use the information given to the processor to only generate set commands for changed attributes.
+	// *
+	// * This will do for now.
+	// *
+	// * TODO fix so that references to duplicates are pointed back
+	// *
+	// * @param eObject
+	// * the object to be adjusted
+	// * @param eObject2
+	// * the object from which to copy the adjustment
+	// * @return
+	// */
+	// private Command makeEqualizer(final EObject original, final EObject duplicate) {
+	// if (original == null && duplicate == null) {
+	// return null;// IdentityCommand.INSTANCE;
+	// }
+	// final EditingDomain editingDomain = commandHandler.getEditingDomain();
+	// if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+	// ((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
+	// }
+	// try {
+	//
+	// return workingCopier.createEditCommand();
+	//
+	// // return replaceOriginals(editingDomain, rootObject)
+	// // return makeEqualizer2(original, duplicate, editingDomain);
+	// } finally {
+	// if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+	// ((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
+	// }
+	// }
+	// }
 
-	/**
-	 * Clear all the ereferences on this object and all its contents
-	 * 
-	 * used to prevent opposite references from getting set to point to duplicates after the dialog is cancelled.
-	 * 
-	 * @param duplicate
-	 */
-	private void clearReferences(final EObject duplicate) {
-		for (final EReference reference : duplicate.eClass().getEAllReferences()) {
-			if (reference.isMany()) {
-				final List l = (List) duplicate.eGet(reference);
-				l.clear();
-			} else {
-				duplicate.eSet(reference, null);
-			}
-		}
-		for (final EObject o : duplicate.eContents()) {
-			clearReferences(o);
-		}
-	}
-
-	private Command makeEqualizer2(final EObject original, final EObject duplicate, final EditingDomain editingDomain) {
-		if (original == null || duplicate == null) {
-			return null;// IdentityCommand.INSTANCE;
-		}
-		final CompoundCommand compound = new CompoundCommand();
-		// compound.append(new IdentityCommand());
-		for (final EStructuralFeature feature : original.eClass().getEAllStructuralFeatures()) {
-			// For containment references, we need to compare the contained
-			// object, rather than generate a SetCommand.
-			if (original.eClass().getEAllContainments().contains(feature)) {
-				if (feature.isMany()) {
-					// Clone the original list as it will be modified later (e.g by the duplicate object being cleaned up) causing undo() to break
-					compound.append(SetCommand.create(editingDomain, original, feature, new ArrayList<Object>((Collection<?>) duplicate.eGet(feature))));
-				} else {
-					final Command c = makeEqualizer2((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature), editingDomain);
-					if (c != null) {
-						compound.append(c);
-					}
-				}
-
-				continue;
-			}
-			// Skip items which have not changed.
-			if (Equality.isEqual(original.eGet(feature), duplicate.eGet(feature)) && (!feature.isUnsettable() || (original.eIsSet(feature) == duplicate.eIsSet(feature)))) {
-				continue;
-			}
-			// if (feature instanceof EReference && ((EReference) feature).getEOpposite()!=null) {
-			// handle opposite references
-			// these require a bit more thought than normal ones, because setting the ref on the
-			// duplicate object will have introduced a ref from the referent back to the duplicate
-
-			// once we copy the duplicate's ref onto the original, that should set up the opposite back-reference
-			// but what about the dangling opposite refs?
-
-			// why do these pose a problem anyway?
-			// } else {
-			if (feature.isMany()) {
-				final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, new ArrayList<Object>((Collection<?>) duplicate.eGet(feature)));
-				if (mas.canExecute() == false) {
-					log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
-							"Attempt to set feature which could not be set."));
-				}
-				compound.append(mas);
-			} else {
-				if (duplicateToOriginal.containsKey(duplicate.eGet(feature)))
-					continue; // do not fix references to copied items
-				if (feature.isUnsettable() && (duplicate.eIsSet(feature) == false)) {
-					compound.append(SetCommand.create(editingDomain, original, feature, SetCommand.UNSET_VALUE));
-				} else {
-					compound.append(SetCommand.create(editingDomain, original, feature, duplicate.eGet(feature)));
-				}
-			}
-		}
-		// }
-		if (!compound.isEmpty()) {
-			return compound;
-		} else {
-			return null;
-		}
-	}
+	// /**
+	// * Clear all the ereferences on this object and all its contents
+	// *
+	// * used to prevent opposite references from getting set to point to duplicates after the dialog is cancelled.
+	// *
+	// * @param duplicate
+	// */
+	// private void clearReferences(final EObject duplicate) {
+	// for (final EReference reference : duplicate.eClass().getEAllReferences()) {
+	// if (reference.isMany()) {
+	// final List l = (List) duplicate.eGet(reference);
+	// l.clear();
+	// } else {
+	// duplicate.eSet(reference, null);
+	// }
+	// }
+	// for (final EObject o : duplicate.eContents()) {
+	// clearReferences(o);
+	// }
+	// }
+	//
+	// private Command makeEqualizer2(final EObject original, final EObject duplicate, final EditingDomain editingDomain) {
+	// if (original == null || duplicate == null) {
+	// return null;// IdentityCommand.INSTANCE;
+	// }
+	// final CompoundCommand compound = new CompoundCommand();
+	// // compound.append(new IdentityCommand());
+	// for (final EStructuralFeature feature : original.eClass().getEAllStructuralFeatures()) {
+	// // For containment references, we need to compare the contained
+	// // object, rather than generate a SetCommand.
+	// if (original.eClass().getEAllContainments().contains(feature)) {
+	// if (feature.isMany()) {
+	// // Clone the original list as it will be modified later (e.g by the duplicate object being cleaned up) causing undo() to break
+	// compound.append(SetCommand.create(editingDomain, original, feature, new ArrayList<Object>((Collection<?>) duplicate.eGet(feature))));
+	// } else {
+	// final Command c = makeEqualizer2((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature), editingDomain);
+	// if (c != null) {
+	// compound.append(c);
+	// }
+	// }
+	//
+	// continue;
+	// }
+	// // Skip items which have not changed.
+	// if (Equality.isEqual(original.eGet(feature), duplicate.eGet(feature)) && (!feature.isUnsettable() || (original.eIsSet(feature) == duplicate.eIsSet(feature)))) {
+	// continue;
+	// }
+	// if (feature instanceof EReference && ((EReference) feature).getEOpposite() != null) {
+	// // handle opposite references
+	// // these require a bit more thought than normal ones, because setting the ref on the
+	// // duplicate object will have introduced a ref from the referent back to the duplicate
+	//
+	// // once we copy the duplicate's ref onto the original, that should set up the opposite back-reference
+	// // but what about the dangling opposite refs?
+	//
+	// // why do these pose a problem anyway?
+	//
+	//
+	// // worse for a many relationship
+	//
+	//
+	// } else if (feature.isMany()) {
+	// // final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, new ArrayList<Object>((Collection<?>) duplicate.eGet(feature)), duplicateToOriginal);
+	// // if (mas.canExecute() == false) {
+	// // log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
+	// // "Attempt to set feature which could not be set."));
+	// // }
+	// // compound.append(mas);
+	// } else {
+	// if (duplicateToOriginal.containsKey(duplicate.eGet(feature)))
+	// continue; // do not fix references to copied items
+	// if (feature.isUnsettable() && (duplicate.eIsSet(feature) == false)) {
+	// compound.append(SetCommand.create(editingDomain, original, feature, SetCommand.UNSET_VALUE));
+	// } else {
+	// compound.append(SetCommand.create(editingDomain, original, feature, duplicate.eGet(feature)));
+	// }
+	// }
+	// }
+	// // }
+	// if (!compound.isEmpty()) {
+	// return compound;
+	// } else {
+	// return null;
+	// }
+	// }
 
 	private void validate() {
 		final IStatus status = dialogValidationSupport.validate();
