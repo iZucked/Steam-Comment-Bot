@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.mmxlabs.com/models/ui/test/dialogecorecopier/model"
+    nsPrefix="lng.cargomodel">
+  <eClassifiers xsi:type="ecore:EClass" name="ModelRoot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="simpleObjects" upperBound="-1"
+        eType="#//SimpleObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="singleReferences" upperBound="-1"
+        eType="#//SingleReference" containment="true" eOpposite="#//SingleReference/modelRoot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="multipleReferences" upperBound="-1"
+        eType="#//MultipleReference" containment="true" eOpposite="#//MultipleReference/modelRoot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="singleContainmentReferences"
+        upperBound="-1" eType="#//SingleContainmentReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="multipleContainmentReferences"
+        upperBound="-1" eType="#//MultipleContainmentReference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SingleReference">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="multipleReference" eType="#//MultipleReference"
+        eOpposite="#//MultipleReference/singleReferences"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelRoot" eType="#//ModelRoot"
+        eOpposite="#//ModelRoot/singleReferences"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultipleReference">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="singleReferences" upperBound="-1"
+        eType="#//SingleReference" eOpposite="#//SingleReference/multipleReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelRoot" eType="#//ModelRoot"
+        eOpposite="#//ModelRoot/multipleReferences"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SingleContainmentReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MultipleContainmentReference"/>
+</ecore:EPackage>

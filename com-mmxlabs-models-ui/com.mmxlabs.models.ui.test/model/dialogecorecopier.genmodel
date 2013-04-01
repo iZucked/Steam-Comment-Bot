@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.ui.test/src" modelPluginID="com.mmxlabs.models.ui.test"
+    modelName="Dialogecorecopier" importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0"
+    copyrightFields="false">
+  <foreignModel>dialogecorecopier.ecore</foreignModel>
+  <genPackages prefix="Model" basePackage="com.mmxlabs.models.ui.test" disposableProviderFactory="true"
+      ecorePackage="dialogecorecopier.ecore#/">
+    <genClasses ecoreClass="dialogecorecopier.ecore#//ModelRoot">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dialogecorecopier.ecore#//ModelRoot/simpleObjects"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dialogecorecopier.ecore#//ModelRoot/singleReferences"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dialogecorecopier.ecore#//ModelRoot/multipleReferences"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dialogecorecopier.ecore#//ModelRoot/singleContainmentReferences"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dialogecorecopier.ecore#//ModelRoot/multipleContainmentReferences"/>
+    </genClasses>
+    <genClasses ecoreClass="dialogecorecopier.ecore#//SimpleObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dialogecorecopier.ecore#//SimpleObject/attribute"/>
+    </genClasses>
+    <genClasses ecoreClass="dialogecorecopier.ecore#//SingleReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dialogecorecopier.ecore#//SingleReference/multipleReference"/>
+    </genClasses>
+    <genClasses ecoreClass="dialogecorecopier.ecore#//MultipleReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dialogecorecopier.ecore#//MultipleReference/singleReferences"/>
+    </genClasses>
+    <genClasses ecoreClass="dialogecorecopier.ecore#//SingleContainmentReference"/>
+    <genClasses ecoreClass="dialogecorecopier.ecore#//MultipleContainmentReference"/>
+  </genPackages>
+</genmodel:GenModel>

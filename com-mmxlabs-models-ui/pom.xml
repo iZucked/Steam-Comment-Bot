@@ -29,6 +29,7 @@
 	<modules>
 		<module>target-definition</module>
 		<module>com.mmxlabs.models.ui</module>
+		<module>com.mmxlabs.models.ui.test</module>
 		<module>com.mmxlabs.models.ui.validation</module>
 		<module>com.mmxlabs.models.ui.tabular</module>
 		<module>com.mmxlabs.models.util</module>
