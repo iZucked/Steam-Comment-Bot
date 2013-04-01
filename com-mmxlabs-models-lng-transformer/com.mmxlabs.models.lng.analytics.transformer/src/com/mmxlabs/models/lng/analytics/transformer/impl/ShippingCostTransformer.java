@@ -453,7 +453,11 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 								final int dischargeVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getDischargeVolumeInM3());
 								extraData.addExtraData("volume", "Discharge Volume", dischargeVolume, ExtraDataFormatType.INTEGER);
 
-								final int cargoCVValue = currentAllocationAnnotation.getLoadOption().getCargoCVValue();
+								
+								// for now, only handle single load/discharge case
+								assert(currentAllocationAnnotation.getSlots().size() == 2);
+								final ILoadOption loadOption = (ILoadOption) currentAllocationAnnotation.getSlots().get(0);
+								final int cargoCVValue = loadOption.getCargoCVValue();
 								final long dischargeVolumeInMMBTu = OptimiserUnitConvertor.convertToExternalVolume(Calculator.convertM3ToMMBTu(currentAllocationAnnotation.getDischargeVolumeInM3(),
 										cargoCVValue));
 								totalDischargeVolumeInMMBTu += dischargeVolumeInMMBTu;
