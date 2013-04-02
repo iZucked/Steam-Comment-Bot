@@ -93,7 +93,7 @@ public class ScheduleCalculator {
 
 		// Execute custom logic to manipulate the schedule and choices
 		if (breakEvenEvaluator != null) {
-			// breakEvenEvaluator.processSchedule(scheduledSequences);
+//			 breakEvenEvaluator.processSchedule(scheduledSequences);
 		}
 
 		if (generatedCharterOutEvaluator != null) {
@@ -147,8 +147,8 @@ public class ScheduleCalculator {
 			return false;
 		}
 
-		if (allocation.getSlots().size() == portDetails.size()) {
-			for (int i = 0; i < portDetails.size(); ++i) {
+		if (allocation.getSlots().size() == portDetails.size() - 1) {
+			for (int i = 0; i < portDetails.size() - 1; ++i) {
 				if (portDetails.get(i).getOptions().getPortSlot() != allocation.getSlots().get(i)) {
 					return false;
 				}
