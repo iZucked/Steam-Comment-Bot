@@ -112,19 +112,28 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			eAllocation.getSlotAllocations().add(slotAllocation);
 			
 			// for now, only handle single load/discharge case
-			assert(allocation.getSlots().size() == 2);
-			final ILoadOption loadSlot = (ILoadOption) allocation.getSlots().get(0);
-			final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
+//			assert(allocation.getSlots().size() == 2);
+//			final ILoadOption loadSlot = (ILoadOption) allocation.getSlots().get(0);
+//			final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
 			if (slot instanceof ILoadOption) {
 				//final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), loadSlot.getCargoCVValue());
+				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), ((ILoadOption) slot).getCargoCVValue());
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(loadSlot)));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			} else {
+				int cargoCV = -1;
+				for (IPortSlot sSlot : allocation.getSlots()) {
+					if (sSlot instanceof ILoadOption) {
+						cargoCV  = ((ILoadOption) sSlot).getCargoCVValue();
+					}
+				}
+				if (cargoCV == -1) {
+					throw new IllegalStateException("Discharge Slot without a Load Slot");
+				}
 				//final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), loadSlot.getCargoCVValue());
+				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), cargoCV);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(dischargeSlot)));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			}
 
 			sv.setSlotAllocation(slotAllocation);
