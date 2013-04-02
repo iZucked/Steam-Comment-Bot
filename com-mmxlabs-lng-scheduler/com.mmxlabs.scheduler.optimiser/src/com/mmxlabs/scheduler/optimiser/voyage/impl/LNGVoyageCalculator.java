@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -782,6 +781,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// If a minimum heel is specified, this is the amount which has to remain in the tanks after 
 			// travel on NBO. 
 			if (boiloffWasUsed && vesselClass.getMinHeel() > 0) {
+				// Assert added for null analysis friendliness
+				assert lastBoiloffElement != null;
 				//
 				final long minHeelInM3 = vesselClass.getMinHeel();
 				// There are two states;
