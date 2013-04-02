@@ -83,8 +83,9 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	
 	final ArrayList<VoyagePlan> voyagePlans = new ArrayList<VoyagePlan>();
 
-	final ArrayList<Integer> loadPricesPerM3 = new ArrayList<Integer>();
-	final ArrayList<Integer> dischargePricesPerM3 = new ArrayList<Integer>();
+	final ArrayList<int []> slotPricesPerM3 = new ArrayList<int []>();
+	//final ArrayList<Integer> loadPricesPerM3 = new ArrayList<Integer>();
+	//final ArrayList<Integer> dischargePricesPerM3 = new ArrayList<Integer>();
 
 	int cargoCount;
 
@@ -138,8 +139,9 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		forcedLoadVolumeInM3.clear();
 		remainingHeelVolumeInM3.clear();
 
-		loadPricesPerM3.clear();
-		dischargePricesPerM3.clear();
+		//loadPricesPerM3.clear();
+		//dischargePricesPerM3.clear();
+		slotPricesPerM3.clear();
 		voyagePlans.clear();
 	}
 
@@ -420,8 +422,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		final int dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBtu, cargoCVValue);
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
-		loadPricesPerM3.add(loadPricePerM3);
-		dischargePricesPerM3.add(dischargePricePerM3);
+		final int [] prices = { loadPricePerM3, dischargePricePerM3 };
+		slotPricesPerM3.add(prices);
+		//loadPricesPerM3.add(loadPricePerM3);
+		//dischargePricesPerM3.add(dischargePricePerM3);
 
 		this.unitPricesPerM3.add(dischargePricePerM3 - loadPricePerM3);
 
@@ -493,8 +497,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, dischargePricePerMMBTu, loadVolumeInM3, null);
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
-		loadPricesPerM3.add(loadPricePerM3);
-		dischargePricesPerM3.add(dischargePricePerM3);
+		final int [] prices = { loadPricePerM3, dischargePricePerM3 };
+		slotPricesPerM3.add(prices);
+		//loadPricesPerM3.add(loadPricePerM3);
+		//dischargePricesPerM3.add(dischargePricePerM3);
 
 		this.unitPricesPerM3.add(dischargePricePerM3 - loadPricePerM3);
 
@@ -574,13 +580,18 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 						annotation.setFuelVolumeInM3(forcedLoadVolumeInM3.get(allocationIndex));
 						annotation.setRemainingHeelVolumeInM3(remainingHeelVolumeInM3.get(allocationIndex));
-
+					
 						// TODO recompute load price here; this is not necessarily right
-						annotation.setSlotPricePerM3(loadSlot, loadPricesPerM3.get(allocationIndex));
-						annotation.setSlotPricePerM3(dischargeSlot, dischargePricesPerM3.get(allocationIndex));
+						int [] prices = slotPricesPerM3.get(allocationIndex);
+						for (int i = 0; i < slots.length; i++) {
+							annotation.setSlotPricePerM3(slots[i], prices[i]);							
+							annotation.setSlotTime(slots[i], slotTimes.get(slots[i]));
+						}
+						//annotation.setSlotPricePerM3(loadSlot, loadPricesPerM3.get(allocationIndex));
+						//annotation.setSlotPricePerM3(dischargeSlot, dischargePricesPerM3.get(allocationIndex));
 
-						annotation.setSlotTime(loadSlot, slotTimes.get(loadSlot));
-						annotation.setSlotTime(dischargeSlot, slotTimes.get(dischargeSlot));
+						//annotation.setSlotTime(loadSlot, slotTimes.get(loadSlot));
+						//annotation.setSlotTime(dischargeSlot, slotTimes.get(dischargeSlot));
 
 						annotation.setSlotVolumeInM3(dischargeSlot, allocation[allocationIndex++]);
 						//annotation.setDischargeVolumeInM3(allocation[allocationIndex++]);
