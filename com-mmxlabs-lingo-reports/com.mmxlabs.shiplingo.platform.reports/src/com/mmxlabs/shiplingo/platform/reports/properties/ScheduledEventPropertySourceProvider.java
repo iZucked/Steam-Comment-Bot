@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
@@ -50,7 +51,10 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 			return new EventGroupPropertySource(event);
 		} else if (object instanceof CargoAllocation) {
 			final CargoAllocation alloc = (CargoAllocation) object;
-			return new EventGroupPropertySource(alloc.getLoadAllocation().getSlotVisit());
+			final EList<SlotAllocation> slotAllocations = alloc.getSlotAllocations();
+			if (!slotAllocations.isEmpty()) {
+				return new EventGroupPropertySource(slotAllocations.get(0).getSlotVisit());
+			}
 		} else if (object instanceof SlotAllocation) {
 			final SlotAllocation alloc = (SlotAllocation) object;
 			return new EventGroupPropertySource(alloc.getSlotVisit());
