@@ -85,7 +85,7 @@ public class CargoModelRowTransformer {
 			// Build up list of slots assigned to cargo, sorting into loads and discharges
 			final List<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
 			final List<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
-			for (final Object slot : cargo.getSlots()) {
+			for (final Object slot : cargo.getSortedSlots()) {
 				if (slot instanceof LoadSlot) {
 					loadSlots.add((LoadSlot) slot);
 				} else if (slot instanceof DischargeSlot) {
