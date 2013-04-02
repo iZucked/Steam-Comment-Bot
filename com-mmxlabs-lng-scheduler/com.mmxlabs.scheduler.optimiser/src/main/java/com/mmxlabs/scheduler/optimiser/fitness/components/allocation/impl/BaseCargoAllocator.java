@@ -179,7 +179,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			ArrayList<VoyageDetails> voyages = new ArrayList<VoyageDetails>();
 			IPortSlot lastSlot = null;
 
-			boolean planJustBroken = false;
+			//boolean planJustBroken = false;
 
 			while (planIterator.hasNextObject()) {
 				final Object object;
@@ -195,8 +195,8 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 					
 					boolean expectBreak = !(slot instanceof IDischargeOption || ports.isEmpty());
 					
-					assert(expectBreak == planJustBroken);
-					planJustBroken = false;
+					//assert(expectBreak == planJustBroken);
+					//planJustBroken = false;
 					
 					if (expectBreak) {
 						addCargoAndClearLists(lastPlan, vessel, ports, voyages, slotTimes);
@@ -231,7 +231,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 						
 						lastPlan = plan;
 						
-						planJustBroken = true;
+						//planJustBroken = true;
 					}
 				}
 			}
@@ -243,209 +243,13 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			}
 			
 			if (ports.size() > 2) {
-				assert(planJustBroken);
+				//assert(planJustBroken);
 				addCargoAndClearLists(lastPlan, vessel, ports, voyages, slotTimes);
 			}
 
 		}
 
 		
-		solve();
-		final Map<VoyagePlan, IAllocationAnnotation> result = new HashMap<VoyagePlan, IAllocationAnnotation>();
-		for (final Pair<VoyagePlan, IAllocationAnnotation> p : getAllocations()) {
-			result.put(p.getFirst(), p.getSecond());
-		}
-		return result;
-	}
-
-	public Map<VoyagePlan, IAllocationAnnotation> newAllocate(final ScheduledSequences sequences) {
-		reset();
-
-		final VoyagePlanIterator planIterator = voyagePlanIteratorProvider.get();
-		for (final ScheduledSequence sequence : sequences) {
-			planIterator.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getArrivalTimes());
-			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
-
-			PortDetails loadDetails = null;
-			PortDetails dischargeDetails = null;
-			IPortSlot lastSlot = null;
-			VoyageDetails ladenVoyage = null;
-			VoyageDetails ballastVoyage = null;
-			VoyagePlan plan = null;
-
-			int loadTime = 0, dischargeTime = 0;
-			
-			ArrayList<Integer> slotTimes = new ArrayList<Integer>();
-			ArrayList<PortDetails> slots = new ArrayList<PortDetails>();
-			ArrayList<VoyageDetails> voyages = new ArrayList<VoyageDetails>();
-
-			while (planIterator.hasNextObject()) {
-				final Object object;
-				if (planIterator.nextObjectIsStartOfPlan()) {
-					object = planIterator.nextObject();
-					plan = planIterator.getCurrentPlan();
-				} else {
-					object = planIterator.nextObject();
-				}
-				if (object instanceof PortDetails) {
-					final PortDetails pd = (PortDetails) object;
-					final IPortSlot slot = pd.getOptions().getPortSlot();
-					
-					boolean breakPlan = !(slot instanceof IDischargeOption || slots.isEmpty());
-					
-					if (breakPlan) {
-						assert plan != null;
-						
-						PortDetails [] portDetails = slots.toArray(new PortDetails[0]);
-						VoyageDetails [] voyageDetails = voyages.toArray(new VoyageDetails[0]);
-						Integer [] times = slotTimes.toArray(new Integer[0]);
-
-						addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
-						//addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
-
-						voyagePlans.add(plan);
-						slots.clear();
-						voyages.clear();
-						slotTimes.clear();
-						loadDetails = dischargeDetails = null;
-						
-					}
-					
-					if (slot instanceof ILoadOption || slot instanceof IDischargeOption) {
-						if (slot instanceof ILoadOption) {
-							loadDetails = pd;
-						} 
-						else {
-							dischargeDetails = pd;
-						}
-						slots.add(pd);
-						slotTimes.add(planIterator.getCurrentTime());
-					}										
-					
-					lastSlot = slot;
-					
-					
-				} else if (object instanceof VoyageDetails) {
-					if (lastSlot instanceof ILoadOption || lastSlot instanceof IDischargeOption) {
-						voyages.add((VoyageDetails) object);
-					}
-					/*
-					if ((dischargeDetails == null) && (loadDetails != null)) {
-						ladenVoyage = (VoyageDetails) object;
-					} else if ((dischargeDetails != null) && (loadDetails != null)) {
-						ballastVoyage = (VoyageDetails) object;
-						assert plan != null;
-						
-						PortDetails [] portDetails = { loadDetails, dischargeDetails };
-						VoyageDetails [] voyageDetails = { ladenVoyage, ballastVoyage };
-						int [] times = { loadTime, dischargeTime };
-
-						addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
-						//addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
-
-						voyagePlans.add(plan);
-						loadDetails = null;
-						dischargeDetails = null;
-					}
-					*/
-				}
-			}
-			if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
-				if (loadDetails != null && dischargeDetails != null) {
-					addVirtualCargo(loadDetails, dischargeDetails);
-					voyagePlans.add(plan);
-					slots.clear();
-				}
-			}
-
-			// add final plan if we didn't hit a break point
-			if (!slots.isEmpty()) {
-				PortDetails [] portDetails = slots.toArray(new PortDetails[0]);
-				VoyageDetails [] voyageDetails = voyages.toArray(new VoyageDetails[0]);
-				Integer [] times = slotTimes.toArray(new Integer[0]);
-
-				addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
-				//addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
-
-				voyagePlans.add(plan);			
-			}
-			
-		}
-		
-
-		solve();
-		final Map<VoyagePlan, IAllocationAnnotation> result = new HashMap<VoyagePlan, IAllocationAnnotation>();
-		for (final Pair<VoyagePlan, IAllocationAnnotation> p : getAllocations()) {
-			result.put(p.getFirst(), p.getSecond());
-		}
-		return result;
-	}
-
-	public Map<VoyagePlan, IAllocationAnnotation> oldAllocate(final ScheduledSequences sequences) {
-		reset();
-
-		final VoyagePlanIterator planIterator = voyagePlanIteratorProvider.get();
-		for (final ScheduledSequence sequence : sequences) {
-			planIterator.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getArrivalTimes());
-			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
-
-			PortDetails loadDetails = null;
-			PortDetails dischargeDetails = null;
-			VoyageDetails ladenVoyage = null;
-			VoyageDetails ballastVoyage = null;
-			VoyagePlan plan = null;
-
-			int loadTime = 0, dischargeTime = 0;
-
-			while (planIterator.hasNextObject()) {
-				final Object object;
-				if (planIterator.nextObjectIsStartOfPlan()) {
-					object = planIterator.nextObject();
-					plan = planIterator.getCurrentPlan();
-				} else {
-					object = planIterator.nextObject();
-				}
-				if (object instanceof PortDetails) {
-					final PortDetails pd = (PortDetails) object;
-					final IPortSlot slot = pd.getOptions().getPortSlot();					
-					
-					if (slot instanceof ILoadOption) {
-						loadDetails = pd;
-						loadTime = planIterator.getCurrentTime();
-					} else if (slot instanceof IDischargeOption) {
-						dischargeDetails = pd;
-						dischargeTime = planIterator.getCurrentTime();
-					}
-					
-				} else if (object instanceof VoyageDetails) {
-					if ((dischargeDetails == null) && (loadDetails != null)) {
-						ladenVoyage = (VoyageDetails) object;
-					} else if ((dischargeDetails != null) && (loadDetails != null)) {
-						ballastVoyage = (VoyageDetails) object;
-						assert plan != null;
-						
-						PortDetails [] portDetails = { loadDetails, dischargeDetails };
-						VoyageDetails [] voyageDetails = { ladenVoyage, ballastVoyage };
-						Integer [] times = { loadTime, dischargeTime };
-
-						addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
-						//addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
-
-						voyagePlans.add(plan);
-						loadDetails = null;
-						dischargeDetails = null;
-					}
-				}
-			}
-			if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
-				if (loadDetails != null && dischargeDetails != null) {
-					addVirtualCargo(loadDetails, dischargeDetails);
-					voyagePlans.add(plan);
-				}
-			}
-
-		}
-
 		solve();
 		final Map<VoyagePlan, IAllocationAnnotation> result = new HashMap<VoyagePlan, IAllocationAnnotation>();
 		for (final Pair<VoyagePlan, IAllocationAnnotation> p : getAllocations()) {
@@ -619,7 +423,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			addLoadDischargeCargo(plan, portDetails[0], legs[0], portDetails[1], legs[1], times[0], times[1], requiredFuelVolumeInM3, vessel);
 		}
 		else {
-			//addMultipleCargo(plan, portDetails, legs, times, requiredFuelVolumeInM3, vessel);
+			addMultipleCargo(plan, portDetails, legs, times, requiredFuelVolumeInM3, vessel);
 		}				
 	}
 	
@@ -769,7 +573,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		cargoCount++;
 	}
 
-	public void addMultipleCargo(final VoyagePlan plan, final PortDetails [] portDetails, final VoyageDetails [] legs, final int[] times,
+	public void addMultipleCargo(final VoyagePlan plan, final PortDetails [] portDetails, final VoyageDetails [] legs, final Integer[] times,
 			final long requiredFuelVolumeInM3, final IVessel vessel) {
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
@@ -939,8 +743,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			public Iterator<Pair<VoyagePlan, IAllocationAnnotation>> iterator() {
 				return new Iterator< Pair<VoyagePlan, IAllocationAnnotation>>() {
 					final Iterator<IPortSlot []> slotsIterator = listedSlots.iterator();
-					//final Iterator<ILoadOption> loadIterator = loadSlots.iterator();
-					//final Iterator<IDischargeOption> dischargeIterator = dischargeSlots.iterator();
 					final Iterator<Integer> priceIterator = unitPricesPerM3.iterator();
 					final Iterator<VoyagePlan> voyagePlansIterator = voyagePlans.iterator();
 					int allocationIndex;
@@ -957,12 +759,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 						IPortSlot[] slots = slotsIterator.next();
 						assert(slots.length == 2);
 						
-						final ILoadOption loadSlot = (ILoadOption) (slots[0]);
-						final IDischargeOption dischargeSlot = (IDischargeOption) (slots[1]);
-
 						annotation.getSlots().clear();
-						annotation.getSlots().add(loadSlot);
-						annotation.getSlots().add(dischargeSlot);
+						for (IPortSlot slot: slots) {
+							annotation.getSlots().add(slot);
+						}
 
 						annotation.setFuelVolumeInM3(forcedLoadVolumeInM3.get(allocationIndex));
 						annotation.setRemainingHeelVolumeInM3(remainingHeelVolumeInM3.get(allocationIndex));
@@ -973,14 +773,18 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 							annotation.setSlotPricePerM3(slots[i], prices[i]);							
 							annotation.setSlotTime(slots[i], slotTimes.get(slots[i]));
 						}
-						//annotation.setSlotPricePerM3(loadSlot, loadPricesPerM3.get(allocationIndex));
-						//annotation.setSlotPricePerM3(dischargeSlot, dischargePricesPerM3.get(allocationIndex));
 
-						//annotation.setSlotTime(loadSlot, slotTimes.get(loadSlot));
-						//annotation.setSlotTime(dischargeSlot, slotTimes.get(dischargeSlot));
-
-						annotation.setSlotVolumeInM3(dischargeSlot, allocation[allocationIndex++]);
-						//annotation.setDischargeVolumeInM3(allocation[allocationIndex++]);
+						// load/discharge case
+						if (slots.length == 2) {
+							annotation.setSlotVolumeInM3(slots[1], allocation[allocationIndex++]);
+						}
+						// LDD case
+						else {
+							for (int j = 1; j < slots.length; j++) {
+								IDischargeOption discharge = (IDischargeOption) slots[j];
+								annotation.setSlotVolumeInM3(discharge, discharge.getMaxDischargeVolume());
+							}
+						}
 
 						return new Pair<VoyagePlan, IAllocationAnnotation>(voyagePlansIterator.next(), annotation);
 					}

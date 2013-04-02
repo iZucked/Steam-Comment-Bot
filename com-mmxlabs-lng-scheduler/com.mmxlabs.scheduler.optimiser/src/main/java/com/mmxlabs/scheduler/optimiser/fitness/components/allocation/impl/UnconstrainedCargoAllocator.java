@@ -28,18 +28,25 @@ public class UnconstrainedCargoAllocator extends BaseCargoAllocator {
 			final long flv = forcedLoadVolumeInM3.get(i) + remainingHeelVolumeInM3.get(i);
 			
 			IPortSlot[] slots = listedSlots.get(i);
-			assert(slots.length == 2);
-			long maxLoadVolume = ((ILoadOption) (slots[0])).getMaxLoadVolume();
-			if (maxLoadVolume == 0) {
-				maxLoadVolume = vesselCapacityInM3.get(i);
+			
+			// load/discharge case
+			if (slots.length == 2) {
+				long maxLoadVolume = ((ILoadOption) (slots[0])).getMaxLoadVolume();
+				if (maxLoadVolume == 0) {
+					maxLoadVolume = vesselCapacityInM3.get(i);
+				}
+				long maxDischargeVolume = ((IDischargeOption) (slots[1])).getMaxDischargeVolume();
+				if (maxDischargeVolume == 0) {
+					maxDischargeVolume =vesselCapacityInM3.get(i) - flv;
+				}else {
+					maxDischargeVolume = Math.min(maxDischargeVolume, vesselCapacityInM3.get(i) - flv);
+				}
+				result[i] = Math.min(maxLoadVolume - flv, maxDischargeVolume);
 			}
-			long maxDischargeVolume = ((IDischargeOption) (slots[1])).getMaxDischargeVolume();
-			if (maxDischargeVolume == 0) {
-				maxDischargeVolume =vesselCapacityInM3.get(i) - flv;
-			}else {
-				maxDischargeVolume = Math.min(maxDischargeVolume, vesselCapacityInM3.get(i) - flv);
+			// multiple load/discharge case
+			else {
+				result[i] = ((IDischargeOption) (slots[1])).getMaxDischargeVolume();
 			}
-			result[i] = Math.min(maxLoadVolume - flv, maxDischargeVolume);
 		}
 		return result;
 	}
