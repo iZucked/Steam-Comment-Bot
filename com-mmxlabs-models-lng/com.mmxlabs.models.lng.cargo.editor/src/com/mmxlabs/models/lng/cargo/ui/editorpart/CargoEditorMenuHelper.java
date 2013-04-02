@@ -256,7 +256,7 @@ public class CargoEditorMenuHelper {
 
 	}
 
-	public IMenuListener createSlotsMenuListener(final List<Slot> slots, final int index) {
+	public IMenuListener createSwapSlotsMenuListener(final List<Slot> slots, final int index) {
 		final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
 		final IMenuListener l = new IMenuListener() {
 
@@ -366,9 +366,9 @@ public class CargoEditorMenuHelper {
 
 		}
 		{
-			buildSwapMenu(manager, "Slots By Contract", source, slotsByContract, false, true);
+			buildSwapMenu(manager, "Swap Slots By Contract", source, slotsByContract, false, true);
 			// buildSubMenu(manager, "Slots By Date", source, sourceIsLoad, slotsByDate, true, true);
-			buildSwapMenu(manager, "Slots By Port", source, slotsByPort, true, false);
+			buildSwapMenu(manager, "Swap Slots By Port", source, slotsByPort, true, false);
 		}
 	}
 
