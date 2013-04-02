@@ -202,8 +202,8 @@ public class DefaultScenarioCreator {
 			
 			cargo = cargoCreator.createDefaultCargo(null, ports[1], ports[2], null, duration);
 			
-			Date loadDate = cargo.getSlots().get(0).getWindowStart();
-			Date dischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+			Date loadDate = cargo.getSortedSlots().get(0).getWindowStart();
+			Date dischargeDate = cargo.getSortedSlots().get(1).getWindowEndWithSlotOrPortTime();
 			
 			Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 			Date endDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
