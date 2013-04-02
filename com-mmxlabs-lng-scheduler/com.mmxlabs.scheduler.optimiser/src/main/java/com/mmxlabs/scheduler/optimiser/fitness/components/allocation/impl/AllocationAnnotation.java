@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -20,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
  */
 public class AllocationAnnotation implements IAllocationAnnotation {
 	public class SlotAllocationAnnotation {
-		// public long volumeInM3;
+		public long volumeInM3;
 		public int pricePerM3;
 		public int startTime;
 	}
@@ -32,23 +33,9 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	private long remainingHeelVolumeInM3;
 
-	private long dischargeVolumeInM3;
+	//private long dischargeVolumeInM3;	
 
 	/*
-	@Override
-	public ILoadOption getLoadOption() {
-		assert(slots.size() == 2);
-		return (ILoadOption) slots.get(0);
-	}
-
-	@Override
-	public IDischargeOption getDischargeOption() {
-		assert(slots.size() == 2);
-		return (IDischargeOption) slots.get(1);
-	}
-	*/
-	
-
 	@Override
 	public long getDischargeVolumeInM3() {
 		return dischargeVolumeInM3;
@@ -57,6 +44,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	public void setDischargeVolumeInM3(final long dischargeVolume) {
 		this.dischargeVolumeInM3 = dischargeVolume;
 	}
+	*/
 
 	@Override
 	public long getFuelVolumeInM3() {
@@ -67,11 +55,13 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		this.fuelVolumeInM3 = fuelVolume;
 	}
 
+	/*
 	@Override
 	public long getLoadVolumeInM3() {
 		return getFuelVolumeInM3() + getDischargeVolumeInM3() + getRemainingHeelVolumeInM3();
 	}
-
+	*/
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -87,7 +77,8 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 			}
 			
 			String action = (slot instanceof IDischargeOption) ? "discharged" : (slot instanceof ILoadOption ? "loaded" : "???");
-			long volume =  (slot instanceof IDischargeOption) ? getDischargeVolumeInM3() : (slot instanceof ILoadOption ? getLoadVolumeInM3() : -1);
+			long volume = getSlotVolumeInM3(slot);
+			//long volume =  (slot instanceof IDischargeOption) ? getDischargeVolumeInM3() : (slot instanceof ILoadOption ? getLoadVolumeInM3() : -1);
 			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.startTime, action, volume));
 		}
 		
@@ -145,6 +136,32 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	
 	public void setSlotPricePerM3(IPortSlot slot, int price) {
 		getOrCreateSlotAllocation(slot).pricePerM3 = price;
+	}
+
+	@Override
+	public long getSlotVolumeInM3(IPortSlot slot) {
+		// TODO: remove this horrible hack!
+		if (slot instanceof ILoadOption) {
+			// assume just one load option, and assume it is the first slot in the itinerary
+			long result = remainingHeelVolumeInM3 + fuelVolumeInM3;
+			for (Entry<IPortSlot, SlotAllocationAnnotation> entry: slotAllocations.entrySet()) {
+				if (entry.getKey() instanceof IDischargeOption) {
+					result += entry.getValue().volumeInM3;
+				}
+			}
+			return result;			
+		}
+		
+		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+		if (allocation != null) {
+			return allocation.volumeInM3;
+		}
+		// TODO: throw an exception instead of returning magic value
+		return -1;		
+	}
+
+	public void setSlotVolumeInM3(IPortSlot slot, long volume) {
+		getOrCreateSlotAllocation(slot).volumeInM3 = volume;		
 	}
 	
 }

@@ -347,8 +347,8 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		annotation.setSlotTime(dischargeSlot, dischargeTime);		
 		//annotation.setLoadTime(loadTime);
 		//annotation.setDischargeTime(dischargeTime);
-		annotation.setDischargeVolumeInM3(maximumDischargeVolumeInM3);
-		//annotation.setSlotVolumeInM3(dischargeSlot, maximumDischargeVolumeInM3);
+		//annotation.setDischargeVolumeInM3(maximumDischargeVolumeInM3);
+		annotation.setSlotVolumeInM3(dischargeSlot, maximumDischargeVolumeInM3);
 
 		return annotation;
 	}
@@ -571,7 +571,8 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 						annotation.setSlotTime(loadSlot, slotTimes.get(loadSlot));
 						annotation.setSlotTime(dischargeSlot, slotTimes.get(dischargeSlot));
 
-						annotation.setDischargeVolumeInM3(allocation[allocationIndex++]);
+						annotation.setSlotVolumeInM3(dischargeSlot, allocation[allocationIndex++]);
+						//annotation.setDischargeVolumeInM3(allocation[allocationIndex++]);
 
 						return new Pair<VoyagePlan, IAllocationAnnotation>(voyagePlansIterator.next(), annotation);
 					}

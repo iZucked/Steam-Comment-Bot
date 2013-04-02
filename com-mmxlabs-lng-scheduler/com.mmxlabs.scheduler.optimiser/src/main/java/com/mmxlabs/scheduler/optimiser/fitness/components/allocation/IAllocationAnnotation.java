@@ -31,7 +31,7 @@ public interface IAllocationAnnotation {
 	 * Returns the total load volume in M3. This is the sum of the discharge volume, fuel volume and the remaining heel.
 	 * 
 	 */
-	long getLoadVolumeInM3();
+	//long getLoadVolumeInM3();
 
 	/**
 	 * Returns the total LNG in m3 used as fuel during this cargo.
@@ -52,7 +52,8 @@ public interface IAllocationAnnotation {
 	 * 
 	 * @return
 	 */
-	long getDischargeVolumeInM3();
+	//long getDischargeVolumeInM3();
+	long getSlotVolumeInM3(IPortSlot slot);
 
 	/**
 	 * Returns the time a load or discharge began

@@ -146,8 +146,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				IDischargeOption dischargeSlot = (IDischargeOption) slots.get(1);
 				
 				final int cvValue = loadSlot.getCargoCVValue();
-				final long dischargeVolume = currentAllocation.getDischargeVolumeInM3();
-				final long loadVolume = currentAllocation.getLoadVolumeInM3();
+				final long dischargeVolume = currentAllocation.getSlotVolumeInM3(loadSlot);
+				final long loadVolume = currentAllocation.getSlotVolumeInM3(dischargeSlot);
 				
 				
 
