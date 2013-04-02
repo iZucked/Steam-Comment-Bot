@@ -757,7 +757,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 						final AllocationAnnotation annotation = new AllocationAnnotation();
 
 						IPortSlot[] slots = slotsIterator.next();
-						assert(slots.length == 2);
 						
 						annotation.getSlots().clear();
 						for (IPortSlot slot: slots) {
