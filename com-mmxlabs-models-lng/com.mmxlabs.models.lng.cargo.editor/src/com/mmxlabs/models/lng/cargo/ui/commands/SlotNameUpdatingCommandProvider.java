@@ -46,24 +46,24 @@ public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 				}
 				if (parameter.getEOwner() instanceof Cargo) {
 					final Cargo cargo = (Cargo) parameter.getEOwner();
-					final Slot load = cargo.getLoadSlot();
-					final Slot discharge = cargo.getDischargeSlot();
+//					final Slot load = cargo.getLoadSlot();
+//					final Slot discharge = cargo.getDischargeSlot();
 					final CompoundCommand fixer = new CompoundCommand("Slot Name Update");
-					if (load != null) {
-						// Only update if changed.
-						if (load.getName() == null || !load.getName().equals(parameter.getValue())) {
-							fixer.append(SetCommand.create(editingDomain, load, MMXCorePackage.eINSTANCE.getNamedObject_Name(), parameter.getValue()));
-							seenObjects.add(load);
-						}
-					}
+//					if (load != null) {
+//						// Only update if changed.
+//						if (load.getName() == null || !load.getName().equals(parameter.getValue())) {
+//							fixer.append(SetCommand.create(editingDomain, load, MMXCorePackage.eINSTANCE.getNamedObject_Name(), parameter.getValue()));
+//							seenObjects.add(load);
+//						}
+//					}
 
-					if (discharge != null) {
-						// Only update if the previous value matched correctly - otherwise it could be user specified.
-						if (discharge.getName() == null || discharge.getName().isEmpty() || discharge.getName().equals("d-" + cargo.getName())) {
-							fixer.append(SetCommand.create(editingDomain, discharge, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "d-" + parameter.getValue()));
-							seenObjects.add(discharge);
-						}
-					}
+//					if (discharge != null) {
+//						// Only update if the previous value matched correctly - otherwise it could be user specified.
+//						if (discharge.getName() == null || discharge.getName().isEmpty() || discharge.getName().equals("d-" + cargo.getName())) {
+//							fixer.append(SetCommand.create(editingDomain, discharge, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "d-" + parameter.getValue()));
+//							seenObjects.add(discharge);
+//						}
+//					}
 					if (fixer.isEmpty()) {
 						return null;
 					}
@@ -87,40 +87,40 @@ public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 					return fixer;
 
 				}
-			} else if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
-				final LoadSlot loadSlot = (LoadSlot) parameter.getEValue();
-				final Cargo cargo = (Cargo) parameter.getEOwner();
+			} else if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getCargo_Slots()) {
+
 				final CompoundCommand fixer = new CompoundCommand("Slot Name Update");
-				if (cargo != null && loadSlot != null) {
-					// Update cargo Name only if different
-					if (cargo.getName() == null || !cargo.getName().equals(loadSlot.getName())) {
-						fixer.append(SetCommand.create(editingDomain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), loadSlot.getName()));
-						seenObjects.add(cargo);
+				for (Object obj : parameter.getOwnerList()) {
+					if (obj instanceof Slot) {
+						final Slot slot = (Slot) obj;
+						final Cargo cargo = (Cargo) parameter.getEOwner();
+						if (cargo != null && slot != null) {
+
+							if (slot instanceof LoadSlot) {
+								if (cargo.getSlots().get(0) == slot) {
+									// Update cargo Name only if different
+									LoadSlot loadSlot = (LoadSlot) slot;
+									if (cargo.getName() == null || !cargo.getName().equals(slot.getName())) {
+										fixer.append(SetCommand.create(editingDomain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), slot.getName()));
+										seenObjects.add(cargo);
+									}
+								}
+							} else if (slot instanceof DischargeSlot) {
+								// Only update if the previous value matched correctly - otherwise it could be user specified.
+								DischargeSlot dischargeSlot = (DischargeSlot) slot;
+								if (dischargeSlot.getName() == null || dischargeSlot.getName().isEmpty()) {
+									fixer.append(SetCommand.create(editingDomain, dischargeSlot, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "d-" + cargo.getName()));
+									seenObjects.add(dischargeSlot);
+								}
+							}
+						}
+
 					}
 				}
-
 				if (fixer.isEmpty()) {
 					return null;
 				}
 				return fixer;
-			} else if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) parameter.getEValue();
-				final Cargo cargo = (Cargo) parameter.getEOwner();
-				final CompoundCommand fixer = new CompoundCommand("Slot Name Update");
-				if (cargo != null && dischargeSlot != null) {
-
-					// Only update if the previous value matched correctly - otherwise it could be user specified.
-					if (dischargeSlot.getName() == null || dischargeSlot.getName().isEmpty()) {
-						fixer.append(SetCommand.create(editingDomain, dischargeSlot, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "d-" + cargo.getName()));
-						seenObjects.add(dischargeSlot);
-					}
-				}
-
-				if (fixer.isEmpty()) {
-					return null;
-				}
-				return fixer;
-
 			}
 		}
 		return null;
