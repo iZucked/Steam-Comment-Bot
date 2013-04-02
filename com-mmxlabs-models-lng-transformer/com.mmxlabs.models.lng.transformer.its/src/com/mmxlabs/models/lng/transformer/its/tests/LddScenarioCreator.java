@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.util.Date;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -90,11 +91,18 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		
 		cargo = cargoCreator.createDefaultLddCargo(null, ports[1], ports[2], ports[3], null, duration1, duration2);
 		
+		// set fixed discharge quantities on the discharge slots
+		for (int i = 1; i < cargo.getSlots().size(); i++) {
+			Slot slot = cargo.getSortedSlots().get(i);
+			slot.setMinQuantity(1000);
+			slot.setMaxQuantity(1000);			
+		}
+		
 		Date loadDate = cargo.getSlots().get(0).getWindowStart();
-		Date dischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		Date lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 		
 		Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
-		Date endDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
+		Date endDate = addHours(lastDischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 		
 		fleetCreator.setAvailability(vessel, originPort, startDate, originPort, endDate);			
 
