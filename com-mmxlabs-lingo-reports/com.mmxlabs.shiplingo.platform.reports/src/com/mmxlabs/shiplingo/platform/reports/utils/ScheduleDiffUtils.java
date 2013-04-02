@@ -1,5 +1,6 @@
 package com.mmxlabs.shiplingo.platform.reports.utils;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.Equality;
@@ -8,6 +9,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -47,31 +49,30 @@ public class ScheduleDiffUtils {
 				return true;
 			}
 
-			if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
+			EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
+			EList<SlotAllocation> refSlotAllocations = ref.getSlotAllocations();
+
+			if (caSlotAllocations.size() != refSlotAllocations.size()) {
 				return true;
 			}
 
-			{
-				final AContract caContract = ca.getLoadAllocation().getContract();
-				final AContract refContract = ref.getLoadAllocation().getContract();
-				final String caName = caContract == null ? null : caContract.getName();
-				final String refName = refContract == null ? null : refContract.getName();
+			for (int i = 0; i < caSlotAllocations.size(); ++i) {
+				SlotAllocation caAllocation = caSlotAllocations.get(i);
+				SlotAllocation refAllocation = refSlotAllocations.get(i);
 
-				if (!Equality.isEqual(caName, refName)) {
+				if (!caAllocation.getPort().getName().equals(refAllocation.getPort().getName())) {
 					return true;
 				}
-			}
-			if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
-				return true;
-			}
-			{
-				final AContract caContract = ca.getDischargeAllocation().getContract();
-				final AContract refContract = ref.getDischargeAllocation().getContract();
-				final String caName = caContract == null ? null : caContract.getName();
-				final String refName = refContract == null ? null : refContract.getName();
 
-				if (!Equality.isEqual(caName, refName)) {
-					return true;
+				{
+					final AContract caContract = caAllocation.getContract();
+					final AContract refContract = refAllocation.getContract();
+					final String caName = caContract == null ? null : caContract.getName();
+					final String refName = refContract == null ? null : refContract.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
 				}
 			}
 		} else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {

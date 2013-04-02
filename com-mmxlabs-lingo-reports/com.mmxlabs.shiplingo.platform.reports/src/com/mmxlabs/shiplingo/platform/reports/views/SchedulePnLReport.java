@@ -5,7 +5,6 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,11 +13,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
-import org.omg.CORBA.ServiceDetailHelper;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
@@ -27,7 +23,6 @@ import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -37,7 +32,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -73,151 +67,151 @@ public class SchedulePnLReport extends EMFReportView {
 
 		// addPNLColumn("Asia");
 		// addPNLColumn("Europe");
-
-		addColumn("Discharge Port", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPort().getName();
-				}
-				return null;
-			}
-
-			@Override
-			public Comparable<?> getComparable(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPort().getName();
-				}
-				return "";
-			}
-		});
-		addColumn("Sales Contract", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					final AContract contract = slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getContract();
-					if (contract != null) {
-						return contract.getName();
-					}
-				}
-				return null;
-			}
-
-			@Override
-			public Comparable<?> getComparable(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					final AContract contract = slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getContract();
-					if (contract != null) {
-						return contract.getName();
-					}
-				}
-				return "";
-			}
-		});
-
-		addColumn("Purchase Price", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					return super.format(slotVisit.getSlotAllocation().getPrice());
-				}
-				return null;
-			}
-
-			@Override
-			public Comparable getComparable(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					return slotVisit.getSlotAllocation().getPrice();
-				}
-				return 0.0;
-			}
-		});
-		addColumn("Sales Price", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					return super.format(slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPrice());
-				}
-				return null;
-			}
-
-			@Override
-			public Comparable getComparable(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPrice();
-				}
-				return 0.0;
-			}
-		});
-		addColumn("Shipping Cost", new BaseFormatter() {
-
-			Double getValue(final SlotVisit visit) {
-				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-				if (cargoAllocation == null) {
-					return null;
-				}
-				final Cargo inputCargo = cargoAllocation.getInputCargo();
-				if (inputCargo == null) {
-					return null;
-				}
-				if (inputCargo.getCargoType() != CargoType.FLEET) {
-					return null;
-				}
-				// TODO: Fixed (other) port costs?
-				// TODO: Boil-off included?
-
-				final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
-				if (dataWithKey != null) {
-					final Integer v = dataWithKey.getValueAs(Integer.class);
-					if (v != null) {
-						final SlotAllocation loadAllocation = cargoAllocation.getLoadAllocation();
-						if (loadAllocation == null) {
-							return null;
-						}
-						final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) loadAllocation.getSlot()).getSlotOrPortCV();
-						if (dischargeVolumeInMMBTu == 0.0) {
-							return 0.0;
-						}
-						final double shipping = (double) v.doubleValue() / dischargeVolumeInMMBTu;
-						return shipping;
-					}
-				}
-				return 0.0;
-			}
-
-			@Override
-			public String format(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					final Double value = getValue(slotVisit);
-					if (value != null) {
-						return String.format("%,.2f", value);
-					}
-
-				}
-				return null;
-			}
-
-			@Override
-			public Comparable getComparable(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					final Double value = getValue(slotVisit);
-					if (value != null) {
-						return value;
-					}
-				}
-				return 0.0;
-			}
-		});
+//
+//		addColumn("Discharge Port", new BaseFormatter() {
+//			@Override
+//			public String format(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPort().getName();
+//				}
+//				return null;
+//			}
+//
+//			@Override
+//			public Comparable<?> getComparable(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPort().getName();
+//				}
+//				return "";
+//			}
+//		});
+//		addColumn("Sales Contract", new BaseFormatter() {
+//			@Override
+//			public String format(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					final AContract contract = slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getContract();
+//					if (contract != null) {
+//						return contract.getName();
+//					}
+//				}
+//				return null;
+//			}
+//
+//			@Override
+//			public Comparable<?> getComparable(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					final AContract contract = slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getContract();
+//					if (contract != null) {
+//						return contract.getName();
+//					}
+//				}
+//				return "";
+//			}
+//		});
+//
+//		addColumn("Purchase Price", new BaseFormatter() {
+//			@Override
+//			public String format(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					return super.format(slotVisit.getSlotAllocation().getPrice());
+//				}
+//				return null;
+//			}
+//
+//			@Override
+//			public Comparable getComparable(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					return slotVisit.getSlotAllocation().getPrice();
+//				}
+//				return 0.0;
+//			}
+//		});
+//		addColumn("Sales Price", new BaseFormatter() {
+//			@Override
+//			public String format(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					return super.format(slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPrice());
+//				}
+//				return null;
+//			}
+//
+//			@Override
+//			public Comparable getComparable(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPrice();
+//				}
+//				return 0.0;
+//			}
+//		});
+//		addColumn("Shipping Cost", new BaseFormatter() {
+//
+//			Double getValue(final SlotVisit visit) {
+//				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+//				if (cargoAllocation == null) {
+//					return null;
+//				}
+//				final Cargo inputCargo = cargoAllocation.getInputCargo();
+//				if (inputCargo == null) {
+//					return null;
+//				}
+//				if (inputCargo.getCargoType() != CargoType.FLEET) {
+//					return null;
+//				}
+//				// TODO: Fixed (other) port costs?
+//				// TODO: Boil-off included?
+//
+//				final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
+//				if (dataWithKey != null) {
+//					final Integer v = dataWithKey.getValueAs(Integer.class);
+//					if (v != null) {
+//						final SlotAllocation loadAllocation = cargoAllocation.getLoadAllocation();
+//						if (loadAllocation == null) {
+//							return null;
+//						}
+//						final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) loadAllocation.getSlot()).getSlotOrPortCV();
+//						if (dischargeVolumeInMMBTu == 0.0) {
+//							return 0.0;
+//						}
+//						final double shipping = (double) v.doubleValue() / dischargeVolumeInMMBTu;
+//						return shipping;
+//					}
+//				}
+//				return 0.0;
+//			}
+//
+//			@Override
+//			public String format(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					final Double value = getValue(slotVisit);
+//					if (value != null) {
+//						return String.format("%,.2f", value);
+//					}
+//
+//				}
+//				return null;
+//			}
+//
+//			@Override
+//			public Comparable getComparable(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					final Double value = getValue(slotVisit);
+//					if (value != null) {
+//						return value;
+//					}
+//				}
+//				return 0.0;
+//			}
+//		});
 
 		addColumn("Type", new BaseFormatter() {
 			@Override

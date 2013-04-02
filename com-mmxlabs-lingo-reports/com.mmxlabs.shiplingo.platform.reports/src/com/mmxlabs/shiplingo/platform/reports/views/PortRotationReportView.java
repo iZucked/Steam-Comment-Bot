@@ -13,7 +13,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -21,6 +20,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -84,34 +84,16 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("At Port", objectFormatter, sp.getEvent_Port(), name);
 		addColumn("Route", objectFormatter, sp.getJourney_Route());
 
-		addColumn("Load Volume", new IntegerFormatter() {
+		addColumn("Transfer Volume", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof SlotVisit) {
 					final SlotVisit sv = (SlotVisit) object;
-					final CargoAllocation ca = sv.getSlotAllocation().getCargoAllocation();
-					if (ca == null) {
+					final SlotAllocation sa = sv.getSlotAllocation();
+					if (sa == null) {
 						return null;
 					}
-					// if (ca.getLoadSlot().equals(sv.getSlot())) {
-					// return (int) ca.getLoadVolume();
-					// }
-					return ca.getLoadVolume();
-				}
-				return null;
-			}
-		});
-
-		addColumn("Discharge Volume", new IntegerFormatter() {
-			@Override
-			public Integer getIntValue(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit sv = (SlotVisit) object;
-					final CargoAllocation ca = sv.getSlotAllocation().getCargoAllocation();
-					if (ca == null) {
-						return null;
-					}
-					return ca.getDischargeVolume();
+					return sa.getVolumeTransferred();
 				}
 				return null;
 			}
