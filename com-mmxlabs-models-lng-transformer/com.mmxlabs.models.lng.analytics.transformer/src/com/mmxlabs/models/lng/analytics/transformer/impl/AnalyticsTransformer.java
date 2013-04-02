@@ -479,8 +479,11 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					line.setHireCost((spec.getNotionalDayRate() * totalDuration) / 24);
 					line.setPortCost(totalPortCost);
 
-					line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getLoadVolumeInM3()));
-					line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolumeInM3()) - spec.getRetainHeel());
+					assert(allocation.getSlots().size() == 2);
+					IPortSlot loadSlot = allocation.getSlots().get(0);
+					IPortSlot dischargeSlot = allocation.getSlots().get(1);
+					line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(loadSlot)));
+					line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(dischargeSlot)) - spec.getRetainHeel());
 
 					final double cv = spec.isSetCvValue() ? spec.getCvValue() : line.getFrom().getCvValue();
 

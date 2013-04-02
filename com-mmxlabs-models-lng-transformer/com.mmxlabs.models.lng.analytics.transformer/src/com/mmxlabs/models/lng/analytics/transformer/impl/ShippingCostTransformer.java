@@ -444,13 +444,17 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 						// }
 						if (portDetails.getOptions().getPortSlot() instanceof ILoadOption) {
 							currentAllocationAnnotation = allocationIterator.next();
+							assert(currentAllocationAnnotation.getSlots().size() == 2);
+							IPortSlot loadSlot = currentAllocationAnnotation.getSlots().get(0);
 							// Add in LOAD VOLUME
-							final int loadVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getLoadVolumeInM3());
+							final int loadVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getSlotVolumeInM3(loadSlot));
 							extraData.addExtraData("volume", "Load Volume", loadVolume, ExtraDataFormatType.INTEGER);
 						} else if (portDetails.getOptions().getPortSlot() instanceof IDischargeOption) {
 							// Add in DISCHARGE VOLUME
 							if (currentAllocationAnnotation != null) {
-								final int dischargeVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getDischargeVolumeInM3());
+								assert(currentAllocationAnnotation.getSlots().size() == 2);
+								IPortSlot dischargeSlot = currentAllocationAnnotation.getSlots().get(1);
+								final int dischargeVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getSlotVolumeInM3(dischargeSlot));
 								extraData.addExtraData("volume", "Discharge Volume", dischargeVolume, ExtraDataFormatType.INTEGER);
 
 								
@@ -458,7 +462,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 								assert(currentAllocationAnnotation.getSlots().size() == 2);
 								final ILoadOption loadOption = (ILoadOption) currentAllocationAnnotation.getSlots().get(0);
 								final int cargoCVValue = loadOption.getCargoCVValue();
-								final long dischargeVolumeInMMBTu = OptimiserUnitConvertor.convertToExternalVolume(Calculator.convertM3ToMMBTu(currentAllocationAnnotation.getDischargeVolumeInM3(),
+								final long dischargeVolumeInMMBTu = OptimiserUnitConvertor.convertToExternalVolume(Calculator.convertM3ToMMBTu(currentAllocationAnnotation.getSlotVolumeInM3(dischargeSlot),
 										cargoCVValue));
 								totalDischargeVolumeInMMBTu += dischargeVolumeInMMBTu;
 								currentAllocationAnnotation = null;

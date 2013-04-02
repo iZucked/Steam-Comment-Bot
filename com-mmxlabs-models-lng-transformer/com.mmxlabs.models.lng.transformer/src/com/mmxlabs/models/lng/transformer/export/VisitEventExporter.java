@@ -114,16 +114,17 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			// for now, only handle single load/discharge case
 			assert(allocation.getSlots().size() == 2);
 			final ILoadOption loadSlot = (ILoadOption) allocation.getSlots().get(0);
+			final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
 			if (slot instanceof ILoadOption) {
 				//final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
 				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), loadSlot.getCargoCVValue());
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getLoadVolumeInM3()));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(loadSlot)));
 			} else {
 				//final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
 				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), loadSlot.getCargoCVValue());
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolumeInM3()));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(dischargeSlot)));
 			}
 
 			sv.setSlotAllocation(slotAllocation);
