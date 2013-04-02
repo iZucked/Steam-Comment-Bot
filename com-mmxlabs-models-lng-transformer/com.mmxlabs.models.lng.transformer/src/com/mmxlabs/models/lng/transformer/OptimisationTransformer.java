@@ -108,7 +108,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				final Cargo cargo = loadSlot.getCargo();
 				if (cargo != null) {
-					final EList<Slot> slots = cargo.getSlots();
+					final EList<Slot> slots = cargo.getSortedSlots();
 					// Only process this loop if slot is first in the list
 					if (slots.get(0) == loadSlot) {
 						ISequenceElement prevElement = null;
@@ -143,7 +143,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 						final IResource resource = vp.getResource(vessel);
 
-						final EList<Slot> slots = cargo.getSlots();
+						final EList<Slot> slots = cargo.getSortedSlots();
 						for (final Slot currentSlot : slots) {
 							final IPortSlot slotObject = mem.getOptimiserObject(currentSlot, IPortSlot.class);
 							final ISequenceElement slotElement = psp.getElement(slotObject);
@@ -168,7 +168,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 						final IResource resource = vp.getResource(vessel);
 
-						final EList<Slot> slots = cargo.getSlots();
+						final EList<Slot> slots = cargo.getSortedSlots();
 						for (final Slot currentSlot : slots) {
 							final IPortSlot slotObject = mem.getOptimiserObject(currentSlot, IPortSlot.class);
 							final ISequenceElement slotElement = psp.getElement(slotObject);
@@ -281,8 +281,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		} else if (modelObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) modelObject;
 
-			final List<ISequenceElement> elements = new ArrayList<ISequenceElement>(cargo.getSlots().size());
-			for (final Slot slot : cargo.getSlots()) {
+			final List<ISequenceElement> elements = new ArrayList<ISequenceElement>(cargo.getSortedSlots().size());
+			for (final Slot slot : cargo.getSortedSlots()) {
 				final IPortSlot portSlot = mem.getOptimiserObject(slot, IPortSlot.class);
 				assert portSlot != null;
 				elements.add(psp.getElement(portSlot));

@@ -66,6 +66,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -609,14 +610,16 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			createPortCostComponent(line.addExtraData("loading", "1 Loading"), cargoAllocation.getLoadAllocation(), notionalDayRate);
 			createVoyageCostComponent(line.addExtraData("laden", "2 Laden Journey"), cargoAllocation.getLadenLeg(), cargoAllocation.getLadenIdle(), cv, notionalDayRate);
 
-			sumVoyageCostComponent(cargoAllocation.getLadenLeg(), voyageSums);
-			sumVoyageCostComponent(cargoAllocation.getLadenIdle(), idleSums);
-
 			createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), cargoAllocation.getDischargeAllocation(), notionalDayRate);
 			createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"),  cargoAllocation.getBallastLeg(), cargoAllocation.getBallastIdle(), cv, notionalDayRate);
 
-			sumVoyageCostComponent(cargoAllocation.getBallastLeg(), voyageSums);
-			sumVoyageCostComponent(cargoAllocation.getBallastIdle(), idleSums);
+			for (Event event : cargoAllocation.getEvents()) {
+				if (event instanceof Idle) {
+					sumVoyageCostComponent((Idle)event, idleSums);
+				} else if (event instanceof Journey) {
+					sumVoyageCostComponent((Journey)event, voyageSums);
+				}
+			}
 
 			int totalDuration = 0;
 			int totalFuelCost = 0;

@@ -466,8 +466,8 @@ public class LNGScenarioTransformer {
 				if (!freeze && freezeDate != null) {
 					if (o instanceof Cargo) {
 						final Cargo cargo = (Cargo) o;
-						if (!cargo.getSlots().isEmpty()) {
-							if (cargo.getSlots().get(0).getWindowStart().before(freezeDate)) {
+						if (!cargo.getSortedSlots().isEmpty()) {
+							if (cargo.getSortedSlots().get(0).getWindowStart().before(freezeDate)) {
 								freeze = true;
 							}
 						}
@@ -507,7 +507,7 @@ public class LNGScenarioTransformer {
 				if (o instanceof Cargo) {
 					Cargo cargo = (Cargo) o;
 					IPortSlot prevSlot = null;
-					for (Slot slot : cargo.getSlots()) {
+					for (Slot slot : cargo.getSortedSlots()) {
 						final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
 						if (cargo != null) {
 							// bind slots to vessel
@@ -695,15 +695,15 @@ public class LNGScenarioTransformer {
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
 
-			if (eCargo.getSlots().get(0).getWindowStartWithSlotOrPortTime().after(latestDate)) {
+			if (eCargo.getSortedSlots().get(0).getWindowStartWithSlotOrPortTime().after(latestDate)) {
 				continue;
 			}
 
 			final List<ILoadOption> loadOptions = new LinkedList<ILoadOption>();
 			final List<IDischargeOption> dischargeOptions = new LinkedList<IDischargeOption>();
-			final List<IPortSlot> slots = new ArrayList<IPortSlot>(eCargo.getSlots().size());
+			final List<IPortSlot> slots = new ArrayList<IPortSlot>(eCargo.getSortedSlots().size());
 			final Map<Slot, IPortSlot> slotMap = new HashMap<Slot, IPortSlot>();
-			for (final Slot slot : eCargo.getSlots()) {
+			for (final Slot slot : eCargo.getSortedSlots()) {
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					{
@@ -728,7 +728,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			for (final Slot slot : eCargo.getSlots()) {
+			for (final Slot slot : eCargo.getSortedSlots()) {
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					// Bind FOB/DES slots to resource

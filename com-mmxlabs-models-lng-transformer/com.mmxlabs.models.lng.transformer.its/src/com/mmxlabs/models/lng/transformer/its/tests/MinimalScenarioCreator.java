@@ -7,11 +7,6 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.pricing.CooldownPrice;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
 /**
@@ -89,8 +84,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		
 		cargo = cargoCreator.createDefaultCargo(null, ports[1], ports[2], null, duration);
 		
-		Date loadDate = cargo.getSlots().get(0).getWindowStart();
-		Date dischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		Date loadDate = cargo.getSortedSlots().get(0).getWindowStart();
+		Date dischargeDate = cargo.getSortedSlots().get(1).getWindowEndWithSlotOrPortTime();
 		
 		Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		Date endDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
