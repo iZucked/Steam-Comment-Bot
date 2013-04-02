@@ -28,6 +28,8 @@ public class UnconstrainedCargoAllocator extends BaseCargoAllocator {
 			final long flv = forcedLoadVolumeInM3.get(i) + remainingHeelVolumeInM3.get(i);
 			
 			IPortSlot[] slots = listedSlots.get(i);
+
+			//assert(slots.length == 2);
 			
 			// load/discharge case
 			if (slots.length == 2) {
