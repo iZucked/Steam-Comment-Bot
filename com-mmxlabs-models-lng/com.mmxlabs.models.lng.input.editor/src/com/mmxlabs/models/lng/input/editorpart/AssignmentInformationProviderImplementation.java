@@ -76,7 +76,7 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 	private Port getEndPort(final UUIDObject task) {
 		if (task instanceof Cargo) {
 			final Cargo cargo = (Cargo) task;
-			final EList<Slot> slots = cargo.getSlots();
+			final EList<Slot> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
@@ -94,7 +94,7 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 	private Port getStartPort(final UUIDObject task) {
 		if (task instanceof Cargo) {
 			final Cargo cargo = (Cargo) task;
-			final EList<Slot> slots = cargo.getSlots();
+			final EList<Slot> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
@@ -113,7 +113,7 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 		if (task instanceof Cargo) {
 			final Cargo cargo = (Cargo) task;
 			boolean first = true;
-			for (final Slot slot : cargo.getSlots()) {
+			for (final Slot slot : cargo.getSortedSlots()) {
 				if (first) {
 					secondLine += "\n";
 				} else {

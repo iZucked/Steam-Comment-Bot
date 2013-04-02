@@ -38,7 +38,7 @@ public class AssignmentEditorHelper {
 
 		if (task instanceof Cargo) {
 			final Cargo cargo = (Cargo) task;
-			final EList<Slot> slots = cargo.getSlots();
+			final EList<Slot> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
@@ -56,7 +56,7 @@ public class AssignmentEditorHelper {
 	public static Date getEndDate(final UUIDObject task) {
 		if (task instanceof Cargo) {
 			final Cargo cargo = (Cargo) task;
-			final EList<Slot> slots = cargo.getSlots();
+			final EList<Slot> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
