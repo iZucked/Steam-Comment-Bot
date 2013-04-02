@@ -11,6 +11,7 @@ import org.eclipse.swt.graphics.RGB;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -31,55 +32,54 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 public class ColourSchemeUtil {
 
-	static final RGB Gas_Blue = new RGB(50,60,225);
-//	static final RGB Light_Gas_Blue = new RGB(150,255,255);
-	static final RGB Light_Gas_Blue = new RGB(150,200,255);
-	static final RGB Green = new RGB(0,180,50);
+	static final RGB Gas_Blue = new RGB(50, 60, 225);
+	// static final RGB Light_Gas_Blue = new RGB(150,255,255);
+	static final RGB Light_Gas_Blue = new RGB(150, 200, 255);
+	static final RGB Green = new RGB(0, 180, 50);
 	static final RGB Light_Green = new RGB(40, 255, 50);
 	static final RGB Teal = new RGB(0, 120, 120);
 
-	static final RGB Slot_White = new RGB(255,255,255);
-	static final RGB FOBDES_Grey = new RGB(96,96,96);
-	static final RGB Locked_White = new RGB(255,255,255);
+	static final RGB Slot_White = new RGB(255, 255, 255);
+	static final RGB FOBDES_Grey = new RGB(96, 96, 96);
+	static final RGB Locked_White = new RGB(255, 255, 255);
 	static final RGB VesselEvent_Purple = new RGB(120, 0, 120);
 	static final RGB VesselEvent_LightPurple = new RGB(150, 0, 200);
 	static final RGB VesselEvent_Green = new RGB(0, 225, 150);
 	static final RGB VesselEvent_Green2 = new RGB(80, 180, 50);
 	static final RGB VesselEvent_Green3 = new RGB(50, 200, 80);
-//	static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
+	// static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
 	static final RGB VesselEvent_Brown = new RGB(77, 88, 50);
-		
-	static final RGB Warning_Yellow = new RGB(255,255,25);
-	static final RGB Warning_Orange = new RGB(255,120,25);
-	static final RGB Alert_Crimson = new RGB(255,0,0);
-	
+
+	static final RGB Warning_Yellow = new RGB(255, 255, 25);
+	static final RGB Warning_Orange = new RGB(255, 120, 25);
+	static final RGB Alert_Crimson = new RGB(255, 0, 0);
+
 	static final int Faded_Alpha = 200;
 
-	
 	public static boolean isOutsideTimeWindow(Event ev) {
 		Date start = ev.getStart();
-		if((ev instanceof VesselEventVisit) && start.after(((VesselEventVisit) ev).getVesselEvent().getStartBy())){
+		if ((ev instanceof VesselEventVisit) && start.after(((VesselEventVisit) ev).getVesselEvent().getStartBy())) {
 			return true;
 		}
-		
-		if(ev instanceof SlotVisit){
+
+		if (ev instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) ev;
 			if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 				return true;
 			}
-//			if (visit.getStart().before(visit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime())) {
-//				return true;
-//			}
+			// if (visit.getStart().before(visit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime())) {
+			// return true;
+			// }
 		}
 		return false;
 	}
-	
+
 	public static boolean isLocked(final Event event, GanttChartViewer viewer) {
 		// Stage 1: Find the cargo
 		final Sequence sequence = event.getSequence();
 		int index = sequence.getEvents().indexOf(event);
 		Cargo cargo = null;
-		while (cargo == null && index >= 0 ) {
+		while (cargo == null && index >= 0) {
 			Object obj = sequence.getEvents().get(index);
 			if (obj instanceof SlotVisit) {
 				final SlotVisit slotVisit = ((SlotVisit) obj);
@@ -113,7 +113,7 @@ public class ColourSchemeUtil {
 		}
 		return false;
 	}
-	
+
 	static Idle findIdleForJourney(final Journey journey) {
 		final Sequence sequence = journey.getSequence();
 		final int index = sequence.getEvents().indexOf(journey);
@@ -126,8 +126,6 @@ public class ColourSchemeUtil {
 		return null;
 	}
 
-	
-	
 	static Journey findJourneyForIdle(final Idle idle) {
 		final Sequence sequence = idle.getSequence();
 		final int index = sequence.getEvents().indexOf(idle);
@@ -152,30 +150,28 @@ public class ColourSchemeUtil {
 			totalTime += idle.getDuration();
 		}
 
-		final int travelTime = (int) Math.round((float) distance / IdleRisk_speed);
+		final int travelTime = Math.round(distance / IdleRisk_speed);
 
 		return (travelTime / totalTime > IdleRisk_threshold);
 	}
-	
+
 	public static boolean isFOBSaleCargo(final SlotVisit visit) {
 		boolean isFOB;
 		Slot slot = visit.getSlotAllocation().getSlot();
 		if (slot instanceof LoadSlot) {
-			isFOB = ((DischargeSlot) visit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getSlot()).isFOBSale();				
-		}
-		else {
+			return visit.getSlotAllocation().getCargoAllocation().getInputCargo().getCargoType() == CargoType.FOB;
+		} else {
 			isFOB = ((DischargeSlot) slot).isFOBSale();
 		}
 		return isFOB;
 	}
-	
+
 	public static boolean isDESPurchaseCargo(final SlotVisit visit) {
 		Slot slot = visit.getSlotAllocation().getSlot();
 		if (slot instanceof LoadSlot) {
-			return ((LoadSlot) slot).isDESPurchase();				
-		}
-		else {
-			return ((LoadSlot) visit.getSlotAllocation().getCargoAllocation().getLoadAllocation().getSlot()).isDESPurchase();
+			return ((LoadSlot) slot).isDESPurchase();
+		} else {
+			return visit.getSlotAllocation().getCargoAllocation().getInputCargo().getCargoType() == CargoType.DES;
 		}
 	}
 }
