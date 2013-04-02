@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -23,6 +25,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -714,7 +717,6 @@ public class CargoEditorMenuHelper {
 	}
 
 	public void editLDDCargo(final Cargo cargo) {
-		final DetailCompositeDialog dcd = new DetailCompositeDialog(shell, scenarioEditingLocation.getDefaultCommandHandler());
 		try {
 			scenarioEditingLocation.getEditorLock().claim();
 			scenarioEditingLocation.setDisableUpdates(true);
@@ -722,27 +724,39 @@ public class CargoEditorMenuHelper {
 			final LDDEditor editor = new LDDEditor(shell, scenarioEditingLocation);
 			// editor.setBlockOnOpen(true);
 
-			editor.open(cargo);
+			final int ret = editor.open(cargo);
+			final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
+			if (ret == Window.OK) {
+				final CargoModel cargomodel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
 
-			final CargoModel cargomodel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+				final CompoundCommand cmd = new CompoundCommand("Edit LDD Cargo");
+				if (cargo.eContainer() == null) {
+					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
+				}
+				for (final Slot s : cargo.getSlots()) {
 
-			final CompoundCommand cmd = new CompoundCommand("Edit LDD Cargo");
-			if (cargo.eContainer() == null) {
-				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
-			}
-			for (final Slot s : cargo.getSlots()) {
+					if (s.eContainer() == null) {
 
-				if (s.eContainer() == null) {
+						if (s instanceof LoadSlot) {
+							cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), Collections.singleton(s)));
+						} else {
+							cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), Collections.singleton(s)));
+						}
+					}
+				}
 
-					if (s instanceof LoadSlot) {
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), Collections.singleton(s)));
+				commandStack.execute(cmd);
+			} else {
+				Iterator<Command> itr = new LinkedList<Command>(editor.getExecutedCommands()).descendingIterator();
+				while (itr.hasNext()) {
+					final Command cmd = itr.next();
+					if (commandStack.getUndoCommand() == cmd) {
+						commandStack.undo();
 					} else {
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), Collections.singleton(s)));
+						throw new IllegalStateException("Unable to cancel edit - command stack history is corrupt");
 					}
 				}
 			}
-
-			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 		} finally {
 			scenarioEditingLocation.setDisableUpdates(false);
 			scenarioEditingLocation.getEditorLock().release();

@@ -45,6 +45,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -711,10 +712,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final T manipulator, final EMFPath path) {
 
-		ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
+		final ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
 			@Override
-			public Comparable getComparable(Object element) {
-				Object object = path.get((EObject) element);
+			public Comparable getComparable(final Object element) {
+				final Object object = path.get((EObject) element);
 				if (object instanceof ExtraDataContainer) {
 					final ExtraDataContainer container = (ExtraDataContainer) object;
 					final ExtraData data = container.getDataWithKey("GroupValue");
@@ -732,7 +733,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@Override
 			public String getText(final Object element) {
 
-				Object object = path.get((EObject) element);
+				final Object object = path.get((EObject) element);
 				if (object instanceof ExtraDataContainer) {
 					final ExtraDataContainer container = (ExtraDataContainer) object;
 					final ExtraData data = container.getDataWithKey("GroupValue");
@@ -1351,25 +1352,39 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final DischargeSlot discharge2 = CargoFactory.eINSTANCE.createDischargeSlot();
 
 				cargo.getSlots().addAll(Lists.newArrayList(load, discharge1, discharge2));
-				editor.open(cargo);
+				final int ret = editor.open(cargo);
+				final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
+				if (ret == Window.OK) {
 
-				final CargoModel cargomodel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+					final CargoModel cargomodel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
 
-				final CompoundCommand cmd = new CompoundCommand("New LDD Cargo");
-				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
-				for (final Slot s : cargo.getSlots()) {
+					final CompoundCommand cmd = new CompoundCommand("New LDD Cargo");
+					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
+					for (final Slot s : cargo.getSlots()) {
 
-					if (s.eContainer() == null) {
+						if (s.eContainer() == null) {
 
-						if (s instanceof LoadSlot) {
-							cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), Collections.singleton(s)));
-						} else {
-							cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), Collections.singleton(s)));
+							if (s instanceof LoadSlot) {
+								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), Collections.singleton(s)));
+							} else {
+								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), Collections.singleton(s)));
+							}
 						}
 					}
-				}
 
-				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					commandStack.execute(cmd);
+				} else {
+					final Iterator<Command> itr = new LinkedList<Command>(editor.getExecutedCommands()).descendingIterator();
+					while (itr.hasNext()) {
+						final Command cmd = itr.next();
+						if (commandStack.getUndoCommand() == cmd) {
+							commandStack.undo();
+						} else {
+							throw new IllegalStateException("Unable to cancel edit - command stack history is corrupt");
+						}
+					}
+					
+				}
 			} finally {
 				scenarioEditingLocation.setDisableUpdates(false);
 				scenarioEditingLocation.getEditorLock().release();

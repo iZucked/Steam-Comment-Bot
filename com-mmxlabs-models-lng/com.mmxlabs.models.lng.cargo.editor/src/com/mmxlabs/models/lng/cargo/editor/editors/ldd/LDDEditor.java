@@ -3,12 +3,15 @@ package com.mmxlabs.models.lng.cargo.editor.editors.ldd;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.FeaturePath;
@@ -44,9 +47,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -77,6 +78,8 @@ public class LDDEditor extends Dialog {
 
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
+	private final List<Command> executedCommands = new LinkedList<Command>();
+
 	public LDDEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
 		this.scenarioEditingLocation = scenarioEditingLocation;
@@ -85,6 +88,12 @@ public class LDDEditor extends Dialog {
 	public LDDEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
 		this.scenarioEditingLocation = scenarioEditingLocation;
+	}
+
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText("Edit Complex Cargo");
 	}
 
 	@Override
@@ -98,13 +107,13 @@ public class LDDEditor extends Dialog {
 		{
 			final Group g = new Group(area, SWT.DEFAULT);
 			g.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, true, false));
-			g.setLayout(new GridLayout(2, true));
+			g.setLayout(new GridLayout(2, false));
 
 			final Label l = new Label(g, SWT.NONE);
 			l.setText("ID");
-			l.setLayoutData(new GridData(80, -1));
+			l.setLayoutData(new GridData(20, -1));
 			cargoName = new Text(g, SWT.BORDER);
-			cargoName.setLayoutData(new GridData(30, -1));
+			cargoName.setLayoutData(new GridData(80, -1));
 		}
 		{
 			final Group g = new Group(area, SWT.DEFAULT);
@@ -254,8 +263,6 @@ public class LDDEditor extends Dialog {
 		});
 	}
 
-
-
 	public int open(Cargo c) {
 
 		create();
@@ -273,20 +280,22 @@ public class LDDEditor extends Dialog {
 		validationTargets.addAll(cargo.getSlots());
 		validationSupport.setValidationTargets(validationTargets);
 
+		final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 		final CommandStackListener listener = new CommandStackListener() {
 
 			@Override
 			public void commandStackChanged(final EventObject event) {
+				executedCommands.add(commandStack.getMostRecentCommand());
 				validate();
 			}
 		};
-		scenarioEditingLocation.getEditingDomain().getCommandStack().addCommandStackListener(listener);
+		commandStack.addCommandStackListener(listener);
 		try {
 			scenarioEditingLocation.pushExtraValidationContext(validationSupport.getValidationContext());
 			validate();
 			return super.open();
 		} finally {
-			scenarioEditingLocation.getEditingDomain().getCommandStack().removeCommandStackListener(listener);
+			commandStack.removeCommandStackListener(listener);
 
 			scenarioEditingLocation.popExtraValidationContext();
 
@@ -304,6 +313,10 @@ public class LDDEditor extends Dialog {
 		validationSupport.processStatus(status, validationErrors);
 
 		viewer.refresh();
+	}
+
+	public List<Command> getExecutedCommands() {
+		return executedCommands;
 	}
 
 }
