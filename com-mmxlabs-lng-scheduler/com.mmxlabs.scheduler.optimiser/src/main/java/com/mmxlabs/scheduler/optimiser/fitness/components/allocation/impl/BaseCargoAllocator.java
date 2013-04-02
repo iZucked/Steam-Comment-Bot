@@ -146,6 +146,20 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		slotPricesPerM3.clear();
 		voyagePlans.clear();
 	}
+	
+	public final void addCargoAndClearLists(VoyagePlan plan, IVessel vessel, ArrayList<PortDetails> ports, ArrayList<VoyageDetails> voyages, ArrayList<Integer> slotTimes) {
+		PortDetails [] portDetails = ports.toArray(new PortDetails[0]);
+		VoyageDetails [] voyageDetails = voyages.toArray(new VoyageDetails[0]);
+		Integer [] times = slotTimes.toArray(new Integer[0]);
+		
+		slotTimes.clear();
+		ports.clear();
+		voyages.clear();
+		
+		addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
+
+		voyagePlans.add(plan);		
+	}
 
 	public Map<VoyagePlan, IAllocationAnnotation> allocate(final ScheduledSequences sequences) {
 		reset();
@@ -158,6 +172,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			PortDetails loadDetails = null;
 			PortDetails dischargeDetails = null;
 			VoyagePlan plan = null;
+			VoyagePlan lastPlan = null;
 
 			ArrayList<PortDetails> ports = new ArrayList<PortDetails>();
 			ArrayList<Integer> slotTimes = new ArrayList<Integer>();
@@ -176,7 +191,17 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 				}
 				if (object instanceof PortDetails) {
 					final PortDetails pd = (PortDetails) object;
-					final IPortSlot slot = pd.getOptions().getPortSlot();					
+					final IPortSlot slot = pd.getOptions().getPortSlot();			
+					
+					boolean expectBreak = !(slot instanceof IDischargeOption || ports.isEmpty());
+					
+					assert(expectBreak == planJustBroken);
+					planJustBroken = false;
+					
+					if (expectBreak) {
+						addCargoAndClearLists(lastPlan, vessel, ports, voyages, slotTimes);
+						//ports.clear();
+					}
 					
 					if (slot instanceof ILoadOption || slot instanceof IDischargeOption) {
 						ports.add(pd);
@@ -199,19 +224,12 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 					if ((dischargeDetails != null) && (loadDetails != null)) {
 						assert plan != null;
 						
-						PortDetails [] portDetails = ports.toArray(new PortDetails[0]);
-						VoyageDetails [] voyageDetails = voyages.toArray(new VoyageDetails[0]);
-						Integer [] times = slotTimes.toArray(new Integer[0]);
-						
-						slotTimes.clear();
-						ports.clear();
-						voyages.clear();
-						
-						addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
+						//addCargoAndClearLists(plan, vessel, ports, voyages, slotTimes);
 
-						voyagePlans.add(plan);
 						loadDetails = null;
 						dischargeDetails = null;
+						
+						lastPlan = plan;
 						
 						planJustBroken = true;
 					}
@@ -222,6 +240,11 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 					addVirtualCargo(loadDetails, dischargeDetails);
 					voyagePlans.add(plan);
 				}
+			}
+			
+			if (ports.size() > 2) {
+				assert(planJustBroken);
+				addCargoAndClearLists(lastPlan, vessel, ports, voyages, slotTimes);
 			}
 
 		}
