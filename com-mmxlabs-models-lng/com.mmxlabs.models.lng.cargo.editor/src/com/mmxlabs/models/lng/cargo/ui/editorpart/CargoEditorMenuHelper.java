@@ -743,7 +743,6 @@ public class CargoEditorMenuHelper {
 			}
 
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-			dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(cargo), scenarioEditingLocation.isLocked());
 		} finally {
 			scenarioEditingLocation.setDisableUpdates(false);
 			scenarioEditingLocation.getEditorLock().release();
