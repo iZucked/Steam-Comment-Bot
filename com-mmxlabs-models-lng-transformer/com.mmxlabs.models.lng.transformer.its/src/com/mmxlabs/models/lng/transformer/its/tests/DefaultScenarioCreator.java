@@ -117,8 +117,6 @@ public class DefaultScenarioCreator {
 	public final DefaultCargoCreator cargoCreator = new DefaultCargoCreator();
 	public final DefaultPricingCreator pricingCreator = new DefaultPricingCreator();
 
-	public MinimalScenarioSetup minimalScenarioSetup;
-	
 	MMXRootObject scenario;
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
@@ -128,110 +126,12 @@ public class DefaultScenarioCreator {
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
-		minimalScenarioSetup = new MinimalScenarioSetup();
 	}
 	
 	public Date addHours(Date date, int hours) {
 		return new Date(date.getTime() + Timer.ONE_HOUR * hours);
 	}
-	
-	public class MinimalScenarioSetup {
-		public final VesselClass vc;
-		public final Vessel vessel;
 		
-		public final Port originPort;
-		public final Port loadPort;
-		public final Port dischargePort;
-		
-		public final Cargo cargo;
-		
-		/**
-		 * Initialises a minimal complete scenario, creating:
-		 * - contract and shipping legal entities
-		 * - one vessel class and one vessel
-		 * - one (default) route
-		 * - one fixed-price sales contract and one fixed-price purchase contract
-		 * - three ports (one origin port, one load port and one discharge port)
-		 * - one cargo
-		 * The vessel starts at the origin port, must travel to the load port, pick up the cargo,
-		 * travel to the discharge port and discharge it. There is enough time at every stage
-		 * to create some idling at the discharge port. 
-		 */
-		public MinimalScenarioSetup() {
-			final CommercialModel commercialModel = scenario.getSubModel(CommercialModel.class);
-			
-			// need to create a legal entity for contracts
-			contractEntity = addEntity("Third-parties");
-			// need to create a legal entity for shipping
-			shippingEntity = addEntity("Shipping");
-			commercialModel.setShippingEntity(shippingEntity);
-
-			// need to create sales and purchase contracts
-			salesContract = addSalesContract("Sales Contract", dischargePrice);
-			purchaseContract = addPurchaseContract("Purchase Contract");
-			
-			// create a vessel class with default name
-			vc = fleetCreator.createDefaultVesselClass(null);
-			// create a vessel in that class
-			vessel = fleetCreator.createMultipleDefaultVessels(vc, 1)[0];
-			
-			// need to create a default route
-			addRoute(ScenarioTools.defaultRouteName);		
-
-			final double maxSpeed = vc.getMaxSpeed();
-			
-			// initialise the port creator with a convenient base distance multiplier
-			if (vc.getMinSpeed() == maxSpeed) {
-				portCreator.baseDistanceMultiplier = maxSpeed;
-			}
-			
-			// create three ports (and their distances) all with default settings
-			final Port [] ports = portCreator.createDefaultPorts(3);
-			
-			// these are start, load and discharge ports respectively
-			originPort = ports[0];
-			loadPort = ports[1];
-			dischargePort = ports[2];
-			
-			/*
-			 *  determine the time it will take the vessel to travel between load
-			 *  and discharge ports, and create a cargo with enough time to spare
-			 */
-			
-			int duration = 2 * getTravelTime(loadPort, dischargePort, null, (int) maxSpeed);
-			
-			cargo = cargoCreator.createDefaultCargo(null, ports[1], ports[2], null, duration);
-			
-			Date loadDate = cargo.getSlots().get(0).getWindowStart();
-			Date dischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-			
-			Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
-			Date endDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
-			
-			fleetCreator.setAvailability(vessel, originPort, startDate, originPort, endDate);			
-		}
-		
-		/**
-		 * Sets up a cooldown pricing model including an index
-		 */
-		public void setupCooldown(double value) {
-			final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
-			final PortModel portModel = scenario.getSubModel(PortModel.class);
-
-			final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultIndex("cooldown", value);
-			
-			final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
-			price.setIndex(cooldownIndex);
-			
-			for (Port port: portModel.getPorts()) {
-				price.getPorts().add(port);
-			}
-
-			pricingModel.getCooldownPrices().add(price);		
-		}
-	}
-	
-	
 	
 	/**
 	 * @since 3.0
@@ -711,7 +611,61 @@ public class DefaultScenarioCreator {
 			
 			return result;
 		}
+
+		public Cargo createDefaultLddCargo(String name, Port loadPort, Port dischargePort1, Port dischargePort2, Date loadTime, int travelTimeInHours1, int travelTimeInHours2) {
+			Cargo result = CargoFactory.eINSTANCE.createCargo();
+			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+			final DischargeSlot dischargeSlot1 = CargoFactory.eINSTANCE.createDischargeSlot();
+			final DischargeSlot dischargeSlot2 = CargoFactory.eINSTANCE.createDischargeSlot();
+			
+			// if load time is not specified, set it to the current datetime
+			if (loadTime == null) {
+				loadTime = new Date(System.currentTimeMillis());								
+			}
+			
+			// if name is not specified, set it to a sensible default
+			if (name == null) {
+				String format = "Cargo from %s to %s in %d hrs to %s in %d hrs";
+				name = String.format(format, loadPort.getName(), dischargePort1.getName(), travelTimeInHours1, dischargePort2.getName(), travelTimeInHours2);
+			}
+			
+			result.getSlots().add(loadSlot);
+			result.getSlots().add(dischargeSlot1);
+			result.getSlots().add(dischargeSlot2);
+
+			loadSlot.setPort(loadPort);
+			dischargeSlot1.setPort(dischargePort1);
+			dischargeSlot2.setPort(dischargePort2);
+			
+			loadSlot.setContract(purchaseContract);
+			dischargeSlot1.setContract(salesContract);
+			dischargeSlot2.setContract(salesContract);
+			
+			loadSlot.setMaxQuantity(Integer.MAX_VALUE);
+			loadSlot.setName("load");
+			dischargeSlot1.setMaxQuantity(Integer.MAX_VALUE);
+			dischargeSlot1.setName("discharge1");
+			dischargeSlot2.setMaxQuantity(Integer.MAX_VALUE);
+			dischargeSlot2.setName("discharge2");
+
+			setDefaultSlotWindow(loadSlot, loadTime);
+			setDefaultSlotWindow(dischargeSlot1, addHours(loadTime, travelTimeInHours1));
+			setDefaultSlotWindow(dischargeSlot2, addHours(loadTime, travelTimeInHours1 + defaultWindowSize + travelTimeInHours2));
+
+			result.setName(name);
+
+			final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
+
+			cargoModel.getLoadSlots().add(loadSlot);
+			cargoModel.getDischargeSlots().add(dischargeSlot1);
+			cargoModel.getDischargeSlots().add(dischargeSlot2);
+			cargoModel.getCargoes().add(result);
+			
+			return result;		
+		}		
 	}
+	
+
 	
 	public class DefaultPricingCreator {
 		public DataIndex<Double> createDefaultIndex(String name, double value) {
@@ -1067,5 +1021,22 @@ public class DefaultScenarioCreator {
 		return null;
 	}
 	
-	
+	/**
+	 * Sets up a cooldown pricing model including an index
+	 */
+	public void setupCooldown(double value) {
+		final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+		final PortModel portModel = scenario.getSubModel(PortModel.class);
+
+		final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultIndex("cooldown", value);
+		
+		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
+		price.setIndex(cooldownIndex);
+		
+		for (Port port: portModel.getPorts()) {
+			price.getPorts().add(port);
+		}
+
+		pricingModel.getCooldownPrices().add(price);		
+	}	
 }
