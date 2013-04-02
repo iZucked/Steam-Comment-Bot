@@ -237,13 +237,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO___GET_CARGO_TYPE = TypesPackage.ACARGO_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Sorted Slots</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO___GET_SORTED_SLOTS = TypesPackage.ACARGO_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_OPERATION_COUNT = TypesPackage.ACARGO_OPERATION_COUNT + 1;
+	int CARGO_OPERATION_COUNT = TypesPackage.ACARGO_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -2416,6 +2425,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getCargo__GetCargoType();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots() <em>Get Sorted Slots</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Sorted Slots</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots()
+	 * @generated
+	 */
+	EOperation getCargo__GetSortedSlots();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Slot <em>Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2895,6 +2914,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation CARGO___GET_CARGO_TYPE = eINSTANCE.getCargo__GetCargoType();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Sorted Slots</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO___GET_SORTED_SLOTS = eINSTANCE.getCargo__GetSortedSlots();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.

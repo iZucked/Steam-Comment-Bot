@@ -1,11 +1,13 @@
 package com.mmxlabs.models.lng.cargo.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -45,9 +47,9 @@ public class CargoSlotSorter {
 	 * @param slots
 	 * @return
 	 */
-	public static List<Slot> sortedSlots(final List<Slot> slots) {
+	public static EList<Slot> sortedSlots(final List<Slot> slots) {
 		// Copy original list
-		final List<Slot> sortedSlots = new ArrayList<Slot>(slots);
+		final EList<Slot> sortedSlots = new BasicEList<Slot>(slots);
 		// Sort!
 		Collections.sort(sortedSlots, new SlotComparator());
 		// Return

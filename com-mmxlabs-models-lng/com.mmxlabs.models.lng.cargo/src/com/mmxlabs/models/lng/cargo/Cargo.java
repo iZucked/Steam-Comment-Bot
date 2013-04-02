@@ -3,9 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
+import java.util.List;
+
+import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
 import com.mmxlabs.models.lng.types.ACargo;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -101,8 +105,9 @@ public interface Cargo extends ACargo {
 	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Slots</em>' reference list isn't clear,
-	 * there really should be more of a description here...
+	 * The slots are all the slots linked to this {@link Cargo}. These could be {@link LoadSlot}s or {@link DischargeSlot}s
+	 *  - or any other slot implementation. Note this list is unsorted. Clients of this method should date sort the slots if required.
+	 *  See {@link #getSortedSlots()} or {@link CargoSlotSorter} to help with this.
 	 * </p>
 	 * @since 3.0
 	 * <!-- end-user-doc -->
@@ -121,6 +126,16 @@ public interface Cargo extends ACargo {
 	 * @generated
 	 */
 	CargoType getCargoType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Returns date sorted copy of the {@link #getSlots()} {@link List}. A new list is created each time this method is called.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<Slot> getSortedSlots();
 
 } // end of  Cargo
 
