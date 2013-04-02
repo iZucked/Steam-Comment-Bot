@@ -203,7 +203,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				// && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
 				// }
 				Slot prevSlot = null;
-				for (Slot slot : cargo.getSlots()) {
+				for (Slot slot : cargo.getSortedSlots()) {
 					if (prevSlot != null) {
 						final Port loadPort = prevSlot.getPort();
 						final Port dischargePort = slot.getPort();
