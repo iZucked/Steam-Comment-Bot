@@ -239,6 +239,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Sorted Slots</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2427,6 +2428,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots() <em>Get Sorted Slots</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Sorted Slots</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots()
@@ -2918,6 +2920,7 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Sorted Slots</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
