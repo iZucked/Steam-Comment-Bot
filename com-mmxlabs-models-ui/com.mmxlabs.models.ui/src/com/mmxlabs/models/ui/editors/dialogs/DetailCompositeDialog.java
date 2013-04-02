@@ -237,31 +237,31 @@ public class DetailCompositeDialog extends Dialog {
 		return originalToDuplicate.get(original);
 	}
 
-	/**
-	 * For every EObject in duplicate range or its containment tree, finds any references to any already-duplicated objects and patches them up.
-	 * 
-	 * @param duplicateRange
-	 */
-	private void pointReferencesToExistingDuplicates(final EObject object) {
-		for (final EReference ref : object.eClass().getEAllReferences()) {
-			if (ref.isContainment())
-				continue;
-			if (ref.isMany()) {
-				final List values = (List) object.eGet(ref);
-				for (int i = 0; i < values.size(); i++) {
-					if (originalToDuplicate.containsKey(values.get(i))) {
-						values.set(i, originalToDuplicate.get(values.get(i)));
-					}
-				}
-			} else {
-				final EObject value = (EObject) object.eGet(ref);
-				if (originalToDuplicate.containsKey(value)) {
-					object.eSet(ref, originalToDuplicate.get(value));
-				}
-			}
-		}
-	}
-
+//	/**
+//	 * For every EObject in duplicate range or its containment tree, finds any references to any already-duplicated objects and patches them up.
+//	 * 
+//	 * @param duplicateRange
+//	 */
+//	private void pointReferencesToExistingDuplicates(final EObject object) {
+//		for (final EReference ref : object.eClass().getEAllReferences()) {
+//			if (ref.isContainment())
+//				continue;
+//			if (ref.isMany()) {
+//				final List values = (List) object.eGet(ref);
+//				for (int i = 0; i < values.size(); i++) {
+//					if (originalToDuplicate.containsKey(values.get(i))) {
+//						values.set(i, originalToDuplicate.get(values.get(i)));
+//					}
+//				}
+//			} else {
+//				final EObject value = (EObject) object.eGet(ref);
+//				if (originalToDuplicate.containsKey(value)) {
+//					object.eSet(ref, originalToDuplicate.get(value));
+//				}
+//			}
+//		}
+//	}
+//
 	/**
 	 * Construct a new detail composite dialog.
 	 * 
