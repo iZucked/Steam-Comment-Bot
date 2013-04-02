@@ -73,12 +73,14 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	/**
 	 * The load slot for each cargo
 	 */
-	final ArrayList<ILoadOption> loadSlots = new ArrayList<ILoadOption>();
+	//final ArrayList<ILoadOption> loadSlots = new ArrayList<ILoadOption>();
 	/**
 	 * The discharge slot for each cargo.
 	 */
-	final ArrayList<IDischargeOption> dischargeSlots = new ArrayList<IDischargeOption>();
+	//final ArrayList<IDischargeOption> dischargeSlots = new ArrayList<IDischargeOption>();
 
+	final ArrayList<IPortSlot []> listedSlots = new ArrayList<IPortSlot []>();
+	
 	final ArrayList<VoyagePlan> voyagePlans = new ArrayList<VoyagePlan>();
 
 	final ArrayList<Integer> loadPricesPerM3 = new ArrayList<Integer>();
@@ -129,8 +131,9 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		variableTable.clear();
 		slotTimes.clear();
 		unitPricesPerM3.clear();
-		loadSlots.clear();
-		dischargeSlots.clear();
+		//loadSlots.clear();
+		//dischargeSlots.clear();
+		listedSlots.clear();
 		vesselCapacityInM3.clear();
 		forcedLoadVolumeInM3.clear();
 		remainingHeelVolumeInM3.clear();
@@ -369,8 +372,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		slotTimes.put(loadSlot, loadTime);
 		slotTimes.put(dischargeSlot, dischargeTime);
 
-		loadSlots.add(loadSlot);
-		dischargeSlots.add(dischargeSlot);
+		IPortSlot [] slots = { loadSlot, dischargeSlot };
+		listedSlots.add(slots);
+		//loadSlots.add(loadSlot);
+		//dischargeSlots.add(dischargeSlot);
 
 		// store the current cargo index (variable index in the LP) so that we
 		// can reverse-lookup from slots to LP variables
@@ -456,8 +461,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		slotTimes.put(loadSlot, time);
 		slotTimes.put(dischargeSlot, time);
 
-		loadSlots.add(loadSlot);
-		dischargeSlots.add(dischargeSlot);
+		IPortSlot [] slots = { loadSlot, dischargeSlot };
+		listedSlots.add(slots);
+		//loadSlots.add(loadSlot);
+		//dischargeSlots.add(dischargeSlot);
 
 		// store the current cargo index (variable index in the LP) so that we
 		// can reverse-lookup from slots to LP variables
@@ -539,23 +546,27 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			@Override
 			public Iterator<Pair<VoyagePlan, IAllocationAnnotation>> iterator() {
 				return new Iterator< Pair<VoyagePlan, IAllocationAnnotation>>() {
-					final Iterator<ILoadOption> loadIterator = loadSlots.iterator();
-					final Iterator<IDischargeOption> dischargeIterator = dischargeSlots.iterator();
+					final Iterator<IPortSlot []> slotsIterator = listedSlots.iterator();
+					//final Iterator<ILoadOption> loadIterator = loadSlots.iterator();
+					//final Iterator<IDischargeOption> dischargeIterator = dischargeSlots.iterator();
 					final Iterator<Integer> priceIterator = unitPricesPerM3.iterator();
 					final Iterator<VoyagePlan> voyagePlansIterator = voyagePlans.iterator();
 					int allocationIndex;
 
 					@Override
 					public boolean hasNext() {
-						return loadIterator.hasNext() && dischargeIterator.hasNext() && priceIterator.hasNext() && voyagePlansIterator.hasNext();
+						return slotsIterator.hasNext() && priceIterator.hasNext() && voyagePlansIterator.hasNext();
 					}
 
 					@Override
 					public Pair<VoyagePlan, IAllocationAnnotation> next() {
 						final AllocationAnnotation annotation = new AllocationAnnotation();
 
-						final ILoadOption loadSlot = loadIterator.next();
-						final IDischargeOption dischargeSlot = dischargeIterator.next();
+						IPortSlot[] slots = slotsIterator.next();
+						assert(slots.length == 2);
+						
+						final ILoadOption loadSlot = (ILoadOption) (slots[0]);
+						final IDischargeOption dischargeSlot = (IDischargeOption) (slots[1]);
 
 						annotation.getSlots().clear();
 						annotation.getSlots().add(loadSlot);

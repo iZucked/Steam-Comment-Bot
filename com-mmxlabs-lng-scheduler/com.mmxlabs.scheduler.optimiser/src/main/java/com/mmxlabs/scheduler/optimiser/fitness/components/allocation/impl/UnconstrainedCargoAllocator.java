@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+
 /**
  * A cargo allocator which presumes that there are no total volume constraints, and so the total remaining capacity should be allocated
  * 
@@ -22,11 +26,14 @@ public class UnconstrainedCargoAllocator extends BaseCargoAllocator {
 		for (int i = 0; i < result.length; i++) {
 			// Total volume required for basic travel
 			final long flv = forcedLoadVolumeInM3.get(i) + remainingHeelVolumeInM3.get(i);
-			long maxLoadVolume = loadSlots.get(i).getMaxLoadVolume();
+			
+			IPortSlot[] slots = listedSlots.get(i);
+			assert(slots.length == 2);
+			long maxLoadVolume = ((ILoadOption) (slots[0])).getMaxLoadVolume();
 			if (maxLoadVolume == 0) {
 				maxLoadVolume = vesselCapacityInM3.get(i);
 			}
-			long maxDischargeVolume = dischargeSlots.get(i).getMaxDischargeVolume();
+			long maxDischargeVolume = ((IDischargeOption) (slots[1])).getMaxDischargeVolume();
 			if (maxDischargeVolume == 0) {
 				maxDischargeVolume =vesselCapacityInM3.get(i) - flv;
 			}else {
