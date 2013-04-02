@@ -124,9 +124,9 @@ public class LoadSlotViewer extends ScenarioTableViewerPane {
 					final CargoAllocation cargoAllocation = (CargoAllocation) o;
 					return getLoadSlot(cargoAllocation.getInputCargo());
 				}
-				if (o instanceof Cargo) {
-					return ((Cargo) o).getLoadSlot();
-				}
+//				if (o instanceof Cargo) {
+//					return ((Cargo) o).getLoadSlot();
+//				}
 				if (o instanceof SlotVisit) {
 					final SlotAllocation slotAllocation = ((SlotVisit) o).getSlotAllocation();
 					if (slotAllocation != null) {
@@ -243,7 +243,7 @@ public class LoadSlotViewer extends ScenarioTableViewerPane {
 			@Override
 			public EObject getElementForNotificationTarget(final EObject source) {
 				if (source instanceof Cargo) {
-					return ((Cargo) source).getLoadSlot();
+//					return ((Cargo) source).getLoadSlot();
 				}
 
 				return super.getElementForNotificationTarget(source);

@@ -123,18 +123,18 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		addTypicalColumn("ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain));
 
 		addTypicalColumn("Type ", new BasicOperationRenderer(pkg.getCargo__GetCargoType(), editingDomain));
-
-		addTypicalColumn("Load Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_LoadSlot());
-
-		addTypicalColumn("Load Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_LoadSlot());
-
-		addTypicalColumn("Buy at", new ContractManipulator(provider, editingDomain), pkg.getCargo_LoadSlot());
-
-		addTypicalColumn("Discharge Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_DischargeSlot());
-
-		addTypicalColumn("Discharge Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_DischargeSlot());
-
-		addTypicalColumn("Sell at",  new ContractManipulator(provider, editingDomain), pkg.getCargo_DischargeSlot());
+//
+//		addTypicalColumn("Load Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_LoadSlot());
+//
+//		addTypicalColumn("Load Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_LoadSlot());
+//
+//		addTypicalColumn("Buy at", new ContractManipulator(provider, editingDomain), pkg.getCargo_LoadSlot());
+//
+//		addTypicalColumn("Discharge Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_DischargeSlot());
+//
+//		addTypicalColumn("Discharge Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_DischargeSlot());
+//
+//		addTypicalColumn("Sell at",  new ContractManipulator(provider, editingDomain), pkg.getCargo_DischargeSlot());
 
 		final InputModel input = part.getRootObject().getSubModel(InputModel.class);
 

@@ -83,7 +83,7 @@ public class DischargeSlotViewer extends ScenarioTableViewerPane {
 		addTypicalColumn("Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain));
 
 		addTypicalColumn("Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain));
-		addTypicalColumn("Cargo ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain), pkg.getDischargeSlot_Cargo());
+		addTypicalColumn("Cargo ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain), pkg.getSlot_Cargo());
 		addTypicalColumn("Optional", new BooleanAttributeManipulator(pkg.getSlot_Optional(), editingDomain));
 
 		// final InputModel input = part.getRootObject().getSubModel(InputModel.class);
@@ -126,7 +126,7 @@ public class DischargeSlotViewer extends ScenarioTableViewerPane {
 					return getDischargeSlot(cargoAllocation.getInputCargo());
 				}
 				if (o instanceof Cargo) {
-					return ((Cargo) o).getDischargeSlot();
+//					return ((Cargo) o).getDischargeSlot();
 				}
 				if (o instanceof SlotVisit) {
 					final SlotAllocation slotAllocation = ((SlotVisit) o).getSlotAllocation();
@@ -244,7 +244,7 @@ public class DischargeSlotViewer extends ScenarioTableViewerPane {
 			@Override
 			public EObject getElementForNotificationTarget(final EObject source) {
 				if (source instanceof Cargo) {
-					return ((Cargo) source).getDischargeSlot();
+//					return ((Cargo) source).getDischargeSlot();
 				}
 
 				return super.getElementForNotificationTarget(source);
