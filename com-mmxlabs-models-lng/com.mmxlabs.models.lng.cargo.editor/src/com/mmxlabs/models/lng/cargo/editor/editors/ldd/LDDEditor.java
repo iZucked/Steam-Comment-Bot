@@ -219,7 +219,7 @@ public class LDDEditor extends Dialog {
 					}
 					mgr.removeAll();
 
-					final IMenuListener listener = menuHelper.createSlotsMenuListener(cargo.getSlots(), idx);
+					final IMenuListener listener = menuHelper.createSwapSlotsMenuListener(cargo.getSlots(), idx);
 					listener.menuAboutToShow(mgr);
 
 					menu.setVisible(true);
