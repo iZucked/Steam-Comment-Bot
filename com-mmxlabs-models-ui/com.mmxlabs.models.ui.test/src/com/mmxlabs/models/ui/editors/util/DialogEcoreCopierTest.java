@@ -10,6 +10,7 @@ import com.mmxlabs.models.ui.test.model.ModelFactory;
 import com.mmxlabs.models.ui.test.model.ModelRoot;
 import com.mmxlabs.models.ui.test.model.MultipleReference;
 import com.mmxlabs.models.ui.test.model.SimpleObject;
+import com.mmxlabs.models.ui.test.model.SingleContainmentReference;
 import com.mmxlabs.models.ui.test.model.SingleReference;
 
 public class DialogEcoreCopierTest {
@@ -169,4 +170,85 @@ public class DialogEcoreCopierTest {
 
 	}
 
+	/**
+	 * Test that EOpposite/containment is correctly maintained between copies and originals
+	 */
+	@Test
+	public void testSingleContainmentReference() {
+
+		final String originalValue = "OriginalValue";
+		final String newValue = "NewValue";
+
+		final DialogEcoreCopier copier = new DialogEcoreCopier();
+
+		final SimpleObject simpleObject = ModelFactory.eINSTANCE.createSimpleObject();
+		simpleObject.setAttribute(originalValue);
+
+		final SingleContainmentReference singleContainmentReference = ModelFactory.eINSTANCE.createSingleContainmentReference();
+		singleContainmentReference.setSimpleObject(simpleObject);
+
+		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+
+		final SingleContainmentReference copySingleContainmentReference = (SingleContainmentReference) copier.copy(singleContainmentReference);
+		// Contained objects automatically copied.
+		final SimpleObject copySimpleObject = copySingleContainmentReference.getSimpleObject();//(SimpleObject) copier.copy(simpleObject);
+
+		Assert.assertNotSame(simpleObject, copySimpleObject);
+		
+		copier.record();
+
+		// Check original has not changed
+		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+
+		// Check copy is correctly hooked up
+		Assert.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
+		Assert.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
+
+		// Do something?
+		copySimpleObject.setAttribute(newValue);
+
+		final Command cmd = copier.createEditCommand();
+
+		cmd.execute();
+
+		// Check original has not changed
+		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+
+		// Check copy is correctly hooked up
+		Assert.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
+		Assert.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
+
+		// Check attrrib change
+		Assert.assertEquals(newValue, simpleObject.getAttribute());
+
+		cmd.undo();
+
+		// Check original has not changed
+		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+
+		// Check copy is correctly hooked up
+		Assert.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
+		Assert.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
+
+		// Check attrrib change
+		Assert.assertEquals(originalValue, simpleObject.getAttribute());
+
+		cmd.redo();
+
+		// Check original has not changed
+		Assert.assertEquals(simpleObject, singleContainmentReference.getSimpleObject());
+		Assert.assertEquals(singleContainmentReference, simpleObject.eContainer());
+
+		// Check copy is correctly hooked up
+		Assert.assertEquals(copySimpleObject, copySingleContainmentReference.getSimpleObject());
+		Assert.assertEquals(copySingleContainmentReference, copySimpleObject.eContainer());
+
+		// Check attrrib change
+		Assert.assertEquals(newValue, simpleObject.getAttribute());
+
+	}
 }

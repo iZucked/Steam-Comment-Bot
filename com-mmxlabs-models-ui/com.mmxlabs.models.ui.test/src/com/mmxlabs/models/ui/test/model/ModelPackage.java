@@ -232,13 +232,22 @@ public interface ModelPackage extends EPackage {
 	int SINGLE_CONTAINMENT_REFERENCE = 4;
 
 	/**
+	 * The feature id for the '<em><b>Simple Object</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SINGLE_CONTAINMENT_REFERENCE__SIMPLE_OBJECT = 0;
+
+	/**
 	 * The number of structural features of the '<em>Single Containment Reference</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SINGLE_CONTAINMENT_REFERENCE_FEATURE_COUNT = 0;
+	int SINGLE_CONTAINMENT_REFERENCE_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.ui.test.model.impl.MultipleContainmentReferenceImpl <em>Multiple Containment Reference</em>}' class.
@@ -251,13 +260,22 @@ public interface ModelPackage extends EPackage {
 	int MULTIPLE_CONTAINMENT_REFERENCE = 5;
 
 	/**
+	 * The feature id for the '<em><b>Simple Objects</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULTIPLE_CONTAINMENT_REFERENCE__SIMPLE_OBJECTS = 0;
+
+	/**
 	 * The number of structural features of the '<em>Multiple Containment Reference</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MULTIPLE_CONTAINMENT_REFERENCE_FEATURE_COUNT = 0;
+	int MULTIPLE_CONTAINMENT_REFERENCE_FEATURE_COUNT = 1;
 
 
 	/**
@@ -421,6 +439,17 @@ public interface ModelPackage extends EPackage {
 	EClass getSingleContainmentReference();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.ui.test.model.SingleContainmentReference#getSimpleObject <em>Simple Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Simple Object</em>'.
+	 * @see com.mmxlabs.models.ui.test.model.SingleContainmentReference#getSimpleObject()
+	 * @see #getSingleContainmentReference()
+	 * @generated
+	 */
+	EReference getSingleContainmentReference_SimpleObject();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.ui.test.model.MultipleContainmentReference <em>Multiple Containment Reference</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -429,6 +458,17 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getMultipleContainmentReference();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.ui.test.model.MultipleContainmentReference#getSimpleObjects <em>Simple Objects</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Simple Objects</em>'.
+	 * @see com.mmxlabs.models.ui.test.model.MultipleContainmentReference#getSimpleObjects()
+	 * @see #getMultipleContainmentReference()
+	 * @generated
+	 */
+	EReference getMultipleContainmentReference_SimpleObjects();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -583,6 +623,14 @@ public interface ModelPackage extends EPackage {
 		EClass SINGLE_CONTAINMENT_REFERENCE = eINSTANCE.getSingleContainmentReference();
 
 		/**
+		 * The meta object literal for the '<em><b>Simple Object</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SINGLE_CONTAINMENT_REFERENCE__SIMPLE_OBJECT = eINSTANCE.getSingleContainmentReference_SimpleObject();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.ui.test.model.impl.MultipleContainmentReferenceImpl <em>Multiple Containment Reference</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -591,6 +639,14 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass MULTIPLE_CONTAINMENT_REFERENCE = eINSTANCE.getMultipleContainmentReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Simple Objects</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MULTIPLE_CONTAINMENT_REFERENCE__SIMPLE_OBJECTS = eINSTANCE.getMultipleContainmentReference_SimpleObjects();
 
 	}
 

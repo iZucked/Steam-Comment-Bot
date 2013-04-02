@@ -268,8 +268,26 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSingleContainmentReference_SimpleObject() {
+		return (EReference)singleContainmentReferenceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMultipleContainmentReference() {
 		return multipleContainmentReferenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMultipleContainmentReference_SimpleObjects() {
+		return (EReference)multipleContainmentReferenceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -319,8 +337,10 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEReference(multipleReferenceEClass, MULTIPLE_REFERENCE__MODEL_ROOT);
 
 		singleContainmentReferenceEClass = createEClass(SINGLE_CONTAINMENT_REFERENCE);
+		createEReference(singleContainmentReferenceEClass, SINGLE_CONTAINMENT_REFERENCE__SIMPLE_OBJECT);
 
 		multipleContainmentReferenceEClass = createEClass(MULTIPLE_CONTAINMENT_REFERENCE);
+		createEReference(multipleContainmentReferenceEClass, MULTIPLE_CONTAINMENT_REFERENCE__SIMPLE_OBJECTS);
 	}
 
 	/**
@@ -372,8 +392,10 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEReference(getMultipleReference_ModelRoot(), this.getModelRoot(), this.getModelRoot_MultipleReferences(), "modelRoot", null, 0, 1, MultipleReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(singleContainmentReferenceEClass, SingleContainmentReference.class, "SingleContainmentReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSingleContainmentReference_SimpleObject(), this.getSimpleObject(), null, "simpleObject", null, 0, 1, SingleContainmentReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(multipleContainmentReferenceEClass, MultipleContainmentReference.class, "MultipleContainmentReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMultipleContainmentReference_SimpleObjects(), this.getSimpleObject(), null, "simpleObjects", null, 0, -1, MultipleContainmentReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
