@@ -333,7 +333,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 					state = VesselState.Ballast;
 					// but the last discharge which might have been partial *was* a partial discharge
 					if (possiblePartialDischargeIndex > -1) {
-						result[possiblePartialDischargeIndex] = VesselState.Laden;
+						result[possiblePartialDischargeIndex+1] = VesselState.Laden;
 					}
 					// and this one might be too
 					possiblePartialDischargeIndex = idx;
