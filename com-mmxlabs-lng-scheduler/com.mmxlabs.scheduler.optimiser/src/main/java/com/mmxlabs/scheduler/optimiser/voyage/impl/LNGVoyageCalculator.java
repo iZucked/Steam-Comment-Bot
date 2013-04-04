@@ -506,10 +506,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				// Voyage
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
-				if (loadIdx <= i && i < dischargeIdx) 
-					assert(details.getOptions().getVesselState() == VesselState.Laden);
-				else 
-					assert(details.getOptions().getVesselState() == VesselState.Ballast);
+//				if (loadIdx <= i && i < dischargeIdx) 
+//					assert(details.getOptions().getVesselState() == VesselState.Laden);
+//				else 
+//					assert(details.getOptions().getVesselState() == VesselState.Ballast);
 			}
 		}
 		
