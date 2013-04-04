@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,15 +210,20 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						final Port dischargePort = slot.getPort();
 						if ((loadPort != null) && (dischargePort != null)) {
 
-							final int availableTime = (int) ((slot.getWindowEndWithSlotOrPortTime().getTime() - prevSlot.getWindowStartWithSlotOrPortTime().getTime()) / Timer.ONE_HOUR)
-									- (prevSlot.getSlotOrPortDuration());
+							Date windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
+							Date windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
 
-							if (constraintID.equals(DATE_ORDER_ID)) {
-								validateSlotOrder(ctx, cargo, prevSlot, availableTime, inDialog, failures);
-							} else if (constraintID.equals(TRAVEL_TIME_ID)) {
-								validateSlotTravelTime(ctx, cargo, prevSlot, slot, availableTime, inDialog, failures);
-							} else if (constraintID.equals(AVAILABLE_TIME_ID)) {
-								validateSlotAvailableTime(ctx, cargo, prevSlot, availableTime, inDialog, failures);
+							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
+								final int availableTime = (int) ((windowEndWithSlotOrPortTime.getTime() - windowStartWithSlotOrPortTime.getTime()) / Timer.ONE_HOUR)
+										- (prevSlot.getSlotOrPortDuration());
+
+								if (constraintID.equals(DATE_ORDER_ID)) {
+									validateSlotOrder(ctx, cargo, prevSlot, availableTime, inDialog, failures);
+								} else if (constraintID.equals(TRAVEL_TIME_ID)) {
+									validateSlotTravelTime(ctx, cargo, prevSlot, slot, availableTime, inDialog, failures);
+								} else if (constraintID.equals(AVAILABLE_TIME_ID)) {
+									validateSlotAvailableTime(ctx, cargo, prevSlot, availableTime, inDialog, failures);
+								}
 							}
 						}
 					}
