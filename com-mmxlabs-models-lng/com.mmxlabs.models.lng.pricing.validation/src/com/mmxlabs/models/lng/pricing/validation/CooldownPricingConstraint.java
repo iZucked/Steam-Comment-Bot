@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -36,15 +37,10 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * @author hinton
  * 
  */
-public class CooldownPricingConstraint extends AbstractModelConstraint {
+public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse.emf.validation.IValidationContext)
-	 */
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	protected String validate(IValidationContext ctx, List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof PricingModel) {
@@ -58,22 +54,28 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 					for (final APort port : ports.getPorts()) {
 						pricingPerPort.put(port, new HashSet<CooldownPrice>());
 					}
-						
+
 					for (final CooldownPrice c : pm.getCooldownPrices()) {
+						
+						if (c.getIndex() == null) {
+							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cooldown definition is missing a price index."));
+							dcsd.addEObjectAndFeature(c, PricingPackage.eINSTANCE.getCooldownPrice_Index());
+							failures.add(dcsd);
+						}
+						
+						
 						for (final APort port : SetUtils.getPorts(c.getPorts())) {
 							pricingPerPort.get(port).add(c);
 						}
 					}
 
-					// find all the ports with less than or more than 1 cooldown price
-					final List<IStatus> failures = new LinkedList<IStatus>();
 
 					for (final Entry<APort, Set<CooldownPrice>> entry : pricingPerPort.entrySet()) {
 						final APort port = entry.getKey();
 						final int count = entry.getValue().size();
 
 						if (count != 1 && (port instanceof Port) && ((Port) port).getCapabilities().contains(PortCapability.LOAD)) {
-							final String message = String.format("Load port %s has %d cooldown prices specified.", port.getName(), count);
+							final String message = String.format("Load port %s has %d cooldown prices specified - there should be exactly one price.", port.getName(), count);
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 							dcsd.addEObjectAndFeature(port, null);
 							if (count > 0) {
@@ -84,21 +86,10 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 							failures.add(dcsd);
 						}
 					}
-
-					// return an appropriate validation status: success, 1 failure or compound failure
-					if (failures.isEmpty()) {
-						return ctx.createSuccessStatus();
-					} else if (failures.size() == 1) {
-						return failures.get(0);
-					} else {
-						final String heading = String.format("%s ports have problems with their cooldown prices.", failures.size());
-						return new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, failures.toArray(new IStatus[] {}), heading, null);
-					}
-
 				}
 			}
 		}
 
-		return ctx.createSuccessStatus();
+		return Activator.PLUGIN_ID;
 	}
 }

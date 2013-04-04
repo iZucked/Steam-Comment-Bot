@@ -148,38 +148,10 @@
           targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.indexPurchaseFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Indexed Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.indexSalesFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Indexed Sales Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
-    </factory>
-    <factory
           ID="com.mmxlabs.models.lng.commercial.editor.entityFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Entity"
           targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.NetbackPurchaseContractFactory"
-          factory="com.mmxlabs.models.lng.commercial.modelfactories.NetbackPurchaseContractFactory"
-          label="Netback Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.ProfitSharePurchaseContractFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Profit Share Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.commercial.NotionalBallastParametersFactory"
@@ -187,13 +159,6 @@
           label="Notional Ballast Parameters"
           outputEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.RedirectionPurchaseContractFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Redirection Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.priceExpressionPurchaseFactory"
