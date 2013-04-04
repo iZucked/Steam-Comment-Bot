@@ -245,6 +245,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param plan
 	 * @return
 	 */
+	@Override
 	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getShippingEntity();
 
