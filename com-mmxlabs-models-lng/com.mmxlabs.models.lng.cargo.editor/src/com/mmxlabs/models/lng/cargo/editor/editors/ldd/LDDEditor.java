@@ -57,6 +57,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
@@ -151,6 +152,18 @@ public class LDDEditor extends Dialog {
 
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setText("ID");
+				column.getColumn().setWidth(150);
+
+				final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), scenarioEditingLocation.getEditingDomain());
+				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
+
+				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
+				column.setEditingSupport(es);
+			}
+			
+			{
+				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("Contract");
 				column.getColumn().setWidth(150);
 				final ContractManipulator manipulator = new ContractManipulator(scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getEditingDomain());
@@ -188,7 +201,18 @@ public class LDDEditor extends Dialog {
 			}
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("Volume");
+				column.getColumn().setText("Volume (Min)");
+				column.getColumn().setWidth(150);
+
+				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), scenarioEditingLocation.getEditingDomain());
+				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
+
+				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
+				column.setEditingSupport(es);
+			}
+			{
+				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+				column.getColumn().setText("Volume (Max)");
 				column.getColumn().setWidth(150);
 
 				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getEditingDomain());
