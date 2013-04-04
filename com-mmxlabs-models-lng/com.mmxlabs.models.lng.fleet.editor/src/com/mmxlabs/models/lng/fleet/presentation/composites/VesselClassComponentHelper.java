@@ -161,11 +161,11 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	}
 	/**
 	 * Create the editor for the coolingTime feature on VesselClass
-	 *
-	 * @generated
+	 * Disabled cooling time editor until implementation is corrected.
+	 * @generated NOT
 	 */
 	protected void add_coolingTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__COOLING_TIME));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__COOLING_TIME));
 	}
 	/**
 	 * Create the editor for the coolingVolume feature on VesselClass
