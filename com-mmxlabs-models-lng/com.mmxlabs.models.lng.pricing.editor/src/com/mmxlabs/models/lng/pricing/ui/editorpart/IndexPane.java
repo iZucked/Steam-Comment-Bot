@@ -27,6 +27,8 @@ import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -243,6 +245,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 						}
 
 						if (minDate != null && maxDate != null) {
+							Grid grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+							int columnCount = grid.getColumnCount();
+							for (int i = columnCount - 1; i > 1; i--) {
+								GridColumn column = grid.getColumn(i);
+								column.dispose();
+							}
 							final Calendar c = Calendar.getInstance();
 							c.setTime(minDate);
 							c.set(Calendar.MILLISECOND, 0);
