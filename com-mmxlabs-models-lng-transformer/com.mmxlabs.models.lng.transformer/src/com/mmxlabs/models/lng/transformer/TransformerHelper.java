@@ -26,7 +26,7 @@ public class TransformerHelper {
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
 				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), OptimiserUnitConvertor.convertToInternalPrice(baseFuelPrice),
 				OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()),
-				OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()), eVc.getWarmingTime(), eVc.getCoolingTime(),
+				OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()), eVc.getWarmingTime(), /* disable cooling time - eVc.getCoolingTime() */ 0,
 				OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()));
 		
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
