@@ -44,6 +44,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.pricing.validation.IndexNameConstraint"
+                  id="com.mmxlabs.models.lng.pricing.validation.IndexNameConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Index Name"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Index">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.pricing.validation.CooldownPricingConstraint"
                   id="com.mmxlabs.models.lng.pricing.validation.cooldownPricing"
                   isEnabledByDefault="true"
