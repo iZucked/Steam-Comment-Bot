@@ -14,7 +14,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
-import com.mmxlabs.models.lng.commercial.validation.util.ContractConstraints;
+import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 
 public class PriceExpressionContractConstraint extends
@@ -25,10 +25,10 @@ public class PriceExpressionContractConstraint extends
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof PriceExpressionContract) {
-			final SeriesParser parser = ContractConstraints.getParser();
+			final SeriesParser parser = PriceExpressionUtils.getParser();
 			final PriceExpressionContract contract = (PriceExpressionContract) target;
 
-			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getPriceExpressionContract_PriceExpression(), contract.getPriceExpression(), parser,
+			PriceExpressionUtils.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getPriceExpressionContract_PriceExpression(), contract.getPriceExpression(), parser,
 					failures);
 
 		}

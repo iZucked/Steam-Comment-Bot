@@ -15,7 +15,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
-import com.mmxlabs.models.lng.commercial.validation.util.ContractConstraints;
+import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -25,12 +25,12 @@ public class RedirectionPurchaseContractConstraint extends AbstractModelMultiCon
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof RedirectionPurchaseContract) {
-			final SeriesParser parser = ContractConstraints.getParser();
+			final SeriesParser parser = PriceExpressionUtils.getParser();
 			final RedirectionPurchaseContract contract = (RedirectionPurchaseContract) target;
 
-			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BasePurchasePriceExpression(), contract.getBasePurchasePriceExpression(), parser,
+			PriceExpressionUtils.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BasePurchasePriceExpression(), contract.getBasePurchasePriceExpression(), parser,
 					failures);
-			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BaseSalesPriceExpression(), contract.getBaseSalesPriceExpression(), parser, failures);
+			PriceExpressionUtils.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BaseSalesPriceExpression(), contract.getBaseSalesPriceExpression(), parser, failures);
 
 			if (contract.getNotionalSpeed() < 10.0) {
 
