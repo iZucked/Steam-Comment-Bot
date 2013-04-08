@@ -50,33 +50,33 @@ public class MigrationRegistry implements IMigrationRegistry {
 	public void init(final Iterable<MigrationContextExtensionPoint> migrationContexts, final Iterable<MigrationUnitExtensionPoint> migrationUnits,
 			final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts) {
 
-		for (final MigrationContextExtensionPoint ext : migrationContexts) {
-			final String contextName = ext.getContextName();
-			try {
-				if (contextName != null) {
-					registerContext(contextName, Integer.parseInt(ext.getLatestVersion()));
-				}
-			} catch (final NumberFormatException e) {
-				log.error("Unable to register context: " + contextName, e);
-			}
-		}
-		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
-			try {
-				if (ext != null) {
-					registerMigrationUnit(new MigrationUnitProxy(ext));
-				}
-			} catch (final Exception e) {
-				log.error("Unable to register migration unit for context: " + (ext == null ? "unknown" : ext.getContext()), e);
-			}
-		}
-
-		for (final DefaultMigrationContextExtensionPoint ext : defaultMigrationContexts) {
-			if (defaultContext == null) {
-				defaultContext = ext.getContext();
-			} else {
-				log.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
-			}
-		}
+//		for (final MigrationContextExtensionPoint ext : migrationContexts) {
+//			final String contextName = ext.getContextName();
+//			try {
+//				if (contextName != null) {
+//					registerContext(contextName, Integer.parseInt(ext.getLatestVersion()));
+//				}
+//			} catch (final NumberFormatException e) {
+//				log.error("Unable to register context: " + contextName, e);
+//			}
+//		}
+//		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
+//			try {
+//				if (ext != null) {
+//					registerMigrationUnit(new MigrationUnitProxy(ext));
+//				}
+//			} catch (final Exception e) {
+//				log.error("Unable to register migration unit for context: " + (ext == null ? "unknown" : ext.getContext()), e);
+//			}
+//		}
+//
+//		for (final DefaultMigrationContextExtensionPoint ext : defaultMigrationContexts) {
+//			if (defaultContext == null) {
+//				defaultContext = ext.getContext();
+//			} else {
+//				log.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
+//			}
+//		}
 	}
 
 	@SuppressWarnings("null")
