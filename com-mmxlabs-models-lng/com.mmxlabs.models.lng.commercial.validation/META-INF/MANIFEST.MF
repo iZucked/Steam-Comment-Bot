@@ -17,5 +17,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.common;version="2.0.0",
  com.mmxlabs.common.parser;version="2.0.0",
- com.mmxlabs.common.parser.series;version="2.0.0"
-Export-Package: com.mmxlabs.models.lng.commercial.validation.util
+ com.mmxlabs.common.parser.series;version="2.0.0",
+ com.mmxlabs.models.lng.pricing.validation.utils
