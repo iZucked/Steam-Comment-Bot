@@ -28,7 +28,7 @@ public class PriceExpressionContractConstraint extends
 			final SeriesParser parser = ContractConstraints.getParser();
 			final PriceExpressionContract contract = (PriceExpressionContract) target;
 
-			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BasePurchasePriceExpression(), contract.getPriceExpression(), parser,
+			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getPriceExpressionContract_PriceExpression(), contract.getPriceExpression(), parser,
 					failures);
 
 		}
