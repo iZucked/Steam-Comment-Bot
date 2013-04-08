@@ -20,6 +20,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
@@ -54,6 +55,7 @@ import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 public class IndexPane extends ScenarioTableViewerPane {
 
@@ -96,6 +98,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 	@Override
 	protected Action createImportAction() {
 		return new SimpleImportAction(getJointModelEditorPart(), getScenarioViewer()) {
+			@Override
+			protected void doImportStages(final DefaultImportContext context) {
+				super.doImportStages(context);
+				
+				// ugly hack: indirectly force a trigger of the inputChanged method
+				// TODO: do this more cleanly and directly
+				Viewer viewer = IndexPane.this.getViewer();
+				viewer.setInput(viewer.getInput());
+			}
+
 			@Override
 			protected IClassImporter getImporter(final EReference containment) {
 				final IClassImporter result = super.getImporter(containment);
@@ -197,7 +209,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
+		ScenarioTableViewer result = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
@@ -432,5 +444,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				});
 			}
 		};
+		return result;
 	}
+	
 }
