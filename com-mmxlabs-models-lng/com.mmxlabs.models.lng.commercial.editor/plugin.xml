@@ -124,8 +124,12 @@
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.expressionPurchaseFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
+          label="Price Expression Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
-    -->
     <!-- Sales Contract Factories -->
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.fixedSalesFactory"
@@ -139,13 +143,6 @@
           factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
           label="Price Expression Sales Contract"
           outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.indexSalesFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
-          label="Indexed Sales Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
 	<!-- Other Factories -->
