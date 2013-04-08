@@ -15,3 +15,6 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.ui.validation;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Export-Package: com.mmxlabs.models.lng.pricing.validation.utils
+Import-Package: com.mmxlabs.common.parser,
+ com.mmxlabs.common.parser.series;version="2.1.0"
