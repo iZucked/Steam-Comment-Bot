@@ -110,12 +110,12 @@ public class CargoImporter extends DefaultClassImporter {
 
 		final List<EObject> newResults = new ArrayList<EObject>(3);
 		boolean keepCargo = true;
-		if (load.getWindowStart() == null) {
+		if (load == null || load.getWindowStart() == null) {
 			keepCargo = false;
 		} else {
 			newResults.add(load);
 		}
-		if (discharge.getWindowStart() == null) {
+		if (discharge == null || discharge.getWindowStart() == null) {
 			keepCargo = false;
 		} else {
 			newResults.add(discharge);
@@ -203,4 +203,5 @@ public class CargoImporter extends DefaultClassImporter {
 
 		return newResults;
 	}
+
 }
