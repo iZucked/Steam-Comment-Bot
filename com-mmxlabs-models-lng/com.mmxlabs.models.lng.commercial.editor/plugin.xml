@@ -124,33 +124,6 @@
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.indexPurchaseFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
-          label="Index Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.expressionPurchaseFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
-          label="Price Expression Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.redirectionPurchaseFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
-          label="Redirection Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <!--
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.RedirectionPurchaseContractFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Redirection Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     -->
     <!-- Sales Contract Factories -->

@@ -11,11 +11,13 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
+import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -38,6 +40,10 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  */
 public class CargoImporter extends DefaultClassImporter {
 	private static final String ASSIGNMENT = "assignment";
+
+	// List of column names to filter out of export. UUID is confusing to the user, othernames is not used by cargo or slots. Fixed Price is deprecated.
+	private static final Set<String> filteredColumns = Sets.newHashSet("uuid", "otherNames", "loadSlot.uuid", "loadSlot.fixedPrice", "loadSlot.otherNames", "dischargeSlot.uuid",
+			"dischargeSlot.fixedPrice", "dischargeSlot.otherNames");
 
 	@Override
 	protected boolean shouldFlattenReference(final EReference reference) {
@@ -74,6 +80,14 @@ public class CargoImporter extends DefaultClassImporter {
 			}
 		}
 
+		// Filter Data
+		for (final Map<String, String> map : data) {
+			// Remove any matching columns
+			for (final String filteredKey : filteredColumns) {
+				map.remove(filteredKey);
+			}
+		}
+
 		return data;
 	}
 
@@ -97,15 +111,13 @@ public class CargoImporter extends DefaultClassImporter {
 
 		final List<EObject> newResults = new ArrayList<EObject>(3);
 		boolean keepCargo = true;
-		if (load != null) {
-			if (load.getWindowStart() == null) {
+		if (load == null || load.getWindowStart() == null) {
 				keepCargo = false;
 			} else {
 				newResults.add(load);
 			}
-		}
+		if (discharge == null || discharge.getWindowStart() == null) {
 		if (discharge != null) {
-			if (discharge.getWindowStart() == null) {
 				keepCargo = false;
 			} else {
 				newResults.add(discharge);
@@ -194,4 +206,5 @@ public class CargoImporter extends DefaultClassImporter {
 
 		return newResults;
 	}
+
 }

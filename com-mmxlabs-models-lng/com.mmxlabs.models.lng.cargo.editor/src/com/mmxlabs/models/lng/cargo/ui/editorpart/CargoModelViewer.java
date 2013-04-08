@@ -4,13 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -49,7 +45,6 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -136,7 +131,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Discharge Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_DischargeSlot());
 
-		addTypicalColumn("Sell at",  new ContractManipulator(provider, editingDomain), pkg.getCargo_DischargeSlot());
+		addTypicalColumn("Sell at", new ContractManipulator(provider, editingDomain), pkg.getCargo_DischargeSlot());
 
 		final InputModel input = part.getRootObject().getSubModel(InputModel.class);
 
@@ -220,29 +215,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 	@Override
 	protected Action createImportAction() {
-		return new SimpleImportAction(part, getScenarioViewer()) {
-			@Override
-			protected Command mergeImports(final EObject container, final EReference containment, final Collection<EObject> imports) {
-				final List<EObject> cargoes = new ArrayList<EObject>();
-				final List<EObject> loads = new ArrayList<EObject>();
-				final List<EObject> discharges = new ArrayList<EObject>();
-
-				for (final EObject o : imports) {
-					if (o instanceof Cargo)
-						cargoes.add(o);
-					else if (o instanceof LoadSlot)
-						loads.add(o);
-					else if (o instanceof DischargeSlot)
-						discharges.add(o);
-				}
-
-				final CompoundCommand mergeAll = new CompoundCommand();
-				mergeAll.append(super.mergeImports(container, containment, cargoes));
-				mergeAll.append(super.mergeImports(container, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loads));
-				mergeAll.append(super.mergeImports(container, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), discharges));
-				return mergeAll;
-			}
-		};
+		return new CargoImportAction(part, getScenarioViewer());
 	}
 
 	@Override

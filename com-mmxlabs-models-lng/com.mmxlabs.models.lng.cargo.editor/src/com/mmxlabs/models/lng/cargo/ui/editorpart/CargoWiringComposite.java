@@ -1241,7 +1241,18 @@ public class CargoWiringComposite extends Composite {
 		}
 		for (final LoadSlot slot : newLoadSlots) {
 			ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
+
 			cargoes.set(numberOfRows, null);
+			// It is possible (e.g. after import) for a new slot instance, but linked to an old Cargo instance.
+			// Here we move the cargo to the correct place.
+			if (slot.getCargo() != null) {
+				if (cargoes.contains(slot.getCargo())) {
+					int oldIdx = cargoes.indexOf(slot.getCargo());
+					cargoes.set(oldIdx, null);
+					cargoes.set(numberOfRows, slot.getCargo());
+				}
+			}
+
 			loadSlots.set(numberOfRows, slot);
 			dischargeSlots.set(numberOfRows, null);
 
