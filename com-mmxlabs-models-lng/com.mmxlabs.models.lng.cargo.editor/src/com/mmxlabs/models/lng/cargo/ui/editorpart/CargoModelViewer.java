@@ -4,23 +4,11 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.EStoreEObjectImpl.EStoreFeatureMap;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.IColorProvider;
@@ -40,7 +28,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -57,7 +44,6 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -228,182 +214,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 	@Override
 	protected Action createImportAction() {
-		return new SimpleImportAction(part, getScenarioViewer()) {
-			@Override
-			protected Command mergeImports(final EObject container, final EReference containment, final Collection<EObject> imports) {
-				final List<EObject> cargoes = new ArrayList<EObject>();
-				final List<EObject> loads = new ArrayList<EObject>();
-				final List<EObject> discharges = new ArrayList<EObject>();
-
-				for (final EObject o : imports) {
-					if (o instanceof Cargo) {
-						final Cargo cargo = (Cargo) o;
-						// Filter out broken cargoes - those with less than two slots
-						if (cargo.getLoadSlot() == null || cargo.getDischargeSlot() == null) {
-							if (cargo.getLoadSlot() != null) {
-								cargo.getLoadSlot().setCargo(null);
-							}
-							if (cargo.getDischargeSlot() != null) {
-								cargo.getDischargeSlot().setCargo(null);
-							}
-							// EOpposite should have already done this - but just to be sure
-							cargo.setLoadSlot(null);
-							cargo.setDischargeSlot(null);
-						} else {
-							cargoes.add(cargo);
-						}
-
-					} else if (o instanceof LoadSlot) {
-						loads.add(o);
-					} else if (o instanceof DischargeSlot) {
-						discharges.add(o);
-					}
-				}
-
-				final CompoundCommand mergeAll = new CompoundCommand();
-
-				// mergeAll.append(super.mergeImports(container, containment, cargoes));
-				mergeAll.append(super.mergeImports(container, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loads));
-				mergeAll.append(super.mergeImports(container, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), discharges));
-
-				mergeAll.append(mergeCargoes((CargoModel) container, cargoes, loads, discharges));
-
-				return mergeAll;
-			}
-
-			/**
-			 * This method handles the Cargo update. This includes merging Cargo record updates, re-wiring of slots and removing cargoes which are no longer valid
-			 * 
-			 * @param container
-			 * @param containment
-			 * @param cargoes
-			 * @param loads
-			 * @param discharges
-			 * @return
-			 */
-			private Command mergeCargoes(final CargoModel cargoModel, final List<EObject> newCargoes, final List<EObject> newLoads, final List<EObject> newDischarges) {
-				final EditingDomain domain = part.getEditingDomain();
-				final CompoundCommand mergeCommand = new CompoundCommand();
-
-				// Build up a count of the number of slots each cargo has. Build a map of slot ID to cargo
-				final Map<Cargo, Integer> cargoSlotCount = new HashMap<Cargo, Integer>();
-				final Map<String, Cargo> existingLoadSlotMap = new HashMap<String, Cargo>();
-				final Map<String, Cargo> existingCargoMap = new HashMap<String, Cargo>();
-				final Map<String, Cargo> existingDischargeSlotMap = new HashMap<String, Cargo>();
-				for (final Cargo c : cargoModel.getCargoes()) {
-
-					existingCargoMap.put(c.getName(), c);
-
-					int count = 0;
-					if (c.getLoadSlot() != null) {
-						++count;
-						existingLoadSlotMap.put(c.getLoadSlot().getName(), c);
-					}
-					if (c.getDischargeSlot() != null) {
-						++count;
-						existingLoadSlotMap.put(c.getDischargeSlot().getName(), c);
-					}
-					cargoSlotCount.put(c, count);
-				}
-
-				for (final EObject newECargo : newCargoes) {
-					final Cargo newCargo = (Cargo) newECargo;
-
-					// Existing cargo to be updated
-					if (existingCargoMap.containsKey(newCargo.getName())) {
-						final Cargo existingCargo = existingCargoMap.get(newCargo.getName());
-						// Merge fields
-						{
-							// TODO: MERGE CARGO RECORDS
-							for (final EStructuralFeature feature : newCargo.eClass().getEAllStructuralFeatures()) {
-								// Skip UUID to preserve original value
-								if (newCargo.eIsSet(feature)) {
-									if (feature != MMXCorePackage.eINSTANCE.getUUIDObject_Uuid() && feature != CargoPackage.eINSTANCE.getCargo_LoadSlot()
-											&& feature != CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
-										mergeCommand.append(SetCommand.create(domain, existingCargo, feature, newCargo.eGet(feature)));
-										// c.eSet(feature, newCargo.eGet(feature));
-									}
-								}
-							}
-
-						}
-						if (existingLoadSlotMap.containsKey(newCargo.getLoadSlot().getName())) {
-							final Cargo oldCargo = existingLoadSlotMap.get(newCargo.getLoadSlot().getName());
-							if (!oldCargo.getName().equals(newCargo.getName())) {
-								// Re-wired!
-								{
-									// Decrement existing count
-									final int count = cargoSlotCount.get(oldCargo);
-									cargoSlotCount.put(oldCargo, count - 1);
-								}
-								{
-									// Increment current cargo counter
-									final int count = cargoSlotCount.get(existingCargo);
-									cargoSlotCount.put(existingCargo, count + 1);
-								}
-							} else {
-								// Same wiring - no change
-							}
-						}
-						mergeCommand.append(SetCommand.create(domain, existingCargo, CargoPackage.eINSTANCE.getCargo_LoadSlot(), newCargo.getLoadSlot()));
-
-						if (existingDischargeSlotMap.containsKey(newCargo.getDischargeSlot().getName())) {
-							final Cargo oldCargo = existingDischargeSlotMap.get(newCargo.getDischargeSlot().getName());
-							if (!oldCargo.getName().equals(newCargo.getName())) {
-								// Re-wired!
-								{
-									// Decrement existing count
-									final int count = cargoSlotCount.get(oldCargo);
-									cargoSlotCount.put(oldCargo, count - 1);
-								}
-								{
-									// Increment current cargo counter
-									final int count = cargoSlotCount.get(existingCargo);
-									cargoSlotCount.put(existingCargo, count + 1);
-								}
-							} else {
-								// Same wiring - no change
-							}
-						} else {
-
-						}
-						mergeCommand.append(SetCommand.create(domain, existingCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), newCargo.getDischargeSlot()));
-					} else {
-						// New Cargo, but check for re-wiring of slots
-						mergeCommand.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
-
-						// Check re-wiring
-						if (existingLoadSlotMap.containsKey(newCargo.getLoadSlot().getName())) {
-							final Cargo oldCargo = existingLoadSlotMap.get(newCargo.getLoadSlot().getName());
-							// Decrement existing count
-							final int count = cargoSlotCount.get(oldCargo);
-							cargoSlotCount.put(oldCargo, count - 1);
-							mergeCommand.append(SetCommand.create(domain, oldCargo, CargoPackage.eINSTANCE.getCargo_LoadSlot(), newCargo.getLoadSlot()));
-						}
-
-						if (existingDischargeSlotMap.containsKey(newCargo.getDischargeSlot().getName())) {
-							final Cargo oldCargo = existingDischargeSlotMap.get(newCargo.getDischargeSlot().getName());
-							// Decrement existing count
-							final int count = cargoSlotCount.get(oldCargo);
-							cargoSlotCount.put(oldCargo, count - 1);
-							mergeCommand.append(SetCommand.create(domain, oldCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), newCargo.getDischargeSlot()));
-						}
-					}
-				}
-
-				for (final Map.Entry<Cargo, Integer> e : cargoSlotCount.entrySet()) {
-					final int count = e.getValue();
-					if (count < 2) {
-						mergeCommand.append(DeleteCommand.create(domain, e.getKey()));
-					}
-					if (count > 2) {
-						throw new RuntimeException("Cargo has more than two slots!");
-					}
-				}
-
-				return mergeCommand;
-			}
-		};
+		return new CargoImportAction(part, getScenarioViewer());
 	}
 
 	@Override
