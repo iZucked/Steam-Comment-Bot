@@ -28,8 +28,6 @@ All rights reserved.
    <requires>
       <import feature="com.mmxlabs.models.lng.types.feature" version="4.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="3.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.models.ui.runtime.feature" version="3.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.jobmanager.feature" version="1.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.lng.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.rcp.common.feature" version="2.0.0" match="compatible"/>

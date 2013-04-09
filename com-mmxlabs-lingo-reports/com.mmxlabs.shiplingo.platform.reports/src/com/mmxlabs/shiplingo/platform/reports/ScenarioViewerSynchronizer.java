@@ -7,11 +7,16 @@ package com.mmxlabs.shiplingo.platform.reports;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Control;
@@ -22,22 +27,21 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.shiplingo.platform.reports.internal.Activator;
 
-public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScenarioServiceSelectionChangedListener {
+public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChangedListener, CommandStackListener {
 	private static final Logger log = LoggerFactory.getLogger(ScenarioViewerSynchronizer.class);
 	private Viewer viewer;
 	private IScenarioServiceSelectionProvider selectionProvider;
-	private HashSet<ScheduleModel> adaptees = new HashSet<ScheduleModel>();
-	private IScenarioInstanceElementCollector collector;
+	private final HashSet<CommandStack> commandStacks = new HashSet<CommandStack>();
+	private final IScenarioInstanceElementCollector collector;
 
 	public ScenarioViewerSynchronizer(final Viewer viewer, final IScenarioInstanceElementCollector collector) {
 		this.viewer = viewer;
@@ -61,43 +65,42 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			selectionProvider.removeSelectionChangedListener(this);
 			selectionProvider = null;
 		}
-		for (final ScheduleModel scheduleModel : adaptees) {
-			scheduleModel.eAdapters().remove(this);
+		for (final CommandStack commandStack : commandStacks) {
+			commandStack.removeCommandStackListener(this);
 		}
 	}
 
 	@Override
-	public void deselected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> deselected) {
+	public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
 		for (final ScenarioInstance instance : deselected) {
-			final ScheduleModel scheduleModel = getScheduleModel(instance);
-			if (scheduleModel != null) {
-				scheduleModel.eAdapters().remove(this);
-				adaptees.remove(scheduleModel);
+			final CommandStack commandStack = getCommandStack(instance);
+			if (commandStack != null) {
+				commandStack.removeCommandStackListener(this);
+				commandStacks.remove(commandStack);
 			}
 		}
 		refreshViewer();
 	}
 
-	private ScheduleModel getScheduleModel(ScenarioInstance instance) {
+	private CommandStack getCommandStack(final ScenarioInstance instance) {
 		final IScenarioService scenarioService = instance.getScenarioService();
 		if (scenarioService == null) {
 			return null;
 		}
-		EObject object = null;
-		try {
-			object = scenarioService.load(instance);
-			if (object instanceof MMXRootObject) {
-				return ((MMXRootObject) object).getSubModel(ScheduleModel.class);
-			}
-		} catch (IOException e) {
 
+		final Map<Class<?>, Object> adapters = instance.getAdapters();
+		if (adapters != null) {
+			final Object object = adapters.get(BasicCommandStack.class);
+			if (object instanceof CommandStack) {
+				return (CommandStack) object;
+			}
 		}
 
 		return null;
 	}
 
 	@Override
-	public void selected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> selected) {
+	public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected) {
 		for (final ScenarioInstance instance : selected) {
 			adaptInstance(instance);
 		}
@@ -105,27 +108,10 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	}
 
 	private void adaptInstance(final ScenarioInstance instance) {
-		final ScheduleModel scheduleModel = getScheduleModel(instance);
-		if (scheduleModel != null) {
-			scheduleModel.eAdapters().add(this);
-			adaptees.add(scheduleModel);
-		}
-	}
-
-	@Override
-	public void reallyNotifyChanged(Notification notification) {
-		if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Schedule()) {
-			refreshViewer();
-		}
-	}
-
-	@Override
-	protected void missedNotifications(final List<Notification> notifications) {
-		for (final Notification notification : notifications) {
-			if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Schedule()) {
-				refreshViewer();
-				return;
-			}
+		final CommandStack commandStack = getCommandStack(instance);
+		if (commandStack != null) {
+			commandStack.addCommandStackListener(this);
+			commandStacks.add(commandStack);
 		}
 	}
 
@@ -174,7 +160,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			EObject instance = null;
 			try {
 				instance = scenarioService.load(job);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}
 
 			if (instance instanceof MMXRootObject) {
@@ -192,12 +178,12 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 
 		return new IScenarioViewerSynchronizerOutput() {
 			@Override
-			public ScenarioInstance getScenarioInstance(Object object) {
+			public ScenarioInstance getScenarioInstance(final Object object) {
 				return sourceByElement.get(object).getFirst();
 			}
 
 			@Override
-			public MMXRootObject getRootObject(Object object) {
+			public MMXRootObject getRootObject(final Object object) {
 				return sourceByElement.get(object).getSecond();
 			}
 
@@ -212,7 +198,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			}
 
 			@Override
-			public boolean isPinned(Object object) {
+			public boolean isPinned(final Object object) {
 				return ScenarioViewerSynchronizer.this.selectionProvider.getPinnedInstance() == (getScenarioInstance(object));
 			}
 		};
@@ -226,7 +212,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	 * @param c
 	 * @return
 	 */
-	public static ScenarioViewerSynchronizer registerView(final Viewer c, IScenarioInstanceElementCollector collector) {
+	public static ScenarioViewerSynchronizer registerView(final Viewer c, final IScenarioInstanceElementCollector collector) {
 		return new ScenarioViewerSynchronizer(c, collector);
 	}
 
@@ -237,5 +223,25 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	@Override
 	public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
 		refreshViewer();
+	}
+
+	/**
+	 * Command stack listener method, cause the linked viewer to refresh on command execution
+	 * 
+	 * @since 3.0
+	 */
+	@Override
+	public void commandStackChanged(final EventObject event) {
+
+		// Only react to changes involving the ScheduleModel
+		final CommandStack commandStack = (CommandStack) event.getSource();
+		final Command mostRecentCommand = commandStack.getMostRecentCommand();
+		final Collection<?> result = mostRecentCommand.getResult();
+		for (final Object o : result) {
+			if (o instanceof ScheduleModel || o instanceof Schedule) {
+				refreshViewer();
+				return;
+			}
+		}
 	}
 }
