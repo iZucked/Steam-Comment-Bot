@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.cargo.ui.actions;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -89,8 +91,16 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 						final ArrayList<Object> cargoes = new ArrayList<Object>(((IStructuredSelection) sel).toList());
 						// Set up a list of objects for deletion
 						// This will include the cargoes but may also include load or discharge slots
-						final ArrayList<Object> trash = new ArrayList<Object>();
-						trash.addAll(0, cargoes);
+						final Set<Object> trash = new LinkedHashSet<Object>();
+						trash.addAll(cargoes);
+						// Filter out slots which are already linked to a cargo - this dialog below will re-add them if required.
+						for (Object obj : cargoes) {
+							if (obj instanceof Cargo) {
+								Cargo cargo = (Cargo) obj;
+								trash.remove(cargo.getLoadSlot());
+								trash.remove(cargo.getDischargeSlot());
+							}
+						}
 
 						int dialogResponse = 0;
 						boolean useResponseForAll = false;

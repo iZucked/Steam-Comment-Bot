@@ -72,6 +72,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
 
 import com.mmxlabs.common.Equality;
@@ -83,6 +84,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
+import com.mmxlabs.models.lng.cargo.ui.actions.DeleteSelectedCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
@@ -169,9 +171,29 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		super.dispose();
 	}
 
+	@Override
+	protected Action createImportAction() {
+		return new CargoImportAction(jointModelEditorPart, getScenarioViewer());
+	}
+
+	@Override
+	protected Action createDeleteAction() {
+		return new DeleteSelectedCargoAction(jointModelEditorPart, viewer);
+	}
+
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
 		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart) {
+
+			@Override
+			public EReference getCurrentContainment() {
+				return CargoPackage.eINSTANCE.getCargoModel_Cargoes();
+			}
+
+			@Override
+			public EObject getCurrentContainer() {
+				return jointModelEditorPart.getRootObject().getSubModel(CargoModel.class);
+			}
 
 			/**
 			 * Overridden method to convert internal RowData objects into a collection of EMF Objects
@@ -464,6 +486,27 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 				});
 			}
+		}
+
+		if (addAction != null) {
+			// if we can't add one, we can't duplicate one either.
+			final Action dupAction = createDuplicateAction();
+
+			if (dupAction != null) {
+				toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
+			}
+		}
+		deleteAction = createDeleteAction();
+		if (deleteAction != null) {
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
+		}
+		if (actionBars != null) {
+			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+		}
+
+		final Action importAction = createImportAction();
+		if (importAction != null) {
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
 		}
 
 		Action copyToClipboardAction = null;
@@ -1110,4 +1153,5 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 	}
+
 }
