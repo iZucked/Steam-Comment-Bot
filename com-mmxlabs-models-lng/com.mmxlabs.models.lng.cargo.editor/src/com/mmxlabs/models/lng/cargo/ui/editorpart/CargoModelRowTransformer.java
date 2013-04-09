@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
-import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
@@ -85,35 +85,22 @@ public class CargoModelRowTransformer {
 			// Build up list of slots assigned to cargo, sorting into loads and discharges
 			final List<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
 			final List<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
-			for (final Object slot : cargo.getSlots()) {
-				if (slot instanceof LoadSlot) {
-					loadSlots.add((LoadSlot) slot);
-				} else if (slot instanceof DischargeSlot) {
-					dischargeSlots.add((DischargeSlot) slot);
-				} else {
-					// Assume some kind of discharge?
-					// dischargeSlots.add((Slot) slot);
-				}
+			if (cargo.getLoadSlot() != null) {
+				loadSlots.add(cargo.getLoadSlot());
+			}
+			if (cargo.getDischargeSlot() != null) {
+				dischargeSlots.add(cargo.getDischargeSlot());
+			}
+
+			// Generate the wiring
+			if (cargo.getLoadSlot() != null && cargo.getDischargeSlot() != null) {
+				final WireData wire = new WireData();
+				wire.loadSlot = cargo.getLoadSlot();
+				wire.dischargeSlot = cargo.getDischargeSlot();
+				group.getWires().add(wire);
 
 			}
 
-			// Generate the wiring - currently this is the full many-many mapping between loads and discharges.
-			// In future this should be better (in some way...)
-			for (final Object slot : cargo.getSlots()) {
-
-				if (slot instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) slot;
-					for (final Object slot2 : cargo.getSlots()) {
-						if (slot2 instanceof DischargeSlot) {
-							final DischargeSlot dischargeSlot = (DischargeSlot) slot2;
-							final WireData wire = new WireData();
-							wire.loadSlot = loadSlot;
-							wire.dischargeSlot = dischargeSlot;
-							group.getWires().add(wire);
-						}
-					}
-				}
-			}
 			// Set the colour for all cargo wires.
 			setWiringColour(validationInfo, group);
 

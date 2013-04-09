@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -70,8 +69,6 @@ public class CargoEditingCommands {
 		final Cargo newCargo = createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
 		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 
-		// Factory create new slots by default - remove them
-		newCargo.getSlots().clear();
 		// Allow re-wiring
 		newCargo.setAllowRewiring(true);
 
@@ -178,40 +175,32 @@ public class CargoEditingCommands {
 			deleteCommands.add(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot.getCargo()));
 
 			// Optional market slots can be removed.
-			for (final Slot s : dischargeSlot.getCargo().getSlots()) {
-				if (s instanceof LoadSlot) {
-					final LoadSlot oldSlot = (LoadSlot) s;
-					if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-						deleteCommands.add(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), oldSlot));
-					}
-				}
+			final LoadSlot oldSlot = dischargeSlot.getCargo().getLoadSlot();
+			if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+				deleteCommands.add(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), oldSlot));
 			}
 		}
 
 		// Do we need to create a new cargo or re-wire and existing one.
 		Cargo cargo = loadSlot.getCargo();
 		if (cargo != null) {
-
-			setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+			setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot(), cargo));
 
 			// Optional market slots can be removed.
-			for (final Slot s : cargo.getSlots()) {
-				if (s instanceof DischargeSlot) {
-					final DischargeSlot oldSlot = (DischargeSlot) s;
-					if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-						deleteCommands.add(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), oldSlot));
-					}
+			if (cargo.getDischargeSlot() != null) {
+				final DischargeSlot oldSlot = cargo.getDischargeSlot();
+				if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+					deleteCommands.add(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), oldSlot));
 				}
 			}
 		} else {
 			cargo = createNewCargo(setCommands, cargoModel);
 			cargo.setName(loadSlot.getName());
-			setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
-			setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+			setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
+			setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
 		}
 
 		appendFOBDESCommands(setCommands, deleteCommands, scenarioEditingLocation.getEditingDomain(), inputModel, cargo, loadSlot, dischargeSlot);
-
 	}
 
 }
