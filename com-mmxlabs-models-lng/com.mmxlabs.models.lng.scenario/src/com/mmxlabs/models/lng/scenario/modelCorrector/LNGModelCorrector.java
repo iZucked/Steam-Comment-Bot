@@ -52,6 +52,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -104,10 +105,44 @@ public class LNGModelCorrector {
 
 		addMissingTaxCurves(cmd, rootObject, ed);
 
+		fixIndexNames(cmd, rootObject, ed);
+
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
 
+	}
+
+	// Remove special characters from index names
+	private void fixIndexNames(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
+
+		final CompoundCommand cmd = new CompoundCommand("Fix canal cost vessel types");
+
+		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
+
+		if (pricingModel != null) {
+
+			for (final Index<?> index : pricingModel.getCommodityIndices()) {
+				fixIndexName(parent, index, ed);
+			}
+			for (final Index<?> index : pricingModel.getCharterIndices()) {
+				fixIndexName(parent, index, ed);
+			}
+		}
+
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
+		}
+
+	}
+
+	private void fixIndexName(final CompoundCommand parent, final Index<?> index, final EditingDomain ed) {
+		String name = index.getName();
+		name = name.replaceAll(" ", "_");
+
+		if (!name.equals(index.getName())) {
+			parent.append(SetCommand.create(ed, index, MMXCorePackage.eINSTANCE.getNamedObject_Name(), name));
+		}
 	}
 
 	private void addMissingTaxCurves(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
