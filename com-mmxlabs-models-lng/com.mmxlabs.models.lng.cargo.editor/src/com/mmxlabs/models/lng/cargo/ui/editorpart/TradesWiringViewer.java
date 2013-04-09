@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,6 +18,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -102,6 +102,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -170,7 +171,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
-		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart) {
+		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart) {
 
 			/**
 			 * Overridden method to convert internal RowData objects into a collection of EMF Objects
@@ -487,36 +488,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final CargoPackage pkg = CargoPackage.eINSTANCE;
 		final IReferenceValueProviderProvider provider = jointModelEditorPart.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = jointModelEditorPart.getEditingDomain();
-		//
-		// final GridViewerColumn state = getScenarioViewer().addSimpleColumn("", false);
-		// state.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
-		//
-		// @Override
-		// public String getText(final Object element) {
-		// return null;
-		// }
-		//
-		// @Override
-		// public Image getImage(final Object element) {
-		//
-		// if (element instanceof RowData) {
-		// final RowData rowDataItem = (RowData) element;
-		// if (rowDataItem.cargo != null) {
-		// final Cargo cargo = rowDataItem.cargo;
-		// final InputModel inputModel = jointModelEditorPart.getRootObject().getSubModel(InputModel.class);
-		// final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
-		// if (assignment != null && assignment.isLocked()) {
-		// return lockedImage;
-		// } else if (!cargo.isAllowRewiring()) {
-		// return wiredImage;
-		//
-		// }
-		// }
-		// }
-		//
-		// return super.getImage(element);
-		// }
-		// });
 
 		addTradesColumn(loadColumns, "L-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
@@ -660,10 +631,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final T manipulator, final EMFPath path) {
 
-		ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
+		final ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
 			@Override
-			public Comparable getComparable(Object element) {
-				Object object = path.get((EObject) element);
+			public Comparable getComparable(final Object element) {
+				final Object object = path.get((EObject) element);
 				if (object instanceof ExtraDataContainer) {
 					final ExtraDataContainer container = (ExtraDataContainer) object;
 					final ExtraData data = container.getDataWithKey("GroupValue");
@@ -681,7 +652,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@Override
 			public String getText(final Object element) {
 
-				Object object = path.get((EObject) element);
+				final Object object = path.get((EObject) element);
 				if (object instanceof ExtraDataContainer) {
 					final ExtraDataContainer container = (ExtraDataContainer) object;
 					final ExtraData data = container.getDataWithKey("GroupValue");
@@ -720,10 +691,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 					if (structuredSelection.isEmpty() == false) {
-						if (structuredSelection.size() == 1) {
 
+						boolean mixedContent = false;
+						final List<EObject> editorTargets = new ArrayList<EObject>();
+						final Iterator<?> itr = structuredSelection.iterator();
+						EClass firstType = null;
+						while (itr.hasNext()) {
+							final Object obj = itr.next();
 							EObject target = null;
-							final Object obj = structuredSelection.getFirstElement();
 							if (obj instanceof RowData) {
 								final RowData rd = (RowData) obj;
 								if (rd.cargo != null) {
@@ -734,32 +709,38 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									target = rd.dischargeSlot;
 								}
 							}
-							if (target == null) {
-								return;
+							if (target != null) {
+								editorTargets.add(target);
 							}
-							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
+							if (editorTargets.size() == 1) {
+								firstType = target.eClass();
+							} else {
+								if (firstType != target.eClass()) {
+									mixedContent = true;
+								}
+							}
+						}
+						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
 							try {
 								jointModelEditorPart.getEditorLock().claim();
 								jointModelEditorPart.setDisableUpdates(true);
+								if (editorTargets.size() > 1) {
+									if (!mixedContent) {
+										final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
+												.getDefaultCommandHandler());
+										mdd.open(jointModelEditorPart, editorTargets);
+									} else {
+										// Currently unable to edit mixed content!
+									}
+								} else {
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
+									dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), editorTargets, scenarioViewer.isLocked());
 
-								dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), Collections.singletonList(target), scenarioViewer.isLocked());
+								}
 							} finally {
 								jointModelEditorPart.setDisableUpdates(false);
 								jointModelEditorPart.getEditorLock().release();
 							}
-						} else {
-							// No support yet.
-
-							// try {
-							// jointModelEditorPart.getEditorLock().claim();
-							// if (scenarioViewer.isLocked() == false) {
-							// final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
-							// .getDefaultCommandHandler());
-							// mdd.open(jointModelEditorPart, structuredSelection.toList());
-							// }
-							// } finally {
-							// jointModelEditorPart.getEditorLock().release();
-							// }
 						}
 					}
 				}
@@ -767,58 +748,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		});
 	}
-
-	// private synchronized void updateWiringColours(final TradesWiringDiagram diagram, final List<List<Integer>> wiring, final RootData root) {
-	// final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-	// final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
-	// final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-	// final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-	//
-	// for (int i = 0; i < root.getRows().size(); ++i) {
-	// final RowData rd = root.getRows().get(i);
-	// final LoadSlot loadSlot = rd.loadSlot;
-	// final DischargeSlot dischargeSlot = rd.dischargeSlot;
-	// // if (loadSlot != null && loadSlot.isOptional()) {
-	// // diagram.setLeftTerminalColor(i, green);
-	// // diagram.setLeftTerminalOptional(i, true);
-	// // } else {
-	// // diagram.setLeftTerminalColor(i, red);
-	// // diagram.setLeftTerminalOptional(i, false);
-	// // }
-	// // if (dischargeSlot != null && dischargeSlot.isOptional()) {
-	// // diagram.setRightTerminalColor(i, green);
-	// // diagram.setRightTerminalOptional(i, true);
-	// // } else {
-	// // diagram.setRightTerminalColor(i, red);
-	// // diagram.setRightTerminalOptional(i, false);
-	// // }
-	// final int j = wiring.get(i);
-	// if (j == -1) {
-	// continue;
-	// }
-	//
-	// if (loadSlot == null) {
-	// continue;
-	// }
-	// if (dischargeSlot == null) {
-	// continue;
-	// }
-	//
-	// diagram.setLeftTerminalColor(i, green);
-	// diagram.setRightTerminalColor(j, green);
-	//
-	// if (isWiringValid(root.getCargoes().get(i), loadSlot, dischargeSlot)) {
-	// if (root.getCargoes().get(i).isAllowRewiring()) {
-	// diagram.setWireColor(i, black);
-	// } else {
-	// diagram.setWireColor(i, gray);
-	// }
-	// } else {
-	// diagram.setWireColor(i, red);
-	// }
-	// }
-	// diagram.redraw();
-	// }
 
 	private void performControlUpdate(final boolean rowAdded) {
 
@@ -931,94 +860,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		for (final Slot slot : slotsToRemove) {
 			deleteCommands.add(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), slot));
 		}
-		//
-		// for (int i = 0; i < rootData.getRows().size(); ++i) {
-		// // if (wiring.get(i).equals(newWiring.get(i))) {
-		// // // No change
-		// // continue;
-		// // }
-		//
-		// final RowData rowI = rootData.getRows().get(i);
-		//
-		// final Integer newIndex = newWiring.get(i);
-		// final LoadSlot loadSlot = rowI.loadSlot;
-		// if (loadSlot != null) {
-		// if (newIndex >= 0 && newIndex < newWiring.size()) {
-		// final DischargeSlot otherDischarge = rootData.getRows().get(newIndex).dischargeSlot;
-		// if (otherDischarge != null) {
-		// Cargo c = rowI.cargo;
-		// if (c != null) {
-		// if (!c.getSlots().contains(otherDischarge)) {
-		// setCommands.add(SetCommand.create(jointModelEditorPart.getEditingDomain(), otherDischarge, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-		//
-		// // Optional market slots can be removed.
-		// for (final Slot s : c.getSlots()) {
-		// if (s instanceof DischargeSlot) {
-		// final DischargeSlot oldSlot = (DischargeSlot) s;
-		// if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-		// deleteCommands.add(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), oldSlot));
-		// }
-		// }
-		// }
-		// }
-		// } else {
-		// // create a new cargo
-		// c = cec.createNewCargo(setCommands, cargoModel);
-		// c.setName(loadSlot.getName());
-		//
-		// setCommands.add(SetCommand.create(jointModelEditorPart.getEditingDomain(), loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-		// setCommands.add(SetCommand.create(jointModelEditorPart.getEditingDomain(), otherDischarge, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-		// }
-		// cec.appendFOBDESCommands(setCommands, deleteCommands, jointModelEditorPart.getEditingDomain(), inputModel, c, loadSlot, otherDischarge);
-		// }
-		// } else if (newIndex == -1) {
-		// final Cargo c = rowI.cargo;
-		// if (c != null) {
-		//
-		// for (final Slot s : c.getSlots()) {
-		//
-		// // currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), s, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
-		//
-		// // Optional market slots can be removed.
-		// if (s instanceof DischargeSlot) {
-		// final DischargeSlot oldSlot = (DischargeSlot) s;
-		// if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-		// deleteCommands.add(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), oldSlot));
-		// }
-		// }
-		//
-		// if (s instanceof LoadSlot) {
-		// final LoadSlot oldSlot = (LoadSlot) s;
-		// if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-		// deleteCommands.add(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), oldSlot));
-		// }
-		// }
-		// }
-		// deleteCommands.add(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), c));
-		//
-		// } else {
-		// // Error?
-		// }
-		// } else {
-		// final DischargeSlot dischargeSlot = cec.createNewDischarge(setCommands, cargoModel, false);
-		// // ensureCapacity(newIndex + 1, cargoes, loadSlots, dischargeSlots);
-		// // dischargeSlots.set(newIndex, dischargeSlot);
-		// Cargo c = rowI.cargo;
-		// if (c == null) {
-		// // create a cargo
-		// c = cec.createNewCargo(setCommands, cargoModel);
-		// c.setName(loadSlot.getName());
-		//
-		// setCommands.add(SetCommand.create(jointModelEditorPart.getEditingDomain(), loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-		// setCommands.add(SetCommand.create(jointModelEditorPart.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-		// } else {
-		// setCommands.add(SetCommand.create(jointModelEditorPart.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-		// }
-		// cec.appendFOBDESCommands(setCommands, deleteCommands, jointModelEditorPart.getEditingDomain(), inputModel, c, loadSlot, dischargeSlot);
-		//
-		// }
-		// }
-		// }
 
 		final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
 		// Process set before delete
