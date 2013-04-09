@@ -285,7 +285,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					idle.setVesselState(details.getOptions().getVesselState());
 
 					if (idle.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
-						idle.setCooldownDuration(Math.min(idleTime, vessel.getVesselClass().getCooldownTime()));
+						idle.setCooldownDuration(Math.min(idleTime, /*vessel.getVesselClass().getCooldownTime()*/ 0));
 					}
 
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);

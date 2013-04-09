@@ -239,10 +239,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final int warmingTimeInHours = idleTimeInHours - deltaTimeInHours;
 
 						if (warmingTimeInHours > vesselClass.getWarmupTime()) {
-							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime() + vesselClass.getCooldownTime()))) {
+							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime() /*+ vesselClass.getCooldownTime()*/))) {
 								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
 								// don't use any idle base during the cooldown
-								remainingIdleTimeInHours -= vesselClass.getCooldownTime();
+//								remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 							} else {
 								// warming time = idle - delta
 								// therefore we need
@@ -274,7 +274,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// sequence scheduler unless it's unavoidable.
 						if (options.isWarm() || (options.getAvailableTime() > vesselClass.getWarmupTime())) {
 							output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
-							remainingIdleTimeInHours -= vesselClass.getCooldownTime();
+//							remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 						}
 					}
 				}
@@ -739,7 +739,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						++capacityViolations;
 					}
 
-					final int cooldownTime = arrivalTimes[i / 2] - vesselClass.getCooldownTime();
+					final int cooldownTime = arrivalTimes[i / 2] /*- vesselClass.getCooldownTime()*/;
 
 					// TODO is this how cooldown gas ought to be priced?
 					final int cooldownPricePerM3;
