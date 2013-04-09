@@ -2,11 +2,9 @@ package com.mmxlabs.models.ui.editors.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -69,7 +67,7 @@ public class DialogEcoreCopier {
 		changeDescription.applyAndReverse();
 		rewriteReferences(changeDescription);
 
-		return new ChangeCommand(changeDescription, originals);
+		return new ChangeDescriptionCommand(changeDescription, originals);
 	}
 
 	private boolean isEmpty(final ChangeDescription changeDescription) {
@@ -98,51 +96,5 @@ public class DialogEcoreCopier {
 	private boolean needsToBeReplaced(final EStructuralFeature.Setting setting) {
 		final EStructuralFeature feature = setting.getEStructuralFeature();
 		return !feature.isDerived() && feature.isChangeable();
-	}
-
-	/**
-	 * Class to wrap a {@link ChangeDescription} in a {@link Command}
-	 * 
-	 */
-	private static class ChangeCommand extends AbstractCommand {
-		private ChangeDescription changeDescription;
-		private Collection<?> affectedObjects;
-
-		public ChangeCommand(final ChangeDescription changeDescription, final Collection<?> affectedObjects) {
-			this.changeDescription = changeDescription;
-			this.affectedObjects = affectedObjects;
-		}
-
-		@Override
-		public Collection<?> getAffectedObjects() {
-			return affectedObjects == null ? Collections.emptyList() : affectedObjects;
-		}
-
-		@Override
-		public void dispose() {
-			changeDescription = null;
-			affectedObjects = null;
-			super.dispose();
-		}
-
-		@Override
-		public boolean canExecute() {
-			return true;
-		}
-
-		@Override
-		public void execute() {
-			changeDescription.applyAndReverse();
-		}
-
-		@Override
-		public void undo() {
-			changeDescription.applyAndReverse();
-		}
-
-		@Override
-		public void redo() {
-			changeDescription.applyAndReverse();
-		}
 	}
 }
