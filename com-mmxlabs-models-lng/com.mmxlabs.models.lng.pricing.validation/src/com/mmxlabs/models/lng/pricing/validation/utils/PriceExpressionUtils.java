@@ -2,9 +2,11 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.commercial.validation.util;
+package com.mmxlabs.models.lng.pricing.validation.utils;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -15,11 +17,11 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -32,30 +34,46 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * @since 2.0
  *
  */
-public class ContractConstraints {
+public class PriceExpressionUtils {
+	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*()])");
+
+	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression,
+			final List<IStatus> failures) {
+		validatePriceExpression(ctx, object, feature, priceExpression, getParser(), failures);
+	}
+		
 	/**
 	 * @author Simon McGregor
 	 * 
-	 * Validates a price expression for a given contract
+	 * Validates a price expression for a given EMF object
 	 * 
 	 * @param ctx A validation context.
-	 * @param target The EMF object to associate validation failures with.
+	 * @param object The EMF object to associate validation failures with.
 	 * @param feature The structural feature to attach validation failures to.
 	 * @param priceExpression The price expression to validate.
 	 * @param parser A parser for price expressions.
 	 * @param failures The list of validation failures to append to.
-	 * @since 3.0
 	 */
-	public static void validatePriceExpression(final IValidationContext ctx, final EObject target, final EStructuralFeature feature, final String priceExpression,
+	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression,
 			final SeriesParser parser, final List<IStatus> failures) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Price Expression is missing."));
-			dsd.addEObjectAndFeature(target, feature);
+			dsd.addEObjectAndFeature(object, feature);
 			failures.add(dsd);
 			return;
 		}
 
+		Matcher matcher = pattern.matcher(priceExpression);
+		
+		if (matcher.find()) {
+			String message = String.format("Price Expression contains unexpected character '%s'.", matcher.group(1));
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+			dsd.addEObjectAndFeature(object, feature);
+			failures.add(dsd);
+			return;
+		}
+		
 		if (parser != null) {
 			ISeries parsed = null;
 			String hints = "";
@@ -68,7 +86,7 @@ public class ContractConstraints {
 			}
 			if (parsed == null) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Unable to parse price expression. " + hints));
-				dsd.addEObjectAndFeature(target, feature);
+				dsd.addEObjectAndFeature(object, feature);
 				failures.add(dsd);
 			}
 		}
