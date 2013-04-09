@@ -13,9 +13,8 @@ import org.eclipse.emf.validation.IValidationContext;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
-import com.mmxlabs.models.lng.commercial.validation.util.ContractConstraints;
+import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 
 public class PriceExpressionParametersConstraint extends AbstractModelMultiConstraint {
@@ -24,14 +23,12 @@ public class PriceExpressionParametersConstraint extends AbstractModelMultiConst
 	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		EObject target = ctx.getTarget();
 
-		// shortcut price parameters testing for classes whose price parameters fields are known 
 		if (target instanceof ExpressionPriceParameters) {
-			ExpressionPriceParameters parameters = (ExpressionPriceParameters) target;
-			final SeriesParser parser = ContractConstraints.getParser();
-
-			ContractConstraints.validatePriceExpression(ctx, parameters, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION, parameters.getPriceExpression(), parser, failures);		
+			final SeriesParser parser = PriceExpressionUtils.getParser();
+			final ExpressionPriceParameters contract = (ExpressionPriceParameters) target;
+			PriceExpressionUtils.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getExpressionPriceParameters_PriceExpression(), contract.getPriceExpression(), parser, failures);
 		}
-		
+
 		return Activator.PLUGIN_ID;
 	}
 }
