@@ -29,11 +29,6 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 			final Slot slot = (Slot) target;
 
 			String priceExpression = slot.getPriceExpression();
-			} else if (!slot.isSetContract()) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A price expression or a contract must be set."));
-				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
-				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
-				failures.add(dsd);
 
 			if (slot.isSetPriceExpression()) {
 				// Permit break even marker
@@ -45,7 +40,4 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 		return Activator.PLUGIN_ID;
 	}
 	
-			if (pricingModel == null) {
-				return null;
-			}
 }
