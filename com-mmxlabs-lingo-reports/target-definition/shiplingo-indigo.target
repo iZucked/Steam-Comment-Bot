@@ -123,6 +123,8 @@
 <unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.1.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="3.1.0.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="3.1.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="4.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="4.0.0.RELEASE"/>
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.RELEASE"/>
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.source" version="1.0.1.RELEASE"/>
 <unit id="com.mmxlabs.optimiser.optimiser-common.source" version="1.1.1.201212131159"/>
@@ -135,6 +137,10 @@
 <unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201212131159"/>
 <unit id="com.mmxlabs.datasources.feature.feature.group" version="1.1.2.RELEASE"/>
 <unit id="com.mmxlabs.datasources.feature.source.feature.group" version="1.1.2.RELEASE"/>
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="2.1.0.RELEASE"/>
+<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="2.1.0.RELEASE"/>
+<unit id="com.mmxlabs.models.migration.feature.source.feature.group" version="2.0.2.RELEASE"/>
+<unit id="com.mmxlabs.models.migration.feature.feature.group" version="2.0.2.RELEASE"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -144,6 +150,11 @@
 <unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.6.0.v20120328-0001-67T-96SGR75UNqZNTdeQnghI6uFA"/>
 <unit id="org.eclipse.ocl.all.sdk.feature.group" version="4.0.1.v20120919-0602"/>
 <repository location="http://download.eclipse.org/releases/juno/"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.junit" version="4.10.0.v4_10_0_v20120426-0900"/>
+<unit id="org.junit.source" version="4.10.0.v4_10_0_v20120426-0900"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 </locations>
 </target>
