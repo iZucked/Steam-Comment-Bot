@@ -88,7 +88,7 @@
                         <iterate>
                            <or>
                               <instanceof
-                                    value="com.mmxlabs.scenario.service.model.Container">
+                                    value="com.mmxlabs.scenario.service.model.Folder">
                               </instanceof>
                            </or>
                         </iterate>
