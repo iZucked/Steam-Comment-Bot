@@ -4,7 +4,9 @@ import java.util.Date;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -18,6 +20,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	 */
 	public final VesselClass vc;
 	public final Vessel vessel;
+	public final VesselAvailability vesselAvailability; 
 	
 	public final Port originPort;
 	public final Port loadPort;
@@ -41,6 +44,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 		
 		final CommercialModel commercialModel = scenario.getSubModel(CommercialModel.class);
+		final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 		
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
@@ -90,6 +94,6 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		Date endDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
 		
-		fleetCreator.setAvailability(vessel, originPort, startDate, originPort, endDate);			
+		this.vesselAvailability = fleetCreator.setAvailability(fleetModel, vessel, originPort, startDate, originPort, endDate);			
 	}
 }

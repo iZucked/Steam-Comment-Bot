@@ -164,7 +164,6 @@ public class CustomScenarioCreator {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
-		final int cooldownTime = 0;
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		// final int minHeelVolume = 0;
@@ -196,7 +195,6 @@ public class CustomScenarioCreator {
 		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
 		vc.setPilotLightRate(pilotLightRate);
-		vc.setCoolingTime(cooldownTime);
 		vc.setWarmingTime(warmupTime);
 		vc.setCoolingVolume(cooldownVolume);
 		vc.setMinHeel(minHeelVolume);
@@ -254,12 +252,14 @@ public class CustomScenarioCreator {
 
 			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
 
-			vessel.setAvailability(availability);
+			availability.setVessel(vessel);
+			
 
 			HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 			vessel.setStartHeel(heelOptions);
 
 			fleetModel.getVessels().add(vessel);
+			fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availability);
 			created[i] = vessel;
 		}
 
@@ -445,7 +445,7 @@ public class CustomScenarioCreator {
 		dryDock.setDurationInDays(durationDays);
 		dryDock.setPort(startPort);
 		// add to scenario's fleet model
-		fleetModel.getVesselEvents().add(dryDock);
+		fleetModel.getScenarioFleetModel().getVesselEvents().add(dryDock);
 
 		// define the start and end time
 		dryDock.setStartAfter(start);
@@ -481,7 +481,7 @@ public class CustomScenarioCreator {
 		charterOut.setHireRate(dailyCharterOutPrice);
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
-		fleetModel.getVesselEvents().add(charterOut);
+		fleetModel.getScenarioFleetModel().getVesselEvents().add(charterOut);
 
 		return charterOut;
 	}

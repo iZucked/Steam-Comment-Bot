@@ -57,6 +57,7 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -213,7 +214,6 @@ public class ScenarioTools {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
-		final int cooldownTime = 0;
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		// final int minHeelVolume = 0;
@@ -261,7 +261,6 @@ public class ScenarioTools {
 		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
 		vc.setPilotLightRate(pilotLightRate);
-		vc.setCoolingTime(cooldownTime);
 		vc.setWarmingTime(warmupTime);
 		vc.setCoolingVolume(cooldownVolume);
 		vc.setMinHeel(minHeelVolume);
@@ -310,12 +309,12 @@ public class ScenarioTools {
 
 		final VesselAvailability availablility = FleetFactory.eINSTANCE.createVesselAvailability();
 
-		vessel.setAvailability(availablility);
-
+		availablility.setVessel(vessel);
 		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 		vessel.setStartHeel(heelOptions);
 
 		fleetModel.getVessels().add(vessel);
+		fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availablility);
 
 		final PortModel portModel = scenario.getSubModel(PortModel.class);
 		portModel.getPorts().add(A);
@@ -357,7 +356,10 @@ public class ScenarioTools {
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
 		final DataIndex<Double> sales = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
-
+		IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+		pt.setDate(new Date(0));
+		pt.setValue(0.0);
+		sales.getPoints().add(pt);
 		pricingModel.getCommodityIndices().add(sales);
 
 		sc.setEntity(e);
@@ -436,7 +438,7 @@ public class ScenarioTools {
 			dryDock.setDurationInDays(0);
 			dryDock.setPort(A);
 			// add to scenario's fleet model
-			fleetModel.getVesselEvents().add(dryDock);
+			fleetModel.getScenarioFleetModel().getVesselEvents().add(dryDock);
 			// set the date to be after the discharge date
 			final Date thenNext = new Date(dischargeDate.getTime() + (Timer.ONE_HOUR * travelTime));
 			dryDock.setStartAfter(thenNext);
@@ -510,7 +512,6 @@ public class ScenarioTools {
 		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
 		vc.setPilotLightRate(pilotLightRate);
-		vc.setCoolingTime(cooldownTime);
 		vc.setWarmingTime(warmupTime);
 		vc.setCoolingVolume(cooldownVolume);
 		vc.setMinHeel(minHeelVolume);
@@ -561,9 +562,10 @@ public class ScenarioTools {
 
 		vessel.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 
-		vessel.setAvailability(availability);
+		availability.setVessel(vessel);
 
 		fleetModel.getVessels().add(vessel);
+		fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availability);
 
 		portModel.getPorts().add(A);
 		portModel.getPorts().add(B);
@@ -603,7 +605,10 @@ public class ScenarioTools {
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
 		final DataIndex<Double> sales = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
-
+		IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+		pt.setDate(new Date(0));
+		pt.setValue(0.0);
+		sales.getPoints().add(pt);
 		pricingModel.getCommodityIndices().add(sales);
 
 		sc.setEntity(e);
@@ -637,7 +642,7 @@ public class ScenarioTools {
 		// charterOut.setDailyCharterOutPrice(0);
 		charterOut.setRepositioningFee(0);
 		// add to the scenario's fleet model
-		fleetModel.getVesselEvents().add(charterOut);
+		fleetModel.getScenarioFleetModel().getVesselEvents().add(charterOut);
 
 		// Set up dry dock to cause journey
 		final DryDockEvent dryDockJourney = FleetFactory.eINSTANCE.createDryDockEvent();
@@ -647,7 +652,7 @@ public class ScenarioTools {
 		dryDockJourney.setStartAfter(dryDockJourneyStartDate);
 		dryDockJourney.setStartBy(dryDockJourneyStartDate);
 		// add to scenario's fleet model
-		fleetModel.getVesselEvents().add(dryDockJourney);
+		fleetModel.getScenarioFleetModel().getVesselEvents().add(dryDockJourney);
 
 		ScenarioUtils.addDefaultSettings(scenario);
 
@@ -705,7 +710,7 @@ public class ScenarioTools {
 		// FIXME: Update for API changes
 		// System.err.println("Total cost: " + a.getTotalCost() + ", Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
 
-		SimpleCargoAllocation a= new SimpleCargoAllocation(ca);
+		SimpleCargoAllocation a = new SimpleCargoAllocation(ca);
 		if (a.getLadenLeg() != null) {
 			printJourney("Laden Leg", a.getLadenLeg());
 		}
@@ -905,7 +910,5 @@ public class ScenarioTools {
 		// System.err.println("time: " + (System.currentTimeMillis() - l));
 		manifestResource.save(null);
 	}
-
-	
 
 }

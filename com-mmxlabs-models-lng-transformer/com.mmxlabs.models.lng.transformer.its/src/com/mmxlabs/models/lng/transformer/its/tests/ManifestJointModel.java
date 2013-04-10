@@ -228,7 +228,7 @@ public class ManifestJointModel {
 		// Nothing to set
 
 		FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
-		// Nothing to set
+		fleetModel.setScenarioFleetModel(FleetFactory.eINSTANCE.createScenarioFleetModel());
 
 		CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		// Nothing to set

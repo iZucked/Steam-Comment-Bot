@@ -8,7 +8,9 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -29,6 +31,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	public final Port dischargePort2;
 	
 	public final Cargo cargo;
+	private VesselAvailability vesselAvailability;
 	
 	/**
 	 * Initialises a minimal complete scenario, creating:
@@ -46,6 +49,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 		
 		final CommercialModel commercialModel = scenario.getSubModel(CommercialModel.class);
+		final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 		
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
@@ -104,7 +108,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		Date endDate = addHours(lastDischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 		
-		fleetCreator.setAvailability(vessel, originPort, startDate, originPort, endDate);			
+		this.vesselAvailability = fleetCreator.setAvailability(fleetModel, vessel, originPort, startDate, originPort, endDate);			
 
 		// complete hack: forcibly assign the cargo to the vessel
 		final ElementAssignment assignment = AssignmentFactory.eINSTANCE.createElementAssignment();

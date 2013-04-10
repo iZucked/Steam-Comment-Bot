@@ -45,7 +45,6 @@ import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -63,36 +62,18 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * Class to create a scenario programmatically.
  * 
- * The scenario is created by default with 
- *  - one contract legal entity (associated with all contracts)
- *  - one shipping legal entity
- *  - one sales contract
- *  - one vessel class
- *  - one vessel
- *  - three ports
- *  - one purchase contract, and
- *  - one (default) route
- *  
- * The following methods are provided to add further EML objects to the scenario:
- *  - addEntity
- *  - addVessel
- *  - addVesselSimple
- *  - addPorts
- *  - addCargo
- *  - addDryDock
- *  - addCharterOut
- *  - addAllowedVesselsOnCargo
- *  - addInaccessiblePortsOnVesselClass
- *  - addSalesContract
- *  - addPurchaseContract
- *
+ * The scenario is created by default with - one contract legal entity (associated with all contracts) - one shipping legal entity - one sales contract - one vessel class - one vessel - three ports -
+ * one purchase contract, and - one (default) route
+ * 
+ * The following methods are provided to add further EML objects to the scenario: - addEntity - addVessel - addVesselSimple - addPorts - addCargo - addDryDock - addCharterOut -
+ * addAllowedVesselsOnCargo - addInaccessiblePortsOnVesselClass - addSalesContract - addPurchaseContract
+ * 
  * The scenario then needs to be finalised using {@link #buildScenario()} before it can be used.
  * 
  * @author Simon McGregor
@@ -104,14 +85,13 @@ public class DefaultScenarioCreator {
 	private static final Logger log = LoggerFactory.getLogger(DefaultScenarioCreator.class);
 	public float dischargePrice = 1f;
 
-	
 	// will need at least one sales contract and purchase contract for any completed transactions
 	SalesContract salesContract;
 	PurchaseContract purchaseContract;
 	// will need a contract entity and a shipping entity
 	LegalEntity contractEntity;
 	LegalEntity shippingEntity;
-	
+
 	public final DefaultFleetCreator fleetCreator = new DefaultFleetCreator();
 	public final DefaultPortCreator portCreator = new DefaultPortCreator();
 	public final DefaultCargoCreator cargoCreator = new DefaultCargoCreator();
@@ -127,12 +107,11 @@ public class DefaultScenarioCreator {
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 	}
-	
+
 	public Date addHours(Date date, int hours) {
 		return new Date(date.getTime() + Timer.ONE_HOUR * hours);
 	}
-		
-	
+
 	/**
 	 * @since 3.0
 	 */
@@ -142,55 +121,54 @@ public class DefaultScenarioCreator {
 		commercialModel.getEntities().add(entity);
 		return entity;
 	}
-	
+
 	/**
 	 * @since 3.0
 	 */
-	public Route addRoute(String name) {		
+	public Route addRoute(String name) {
 		final PortModel portModel = scenario.getSubModel(PortModel.class);
 		Route r = PortFactory.eINSTANCE.createRoute();
 		r.setName(name);
 		portModel.getRoutes().add(r);
 		return r;
 	}
-	
+
 	public Route getRoute(String name) {
 		final PortModel portModel = scenario.getSubModel(PortModel.class);
-		for (Route route: portModel.getRoutes()) {
+		for (Route route : portModel.getRoutes()) {
 			if (route.getName().equals(name)) {
 				return route;
 			}
 		}
 		return null;
 	}
-	
+
 	public class DefaultVesselStateAttributesCreator {
 		public static final int fuelTravelConsumptionPerHour = 15;
 		public static final int NBOIdleRatePerHour = 5; // should this be converted to per-day?
-		public static final int fuelIdleConsumptionPerHour = 5;		
-		
+		public static final int fuelIdleConsumptionPerHour = 5;
+
 		int consumption = TimeUnitConvert.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
 		int maxConsumption = TimeUnitConvert.convertPerHourToPerDay(fuelTravelConsumptionPerHour);
-		
+
 		int fuelIdleConsumptionPerDay = TimeUnitConvert.convertPerHourToPerDay(fuelIdleConsumptionPerHour);
-		int NBOIdleRatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBOIdleRatePerHour); 
+		int NBOIdleRatePerDay = TimeUnitConvert.convertPerHourToPerDay(NBOIdleRatePerHour);
 		int NBORatePerDay = NBOIdleRatePerDay * 2;
-		
-		
+
 		public VesselStateAttributes createVesselStateAttributes(double minSpeed, double maxSpeed) {
 			final VesselStateAttributes result = FleetFactory.eINSTANCE.createVesselStateAttributes();
 
-			double [] speeds = {minSpeed, maxSpeed};
-			
+			double[] speeds = { minSpeed, maxSpeed };
+
 			int n = (minSpeed == maxSpeed ? 1 : 2);
-			
+
 			for (int i = 0; i < n; i++) {
 				FuelConsumption fc = FleetFactory.eINSTANCE.createFuelConsumption();
 				fc.setConsumption(consumption);
 				fc.setSpeed(speeds[i]);
 				result.getFuelConsumption().add(fc);
 			}
-			
+
 			result.setIdleBaseRate(fuelIdleConsumptionPerDay);
 			result.setIdleNBORate(NBOIdleRatePerDay);
 			result.setNboRate(NBORatePerDay);
@@ -198,16 +176,15 @@ public class DefaultScenarioCreator {
 			return result;
 		}
 
-		
 	}
-	
+
 	public class DefaultVesselClassRouteParametersCreator {
 		int defaultConsumptionRatePerHour = 10;
 		int defaultNBORatePerHour = 5;
 		int defaultConsumptionRatePerDay = TimeUnitConvert.convertPerHourToPerDay(defaultConsumptionRatePerHour);
 		int defaultNBORatePerDay = TimeUnitConvert.convertPerHourToPerDay(defaultNBORatePerHour);
 		int defaultTransitTimeInHours = 0;
-		
+
 		public VesselClassRouteParameters createVesselClassRouteParameters(Route route) {
 			VesselClassRouteParameters result = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 
@@ -217,12 +194,12 @@ public class DefaultScenarioCreator {
 			result.setLadenNBORate(defaultNBORatePerDay);
 			result.setBallastNBORate(defaultNBORatePerDay);
 			result.setExtraTransitTime(defaultTransitTimeInHours);
-			
+
 			return result;
-			
+
 		}
 	}
-	
+
 	public class DefaultFleetCreator {
 		// default values
 		public static final int spotCharterCount = 0;
@@ -234,7 +211,6 @@ public class DefaultScenarioCreator {
 		final int defaultCapacity = 10000;
 		final int defaultPilotLightRate = 0;
 		final int defaultMinHeelVolume = 500;
-		final int defaultCooldownTime = 0;
 		final int defaultWarmupTime = Integer.MAX_VALUE;
 		final double defaultEquivalenceFactor = 1.0;
 		final int cooldownVolume = 0;
@@ -244,6 +220,7 @@ public class DefaultScenarioCreator {
 
 		/**
 		 * Creates a heel options with default settings.
+		 * 
 		 * @return
 		 */
 		public HeelOptions createDefaultHeelOptions() {
@@ -253,9 +230,10 @@ public class DefaultScenarioCreator {
 			result.setVolumeAvailable(startHeelVolume);
 			return result;
 		}
-		
+
 		/**
 		 * Creates a base fuel with default settings.
+		 * 
 		 * @return
 		 */
 		public BaseFuel createDefaultBaseFuel() {
@@ -272,13 +250,12 @@ public class DefaultScenarioCreator {
 			bfc.setFuel(baseFuel);
 			bfc.setPrice(baseFuelUnitPrice);
 			fleetCostModel.getBaseFuelPrices().add(bfc);
-			
+
 			return baseFuel;
 		}
-		
+
 		/**
-		 * Creates a vessel class with default settings. If the name parameter is null,
-		 * a default name is generated.
+		 * Creates a vessel class with default settings. If the name parameter is null, a default name is generated.
 		 * 
 		 * @param name
 		 * @return
@@ -289,19 +266,19 @@ public class DefaultScenarioCreator {
 				final int n = fleetModel.getVesselClasses().size();
 				name = "Vessel Class " + n;
 			}
-			
+
 			final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
 			fleetModel.getVesselClasses().add(vc);
-		
+
 			DefaultVesselStateAttributesCreator dvsac = new DefaultVesselStateAttributesCreator();
-			
+
 			CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
 			charterCostModel.setSpotCharterCount(spotCharterCount);
 			charterCostModel.getVesselClasses().add(vc);
 
 			final SpotMarketsModel spotMarketsModel = scenario.getSubModel(SpotMarketsModel.class);
 			spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
-			
+
 			vc.setLadenAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
 			vc.setBallastAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
 			vc.setName(name);
@@ -310,15 +287,14 @@ public class DefaultScenarioCreator {
 			vc.setMaxSpeed(defaultMaxSpeed);
 			vc.setCapacity(defaultCapacity);
 			vc.setPilotLightRate(defaultPilotLightRate);
-			vc.setCoolingTime(defaultCooldownTime);
 			vc.setWarmingTime(defaultWarmupTime);
 			vc.setCoolingVolume(cooldownVolume);
 			vc.setMinHeel(defaultMinHeelVolume);
-			vc.setFillCapacity(defaultFillCapacity);	
-			
+			vc.setFillCapacity(defaultFillCapacity);
+
 			return vc;
 		}
-		
+
 		/**
 		 * Creates a vessel of the specified vessel class with default parameters.
 		 * 
@@ -332,18 +308,18 @@ public class DefaultScenarioCreator {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			vessel.setVesselClass(vc);
 			vessel.setName(name);
-			
+
 			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
 
-			vessel.setAvailability(availability);
-
+			availability.setVessel(vessel);
 			vessel.setStartHeel(createDefaultHeelOptions());
 
 			fleetModel.getVessels().add(vessel);
-			
+			fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availability);
+
 			return vessel;
 		}
-		
+
 		/**
 		 * Creates multiple default vessels of the specified vessel class. Names are automatically generated.
 		 * 
@@ -351,14 +327,14 @@ public class DefaultScenarioCreator {
 		 * @param num
 		 * @return
 		 */
-		public Vessel [] createMultipleDefaultVessels(final VesselClass vc, final int num) {
+		public Vessel[] createMultipleDefaultVessels(final VesselClass vc, final int num) {
 			Vessel[] result = new Vessel[num];
 			for (int i = 0; i < num; i++) {
 				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc);
 			}
 			return result;
 		}
-		
+
 		/**
 		 * Creates and sets an availability for the specified vessel.
 		 * 
@@ -368,20 +344,22 @@ public class DefaultScenarioCreator {
 		 * @param endPort
 		 * @param endDate
 		 */
-		public void setAvailability(Vessel vessel, Port startPort, Date startDate, Port endPort, Date endDate) {
-			VesselAvailability availability = (VesselAvailabilityImpl) FleetFactory.eINSTANCE.createVesselAvailability();
+		public VesselAvailability setAvailability(FleetModel fleetModel, Vessel vessel, Port startPort, Date startDate, Port endPort, Date endDate) {
+			VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
 			availability.getStartAt().add(startPort);
 			availability.getEndAt().add(endPort);
 			availability.setStartAfter(startDate);
 			availability.setEndBy(endDate);
-			vessel.setAvailability(availability);			
+			availability.setVessel(vessel);
+			fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availability);
+			return availability;
 		}
-		
+
 		public void assignDefaultCanalData(VesselClass vc, Route route) {
 			assignRouteParameters(vc, route);
 			setCanalCost(vc, route, defaultCanalCost, defaultCanalCost);
 		}
-		
+
 		/**
 		 * Assigns default route parameters to the specified vessel on the specified route.
 		 * 
@@ -394,10 +372,10 @@ public class DefaultScenarioCreator {
 			vc.getRouteParameters().add(result);
 			return result;
 		}
-		
+
 		public RouteCost setCanalCost(VesselClass vc, Route route, int ladenCost, int ballastCost) {
 			final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
-	
+
 			final RouteCost result = PricingFactory.eINSTANCE.createRouteCost();
 			result.setRoute(route);
 			result.setLadenCost(ladenCost); // cost in dollars for a laden vessel
@@ -406,17 +384,15 @@ public class DefaultScenarioCreator {
 			pricingModel.getRouteCosts().add(result);
 			return result;
 		}
-		
-		
+
 	}
 
-	
 	public class DefaultPortCreator {
 		// for auto-generated distances, we can supply a base multiplier so
 		// that distances are integer multiples of vessel speeds
-		double baseDistanceMultiplier = 1; 
+		double baseDistanceMultiplier = 1;
 		double defaultCv = 21;
-			
+
 		public DefaultPortCreator() {
 		}
 
@@ -425,40 +401,33 @@ public class DefaultScenarioCreator {
 			result.setCanal(true);
 			return result;
 		}
-		
+
 		/**
-		 * Creates a new DefaultPortCreator whose autogenerated distances will
-		 * be multiples of the specified base distance multiplier. If the speeds of
-		 * all vessels in the scenario have a common factor, it may be convenient
-		 * to set the base multiplier to that common factor, so that travel times
-		 * are all integers.
-		 *  
+		 * Creates a new DefaultPortCreator whose autogenerated distances will be multiples of the specified base distance multiplier. If the speeds of all vessels in the scenario have a common
+		 * factor, it may be convenient to set the base multiplier to that common factor, so that travel times are all integers.
+		 * 
 		 * 
 		 * @param baseDistanceMultiplier
 		 */
 		public DefaultPortCreator(int baseDistanceMultiplier) {
 			this.baseDistanceMultiplier = baseDistanceMultiplier;
 		}
-		
+
 		/**
-		 * Sets the distance between two ports via a specified route to be 
-		 * symmetrically equal to the specified value. If route == null, 
-		 * the default route is used.
+		 * Sets the distance between two ports via a specified route to be symmetrically equal to the specified value. If route == null, the default route is used.
 		 * 
-		 * @param p1 
+		 * @param p1
 		 * @param p2
 		 * @param distance
 		 * @param r
 		 */
 		public void setDistance(Port p1, Port p2, int distance, Route r) {
 			setOneWayDistance(p1, p2, distance, r);
-			setOneWayDistance(p2, p1, distance, r);			
+			setOneWayDistance(p2, p1, distance, r);
 		}
-		
+
 		/**
-		 * Sets the distance from port p1 to p2 via a specified route to be 
-		 * equal to the specified value. If route == null, the default route is used.
-		 * The distance from port p2 to p1 is not set.
+		 * Sets the distance from port p1 to p2 via a specified route to be equal to the specified value. If route == null, the default route is used. The distance from port p2 to p1 is not set.
 		 * 
 		 * @param p1
 		 * @param p2
@@ -471,35 +440,33 @@ public class DefaultScenarioCreator {
 				final PortModel portModel = scenario.getSubModel(PortModel.class);
 				r = portModel.getRoutes().get(0);
 			}
-			
+
 			final RouteLine distanceLine = PortFactory.eINSTANCE.createRouteLine();
 			distanceLine.setFrom(p1);
 			distanceLine.setTo(p2);
 			distanceLine.setDistance(distance);
 			r.getLines().add(distanceLine);
 		}
-		
+
 		/**
-		 * Creates a new port and connects it to existing ports using the
-		 * specified 1d array of distances (one for each existing port).
-		 * If the name or distances parameters are left null, sensible defaults
-		 * will be chosen.  
+		 * Creates a new port and connects it to existing ports using the specified 1d array of distances (one for each existing port). If the name or distances parameters are left null, sensible
+		 * defaults will be chosen.
 		 * 
 		 * @param name
 		 * @param distances
 		 * @return
 		 */
-		public Port createPort(String name, int [] distances) {
+		public Port createPort(String name, int[] distances) {
 			final PortModel portModel = scenario.getSubModel(PortModel.class);
-			
+
 			// if not specified, set name to a sensible default value
 			if (name == null) {
 				int n = portModel.getPorts().size();
-				name = "Port " + n;				
+				name = "Port " + n;
 			}
-			
+
 			final Port result = PortFactory.eINSTANCE.createPort();
-			
+
 			result.setTimeZone(timeZone);
 			result.setName(name);
 			result.setCvValue(defaultCv);
@@ -508,10 +475,9 @@ public class DefaultScenarioCreator {
 			if (distances == null) {
 				distances = createDefaultDistances();
 			}
-			
+
 			EList<Port> ports = portModel.getPorts();
 			ports.add(result);
-
 
 			for (int i = 0; i < distances.length; i++) {
 				setDistance(ports.get(i), result, distances[i], null);
@@ -521,44 +487,42 @@ public class DefaultScenarioCreator {
 		}
 
 		/**
-		 * Creates a default list of distances between a new port and existing ports.
-		 * The distances are multiples of the base distance multiplier supplied to
-		 * the 
+		 * Creates a default list of distances between a new port and existing ports. The distances are multiples of the base distance multiplier supplied to the
 		 * 
 		 * @return
 		 */
-		private int [] createDefaultDistances() {
+		private int[] createDefaultDistances() {
 			final PortModel portModel = scenario.getSubModel(PortModel.class);
 			EList<Port> ports = portModel.getPorts();
-			int [] result = new int [ports.size()];
-			
+			int[] result = new int[ports.size()];
+
 			for (int i = 0; i < result.length; i++) {
 				// TODO: make a more meaningful value here
-				result[i] = (int) ((i+1) * baseDistanceMultiplier);
-				
+				result[i] = (int) ((i + 1) * baseDistanceMultiplier);
+
 			}
 			return result;
 		}
-		
-		public Port [] createDefaultPorts(int num) {
-			Port [] result = new Port [num];
+
+		public Port[] createDefaultPorts(int num) {
+			Port[] result = new Port[num];
 			for (int i = 0; i < num; i++) {
 				result[i] = createPort(null, null);
 			}
 			return result;
 		}
 	}
-	
+
 	public class DefaultCargoCreator {
 		int defaultWindowSize = 0;
-		
+
 		public void setDefaultSlotWindow(Slot slot, Date time) {
 			slot.setWindowSize(defaultWindowSize);
 			Port port = slot.getPort();
 			final TimeZone zone = TimeZone.getTimeZone(port.getTimeZone() == null || port.getTimeZone().isEmpty() ? "UTC" : port.getTimeZone());
 
 			final Calendar loadCalendar = Calendar.getInstance(zone);
-			
+
 			loadCalendar.setTime(time);
 			slot.setWindowStartTime(loadCalendar.get(Calendar.HOUR_OF_DAY));
 			loadCalendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -567,37 +531,37 @@ public class DefaultScenarioCreator {
 			loadCalendar.set(Calendar.MILLISECOND, 0);
 			slot.setWindowStart(loadCalendar.getTime());
 		}
-		
+
 		public Cargo createDefaultCargo(String name, Port loadPort, Port dischargePort, Date loadTime, int travelTimeInHours) {
 			Cargo result = CargoFactory.eINSTANCE.createCargo();
 			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
 			final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
-			
+
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
-				loadTime = new Date(System.currentTimeMillis());								
+				loadTime = new Date(System.currentTimeMillis());
 			}
-			
+
 			// if name is not specified, set it to a sensible default
 			if (name == null) {
 				String format = "Cargo from %s to %s in %d hrs";
 				name = String.format(format, loadPort.getName(), dischargePort.getName(), travelTimeInHours);
 			}
-			
+
 			result.getSlots().add(loadSlot);
 			result.getSlots().add(dischargeSlot);
 
 			loadSlot.setPort(loadPort);
 			dischargeSlot.setPort(dischargePort);
-			
+
 			loadSlot.setContract(purchaseContract);
 			dischargeSlot.setContract(salesContract);
-			
+
 			loadSlot.setMaxQuantity(Integer.MAX_VALUE);
 			loadSlot.setName("load");
 			dischargeSlot.setMaxQuantity(Integer.MAX_VALUE);
 			dischargeSlot.setName("discharge");
-			
+
 			setDefaultSlotWindow(loadSlot, loadTime);
 			setDefaultSlotWindow(dischargeSlot, addHours(loadTime, travelTimeInHours));
 
@@ -608,7 +572,7 @@ public class DefaultScenarioCreator {
 			cargoModel.getLoadSlots().add(loadSlot);
 			cargoModel.getDischargeSlots().add(dischargeSlot);
 			cargoModel.getCargoes().add(result);
-			
+
 			return result;
 		}
 
@@ -617,18 +581,18 @@ public class DefaultScenarioCreator {
 			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
 			final DischargeSlot dischargeSlot1 = CargoFactory.eINSTANCE.createDischargeSlot();
 			final DischargeSlot dischargeSlot2 = CargoFactory.eINSTANCE.createDischargeSlot();
-			
+
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
-				loadTime = new Date(System.currentTimeMillis());								
+				loadTime = new Date(System.currentTimeMillis());
 			}
-			
+
 			// if name is not specified, set it to a sensible default
 			if (name == null) {
 				String format = "Cargo from %s to %s in %d hrs to %s in %d hrs";
 				name = String.format(format, loadPort.getName(), dischargePort1.getName(), travelTimeInHours1, dischargePort2.getName(), travelTimeInHours2);
 			}
-			
+
 			result.getSlots().add(loadSlot);
 			result.getSlots().add(dischargeSlot1);
 			result.getSlots().add(dischargeSlot2);
@@ -636,11 +600,11 @@ public class DefaultScenarioCreator {
 			loadSlot.setPort(loadPort);
 			dischargeSlot1.setPort(dischargePort1);
 			dischargeSlot2.setPort(dischargePort2);
-			
+
 			loadSlot.setContract(purchaseContract);
 			dischargeSlot1.setContract(salesContract);
 			dischargeSlot2.setContract(salesContract);
-			
+
 			loadSlot.setMaxQuantity(Integer.MAX_VALUE);
 			loadSlot.setName("load");
 			dischargeSlot1.setMaxQuantity(Integer.MAX_VALUE);
@@ -660,37 +624,35 @@ public class DefaultScenarioCreator {
 			cargoModel.getDischargeSlots().add(dischargeSlot1);
 			cargoModel.getDischargeSlots().add(dischargeSlot2);
 			cargoModel.getCargoes().add(result);
-			
-			return result;		
-		}		
-	}
-	
 
-	
+			return result;
+		}
+	}
+
 	public class DefaultPricingCreator {
 		public DataIndex<Double> createDefaultIndex(String name, double value) {
 			final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
 
-			IndexPoint<Double> startPoint = PricingFactory.eINSTANCE.createIndexPoint(); 
+			IndexPoint<Double> startPoint = PricingFactory.eINSTANCE.createIndexPoint();
 			IndexPoint<Double> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
-			
+
 			startPoint.setDate(new Date(0));
 			startPoint.setValue(value);
-			
+
 			endPoint.setDate(new Date(Long.MAX_VALUE));
 			endPoint.setValue(value);
-			
+
 			DataIndex<Double> result = PricingFactory.eINSTANCE.createDataIndex();
-			
+
 			result.getPoints().add(startPoint);
 			result.getPoints().add(endPoint);
-			
+
 			pricingModel.getCommodityIndices().add(result);
-			
+
 			return result;
 		}
 	}
-	
+
 	// /**
 	// * Add a canal to all vessel classes.
 	// */
@@ -715,13 +677,13 @@ public class DefaultScenarioCreator {
 			final PortModel portModel = scenario.getSubModel(PortModel.class);
 			r = portModel.getRoutes().get(0);
 		}
-		
-		for (RouteLine line: r.getLines()) {
+
+		for (RouteLine line : r.getLines()) {
 			if (line.getFrom() == p1 && line.getTo() == p2) {
 				return line.getDistance();
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -740,7 +702,7 @@ public class DefaultScenarioCreator {
 		dryDock.setDurationInDays(durationDays);
 		dryDock.setPort(startPort);
 		// add to scenario's fleet model
-		fleetModel.getVesselEvents().add(dryDock);
+		fleetModel.getScenarioFleetModel().getVesselEvents().add(dryDock);
 
 		// define the start and end time
 		dryDock.setStartAfter(start);
@@ -777,7 +739,7 @@ public class DefaultScenarioCreator {
 		charterOut.setHireRate(dailyCharterOutPrice);
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
-		fleetModel.getVesselEvents().add(charterOut);
+		fleetModel.getScenarioFleetModel().getVesselEvents().add(charterOut);
 
 		return charterOut;
 	}
@@ -994,33 +956,33 @@ public class DefaultScenarioCreator {
 
 		return result;
 	}
-	
-	public void checkJourneyGeography(Journey journey, Port from,  Port to) {
+
+	public void checkJourneyGeography(Journey journey, Port from, Port to) {
 		Assert.assertEquals(journey.getPort(), from);
 		Assert.assertEquals(journey.getDestination(), to);
 		Route route = getRoute(journey.getRoute());
 		Assert.assertEquals((int) journey.getDistance(), (int) getDistance(from, to, route));
-	}	
-	
+	}
+
 	public RouteCost getRouteCost(VesselClass vc, Route route) {
 		final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
-		for (RouteCost rc: pricingModel.getRouteCosts()) {
+		for (RouteCost rc : pricingModel.getRouteCosts()) {
 			if (rc.getRoute().equals(route) && rc.getVesselClass().equals(vc)) {
 				return rc;
 			}
 		}
-		return null;	
+		return null;
 	}
-	
+
 	public VesselClassRouteParameters getRouteParameters(VesselClass vc, Route route) {
-		for (VesselClassRouteParameters parameters: vc.getRouteParameters()) {
+		for (VesselClassRouteParameters parameters : vc.getRouteParameters()) {
 			if (parameters.getRoute().equals(route)) {
 				return parameters;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Sets up a cooldown pricing model including an index
 	 */
@@ -1029,14 +991,14 @@ public class DefaultScenarioCreator {
 		final PortModel portModel = scenario.getSubModel(PortModel.class);
 
 		final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultIndex("cooldown", value);
-		
+
 		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
 		price.setIndex(cooldownIndex);
-		
-		for (Port port: portModel.getPorts()) {
+
+		for (Port port : portModel.getPorts()) {
 			price.getPorts().add(port);
 		}
 
-		pricingModel.getCooldownPrices().add(price);		
-	}	
+		pricingModel.getCooldownPrices().add(price);
+	}
 }

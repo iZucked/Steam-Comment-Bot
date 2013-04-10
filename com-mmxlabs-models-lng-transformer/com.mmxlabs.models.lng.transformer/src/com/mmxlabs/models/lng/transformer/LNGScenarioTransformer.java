@@ -61,13 +61,15 @@ import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -595,20 +597,22 @@ public class LNGScenarioTransformer {
 
 		final HashSet<Date> allDates = new HashSet<Date>();
 
-		for (final VesselEvent event : fleet.getVesselEvents()) {
+		ScenarioFleetModel scenarioFleetModel = fleet.getScenarioFleetModel();
+
+		for (final VesselEvent event : scenarioFleetModel.getVesselEvents()) {
 			allDates.add(event.getStartBy());
 			allDates.add(event.getStartAfter());
 		}
-		for (final Vessel vessel : fleet.getVessels()) {
-			if (vessel.getAvailability().isSetStartBy())
-				allDates.add(vessel.getAvailability().getStartBy());
-			if (vessel.getAvailability().isSetStartAfter())
-				allDates.add(vessel.getAvailability().getStartAfter());
+		for (final VesselAvailability vesselAvailability : scenarioFleetModel.getVesselAvailabilities()) {
+			if (vesselAvailability.isSetStartBy())
+				allDates.add(vesselAvailability.getStartBy());
+			if (vesselAvailability.isSetStartAfter())
+				allDates.add(vesselAvailability.getStartAfter());
 
-			if (vessel.getAvailability().isSetEndBy())
-				allDates.add(vessel.getAvailability().getEndBy());
-			if (vessel.getAvailability().isSetEndAfter())
-				allDates.add(vessel.getAvailability().getEndAfter());
+			if (vesselAvailability.isSetEndBy())
+				allDates.add(vesselAvailability.getEndBy());
+			if (vesselAvailability.isSetEndAfter())
+				allDates.add(vesselAvailability.getEndAfter());
 		}
 		for (final Slot s : cargo.getLoadSlots()) {
 			allDates.add(s.getWindowStartWithSlotOrPortTime());
@@ -630,7 +634,7 @@ public class LNGScenarioTransformer {
 
 		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 
-		for (final VesselEvent event : fleetModel.getVesselEvents()) {
+		for (final VesselEvent event : fleetModel.getScenarioFleetModel().getVesselEvents()) {
 
 			if (event.getStartAfter().after(latestDate)) {
 				continue;
@@ -1654,12 +1658,14 @@ public class LNGScenarioTransformer {
 		/*
 		 * Now create each vessel
 		 */
-		for (final Vessel eV : fleetModel.getVessels()) {
-			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, eV.getAvailability().isSetStartAfter() ? eV.getAvailability().getStartAfter() : null, eV
-					.getAvailability().isSetStartBy() ? eV.getAvailability().getStartBy() : null, SetUtils.getPorts(eV.getAvailability().getStartAt()));
+		for (final VesselAvailability vesselAvailability : fleetModel.getScenarioFleetModel().getVesselAvailabilities()) {
+			Vessel eV = vesselAvailability.getVessel();
 
-			final IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, eV.getAvailability().isSetEndAfter() ? eV.getAvailability().getEndAfter() : null, eV
-					.getAvailability().isSetEndBy() ? eV.getAvailability().getEndBy() : null, SetUtils.getPorts(eV.getAvailability().getEndAt()));
+			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, vesselAvailability.isSetStartAfter() ? vesselAvailability.getStartAfter() : null,
+					vesselAvailability.isSetStartBy() ? vesselAvailability.getStartBy() : null, SetUtils.getPorts(vesselAvailability.getStartAt()));
+
+			final IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, vesselAvailability.isSetEndAfter() ? vesselAvailability.getEndAfter() : null,
+					vesselAvailability.isSetEndBy() ? vesselAvailability.getEndBy() : null, SetUtils.getPorts(vesselAvailability.getEndAt()));
 
 			// TODO: Hook up once charter out opt implemented
 			final int dailyCharterInPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
@@ -1787,6 +1793,7 @@ public class LNGScenarioTransformer {
 	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
 	 * 
 	 * @return
+	 * @since 3.0
 	 */
 	public OptimiserSettings getOptimisationSettings() {
 		final ParametersModel om = rootObject.getSubModel(ParametersModel.class);
