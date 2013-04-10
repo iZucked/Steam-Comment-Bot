@@ -6,13 +6,16 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -78,6 +81,13 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 	private void createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance, final List<RowData> output) {
 
+		final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
+		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+		final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
+		for (final VesselAvailability vesselAvailability : fleetModel.getScenarioFleetModel().getVesselAvailabilities()) {
+			vesselAvailabilityMap.put(vesselAvailability.getVessel(), vesselAvailability);
+		}
+
 		long totalCost = 0l;
 		long lateness = 0l;
 		long totalPNL = 0l;
@@ -128,7 +138,7 @@ public class KPIContentProvider implements IStructuredContentProvider {
 					if (vessel == null) {
 						continue;
 					}
-					final VesselAvailability availability = vessel.getAvailability();
+					final VesselAvailability availability = vesselAvailabilityMap.get(vessel);
 					if (availability == null) {
 						continue;
 					}
