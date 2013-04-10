@@ -32,7 +32,7 @@ public class CargoSandboxEditorContribution implements IJointModelEditorContribu
 	/**
 	 * Temporary switch to enable/disable this editor during devel
 	 */
-	private static final boolean TMP_ENABLE_EDITOR = true;
+	private static final boolean TMP_ENABLE_EDITOR = false;
 
 	public CargoSandboxEditorContribution() {
 	}
