@@ -927,6 +927,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1198,6 +1199,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3411,6 +3413,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3465,6 +3468,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3727,6 +3731,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4061,6 +4066,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4304,6 +4310,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationsHolder()
@@ -4314,6 +4321,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4323,6 +4331,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4332,6 +4341,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4341,6 +4351,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Capacity Violations Holder</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4350,6 +4361,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4359,6 +4371,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Resolve Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4368,6 +4381,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Restore Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4377,6 +4391,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4386,6 +4401,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4395,6 +4411,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4404,6 +4421,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4413,6 +4431,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4422,6 +4441,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Capacity Violations Holder</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4431,6 +4451,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl <em>Capacity Map Entry</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityMapEntry()
@@ -4441,6 +4462,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4450,6 +4472,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4459,6 +4482,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Capacity Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4468,6 +4492,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Capacity Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4509,6 +4534,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
@@ -5564,6 +5590,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder <em>Capacity Violations Holder</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Capacity Violations Holder</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationsHolder
@@ -5574,6 +5601,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the map '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder#getViolations <em>Violations</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Violations</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationsHolder#getViolations()
@@ -5585,6 +5613,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Capacity Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Capacity Map Entry</em>'.
 	 * @see java.util.Map.Entry
@@ -5597,6 +5626,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
@@ -5608,6 +5638,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see java.util.Map.Entry
@@ -5650,6 +5681,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Capacity Violation Type</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
@@ -6517,6 +6549,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationsHolder()
@@ -6527,6 +6560,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Violations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6535,6 +6569,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl <em>Capacity Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityMapEntry()
@@ -6545,6 +6580,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6553,6 +6589,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6592,6 +6629,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()

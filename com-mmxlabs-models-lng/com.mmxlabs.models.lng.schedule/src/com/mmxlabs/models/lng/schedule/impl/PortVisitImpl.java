@@ -36,6 +36,7 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	/**
 	 * The cached value of the '{@link #getViolations() <em>Violations</em>}' map.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getViolations()
 	 * @generated
