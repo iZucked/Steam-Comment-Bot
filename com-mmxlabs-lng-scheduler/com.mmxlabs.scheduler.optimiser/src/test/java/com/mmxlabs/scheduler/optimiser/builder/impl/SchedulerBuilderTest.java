@@ -169,7 +169,7 @@ public class SchedulerBuilderTest {
 		final long capacity = 3l;
 		final int minHeel = 4;
 
-		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 0, 35353, 80808, 10101);
+		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 0, 35353, 10101);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, minHeel, 700;
 
@@ -181,7 +181,6 @@ public class SchedulerBuilderTest {
 		Assert.assertEquals(1000, vesselClass.getBaseFuelConversionFactor());
 
 		Assert.assertEquals(35353, vesselClass.getWarmupTime());
-		Assert.assertEquals(80808, vesselClass.getCooldownTime());
 		Assert.assertEquals(10101, vesselClass.getCooldownVolume());
 
 		fail("Not yet implemented - Internal state checks");

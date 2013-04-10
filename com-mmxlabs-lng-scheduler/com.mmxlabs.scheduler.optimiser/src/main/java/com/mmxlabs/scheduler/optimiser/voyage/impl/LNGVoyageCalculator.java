@@ -49,10 +49,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			throw new IllegalStateException("Port CV Provider is not set");
 		}
 	}
-	
+
 	private List<Integer> loadIndicesStorage = new ArrayList<Integer>();
 	private List<Integer> dischargeIndicesStorage = new ArrayList<Integer>();
-	
+
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
 	 * 
@@ -242,10 +242,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final int warmingTimeInHours = idleTimeInHours - deltaTimeInHours;
 
 						if (warmingTimeInHours > vesselClass.getWarmupTime()) {
-							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime() + vesselClass.getCooldownTime()))) {
+							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime()))) {
 								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
-								// don't use any idle base during the cooldown
-								remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 							} else {
 								// warming time = idle - delta
 								// therefore we need
@@ -277,7 +275,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// sequence scheduler unless it's unavoidable.
 						if (options.isWarm() || (options.getAvailableTime() > vesselClass.getWarmupTime())) {
 							output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
-							remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 						}
 					}
 				}
@@ -373,9 +370,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * Calculates the fuel consumptions for a sequence of alternating PortDetails / VoyageDetails
-	 * objects, populating the fuel price fields of those objects and returning a total consumption
-	 * array. 
+	 * Calculates the fuel consumptions for a sequence of alternating PortDetails / VoyageDetails objects, populating the fuel price fields of those objects and returning a total consumption array.
 	 * 
 	 * @param vessel
 	 * @param sequence
@@ -383,7 +378,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * 
 	 * @author Simon McGregor
 	 */
-	public long [] calculateVoyagePlanFuelConsumptions(final IVessel vessel, final Object... sequence) { 
+	public long[] calculateVoyagePlanFuelConsumptions(final IVessel vessel, final Object... sequence) {
 		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
 		final long[] fuelConsumptions = new long[FuelComponent.values().length];
 
@@ -417,19 +412,18 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			}
 		}
-		return fuelConsumptions;	
+		return fuelConsumptions;
 	}
-	
+
 	final public List<Integer> findLoadIndices(List<Integer> storage, Object... sequence) {
 		if (storage == null) {
 			storage = new ArrayList<Integer>();
-		}
-		else {
+		} else {
 			storage.clear();
 		}
-		
-		/* ignore the last element in the sequence, to avoid double-counting 
-		 * (it will be included in the next sequence)
+
+		/*
+		 * ignore the last element in the sequence, to avoid double-counting (it will be included in the next sequence)
 		 */
 		for (int i = 0; i < sequence.length / 2; i++) {
 			int index = i * 2;
@@ -437,32 +431,31 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final IPortSlot slot = details.getOptions().getPortSlot();
 			if (slot instanceof ILoadSlot) {
 				storage.add(index);
-			} 
+			}
 		}
-		
+
 		return storage;
 	}
-	
+
 	final public List<Integer> findDischargeIndices(List<Integer> storage, Object... sequence) {
 		if (storage == null) {
 			storage = new ArrayList<Integer>();
-		}
-		else {
+		} else {
 			storage.clear();
 		}
-		
+
 		for (int i = 0; i < sequence.length / 2; i++) {
 			int index = i * 2;
 			final PortDetails details = (PortDetails) sequence[index];
 			final IPortSlot slot = details.getOptions().getPortSlot();
 			if (slot instanceof IDischargeSlot) {
 				storage.add(index);
-			} 
+			}
 		}
-		
+
 		return storage;
 	}
-	
+
 	final public int findLoadIndex(Object... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
 			if ((i % 2) == 0) {
@@ -475,13 +468,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					} else {
 						return i;
 					}
-				} 
+				}
 			}
 		}
-				
+
 		return -1;
 	}
-				
+
 	final public int findDischargeIndex(Object... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
 			if ((i % 2) == 0) {
@@ -490,32 +483,32 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final IPortSlot slot = details.getOptions().getPortSlot();
 				if (slot instanceof IDischargeSlot) {
 					return i;
-				} 
+				}
 			}
 		}
-				
+
 		return -1;
 	}
-	
+
 	public void sanityCheckVesselState(int loadIdx, int dischargeIdx, Object... sequence) {
 		// If load or discharge has been set, then the other must be too.
-		assert (loadIdx < 0 && dischargeIdx < 0) || (loadIdx >=0 && dischargeIdx >= 0);
-		
+		assert (loadIdx < 0 && dischargeIdx < 0) || (loadIdx >= 0 && dischargeIdx >= 0);
+
 		for (int i = 0; i < sequence.length; ++i) {
 			if ((i % 2) == 1) {
 				// Voyage
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
-//				if (loadIdx <= i && i < dischargeIdx) 
-//					assert(details.getOptions().getVesselState() == VesselState.Laden);
-//				else 
-//					assert(details.getOptions().getVesselState() == VesselState.Ballast);
+				// if (loadIdx <= i && i < dischargeIdx)
+				// assert(details.getOptions().getVesselState() == VesselState.Laden);
+				// else
+				// assert(details.getOptions().getVesselState() == VesselState.Ballast);
 			}
 		}
-		
+
 	}
 
-	final public int calculateCooldownPrices(final IVesselClass vesselClass, final int[] arrivalTimes, Object...sequence) {
+	final public int calculateCooldownPrices(final IVesselClass vesselClass, final int[] arrivalTimes, Object... sequence) {
 		int cooldownM3Price = 0;
 
 		for (int i = 0; i < sequence.length; ++i) {
@@ -526,7 +519,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (details.getOptions().shouldBeCold() && (details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0)) {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
 
-					final int cooldownTime = arrivalTimes[i / 2] - vesselClass.getCooldownTime();
+					final int cooldownTime = arrivalTimes[i / 2];
 
 					// TODO is this how cooldown gas ought to be priced?
 					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {
@@ -545,17 +538,15 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				assert sequence[i] instanceof PortDetails;
 			}
 		}
-		
+
 		return cooldownM3Price;
 	}
-	 
+
 	/**
-	 * Returns an array of LNG prices corresponding to each index on an interleaved sequence of port / voyage details.
-	 * LNG is priced at the discharge value for the next discharge, or the previous discharge if there is no next discharge
-	 * in the sequence. 
+	 * Returns an array of LNG prices corresponding to each index on an interleaved sequence of port / voyage details. LNG is priced at the discharge value for the next discharge, or the previous
+	 * discharge if there is no next discharge in the sequence.
 	 * 
-	 * This method expects either no load or discharge ports, or at least one load and at least one discharge port. Behaviour
-	 * in any other situation is undefined.  
+	 * This method expects either no load or discharge ports, or at least one load and at least one discharge port. Behaviour in any other situation is undefined.
 	 * 
 	 * @param loadIndices
 	 * @param dischargeIndices
@@ -563,13 +554,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
 	 */
-	final public int [] getLngEffectivePrices(List<Integer> loadIndices, List<Integer> dischargeIndices, int [] arrivalTimes, final Object...sequence) {
+	final public int[] getLngEffectivePrices(List<Integer> loadIndices, List<Integer> dischargeIndices, int[] arrivalTimes, final Object... sequence) {
 		// TODO: does not need to be this long
-		int [] result = new int [sequence.length];
-		
+		int[] result = new int[sequence.length];
+
 		// require at least one load and discharge port, or no loads and no discharges
-		assert((loadIndices.isEmpty()) == (dischargeIndices.isEmpty()));
-		
+		assert ((loadIndices.isEmpty()) == (dischargeIndices.isEmpty()));
+
 		// no loads or discharges
 		if (loadIndices.isEmpty()) {
 			IPortSlot firstSlot = ((PortDetails) sequence[0]).getOptions().getPortSlot();
@@ -587,45 +578,45 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 			// or refuse to price the LNG otherwise
 			return null;
-		}				
-		
+		}
+
 		// further logic is for the load / discharge case
-		
+
 		// base cargo cv value on the last load slot before a discharge slot (there will not be further load/discharge pairs, due to
 		// how sequences are broken up)
-		int lastLoadIndex = loadIndices.get(loadIndices.size()-1);
+		int lastLoadIndex = loadIndices.get(loadIndices.size() - 1);
 		int cargoCvValue = ((ILoadSlot) ((PortDetails) sequence[lastLoadIndex]).getOptions().getPortSlot()).getCargoCVValue();
-		
+
 		int prevDischargeIndex = 0;
 		int lngValue = 0;
-		
+
 		// step through the discharge ports
-		for (int i: dischargeIndices) {
+		for (int i : dischargeIndices) {
 			final IPortSlot slot = ((PortDetails) sequence[i]).getOptions().getPortSlot();
 			IDischargeSlot dischargeSlot = (IDischargeSlot) slot;
 
-			// calculate the effective LNG value based on this discharge slot 
+			// calculate the effective LNG value based on this discharge slot
 			int dischargeUnitPrice = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, arrivalTimes[i / 2]);
 			lngValue = Calculator.costPerM3FromMMBTu(dischargeUnitPrice, cargoCvValue);
-			
-			// and apply the value to prices on all preceding voyages 
+
+			// and apply the value to prices on all preceding voyages
 			for (int j = prevDischargeIndex; j < i; j++) {
 				result[j] = lngValue;
 			}
-		}	
-		
+		}
+
 		// remember the final value coming out of the loop
 		int finalLngValue = lngValue;
-		
+
 		// now apply the value from the last discharge port to all voyages following it
-		int finalDischargeIndex = dischargeIndices.get(dischargeIndices.size()-1);
+		int finalDischargeIndex = dischargeIndices.get(dischargeIndices.size() - 1);
 		for (int j = finalDischargeIndex; j < sequence.length; j++) {
 			result[j] = finalLngValue;
-		}					
-		
+		}
+
 		return result;
 	}
-	
+
 	/**
 	 * Given a sequence of {@link IPortDetails} interleaved with {@link VoyageDetails}, compute the total base fuel and LNG requirements, taking into account initial conditions, load and discharge
 	 * commitments etc. It is assumed that the first and last {@link IPortDetails} will be a Loading slot or other slot where the vessel state is set to a known state. Intermediate slots are any other
@@ -640,10 +631,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 */
 	@Override
 	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final int[] arrivalTimes, final Object... sequence) {
-		/* TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature
-		 * (and cleaner logic?) if it passed a list of IPortDetails and a list of VoyageDetails as separate parameters. Worth doing at 
-		 * some point? 
-		*/
+		/*
+		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
+		 * VoyageDetails as separate parameters. Worth doing at some point?
+		 */
 
 		// Ensure odd number of elements
 		assert (sequence.length % 2) == 1;
@@ -653,7 +644,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final int loadIdx = findLoadIndex(sequence);
 		final int dischargeIdx = findDischargeIndex(sequence);
 		sanityCheckVesselState(loadIdx, dischargeIdx, sequence);
-		
+
 		long availableHeelinM3 = Long.MAX_VALUE;
 
 		final long[] fuelConsumptions = calculateVoyagePlanFuelConsumptions(vessel, sequence);
@@ -665,7 +656,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		int routeCostAccumulator = 0;
 
-		// block to force limited scope for temporary local variables 
+		// block to force limited scope for temporary local variables
 		{
 			final PortDetails details = (PortDetails) sequence[0];
 			final IPortSlot slot = details.getOptions().getPortSlot();
@@ -674,7 +665,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				availableHeelinM3 = ((IHeelOptionsPortSlot) slot).getHeelOptions().getHeelLimit();
 			}
 		}
-		
+
 		// The last sequence element that used some kind of boil-off
 		VoyageDetails lastBoiloffElement = null;
 
@@ -685,13 +676,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 				// add route cost
 				routeCostAccumulator += details.getRouteCost();
-				for (final FuelComponent fc: FuelComponent.getLNGFuelComponents()) {
+				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
 					final long fuelConsumption = details.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 					// If this is some sort of boil-off, then record the use
 					if (fuelConsumption > 0) {
 						lastBoiloffElement = details;
 					}
-				}				
+				}
 			}
 		}
 
@@ -711,10 +702,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		int cargoCVValue = 0;
 
-		// the LNG which will be required to complete the sequence, including 
-		// NBO, FBO and any minimum heel if travelling on NBO		
+		// the LNG which will be required to complete the sequence, including
+		// NBO, FBO and any minimum heel if travelling on NBO
 		long lngCommitmentInM3;
-		
+
 		// Load/Discharge sequence
 		if ((loadIdx != -1) && (dischargeIdx != -1)) {
 			final PortDetails loadDetails = (PortDetails) sequence[loadIdx];
@@ -740,10 +731,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			long minDischargeVolumeInM3 = dischargeSlot.getMinDischargeVolume();
 
 			boolean boiloffWasUsed = (lastBoiloffElement != null);
-			
+
 			// Min Heel adjustments. The VoyageDetails tells us how much gas we consumed on the voyage. This may include some of the vessel min heel during the idle time.
-			// If a minimum heel is specified, this is the amount which has to remain in the tanks after 
-			// travel on NBO. 
+			// If a minimum heel is specified, this is the amount which has to remain in the tanks after
+			// travel on NBO.
 			if (boiloffWasUsed && vesselClass.getMinHeel() > 0) {
 				// Assert added for null analysis friendliness
 				assert lastBoiloffElement != null;
@@ -789,7 +780,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 
 			final long cargoCapacityInM3 = vesselClass.getCargoCapacity();
-			
+
 			if (lngCommitmentInM3 > cargoCapacityInM3) {
 				// This is a real issue - hit physical constraints - reject
 				// dischargeDetails.setCapacityViolation(CapacityViolationType.VESSEL_CAPACITY, lngConsumed - cargoCapacity);
@@ -832,8 +823,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// Sanity checks
 			assert lngCommitmentInM3 >= 0;
 			assert lngCommitmentInM3 <= cargoCapacityInM3;
-		} 
-		else { 		// was not a load / discharge sequence 
+		} else { // was not a load / discharge sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 			if (lngCommitmentInM3 > availableHeelinM3) {
 				final PortDetails portDetails = (PortDetails) sequence[2];
@@ -844,26 +834,26 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		List<Integer> loadIndices = findLoadIndices(loadIndicesStorage, sequence);
 		List<Integer> dischargeIndices = findDischargeIndices(dischargeIndicesStorage, sequence);
-		
+
 		// Process details, filling in LNG prices
 		// TODO: I don't really like altering the details at this stage of
 		// processing, but this is where the information is being processed.
 		// Can this be moved into the scheduler? If so, we need to ensure the
 		// same price is used in all valid voyage legs.
-		int [] prices = getLngEffectivePrices(loadIndices, dischargeIndices, arrivalTimes, sequence); 
-		
+		int[] prices = getLngEffectivePrices(loadIndices, dischargeIndices, arrivalTimes, sequence);
+
 		// set the LNG values for the voyages
 		if (prices != null) {
 			int numVoyages = sequence.length / 2;
 			for (int i = 0; i < numVoyages; i++) {
 				int index = i * 2 + 1;
 				final VoyageDetails details = (VoyageDetails) sequence[index];
-				for (FuelComponent fc: FuelComponent.getLNGFuelComponents()) {
+				for (FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
 					details.setFuelUnitPrice(fc, prices[index]);
 				}
 			}
-		}		
-		
+		}
+
 		// check for cooldown violations
 		for (int i = 0; i < sequence.length; ++i) {
 			if ((i & 1) == 1) {
