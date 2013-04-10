@@ -60,17 +60,7 @@ public abstract class ImportAction extends LockableAction {
 			part.setDisableUpdates(true);
 			final DefaultImportContext context = new DefaultImportContext();
 			context.setRootObject(part.getRootObject());
-
-			// first set up all existing named objects
-			for (final MMXSubModel subModel : context.getRootObject().getSubModels()) {
-				final TreeIterator<EObject> allObjects = subModel.getSubModelInstance().eAllContents();
-				
-				while (allObjects.hasNext()) {
-					final EObject o = allObjects.next();
-					if (o instanceof NamedObject)
-						context.registerNamedObject((NamedObject) o);
-				}
-			}
+			context.registerNamedObjectsFromSubModels();
 			
 			doImportStages(context);
 			if (context.getProblems().isEmpty() == false) {
