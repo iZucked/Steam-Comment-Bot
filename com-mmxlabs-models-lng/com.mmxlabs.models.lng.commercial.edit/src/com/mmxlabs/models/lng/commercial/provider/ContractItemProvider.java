@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -354,11 +355,6 @@ public class ContractItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
-				 CommercialFactory.eINSTANCE.createIndexPriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
 				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
 	}
 
@@ -370,7 +366,7 @@ public class ContractItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return CommercialEditPlugin.INSTANCE;
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

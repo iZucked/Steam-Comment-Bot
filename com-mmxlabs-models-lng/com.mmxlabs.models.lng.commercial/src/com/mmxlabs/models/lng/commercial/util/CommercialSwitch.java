@@ -155,16 +155,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.INDEX_PRICE_PARAMETERS: {
-				IndexPriceParameters indexPriceParameters = (IndexPriceParameters)theEObject;
-				T result = caseIndexPriceParameters(indexPriceParameters);
-				if (result == null) result = caseLNGPriceCalculatorParameters(indexPriceParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(indexPriceParameters);
-				if (result == null) result = caseUUIDObject(indexPriceParameters);
-				if (result == null) result = caseMMXObject(indexPriceParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: {
 				ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters)theEObject;
 				T result = caseExpressionPriceParameters(expressionPriceParameters);
@@ -299,22 +289,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFixedPriceParameters(FixedPriceParameters object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Index Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Index Price Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseIndexPriceParameters(IndexPriceParameters object) {
 		return null;
 	}
 

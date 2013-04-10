@@ -67,7 +67,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case CommercialPackage.TAX_RATE: return createTaxRate();
 			case CommercialPackage.FIXED_PRICE_PARAMETERS: return createFixedPriceParameters();
-			case CommercialPackage.INDEX_PRICE_PARAMETERS: return createIndexPriceParameters();
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -146,17 +145,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public FixedPriceParameters createFixedPriceParameters() {
 		FixedPriceParametersImpl fixedPriceParameters = new FixedPriceParametersImpl();
 		return fixedPriceParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public IndexPriceParameters createIndexPriceParameters() {
-		IndexPriceParametersImpl indexPriceParameters = new IndexPriceParametersImpl();
-		return indexPriceParameters;
 	}
 
 	/**

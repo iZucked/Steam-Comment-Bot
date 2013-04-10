@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -300,34 +299,23 @@ public class Exposures {
 		String priceExpression = null;
 		if (slot.isSetPriceExpression()) {
 			priceExpression = slot.getPriceExpression();
-		}
-		else {
+		} else {
 			LNGPriceCalculatorParameters parameters = null;
 			Contract contract = slot.getContract();
 			if (contract != null) {
 				parameters = contract.getPriceInfo();
 			}
-			// do a case switch on contract class
-			// TODO: refactor this into the actual contract classes?
-			if (parameters instanceof IndexPriceParameters) {
-				IndexPriceParameters ipc = (IndexPriceParameters) parameters;
-				if (ipc.getIndex() == null) {
-					return 0;
-				}
-				if (ipc.getIndex().equals(index)) {
-					return ipc.getMultiplier(); 
-				}
-			}
-			else if (parameters instanceof ExpressionPriceParameters) {
+			// do a case switch on price parameters
+			if (parameters instanceof ExpressionPriceParameters) {
 				ExpressionPriceParameters pec = (ExpressionPriceParameters) parameters;
 				priceExpression = pec.getPriceExpression();
 			}
 		}
-		
+
 		if (priceExpression != null) {
 			return getExposureCoefficient(priceExpression, index);
-		}		
-		
+		}
+
 		return 0;
 	}
 
@@ -348,7 +336,7 @@ public class Exposures {
 				Slot slot = slotAllocation.getSlot();
 				double exposureCoefficient = getExposureCoefficient(slot, index);
 				double exposure = exposureCoefficient * volume;
-				
+
 				if (slot instanceof LoadSlot) {
 					// +ve exposure
 				} else if (slot instanceof DischargeSlot) {

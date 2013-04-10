@@ -13,6 +13,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -228,11 +229,6 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createIndexPriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
 				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
 
 		newChildDescriptors.add
@@ -279,7 +275,7 @@ public class CommercialModelItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return CommercialEditPlugin.INSTANCE;
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

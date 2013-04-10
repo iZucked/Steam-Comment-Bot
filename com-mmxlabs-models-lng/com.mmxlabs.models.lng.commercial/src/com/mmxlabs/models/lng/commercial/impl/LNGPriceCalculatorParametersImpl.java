@@ -9,6 +9,10 @@
 package com.mmxlabs.models.lng.commercial.impl;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl;
+import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 
 import com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl;
 

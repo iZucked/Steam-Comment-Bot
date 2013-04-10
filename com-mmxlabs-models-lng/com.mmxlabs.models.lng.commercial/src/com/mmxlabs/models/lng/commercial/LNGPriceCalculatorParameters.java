@@ -8,6 +8,7 @@
  */
 package com.mmxlabs.models.lng.commercial;
 import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 
 /**
  * <!-- begin-user-doc -->

@@ -858,87 +858,6 @@ public interface CommercialPackage extends EPackage {
 	int FIXED_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl <em>Index Price Parameters</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIndexPriceParameters()
-	 * @generated
-	 */
-	int INDEX_PRICE_PARAMETERS = 8;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX_PRICE_PARAMETERS__PROXIES = LNG_PRICE_CALCULATOR_PARAMETERS__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Index</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX_PRICE_PARAMETERS__INDEX = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Multiplier</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX_PRICE_PARAMETERS__MULTIPLIER = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Constant</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX_PRICE_PARAMETERS__CONSTANT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Index Price Parameters</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -947,7 +866,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
 	 * @generated
 	 */
-	int EXPRESSION_PRICE_PARAMETERS = 9;
+	int EXPRESSION_PRICE_PARAMETERS = 8;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1326,53 +1245,6 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getFixedPriceParameters_PricePerMMBTU();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters <em>Index Price Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Index Price Parameters</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters
-	 * @generated
-	 */
-	EClass getIndexPriceParameters();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Index</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex()
-	 * @see #getIndexPriceParameters()
-	 * @generated
-	 */
-	EReference getIndexPriceParameters_Index();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier <em>Multiplier</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Multiplier</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier()
-	 * @see #getIndexPriceParameters()
-	 * @generated
-	 */
-	EAttribute getIndexPriceParameters_Multiplier();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant <em>Constant</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Constant</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant()
-	 * @see #getIndexPriceParameters()
-	 * @generated
-	 */
-	EAttribute getIndexPriceParameters_Constant();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters <em>Expression Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1679,44 +1551,6 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU = eINSTANCE.getFixedPriceParameters_PricePerMMBTU();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl <em>Index Price Parameters</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIndexPriceParameters()
-		 * @generated
-		 */
-		EClass INDEX_PRICE_PARAMETERS = eINSTANCE.getIndexPriceParameters();
-
-		/**
-		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference INDEX_PRICE_PARAMETERS__INDEX = eINSTANCE.getIndexPriceParameters_Index();
-
-		/**
-		 * The meta object literal for the '<em><b>Multiplier</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INDEX_PRICE_PARAMETERS__MULTIPLIER = eINSTANCE.getIndexPriceParameters_Multiplier();
-
-		/**
-		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INDEX_PRICE_PARAMETERS__CONSTANT = eINSTANCE.getIndexPriceParameters_Constant();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.

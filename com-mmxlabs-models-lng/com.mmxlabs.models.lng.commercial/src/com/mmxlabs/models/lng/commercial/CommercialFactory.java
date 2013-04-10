@@ -93,16 +93,6 @@ public interface CommercialFactory extends EFactory {
 	FixedPriceParameters createFixedPriceParameters();
 
 	/**
-	 * Returns a new object of class '<em>Index Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Index Price Parameters</em>'.
-	 * @generated
-	 */
-	IndexPriceParameters createIndexPriceParameters();
-
-	/**
 	 * Returns a new object of class '<em>Expression Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0

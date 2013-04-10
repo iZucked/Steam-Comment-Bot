@@ -57,11 +57,6 @@
 		inheritable="false"
 		modelClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters" />
 	<componentHelper
-		id="com.mmxlabs.models.lng.commercial.helpers.IndexPriceParameters"
-		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.IndexPriceParametersComponentHelper"
-		inheritable="false"
-		modelClass="com.mmxlabs.models.lng.commercial.IndexPriceParameters" />
-	<componentHelper
 		id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
 		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
 		inheritable="false"
@@ -124,35 +119,12 @@
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.indexPurchaseFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
-          label="Index Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
           ID="com.mmxlabs.models.lng.commercial.editor.expressionPurchaseFactory"
           factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
           label="Price Expression Purchase Contract"
           outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.redirectionPurchaseFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
-          label="Redirection Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <!--
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.RedirectionPurchaseContractFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Redirection Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    -->
     <!-- Sales Contract Factories -->
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.fixedSalesFactory"
@@ -166,13 +138,6 @@
           factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
           label="Price Expression Sales Contract"
           outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.indexSalesFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
-          label="Indexed Sales Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
 	<!-- Other Factories -->

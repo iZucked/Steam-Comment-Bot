@@ -114,10 +114,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createFixedPriceParametersAdapter();
 			}
 			@Override
-			public Adapter caseIndexPriceParameters(IndexPriceParameters object) {
-				return createIndexPriceParametersAdapter();
-			}
-			@Override
 			public Adapter caseExpressionPriceParameters(ExpressionPriceParameters object) {
 				return createExpressionPriceParametersAdapter();
 			}
@@ -285,21 +281,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFixedPriceParametersAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters <em>Index Price Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters
-	 * @generated
-	 */
-	public Adapter createIndexPriceParametersAdapter() {
 		return null;
 	}
 
