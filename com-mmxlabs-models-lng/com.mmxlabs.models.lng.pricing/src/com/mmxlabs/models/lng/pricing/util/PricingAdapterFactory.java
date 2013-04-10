@@ -317,6 +317,10 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * @since 3.0
+	 * @since 3.0
+	 * @since 3.0
+	 * @since 3.0
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -373,6 +377,8 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * @since 3.0
+	 * @since 3.0
 	 * Creates a new adapter for the default case.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null.
