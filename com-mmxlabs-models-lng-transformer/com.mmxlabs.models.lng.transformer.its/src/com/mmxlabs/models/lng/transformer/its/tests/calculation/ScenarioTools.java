@@ -33,8 +33,8 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
-import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -362,8 +362,8 @@ public class ScenarioTools {
 
 		sc.setEntity(e);
 		pc.setEntity(e);
-		final IndexPriceParameters salesParams = CommercialFactory.eINSTANCE.createIndexPriceParameters();
-		salesParams.setIndex(sales);
+		final ExpressionPriceParameters salesParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		salesParams.setPriceExpression(sales.getName());
 		sc.setPriceInfo(salesParams);
 
 		commercialModel.getSalesContracts().add(sc);
@@ -608,8 +608,8 @@ public class ScenarioTools {
 
 		sc.setEntity(e);
 		pc.setEntity(e);
-		final IndexPriceParameters salesParams = CommercialFactory.eINSTANCE.createIndexPriceParameters();
-		salesParams.setIndex(sales);
+		final ExpressionPriceParameters salesParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		salesParams.setPriceExpression(sales.getName());
 		sc.setPriceInfo(salesParams);
 
 		commercialModel.getSalesContracts().add(sc);
