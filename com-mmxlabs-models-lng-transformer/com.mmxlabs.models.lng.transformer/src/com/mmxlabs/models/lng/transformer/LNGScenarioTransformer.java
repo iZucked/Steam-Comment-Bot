@@ -65,9 +65,9 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.optimiser.OptimisationRange;
-import com.mmxlabs.models.lng.optimiser.OptimiserModel;
-import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationRange;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -443,7 +443,7 @@ public class LNGScenarioTransformer {
 	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
 
 		Date freezeDate = null;
-		final OptimiserModel optimiserModel = rootObject.getSubModel(OptimiserModel.class);
+		final ParametersModel optimiserModel = rootObject.getSubModel(ParametersModel.class);
 		if (optimiserModel != null) {
 			final OptimiserSettings settings = optimiserModel.getActiveSetting();
 			if (settings != null) {
@@ -1789,7 +1789,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	public OptimiserSettings getOptimisationSettings() {
-		final OptimiserModel om = rootObject.getSubModel(OptimiserModel.class);
+		final ParametersModel om = rootObject.getSubModel(ParametersModel.class);
 		if (om != null) {
 			// select settings
 			final OptimiserSettings x = om.getActiveSetting();

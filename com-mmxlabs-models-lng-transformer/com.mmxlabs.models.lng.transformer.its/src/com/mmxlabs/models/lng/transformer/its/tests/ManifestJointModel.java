@@ -23,9 +23,9 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
-import com.mmxlabs.models.lng.optimiser.OptimiserModel;
-import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -61,7 +61,7 @@ public class ManifestJointModel {
 	private static final String SCHEDULE_MODEL_KEY = "schedule-model";
 	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
 	private static final String ROOT_MODEL_KEY = "root-model";
-	private static final String OPTIMISER_MODEL_KEY = "optimiser-model";
+	private static final String PARAMETERS_MODEL_KEY = "parameters-model";
 	private static final String ANALYTICS_MODEL_KEY = "analytics-model";
 	private static final String SPOT_MARKETS_MODEL_KEY = "spot-markets-model";
 
@@ -78,7 +78,7 @@ public class ManifestJointModel {
 		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
 		modelClassKeys.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), ASSIGNMENT_MODEL_KEY);
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
-		modelClassKeys.put(OptimiserPackage.eINSTANCE.getOptimiserModel(), OPTIMISER_MODEL_KEY);
+		modelClassKeys.put(ParametersPackage.eINSTANCE.getParametersModel(), PARAMETERS_MODEL_KEY);
 //		modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
 		modelClassKeys.put(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel(), SPOT_MARKETS_MODEL_KEY);
 
@@ -116,7 +116,7 @@ public class ManifestJointModel {
 		rootObject.addSubModel(AssignmentFactory.eINSTANCE.createAssignmentModel());
 		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
-		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
+		rootObject.addSubModel(ParametersFactory.eINSTANCE.createParametersModel());
 		rootObject.addSubModel(SpotMarketsFactory.eINSTANCE.createSpotMarketsModel());
 //		rootObject.addSubModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 
@@ -246,7 +246,7 @@ public class ManifestJointModel {
 		CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 		// Nothing to set
 
-		OptimiserModel optimiserModel = rootObject.getSubModel(OptimiserModel.class);
+		ParametersModel optimiserModel = rootObject.getSubModel(ParametersModel.class);
 		// Nothing to set
 	}
 }

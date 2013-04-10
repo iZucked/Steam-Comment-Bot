@@ -41,7 +41,7 @@ import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -75,7 +75,7 @@ public class CustomScenarioCreator {
 	private final PortModel portModel;
 	private final FleetModel fleetModel;
 	private final PricingModel pricingModel;
-	private final OptimiserModel optimiserModel;
+	private final ParametersModel optimiserModel;
 	private final SpotMarketsModel spotMarketsModel;
 
 	final SalesContract sc;
@@ -98,7 +98,7 @@ public class CustomScenarioCreator {
 		portModel = scenario.getSubModel(PortModel.class);
 		fleetModel = scenario.getSubModel(FleetModel.class);
 		pricingModel = scenario.getSubModel(PricingModel.class);
-		optimiserModel = scenario.getSubModel(OptimiserModel.class);
+		optimiserModel = scenario.getSubModel(ParametersModel.class);
 		spotMarketsModel = scenario.getSubModel(SpotMarketsModel.class);
 
 		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();

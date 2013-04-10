@@ -14,8 +14,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.optimiser.OptimiserModel;
-import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -111,7 +111,7 @@ public class LNGTransformerModule extends AbstractModule {
 	 * @return
 	 */
 	OptimiserSettings getOptimisationSettings(MMXRootObject rootObject) {
-		final OptimiserModel om = rootObject.getSubModel(OptimiserModel.class);
+		final ParametersModel om = rootObject.getSubModel(ParametersModel.class);
 		if (om != null) {
 			// select settings
 			final OptimiserSettings x = om.getActiveSetting();
