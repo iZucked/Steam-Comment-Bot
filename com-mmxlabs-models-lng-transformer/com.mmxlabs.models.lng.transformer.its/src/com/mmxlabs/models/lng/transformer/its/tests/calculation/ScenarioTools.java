@@ -672,7 +672,7 @@ public class ScenarioTools {
 		// Code to dump out the scenario to disk
 		if (false) {
 			try {
-				storeToFile(scenario, new File("c:/temp/test.scenario"));
+				storeToFile(scenario, new File("c:/temp/test.lingo"));
 			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
