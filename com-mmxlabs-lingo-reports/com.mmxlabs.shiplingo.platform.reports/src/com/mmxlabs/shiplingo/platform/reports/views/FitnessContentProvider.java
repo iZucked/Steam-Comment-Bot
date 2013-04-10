@@ -13,9 +13,9 @@ import java.util.Map;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.models.lng.optimiser.Objective;
-import com.mmxlabs.models.lng.optimiser.OptimiserModel;
-import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.Objective;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -80,7 +80,7 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 				if (o instanceof Schedule) {
 
 					final MMXRootObject rootObject = svso.getRootObject(o);
-					final OptimiserModel optimiserModel = rootObject.getSubModel(OptimiserModel.class);
+					final ParametersModel optimiserModel = rootObject.getSubModel(ParametersModel.class);
 					final OptimiserSettings settings = optimiserModel.getActiveSetting();
 					final Map<String, Double> weightsMap = new HashMap<String, Double>();
 					if (settings != null) {
