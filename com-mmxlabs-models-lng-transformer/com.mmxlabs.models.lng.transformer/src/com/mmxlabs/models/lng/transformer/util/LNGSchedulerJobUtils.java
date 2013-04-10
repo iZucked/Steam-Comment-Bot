@@ -186,12 +186,12 @@ public class LNGSchedulerJobUtils {
 	 * @param domain
 	 * @param scenario
 	 * @param schedule
-	 * @param inputModel
+	 * @param assignmentModel
 	 * @param cargoModel
 	 * @param postExportProcessors
 	 * @return
 	 */
-	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final AssignmentModel inputModel, final CargoModel cargoModel,
+	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final AssignmentModel assignmentModel, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
@@ -322,7 +322,7 @@ public class LNGSchedulerJobUtils {
 			// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
 			if (fobSaleSlot != null) {
 				// Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
-				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, loadCargo));
+				cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, loadCargo));
 			}
 
 			// Remove references to slots no longer in the cargo
@@ -368,7 +368,7 @@ public class LNGSchedulerJobUtils {
 					// if (!loadSlot.isOptional()) {
 					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 					// }
-					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
+					cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
 					cmd.append(DeleteCommand.create(domain, c));
 				}
 			}
@@ -395,12 +395,12 @@ public class LNGSchedulerJobUtils {
 				// if (!c.getLoadSlot().isOptional()) {
 				// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 				// }
-				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
+				cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
 				cmd.append(DeleteCommand.create(domain, c));
 			}
 		}
 
-		for (final ElementAssignment ai : inputModel.getElementAssignments()) {
+		for (final ElementAssignment ai : assignmentModel.getElementAssignments()) {
 			if (ai.isLocked()) {
 				previouslyLocked.add(ai.getAssignedObject());
 			}
@@ -449,17 +449,17 @@ public class LNGSchedulerJobUtils {
 
 		// copy through assignments which were not present in the schedule
 		// TODO this will probably need some thought around optional elements
-		for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+		for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 			if (ea.getAssignedObject() != null && !reassigned.contains(ea.getAssignedObject())) {
 				newElementAssignments.add(ea);
 			}
 		}
 
-		cmd.append(SetCommand.create(domain, inputModel, AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), newElementAssignments));
+		cmd.append(SetCommand.create(domain, assignmentModel, AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), newElementAssignments));
 
 		if (postExportProcessors != null) {
 			for (final IPostExportProcessor processor : postExportProcessors) {
-				processor.postProcess(domain, scenario, schedule, inputModel, cmd);
+				processor.postProcess(domain, scenario, schedule, assignmentModel, cmd);
 			}
 		}
 		return cmd;
