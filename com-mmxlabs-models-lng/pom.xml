@@ -56,9 +56,9 @@
 		<module>com.mmxlabs.models.lng.schedule.edit</module>
 		<module>com.mmxlabs.models.lng.schedule.editor</module>
 		<module>com.mmxlabs.models.lng.schedule.validation</module>
-		<module>com.mmxlabs.models.lng.optimiser</module>
-		<module>com.mmxlabs.models.lng.optimiser.edit</module>
-		<module>com.mmxlabs.models.lng.optimiser.editor</module>
+		<module>com.mmxlabs.models.lng.parameters</module>
+		<module>com.mmxlabs.models.lng.parameters.edit</module>
+		<module>com.mmxlabs.models.lng.parameters.editor</module>
 
 		<module>com.mmxlabs.models.lng.spotmarkets</module>
 		<module>com.mmxlabs.models.lng.spotmarkets.edit</module>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.parameters/src" modelPluginID="com.mmxlabs.models.lng.parameters"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+    dynamicTemplates="true" modelName="Parameters" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
+  <foreignModel>parameters.ecore</foreignModel>
+  <genPackages prefix="Parameters" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="parameters.ecore#/">
+    <genClasses ecoreClass="parameters.ecore#//ParametersModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ParametersModel/settings"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference parameters.ecore#//ParametersModel/activeSetting"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//OptimiserSettings">
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="The list of objectives being optimised (or fitness functions)"
+          ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/objectives"/>
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="The list of hard constraints being applied"
+          ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/constraints"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/range"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/annealingSettings"/>
+      <genFeatures createChild="false" propertyDescription="A seed for the random number generator"
+          ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/seed"/>
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="A list of extra arguments to the parameters"
+          ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/arguments"/>
+      <genFeatures createChild="false" propertyDescription="If true, rewiring will be allowed by default, otherwise not (cargoes can override this)"
+          ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/rewire"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//Objective">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Objective/weight"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Objective/enabled"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//Constraint">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Constraint/enabled"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//OptimisationRange">
+      <genFeatures createChild="false" propertyDescription="Only scenario events after this date will be included in the optimisation, if set"
+          ecoreFeature="ecore:EAttribute parameters.ecore#//OptimisationRange/optimiseAfter"/>
+      <genFeatures createChild="false" propertyDescription="Only scenario events before this date will be optimised, if set"
+          ecoreFeature="ecore:EAttribute parameters.ecore#//OptimisationRange/optimiseBefore"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//AnnealingSettings">
+      <genFeatures createChild="false" propertyDescription="The number of adjustments to the schedule to perform before finishing; more iterations may give a better result, but will take longer"
+          ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/iterations"/>
+      <genFeatures createChild="false" propertyDescription="The number of iterations performed before each annealing temperature change; a longer epoch length typically goes with more iterations"
+          ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/epochLength"/>
+      <genFeatures createChild="false" propertyDescription="The fraction by which to multiply the temperature each epoch"
+          ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/cooling"/>
+      <genFeatures createChild="false" propertyDescription="The starting temperature for the annealer"
+          ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/initialTemperature"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//Argument">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Argument/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Argument/value"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
