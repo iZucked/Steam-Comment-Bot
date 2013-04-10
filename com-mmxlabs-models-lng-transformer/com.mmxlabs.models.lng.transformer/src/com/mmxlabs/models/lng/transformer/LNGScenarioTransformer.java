@@ -40,6 +40,8 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -63,8 +65,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.optimiser.OptimisationRange;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
@@ -430,7 +430,7 @@ public class LNGScenarioTransformer {
 		// freezeStartSequences(builder, entities);
 
 		// freeze any frozen assignments
-		freezeInputModel(builder, entities);
+		freezeAssignmentModel(builder, entities);
 
 		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.finishTransforming();
@@ -441,7 +441,7 @@ public class LNGScenarioTransformer {
 		return builder.getOptimisationData();
 	}
 
-	private void freezeInputModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
+	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
 
 		Date freezeDate = null;
 		final OptimiserModel optimiserModel = rootObject.getSubModel(OptimiserModel.class);
@@ -455,10 +455,10 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		final InputModel input = rootObject.getSubModel(InputModel.class);
-		if (input != null) {
+		final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
+		if (assignmentModel != null) {
 
-			for (final ElementAssignment assignment : input.getElementAssignments()) {
+			for (final ElementAssignment assignment : assignmentModel.getElementAssignments()) {
 				final UUIDObject o = assignment.getAssignedObject();
 
 				boolean freeze = assignment.isLocked();

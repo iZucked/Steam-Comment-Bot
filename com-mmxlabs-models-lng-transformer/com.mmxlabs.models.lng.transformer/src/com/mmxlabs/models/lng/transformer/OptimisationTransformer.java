@@ -18,6 +18,10 @@ import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -25,10 +29,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
-import com.mmxlabs.models.lng.input.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -87,7 +87,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.
 		 */
 		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
-		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
+		final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
 
 		final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
@@ -206,8 +206,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		}
 
 		// Process initial vessel assignments list
-		if (!inputModel.getElementAssignments().isEmpty()) {
-			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(inputModel, rootObject.getSubModel(FleetModel.class));
+		if (!assignmentModel.getElementAssignments().isEmpty()) {
+			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, rootObject.getSubModel(FleetModel.class));
 			for (final CollectedAssignment seq : assignments) {
 				IVessel vessel = null;
 				log.debug("Processing assignment " + seq.getVesselOrClass().getName());
@@ -246,7 +246,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			if (shortCargoVessel != null) {
 				final IResource resource = vp.getResource(shortCargoVessel);
 				final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-				for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+				for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 					if (ea.getAssignment() == null) {
 
 						final UUIDObject assignedObject = ea.getAssignedObject();

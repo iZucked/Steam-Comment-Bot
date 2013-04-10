@@ -596,22 +596,22 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
 			final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
 
-			line.setFrom((Port) cargoAllocation.getLoadAllocation().getPort());
-			line.setTo((Port) cargoAllocation.getDischargeAllocation().getPort());
+//			line.setFrom((Port) cargoAllocation.getLoadAllocation().getPort());
+//			line.setTo((Port) cargoAllocation.getDischargeAllocation().getPort());
 
 			final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
 
 			final Map<Fuel, Integer[]> voyageSums = new EnumMap<Fuel, Integer[]>(Fuel.class);
 			final Map<Fuel, Integer[]> idleSums = new EnumMap<Fuel, Integer[]>(Fuel.class);
 
-			double cv = ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
-
-			// unpack costs from plan
-			createPortCostComponent(line.addExtraData("loading", "1 Loading"), cargoAllocation.getLoadAllocation(), notionalDayRate);
-			createVoyageCostComponent(line.addExtraData("laden", "2 Laden Journey"), cargoAllocation.getLadenLeg(), cargoAllocation.getLadenIdle(), cv, notionalDayRate);
-
-			createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), cargoAllocation.getDischargeAllocation(), notionalDayRate);
-			createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"),  cargoAllocation.getBallastLeg(), cargoAllocation.getBallastIdle(), cv, notionalDayRate);
+//			double cv = ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
+//
+//			// unpack costs from plan
+//			createPortCostComponent(line.addExtraData("loading", "1 Loading"), cargoAllocation.getLoadAllocation(), notionalDayRate);
+//			createVoyageCostComponent(line.addExtraData("laden", "2 Laden Journey"), cargoAllocation.getLadenLeg(), cargoAllocation.getLadenIdle(), cv, notionalDayRate);
+//
+//			createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), cargoAllocation.getDischargeAllocation(), notionalDayRate);
+//			createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"),  cargoAllocation.getBallastLeg(), cargoAllocation.getBallastIdle(), cv, notionalDayRate);
 
 			for (Event event : cargoAllocation.getEvents()) {
 				if (event instanceof Idle) {
@@ -662,11 +662,11 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
 			line.setProfit((int) (totalPNL / 1000l));
 
-			line.setVolumeLoaded(cargoAllocation.getLoadVolume());
-			line.setVolumeDischarged(cargoAllocation.getDischargeVolume());
-
-			line.setMmbtuDelivered((int) (line.getVolumeDischarged() * cv));
-			line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
+//			line.setVolumeLoaded(cargoAllocation.getLoadVolume());
+//			line.setVolumeDischarged(cargoAllocation.getDischargeVolume());
+//
+//			line.setMmbtuDelivered((int) (line.getVolumeDischarged() * cv));
+//			line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
 
 			{
 				final ExtraData summary = line.addExtraData("summary", "Summary", line.getTotalCost() / (double) line.getMmbtuDelivered(), ExtraDataFormatType.STRING_FORMAT);
@@ -714,15 +714,15 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				summary.addExtraData("routecost", "Route Cost", totalRouteCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("portcost", "Port Cost", totalPortCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("profit", "Profit", line.getProfit(), ExtraDataFormatType.CURRENCY);
-				summary.addExtraData("salesprice", "Sales Price", cargoAllocation.getDischargeAllocation().getPrice(), ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
-				summary.addExtraData("purchaseprice", "Purchase Price", cargoAllocation.getLoadAllocation().getPrice(), ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
-				// summary.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * totalDuration) / 24, ExtraDataFormatType.CURRENCY);
+//				summary.addExtraData("salesprice", "Sales Price", cargoAllocation.getDischargeAllocation().getPrice(), ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
+//				summary.addExtraData("purchaseprice", "Purchase Price", cargoAllocation.getLoadAllocation().getPrice(), ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
+//				// summary.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * totalDuration) / 24, ExtraDataFormatType.CURRENCY);
 
-				final ExtraData dischargeData = summary.addExtraData("discharged", "MMBTU Discharged", (int) (line.getVolumeDischarged() * cv), ExtraDataFormatType.INTEGER);
-				dischargeData.addExtraData("m3", "Volume", line.getVolumeDischarged(), ExtraDataFormatType.INTEGER);
+//				final ExtraData dischargeData = summary.addExtraData("discharged", "MMBTU Discharged", (int) (line.getVolumeDischarged() * cv), ExtraDataFormatType.INTEGER);
+//				dischargeData.addExtraData("m3", "Volume", line.getVolumeDischarged(), ExtraDataFormatType.INTEGER);
 
-				final ExtraData loadData = summary.addExtraData("loaded", "MMBTU Loaded", (int) (line.getVolumeLoaded() * cv), ExtraDataFormatType.INTEGER);
-				loadData.addExtraData("m3", "Volume", line.getVolumeLoaded(), ExtraDataFormatType.INTEGER);
+//				final ExtraData loadData = summary.addExtraData("loaded", "MMBTU Loaded", (int) (line.getVolumeLoaded() * cv), ExtraDataFormatType.INTEGER);
+//				loadData.addExtraData("m3", "Volume", line.getVolumeLoaded(), ExtraDataFormatType.INTEGER);
 
 				summary.addExtraData("unitcost", "Unit Cost", line.getTotalCost() / (double) line.getMmbtuDelivered(), ExtraDataFormatType.STRING_FORMAT).setFormat("$%,f");
 			}

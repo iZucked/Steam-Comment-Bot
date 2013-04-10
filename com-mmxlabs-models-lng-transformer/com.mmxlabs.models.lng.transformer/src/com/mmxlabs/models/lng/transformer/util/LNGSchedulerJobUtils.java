@@ -27,6 +27,11 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.assignment.AssignmentFactory;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -35,11 +40,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputFactory;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.InputPackage;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -85,7 +85,7 @@ public class LNGSchedulerJobUtils {
 	private static final String LABEL_PREFIX = "Optimised: ";
 
 	/**
-	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link InputModel})
+	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link AssignmentModel})
 	 * 
 	 * @param injector
 	 * @param scenario
@@ -107,7 +107,7 @@ public class LNGSchedulerJobUtils {
 		}
 		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-		final InputModel inputModel = scenario.getSubModel(InputModel.class);
+		final AssignmentModel assignmentModel = scenario.getSubModel(AssignmentModel.class);
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
 
 		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");
@@ -133,7 +133,7 @@ public class LNGSchedulerJobUtils {
 				postExportProcessors = null;
 			}
 
-			command.append(derive(editingDomain, scenario, schedule, inputModel, cargoModel, postExportProcessors));
+			command.append(derive(editingDomain, scenario, schedule, assignmentModel, cargoModel, postExportProcessors));
 			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 		} finally {
 			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -181,7 +181,7 @@ public class LNGSchedulerJobUtils {
 	}
 
 	/**
-	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the {@link InputModel} for assignment changes. Back link the {@link CargoModel} to the {@link Schedule}
+	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the {@link AssignmentModel} for assignment changes. Back link the {@link CargoModel} to the {@link Schedule}
 	 * 
 	 * @param domain
 	 * @param scenario
@@ -191,7 +191,7 @@ public class LNGSchedulerJobUtils {
 	 * @param postExportProcessors
 	 * @return
 	 */
-	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel,
+	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final AssignmentModel inputModel, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
@@ -435,7 +435,7 @@ public class LNGSchedulerJobUtils {
 				}
 
 				if (object != null) {
-					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
+					final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
 					ea.setAssignedObject(object);
 					ea.setAssignment(assignment);
 					ea.setSequence(index++);
@@ -455,7 +455,7 @@ public class LNGSchedulerJobUtils {
 			}
 		}
 
-		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
+		cmd.append(SetCommand.create(domain, inputModel, AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), newElementAssignments));
 
 		if (postExportProcessors != null) {
 			for (final IPostExportProcessor processor : postExportProcessors) {

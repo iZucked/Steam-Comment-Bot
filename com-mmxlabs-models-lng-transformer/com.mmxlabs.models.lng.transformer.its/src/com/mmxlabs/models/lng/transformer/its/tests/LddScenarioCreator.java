@@ -2,14 +2,14 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.util.Date;
 
+import com.mmxlabs.models.lng.assignment.AssignmentFactory;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputFactory;
-import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
@@ -107,11 +107,11 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		fleetCreator.setAvailability(vessel, originPort, startDate, originPort, endDate);			
 
 		// complete hack: forcibly assign the cargo to the vessel
-		final ElementAssignment assignment = InputFactory.eINSTANCE.createElementAssignment();
+		final ElementAssignment assignment = AssignmentFactory.eINSTANCE.createElementAssignment();
 		assignment.setAssignedObject(cargo);
 		assignment.setAssignment(vessel);
-		final InputModel inputModel = scenario.getSubModel(InputModel.class);
-		inputModel.getElementAssignments().add(assignment);	
+		final AssignmentModel assignmentModel = scenario.getSubModel(AssignmentModel.class);
+		assignmentModel.getElementAssignments().add(assignment);	
 	
 	}
 	

@@ -11,6 +11,9 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.assignment.AssignmentFactory;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -20,9 +23,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.input.InputFactory;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
@@ -57,7 +57,7 @@ public class ManifestJointModel {
 	private static final String FLEET_MODEL_KEY = "fleet-model";
 	private static final String CARGO_MODEL_KEY = "cargo-model";
 	private static final String PRICING_MODEL_KEY = "pricing-model";
-	private static final String INPUT_MODEL_KEY = "input-model";
+	private static final String ASSIGNMENT_MODEL_KEY = "assignment-model";
 	private static final String SCHEDULE_MODEL_KEY = "schedule-model";
 	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
 	private static final String ROOT_MODEL_KEY = "root-model";
@@ -76,7 +76,7 @@ public class ManifestJointModel {
 		modelClassKeys.put(CargoPackage.eINSTANCE.getCargoModel(), CARGO_MODEL_KEY);
 		modelClassKeys.put(CommercialPackage.eINSTANCE.getCommercialModel(), COMMERCIAL_MODEL_KEY);
 		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
-		modelClassKeys.put(InputPackage.eINSTANCE.getInputModel(), INPUT_MODEL_KEY);
+		modelClassKeys.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), ASSIGNMENT_MODEL_KEY);
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
 		modelClassKeys.put(OptimiserPackage.eINSTANCE.getOptimiserModel(), OPTIMISER_MODEL_KEY);
 //		modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
@@ -113,7 +113,7 @@ public class ManifestJointModel {
 		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
 		rootObject.addSubModel(CargoFactory.eINSTANCE.createCargoModel());
 		rootObject.addSubModel(PricingFactory.eINSTANCE.createPricingModel());
-		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
+		rootObject.addSubModel(AssignmentFactory.eINSTANCE.createAssignmentModel());
 		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
@@ -237,7 +237,7 @@ public class ManifestJointModel {
 		FleetCostModel fleetCostModel = PricingFactory.eINSTANCE.createFleetCostModel();
 		pricingModel.setFleetCost(fleetCostModel);
 
-		InputModel inputModel = rootObject.getSubModel(InputModel.class);
+		AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
 		// Nothing to set
 
 		ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
