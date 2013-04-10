@@ -15,11 +15,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -300,5 +303,18 @@ public class DefaultImportContext implements IImportContext {
 	@Override
 	public CSVReader peekReader() {
 		return readerStack.peek();
+	}
+	
+	public void registerNamedObjectsFromSubModels() {
+		// first set up all existing named objects
+		for (final MMXSubModel subModel : getRootObject().getSubModels()) {
+			final TreeIterator<EObject> allObjects = subModel.getSubModelInstance().eAllContents();
+			
+			while (allObjects.hasNext()) {
+				final EObject o = allObjects.next();
+				if (o instanceof NamedObject)
+					registerNamedObject((NamedObject) o);
+			}
+		}		
 	}
 }
