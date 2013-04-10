@@ -70,7 +70,7 @@ public class ScenarioStorageUtil {
 		if (uuidDir.exists() == false) {
 			uuidDir.mkdirs();
 		}
-		return new File(uuidDir, escape(name) + ".scenario");
+		return new File(uuidDir, escape(name) + ".lingo");
 	}
 
 	private String escape(final String name) {
