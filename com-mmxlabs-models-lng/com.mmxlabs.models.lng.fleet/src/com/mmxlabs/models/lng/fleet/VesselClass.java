@@ -3,12 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
+import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
-
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +28,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel <em>Min Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getWarmingTime <em>Warming Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime <em>Cooling Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters <em>Route Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
@@ -296,33 +295,6 @@ public interface VesselClass extends AVesselClass {
 	 * @generated
 	 */
 	void setWarmingTime(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Cooling Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cooling Time</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cooling Time</em>' attribute.
-	 * @see #setCoolingTime(int)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_CoolingTime()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs'"
-	 * @generated
-	 */
-	int getCoolingTime();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime <em>Cooling Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cooling Time</em>' attribute.
-	 * @see #getCoolingTime()
-	 * @generated
-	 */
-	void setCoolingTime(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Cooling Volume</b></em>' attribute.

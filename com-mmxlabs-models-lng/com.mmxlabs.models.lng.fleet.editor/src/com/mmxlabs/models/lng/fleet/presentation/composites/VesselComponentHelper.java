@@ -66,9 +66,10 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_inaccessiblePortsEditor(detailComposite, topClass);
-		add_availabilityEditor(detailComposite, topClass);
 		add_startHeelEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
+		add_capacityEditor(detailComposite, topClass);
+		add_fillCapacityEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vesselClass feature on Vessel
@@ -95,19 +96,29 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__START_HEEL));
 	}
 	/**
-	 * Create the editor for the availability feature on Vessel
-	 *
-	 * @generated
-	 */
-	protected void add_availabilityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__AVAILABILITY));
-	}
-	/**
 	 * Create the editor for the timeCharterRate feature on Vessel
 	 *
 	 * @generated
 	 */
 	protected void add_timeCharterRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__TIME_CHARTER_RATE));
+	}
+
+	/**
+	 * Create the editor for the capacity feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_capacityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__CAPACITY));
+	}
+
+	/**
+	 * Create the editor for the fillCapacity feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_fillCapacityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__FILL_CAPACITY));
 	}
 }

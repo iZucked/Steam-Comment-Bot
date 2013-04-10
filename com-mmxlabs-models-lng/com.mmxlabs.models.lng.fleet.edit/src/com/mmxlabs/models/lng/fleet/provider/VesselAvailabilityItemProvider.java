@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -70,6 +71,7 @@ public class VesselAvailabilityItemProvider
 			addEndAtPropertyDescriptor(object);
 			addEndAfterPropertyDescriptor(object);
 			addEndByPropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -207,6 +209,29 @@ public class VesselAvailabilityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_vessel_feature", "_UI_VesselAvailability_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABILITY__VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns VesselAvailability.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -274,7 +299,7 @@ public class VesselAvailabilityItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return FleetEditPlugin.INSTANCE;
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

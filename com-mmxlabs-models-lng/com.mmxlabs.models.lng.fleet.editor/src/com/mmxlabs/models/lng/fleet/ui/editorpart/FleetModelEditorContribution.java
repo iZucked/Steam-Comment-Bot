@@ -12,6 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -31,11 +32,13 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 
 		vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		vesselViewerPane.createControl(sash);
-		vesselViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_Vessels()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		vesselViewerPane.init(Lists.newArrayList(FleetPackage.eINSTANCE.getFleetModel_ScenarioFleetModel(), FleetPackage.eINSTANCE.getScenarioFleetModel_VesselAvailabilities()),
+				editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 
 		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		eventViewerPane.createControl(sash);
-		eventViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		eventViewerPane.init(Lists.newArrayList(FleetPackage.eINSTANCE.getFleetModel_ScenarioFleetModel(), FleetPackage.eINSTANCE.getScenarioFleetModel_VesselEvents()),
+				editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 
 		vesselViewerPane.getViewer().setInput(modelObject);
 		eventViewerPane.getViewer().setInput(modelObject);

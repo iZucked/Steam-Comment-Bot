@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.assignment.editorpart;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.management.timer.Timer;
 
@@ -22,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
@@ -39,6 +41,7 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 	private final MMXRootObject rootObject;
 	private final AssignmentModel modelObject;
 	private final HashMap<Pair<Port, Port>, Integer> minTravelTimes = new HashMap<Pair<Port, Port>, Integer>();
+	private final Map<Vessel, VesselAvailability> availabilityMap = new HashMap<Vessel, VesselAvailability>();
 
 	/**
 	 * @param inputJointModelEditorContribution
@@ -47,6 +50,9 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 		this.rootObject = rootObject;
 		this.modelObject = rootObject.getSubModel(AssignmentModel.class);
 		updateMinTravelTimes();
+		for (final VesselAvailability vesselAvailability : rootObject.getSubModel(FleetModel.class).getScenarioFleetModel().getVesselAvailabilities()) {
+			availabilityMap.put(vesselAvailability.getVessel(), vesselAvailability);
+		}
 	}
 
 	@Override
@@ -143,8 +149,10 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 		if (resource.isSpotVessel() == false) {
 
 			final Vessel v2 = (Vessel) resource.getVesselOrClass();
-			if (v2.getAvailability().isSetStartAfter()) {
-				return v2.getAvailability().getStartAfter();
+			final VesselAvailability vesselAvailability = availabilityMap.get(v2);
+
+			if (vesselAvailability.isSetStartAfter()) {
+				return vesselAvailability.getStartAfter();
 			}
 
 		}
@@ -155,8 +163,10 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 	public Date getResourceEndDate(final CollectedAssignment resource) {
 		if (resource.isSpotVessel() == false) {
 			final Vessel v2 = (Vessel) resource.getVesselOrClass();
-			if (v2.getAvailability().isSetStartAfter()) {
-				return v2.getAvailability().getEndBy();
+			final VesselAvailability vesselAvailability = availabilityMap.get(v2);
+
+			if (vesselAvailability.isSetStartAfter()) {
+				return vesselAvailability.getEndBy();
 			}
 		}
 

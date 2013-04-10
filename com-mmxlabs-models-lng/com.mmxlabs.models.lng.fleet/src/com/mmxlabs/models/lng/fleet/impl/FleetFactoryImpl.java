@@ -4,16 +4,31 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 
-import com.mmxlabs.models.lng.fleet.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.fleet.VesselType;
+import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 
 /**
  * <!-- begin-user-doc -->
@@ -59,20 +74,21 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case FleetPackage.VESSEL: return createVessel();
-			case FleetPackage.VESSEL_CLASS: return createVesselClass();
 			case FleetPackage.FLEET_MODEL: return createFleetModel();
 			case FleetPackage.BASE_FUEL: return createBaseFuel();
-			case FleetPackage.DRY_DOCK_EVENT: return createDryDockEvent();
-			case FleetPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
-			case FleetPackage.HEEL_OPTIONS: return createHeelOptions();
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
-			case FleetPackage.VESSEL_AVAILABILITY: return createVesselAvailability();
-			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
-			case FleetPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: return createVesselClassRouteParameters();
+			case FleetPackage.VESSEL: return createVessel();
+			case FleetPackage.VESSEL_CLASS: return createVesselClass();
 			case FleetPackage.VESSEL_GROUP: return createVesselGroup();
 			case FleetPackage.VESSEL_TYPE_GROUP: return createVesselTypeGroup();
+			case FleetPackage.HEEL_OPTIONS: return createHeelOptions();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
+			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
+			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: return createVesselClassRouteParameters();
+			case FleetPackage.SCENARIO_FLEET_MODEL: return createScenarioFleetModel();
+			case FleetPackage.VESSEL_AVAILABILITY: return createVesselAvailability();
+			case FleetPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
+			case FleetPackage.DRY_DOCK_EVENT: return createDryDockEvent();
+			case FleetPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -226,6 +242,17 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public VesselClassRouteParameters createVesselClassRouteParameters() {
 		VesselClassRouteParametersImpl vesselClassRouteParameters = new VesselClassRouteParametersImpl();
 		return vesselClassRouteParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScenarioFleetModel createScenarioFleetModel() {
+		ScenarioFleetModelImpl scenarioFleetModel = new ScenarioFleetModelImpl();
+		return scenarioFleetModel;
 	}
 
 	/**

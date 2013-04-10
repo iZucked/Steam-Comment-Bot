@@ -4,25 +4,37 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
-import com.mmxlabs.models.lng.fleet.*;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 import com.mmxlabs.models.lng.types.ABaseFuel;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
-
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notifier;
-
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -81,18 +93,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	protected FleetSwitch<Adapter> modelSwitch =
 		new FleetSwitch<Adapter>() {
 			@Override
-			public Adapter caseVessel(Vessel object) {
-				return createVesselAdapter();
-			}
-			@Override
-			public Adapter caseVesselClass(VesselClass object) {
-				return createVesselClassAdapter();
-			}
-			@Override
-			public Adapter caseVesselEvent(VesselEvent object) {
-				return createVesselEventAdapter();
-			}
-			@Override
 			public Adapter caseFleetModel(FleetModel object) {
 				return createFleetModelAdapter();
 			}
@@ -101,12 +101,20 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createBaseFuelAdapter();
 			}
 			@Override
-			public Adapter caseDryDockEvent(DryDockEvent object) {
-				return createDryDockEventAdapter();
+			public Adapter caseVessel(Vessel object) {
+				return createVesselAdapter();
 			}
 			@Override
-			public Adapter caseCharterOutEvent(CharterOutEvent object) {
-				return createCharterOutEventAdapter();
+			public Adapter caseVesselClass(VesselClass object) {
+				return createVesselClassAdapter();
+			}
+			@Override
+			public Adapter caseVesselGroup(VesselGroup object) {
+				return createVesselGroupAdapter();
+			}
+			@Override
+			public Adapter caseVesselTypeGroup(VesselTypeGroup object) {
+				return createVesselTypeGroupAdapter();
 			}
 			@Override
 			public Adapter caseHeelOptions(HeelOptions object) {
@@ -117,28 +125,36 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createVesselStateAttributesAdapter();
 			}
 			@Override
-			public Adapter caseVesselAvailability(VesselAvailability object) {
-				return createVesselAvailabilityAdapter();
-			}
-			@Override
 			public Adapter caseFuelConsumption(FuelConsumption object) {
 				return createFuelConsumptionAdapter();
-			}
-			@Override
-			public Adapter caseMaintenanceEvent(MaintenanceEvent object) {
-				return createMaintenanceEventAdapter();
 			}
 			@Override
 			public Adapter caseVesselClassRouteParameters(VesselClassRouteParameters object) {
 				return createVesselClassRouteParametersAdapter();
 			}
 			@Override
-			public Adapter caseVesselGroup(VesselGroup object) {
-				return createVesselGroupAdapter();
+			public Adapter caseScenarioFleetModel(ScenarioFleetModel object) {
+				return createScenarioFleetModelAdapter();
 			}
 			@Override
-			public Adapter caseVesselTypeGroup(VesselTypeGroup object) {
-				return createVesselTypeGroupAdapter();
+			public Adapter caseVesselAvailability(VesselAvailability object) {
+				return createVesselAvailabilityAdapter();
+			}
+			@Override
+			public Adapter caseVesselEvent(VesselEvent object) {
+				return createVesselEventAdapter();
+			}
+			@Override
+			public Adapter caseMaintenanceEvent(MaintenanceEvent object) {
+				return createMaintenanceEventAdapter();
+			}
+			@Override
+			public Adapter caseDryDockEvent(DryDockEvent object) {
+				return createDryDockEventAdapter();
+			}
+			@Override
+			public Adapter caseCharterOutEvent(CharterOutEvent object) {
+				return createCharterOutEventAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -151,6 +167,10 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
+			}
+			@Override
+			public Adapter caseABaseFuel(ABaseFuel object) {
+				return createABaseFuelAdapter();
 			}
 			@Override
 			public Adapter caseAVesselSet(AVesselSet object) {
@@ -171,10 +191,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
 				return createITimezoneProviderAdapter();
-			}
-			@Override
-			public Adapter caseABaseFuel(ABaseFuel object) {
-				return createABaseFuelAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -375,6 +391,21 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselClassRouteParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel <em>Scenario Fleet Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.fleet.ScenarioFleetModel
+	 * @generated
+	 */
+	public Adapter createScenarioFleetModelAdapter() {
 		return null;
 	}
 

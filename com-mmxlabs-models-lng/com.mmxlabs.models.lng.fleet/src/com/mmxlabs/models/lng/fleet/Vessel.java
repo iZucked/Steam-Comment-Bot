@@ -3,10 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
+import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,9 +19,10 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
  * </ul>
  * </p>
  *
@@ -98,32 +100,6 @@ public interface Vessel extends AVessel {
 	void setStartHeel(HeelOptions value);
 
 	/**
-	 * Returns the value of the '<em><b>Availability</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Availability</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Availability</em>' containment reference.
-	 * @see #setAvailability(VesselAvailability)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Availability()
-	 * @model containment="true" required="true"
-	 * @generated
-	 */
-	VesselAvailability getAvailability();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Availability</em>' containment reference.
-	 * @see #getAvailability()
-	 * @generated
-	 */
-	void setAvailability(VesselAvailability value);
-
-	/**
 	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -175,6 +151,123 @@ public interface Vessel extends AVessel {
 	 * @generated
 	 */
 	boolean isSetTimeCharterRate();
+
+	/**
+	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Capacity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Capacity</em>' attribute.
+	 * @see #isSetCapacity()
+	 * @see #unsetCapacity()
+	 * @see #setCapacity(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Capacity()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
+	 * @generated
+	 */
+	int getCapacity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Capacity</em>' attribute.
+	 * @see #isSetCapacity()
+	 * @see #unsetCapacity()
+	 * @see #getCapacity()
+	 * @generated
+	 */
+	void setCapacity(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #isSetCapacity()
+	 * @see #getCapacity()
+	 * @see #setCapacity(int)
+	 * @generated
+	 */
+	void unsetCapacity();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Capacity</em>' attribute is set.
+	 * @see #unsetCapacity()
+	 * @see #getCapacity()
+	 * @see #setCapacity(int)
+	 * @generated
+	 */
+	boolean isSetCapacity();
+
+	/**
+	 * Returns the value of the '<em><b>Fill Capacity</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fill Capacity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fill Capacity</em>' attribute.
+	 * @see #isSetFillCapacity()
+	 * @see #unsetFillCapacity()
+	 * @see #setFillCapacity(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_FillCapacity()
+	 * @model default="1" unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 * @generated
+	 */
+	double getFillCapacity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fill Capacity</em>' attribute.
+	 * @see #isSetFillCapacity()
+	 * @see #unsetFillCapacity()
+	 * @see #getFillCapacity()
+	 * @generated
+	 */
+	void setFillCapacity(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #isSetFillCapacity()
+	 * @see #getFillCapacity()
+	 * @see #setFillCapacity(double)
+	 * @generated
+	 */
+	void unsetFillCapacity();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Fill Capacity</em>' attribute is set.
+	 * @see #unsetFillCapacity()
+	 * @see #getFillCapacity()
+	 * @see #setFillCapacity(double)
+	 * @generated
+	 */
+	boolean isSetFillCapacity();
 
 	/**
 	 * <!-- begin-user-doc -->

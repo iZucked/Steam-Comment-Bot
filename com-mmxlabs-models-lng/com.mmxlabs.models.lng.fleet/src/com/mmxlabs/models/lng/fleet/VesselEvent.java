@@ -3,14 +3,14 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.AVesselEvent;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
-import com.mmxlabs.models.lng.port.Port;
-
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselEvent;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
 /**
  * <!-- begin-user-doc -->

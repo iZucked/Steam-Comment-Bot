@@ -4,15 +4,14 @@
  */
 package com.mmxlabs.models.lng.fleet;
 
-import com.mmxlabs.models.lng.types.TypesPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -70,7 +69,203 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVessel()
 	 * @generated
 	 */
-	int VESSEL = 0;
+	int VESSEL = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClass()
+	 * @generated
+	 */
+	int VESSEL_CLASS = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselEventImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselEvent()
+	 * @generated
+	 */
+	int VESSEL_EVENT = 12;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetModelImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFleetModel()
+	 * @generated
+	 */
+	int FLEET_MODEL = 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Classes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__VESSEL_CLASSES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Base Fuels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__BASE_FUELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Special Vessel Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__SPECIAL_VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Scenario Fleet Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__SCENARIO_FLEET_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getBaseFuel()
+	 * @generated
+	 */
+	int BASE_FUEL = 1;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__EXTENSIONS = TypesPackage.ABASE_FUEL__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__PROXIES = TypesPackage.ABASE_FUEL__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__UUID = TypesPackage.ABASE_FUEL__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__NAME = TypesPackage.ABASE_FUEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__OTHER_NAMES = TypesPackage.ABASE_FUEL__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Equivalence Factor</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__EQUIVALENCE_FACTOR = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Base Fuel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_FEATURE_COUNT = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -137,22 +332,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__AVAILABILITY = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__START_HEEL = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
+	int VESSEL__START_HEEL = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
@@ -161,7 +347,27 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
+	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -170,17 +376,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClass()
-	 * @generated
-	 */
-	int VESSEL_CLASS = 1;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -319,22 +515,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 9;
 
 	/**
-	 * The feature id for the '<em><b>Cooling Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS__COOLING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 10;
-
-	/**
 	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
+	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
@@ -343,7 +530,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
+	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
@@ -352,7 +539,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 13;
+	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -361,17 +548,640 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 14;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 13;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselEventImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselEvent()
+	 * @see com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getDryDockEvent()
 	 * @generated
 	 */
-	int VESSEL_EVENT = 2;
+	int DRY_DOCK_EVENT = 14;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCharterOutEvent()
+	 * @generated
+	 */
+	int CHARTER_OUT_EVENT = 15;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getHeelOptions()
+	 * @generated
+	 */
+	int HEEL_OPTIONS = 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselStateAttributes()
+	 * @generated
+	 */
+	int VESSEL_STATE_ATTRIBUTES = 7;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselAvailability()
+	 * @generated
+	 */
+	int VESSEL_AVAILABILITY = 11;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFuelConsumption()
+	 * @generated
+	 */
+	int FUEL_CONSUMPTION = 8;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.MaintenanceEventImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getMaintenanceEvent()
+	 * @generated
+	 */
+	int MAINTENANCE_EVENT = 13;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl <em>Vessel Class Route Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClassRouteParameters()
+	 * @generated
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS = 9;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.ScenarioFleetModelImpl <em>Scenario Fleet Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.ScenarioFleetModelImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getScenarioFleetModel()
+	 * @generated
+	 */
+	int SCENARIO_FLEET_MODEL = 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl <em>Vessel Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselGroup()
+	 * @generated
+	 */
+	int VESSEL_GROUP = 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__PROXIES = TypesPackage.AVESSEL_SET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__UUID = TypesPackage.AVESSEL_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__OTHER_NAMES = TypesPackage.AVESSEL_SET__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__VESSELS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselTypeGroup()
+	 * @generated
+	 */
+	int VESSEL_TYPE_GROUP = 5;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__PROXIES = TypesPackage.AVESSEL_SET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__UUID = TypesPackage.AVESSEL_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__OTHER_NAMES = TypesPackage.AVESSEL_SET__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__VESSEL_TYPE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Type Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Volume Available</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS__PRICE_PER_MMBTU = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Heel Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HEEL_OPTIONS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Nbo Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Idle NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Idle Base Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>In Port Base Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Consumption</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_CONSUMPTION__SPEED = 0;
+
+	/**
+	 * The feature id for the '<em><b>Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_CONSUMPTION__CONSUMPTION = 1;
+
+	/**
+	 * The number of structural features of the '<em>Fuel Consumption</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_CONSUMPTION_FEATURE_COUNT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Route</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extra Transit Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Laden Consumption Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Laden NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Consumption Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Ballast NBO Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Class Route Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS_ROUTE_PARAMETERS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FLEET_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FLEET_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FLEET_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FLEET_MODEL__VESSEL_AVAILABILITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FLEET_MODEL__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Scenario Fleet Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Start At</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__START_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__START_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__START_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>End At</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__END_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>End After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__END_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>End By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__END_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Availability</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -474,23 +1284,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_EVENT_FEATURE_COUNT = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetModelImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFleetModel()
-	 * @generated
-	 */
-	int FLEET_MODEL = 3;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int MAINTENANCE_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
@@ -499,7 +1299,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+	int MAINTENANCE_EVENT__PROXIES = VESSEL_EVENT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -508,108 +1308,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Vessels</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Classes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__VESSEL_CLASSES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Base Fuels</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__BASE_FUELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Groups</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Special Vessel Groups</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__SPECIAL_VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The number of structural features of the '<em>Model</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getBaseFuel()
-	 * @generated
-	 */
-	int BASE_FUEL = 4;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL__EXTENSIONS = TypesPackage.ABASE_FUEL__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL__PROXIES = TypesPackage.ABASE_FUEL__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL__UUID = TypesPackage.ABASE_FUEL__UUID;
+	int MAINTENANCE_EVENT__UUID = VESSEL_EVENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -618,7 +1317,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__NAME = TypesPackage.ABASE_FUEL__NAME;
+	int MAINTENANCE_EVENT__NAME = VESSEL_EVENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -628,35 +1327,61 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__OTHER_NAMES = TypesPackage.ABASE_FUEL__OTHER_NAMES;
+	int MAINTENANCE_EVENT__OTHER_NAMES = VESSEL_EVENT__OTHER_NAMES;
 
 	/**
-	 * The feature id for the '<em><b>Equivalence Factor</b></em>' attribute.
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__EQUIVALENCE_FACTOR = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 0;
+	int MAINTENANCE_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
 
 	/**
-	 * The number of structural features of the '<em>Base Fuel</em>' class.
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_FEATURE_COUNT = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 1;
+	int MAINTENANCE_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
+	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getDryDockEvent()
 	 * @generated
+	 * @ordered
 	 */
-	int DRY_DOCK_EVENT = 5;
+	int MAINTENANCE_EVENT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The number of structural features of the '<em>Maintenance Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -757,16 +1482,6 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRY_DOCK_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.CharterOutEventImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCharterOutEvent()
-	 * @generated
-	 */
-	int CHARTER_OUT_EVENT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -905,641 +1620,6 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 4;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getHeelOptions()
-	 * @generated
-	 */
-	int HEEL_OPTIONS = 7;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Volume Available</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS__PRICE_PER_MMBTU = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Heel Options</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HEEL_OPTIONS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselStateAttributes()
-	 * @generated
-	 */
-	int VESSEL_STATE_ATTRIBUTES = 8;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Nbo Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Idle NBO Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Idle Base Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>In Port Base Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Consumption</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselAvailability()
-	 * @generated
-	 */
-	int VESSEL_AVAILABILITY = 9;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Start At</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__START_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Start After</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__START_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Start By</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__START_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>End At</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__END_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>End After</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__END_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>End By</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__END_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The number of structural features of the '<em>Vessel Availability</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFuelConsumption()
-	 * @generated
-	 */
-	int FUEL_CONSUMPTION = 10;
-
-	/**
-	 * The feature id for the '<em><b>Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_CONSUMPTION__SPEED = 0;
-
-	/**
-	 * The feature id for the '<em><b>Consumption</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_CONSUMPTION__CONSUMPTION = 1;
-
-	/**
-	 * The number of structural features of the '<em>Fuel Consumption</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_CONSUMPTION_FEATURE_COUNT = 2;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.MaintenanceEventImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getMaintenanceEvent()
-	 * @generated
-	 */
-	int MAINTENANCE_EVENT = 11;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__PROXIES = VESSEL_EVENT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__UUID = VESSEL_EVENT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__NAME = VESSEL_EVENT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__OTHER_NAMES = VESSEL_EVENT__OTHER_NAMES;
-
-	/**
-	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
-
-	/**
-	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__PORT = VESSEL_EVENT__PORT;
-
-	/**
-	 * The feature id for the '<em><b>Start After</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
-
-	/**
-	 * The feature id for the '<em><b>Start By</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT__START_BY = VESSEL_EVENT__START_BY;
-
-	/**
-	 * The number of structural features of the '<em>Maintenance Event</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAINTENANCE_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl <em>Vessel Class Route Parameters</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselClassRouteParameters()
-	 * @generated
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS = 12;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Route</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__ROUTE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Extra Transit Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__EXTRA_TRANSIT_TIME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Laden Consumption Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Laden NBO Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Consumption Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Ballast NBO Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The number of structural features of the '<em>Vessel Class Route Parameters</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_CLASS_ROUTE_PARAMETERS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl <em>Vessel Group</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselGroup()
-	 * @generated
-	 */
-	int VESSEL_GROUP = 13;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP__PROXIES = TypesPackage.AVESSEL_SET__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP__UUID = TypesPackage.AVESSEL_SET__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP__OTHER_NAMES = TypesPackage.AVESSEL_SET__OTHER_NAMES;
-
-	/**
-	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP__VESSELS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Vessel Group</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl
-	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselTypeGroup()
-	 * @generated
-	 */
-	int VESSEL_TYPE_GROUP = 14;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_TYPE_GROUP__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_TYPE_GROUP__PROXIES = TypesPackage.AVESSEL_SET__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_TYPE_GROUP__UUID = TypesPackage.AVESSEL_SET__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_TYPE_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_TYPE_GROUP__OTHER_NAMES = TypesPackage.AVESSEL_SET__OTHER_NAMES;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_TYPE_GROUP__VESSEL_TYPE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Vessel Type Group</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_TYPE_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.VesselType <em>Vessel Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1548,7 +1628,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 15;
+	int VESSEL_TYPE = 16;
 
 
 	/**
@@ -1595,17 +1675,6 @@ public interface FleetPackage extends EPackage {
 	EReference getVessel_StartHeel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Availability</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getAvailability()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EReference getVessel_Availability();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1615,6 +1684,30 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVessel_TimeCharterRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Capacity</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getCapacity()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_Capacity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fill Capacity</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_FillCapacity();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselClass <em>Vessel Class</em>}'.
@@ -1735,17 +1828,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselClass_WarmingTime();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime <em>Cooling Time</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cooling Time</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime()
-	 * @see #getVesselClass()
-	 * @generated
-	 */
-	EAttribute getVesselClass_CoolingTime();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume <em>Cooling Volume</em>}'.
@@ -1878,17 +1960,6 @@ public interface FleetPackage extends EPackage {
 	EReference getFleetModel_VesselClasses();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselEvents <em>Vessel Events</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getVesselEvents()
-	 * @see #getFleetModel()
-	 * @generated
-	 */
-	EReference getFleetModel_VesselEvents();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getBaseFuels <em>Base Fuels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1921,6 +1992,18 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFleetModel_SpecialVesselGroups();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.FleetModel#getScenarioFleetModel <em>Scenario Fleet Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Scenario Fleet Model</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getScenarioFleetModel()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_ScenarioFleetModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.BaseFuel <em>Base Fuel</em>}'.
@@ -2192,6 +2275,18 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselAvailability_EndBy();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_Vessel();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelConsumption <em>Fuel Consumption</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2310,6 +2405,41 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClassRouteParameters_BallastNBORate();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel <em>Scenario Fleet Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Scenario Fleet Model</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.ScenarioFleetModel
+	 * @generated
+	 */
+	EClass getScenarioFleetModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel#getVesselAvailabilities <em>Vessel Availabilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Availabilities</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.ScenarioFleetModel#getVesselAvailabilities()
+	 * @see #getScenarioFleetModel()
+	 * @generated
+	 */
+	EReference getScenarioFleetModel_VesselAvailabilities();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel#getVesselEvents <em>Vessel Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.ScenarioFleetModel#getVesselEvents()
+	 * @see #getScenarioFleetModel()
+	 * @generated
+	 */
+	EReference getScenarioFleetModel_VesselEvents();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselGroup <em>Vessel Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2421,20 +2551,30 @@ public interface FleetPackage extends EPackage {
 		EReference VESSEL__START_HEEL = eINSTANCE.getVessel_StartHeel();
 
 		/**
-		 * The meta object literal for the '<em><b>Availability</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL__AVAILABILITY = eINSTANCE.getVessel_Availability();
-
-		/**
 		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute VESSEL__TIME_CHARTER_RATE = eINSTANCE.getVessel_TimeCharterRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__CAPACITY = eINSTANCE.getVessel_Capacity();
+
+		/**
+		 * The meta object literal for the '<em><b>Fill Capacity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__FILL_CAPACITY = eINSTANCE.getVessel_FillCapacity();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
@@ -2525,14 +2665,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__WARMING_TIME = eINSTANCE.getVesselClass_WarmingTime();
-
-		/**
-		 * The meta object literal for the '<em><b>Cooling Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CLASS__COOLING_TIME = eINSTANCE.getVesselClass_CoolingTime();
 
 		/**
 		 * The meta object literal for the '<em><b>Cooling Volume</b></em>' attribute feature.
@@ -2635,14 +2767,6 @@ public interface FleetPackage extends EPackage {
 		EReference FLEET_MODEL__VESSEL_CLASSES = eINSTANCE.getFleetModel_VesselClasses();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLEET_MODEL__VESSEL_EVENTS = eINSTANCE.getFleetModel_VesselEvents();
-
-		/**
 		 * The meta object literal for the '<em><b>Base Fuels</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2666,6 +2790,15 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_MODEL__SPECIAL_VESSEL_GROUPS = eINSTANCE.getFleetModel_SpecialVesselGroups();
+
+		/**
+		 * The meta object literal for the '<em><b>Scenario Fleet Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__SCENARIO_FLEET_MODEL = eINSTANCE.getFleetModel_ScenarioFleetModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -2880,6 +3013,15 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL_AVAILABILITY__END_BY = eINSTANCE.getVesselAvailability_EndBy();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__VESSEL = eINSTANCE.getVesselAvailability_Vessel();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2972,6 +3114,35 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE = eINSTANCE.getVesselClassRouteParameters_BallastNBORate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.ScenarioFleetModelImpl <em>Scenario Fleet Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.ScenarioFleetModelImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getScenarioFleetModel()
+		 * @generated
+		 */
+		EClass SCENARIO_FLEET_MODEL = eINSTANCE.getScenarioFleetModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Availabilities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_FLEET_MODEL__VESSEL_AVAILABILITIES = eINSTANCE.getScenarioFleetModel_VesselAvailabilities();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_FLEET_MODEL__VESSEL_EVENTS = eINSTANCE.getScenarioFleetModel_VesselEvents();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl <em>Vessel Group</em>}' class.

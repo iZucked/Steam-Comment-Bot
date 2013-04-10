@@ -422,7 +422,7 @@ public class LNGModelCorrector {
 		if (assignmentModel != null && fleetModel != null) {
 
 			final Set<VesselEvent> events = new HashSet<VesselEvent>();
-			for (final VesselEvent e : fleetModel.getVesselEvents()) {
+			for (final VesselEvent e : fleetModel.getScenarioFleetModel().getVesselEvents()) {
 				events.add(e);
 			}
 

@@ -66,9 +66,10 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselsEditor(detailComposite, topClass);
 		add_vesselClassesEditor(detailComposite, topClass);
-		add_vesselEventsEditor(detailComposite, topClass);
 		add_baseFuelsEditor(detailComposite, topClass);
 		add_vesselGroupsEditor(detailComposite, topClass);
+		add_specialVesselGroupsEditor(detailComposite, topClass);
+		add_scenarioFleetModelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessels feature on FleetModel
@@ -87,14 +88,6 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES));
 	}
 	/**
-	 * Create the editor for the vesselEvents feature on FleetModel
-	 *
-	 * @generated
-	 */
-	protected void add_vesselEventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS));
-	}
-	/**
 	 * Create the editor for the baseFuels feature on FleetModel
 	 *
 	 * @generated
@@ -110,5 +103,23 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS));
+	}
+
+	/**
+	 * Create the editor for the specialVesselGroups feature on FleetModel
+	 *
+	 * @generated
+	 */
+	protected void add_specialVesselGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__SPECIAL_VESSEL_GROUPS));
+	}
+
+	/**
+	 * Create the editor for the scenarioFleetModel feature on FleetModel
+	 *
+	 * @generated
+	 */
+	protected void add_scenarioFleetModelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__SCENARIO_FLEET_MODEL));
 	}
 }

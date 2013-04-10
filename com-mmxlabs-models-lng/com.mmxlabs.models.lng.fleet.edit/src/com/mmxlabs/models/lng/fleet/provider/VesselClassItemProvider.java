@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -74,7 +75,6 @@ public class VesselClassItemProvider
 			addMaxSpeedPropertyDescriptor(object);
 			addMinHeelPropertyDescriptor(object);
 			addWarmingTimePropertyDescriptor(object);
-			addCoolingTimePropertyDescriptor(object);
 			addCoolingVolumePropertyDescriptor(object);
 			addRouteParametersPropertyDescriptor(object);
 			addPilotLightRatePropertyDescriptor(object);
@@ -259,28 +259,6 @@ public class VesselClassItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Cooling Time feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCoolingTimePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselClass_coolingTime_feature"),
-				 getString("_UI_VesselClass_coolingTime_description"),
-				 FleetPackage.Literals.VESSEL_CLASS__COOLING_TIME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Cooling Volume feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -421,7 +399,6 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL:
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
@@ -493,7 +470,7 @@ public class VesselClassItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return FleetEditPlugin.INSTANCE;
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

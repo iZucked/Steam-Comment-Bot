@@ -3,6 +3,18 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -10,28 +22,10 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-
 import com.mmxlabs.models.lng.types.impl.AVesselClassImpl;
-
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -50,7 +44,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinHeel <em>Min Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getWarmingTime <em>Warming Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCoolingTime <em>Cooling Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getRouteParameters <em>Route Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
@@ -219,26 +212,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * @ordered
 	 */
 	protected int warmingTime = WARMING_TIME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getCoolingTime() <em>Cooling Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCoolingTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int COOLING_TIME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getCoolingTime() <em>Cooling Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCoolingTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected int coolingTime = COOLING_TIME_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCoolingVolume() <em>Cooling Volume</em>}' attribute.
@@ -576,27 +549,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getCoolingTime() {
-		return coolingTime;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCoolingTime(int newCoolingTime) {
-		int oldCoolingTime = coolingTime;
-		coolingTime = newCoolingTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__COOLING_TIME, oldCoolingTime, coolingTime));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getCoolingVolume() {
 		return coolingVolume;
 	}
@@ -713,8 +665,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return getMinHeel();
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 				return getWarmingTime();
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
-				return getCoolingTime();
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				return getCoolingVolume();
 			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
@@ -764,9 +714,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return;
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 				setWarmingTime((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
-				setCoolingTime((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				setCoolingVolume((Integer)newValue);
@@ -820,9 +767,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 				setWarmingTime(WARMING_TIME_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
-				setCoolingTime(COOLING_TIME_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				setCoolingVolume(COOLING_VOLUME_EDEFAULT);
 				return;
@@ -864,8 +808,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return minHeel != MIN_HEEL_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 				return warmingTime != WARMING_TIME_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
-				return coolingTime != COOLING_TIME_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				return coolingVolume != COOLING_VOLUME_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
@@ -898,8 +840,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 		result.append(minHeel);
 		result.append(", warmingTime: ");
 		result.append(warmingTime);
-		result.append(", coolingTime: ");
-		result.append(coolingTime);
 		result.append(", coolingVolume: ");
 		result.append(coolingVolume);
 		result.append(", pilotLightRate: ");

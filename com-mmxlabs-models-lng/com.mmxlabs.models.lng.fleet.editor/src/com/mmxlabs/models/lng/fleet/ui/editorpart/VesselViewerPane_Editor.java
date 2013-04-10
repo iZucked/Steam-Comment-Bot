@@ -82,29 +82,26 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
 
-		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain));
+		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain),
+				FleetPackage.eINSTANCE.getVesselAvailability_Vessel());
 
 		addTypicalColumn("Time Charter", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeCharterRate(), jointModelEditor.getEditingDomain()));
 
 		addTypicalColumn("Start Port",
 				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
-						MMXCorePackage.eINSTANCE.getNamedObject_Name()), FleetPackage.eINSTANCE.getVessel_Availability());
+						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		addTypicalColumn("Start After", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_StartAfter(), jointModelEditor.getEditingDomain()),
-				FleetPackage.eINSTANCE.getVessel_Availability());
+		addTypicalColumn("Start After", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_StartAfter(), jointModelEditor.getEditingDomain()));
 
-		addTypicalColumn("Start Before", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_StartBy(), jointModelEditor.getEditingDomain()),
-				FleetPackage.eINSTANCE.getVessel_Availability());
+		addTypicalColumn("Start Before", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_StartBy(), jointModelEditor.getEditingDomain()));
 
 		addTypicalColumn("End Port",
 				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailability_EndAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
-						MMXCorePackage.eINSTANCE.getNamedObject_Name()), FleetPackage.eINSTANCE.getVessel_Availability());
+						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		addTypicalColumn("End After", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_EndAfter(), jointModelEditor.getEditingDomain()),
-				FleetPackage.eINSTANCE.getVessel_Availability());
+		addTypicalColumn("End After", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_EndAfter(), jointModelEditor.getEditingDomain()));
 
-		addTypicalColumn("End By", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_EndBy(), jointModelEditor.getEditingDomain()),
-				FleetPackage.eINSTANCE.getVessel_Availability());
+		addTypicalColumn("End By", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_EndBy(), jointModelEditor.getEditingDomain()));
 
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}

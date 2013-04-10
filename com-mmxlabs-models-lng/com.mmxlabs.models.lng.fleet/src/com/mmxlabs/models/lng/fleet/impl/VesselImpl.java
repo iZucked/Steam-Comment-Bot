@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVessel;
@@ -32,9 +31,10 @@ import com.mmxlabs.models.lng.types.impl.AVesselImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
  * </ul>
  * </p>
  *
@@ -60,16 +60,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @ordered
 	 */
 	protected EList<APortSet> inaccessiblePorts;
-
-	/**
-	 * The cached value of the '{@link #getAvailability() <em>Availability</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAvailability()
-	 * @generated
-	 * @ordered
-	 */
-	protected VesselAvailability availability;
 
 	/**
 	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
@@ -109,6 +99,70 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @ordered
 	 */
 	protected boolean timeCharterRateESet;
+
+	/**
+	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getCapacity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CAPACITY_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getCapacity()
+	 * @generated
+	 * @ordered
+	 */
+	protected int capacity = CAPACITY_EDEFAULT;
+
+	/**
+	 * This is true if the Capacity attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean capacityESet;
+
+	/**
+	 * The default value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getFillCapacity()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double FILL_CAPACITY_EDEFAULT = 1.0;
+
+	/**
+	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getFillCapacity()
+	 * @generated
+	 * @ordered
+	 */
+	protected double fillCapacity = FILL_CAPACITY_EDEFAULT;
+
+	/**
+	 * This is true if the Fill Capacity attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fillCapacityESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -227,49 +281,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailability getAvailability() {
-		return availability;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetAvailability(VesselAvailability newAvailability, NotificationChain msgs) {
-		VesselAvailability oldAvailability = availability;
-		availability = newAvailability;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__AVAILABILITY, oldAvailability, newAvailability);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAvailability(VesselAvailability newAvailability) {
-		if (newAvailability != availability) {
-			NotificationChain msgs = null;
-			if (availability != null)
-				msgs = ((InternalEObject)availability).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__AVAILABILITY, null, msgs);
-			if (newAvailability != null)
-				msgs = ((InternalEObject)newAvailability).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__AVAILABILITY, null, msgs);
-			msgs = basicSetAvailability(newAvailability, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__AVAILABILITY, newAvailability, newAvailability));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getTimeCharterRate() {
 		return timeCharterRate;
 	}
@@ -313,6 +324,106 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCapacity() {
+		return capacity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCapacity(int newCapacity) {
+		int oldCapacity = capacity;
+		capacity = newCapacity;
+		boolean oldCapacityESet = capacityESet;
+		capacityESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__CAPACITY, oldCapacity, capacity, !oldCapacityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCapacity() {
+		int oldCapacity = capacity;
+		boolean oldCapacityESet = capacityESet;
+		capacity = CAPACITY_EDEFAULT;
+		capacityESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__CAPACITY, oldCapacity, CAPACITY_EDEFAULT, oldCapacityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCapacity() {
+		return capacityESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getFillCapacity() {
+		return fillCapacity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFillCapacity(double newFillCapacity) {
+		double oldFillCapacity = fillCapacity;
+		fillCapacity = newFillCapacity;
+		boolean oldFillCapacityESet = fillCapacityESet;
+		fillCapacityESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__FILL_CAPACITY, oldFillCapacity, fillCapacity, !oldFillCapacityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetFillCapacity() {
+		double oldFillCapacity = fillCapacity;
+		boolean oldFillCapacityESet = fillCapacityESet;
+		fillCapacity = FILL_CAPACITY_EDEFAULT;
+		fillCapacityESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__FILL_CAPACITY, oldFillCapacity, FILL_CAPACITY_EDEFAULT, oldFillCapacityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetFillCapacity() {
+		return fillCapacityESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -332,8 +443,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case FleetPackage.VESSEL__AVAILABILITY:
-				return basicSetAvailability(null, msgs);
 			case FleetPackage.VESSEL__START_HEEL:
 				return basicSetStartHeel(null, msgs);
 		}
@@ -353,12 +462,14 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return basicGetVesselClass();
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
-			case FleetPackage.VESSEL__AVAILABILITY:
-				return getAvailability();
 			case FleetPackage.VESSEL__START_HEEL:
 				return getStartHeel();
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return getTimeCharterRate();
+			case FleetPackage.VESSEL__CAPACITY:
+				return getCapacity();
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+				return getFillCapacity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -379,14 +490,17 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				getInaccessiblePorts().clear();
 				getInaccessiblePorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
-			case FleetPackage.VESSEL__AVAILABILITY:
-				setAvailability((VesselAvailability)newValue);
-				return;
 			case FleetPackage.VESSEL__START_HEEL:
 				setStartHeel((HeelOptions)newValue);
 				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				setTimeCharterRate((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__CAPACITY:
+				setCapacity((Integer)newValue);
+				return;
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+				setFillCapacity((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -406,14 +520,17 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				return;
-			case FleetPackage.VESSEL__AVAILABILITY:
-				setAvailability((VesselAvailability)null);
-				return;
 			case FleetPackage.VESSEL__START_HEEL:
 				setStartHeel((HeelOptions)null);
 				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				unsetTimeCharterRate();
+				return;
+			case FleetPackage.VESSEL__CAPACITY:
+				unsetCapacity();
+				return;
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+				unsetFillCapacity();
 				return;
 		}
 		super.eUnset(featureID);
@@ -431,12 +548,14 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return vesselClass != null;
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
-			case FleetPackage.VESSEL__AVAILABILITY:
-				return availability != null;
 			case FleetPackage.VESSEL__START_HEEL:
 				return startHeel != null;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return isSetTimeCharterRate();
+			case FleetPackage.VESSEL__CAPACITY:
+				return isSetCapacity();
+			case FleetPackage.VESSEL__FILL_CAPACITY:
+				return isSetFillCapacity();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -453,6 +572,10 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (timeCharterRate: ");
 		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
+		result.append(", capacity: ");
+		if (capacityESet) result.append(capacity); else result.append("<unset>");
+		result.append(", fillCapacity: ");
+		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

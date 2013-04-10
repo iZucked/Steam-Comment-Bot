@@ -3,25 +3,21 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
-
-import com.mmxlabs.models.lng.types.APortSet;
-
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-
 import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,6 +32,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndAt <em>End At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndBy <em>End By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
  * </ul>
  * </p>
  *
@@ -177,6 +174,17 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * @ordered
 	 */
 	protected boolean endByESet;
+
+	/**
+	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected Vessel vessel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -407,6 +415,47 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Vessel getVessel() {
+		if (vessel != null && vessel.eIsProxy()) {
+			InternalEObject oldVessel = (InternalEObject)vessel;
+			vessel = (Vessel)eResolveProxy(oldVessel);
+			if (vessel != oldVessel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.VESSEL_AVAILABILITY__VESSEL, oldVessel, vessel));
+			}
+		}
+		return vessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Vessel basicGetVessel() {
+		return vessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVessel(Vessel newVessel) {
+		Vessel oldVessel = vessel;
+		vessel = newVessel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABILITY__VESSEL, oldVessel, vessel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -425,6 +474,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 				return getEndAfter();
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				return getEndBy();
+			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
+				if (resolve) return getVessel();
+				return basicGetVessel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -458,6 +510,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				setEndBy((Date)newValue);
 				return;
+			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
+				setVessel((Vessel)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -488,6 +543,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				unsetEndBy();
 				return;
+			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
+				setVessel((Vessel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -512,6 +570,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 				return isSetEndAfter();
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				return isSetEndBy();
+			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
+				return vessel != null;
 		}
 		return super.eIsSet(featureID);
 	}

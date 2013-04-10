@@ -3,13 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.APortSet;
-
-import com.mmxlabs.models.mmxcore.MMXObject;
-
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAt <em>End At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}</li>
  * </ul>
  * </p>
  *
@@ -276,6 +276,34 @@ public interface VesselAvailability extends MMXObject {
 	 * @generated
 	 */
 	boolean isSetEndBy();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel</em>' reference.
+	 * @see #setVessel(Vessel)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_Vessel()
+	 * @model
+	 * @generated
+	 */
+	Vessel getVessel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel</em>' reference.
+	 * @see #getVessel()
+	 * @generated
+	 */
+	void setVessel(Vessel value);
 
 } // end of  VesselAvailability
 

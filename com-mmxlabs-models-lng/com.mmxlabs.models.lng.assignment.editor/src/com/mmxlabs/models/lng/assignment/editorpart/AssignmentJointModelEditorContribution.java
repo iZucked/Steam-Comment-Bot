@@ -100,14 +100,13 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 				}
 			}
 		}
-		if (fleetModel != null)
-			tasks.addAll(fleetModel.getVesselEvents());
+		if (fleetModel != null) {
+			tasks.addAll(fleetModel.getScenarioFleetModel().getVesselEvents());
+		}
 
 		editor.setTasks(tasks);
 		editor.update();
 	}
-
-
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -220,14 +219,14 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 				// editorPart.getEditingDomain().getCommandStack().execute(
 				// AddCommand.create(ed, modelObject, AssignmentPackage.eINSTANCE.getAssignmentModel_LockedAssignedObjects(),
 				// task));
-				
+
 				final CompoundCommand cmd = new CompoundCommand("Lock Vessel Assignment");
-				
+
 				cmd.append(AssignmentEditorHelper.lockElement(ed, modelObject, task));
 				if (task instanceof Cargo) {
 					cmd.append(SetCommand.create(ed, task, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), false));
 				}
-				
+
 				ed.getCommandStack().execute(cmd);
 				editor.redraw();
 			}

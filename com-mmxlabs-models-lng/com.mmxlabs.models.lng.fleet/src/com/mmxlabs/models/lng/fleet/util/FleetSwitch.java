@@ -4,23 +4,36 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
-import com.mmxlabs.models.lng.fleet.*;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Switch;
 
+import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 import com.mmxlabs.models.lng.types.ABaseFuel;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
-
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -79,6 +92,24 @@ public class FleetSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case FleetPackage.FLEET_MODEL: {
+				FleetModel fleetModel = (FleetModel)theEObject;
+				T result = caseFleetModel(fleetModel);
+				if (result == null) result = caseUUIDObject(fleetModel);
+				if (result == null) result = caseMMXObject(fleetModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.BASE_FUEL: {
+				BaseFuel baseFuel = (BaseFuel)theEObject;
+				T result = caseBaseFuel(baseFuel);
+				if (result == null) result = caseABaseFuel(baseFuel);
+				if (result == null) result = caseUUIDObject(baseFuel);
+				if (result == null) result = caseNamedObject(baseFuel);
+				if (result == null) result = caseMMXObject(baseFuel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case FleetPackage.VESSEL: {
 				Vessel vessel = (Vessel)theEObject;
 				T result = caseVessel(vessel);
@@ -101,6 +132,68 @@ public class FleetSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FleetPackage.VESSEL_GROUP: {
+				VesselGroup vesselGroup = (VesselGroup)theEObject;
+				T result = caseVesselGroup(vesselGroup);
+				if (result == null) result = caseAVesselSet(vesselGroup);
+				if (result == null) result = caseUUIDObject(vesselGroup);
+				if (result == null) result = caseNamedObject(vesselGroup);
+				if (result == null) result = caseMMXObject(vesselGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.VESSEL_TYPE_GROUP: {
+				VesselTypeGroup vesselTypeGroup = (VesselTypeGroup)theEObject;
+				T result = caseVesselTypeGroup(vesselTypeGroup);
+				if (result == null) result = caseAVesselSet(vesselTypeGroup);
+				if (result == null) result = caseUUIDObject(vesselTypeGroup);
+				if (result == null) result = caseNamedObject(vesselTypeGroup);
+				if (result == null) result = caseMMXObject(vesselTypeGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.HEEL_OPTIONS: {
+				HeelOptions heelOptions = (HeelOptions)theEObject;
+				T result = caseHeelOptions(heelOptions);
+				if (result == null) result = caseMMXObject(heelOptions);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES: {
+				VesselStateAttributes vesselStateAttributes = (VesselStateAttributes)theEObject;
+				T result = caseVesselStateAttributes(vesselStateAttributes);
+				if (result == null) result = caseMMXObject(vesselStateAttributes);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.FUEL_CONSUMPTION: {
+				FuelConsumption fuelConsumption = (FuelConsumption)theEObject;
+				T result = caseFuelConsumption(fuelConsumption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: {
+				VesselClassRouteParameters vesselClassRouteParameters = (VesselClassRouteParameters)theEObject;
+				T result = caseVesselClassRouteParameters(vesselClassRouteParameters);
+				if (result == null) result = caseMMXObject(vesselClassRouteParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.SCENARIO_FLEET_MODEL: {
+				ScenarioFleetModel scenarioFleetModel = (ScenarioFleetModel)theEObject;
+				T result = caseScenarioFleetModel(scenarioFleetModel);
+				if (result == null) result = caseUUIDObject(scenarioFleetModel);
+				if (result == null) result = caseMMXObject(scenarioFleetModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.VESSEL_AVAILABILITY: {
+				VesselAvailability vesselAvailability = (VesselAvailability)theEObject;
+				T result = caseVesselAvailability(vesselAvailability);
+				if (result == null) result = caseMMXObject(vesselAvailability);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case FleetPackage.VESSEL_EVENT: {
 				VesselEvent vesselEvent = (VesselEvent)theEObject;
 				T result = caseVesselEvent(vesselEvent);
@@ -112,21 +205,15 @@ public class FleetSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case FleetPackage.FLEET_MODEL: {
-				FleetModel fleetModel = (FleetModel)theEObject;
-				T result = caseFleetModel(fleetModel);
-				if (result == null) result = caseUUIDObject(fleetModel);
-				if (result == null) result = caseMMXObject(fleetModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.BASE_FUEL: {
-				BaseFuel baseFuel = (BaseFuel)theEObject;
-				T result = caseBaseFuel(baseFuel);
-				if (result == null) result = caseABaseFuel(baseFuel);
-				if (result == null) result = caseUUIDObject(baseFuel);
-				if (result == null) result = caseNamedObject(baseFuel);
-				if (result == null) result = caseMMXObject(baseFuel);
+			case FleetPackage.MAINTENANCE_EVENT: {
+				MaintenanceEvent maintenanceEvent = (MaintenanceEvent)theEObject;
+				T result = caseMaintenanceEvent(maintenanceEvent);
+				if (result == null) result = caseVesselEvent(maintenanceEvent);
+				if (result == null) result = caseAVesselEvent(maintenanceEvent);
+				if (result == null) result = caseITimezoneProvider(maintenanceEvent);
+				if (result == null) result = caseUUIDObject(maintenanceEvent);
+				if (result == null) result = caseNamedObject(maintenanceEvent);
+				if (result == null) result = caseMMXObject(maintenanceEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -151,72 +238,6 @@ public class FleetSwitch<T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(charterOutEvent);
 				if (result == null) result = caseNamedObject(charterOutEvent);
 				if (result == null) result = caseMMXObject(charterOutEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.HEEL_OPTIONS: {
-				HeelOptions heelOptions = (HeelOptions)theEObject;
-				T result = caseHeelOptions(heelOptions);
-				if (result == null) result = caseMMXObject(heelOptions);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.VESSEL_STATE_ATTRIBUTES: {
-				VesselStateAttributes vesselStateAttributes = (VesselStateAttributes)theEObject;
-				T result = caseVesselStateAttributes(vesselStateAttributes);
-				if (result == null) result = caseMMXObject(vesselStateAttributes);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.VESSEL_AVAILABILITY: {
-				VesselAvailability vesselAvailability = (VesselAvailability)theEObject;
-				T result = caseVesselAvailability(vesselAvailability);
-				if (result == null) result = caseMMXObject(vesselAvailability);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.FUEL_CONSUMPTION: {
-				FuelConsumption fuelConsumption = (FuelConsumption)theEObject;
-				T result = caseFuelConsumption(fuelConsumption);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.MAINTENANCE_EVENT: {
-				MaintenanceEvent maintenanceEvent = (MaintenanceEvent)theEObject;
-				T result = caseMaintenanceEvent(maintenanceEvent);
-				if (result == null) result = caseVesselEvent(maintenanceEvent);
-				if (result == null) result = caseAVesselEvent(maintenanceEvent);
-				if (result == null) result = caseITimezoneProvider(maintenanceEvent);
-				if (result == null) result = caseUUIDObject(maintenanceEvent);
-				if (result == null) result = caseNamedObject(maintenanceEvent);
-				if (result == null) result = caseMMXObject(maintenanceEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: {
-				VesselClassRouteParameters vesselClassRouteParameters = (VesselClassRouteParameters)theEObject;
-				T result = caseVesselClassRouteParameters(vesselClassRouteParameters);
-				if (result == null) result = caseMMXObject(vesselClassRouteParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.VESSEL_GROUP: {
-				VesselGroup vesselGroup = (VesselGroup)theEObject;
-				T result = caseVesselGroup(vesselGroup);
-				if (result == null) result = caseAVesselSet(vesselGroup);
-				if (result == null) result = caseUUIDObject(vesselGroup);
-				if (result == null) result = caseNamedObject(vesselGroup);
-				if (result == null) result = caseMMXObject(vesselGroup);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.VESSEL_TYPE_GROUP: {
-				VesselTypeGroup vesselTypeGroup = (VesselTypeGroup)theEObject;
-				T result = caseVesselTypeGroup(vesselTypeGroup);
-				if (result == null) result = caseAVesselSet(vesselTypeGroup);
-				if (result == null) result = caseUUIDObject(vesselTypeGroup);
-				if (result == null) result = caseNamedObject(vesselTypeGroup);
-				if (result == null) result = caseMMXObject(vesselTypeGroup);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -416,6 +437,22 @@ public class FleetSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseVesselClassRouteParameters(VesselClassRouteParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Scenario Fleet Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Scenario Fleet Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioFleetModel(ScenarioFleetModel object) {
 		return null;
 	}
 

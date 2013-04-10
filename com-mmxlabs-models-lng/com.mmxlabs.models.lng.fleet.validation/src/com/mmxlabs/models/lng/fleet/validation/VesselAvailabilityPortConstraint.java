@@ -104,15 +104,15 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 
 			final HashSet<String> badPorts = new HashSet<String>();
 			final List<String> badVessels = new LinkedList<String>();
-			for (final Vessel v : fleetModel.getVessels()) {
+			for (final VesselAvailability availability : fleetModel.getScenarioFleetModel().getVesselAvailabilities()) {
+				final Vessel v = availability.getVessel();
 				if (extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
-					final VesselAvailability availablility = v.getAvailability();
 
 					final Set<APort> inaccessiblePortSet = SetUtils.getPorts(vesselClass.getInaccessiblePorts());
 
 					boolean bad = false;
 					{
-						final Set<APort> availabilityPortSet = SetUtils.getPorts(availablility.getStartAt());
+						final Set<APort> availabilityPortSet = SetUtils.getPorts(availability.getStartAt());
 						for (final APort p : availabilityPortSet) {
 
 							// No port match
@@ -127,7 +127,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 						}
 					}
 					{
-						final Set<APort> availabilityPortSet = SetUtils.getPorts(availablility.getEndAt());
+						final Set<APort> availabilityPortSet = SetUtils.getPorts(availability.getEndAt());
 						for (final APort p : availabilityPortSet) {
 
 							// No port match
