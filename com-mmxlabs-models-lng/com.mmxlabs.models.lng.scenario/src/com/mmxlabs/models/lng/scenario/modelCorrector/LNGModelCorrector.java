@@ -24,6 +24,10 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.assignment.AssignmentFactory;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -41,10 +45,6 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselType;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputFactory;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -390,22 +390,22 @@ public class LNGModelCorrector {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix missing cargo element assignments");
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
-		if (inputModel != null && cargoModel != null) {
+		final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
+		if (assignmentModel != null && cargoModel != null) {
 
 			final Set<Cargo> cargoes = new HashSet<Cargo>();
 			for (final Cargo c : cargoModel.getCargoes()) {
 				cargoes.add(c);
 			}
 
-			for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+			for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 				cargoes.remove(ea.getAssignedObject());
 			}
 
 			for (final Cargo c : cargoes) {
-				final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
+				final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
 				ea.setAssignedObject(c);
-				cmd.append(AddCommand.create(ed, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), ea));
+				cmd.append(AddCommand.create(ed, assignmentModel, AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), ea));
 			}
 
 		}
@@ -418,36 +418,36 @@ public class LNGModelCorrector {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix missing vessel event element assignments");
 		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
-		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
-		if (inputModel != null && fleetModel != null) {
+		final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
+		if (assignmentModel != null && fleetModel != null) {
 
 			final Set<VesselEvent> events = new HashSet<VesselEvent>();
 			for (final VesselEvent e : fleetModel.getVesselEvents()) {
 				events.add(e);
 			}
 
-			for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+			for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 				events.remove(ea.getAssignedObject());
 				if (ea.getAssignedObject() instanceof VesselEvent) {
 					final VesselEvent vesselEvent = (VesselEvent) ea.getAssignedObject();
 					final EList<AVesselSet> allowedVessels = vesselEvent.getAllowedVessels();
 					if (allowedVessels.size() == 1) {
 						if (ea.getAssignment() != allowedVessels.get(0)) {
-							cmd.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Assignment(), allowedVessels.get(0)));
+							cmd.append(SetCommand.create(ed, ea, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment(), allowedVessels.get(0)));
 						}
 					}
 				}
 			}
 
 			for (final VesselEvent e : events) {
-				final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
+				final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
 				ea.setAssignedObject(e);
-				cmd.append(AddCommand.create(ed, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), ea));
+				cmd.append(AddCommand.create(ed, assignmentModel, AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), ea));
 
 				final VesselEvent vesselEvent = (VesselEvent) ea.getAssignedObject();
 				final EList<AVesselSet> allowedVessels = vesselEvent.getAllowedVessels();
 				if (allowedVessels.size() == 1) {
-					cmd.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Assignment(), allowedVessels.get(0)));
+					cmd.append(SetCommand.create(ed, ea, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment(), allowedVessels.get(0)));
 				}
 			}
 
@@ -460,11 +460,11 @@ public class LNGModelCorrector {
 	private void removeBadElementAssignments(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 
 		final CompoundCommand cmd = new CompoundCommand("Remove bad element assignments");
-		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
+		final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
 		final Set<UUIDObject> seenObjects = new HashSet<UUIDObject>();
-		if (inputModel != null) {
+		if (assignmentModel != null) {
 
-			for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+			for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 				final UUIDObject assignedObject = ea.getAssignedObject();
 				// Delete duplicates
 				if (!seenObjects.add(assignedObject)) {

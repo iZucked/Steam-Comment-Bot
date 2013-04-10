@@ -40,10 +40,10 @@
 		<module>com.mmxlabs.models.lng.fleet.edit</module>
 		<module>com.mmxlabs.models.lng.fleet.editor</module>
 		<module>com.mmxlabs.models.lng.fleet.validation</module>
-		<module>com.mmxlabs.models.lng.input</module>
-		<module>com.mmxlabs.models.lng.input.edit</module>
-		<module>com.mmxlabs.models.lng.input.editor</module>
-		<module>com.mmxlabs.models.lng.input.validation</module>
+		<module>com.mmxlabs.models.lng.assignment</module>
+		<module>com.mmxlabs.models.lng.assignment.edit</module>
+		<module>com.mmxlabs.models.lng.assignment.editor</module>
+		<module>com.mmxlabs.models.lng.assignment.validation</module>
 		<module>com.mmxlabs.models.lng.port</module>
 		<module>com.mmxlabs.models.lng.port.edit</module>
 		<module>com.mmxlabs.models.lng.port.editor</module>

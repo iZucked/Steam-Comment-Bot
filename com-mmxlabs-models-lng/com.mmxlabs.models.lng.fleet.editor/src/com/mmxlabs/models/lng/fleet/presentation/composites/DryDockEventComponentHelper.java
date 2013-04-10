@@ -13,9 +13,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -72,7 +72,7 @@ public class DryDockEventComponentHelper extends BaseComponentHelper {
 
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
-		final EObject assignment = (EObject) AssignmentEditorHelper.getElementAssignment(root.getSubModel(InputModel.class), (UUIDObject) value);
+		final EObject assignment = (EObject) AssignmentEditorHelper.getElementAssignment(root.getSubModel(AssignmentModel.class), (UUIDObject) value);
 		if (assignment == null) {
 			return super.getExternalEditingRange(root, value);
 		}

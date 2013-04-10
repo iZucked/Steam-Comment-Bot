@@ -77,6 +77,7 @@ import org.eclipse.ui.menus.IMenuService;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -92,7 +93,6 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootD
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
-import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -249,10 +249,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					public Object[] getElements(final Object inputElement) {
 
 						final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
-						final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
+						final AssignmentModel assignmentModel = scenarioEditingLocation.getRootObject().getSubModel(AssignmentModel.class);
 						final ScheduleModel scheduleModel = scenarioEditingLocation.getRootObject().getSubModel(ScheduleModel.class);
 
-						final RootData root = setCargoes(inputModel, cargoModel, scheduleModel);
+						final RootData root = setCargoes(assignmentModel, cargoModel, scheduleModel);
 
 						TradesWiringViewer.this.rootData = root;
 
@@ -555,7 +555,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		// final RowData rowDataItem = (RowData) element;
 		// if (rowDataItem.cargo != null) {
 		// final Cargo cargo = rowDataItem.cargo;
-		// final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
+		// final AssignmentModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(AssignmentModel.class);
 		// final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
 		// if (assignment != null && assignment.isLocked()) {
 		// return lockedImage;
@@ -753,9 +753,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * 
 	 * @param newCargoes
 	 */
-	public RootData setCargoes(final InputModel inputModel, final CargoModel cargoModel, final ScheduleModel scheduleModel) {
+	public RootData setCargoes(final AssignmentModel assignmentModel, final CargoModel cargoModel, final ScheduleModel scheduleModel) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
-		return transformer.transform(inputModel, cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors());
+		return transformer.transform(assignmentModel, cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors());
 	}
 
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack) {
@@ -904,7 +904,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final List<Command> deleteCommands = new LinkedList<Command>();
 
 		final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
-		final InputModel inputModel = scenarioEditingLocation.getRootObject().getSubModel(InputModel.class);
+		final AssignmentModel assignmentModel = scenarioEditingLocation.getRootObject().getSubModel(AssignmentModel.class);
 
 		final Set<Slot> slotsToRemove = new HashSet<Slot>();
 		final Set<Slot> slotsToKeep = new HashSet<Slot>();
@@ -978,7 +978,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				}
 				cargoesToKeep.add(c);
-				cec.appendFOBDESCommands(setCommands, deleteCommands, scenarioEditingLocation.getEditingDomain(), inputModel, c, loadSide.loadSlot, dischargeSide.getDischargeSlot());
+				cec.appendFOBDESCommands(setCommands, deleteCommands, scenarioEditingLocation.getEditingDomain(), assignmentModel, c, loadSide.loadSlot, dischargeSide.getDischargeSlot());
 			}
 		}
 

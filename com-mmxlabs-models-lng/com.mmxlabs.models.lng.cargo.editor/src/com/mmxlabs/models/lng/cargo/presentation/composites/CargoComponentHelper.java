@@ -16,9 +16,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
 
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.editors.CargoTypeInlineEditor;
-import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -136,7 +136,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 
 			@Override
 			public void notifyChanged(final Notification notification) {
-				if (notification.getFeature() == InputPackage.eINSTANCE.getElementAssignment_Locked()) {
+				if (notification.getFeature() == AssignmentPackage.eINSTANCE.getElementAssignment_Locked()) {
 					editor.setEditorEnabled(!notification.getNewBooleanValue());
 					if (notification.getNewBooleanValue()) {
 						final ICommandHandler handler = location.getDefaultCommandHandler();

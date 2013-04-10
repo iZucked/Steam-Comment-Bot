@@ -3,6 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
+import com.mmxlabs.models.lng.types.ACargo;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import org.eclipse.emf.common.util.EList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;

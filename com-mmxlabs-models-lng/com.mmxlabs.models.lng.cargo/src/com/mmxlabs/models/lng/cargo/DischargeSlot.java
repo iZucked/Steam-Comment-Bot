@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
  * <!-- begin-user-doc -->

@@ -32,6 +32,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -39,9 +42,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.actions.DeleteSelectedCargoAction;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -106,7 +106,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 				if (element instanceof Cargo) {
 					final Cargo cargo = (Cargo) element;
-					final InputModel inputModel = part.getRootObject().getSubModel(InputModel.class);
+					final AssignmentModel inputModel = part.getRootObject().getSubModel(AssignmentModel.class);
 					final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
 					if (assignment != null && assignment.isLocked()) {
 						return lockedImage;
@@ -136,9 +136,9 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 //
 //		addTypicalColumn("Sell at",  new ContractManipulator(provider, editingDomain), pkg.getCargo_DischargeSlot());
 
-		final InputModel input = part.getRootObject().getSubModel(InputModel.class);
+		final AssignmentModel assignmentModel = part.getRootObject().getSubModel(AssignmentModel.class);
 
-		if (input != null) {
+		if (assignmentModel != null) {
 			addTypicalColumn("Vessel", new AssignmentManipulator(part)); 	
 		}
 

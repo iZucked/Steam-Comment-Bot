@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.assignment.helpers.AssignmentModel"
+			helperClass="com.mmxlabs.models.lng.assignment.presentation.composites.AssignmentModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.assignment.AssignmentModel" />
+	</extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.assignment.editor.assignmentModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.assignment.AssignmentModel"
+          subModelImporterClass="com.mmxlabs.models.lng.assignment.importers.AssignmentModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.assignment.editor.assignmentEditorContribution"
+          implementation="com.mmxlabs.models.lng.assignment.editorpart.AssignmentJointModelEditorContribution"
+          priority="20"
+          subModelClass="com.mmxlabs.models.lng.assignment.AssignmentModel">
+    </jointModelEditor>
+ </extension>
+ <extension
+       id="com.mmxlabs.models.lng.assignment.cargohelpers"
+       point="com.mmxlabs.models.ui.componenthelpers">
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.assignment.ui.inlineeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.assignment.editor.cargoAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.cargo.Cargo">
+    </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.assignment.ui.inlineeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.assignment.editor.vesselEventAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.fleet.VesselEvent">
+    </componentHelper>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.assignment.valueprovider.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.assignment.editor.assignmentValueProvider"
+          ownerEClass="com.mmxlabs.models.lng.assignment.ElementAssignment"
+          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+    </valueProvider>
+ </extension>
+</plugin>

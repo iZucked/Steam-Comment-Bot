@@ -8,6 +8,11 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.port.Port;
 import java.util.Date;
+import com.mmxlabs.models.lng.types.ASlot;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.port.Port;
+import java.util.Date;
 
 /**
  * <!-- begin-user-doc -->

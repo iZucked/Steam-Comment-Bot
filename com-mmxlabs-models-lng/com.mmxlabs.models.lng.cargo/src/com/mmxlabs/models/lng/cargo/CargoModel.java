@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.util.EList;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,7 +39,7 @@ public interface CargoModel extends UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Load Slots</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_LoadSlots()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<LoadSlot> getLoadSlots();
@@ -53,7 +55,7 @@ public interface CargoModel extends UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Discharge Slots</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_DischargeSlots()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<DischargeSlot> getDischargeSlots();
@@ -69,7 +71,7 @@ public interface CargoModel extends UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargoes</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_Cargoes()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Cargo> getCargoes();
@@ -85,7 +87,7 @@ public interface CargoModel extends UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargo Groups</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_CargoGroups()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<CargoGroup> getCargoGroups();

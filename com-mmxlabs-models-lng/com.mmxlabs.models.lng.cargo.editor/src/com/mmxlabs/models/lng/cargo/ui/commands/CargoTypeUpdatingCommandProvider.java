@@ -18,6 +18,9 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.models.common.commandservice.AbstractModelCommandProvider;
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -25,9 +28,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.util.SpotSlotHelper;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -55,16 +55,16 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 				}
 				seenObjects.add(parameter.getEOwner());
 			}
-			final InputModel inputModel = rootObject.getSubModel(InputModel.class);
+			final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
 
 			if (parameter.getEOwner() instanceof LoadSlot) {
 				final LoadSlot slot = (LoadSlot) parameter.getEOwner();
 
 				if (slot.getCargo() != null) {
 					final Cargo cargo = slot.getCargo();
-					final ElementAssignment assignment = getAssignmentForCargo(overrides, inputModel, cargo);
+					final ElementAssignment assignment = getAssignmentForCargo(overrides, assignmentModel, cargo);
 					DischargeSlot dischargeSlot = null;
-					for (Slot slot2 : cargo.getSlots()) {
+					for (final Slot slot2 : cargo.getSlots()) {
 						if (slot2 instanceof DischargeSlot) {
 							dischargeSlot = (DischargeSlot) slot2;
 							break;
@@ -131,9 +131,9 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 				if (slot.getCargo() != null) {
 					final Cargo cargo = slot.getCargo();
 
-					final ElementAssignment assignment = getAssignmentForCargo(overrides, inputModel, cargo);
+					final ElementAssignment assignment = getAssignmentForCargo(overrides, assignmentModel, cargo);
 					LoadSlot loadSlot = null;
-					for (Slot slot2 : cargo.getSlots()) {
+					for (final Slot slot2 : cargo.getSlots()) {
 						if (slot2 instanceof LoadSlot) {
 							loadSlot = (LoadSlot) slot2;
 							break;
@@ -184,7 +184,7 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 
 			// Fall through to Spot Slots which are not DES Purchases / FOB Sales
 			if (parameter.getEOwner() instanceof SpotSlot) {
-				Slot slot = (Slot) parameter.getEOwner();
+				final Slot slot = (Slot) parameter.getEOwner();
 				if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
 
 					final CompoundCommand cmd = new CompoundCommand("Update spot slot date range");
@@ -202,7 +202,7 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 		return null;
 	}
 
-	private ElementAssignment getAssignmentForCargo(final Map<EObject, EObject> overrides, final InputModel inputModel, Cargo cargo) {
+	private ElementAssignment getAssignmentForCargo(final Map<EObject, EObject> overrides, final AssignmentModel assignmentModel, Cargo cargo) {
 
 		// Find the assignment for the Cargo
 
@@ -216,7 +216,7 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 			}
 		}
 		// Look up the assignment
-		ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
+		ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
 
 		// Look up the override, if present
 		if (overrides.containsKey(assignment)) {

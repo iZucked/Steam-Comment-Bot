@@ -16,15 +16,15 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
+import com.mmxlabs.models.lng.assignment.AssignmentFactory;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputFactory;
-import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -159,18 +159,18 @@ public class CargoImporter extends DefaultClassImporter {
 			context.doLater(new IDeferment() {
 				@Override
 				public void run(final IImportContext context) {
-					final InputModel im = context.getRootObject().getSubModel(InputModel.class);
-					if (im != null) {
+					final AssignmentModel assignmentModel = context.getRootObject().getSubModel(AssignmentModel.class);
+					if (assignmentModel != null) {
 						ElementAssignment existing = null;
-						for (final ElementAssignment ea : im.getElementAssignments()) {
+						for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 							if (ea.getAssignedObject() == cargo_) {
 								existing = ea;
 								break;
 							}
 						}
 						if (existing == null) {
-							existing = InputFactory.eINSTANCE.createElementAssignment();
-							im.getElementAssignments().add(existing);
+							existing = AssignmentFactory.eINSTANCE.createElementAssignment();
+							assignmentModel.getElementAssignments().add(existing);
 							existing.setAssignedObject(cargo_);
 						}
 

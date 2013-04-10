@@ -17,12 +17,12 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.InputPackage;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -40,8 +40,8 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	public AssignmentManipulator(final IScenarioEditingLocation location) {
 		this.location = location;
-		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(InputPackage.eINSTANCE.getElementAssignment(),
-				InputPackage.eINSTANCE.getElementAssignment_Assignment());
+		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(AssignmentPackage.eINSTANCE.getElementAssignment(),
+				AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 	}
 
 	private List<Pair<String, EObject>> getAllowedValues(final EObject target, List<Pair<String, EObject>> storage) {
@@ -50,7 +50,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		else 
 			storage.clear();
 		
-		storage.addAll(valueProvider.getAllowedValues(target, InputPackage.eINSTANCE.getElementAssignment_Assignment()));
+		storage.addAll(valueProvider.getAllowedValues(target, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment()));
 		
 		return storage;
 	}
@@ -58,7 +58,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public void setValue(final Object object, final Object value) {
 		// grar.
-		final InputModel input = location.getRootObject().getSubModel(InputModel.class);
+		final AssignmentModel input = location.getRootObject().getSubModel(AssignmentModel.class);
 		if (input != null) {
 			// 
 			if (value == null || value.equals(-1))
@@ -88,7 +88,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
-			final InputModel input = location.getRootObject().getSubModel(InputModel.class);
+			final AssignmentModel input = location.getRootObject().getSubModel(AssignmentModel.class);
 			if (input != null) {
 				ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, cargo);
 				if (assignment != null)
@@ -105,7 +105,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
-			final InputModel input = location.getRootObject().getSubModel(InputModel.class);
+			final AssignmentModel input = location.getRootObject().getSubModel(AssignmentModel.class);
 			if (input != null) {
 				ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, cargo);
 				
@@ -167,6 +167,6 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
-		return Collections.singleton(new Pair<Notifier, List<Object>>(location.getRootObject().getSubModel(InputModel.class), Collections.emptyList()));
+		return Collections.singleton(new Pair<Notifier, List<Object>>(location.getRootObject().getSubModel(AssignmentModel.class), Collections.emptyList()));
 	}
 }
