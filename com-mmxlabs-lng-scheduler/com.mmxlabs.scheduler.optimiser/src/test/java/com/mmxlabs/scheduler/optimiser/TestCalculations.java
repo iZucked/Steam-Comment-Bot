@@ -98,7 +98,7 @@ public class TestCalculations {
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
 		final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -521,7 +521,7 @@ public class TestCalculations {
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
 		final int baseFuelUnitEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelUnitEquivalence, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelUnitEquivalence, 0, Integer.MAX_VALUE, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -951,7 +951,7 @@ public class TestCalculations {
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(1);
 		final int baseFuelEquivalance = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalance, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalance, 0, Integer.MAX_VALUE, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));

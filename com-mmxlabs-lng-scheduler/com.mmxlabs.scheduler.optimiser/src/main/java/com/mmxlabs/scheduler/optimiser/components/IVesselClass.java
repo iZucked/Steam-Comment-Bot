@@ -138,15 +138,6 @@ public interface IVesselClass {
 	int getWarmupTime();
 
 	/**
-	 * The time in hours required for these vessels' tanks to cool down after they have warmed up when {@link #getCooldownVolume()} M3 of gas are used for cooling.
-	 * 
-	 * In a future version this API may take more parameters, for example an estimate of the tanks' temperature, or the time spent warming up.
-	 * 
-	 * @return time to cool down
-	 */
-	int getCooldownTime();
-
-	/**
 	 * The volume of LNG in M3 (scaled, see {@link Calculator#ScaleFactor}) required to cool down the tanks if they have warmed up.
 	 * 
 	 * In a future version this API may take more parameters, for example an estimate of the tanks' temperature, or the time spent warming up.
