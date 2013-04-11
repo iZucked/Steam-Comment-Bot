@@ -145,7 +145,7 @@
     <jointModelEditor
           id="com.mmxlabs.models.lng.spotmarkets.editor.spotmarketseditor"
           implementation="com.mmxlabs.models.lng.spotmarkets.editor.editorpart.SpotMarketsModelEditorContribution"
-          priority="10"
+          priority="70"
           subModelClass="com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel">
     </jointModelEditor>
  </extension>
