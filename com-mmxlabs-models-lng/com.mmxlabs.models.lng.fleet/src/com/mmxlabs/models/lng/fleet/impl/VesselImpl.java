@@ -3,11 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
+
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -21,9 +23,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.AVesselImpl;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Vessel</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Vessel</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
@@ -40,8 +40,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselImpl;
 public class VesselImpl extends AVesselImpl implements Vessel {
 	/**
 	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVesselClass()
 	 * @generated
 	 * @ordered
@@ -50,8 +49,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * The cached value of the '{@link #getInaccessiblePorts() <em>Inaccessible Ports</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getInaccessiblePorts()
 	 * @generated
 	 * @ordered
@@ -60,8 +58,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getTimeCharterRate()
 	 * @generated
 	 * @ordered
@@ -70,8 +67,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * The cached value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getTimeCharterRate()
 	 * @generated
 	 * @ordered
@@ -80,8 +76,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * This is true if the Time Charter Rate attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -90,8 +85,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	/**
 	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @see #getCapacity()
 	 * @generated
 	 * @ordered
@@ -101,8 +96,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	/**
 	 * The cached value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @see #getCapacity()
 	 * @generated
 	 * @ordered
@@ -112,8 +107,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	/**
 	 * This is true if the Capacity attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -122,8 +117,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	/**
 	 * The default value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @see #getFillCapacity()
 	 * @generated
 	 * @ordered
@@ -133,8 +128,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	/**
 	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @see #getFillCapacity()
 	 * @generated
 	 * @ordered
@@ -144,16 +139,15 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	/**
 	 * This is true if the Fill Capacity attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	protected boolean fillCapacityESet;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected VesselImpl() {
@@ -161,8 +155,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -171,8 +164,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public VesselClass getVesselClass() {
@@ -188,8 +180,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public VesselClass basicGetVesselClass() {
@@ -197,8 +188,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setVesselClass(VesselClass newVesselClass) {
@@ -209,8 +199,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<APortSet> getInaccessiblePorts() {
@@ -221,8 +210,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public int getTimeCharterRate() {
@@ -230,8 +218,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setTimeCharterRate(int newTimeCharterRate) {
@@ -244,8 +231,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void unsetTimeCharterRate() {
@@ -258,8 +244,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isSetTimeCharterRate() {
@@ -268,8 +253,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 */
 	public int getCapacity() {
@@ -278,8 +263,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setCapacity(int newCapacity) {
@@ -293,8 +278,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void unsetCapacity() {
@@ -308,8 +293,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isSetCapacity() {
@@ -318,8 +303,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 */
 	public double getFillCapacity() {
@@ -328,8 +313,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setFillCapacity(double newFillCapacity) {
@@ -343,8 +328,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void unsetFillCapacity() {
@@ -358,8 +343,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+	 * 
+	 * @since 3.0 <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isSetFillCapacity() {
@@ -367,8 +352,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<AVessel> collect(EList<AVesselSet> marked) {
@@ -381,7 +365,27 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getVesselOrVesselClassCapacity() {
+		
+		return (Integer) eGetWithDefault(FleetPackage.eINSTANCE.getVessel_Capacity());
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public double getVesselOrVesselClassFillCapacity() {
+		return (Double) eGetWithDefault(FleetPackage.eINSTANCE.getVessel_FillCapacity());
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -403,8 +407,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -432,8 +435,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -459,8 +461,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -481,8 +482,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -498,6 +498,16 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
+	}
+
+	@Override
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		if (FleetPackage.eINSTANCE.getVessel_Capacity() == feature) {
+			return new DelegateInformation(FleetPackage.eINSTANCE.getVessel_VesselClass(), FleetPackage.eINSTANCE.getVesselClass_Capacity(), (Integer) 0);
+		} else if (FleetPackage.eINSTANCE.getVessel_FillCapacity() == feature) {
+			return new DelegateInformation(FleetPackage.eINSTANCE.getVessel_VesselClass(), FleetPackage.eINSTANCE.getVesselClass_FillCapacity(), (Double) 100.0);
+		}
+		return super.getUnsetValueOrDelegate(feature);
 	}
 
 } // end of VesselImpl

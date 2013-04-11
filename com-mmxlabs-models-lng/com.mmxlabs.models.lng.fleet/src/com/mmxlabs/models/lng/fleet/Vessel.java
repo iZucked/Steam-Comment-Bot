@@ -251,6 +251,22 @@ public interface Vessel extends AVessel {
 	 */
 	EList<AVessel> collect(EList<AVesselSet> marked);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getVesselOrVesselClassCapacity();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	double getVesselOrVesselClassFillCapacity();
+
 } // end of  Vessel
 
 // finish type fixing

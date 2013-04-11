@@ -30,6 +30,8 @@
       </eAnnotations>
       <eParameters name="marked" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
     </eOperations>
+    <eOperations name="getVesselOrVesselClassCapacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getVesselOrVesselClassFillCapacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
         eType="#//VesselClass"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1"
