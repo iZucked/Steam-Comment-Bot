@@ -16,7 +16,6 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.MMXRootObject#getSubModels <em>Sub Models</em>}</li>
- *   <li>{@link com.mmxlabs.models.mmxcore.MMXRootObject#getVersion <em>Version</em>}</li>
  * </ul>
  * </p>
  *
@@ -42,47 +41,12 @@ public interface MMXRootObject extends UUIDObject, NamedObject {
 	EList<MMXSubModel> getSubModels();
 
 	/**
-	 * Returns the value of the '<em><b>Version</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Version</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Version</em>' attribute.
-	 * @see #setVersion(int)
-	 * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXRootObject_Version()
-	 * @model default="0" required="true"
-	 * @generated
-	 */
-	int getVersion();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.mmxcore.MMXRootObject#getVersion <em>Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Version</em>' attribute.
-	 * @see #getVersion()
-	 * @generated
-	 */
-	void setVersion(int value);
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model subModelRequired="true"
 	 * @generated
 	 */
 	void addSubModel(UUIDObject subModel);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model
-	 * @generated
-	 */
-	void restoreSubModels();
 
 	/**
 	 * <!-- begin-user-doc -->

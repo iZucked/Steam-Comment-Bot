@@ -35,7 +35,6 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getSubModels <em>Sub Models</em>}</li>
- *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getVersion <em>Version</em>}</li>
  * </ul>
  * </p>
  *
@@ -82,26 +81,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @ordered
 	 */
 	protected EList<MMXSubModel> subModels;
-
-	/**
-	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVersion()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int VERSION_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVersion()
-	 * @generated
-	 * @ordered
-	 */
-	protected int version = VERSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -169,27 +148,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getVersion() {
-		return version;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVersion(int newVersion) {
-		int oldVersion = version;
-		version = newVersion;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_ROOT_OBJECT__VERSION, oldVersion, version));
-	}
-
-	/**
 	 * Add the given model as a submodel in here
 	 * 
 	 * TODO this will always change the container of the submodel; if the submodel is shared with other instances,
@@ -202,7 +160,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		assert(subModel.eContainer() == null);
 		final Resource resource = subModel.eResource();
 		final MMXSubModel container = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-		container.setOriginalResource(resource);
 		container.setSubModelInstance(subModel);
 		getSubModels().add(container);
 	}
@@ -259,8 +216,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 				return getOtherNames();
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				return getSubModels();
-			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
-				return getVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -285,9 +240,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 				getSubModels().clear();
 				getSubModels().addAll((Collection<? extends MMXSubModel>)newValue);
 				return;
-			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
-				setVersion((Integer)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -309,9 +261,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				getSubModels().clear();
 				return;
-			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
-				setVersion(VERSION_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -330,8 +279,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 				return otherNames != null && !otherNames.isEmpty();
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				return subModels != null && !subModels.isEmpty();
-			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
-				return version != VERSION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -376,16 +323,14 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @generated
 	 */
 	@Override
+	@SuppressWarnings({"rawtypes", "unchecked" })
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case MMXCorePackage.MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT:
 				addSubModel((UUIDObject)arguments.get(0));
 				return null;
-			case MMXCorePackage.MMX_ROOT_OBJECT___RESTORE_SUB_MODELS:
-				restoreSubModels();
-				return null;
 			case MMXCorePackage.MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS:
-				return getSubModel((Class<?>)arguments.get(0));
+				return getSubModel((Class)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -404,8 +349,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		result.append(name);
 		result.append(", otherNames: ");
 		result.append(otherNames);
-		result.append(", version: ");
-		result.append(version);
 		result.append(')');
 		return result.toString();
 	}

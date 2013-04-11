@@ -163,11 +163,4 @@ public class UUIDObjectImpl extends MMXObjectImpl implements UUIDObject {
 		result.append(')');
 		return result.toString();
 	}
-
-	@Override
-	public void collectUUIDObjects(Map<String, UUIDObject> objectsByUUID) {
-		super.collectUUIDObjects(objectsByUUID);
-		objectsByUUID.put(getUuid(), this);
-	}
-	
 } //UUIDObjectImpl

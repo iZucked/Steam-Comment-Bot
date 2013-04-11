@@ -82,10 +82,6 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 				return createUUIDObjectAdapter();
 			}
 			@Override
-			public Adapter caseMMXProxy(MMXProxy object) {
-				return createMMXProxyAdapter();
-			}
-			@Override
 			public Adapter caseMMXRootObject(MMXRootObject object) {
 				return createMMXRootObjectAdapter();
 			}
@@ -152,20 +148,6 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createUUIDObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXProxy <em>MMX Proxy</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.mmxcore.MMXProxy
-	 * @generated
-	 */
-	public Adapter createMMXProxyAdapter() {
 		return null;
 	}
 

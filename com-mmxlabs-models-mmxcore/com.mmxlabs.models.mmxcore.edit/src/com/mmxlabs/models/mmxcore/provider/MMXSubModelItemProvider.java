@@ -64,31 +64,8 @@ public class MMXSubModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addOriginalResourcePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Original Resource feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOriginalResourcePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MMXSubModel_originalResource_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MMXSubModel_originalResource_feature", "_UI_MMXSubModel_type"),
-				 MMXCorePackage.Literals.MMX_SUB_MODEL__ORIGINAL_RESOURCE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -140,11 +117,7 @@ public class MMXSubModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Resource labelValue = ((MMXSubModel)object).getOriginalResource();
-		String label = labelValue == null ? null : labelValue.toString();
-		return label == null || label.length() == 0 ?
-			getString("_UI_MMXSubModel_type") :
-			getString("_UI_MMXSubModel_type") + " " + label;
+		return getString("_UI_MMXSubModel_type");
 	}
 
 	/**
@@ -159,9 +132,6 @@ public class MMXSubModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(MMXSubModel.class)) {
-			case MMXCorePackage.MMX_SUB_MODEL__ORIGINAL_RESOURCE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
 			case MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;

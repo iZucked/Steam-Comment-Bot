@@ -25,8 +25,6 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
 	
 	public MMXAdapterImpl() {
-		ignoredFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Proxies());
-		ignoredFeatures.addAll(MMXCorePackage.eINSTANCE.getMMXProxy().getEStructuralFeatures());
 	}
 	
 	@Override

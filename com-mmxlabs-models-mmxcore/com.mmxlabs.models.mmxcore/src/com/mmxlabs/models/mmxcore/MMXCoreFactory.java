@@ -51,15 +51,6 @@ public interface MMXCoreFactory extends EFactory {
 	UUIDObject createUUIDObject();
 
 	/**
-	 * Returns a new object of class '<em>MMX Proxy</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>MMX Proxy</em>'.
-	 * @generated
-	 */
-	MMXProxy createMMXProxy();
-
-	/**
 	 * Returns a new object of class '<em>MMX Root Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

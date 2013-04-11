@@ -64,7 +64,6 @@ public class MMXRootObjectItemProvider
 
 			addNamePropertyDescriptor(object);
 			addOtherNamesPropertyDescriptor(object);
-			addVersionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -110,28 +109,6 @@ public class MMXRootObjectItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Version feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVersionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MMXRootObject_version_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MMXRootObject_version_feature", "_UI_MMXRootObject_type"),
-				 MMXCorePackage.Literals.MMX_ROOT_OBJECT__VERSION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -205,7 +182,6 @@ public class MMXRootObjectItemProvider
 		switch (notification.getFeatureID(MMXRootObject.class)) {
 			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
 			case MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES:
-			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:

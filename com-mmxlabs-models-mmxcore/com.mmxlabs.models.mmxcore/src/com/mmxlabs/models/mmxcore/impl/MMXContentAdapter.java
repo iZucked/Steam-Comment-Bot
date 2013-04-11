@@ -24,8 +24,6 @@ public abstract class MMXContentAdapter extends EContentAdapter implements IMMXA
 	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
 	
 	public MMXContentAdapter() {
-		ignoredFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Proxies());
-		ignoredFeatures.addAll(MMXCorePackage.eINSTANCE.getMMXProxy().getEStructuralFeatures());
 	}
 	
 	@Override

@@ -143,29 +143,6 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXProxy} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MMXProxyItemProvider mmxProxyItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.MMXProxy}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMMXProxyAdapter() {
-		if (mmxProxyItemProvider == null) {
-			mmxProxyItemProvider = new MMXProxyItemProvider(this);
-		}
-
-		return mmxProxyItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXRootObject} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -313,7 +290,6 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 		if (mmxObjectItemProvider != null) mmxObjectItemProvider.dispose();
 		if (namedObjectItemProvider != null) namedObjectItemProvider.dispose();
 		if (uuidObjectItemProvider != null) uuidObjectItemProvider.dispose();
-		if (mmxProxyItemProvider != null) mmxProxyItemProvider.dispose();
 		if (mmxRootObjectItemProvider != null) mmxRootObjectItemProvider.dispose();
 		if (mmxSubModelItemProvider != null) mmxSubModelItemProvider.dispose();
 	}

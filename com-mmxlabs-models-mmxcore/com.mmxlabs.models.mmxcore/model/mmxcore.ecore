@@ -1,33 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mmxcore"
-    nsURI="http://www.mmxlabs.com/models/mmxcore/1/" nsPrefix="models.mmxcore">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mmxcore" nsURI="http://www.mmxlabs.com/models/mmxcore/1/" nsPrefix="models.mmxcore">
   <eClassifiers xsi:type="ecore:EClass" name="MMXObject">
-    <eOperations name="makeProxies" lowerBound="1"/>
-    <eOperations name="resolveProxies" lowerBound="1">
-      <eParameters name="objectsByUUID" lowerBound="1">
-        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
-          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-          <eTypeArguments eClassifier="#//UUIDObject"/>
-        </eGenericType>
-      </eParameters>
-    </eOperations>
-    <eOperations name="restoreProxies" lowerBound="1"/>
-    <eOperations name="collectUUIDObjects" lowerBound="1">
-      <eParameters name="objectsByUUID" lowerBound="1">
-        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
-          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-          <eTypeArguments eClassifier="#//UUIDObject"/>
-        </eGenericType>
-      </eParameters>
-    </eOperations>
-    <eOperations name="collectUUIDObjects" lowerBound="1">
-      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        <eTypeArguments eClassifier="#//UUIDObject"/>
-      </eGenericType>
-    </eOperations>
     <eOperations name="getUnsetValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
       <eParameters name="feature" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
     </eOperations>
@@ -37,8 +11,6 @@
     <eOperations name="eContainerOp" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" ordered="false"
         upperBound="-1" eType="#//UUIDObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="proxies" upperBound="-1"
-        eType="#//MMXProxy" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamedObject" eSuperTypes="#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -53,24 +25,10 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MMXProxy">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referentID" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedReferent" lowerBound="1"
-        eType="#//UUIDObject" transient="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" lowerBound="1"
-        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referentOwner" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referentName" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MMXRootObject" eSuperTypes="#//UUIDObject #//NamedObject">
     <eOperations name="addSubModel" lowerBound="1">
       <eParameters name="subModel" lowerBound="1" eType="#//UUIDObject"/>
     </eOperations>
-    <eOperations name="restoreSubModels" lowerBound="1"/>
     <eOperations name="getSubModel" lowerBound="1">
       <eGenericType eTypeParameter="#//MMXRootObject/getSubModel/T"/>
       <eTypeParameters name="T"/>
@@ -82,14 +40,9 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subModels" upperBound="-1"
         eType="#//MMXSubModel" transient="true" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MMXSubModel" eSuperTypes="#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="subModelInstance" lowerBound="1"
-        eType="#//UUIDObject"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalResource" lowerBound="1"
-        eType="#//MMXResource"/>
+        eType="#//UUIDObject" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="MMXResource" instanceClassName="org.eclipse.emf.ecore.resource.Resource"/>
 </ecore:EPackage>

@@ -4,19 +4,15 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
-import java.util.Map;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.resource.Resource;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +22,6 @@ import org.eclipse.emf.ecore.resource.Resource;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXSubModelImpl#getSubModelInstance <em>Sub Model Instance</em>}</li>
- *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXSubModelImpl#getOriginalResource <em>Original Resource</em>}</li>
  * </ul>
  * </p>
  *
@@ -34,7 +29,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  */
 public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	/**
-	 * The cached value of the '{@link #getSubModelInstance() <em>Sub Model Instance</em>}' reference.
+	 * The cached value of the '{@link #getSubModelInstance() <em>Sub Model Instance</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getSubModelInstance()
@@ -42,26 +37,6 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	 * @ordered
 	 */
 	protected UUIDObject subModelInstance;
-
-	/**
-	 * The default value of the '{@link #getOriginalResource() <em>Original Resource</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOriginalResource()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final Resource ORIGINAL_RESOURCE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getOriginalResource() <em>Original Resource</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOriginalResource()
-	 * @generated
-	 * @ordered
-	 */
-	protected Resource originalResource = ORIGINAL_RESOURCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -88,25 +63,23 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	 * @generated
 	 */
 	public UUIDObject getSubModelInstance() {
-		if (subModelInstance != null && subModelInstance.eIsProxy()) {
-			InternalEObject oldSubModelInstance = (InternalEObject)subModelInstance;
-			subModelInstance = (UUIDObject)eResolveProxy(oldSubModelInstance);
-			if (subModelInstance != oldSubModelInstance) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, oldSubModelInstance, subModelInstance));
-			}
-		}
 		return subModelInstance;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.2
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public UUIDObject basicGetSubModelInstance() {
-		return subModelInstance;
+	public NotificationChain basicSetSubModelInstance(UUIDObject newSubModelInstance, NotificationChain msgs) {
+		UUIDObject oldSubModelInstance = subModelInstance;
+		subModelInstance = newSubModelInstance;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, oldSubModelInstance, newSubModelInstance);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -115,10 +88,17 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	 * @generated
 	 */
 	public void setSubModelInstance(UUIDObject newSubModelInstance) {
-		UUIDObject oldSubModelInstance = subModelInstance;
-		subModelInstance = newSubModelInstance;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, oldSubModelInstance, subModelInstance));
+		if (newSubModelInstance != subModelInstance) {
+			NotificationChain msgs = null;
+			if (subModelInstance != null)
+				msgs = ((InternalEObject)subModelInstance).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, null, msgs);
+			if (newSubModelInstance != null)
+				msgs = ((InternalEObject)newSubModelInstance).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, null, msgs);
+			msgs = basicSetSubModelInstance(newSubModelInstance, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, newSubModelInstance, newSubModelInstance));
 	}
 
 	/**
@@ -126,20 +106,13 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Resource getOriginalResource() {
-		return originalResource;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setOriginalResource(Resource newOriginalResource) {
-		Resource oldOriginalResource = originalResource;
-		originalResource = newOriginalResource;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_SUB_MODEL__ORIGINAL_RESOURCE, oldOriginalResource, originalResource));
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE:
+				return basicSetSubModelInstance(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -151,10 +124,7 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE:
-				if (resolve) return getSubModelInstance();
-				return basicGetSubModelInstance();
-			case MMXCorePackage.MMX_SUB_MODEL__ORIGINAL_RESOURCE:
-				return getOriginalResource();
+				return getSubModelInstance();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -169,9 +139,6 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 		switch (featureID) {
 			case MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE:
 				setSubModelInstance((UUIDObject)newValue);
-				return;
-			case MMXCorePackage.MMX_SUB_MODEL__ORIGINAL_RESOURCE:
-				setOriginalResource((Resource)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -188,9 +155,6 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 			case MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE:
 				setSubModelInstance((UUIDObject)null);
 				return;
-			case MMXCorePackage.MMX_SUB_MODEL__ORIGINAL_RESOURCE:
-				setOriginalResource(ORIGINAL_RESOURCE_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -205,43 +169,7 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 		switch (featureID) {
 			case MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE:
 				return subModelInstance != null;
-			case MMXCorePackage.MMX_SUB_MODEL__ORIGINAL_RESOURCE:
-				return ORIGINAL_RESOURCE_EDEFAULT == null ? originalResource != null : !ORIGINAL_RESOURCE_EDEFAULT.equals(originalResource);
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (originalResource: ");
-		result.append(originalResource);
-		result.append(')');
-		return result.toString();
-	}
-
-	@Override
-	public void resolveProxies(Map<String, UUIDObject> objectsByUUID) {
-		super.resolveProxies(objectsByUUID);
-		getSubModelInstance().resolveProxies(objectsByUUID);
-	}
-
-	@Override
-	public void restoreProxies() {
-		super.restoreProxies();
-		getSubModelInstance().restoreProxies();
-	}
-
-	@Override
-	public void collectUUIDObjects(Map<String, UUIDObject> objectsByUUID) {
-		super.collectUUIDObjects(objectsByUUID);
-		getSubModelInstance().collectUUIDObjects(objectsByUUID);
 	}
 } //MMXSubModelImpl

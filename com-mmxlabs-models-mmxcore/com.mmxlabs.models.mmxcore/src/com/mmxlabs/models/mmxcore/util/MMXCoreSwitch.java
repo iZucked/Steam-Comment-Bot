@@ -87,12 +87,6 @@ public class MMXCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MMXCorePackage.MMX_PROXY: {
-				MMXProxy mmxProxy = (MMXProxy)theEObject;
-				T result = caseMMXProxy(mmxProxy);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case MMXCorePackage.MMX_ROOT_OBJECT: {
 				MMXRootObject mmxRootObject = (MMXRootObject)theEObject;
 				T result = caseMMXRootObject(mmxRootObject);
@@ -155,21 +149,6 @@ public class MMXCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseUUIDObject(UUIDObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>MMX Proxy</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>MMX Proxy</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMMXProxy(MMXProxy object) {
 		return null;
 	}
 
