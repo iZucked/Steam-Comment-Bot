@@ -256,7 +256,7 @@ public class CustomScenarioCreator {
 			
 
 			HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-			vessel.setStartHeel(heelOptions);
+			availability.setStartHeel(heelOptions);
 
 			fleetModel.getVessels().add(vessel);
 			fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availability);

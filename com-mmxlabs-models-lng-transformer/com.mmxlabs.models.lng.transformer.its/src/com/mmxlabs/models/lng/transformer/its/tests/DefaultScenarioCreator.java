@@ -312,7 +312,7 @@ public class DefaultScenarioCreator {
 			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
 
 			availability.setVessel(vessel);
-			vessel.setStartHeel(createDefaultHeelOptions());
+			availability.setStartHeel(createDefaultHeelOptions());
 
 			fleetModel.getVessels().add(vessel);
 			fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availability);

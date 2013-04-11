@@ -505,9 +505,9 @@ public class ShippingCalculationsTest {
 		final DefaultScenarioCreator dsc = mss;
 		final MMXRootObject scenario = dsc.buildScenario();
 		
-		final Vessel vessel = mss.vessel;
-		vessel.getStartHeel().setVolumeAvailable(1000);
-		vessel.getStartHeel().setPricePerMMBTU(1);
+		final VesselAvailability vesselAvailability = mss.vesselAvailability;
+		vesselAvailability.getStartHeel().setVolumeAvailable(1000);
+		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 				
 		final SequenceTester checker = getDefaultTester();
 	
@@ -547,9 +547,10 @@ public class ShippingCalculationsTest {
 		final DefaultScenarioCreator dsc = mss;
 		final MMXRootObject scenario = dsc.buildScenario();
 		
-		final Vessel vessel = mss.vessel;
-		vessel.getStartHeel().setVolumeAvailable(5);
-		vessel.getStartHeel().setPricePerMMBTU(1);
+		
+		final VesselAvailability vesselAvailability = mss.vesselAvailability;
+		vesselAvailability.getStartHeel().setVolumeAvailable(5);
+		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 				
 		final SequenceTester checker = getDefaultTester();
 		
@@ -661,8 +662,9 @@ public class ShippingCalculationsTest {
 		mss.loadPort.setAllowCooldown(true);
 		
 		// but a big start heel should mean no cooldown is required
-		mss.vessel.getStartHeel().setVolumeAvailable(1000);
-		mss.vessel.getStartHeel().setPricePerMMBTU(1);
+		final VesselAvailability vesselAvailability = mss.vesselAvailability;
+		vesselAvailability.getStartHeel().setVolumeAvailable(1000);
+		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 				
 		final SequenceTester checker = getDefaultTester();
 	
@@ -1264,18 +1266,16 @@ public class ShippingCalculationsTest {
 		final DefaultScenarioCreator dsc = mss;
 		final MMXRootObject scenario = dsc.buildScenario();
 		
-		final Vessel vessel = mss.vessel;
-		vessel.getStartHeel().setVolumeAvailable(10);
-		vessel.getStartHeel().setPricePerMMBTU(1);
-		
+		final VesselAvailability vesselAvailability = mss.vesselAvailability;
+		vesselAvailability.getStartHeel().setVolumeAvailable(10);
+		vesselAvailability.getStartHeel().setPricePerMMBTU(1);		
 		// change from default scenario: set a "return after" date 
 		// somewhat later than the end of the discharge window 
-		VesselAvailability av = mss.vesselAvailability;
 		Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 		
 		// start 3 hrs before load window begins
 		Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
-		av.setStartBy(startDate);
+		vesselAvailability.setStartBy(startDate);
 		System.err.println("Vessel to start before: " + startDate);
 				
 		final SequenceTester checker = getDefaultTester();

@@ -311,7 +311,7 @@ public class ScenarioTools {
 
 		availablility.setVessel(vessel);
 		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-		vessel.setStartHeel(heelOptions);
+		availablility.setStartHeel(heelOptions);
 
 		fleetModel.getVessels().add(vessel);
 		fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availablility);
@@ -560,7 +560,7 @@ public class ScenarioTools {
 
 		final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
 
-		vessel.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+		availability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 
 		availability.setVessel(vessel);
 
