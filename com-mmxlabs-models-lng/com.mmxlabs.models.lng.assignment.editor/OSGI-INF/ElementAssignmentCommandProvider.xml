@@ -6,7 +6,7 @@
 
 -->
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.models.lng.input.editor.elementAssignmentProvider">
-   <implementation class="com.mmxlabs.models.lng.input.commands.ElementAssignmentCommandProvider"/>
+   <implementation class="com.mmxlabs.models.lng.assignment.commands.ElementAssignmentCommandProvider"/>
    <service>
       <provide interface="com.mmxlabs.models.common.commandservice.IModelCommandProvider"/>
    </service>
