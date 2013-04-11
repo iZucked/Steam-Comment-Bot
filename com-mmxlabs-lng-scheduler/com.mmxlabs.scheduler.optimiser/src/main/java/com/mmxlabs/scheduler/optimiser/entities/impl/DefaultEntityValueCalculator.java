@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
@@ -85,77 +87,108 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// get each entity
 		List<IPortSlot> slots = currentAllocation.getSlots();
 		// only handle single load / discharge case
-		assert(slots.size() == 2);
+//		assert(slots.size() == 2);
 		
-		final ILoadOption loadOption = (ILoadOption) slots.get(0);
-		final IDischargeOption dischargeOption = (IDischargeOption) slots.get(1);
 		
-		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
-		final IEntity upstreamEntity = entityProvider.getEntityForSlot(loadOption);
 
-		final int cvValue = loadOption.getCargoCVValue();
+		int cvValue = -1;
 		
-		final ILoadOption loadSlot = loadOption;
-		final IDischargeOption dischargeSlot = dischargeOption;
-
-		final int dischargePricePerM3 = currentAllocation.getSlotPricePerM3(dischargeOption);
-		final int dischargePricePerMMBTu = Calculator.costPerMMBTuFromM3(dischargePricePerM3, cvValue);
-
-		final long dischargeVolumeInM3 = currentAllocation.getSlotVolumeInM3(dischargeSlot);
-		final long loadVolumeInM3 = currentAllocation.getSlotVolumeInM3(loadSlot);
-		final int loadPricePerM3 = currentAllocation.getSlotPricePerM3(loadSlot);
+		long revenue = 0;
+		long cost = 0;
+		
+		for (IPortSlot slot : slots) {
+			
+			if (slot instanceof ILoadOption) {
+				cvValue = ((ILoadOption) slot).getCargoCVValue();
+				
+			} else if (slot instanceof IDischargeOption) {
+				
+			}
+			final long volumeInM3 = currentAllocation.getSlotVolumeInM3(slot);
+			final int pricePerM3 = currentAllocation.getSlotPricePerM3(slot);
+			final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(pricePerM3, cvValue);
+			final int time = currentAllocation.getSlotTime(slot);
+			
+			
+			long value =  Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
+			
+			if (slot instanceof ILoadOption) {
+				cvValue = ((ILoadOption) slot).getCargoCVValue();
+				cost += value;
+			} else if (slot instanceof IDischargeOption) {
+				revenue += value;
+			}
+		}
+		
+//		final ILoadOption loadOption = (ILoadOption) slots.get(0);
+//		final IDischargeOption dischargeOption = (IDischargeOption) slots.get(1);
+//		
+////		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
+////		final IEntity upstreamEntity = entityProvider.getEntityForSlot(loadOption);
+//
+////		final int cvValue = loadOption.getCargoCVValue();
+//		
+//		final ILoadOption loadSlot = loadOption;
+//		final IDischargeOption dischargeSlot = dischargeOption;
+//
+//
+//		final long dischargeVolumeInM3 = currentAllocation.getSlotVolumeInM3(dischargeSlot);
+//		final long loadVolumeInM3 = currentAllocation.getSlotVolumeInM3(loadSlot);
+//		final int loadPricePerM3 = currentAllocation.getSlotPricePerM3(loadSlot);
 
 		// TODO should we be thinking in $/m3 or /mmbtu?
 		// TODO regas comes in here.
 		// TODO inter-entity taxation will also come in here.
 
-		final int shippingTransferPricePerM3 = downstreamEntity.getDownstreamTransferPrice(dischargePricePerM3, cvValue);
-		final long downstreamPaysShipping = Calculator.convertM3ToM3Price(dischargeVolumeInM3, shippingTransferPricePerM3);
-		final long downstreamRevenue = Calculator.convertM3ToM3Price(dischargeVolumeInM3, dischargePricePerM3);
-
-		final long downstreamTotalPretaxProfit = downstreamRevenue - downstreamPaysShipping;
-
-		final int upstreamTransferPricePerM3 = upstreamEntity.getUpstreamTransferPrice(loadPricePerM3, cvValue);
-		final long shippingPaysUpstream = Calculator.convertM3ToM3Price(loadVolumeInM3, upstreamTransferPricePerM3);
-		final long shippingGasBalance = downstreamPaysShipping - shippingPaysUpstream;
+//		final int shippingTransferPricePerM3 = downstreamEntity.getDownstreamTransferPrice(dischargePricePerM3, cvValue);
+//		final long downstreamPaysShipping = Calculator.convertM3ToM3Price(dischargeVolumeInM3, shippingTransferPricePerM3);
+//		final long downstreamRevenue = Calculator.convertM3ToM3Price(dischargeVolumeInM3, dischargePricePerM3);
+//
+//		final long downstreamTotalPretaxProfit = downstreamRevenue - downstreamPaysShipping;
+//
+//		final int upstreamTransferPricePerM3 = upstreamEntity.getUpstreamTransferPrice(loadPricePerM3, cvValue);
+//		final long shippingPaysUpstream = Calculator.convertM3ToM3Price(loadVolumeInM3, upstreamTransferPricePerM3);
+//		final long shippingGasBalance = downstreamPaysShipping - shippingPaysUpstream;
 		// now we need the total non-LNG shipping cost for the whole thing, which shipping pays.
 
-		final long upstreamRevenue = -Calculator.convertM3ToM3Price(loadVolumeInM3, loadPricePerM3);
-		final long upstreamTotalPretaxProfit = upstreamRevenue + shippingPaysUpstream;
+//		final long upstreamRevenue = -Calculator.convertM3ToM3Price(loadVolumeInM3, loadPricePerM3);
+//		final long upstreamTotalPretaxProfit = upstreamRevenue + shippingPaysUpstream;
 
 		final long shippingCosts = getShippingCosts(plan, vessel, false, vesselStartTime, null);
 
-		final long shippingTotalPretaxProfit = shippingGasBalance - shippingCosts;
-
-		final int dischargeTime = currentAllocation.getSlotTime(dischargeSlot);
-		final int loadTime = currentAllocation.getSlotTime(loadSlot);
-		
-		final int taxTime = dischargeTime;
-		final long upstreamProfit = upstreamEntity.getTaxedProfit(upstreamTotalPretaxProfit, taxTime);
-		final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
-		final long downstreamProfit = downstreamEntity.getTaxedProfit(downstreamTotalPretaxProfit, taxTime);
+		final long shippingTotalPretaxProfit = revenue - cost - shippingCosts;
+//
+//		final int dischargeTime = currentAllocation.getSlotTime(dischargeSlot);
+//		final int loadTime = currentAllocation.getSlotTime(loadSlot);
+//		
+//		final int taxTime = dischargeTime;
+//		final long upstreamProfit = upstreamEntity.getTaxedProfit(upstreamTotalPretaxProfit, taxTime);
+		final long shippingProfit = shippingTotalPretaxProfit ; //shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
+//		final long downstreamProfit = downstreamEntity.getTaxedProfit(downstreamTotalPretaxProfit, taxTime);
 
 		final long charterRevenue = getCharterRevenue(plan, vessel);
-		final long taxedCharterRevenue = shippingEntity.getTaxedProfit(charterRevenue, taxTime);
+		final long taxedCharterRevenue = charterRevenue;//shippingEntity.getTaxedProfit(charterRevenue, taxTime);
 
-		final long result = upstreamProfit + shippingProfit + downstreamProfit + taxedCharterRevenue;
+		final long result = shippingProfit + taxedCharterRevenue;
 
 		if (annotatedSolution != null) {
+			IPortSlot firstSlot = slots.get(0);
+			int firstTime = currentAllocation.getSlotTime(firstSlot);
 			{
-				final ISequenceElement element = slotProvider.getElement(loadOption);
+				final ISequenceElement element = slotProvider.getElement(firstSlot);
 
 				final LinkedList<IProfitAndLossEntry> entries = new LinkedList<IProfitAndLossEntry>();
 
-				final DetailTree upstreamDetails = new DetailTree();
+//				final DetailTree upstreamDetails = new DetailTree();
 				final DetailTree shippingDetails = new DetailTree();
-				final DetailTree downstreamDetails = new DetailTree();
+//				final DetailTree downstreamDetails = new DetailTree();
 
-				upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolumeInM3, loadPricePerM3, cvValue));
-				final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Shipping to upstream", loadVolumeInM3, upstreamTransferPricePerM3, cvValue);
-				upstreamDetails.addChild(upstreamToShipping);
-				shippingDetails.addChild(upstreamToShipping);
-				final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolumeInM3, shippingTransferPricePerM3, cvValue);
-				shippingDetails.addChild(shippingToDownstream);
+//				upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolumeInM3, loadPricePerM3, cvValue));
+//				final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Shipping to upstream", loadVolumeInM3, upstreamTransferPricePerM3, cvValue);
+//				upstreamDetails.addChild(upstreamToShipping);
+//				shippingDetails.addChild(upstreamToShipping);
+//				final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolumeInM3, shippingTransferPricePerM3, cvValue);
+//				shippingDetails.addChild(shippingToDownstream);
 
 				final IDetailTree[] detailsRef = new IDetailTree[1];
 				// final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
@@ -163,29 +196,29 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// new ShippingCostAnnotation(currentAllocation.getLoadTime(), costNoBoiloff, detailsRef[0]));
 				final long costIncBoiloff = getShippingCosts(plan, vessel, true, vesselStartTime, detailsRef);
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
-						new ShippingCostAnnotation(loadTime, costIncBoiloff, detailsRef[0]));
+						new ShippingCostAnnotation(firstTime, costIncBoiloff, detailsRef[0]));
 
-				downstreamDetails.addChild(shippingToDownstream);
-				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolumeInM3, dischargePricePerM3, cvValue));
+//				downstreamDetails.addChild(shippingToDownstream);
+//				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolumeInM3, dischargePricePerM3, cvValue));
 
-				entries.add(new ProfitAndLossEntry(upstreamEntity, upstreamProfit, upstreamDetails));
+//				entries.add(new ProfitAndLossEntry(upstreamEntity, upstreamProfit, upstreamDetails));
 				entries.add(new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingDetails));
-				entries.add(new ProfitAndLossEntry(downstreamEntity, downstreamProfit, downstreamDetails));
+//				entries.add(new ProfitAndLossEntry(downstreamEntity, downstreamProfit, downstreamDetails));
 				// add entry for each entity
 
-				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(dischargeTime, entries);
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(firstTime, entries);
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
 
-				if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
-					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, loadTime,
-							currentAllocation.getSlotTime(dischargeSlot), dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3, vessel, plan, shippingDetails);
-				} else {
-					assert(currentAllocation.getSlots().size() == 2);
-					//loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, loadTime, dischargePricePerMMBTu, currentAllocation.getLoadVolumeInM3(),
-					//		shippingDetails);
-					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, loadTime, dischargePricePerMMBTu, currentAllocation.getSlotVolumeInM3(loadSlot),
-							shippingDetails);
-				}
+//				if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
+//					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, loadTime,
+//							currentAllocation.getSlotTime(dischargeSlot), dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3, vessel, plan, shippingDetails);
+//				} else {
+//					assert(currentAllocation.getSlots().size() == 2);
+//					//loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, loadTime, dischargePricePerMMBTu, currentAllocation.getLoadVolumeInM3(),
+//					//		shippingDetails);
+//					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, loadTime, dischargePricePerMMBTu, currentAllocation.getSlotVolumeInM3(loadSlot),
+//							shippingDetails);
+//				}
 			}
 
 			// Add in charter out revenue
@@ -195,8 +228,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				details.addChild(new DetailTree("Charter Out", new TotalCostDetailElement(charterRevenue)));
 
 				final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, taxedCharterRevenue, details);
-				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(loadTime, Collections.singleton(entry));
-				final ISequenceElement element = slotProvider.getElement(loadOption);
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(firstTime, Collections.singleton(entry));
+				final ISequenceElement element = slotProvider.getElement(firstSlot);
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss, annotation);
 			}
 		}
@@ -212,6 +245,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param plan
 	 * @return
 	 */
+	@Override
 	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getShippingEntity();
 
