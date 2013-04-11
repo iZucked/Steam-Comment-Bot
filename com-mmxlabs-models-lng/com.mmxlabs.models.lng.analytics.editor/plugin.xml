@@ -16,31 +16,7 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
-      <wizard
-            id="com.mmxlabs.models.lng.analytics.presentation.AnalyticsModelWizardID"
-            name="%_UI_AnalyticsModelWizard_label"
-            class="com.mmxlabs.models.lng.analytics.presentation.AnalyticsModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/AnalyticsModelFile.gif">
-         <description>%_UI_AnalyticsModelWizard_description</description>
-         <selection class="org.eclipse.core.resources.IResource"/>
-      </wizard>
-   </extension>
 
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditorID"
-            name="%_UI_AnalyticsEditor_label"
-            icon="icons/full/obj16/AnalyticsModelFile.gif"
-            extensions="analytics"
-            class="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditor"
-            contributorClass="com.mmxlabs.models.lng.analytics.presentation.AnalyticsActionBarContributor">
-      </editor>
-   </extension>
 
 	
 	<extension
