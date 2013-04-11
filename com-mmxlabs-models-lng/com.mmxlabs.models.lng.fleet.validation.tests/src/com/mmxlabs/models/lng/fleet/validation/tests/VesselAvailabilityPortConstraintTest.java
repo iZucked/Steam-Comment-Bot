@@ -68,10 +68,11 @@ public class VesselAvailabilityPortConstraintTest {
 
 		// The constraint will need to be able to get at the port and
 		// time's eContainer (the vessel owning it, in this case)
-		when(availability.eContainer()).thenReturn(vessel);
+//		when(availability.eContainer()).thenReturn(vessel);
 		// It will also need to know which feature in the vessel is
 		// containing pat (the start requirement)
-		when(availability.eContainingFeature()).thenReturn(FleetPackage.eINSTANCE.getVessel_Availability());
+//		when(availability.eContainingFeature()).thenReturn(FleetPackage.eINSTANCE.getVessel_Availability());
+		when(availability.getVessel()).thenReturn(vessel);
 		// It will need to ask the vessel for its class, but this should
 		// only happen once
 		when(vessel.getVesselClass()).thenReturn(vesselClass);
@@ -144,9 +145,9 @@ public class VesselAvailabilityPortConstraintTest {
 		final EList<Port> inaccessiblePorts = mock(EList.class);
 
 		// The constraint will need to be able to get vessel class' eContainer (the vessel owning it, in this case)
-		when(vc.eContainer()).thenReturn(vessel);
+//		when(vc.eContainer()).thenReturn(vessel);
 		// It will also need to know which feature in the vessel is containing vessel class (the start requirement)
-		when(vc.eContainingFeature()).thenReturn(FleetPackage.eINSTANCE.getVessel_Availability());
+//		when(vc.eContainingFeature()).thenReturn(FleetPackage.eINSTANCE.getVessel_Availability());
 		// the inaccessible port list will be queried whether it contains port A
 		when(inaccessiblePorts.contains(portA)).thenReturn(true);
 		// It will ask for the port's name

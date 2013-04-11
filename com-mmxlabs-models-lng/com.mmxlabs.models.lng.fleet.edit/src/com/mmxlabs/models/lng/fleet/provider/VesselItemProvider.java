@@ -69,7 +69,6 @@ public class VesselItemProvider
 
 			addVesselClassPropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
-			addStartHeelPropertyDescriptor(object);
 			addTimeCharterRatePropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
@@ -113,28 +112,6 @@ public class VesselItemProvider
 				 getString("_UI_Vessel_inaccessiblePorts_feature"),
 				 getString("_UI_Vessel_inaccessiblePorts_description"),
 				 FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Start Heel feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addStartHeelPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_startHeel_feature"),
-				 getString("_UI_Vessel_startHeel_description"),
-				 FleetPackage.Literals.VESSEL__START_HEEL,
 				 true,
 				 false,
 				 true,

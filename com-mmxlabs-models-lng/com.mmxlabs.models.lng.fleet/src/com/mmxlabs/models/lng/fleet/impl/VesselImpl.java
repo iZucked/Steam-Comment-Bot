@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.fleet.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -14,7 +13,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -31,7 +29,6 @@ import com.mmxlabs.models.lng.types.impl.AVesselImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
@@ -60,16 +57,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @ordered
 	 */
 	protected EList<APortSet> inaccessiblePorts;
-
-	/**
-	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStartHeel()
-	 * @generated
-	 * @ordered
-	 */
-	protected HeelOptions startHeel;
 
 	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
@@ -238,49 +225,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public HeelOptions getStartHeel() {
-		return startHeel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetStartHeel(HeelOptions newStartHeel, NotificationChain msgs) {
-		HeelOptions oldStartHeel = startHeel;
-		startHeel = newStartHeel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_HEEL, oldStartHeel, newStartHeel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setStartHeel(HeelOptions newStartHeel) {
-		if (newStartHeel != startHeel) {
-			NotificationChain msgs = null;
-			if (startHeel != null)
-				msgs = ((InternalEObject)startHeel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__START_HEEL, null, msgs);
-			if (newStartHeel != null)
-				msgs = ((InternalEObject)newStartHeel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL__START_HEEL, null, msgs);
-			msgs = basicSetStartHeel(newStartHeel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__START_HEEL, newStartHeel, newStartHeel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getTimeCharterRate() {
 		return timeCharterRate;
 	}
@@ -441,20 +385,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case FleetPackage.VESSEL__START_HEEL:
-				return basicSetStartHeel(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case FleetPackage.VESSEL__VESSEL_CLASS:
@@ -462,8 +392,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return basicGetVesselClass();
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
-			case FleetPackage.VESSEL__START_HEEL:
-				return getStartHeel();
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return getTimeCharterRate();
 			case FleetPackage.VESSEL__CAPACITY:
@@ -489,9 +417,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				getInaccessiblePorts().addAll((Collection<? extends APortSet>)newValue);
-				return;
-			case FleetPackage.VESSEL__START_HEEL:
-				setStartHeel((HeelOptions)newValue);
 				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				setTimeCharterRate((Integer)newValue);
@@ -520,9 +445,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				return;
-			case FleetPackage.VESSEL__START_HEEL:
-				setStartHeel((HeelOptions)null);
-				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				unsetTimeCharterRate();
 				return;
@@ -548,8 +470,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return vesselClass != null;
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
-			case FleetPackage.VESSEL__START_HEEL:
-				return startHeel != null;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return isSetTimeCharterRate();
 			case FleetPackage.VESSEL__CAPACITY:

@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
@@ -72,32 +71,6 @@ public interface Vessel extends AVessel {
 	 * @generated
 	 */
 	EList<APortSet> getInaccessiblePorts();
-
-	/**
-	 * Returns the value of the '<em><b>Start Heel</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Start Heel</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Start Heel</em>' containment reference.
-	 * @see #setStartHeel(HeelOptions)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_StartHeel()
-	 * @model containment="true" required="true"
-	 * @generated
-	 */
-	HeelOptions getStartHeel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Start Heel</em>' containment reference.
-	 * @see #getStartHeel()
-	 * @generated
-	 */
-	void setStartHeel(HeelOptions value);
 
 	/**
 	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.

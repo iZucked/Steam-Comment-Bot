@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -14,6 +15,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -33,6 +35,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndBy <em>End By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartHeel <em>Start Heel</em>}</li>
  * </ul>
  * </p>
  *
@@ -185,6 +188,17 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * @ordered
 	 */
 	protected Vessel vessel;
+
+	/**
+	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getStartHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected HeelOptions startHeel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -456,6 +470,66 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public HeelOptions getStartHeel() {
+		return startHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetStartHeel(HeelOptions newStartHeel, NotificationChain msgs) {
+		HeelOptions oldStartHeel = startHeel;
+		startHeel = newStartHeel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABILITY__START_HEEL, oldStartHeel, newStartHeel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setStartHeel(HeelOptions newStartHeel) {
+		if (newStartHeel != startHeel) {
+			NotificationChain msgs = null;
+			if (startHeel != null)
+				msgs = ((InternalEObject)startHeel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_AVAILABILITY__START_HEEL, null, msgs);
+			if (newStartHeel != null)
+				msgs = ((InternalEObject)newStartHeel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.VESSEL_AVAILABILITY__START_HEEL, null, msgs);
+			msgs = basicSetStartHeel(newStartHeel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABILITY__START_HEEL, newStartHeel, newStartHeel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
+				return basicSetStartHeel(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -477,6 +551,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
+			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
+				return getStartHeel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -513,6 +589,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)newValue);
 				return;
+			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
+				setStartHeel((HeelOptions)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -546,6 +625,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)null);
 				return;
+			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
+				setStartHeel((HeelOptions)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -572,6 +654,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 				return isSetEndBy();
 			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
 				return vessel != null;
+			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
+				return startHeel != null;
 		}
 		return super.eIsSet(featureID);
 	}

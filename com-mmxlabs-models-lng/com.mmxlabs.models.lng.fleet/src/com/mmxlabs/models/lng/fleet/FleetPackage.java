@@ -332,22 +332,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__START_HEEL = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
+	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
@@ -357,7 +348,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__CAPACITY = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -367,7 +358,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -376,7 +367,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 6;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1175,13 +1166,23 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_AVAILABILITY__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__START_HEEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1662,17 +1663,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVessel_InaccessiblePorts();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Start Heel</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getStartHeel()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EReference getVessel_StartHeel();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}'.
@@ -2287,6 +2277,18 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselAvailability_Vessel();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel <em>Start Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Start Heel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_StartHeel();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelConsumption <em>Fuel Consumption</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2541,14 +2543,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL__INACCESSIBLE_PORTS = eINSTANCE.getVessel_InaccessiblePorts();
-
-		/**
-		 * The meta object literal for the '<em><b>Start Heel</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL__START_HEEL = eINSTANCE.getVessel_StartHeel();
 
 		/**
 		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.
@@ -3020,6 +3014,15 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_AVAILABILITY__VESSEL = eINSTANCE.getVesselAvailability_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Heel</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__START_HEEL = eINSTANCE.getVesselAvailability_StartHeel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.

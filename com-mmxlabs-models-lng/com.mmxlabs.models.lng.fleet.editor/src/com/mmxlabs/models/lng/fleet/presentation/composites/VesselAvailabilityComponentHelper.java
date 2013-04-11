@@ -71,6 +71,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_endAfterEditor(detailComposite, topClass);
 		add_endByEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
+		add_startHeelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the startAt feature on VesselAvailability
@@ -128,5 +129,14 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__VESSEL));
+	}
+
+	/**
+	 * Create the editor for the startHeel feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_startHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__START_HEEL));
 	}
 }

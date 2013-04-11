@@ -25,6 +25,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel <em>Start Heel</em>}</li>
  * </ul>
  * </p>
  *
@@ -304,6 +305,34 @@ public interface VesselAvailability extends MMXObject {
 	 * @generated
 	 */
 	void setVessel(Vessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Start Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Start Heel</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Start Heel</em>' containment reference.
+	 * @see #setStartHeel(HeelOptions)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_StartHeel()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	HeelOptions getStartHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel <em>Start Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start Heel</em>' containment reference.
+	 * @see #getStartHeel()
+	 * @generated
+	 */
+	void setStartHeel(HeelOptions value);
 
 } // end of  VesselAvailability
 
