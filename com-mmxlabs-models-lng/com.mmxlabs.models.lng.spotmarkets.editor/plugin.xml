@@ -10,16 +10,6 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditorID"
-            name="%_UI_SpotMarketsEditor_label"
-            icon="icons/full/obj16/SpotMarketsModelFile.gif"
-            extensions="spotmarkets"
-            class="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditor"
-            contributorClass="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsActionBarContributor">
-      </editor>
-   </extension>
 
 	
 	<extension
