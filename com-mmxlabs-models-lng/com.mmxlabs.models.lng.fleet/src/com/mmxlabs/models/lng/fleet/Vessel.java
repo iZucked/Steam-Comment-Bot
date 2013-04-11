@@ -253,6 +253,7 @@ public interface Vessel extends AVessel {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
@@ -261,6 +262,7 @@ public interface Vessel extends AVessel {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
