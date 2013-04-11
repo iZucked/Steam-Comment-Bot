@@ -6,6 +6,9 @@ package com.mmxlabs.models.lng.types.impl;
 
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.lng.types.AVesselClass;
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
@@ -18,8 +21,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public abstract class AVesselClassImpl extends AVesselSetImpl implements
-		AVesselClass {
+public abstract class AVesselClassImpl extends AVesselSetImpl implements AVesselClass {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

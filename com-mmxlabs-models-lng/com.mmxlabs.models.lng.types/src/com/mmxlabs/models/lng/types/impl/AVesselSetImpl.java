@@ -7,6 +7,19 @@ package com.mmxlabs.models.lng.types.impl;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import com.mmxlabs.models.lng.types.AVessel;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -37,8 +50,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *
  * @generated
  */
-public abstract class AVesselSetImpl extends UUIDObjectImpl implements
-		AVesselSet {
+public abstract class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -107,8 +119,7 @@ public abstract class AVesselSetImpl extends UUIDObjectImpl implements
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.AVESSEL_SET__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.AVESSEL_SET__NAME, oldName, name));
 	}
 
 	/**
@@ -119,8 +130,7 @@ public abstract class AVesselSetImpl extends UUIDObjectImpl implements
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.AVESSEL_SET__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.AVESSEL_SET__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -199,8 +209,7 @@ public abstract class AVesselSetImpl extends UUIDObjectImpl implements
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.AVESSEL_SET__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.AVESSEL_SET__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}
@@ -254,8 +263,7 @@ public abstract class AVesselSetImpl extends UUIDObjectImpl implements
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments)
-			throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 		case TypesPackage.AVESSEL_SET___COLLECT__ELIST:
 			return collect((EList<AVesselSet>) arguments.get(0));

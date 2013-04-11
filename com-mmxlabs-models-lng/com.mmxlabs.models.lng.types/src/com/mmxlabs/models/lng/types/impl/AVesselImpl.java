@@ -7,6 +7,12 @@ package com.mmxlabs.models.lng.types.impl;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import java.lang.reflect.InvocationTargetException;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.lng.types.AVessel;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.util.EList;
@@ -51,8 +57,7 @@ public abstract class AVesselImpl extends AVesselSetImpl implements AVessel {
 			return org.eclipse.emf.common.util.ECollections.emptyEList();
 		} else {
 			marked.add(this);
-			return (EList<AVessel>) org.eclipse.emf.common.util.ECollections
-					.singletonEList((AVessel) this);
+			return (EList<AVessel>) org.eclipse.emf.common.util.ECollections.singletonEList((AVessel) this);
 		}
 
 	}
@@ -64,8 +69,7 @@ public abstract class AVesselImpl extends AVesselSetImpl implements AVessel {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments)
-			throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 		case TypesPackage.AVESSEL___COLLECT__ELIST:
 			return collect((EList<AVesselSet>) arguments.get(0));

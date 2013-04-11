@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.types;
 
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EObject;

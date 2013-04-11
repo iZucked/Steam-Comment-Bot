@@ -61,8 +61,7 @@ public interface TypesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl
-			.init();
+	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl.init();
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
@@ -82,15 +81,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int APORT_SET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_SET__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -128,51 +118,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int APORT_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_SET___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_SET___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_SET___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_SET___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_SET___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -240,15 +185,6 @@ public interface TypesPackage extends EPackage {
 	int APORT__EXTENSIONS = APORT_SET__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT__PROXIES = APORT_SET__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -284,51 +220,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int APORT_FEATURE_COUNT = APORT_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___MAKE_PROXIES = APORT_SET___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___RESOLVE_PROXIES__MAP = APORT_SET___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___RESTORE_PROXIES = APORT_SET___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___COLLECT_UUID_OBJECTS__MAP = APORT_SET___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___COLLECT_UUID_OBJECTS = APORT_SET___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -396,15 +287,6 @@ public interface TypesPackage extends EPackage {
 	int AROUTE__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -440,51 +322,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AROUTE_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -543,15 +380,6 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL_SET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_SET__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -587,51 +415,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AVESSEL_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_SET___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_SET___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_SET___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_SET___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_SET___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -699,15 +482,6 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL__EXTENSIONS = AVESSEL_SET__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL__PROXIES = AVESSEL_SET__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -743,51 +517,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AVESSEL_FEATURE_COUNT = AVESSEL_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___MAKE_PROXIES = AVESSEL_SET___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___RESOLVE_PROXIES__MAP = AVESSEL_SET___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___RESTORE_PROXIES = AVESSEL_SET___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___COLLECT_UUID_OBJECTS__MAP = AVESSEL_SET___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___COLLECT_UUID_OBJECTS = AVESSEL_SET___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -857,16 +586,6 @@ public interface TypesPackage extends EPackage {
 	int AFLEET_VESSEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -885,56 +604,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AFLEET_VESSEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -996,15 +665,6 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL_CLASS__EXTENSIONS = AVESSEL_SET__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS__PROXIES = AVESSEL_SET__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1040,51 +700,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AVESSEL_CLASS_FEATURE_COUNT = AVESSEL_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___MAKE_PROXIES = AVESSEL_SET___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___RESOLVE_PROXIES__MAP = AVESSEL_SET___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___RESTORE_PROXIES = AVESSEL_SET___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___COLLECT_UUID_OBJECTS__MAP = AVESSEL_SET___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___COLLECT_UUID_OBJECTS = AVESSEL_SET___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1152,15 +767,6 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL_EVENT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1196,51 +802,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AVESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1299,15 +860,6 @@ public interface TypesPackage extends EPackage {
 	int ACONTRACT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1343,51 +895,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1446,15 +953,6 @@ public interface TypesPackage extends EPackage {
 	int ALEGAL_ENTITY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1490,51 +988,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ALEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1593,15 +1046,6 @@ public interface TypesPackage extends EPackage {
 	int AINDEX__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1637,51 +1081,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AINDEX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1740,15 +1139,6 @@ public interface TypesPackage extends EPackage {
 	int ACARGO__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1784,51 +1174,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1887,15 +1232,6 @@ public interface TypesPackage extends EPackage {
 	int ASLOT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1931,51 +1267,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ASLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2071,15 +1362,6 @@ public interface TypesPackage extends EPackage {
 	int ABASE_FUEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2115,51 +1397,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ABASE_FUEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2218,15 +1455,6 @@ public interface TypesPackage extends EPackage {
 	int ASPOT_MARKET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2262,51 +1490,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ASPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2365,15 +1548,6 @@ public interface TypesPackage extends EPackage {
 	int AOPTIMISATION_SETTINGS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2409,51 +1583,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AOPTIMISATION_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2514,16 +1643,6 @@ public interface TypesPackage extends EPackage {
 	int APURCHASE_CONTRACT__EXTENSIONS = ACONTRACT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT__PROXIES = ACONTRACT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2562,56 +1681,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int APURCHASE_CONTRACT_FEATURE_COUNT = ACONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT___MAKE_PROXIES = ACONTRACT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT___RESOLVE_PROXIES__MAP = ACONTRACT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT___RESTORE_PROXIES = ACONTRACT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT___COLLECT_UUID_OBJECTS__MAP = ACONTRACT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT___COLLECT_UUID_OBJECTS = ACONTRACT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2675,16 +1744,6 @@ public interface TypesPackage extends EPackage {
 	int ASALES_CONTRACT__EXTENSIONS = ACONTRACT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT__PROXIES = ACONTRACT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2723,56 +1782,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ASALES_CONTRACT_FEATURE_COUNT = ACONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT___MAKE_PROXIES = ACONTRACT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT___RESOLVE_PROXIES__MAP = ACONTRACT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT___RESTORE_PROXIES = ACONTRACT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT___COLLECT_UUID_OBJECTS__MAP = ACONTRACT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT___COLLECT_UUID_OBJECTS = ACONTRACT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3088,16 +2097,6 @@ public interface TypesPackage extends EPackage {
 	int ALNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3116,57 +2115,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ALNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @ordered
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3782,8 +2730,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation APORT___COLLECT__ELIST = eINSTANCE
-				.getAPort__Collect__EList();
+		EOperation APORT___COLLECT__ELIST = eINSTANCE.getAPort__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
@@ -3801,8 +2748,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE
-				.getAPortSet__Collect__EList();
+		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE.getAPortSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ARouteImpl <em>ARoute</em>}' class.
@@ -3830,8 +2776,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE
-				.getAVessel__Collect__EList();
+		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE.getAVessel__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
@@ -3930,8 +2875,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE
-				.getAVesselSet__Collect__EList();
+		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE.getAVesselSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}' class.
@@ -3949,8 +2893,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE
-				.getITimezoneProvider__GetTimeZone__EAttribute();
+		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ABaseFuelImpl <em>ABase Fuel</em>}' class.
@@ -4058,8 +3001,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute EXTRA_DATA__FORMAT_TYPE = eINSTANCE
-				.getExtraData_FormatType();
+		EAttribute EXTRA_DATA__FORMAT_TYPE = eINSTANCE.getExtraData_FormatType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Value As</b></em>' operation.
@@ -4068,8 +3010,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA___GET_VALUE_AS__CLASS = eINSTANCE
-				.getExtraData__GetValueAs__Class();
+		EOperation EXTRA_DATA___GET_VALUE_AS__CLASS = eINSTANCE.getExtraData__GetValueAs__Class();
 
 		/**
 		 * The meta object literal for the '<em><b>Format Value</b></em>' operation.
@@ -4078,8 +3019,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA___FORMAT_VALUE = eINSTANCE
-				.getExtraData__FormatValue();
+		EOperation EXTRA_DATA___FORMAT_VALUE = eINSTANCE.getExtraData__FormatValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl <em>Extra Data Container</em>}' class.
@@ -4099,8 +3039,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EXTRA_DATA_CONTAINER__EXTRA_DATA = eINSTANCE
-				.getExtraDataContainer_ExtraData();
+		EReference EXTRA_DATA_CONTAINER__EXTRA_DATA = eINSTANCE.getExtraDataContainer_ExtraData();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Data With Path</b></em>' operation.
@@ -4109,8 +3048,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE = eINSTANCE
-				.getExtraDataContainer__GetDataWithPath__Iterable();
+		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE = eINSTANCE.getExtraDataContainer__GetDataWithPath__Iterable();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Data With Key</b></em>' operation.
@@ -4119,8 +3057,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = eINSTANCE
-				.getExtraDataContainer__GetDataWithKey__String();
+		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = eINSTANCE.getExtraDataContainer__GetDataWithKey__String();
 
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
@@ -4129,8 +3066,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = eINSTANCE
-				.getExtraDataContainer__AddExtraData__String_String();
+		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = eINSTANCE.getExtraDataContainer__AddExtraData__String_String();
 
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
@@ -4149,8 +3085,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE
-				.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
+		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl <em>ALNG Price Calculator Parameters</em>}' class.
@@ -4161,8 +3096,7 @@ public interface TypesPackage extends EPackage {
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALNGPriceCalculatorParameters()
 		 * @generated
 		 */
-		EClass ALNG_PRICE_CALCULATOR_PARAMETERS = eINSTANCE
-				.getALNGPriceCalculatorParameters();
+		EClass ALNG_PRICE_CALCULATOR_PARAMETERS = eINSTANCE.getALNGPriceCalculatorParameters();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.

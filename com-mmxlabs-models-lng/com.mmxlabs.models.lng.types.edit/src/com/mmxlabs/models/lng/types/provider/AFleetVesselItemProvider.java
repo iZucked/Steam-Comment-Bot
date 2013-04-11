@@ -4,24 +4,20 @@
  */
 package com.mmxlabs.models.lng.types.provider;
 
-import com.mmxlabs.models.lng.types.AFleetVessel;
-
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+
+import com.mmxlabs.models.lng.types.AFleetVessel;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.types.AFleetVessel} object.
@@ -30,9 +26,8 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -67,8 +62,7 @@ public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements
 	@Override
 	public String getText(Object object) {
 		String label = ((AFleetVessel) object).getUuid();
-		return label == null || label.length() == 0 ? getString("_UI_AFleetVessel_type")
-				: getString("_UI_AFleetVessel_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_AFleetVessel_type") : getString("_UI_AFleetVessel_type") + " " + label;
 	}
 
 	/**
@@ -92,20 +86,8 @@ public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return LNGTypesEditPlugin.INSTANCE;
 	}
 
 }

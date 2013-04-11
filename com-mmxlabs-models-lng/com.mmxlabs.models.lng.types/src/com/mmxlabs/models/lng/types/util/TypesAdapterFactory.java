@@ -178,8 +178,7 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseALNGPriceCalculatorParameters(
-				ALNGPriceCalculatorParameters object) {
+		public Adapter caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
 			return createALNGPriceCalculatorParametersAdapter();
 		}
 

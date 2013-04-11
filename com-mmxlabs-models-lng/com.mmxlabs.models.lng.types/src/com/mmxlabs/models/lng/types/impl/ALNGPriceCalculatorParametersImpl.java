@@ -6,6 +6,10 @@ package com.mmxlabs.models.lng.types.impl;
 
 import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -29,8 +33,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public abstract class ALNGPriceCalculatorParametersImpl extends UUIDObjectImpl
-		implements ALNGPriceCalculatorParameters {
+public abstract class ALNGPriceCalculatorParametersImpl extends UUIDObjectImpl implements ALNGPriceCalculatorParameters {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

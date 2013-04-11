@@ -4,6 +4,15 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;

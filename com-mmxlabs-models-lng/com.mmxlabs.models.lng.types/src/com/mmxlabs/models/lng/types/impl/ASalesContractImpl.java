@@ -6,6 +6,9 @@ package com.mmxlabs.models.lng.types.impl;
 
 import com.mmxlabs.models.lng.types.ASalesContract;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.lng.types.ASalesContract;
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
@@ -19,8 +22,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public abstract class ASalesContractImpl extends AContractImpl implements
-		ASalesContract {
+public abstract class ASalesContractImpl extends AContractImpl implements ASalesContract {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

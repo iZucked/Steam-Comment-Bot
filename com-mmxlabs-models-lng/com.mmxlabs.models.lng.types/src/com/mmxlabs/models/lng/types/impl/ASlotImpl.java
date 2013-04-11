@@ -4,6 +4,17 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import com.mmxlabs.models.lng.types.ASlot;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -100,8 +111,7 @@ public abstract class ASlotImpl extends UUIDObjectImpl implements ASlot {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.ASLOT__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.ASLOT__NAME, oldName, name));
 	}
 
 	/**
@@ -112,8 +122,7 @@ public abstract class ASlotImpl extends UUIDObjectImpl implements ASlot {
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.ASLOT__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.ASLOT__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -181,8 +190,7 @@ public abstract class ASlotImpl extends UUIDObjectImpl implements ASlot {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.ASLOT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.ASLOT__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}

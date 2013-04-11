@@ -99,8 +99,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final CargoDeliveryType[] VALUES_ARRAY = new CargoDeliveryType[] {
-			ANY, SHIPPED, DELIVERED, };
+	private static final CargoDeliveryType[] VALUES_ARRAY = new CargoDeliveryType[] { ANY, SHIPPED, DELIVERED, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Cargo Delivery Type</b></em>' enumerators.
@@ -108,8 +107,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<CargoDeliveryType> VALUES = Collections
-			.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<CargoDeliveryType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
 	 * Returns the '<em><b>Cargo Delivery Type</b></em>' literal with the specified literal value.

@@ -6,6 +6,17 @@ package com.mmxlabs.models.lng.types.impl;
 
 import com.mmxlabs.models.lng.types.ABaseFuel;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import com.mmxlabs.models.lng.types.ABaseFuel;
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -104,8 +115,7 @@ public abstract class ABaseFuelImpl extends UUIDObjectImpl implements ABaseFuel 
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.ABASE_FUEL__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.ABASE_FUEL__NAME, oldName, name));
 	}
 
 	/**
@@ -116,8 +126,7 @@ public abstract class ABaseFuelImpl extends UUIDObjectImpl implements ABaseFuel 
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.ABASE_FUEL__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.ABASE_FUEL__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -185,8 +194,7 @@ public abstract class ABaseFuelImpl extends UUIDObjectImpl implements ABaseFuel 
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.ABASE_FUEL__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.ABASE_FUEL__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}

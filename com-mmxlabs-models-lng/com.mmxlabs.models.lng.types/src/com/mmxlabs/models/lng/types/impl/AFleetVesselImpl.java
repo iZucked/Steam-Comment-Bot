@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import com.mmxlabs.models.lng.types.AFleetVessel;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.types.AFleetVessel;
@@ -20,8 +24,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *
  * @generated
  */
-public abstract class AFleetVesselImpl extends UUIDObjectImpl implements
-		AFleetVessel {
+public abstract class AFleetVesselImpl extends UUIDObjectImpl implements AFleetVessel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -4,21 +4,11 @@
  */
 package com.mmxlabs.models.lng.types.provider;
 
-import com.mmxlabs.models.lng.types.ABaseFuel;
-import com.mmxlabs.models.lng.types.TypesPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -29,15 +19,19 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.models.lng.types.ABaseFuel;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
+
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.types.ABaseFuel} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -75,18 +69,9 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(
-						((ComposeableAdapterFactory) adapterFactory)
-								.getRootAdapterFactory(),
-						getResourceLocator(),
-						getString("_UI_NamedObject_name_feature"),
-						getString("_UI_PropertyDescriptor_description",
-								"_UI_NamedObject_name_feature",
-								"_UI_NamedObject_type"),
-						MMXCorePackage.Literals.NAMED_OBJECT__NAME, true,
-						false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_NamedObject_name_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"), MMXCorePackage.Literals.NAMED_OBJECT__NAME, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -97,29 +82,9 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	 * @generated
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_NamedObject_otherNames_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_NamedObject_otherNames_feature",
-						"_UI_NamedObject_type"),
-				MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES, true, false,
-				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-	}
-
-	/**
-	 * This returns ABaseFuel.gif.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/ABaseFuel"));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_NamedObject_otherNames_feature"), getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
+				MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -132,8 +97,7 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	@Override
 	public String getText(Object object) {
 		String label = ((ABaseFuel) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ABaseFuel_type")
-				: getString("_UI_ABaseFuel_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_ABaseFuel_type") : getString("_UI_ABaseFuel_type") + " " + label;
 	}
 
 	/**
@@ -150,8 +114,7 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 		switch (notification.getFeatureID(ABaseFuel.class)) {
 		case TypesPackage.ABASE_FUEL__NAME:
 		case TypesPackage.ABASE_FUEL__OTHER_NAMES:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), false, true));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -165,20 +128,8 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return LNGTypesEditPlugin.INSTANCE;
 	}
 
 }

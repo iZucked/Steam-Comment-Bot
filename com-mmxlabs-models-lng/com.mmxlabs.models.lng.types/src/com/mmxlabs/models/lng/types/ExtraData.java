@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.types;
 
 import java.io.Serializable;
+import java.io.Serializable;
 
 /**
  * <!-- begin-user-doc -->

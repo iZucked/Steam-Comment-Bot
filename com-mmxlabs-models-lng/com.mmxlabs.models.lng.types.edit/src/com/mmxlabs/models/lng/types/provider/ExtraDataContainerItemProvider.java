@@ -4,20 +4,14 @@
  */
 package com.mmxlabs.models.lng.types.provider;
 
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.TypesFactory;
-import com.mmxlabs.models.lng.types.TypesPackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -27,6 +21,10 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.TypesFactory;
+import com.mmxlabs.models.lng.types.TypesPackage;
+
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.types.ExtraDataContainer} object.
  * <!-- begin-user-doc -->
@@ -34,9 +32,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ExtraDataContainerItemProvider extends ItemProviderAdapter
-		implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ExtraDataContainerItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -71,12 +68,10 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(
-			Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures
-					.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
+			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 		}
 		return childrenFeatures;
 	}
@@ -102,8 +97,7 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/ExtraDataContainer"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ExtraDataContainer"));
 	}
 
 	/**
@@ -130,8 +124,7 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter
 
 		switch (notification.getFeatureID(ExtraDataContainer.class)) {
 		case TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), true, false));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -145,13 +138,10 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(
-				TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA,
-				TypesFactory.eINSTANCE.createExtraData()));
+		newChildDescriptors.add(createChildParameter(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA, TypesFactory.eINSTANCE.createExtraData()));
 	}
 
 	/**
@@ -162,7 +152,7 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return LNGTypesEditPlugin.INSTANCE;
+		return ((IChildCreationExtender) adapterFactory).getResourceLocator();
 	}
 
 }

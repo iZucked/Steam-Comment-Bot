@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.types;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

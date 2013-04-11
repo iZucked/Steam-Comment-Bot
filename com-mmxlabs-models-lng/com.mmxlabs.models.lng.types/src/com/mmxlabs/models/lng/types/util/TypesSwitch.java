@@ -685,8 +685,7 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseALNGPriceCalculatorParameters(
-			ALNGPriceCalculatorParameters object) {
+	public T caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
 		return null;
 	}
 

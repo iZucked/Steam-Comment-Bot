@@ -4,15 +4,11 @@
  */
 package com.mmxlabs.models.lng.types.provider;
 
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.TypesPackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -23,6 +19,9 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.TypesPackage;
+
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.types.ExtraData} object.
  * <!-- begin-user-doc -->
@@ -30,9 +29,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
-		implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ExtraDataItemProvider extends ExtraDataContainerItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -70,14 +68,8 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	 * @generated
 	 */
 	protected void addKeyPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ExtraData_key_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ExtraData_key_feature", "_UI_ExtraData_type"),
-				TypesPackage.Literals.EXTRA_DATA__KEY, true, false, false,
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ExtraData_key_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_ExtraData_key_feature", "_UI_ExtraData_type"), TypesPackage.Literals.EXTRA_DATA__KEY, true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -88,14 +80,8 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ExtraData_name_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ExtraData_name_feature", "_UI_ExtraData_type"),
-				TypesPackage.Literals.EXTRA_DATA__NAME, true, false, false,
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ExtraData_name_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_ExtraData_name_feature", "_UI_ExtraData_type"), TypesPackage.Literals.EXTRA_DATA__NAME, true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -106,14 +92,8 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	 * @generated
 	 */
 	protected void addValuePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ExtraData_value_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ExtraData_value_feature", "_UI_ExtraData_type"),
-				TypesPackage.Literals.EXTRA_DATA__VALUE, true, false, false,
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ExtraData_value_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_ExtraData_value_feature", "_UI_ExtraData_type"), TypesPackage.Literals.EXTRA_DATA__VALUE, true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -124,14 +104,8 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	 * @generated
 	 */
 	protected void addFormatPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ExtraData_format_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ExtraData_format_feature", "_UI_ExtraData_type"),
-				TypesPackage.Literals.EXTRA_DATA__FORMAT, true, false, false,
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ExtraData_format_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_ExtraData_format_feature", "_UI_ExtraData_type"), TypesPackage.Literals.EXTRA_DATA__FORMAT, true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -142,16 +116,9 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	 * @generated
 	 */
 	protected void addFormatTypePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ExtraData_formatType_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ExtraData_formatType_feature",
-						"_UI_ExtraData_type"),
-				TypesPackage.Literals.EXTRA_DATA__FORMAT_TYPE, true, false,
-				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ExtraData_formatType_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ExtraData_formatType_feature", "_UI_ExtraData_type"),
+				TypesPackage.Literals.EXTRA_DATA__FORMAT_TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -162,8 +129,7 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/ExtraData"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ExtraData"));
 	}
 
 	/**
@@ -175,8 +141,7 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	@Override
 	public String getText(Object object) {
 		String label = ((ExtraData) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ExtraData_type")
-				: getString("_UI_ExtraData_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_ExtraData_type") : getString("_UI_ExtraData_type") + " " + label;
 	}
 
 	/**
@@ -196,8 +161,7 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 		case TypesPackage.EXTRA_DATA__VALUE:
 		case TypesPackage.EXTRA_DATA__FORMAT:
 		case TypesPackage.EXTRA_DATA__FORMAT_TYPE:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), false, true));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -211,8 +175,7 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
