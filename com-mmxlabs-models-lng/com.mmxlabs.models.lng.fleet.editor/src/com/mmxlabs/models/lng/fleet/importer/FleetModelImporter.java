@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -59,7 +60,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 	private IClassImporter baseFuelImporter;
 	private IClassImporter groupImporter;
 
-	private FuelCurveImporter fuelCurveImporter = new FuelCurveImporter();
+	private final FuelCurveImporter fuelCurveImporter = new FuelCurveImporter();
 
 	private static final Map<String, String> inputs = new HashMap<String, String>();
 	static {
@@ -104,6 +105,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 	@Override
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
+		fleetModel.setScenarioFleetModel(FleetFactory.eINSTANCE.createScenarioFleetModel());
 
 		if (inputs.containsKey(VESSELS_KEY))
 			fleetModel.getVessels().addAll((Collection<? extends Vessel>) vesselImporter.importObjects(FleetPackage.eINSTANCE.getVessel(), inputs.get(VESSELS_KEY), context));
@@ -165,7 +167,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(MMXRootObject root, UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
 		final FleetModel fleetModel = (FleetModel) model;
 		output.put(VESSELS_KEY, vesselImporter.exportObjects(fleetModel.getVessels(), root));
 		output.put(VESSEL_AVAILABILITY_KEY, vesselAvailabilityImporter.exportObjects(fleetModel.getScenarioFleetModel().getVesselAvailabilities(), root));
