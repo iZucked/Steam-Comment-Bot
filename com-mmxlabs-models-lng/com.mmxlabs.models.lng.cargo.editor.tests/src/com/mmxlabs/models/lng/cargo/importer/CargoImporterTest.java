@@ -83,7 +83,7 @@ public class CargoImporterTest {
 			row.put("name", "");
 
 			row.put("dischargeslot.kind", "DischargeSlot");
-			row.put("dischargeslot." + MMXCorePackage.eINSTANCE.getNamedObject_Name().getName().toLowerCase(), "DischrgeSlot1");
+			row.put("dischargeslot." + MMXCorePackage.eINSTANCE.getNamedObject_Name().getName().toLowerCase(), "DischargeSlot1");
 			row.put("dischargeslot." + MMXCorePackage.eINSTANCE.getUUIDObject_Uuid().getName().toLowerCase(), "UUID");
 			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_Contract().getName().toLowerCase(), "ContractName");
 			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_Duration().getName().toLowerCase(), "42");
