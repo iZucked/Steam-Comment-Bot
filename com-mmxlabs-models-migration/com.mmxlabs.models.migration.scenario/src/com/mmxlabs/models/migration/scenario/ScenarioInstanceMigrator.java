@@ -12,13 +12,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.annotation.NonNull;
@@ -26,9 +30,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
-import com.mmxlabs.models.mmxcore.util.MMXCoreBinaryResourceFactoryImpl;
-import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
-import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -56,38 +57,32 @@ public class ScenarioInstanceMigrator {
 		assert context != null;
 
 		final int latestVersion = migrationRegistry.getLatestContextVersion(context);
-		 int scenarioVersion = scenarioInstance.getScenarioVersion();
-		final EList<String> subModelURIs = scenarioInstance.getSubModelURIs();
+		int scenarioVersion = scenarioInstance.getScenarioVersion();
+		final String subModelURI = scenarioInstance.getRootObjectURI();
 
 		final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
 		// Get original URI's as a list
-		final List<URI> uris = new ArrayList<URI>();
-		for (final String uriStr : subModelURIs) {
-			final URI uri = scenarioService.resolveURI(uriStr);
-			uris.add(uri);
-		}
+		final URI originalURI = scenarioService.resolveURI(subModelURI);
 
 		final List<File> tmpFiles = new ArrayList<File>();
 		try {
 			// Copy data files for manipulation
 			final List<URI> tmpURIs = new ArrayList<URI>();
-			for (final URI uri : uris) {
-				assert uri != null;
+			{
+				assert originalURI != null;
 				final File f = File.createTempFile("migration", ".xmi");
 				// Create a temp file and generate a URI to it to pass into migration code.
 				final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
 				assert tmpURI != null;
-				copyURIData(uc, uri, tmpURI);
+				copyURIData(uc, originalURI, tmpURI);
 
 				// Store the URI
 				tmpURIs.add(tmpURI);
 				// Add a mapping between the original URI and the temp URI. This should permit internal references to resolve to the new data file.
 				// TODO: Check to see whether or not the URI is the original URI or the "resolved" uri.
-				uc.getURIMap().put(uri, tmpURI);
+				uc.getURIMap().put(originalURI, tmpURI);
 			}
-
-			assert tmpURIs.size() == uris.size();
 			if (scenarioVersion < 0) {
 				int lastReleaseVersion = migrationRegistry.getLastReleaseVersion(context);
 				scenarioVersion = lastReleaseVersion;
@@ -99,14 +94,16 @@ public class ScenarioInstanceMigrator {
 			{
 				// Construct a normal resource set. This will use the global package registry etc
 				final ResourceSetImpl resourceSet = new ResourceSetImpl();
-				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new MMXCoreResourceFactoryImpl());
-				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmb", new MMXCoreBinaryResourceFactoryImpl());
 				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
+				Map<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 				try {
 					// Create a sample instance object
 					for (final URI uri : tmpURIs) {
 						final Resource r = resourceSet.createResource(uri);
+						if (r instanceof ResourceImpl) {
+							((ResourceImpl) r).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
+						}
 						r.load(null);
 						final Object submodel = r.getContents().get(0);
 						if (submodel == null) {
@@ -114,44 +111,19 @@ public class ScenarioInstanceMigrator {
 						}
 					}
 
-					// Attempt to resolve inter-model references.
-					MMXCoreHandlerUtil.restoreProxiesForResources(resourceSet.getResources());
 				} catch (final Exception e) {
 					throw new RuntimeException("Error loading migrated scenario. Aborting", e);
 				}
 			}
 
 			// Copy back over original data
-			for (int i = 0; i < uris.size(); ++i) {
-				final URI tmpURI = tmpURIs.get(i);
+			{
+				final URI tmpURI = tmpURIs.get(0);
 				assert tmpURI != null;
-				final URI uri = uris.get(i);
+				final URI uri = originalURI;
 				assert uri != null;
 				// Use a new URI Convertor otherwise the previous map will cause source == dest!
 				copyURIData(new ExtensibleURIConverterImpl(), tmpURI, uri);
-			}
-
-			// For new URI's added to the collection, we need to add them to the scenario model
-			if (tmpURIs.size() > uris.size()) {
-				for (int i = uris.size(); i < tmpURIs.size(); ++i) {
-					final URI tmpURI = tmpURIs.get(i);
-					assert tmpURI != null;
-
-					// Construct new URI for model store - here we are using knowledge of how uri's are constructed. We should really create some API around this in scenario service.
-					final String newURIStr = "./" + scenarioInstance.getUuid() + "-" + i + ".xmi";
-					// Copy data into the new data file
-					URI destURI = scenarioService.resolveURI(newURIStr);
-
-					if (destURI.isRelative()) {
-						final File f = File.createTempFile("migration", ".xmi");
-						destURI = URI.createFileURI(f.getCanonicalPath());
-					}
-					assert destURI != null;
-					copyURIData(new ExtensibleURIConverterImpl(), tmpURI, destURI);
-
-					// Add submodel URI to the model def
-					scenarioInstance.getSubModelURIs().add(destURI.toString());
-				}
 			}
 
 			scenarioInstance.setScenarioVersion(migratedVersion);
