@@ -34,12 +34,17 @@ public class CSVReader implements Closeable {
 	private final Map<String, String> originalHeaderLine = new HashMap<String, String>();
 
 	private final Set<String> unusedHeaders = new HashSet<String>();
+	
+	private final char separator;
 
+	public CSVReader(final File file) throws IOException {
+		this(file, ',');
+	}
 	/**
 	 * @since 2.0
 	 */
-	public CSVReader(final File file) throws IOException {
-		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString());
+	public CSVReader(final File file, char separator) throws IOException {
+		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString(), separator);
 	}
 
 	/**
@@ -47,7 +52,8 @@ public class CSVReader implements Closeable {
 	 * @throws IOException
 	 * @since 2.0
 	 */
-	public CSVReader(final String base, final String inputFileName) throws IOException {
+	public CSVReader(final String base, final String inputFileName, char separator) throws IOException {
+		this.separator = separator;
 		this.base = base;
 		filename = inputFileName;
 		reader = new BufferedReader(new InputStreamReader(new URL(filename).openStream()));
@@ -64,7 +70,7 @@ public class CSVReader implements Closeable {
 	}
 
 	public CSVReader getAdjacentReader(final String pathFragment) throws IOException {
-		return new CSVReader(base, base + File.separator + pathFragment);
+		return new CSVReader(base, base + File.separator + pathFragment, separator);
 	}
 
 	public String getCasedColumnName(final String lowerCaseName) {
@@ -84,7 +90,7 @@ public class CSVReader implements Closeable {
 			final char c = line.charAt(i);
 			switch (state) {
 			case NORMAL:
-				if (c == ',') {
+				if (c == separator) {
 					fields.add(temp.toString().trim());
 					temp = new StringBuffer();
 				} else if (c == '"') {
@@ -105,7 +111,7 @@ public class CSVReader implements Closeable {
 					temp.append(c);
 				} else {
 					state = State.NORMAL;
-					if (c == ',') {
+					if (c == separator) {
 						fields.add(temp.toString().trim());
 						temp = new StringBuffer();
 					}
