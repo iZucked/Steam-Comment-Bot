@@ -398,7 +398,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
-		return !(feature == MMXCorePackage.eINSTANCE.getMMXObject_Extensions() || feature == MMXCorePackage.eINSTANCE.getMMXObject_Proxies());
+		return !(feature == MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 	}
 
 	protected boolean shouldFlattenReference(final EReference reference) {
