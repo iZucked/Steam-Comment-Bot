@@ -26,7 +26,7 @@ All rights reserved.
 
    <requires>
       <import feature="com.mmxlabs.models.lng.feature" version="3.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.scenario.service.feature" version="4.0.0" match="compatible"/>
    </requires>
 
    <plugin
