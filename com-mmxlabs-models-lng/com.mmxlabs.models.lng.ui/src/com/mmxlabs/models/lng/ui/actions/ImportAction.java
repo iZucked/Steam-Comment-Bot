@@ -55,22 +55,33 @@ public abstract class ImportAction extends LockableAction {
 
 	@Override
 	public void run() {
+		// import the data
+		final DefaultImportContext context = safelyImport();
+		
+		// if there were any problems, pop up a problem dialog 
+		if (context != null && context.getProblems().isEmpty() == false) {
+			final ImportProblemDialog ipd = new ImportProblemDialog(part.getShell());
+			ipd.open(context);
+		}
+	}
+	
+	protected DefaultImportContext safelyImport() {
+		DefaultImportContext context = null;
 		try {
 			part.setDisableCommandProviders(true);
 			part.setDisableUpdates(true);
-			final DefaultImportContext context = new DefaultImportContext();
+			context = new DefaultImportContext();
 			context.setRootObject(part.getRootObject());
 			context.registerNamedObjectsFromSubModels();
 			
 			doImportStages(context);
-			if (context.getProblems().isEmpty() == false) {
-				final ImportProblemDialog ipd = new ImportProblemDialog(part.getShell());
-				ipd.open(context);
-			}
+
 		} finally {
 			part.setDisableCommandProviders(false);
 			part.setDisableUpdates(false);
-		}
+		}		
+		
+		return context;
 	}
 
 	/**
