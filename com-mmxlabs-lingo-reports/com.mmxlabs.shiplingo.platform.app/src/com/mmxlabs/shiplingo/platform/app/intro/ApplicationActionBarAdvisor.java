@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
@@ -50,6 +51,11 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 @SuppressWarnings("restriction")
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
+	public static final String DATA_MESSAGE = "Data";
+	public static final String M_DATA = "data";
+	public static final String DATA_START = "dataStart";
+	public static final String DATA_END = "dataEnd";	
+	
 	private final IWorkbenchWindow window;
 
 	// generic actions
@@ -404,11 +410,20 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void fillMenuBar(final IMenuManager menuBar) {
 		menuBar.add(createFileMenu());
 		menuBar.add(createEditMenu());
+		menuBar.add(createDataMenu());
 		// menuBar.add(createNavigateMenu());
 		// menuBar.add(createProjectMenu());
 		menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		menuBar.add(createWindowMenu());
 		menuBar.add(createHelpMenu());
+	}
+
+	private MenuManager createDataMenu() {
+		final MenuManager menu = new MenuManager(DATA_MESSAGE, M_DATA);
+		menu.add(new GroupMarker(DATA_START));
+		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		menu.add(new GroupMarker(DATA_END));
+		return menu;
 	}
 
 	/**
