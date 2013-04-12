@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.impl;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -15,6 +16,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -188,6 +191,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass capacityViolationsHolderEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass capacityMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum fuelUnitEEnum = null;
 
 	/**
@@ -203,6 +220,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EEnum sequenceTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum capacityViolationTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -331,17 +355,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSchedule_Complete() {
-		return (EAttribute)scheduleEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getSchedule_Sequences() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(1);
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -350,7 +365,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	public EReference getSchedule_CargoAllocations() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(2);
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -359,7 +374,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	public EReference getSchedule_SlotAllocations() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(3);
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -368,7 +383,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	public EReference getSchedule_Fitnesses() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(4);
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -377,7 +392,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	public EReference getSchedule_UnusedElements() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(5);
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1099,6 +1114,56 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCapacityViolationsHolder() {
+		return capacityViolationsHolderEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCapacityViolationsHolder_Violations() {
+		return (EReference)capacityViolationsHolderEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCapacityMapEntry() {
+		return capacityMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCapacityMapEntry_Key() {
+		return (EAttribute)capacityMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCapacityMapEntry_Value() {
+		return (EAttribute)capacityMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1123,6 +1188,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EEnum getSequenceType() {
 		return sequenceTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getCapacityViolationType() {
+		return capacityViolationTypeEEnum;
 	}
 
 	/**
@@ -1185,7 +1260,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(scheduleModelEClass, SCHEDULE_MODEL__DIRTY);
 
 		scheduleEClass = createEClass(SCHEDULE);
-		createEAttribute(scheduleEClass, SCHEDULE__COMPLETE);
 		createEReference(scheduleEClass, SCHEDULE__SEQUENCES);
 		createEReference(scheduleEClass, SCHEDULE__CARGO_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__SLOT_ALLOCATIONS);
@@ -1288,10 +1362,18 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		endEventEClass = createEClass(END_EVENT);
 		createEReference(endEventEClass, END_EVENT__SLOT_ALLOCATION);
 
+		capacityViolationsHolderEClass = createEClass(CAPACITY_VIOLATIONS_HOLDER);
+		createEReference(capacityViolationsHolderEClass, CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
+
+		capacityMapEntryEClass = createEClass(CAPACITY_MAP_ENTRY);
+		createEAttribute(capacityMapEntryEClass, CAPACITY_MAP_ENTRY__KEY);
+		createEAttribute(capacityMapEntryEClass, CAPACITY_MAP_ENTRY__VALUE);
+
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		fuelEEnum = createEEnum(FUEL);
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
+		capacityViolationTypeEEnum = createEEnum(CAPACITY_VIOLATION_TYPE);
 
 		// Create data types
 		calendarEDataType = createEDataType(CALENDAR);
@@ -1356,6 +1438,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		portVisitEClass.getESuperTypes().add(this.getEvent());
+		portVisitEClass.getESuperTypes().add(this.getCapacityViolationsHolder());
 		startEventEClass.getESuperTypes().add(this.getEvent());
 		startEventEClass.getESuperTypes().add(this.getFuelUsage());
 		startEventEClass.getESuperTypes().add(this.getPortVisit());
@@ -1364,6 +1447,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		endEventEClass.getESuperTypes().add(this.getFuelUsage());
 		endEventEClass.getESuperTypes().add(this.getPortVisit());
 		endEventEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
+		capacityViolationsHolderEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1371,7 +1455,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getScheduleModel_Dirty(), ecorePackage.getEBoolean(), "dirty", null, 1, 1, ScheduleModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scheduleEClass, Schedule.class, "Schedule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSchedule_Complete(), ecorePackage.getEBoolean(), "complete", null, 1, 1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_Sequences(), this.getSequence(), null, "sequences", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_CargoAllocations(), this.getCargoAllocation(), null, "cargoAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_SlotAllocations(), this.getSlotAllocation(), null, "slotAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1491,6 +1574,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(endEventEClass, EndEvent.class, "EndEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEndEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, EndEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(capacityViolationsHolderEClass, CapacityViolationsHolder.class, "CapacityViolationsHolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCapacityViolationsHolder_Violations(), this.getCapacityMapEntry(), null, "violations", null, 0, -1, CapacityViolationsHolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(capacityMapEntryEClass, Map.Entry.class, "CapacityMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCapacityMapEntry_Key(), this.getCapacityViolationType(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCapacityMapEntry_Value(), ecorePackage.getELongObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");
 		addEEnumLiteral(fuelUnitEEnum, FuelUnit.M3);
@@ -1509,6 +1599,14 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.DES_PURCHASE);
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.FOB_SALE);
 		addEEnumLiteral(sequenceTypeEEnum, SequenceType.CARGO_SHORTS);
+
+		initEEnum(capacityViolationTypeEEnum, CapacityViolationType.class, "CapacityViolationType");
+		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.MAX_LOAD);
+		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.MAX_DISCHARGE);
+		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.MIN_LOAD);
+		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.MIN_DISCHARGE);
+		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.MAX_HEEL);
+		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.FORCED_COOLDOWN);
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

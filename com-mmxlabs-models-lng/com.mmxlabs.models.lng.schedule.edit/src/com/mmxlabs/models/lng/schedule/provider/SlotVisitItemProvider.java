@@ -125,6 +125,7 @@ public class SlotVisitItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.FUEL_USAGE__FUELS);
+			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SLOT_VISIT__SLOT_ALLOCATION);
 		}
 		return childrenFeatures;
@@ -174,6 +175,7 @@ public class SlotVisitItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.SLOT_VISIT__FUELS:
+			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -195,6 +197,11 @@ public class SlotVisitItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.FUEL_USAGE__FUELS,
 				 ScheduleFactory.eINSTANCE.createFuelQuantity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS,
+				 ScheduleFactory.eINSTANCE.create(SchedulePackage.Literals.CAPACITY_MAP_ENTRY)));
 	}
 
 }

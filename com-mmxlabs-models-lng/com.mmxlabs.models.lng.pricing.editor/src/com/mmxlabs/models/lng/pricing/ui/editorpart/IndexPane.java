@@ -21,12 +21,15 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -55,6 +58,7 @@ import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.DialogFeatureManipulator;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 public class IndexPane extends ScenarioTableViewerPane {
 
@@ -97,6 +101,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 	@Override
 	protected Action createImportAction() {
 		return new SimpleImportAction(getJointModelEditorPart(), getScenarioViewer()) {
+			@Override
+			protected void doImportStages(final DefaultImportContext context) {
+				super.doImportStages(context);
+				
+				// ugly hack: indirectly force a trigger of the inputChanged method
+				// TODO: do this more cleanly and directly
+				Viewer viewer = IndexPane.this.getViewer();
+				viewer.setInput(viewer.getInput());
+			}
+
 			@Override
 			protected IClassImporter getImporter(final EReference containment) {
 				final IClassImporter result = super.getImporter(containment);
@@ -198,7 +212,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
+		ScenarioTableViewer result = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
@@ -232,6 +246,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 						}
 
 						if (minDate != null && maxDate != null) {
+							Grid grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+							int columnCount = grid.getColumnCount();
+							for (int i = columnCount - 1; i > 1; i--) {
+								GridColumn column = grid.getColumn(i);
+								column.dispose();
+							}
 							final Calendar c = Calendar.getInstance();
 							c.setTime(minDate);
 							c.set(Calendar.MILLISECOND, 0);
@@ -433,5 +453,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				});
 			}
 		};
+		return result;
 	}
+	
 }

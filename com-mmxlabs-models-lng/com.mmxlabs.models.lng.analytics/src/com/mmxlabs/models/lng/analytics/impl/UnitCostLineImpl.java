@@ -688,6 +688,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

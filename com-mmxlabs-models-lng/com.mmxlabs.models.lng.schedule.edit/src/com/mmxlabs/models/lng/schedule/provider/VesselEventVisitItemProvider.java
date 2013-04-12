@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
@@ -125,6 +126,7 @@ public class VesselEventVisitItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
 			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 			childrenFeatures.add(SchedulePackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT);
 		}
@@ -185,6 +187,7 @@ public class VesselEventVisitItemProvider
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
 			case SchedulePackage.VESSEL_EVENT_VISIT__EXTRA_DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -202,6 +205,11 @@ public class VesselEventVisitItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS,
+				 ScheduleFactory.eINSTANCE.create(SchedulePackage.Literals.CAPACITY_MAP_ENTRY)));
 
 		newChildDescriptors.add
 			(createChildParameter

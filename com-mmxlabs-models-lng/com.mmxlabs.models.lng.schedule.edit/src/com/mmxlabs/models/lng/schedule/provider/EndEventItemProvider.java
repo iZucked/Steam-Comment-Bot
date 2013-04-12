@@ -129,6 +129,7 @@ public class EndEventItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.FUEL_USAGE__FUELS);
+			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
 			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 		}
 		return childrenFeatures;
@@ -189,6 +190,7 @@ public class EndEventItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.END_EVENT__FUELS:
+			case SchedulePackage.END_EVENT__VIOLATIONS:
 			case SchedulePackage.END_EVENT__EXTRA_DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -211,6 +213,11 @@ public class EndEventItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.FUEL_USAGE__FUELS,
 				 ScheduleFactory.eINSTANCE.createFuelQuantity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS,
+				 ScheduleFactory.eINSTANCE.create(SchedulePackage.Literals.CAPACITY_MAP_ENTRY)));
 
 		newChildDescriptors.add
 			(createChildParameter

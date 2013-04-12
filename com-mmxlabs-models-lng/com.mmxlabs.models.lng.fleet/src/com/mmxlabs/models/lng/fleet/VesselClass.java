@@ -251,8 +251,12 @@ public interface VesselClass extends AVesselClass {
 	 * Returns the value of the '<em><b>Min Heel</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Min Heel</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * This value is the minimum quantity of LNG left in the tanks after 
+	 * travelling on NBO (in m3). If the quantity falls below this amount
+	 * while travelling, the boiloff system stops working and requires human
+	 * maintenance to restart. 
+	 * (For some reason), going below the minimum heel while idling on NBO 
+	 * is not problematic. 
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Min Heel</em>' attribute.

@@ -533,6 +533,54 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CapacityViolationsHolderItemProvider capacityViolationsHolderItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCapacityViolationsHolderAdapter() {
+		if (capacityViolationsHolderItemProvider == null) {
+			capacityViolationsHolderItemProvider = new CapacityViolationsHolderItemProvider(this);
+		}
+
+		return capacityViolationsHolderItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CapacityMapEntryItemProvider capacityMapEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCapacityMapEntryAdapter() {
+		if (capacityMapEntryItemProvider == null) {
+			capacityMapEntryItemProvider = new CapacityMapEntryItemProvider(this);
+		}
+
+		return capacityMapEntryItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -680,6 +728,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
 		if (startEventItemProvider != null) startEventItemProvider.dispose();
 		if (endEventItemProvider != null) endEventItemProvider.dispose();
+		if (capacityViolationsHolderItemProvider != null) capacityViolationsHolderItemProvider.dispose();
+		if (capacityMapEntryItemProvider != null) capacityMapEntryItemProvider.dispose();
 	}
 
 	/**

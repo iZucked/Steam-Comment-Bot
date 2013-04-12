@@ -196,6 +196,16 @@ public interface ScheduleFactory extends EFactory {
 	EndEvent createEndEvent();
 
 	/**
+	 * Returns a new object of class '<em>Capacity Violations Holder</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Capacity Violations Holder</em>'.
+	 * @generated
+	 */
+	CapacityViolationsHolder createCapacityViolationsHolder();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

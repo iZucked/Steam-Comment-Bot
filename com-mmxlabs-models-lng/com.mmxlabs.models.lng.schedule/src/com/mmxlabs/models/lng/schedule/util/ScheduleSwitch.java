@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -128,8 +129,9 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseFuelUsage(slotVisit);
 				if (result == null) result = casePortVisit(slotVisit);
 				if (result == null) result = caseEvent(slotVisit);
-				if (result == null) result = caseMMXObject(slotVisit);
 				if (result == null) result = caseITimezoneProvider(slotVisit);
+				if (result == null) result = caseCapacityViolationsHolder(slotVisit);
+				if (result == null) result = caseMMXObject(slotVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -139,8 +141,9 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = casePortVisit(vesselEventVisit);
 				if (result == null) result = caseExtraDataContainer(vesselEventVisit);
 				if (result == null) result = caseEvent(vesselEventVisit);
-				if (result == null) result = caseMMXObject(vesselEventVisit);
 				if (result == null) result = caseITimezoneProvider(vesselEventVisit);
+				if (result == null) result = caseCapacityViolationsHolder(vesselEventVisit);
+				if (result == null) result = caseMMXObject(vesselEventVisit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -229,6 +232,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				PortVisit portVisit = (PortVisit)theEObject;
 				T result = casePortVisit(portVisit);
 				if (result == null) result = caseEvent(portVisit);
+				if (result == null) result = caseCapacityViolationsHolder(portVisit);
 				if (result == null) result = caseMMXObject(portVisit);
 				if (result == null) result = caseITimezoneProvider(portVisit);
 				if (result == null) result = defaultCase(theEObject);
@@ -241,8 +245,9 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = casePortVisit(startEvent);
 				if (result == null) result = caseExtraDataContainer(startEvent);
 				if (result == null) result = caseEvent(startEvent);
-				if (result == null) result = caseMMXObject(startEvent);
 				if (result == null) result = caseITimezoneProvider(startEvent);
+				if (result == null) result = caseCapacityViolationsHolder(startEvent);
+				if (result == null) result = caseMMXObject(startEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -253,8 +258,22 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = casePortVisit(endEvent);
 				if (result == null) result = caseExtraDataContainer(endEvent);
 				if (result == null) result = caseEvent(endEvent);
-				if (result == null) result = caseMMXObject(endEvent);
 				if (result == null) result = caseITimezoneProvider(endEvent);
+				if (result == null) result = caseCapacityViolationsHolder(endEvent);
+				if (result == null) result = caseMMXObject(endEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.CAPACITY_VIOLATIONS_HOLDER: {
+				CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder)theEObject;
+				T result = caseCapacityViolationsHolder(capacityViolationsHolder);
+				if (result == null) result = caseMMXObject(capacityViolationsHolder);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.CAPACITY_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<CapacityViolationType, Long> capacityMapEntry = (Map.Entry<CapacityViolationType, Long>)theEObject;
+				T result = caseCapacityMapEntry(capacityMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -545,6 +564,38 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEndEvent(EndEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Capacity Violations Holder</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Capacity Violations Holder</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCapacityViolationsHolder(CapacityViolationsHolder object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Capacity Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Capacity Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCapacityMapEntry(Map.Entry<CapacityViolationType, Long> object) {
 		return null;
 	}
 

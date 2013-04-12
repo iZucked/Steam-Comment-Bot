@@ -7,6 +7,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * <!-- begin-user-doc -->

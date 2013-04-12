@@ -64,20 +64,11 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_completeEditor(detailComposite, topClass);
 		add_sequencesEditor(detailComposite, topClass);
 		add_cargoAllocationsEditor(detailComposite, topClass);
 		add_slotAllocationsEditor(detailComposite, topClass);
 		add_fitnessesEditor(detailComposite, topClass);
 		add_unusedElementsEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the complete feature on Schedule
-	 *
-	 * @generated
-	 */
-	protected void add_completeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__COMPLETE));
 	}
 	/**
 	 * Create the editor for the sequences feature on Schedule

@@ -11,6 +11,22 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import java.util.Collection;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -85,7 +101,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#isComplete <em>Complete</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSequences <em>Sequences</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
@@ -97,26 +112,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * @generated
  */
 public class ScheduleImpl extends MMXObjectImpl implements Schedule {
-	/**
-	 * The default value of the '{@link #isComplete() <em>Complete</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isComplete()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean COMPLETE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isComplete() <em>Complete</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isComplete()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean complete = COMPLETE_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getSequences() <em>Sequences</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -184,27 +179,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	@Override
 	protected EClass eStaticClass() {
 		return SchedulePackage.Literals.SCHEDULE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isComplete() {
-		return complete;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setComplete(boolean newComplete) {
-		boolean oldComplete = complete;
-		complete = newComplete;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE__COMPLETE, oldComplete, complete));
 	}
 
 	/**
@@ -295,8 +269,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE__COMPLETE:
-				return isComplete();
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				return getSequences();
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
@@ -320,9 +292,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE__COMPLETE:
-				setComplete((Boolean)newValue);
-				return;
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				getSequences().clear();
 				getSequences().addAll((Collection<? extends Sequence>)newValue);
@@ -355,9 +324,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE__COMPLETE:
-				setComplete(COMPLETE_EDEFAULT);
-				return;
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				getSequences().clear();
 				return;
@@ -385,8 +351,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE__COMPLETE:
-				return complete != COMPLETE_EDEFAULT;
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				return sequences != null && !sequences.isEmpty();
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
@@ -399,22 +363,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return unusedElements != null && !unusedElements.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (complete: ");
-		result.append(complete);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of ScheduleImpl

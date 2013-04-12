@@ -114,6 +114,11 @@ public interface PricingFactory extends EFactory {
 	CooldownPrice createCooldownPrice();
 
 	/**
+	 * @since 3.0
+	 * @since 3.0
+	 * @since 3.0
+	 * @since 3.0
+	 * @since 3.0
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

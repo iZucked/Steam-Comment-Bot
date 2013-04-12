@@ -43,6 +43,7 @@ public class PortVisitComponentHelper extends BaseComponentHelper {
 	public PortVisitComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER));
 	}
 	
 	/**

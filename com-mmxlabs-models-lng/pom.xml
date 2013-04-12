@@ -31,6 +31,8 @@
 		<module>com.mmxlabs.models.lng.cargo</module>
 		<module>com.mmxlabs.models.lng.cargo.edit</module>
 		<module>com.mmxlabs.models.lng.cargo.editor</module>
+
+
 		<module>com.mmxlabs.models.lng.cargo.validation</module>
 		<module>com.mmxlabs.models.lng.commercial</module>
 		<module>com.mmxlabs.models.lng.commercial.edit</module>
@@ -81,6 +83,7 @@
 		<module>com.mmxlabs.models.lng.feature</module>
 		<module>com.mmxlabs.models.lng.p2</module>
 
+		<module>com.mmxlabs.models.lng.cargo.editor.tests</module>
 	</modules>
 
 	<build>

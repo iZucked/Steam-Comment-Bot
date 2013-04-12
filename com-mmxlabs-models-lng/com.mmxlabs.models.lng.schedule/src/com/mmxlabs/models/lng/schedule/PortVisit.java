@@ -20,7 +20,7 @@ package com.mmxlabs.models.lng.schedule;
  * @model
  * @generated
  */
-public interface PortVisit extends Event {
+public interface PortVisit extends Event, CapacityViolationsHolder {
 	/**
 	 * Returns the value of the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
