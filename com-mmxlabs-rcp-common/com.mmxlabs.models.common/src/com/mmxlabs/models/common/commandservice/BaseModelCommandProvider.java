@@ -33,7 +33,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author hinton
  * 
  */
-public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandProvider<T> implements IModelCommandProvider {
+public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandProvider<T> {
 
 	/**
 	 * @since 2.0
