@@ -11,6 +11,5 @@
       <provide interface="com.mmxlabs.scenario.service.IScenarioService"/>
    </service>
    <property name="com.mmxlabs.scenario.service.file.model" type="String" value="/scenario-service/file-service-model.xmi"/>
-   <reference bind="setModelService" cardinality="1..1" interface="com.mmxlabs.model.service.IModelService" name="IModelService" policy="static"/>
    <reference bind="setScenarioMigrationService" cardinality="1..1" interface="com.mmxlabs.scenario.service.IScenarioMigrationService" name="IScenarioMigrationService" policy="static"/>
 </scr:component>

@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Scenario Fragment</b></em>'.
- * @since 3.1
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

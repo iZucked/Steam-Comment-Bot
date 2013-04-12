@@ -8,25 +8,23 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.mmxcore.util.MMXCoreBinaryResourceFactoryImpl;
-import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
-import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -89,54 +87,22 @@ public class ScenarioStorageUtil {
 	@SuppressWarnings("resource")
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new MMXCoreResourceFactoryImpl());
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmb", new MMXCoreBinaryResourceFactoryImpl());
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
-		manifest.setScenarioType(instance.getMetadata().getContentType());
-		manifest.setUUID(instance.getUuid());
-		manifest.setScenarioVersion(instance.getScenarioVersion());
-		manifest.setVersionContext(instance.getVersionContext());
-		final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/MANIFEST.xmi");
-		final Resource manifestResource = resourceSet.createResource(manifestURI);
 
-		manifestResource.getContents().add(manifest);
+		// Store data into scenario archive
+		{
+			final IScenarioService scenarioService = instance.getScenarioService();
+			final URI rootObjectURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/rootObject.xmi");
 
-		final IScenarioService scenarioService = instance.getScenarioService();
-		final List<String> partURIs = new ArrayList<String>();
+			final URIConverter conv = resourceSet.getURIConverter();
 
-		addURIs(partURIs, instance, scenarioService);
+			final URI u = scenarioService.resolveURI(instance.getRootObjectURI());
 
-		final URIConverter conv = resourceSet.getURIConverter();
-
-		// long l = System.currentTimeMillis();
-		//
-		// int index = 0;
-		// for (final String partURI : partURIs) {
-		// final URI u = URI.createURI(partURI);
-		// final Resource r = resourceSet.createResource(u);
-		// r.load(null);
-		// if (!r.getContents().isEmpty()) {
-		// final EObject top = r.getContents().get(0);
-		// final URI relativeURI = URI.createURI("/" + top.eClass().getName() + index++ + ".xmi");
-		// manifest.getModelURIs().add(relativeURI.toString());
-		// final URI resolved = relativeURI.resolve(manifestURI);
-		// final Resource r2 = resourceSet.createResource(resolved);
-		// r2.getContents().add(top);
-		// r2.save(null);
-		// }
-		// }
-
-		for (final String partURI : partURIs) {
-			final URI u = scenarioService.resolveURI(partURI);
-			final URI relativeURI = URI.createURI("/" + u.segment(u.segmentCount() - 1));
-			manifest.getModelURIs().add(relativeURI.toString());
-			final URI resolved = relativeURI.resolve(manifestURI);
 			OutputStream output = null;
 			InputStream input = null;
 			try {
 				input = conv.createInputStream(u);
-				output = conv.createOutputStream(resolved);
+				output = conv.createOutputStream(rootObjectURI);
 
 				ByteStreams.copy(input, output);
 				output.flush();
@@ -157,17 +123,23 @@ public class ScenarioStorageUtil {
 				}
 			}
 		}
-		// System.err.println("time: " + (System.currentTimeMillis() - l));
-		manifestResource.save(null);
-	}
 
-	private static void addURIs(final List<String> partURIs, final ScenarioInstance instance, final IScenarioService scenarioService) {
-		if (instance == null)
-			return;
-		partURIs.addAll(instance.getSubModelURIs());
-		for (final String depUUID : instance.getDependencyUUIDs()) {
-			addURIs(partURIs, scenarioService.getScenarioInstance(depUUID), scenarioService);
+		// Now store the metadata
+		{
+			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+			manifest.setScenarioType(instance.getMetadata().getContentType());
+			manifest.setUUID(instance.getUuid());
+			manifest.setScenarioVersion(instance.getScenarioVersion());
+			manifest.setVersionContext(instance.getVersionContext());
+			final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/MANIFEST.xmi");
+			final Resource manifestResource = resourceSet.createResource(manifestURI);
+
+			manifestResource.getContents().add(manifest);
+
+			manifest.getModelURIs().add("rootObject.xmi");
+			manifestResource.save(null);
 		}
+
 	}
 
 	/**
@@ -187,9 +159,12 @@ public class ScenarioStorageUtil {
 	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI, final boolean preLoad) {
 		final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new MMXCoreResourceFactoryImpl());
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmb", new MMXCoreBinaryResourceFactoryImpl());
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
+
+		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 
 		final Resource resource = resourceSet.createResource(manifestURI);
 		try {
@@ -216,22 +191,19 @@ public class ScenarioStorageUtil {
 						if (rel.isRelative()) {
 							rel = rel.resolve(manifestURI);
 						}
-						result.getSubModelURIs().add(rel.toString());
+						result.setRootObjectURI(rel.toString());
+						break;
 					}
-
-					result.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
 
 					if (preLoad) {
 						final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 						result.setInstance(implementation);
 
-						for (final String rel : result.getSubModelURIs()) {
-							final Resource r = resourceSet.createResource(URI.createURI(rel));
-							r.load(null);
-							implementation.addSubModel((UUIDObject) r.getContents().get(0));
+						final Resource r = resourceSet.createResource(URI.createURI(result.getRootObjectURI()));
+						if (r instanceof ResourceImpl) {
+							((ResourceImpl) r).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
 						}
-
-						MMXCoreHandlerUtil.restoreProxiesForResources(resourceSet.getResources());
+						r.load(null);
 					}
 
 					return result;

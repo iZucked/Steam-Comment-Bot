@@ -38,8 +38,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getInstance <em>Instance</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getAdapters <em>Adapters</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getSubModelURIs <em>Sub Model UR Is</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getRootObjectURI <em>Root Object URI</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getLocks <em>Locks</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
@@ -123,24 +122,26 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	protected Map<Class<?>, Object> adapters;
 
 	/**
-	 * The cached value of the '{@link #getSubModelURIs() <em>Sub Model UR Is</em>}' attribute list.
+	 * The default value of the '{@link #getRootObjectURI() <em>Root Object URI</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @see #getSubModelURIs()
+	 * @see #getRootObjectURI()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<String> subModelURIs;
+	protected static final String ROOT_OBJECT_URI_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getDependencyUUIDs() <em>Dependency UUI Ds</em>}' attribute list.
+	 * The cached value of the '{@link #getRootObjectURI() <em>Root Object URI</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @see #getDependencyUUIDs()
+	 * @see #getRootObjectURI()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<String> dependencyUUIDs;
+	protected String rootObjectURI = ROOT_OBJECT_URI_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
@@ -195,7 +196,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The default value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getScenarioVersion()
 	 * @generated
@@ -206,7 +207,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The cached value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getScenarioVersion()
 	 * @generated
@@ -217,7 +218,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The default value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getVersionContext()
 	 * @generated
@@ -228,7 +229,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The cached value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getVersionContext()
 	 * @generated
@@ -239,7 +240,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The cached value of the '{@link #getFragments() <em>Fragments</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getFragments()
 	 * @generated
@@ -415,31 +416,30 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<String> getSubModelURIs() {
-		if (subModelURIs == null) {
-			subModelURIs = new EDataTypeUniqueEList<String>(String.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS);
-		}
-		return subModelURIs;
+	public String getRootObjectURI() {
+		return rootObjectURI;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<String> getDependencyUUIDs() {
-		if (dependencyUUIDs == null) {
-			dependencyUUIDs = new EDataTypeUniqueEList<String>(String.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS);
-		}
-		return dependencyUUIDs;
+	public void setRootObjectURI(String newRootObjectURI) {
+		String oldRootObjectURI = rootObjectURI;
+		rootObjectURI = newRootObjectURI;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI, oldRootObjectURI, rootObjectURI));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -449,7 +449,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -462,7 +462,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -472,7 +472,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -485,7 +485,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -637,10 +637,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return basicGetInstance();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 			return getAdapters();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS:
-			return getSubModelURIs();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
-			return getDependencyUUIDs();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
+			return getRootObjectURI();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
 			return isDirty();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
@@ -681,13 +679,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 			setAdapters((Map<Class<?>, Object>) newValue);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS:
-			getSubModelURIs().clear();
-			getSubModelURIs().addAll((Collection<? extends String>) newValue);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
-			getDependencyUUIDs().clear();
-			getDependencyUUIDs().addAll((Collection<? extends String>) newValue);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
+			setRootObjectURI((String) newValue);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
 			setDirty((Boolean) newValue);
@@ -736,11 +729,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 			setAdapters((Map<Class<?>, Object>) null);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS:
-			getSubModelURIs().clear();
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
-			getDependencyUUIDs().clear();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
+			setRootObjectURI(ROOT_OBJECT_URI_EDEFAULT);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
 			setDirty(DIRTY_EDEFAULT);
@@ -782,10 +772,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return instance != null;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 			return adapters != null;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS:
-			return subModelURIs != null && !subModelURIs.isEmpty();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
-			return dependencyUUIDs != null && !dependencyUUIDs.isEmpty();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
+			return ROOT_OBJECT_URI_EDEFAULT == null ? rootObjectURI != null : !ROOT_OBJECT_URI_EDEFAULT.equals(rootObjectURI);
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
 			return dirty != DIRTY_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
@@ -819,10 +807,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		result.append(locked);
 		result.append(", adapters: ");
 		result.append(adapters);
-		result.append(", subModelURIs: ");
-		result.append(subModelURIs);
-		result.append(", dependencyUUIDs: ");
-		result.append(dependencyUUIDs);
+		result.append(", rootObjectURI: ");
+		result.append(rootObjectURI);
 		result.append(", dirty: ");
 		result.append(dirty);
 		result.append(", validationStatusCode: ");

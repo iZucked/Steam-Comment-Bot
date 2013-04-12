@@ -23,8 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getSubModelURIs <em>Sub Model UR Is</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getRootObjectURI <em>Root Object URI</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLocks <em>Locks</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
@@ -170,36 +169,32 @@ public interface ScenarioInstance extends Container {
 	void setAdapters(Map<Class<?>, Object> value);
 
 	/**
-	 * Returns the value of the '<em><b>Sub Model UR Is</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
+	 * Returns the value of the '<em><b>Root Object URI</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Sub Model UR Is</em>' attribute list isn't clear,
+	 * If the meaning of the '<em>Root Object URI</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Sub Model UR Is</em>' attribute list.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_SubModelURIs()
+	 * @return the value of the '<em>Root Object URI</em>' attribute.
+	 * @see #setRootObjectURI(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_RootObjectURI()
 	 * @model
 	 * @generated
 	 */
-	EList<String> getSubModelURIs();
+	String getRootObjectURI();
 
 	/**
-	 * Returns the value of the '<em><b>Dependency UUI Ds</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getRootObjectURI <em>Root Object URI</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Dependency UUI Ds</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Dependency UUI Ds</em>' attribute list.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_DependencyUUIDs()
-	 * @model
+	 * @param value the new value of the '<em>Root Object URI</em>' attribute.
+	 * @see #getRootObjectURI()
 	 * @generated
 	 */
-	EList<String> getDependencyUUIDs();
+	void setRootObjectURI(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Scenario Version</b></em>' attribute.

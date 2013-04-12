@@ -5,7 +5,6 @@
 package com.mmxlabs.scenario.service;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -56,8 +55,9 @@ public interface IScenarioService {
 	 *            the new models which this scenario will own; these ought not be in any resources at this point. New resources and storage will be sorted out for them by this scenario service.
 	 * @return a new scenario instance, which will contain a new root object as its instance attribute
 	 * @throws IOException
+	 * @since 4.0
 	 */
-	ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException;
+	ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException;
 
 	/**
 	 * Create a duplicate of the given scenario and place it in the destination. Any models owned by the original will be duplicated into new resources; dependencies of the original will not be
