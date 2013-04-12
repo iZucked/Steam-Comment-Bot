@@ -345,11 +345,15 @@ public final class CargoImportAction extends SimpleImportAction {
 				if (newSlot instanceof LoadSlot) {
 					// Look up original slot, unless this is a new slot
 					final LoadSlot slot = nameToLoad.containsKey(newSlot.getName()) ? nameToLoad.get(newSlot.getName()) : (LoadSlot) newSlot;
-					mergeCommand.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+					if (cargo.getSlots().contains(slot) == false) {
+						mergeCommand.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+					}
 				} else if (newSlot instanceof DischargeSlot) {
 					// Look up original slot, unless this is a new slot
 					final DischargeSlot slot = nameToDischarge.containsKey(newSlot.getName()) ? nameToDischarge.get(newSlot.getName()) : (DischargeSlot) newSlot;
-					mergeCommand.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+					if (cargo.getSlots().contains(slot) == false) {
+						mergeCommand.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+					}
 				} else {
 					throw new ClassCastException("Slot is not a Load or Discharge");
 				}
@@ -442,6 +446,11 @@ public final class CargoImportAction extends SimpleImportAction {
 			changeDescription = null;
 			affectedObjects = null;
 			super.dispose();
+		}
+
+		@Override
+		protected boolean prepare() {
+			return true;
 		}
 
 		@Override

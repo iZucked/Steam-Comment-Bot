@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.provider.CargoItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -513,8 +514,8 @@ public class CargoImportActionTest {
 			newDischargeSlot.setName("Discharge2");
 
 			newCargo = CargoFactory.eINSTANCE.createCargo();
-			newCargo.setLoadSlot(newLoadSlot);
-			newCargo.setDischargeSlot(newDischargeSlot);
+			newCargo.getSlots().add(newLoadSlot);
+			newCargo.getSlots().add(newDischargeSlot);
 
 			imports.add(newDischargeSlot);
 			imports.add(newLoadSlot);
@@ -542,8 +543,8 @@ public class CargoImportActionTest {
 		Assert.assertSame(newLoadSlot, cargoModel.getLoadSlots().get(0));
 		Assert.assertSame(newDischargeSlot, cargoModel.getDischargeSlots().get(0));
 		Assert.assertSame(newCargo, cargoModel.getCargoes().get(0));
-		Assert.assertSame(newLoadSlot, cargoModel.getCargoes().get(0).getLoadSlot());
-		Assert.assertSame(newDischargeSlot, cargoModel.getCargoes().get(0).getDischargeSlot());
+		Assert.assertSame(newLoadSlot, cargoModel.getCargoes().get(0).getSlots().get(0));
+		Assert.assertSame(newDischargeSlot, cargoModel.getCargoes().get(0).getSlots().get(1));
 	}
 
 	/**
@@ -574,8 +575,8 @@ public class CargoImportActionTest {
 			originalDischargeSlot.setName("Discharge1");
 
 			originalCargo = CargoFactory.eINSTANCE.createCargo();
-			originalCargo.setLoadSlot(originalLoadSlot);
-			originalCargo.setDischargeSlot(originalDischargeSlot);
+			originalCargo.getSlots().add(originalLoadSlot);
+			originalCargo.getSlots().add(originalDischargeSlot);
 			originalCargo.setName("Cargo1");
 
 			originalLoadSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID1");
@@ -612,8 +613,8 @@ public class CargoImportActionTest {
 			newDischargeSlot.setName("Discharge1");
 
 			newCargo = CargoFactory.eINSTANCE.createCargo();
-			newCargo.setLoadSlot(newLoadSlot);
-			newCargo.setDischargeSlot(newDischargeSlot);
+			newCargo.getSlots().add(newLoadSlot);
+			newCargo.getSlots().add(newDischargeSlot);
 			newCargo.setName("Cargo1");
 
 			newLoadSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "newUUID1");
@@ -655,9 +656,9 @@ public class CargoImportActionTest {
 		Assert.assertSame(originalCargo, importedCargo);
 
 		// Slot References should be the newly created imported object
-		LoadSlot importedLoadSlot = importedCargo.getLoadSlot();
+		Slot importedLoadSlot = importedCargo.getSlots().get(0);
 		Assert.assertSame(originalLoadSlot, importedLoadSlot);
-		DischargeSlot importedDischargeSlot = importedCargo.getDischargeSlot();
+		Slot importedDischargeSlot = importedCargo.getSlots().get(1);
 		Assert.assertSame(originalDischargeSlot, importedDischargeSlot);
 
 		// UUID Fields Should NOT change
@@ -693,8 +694,8 @@ public class CargoImportActionTest {
 			originalDischargeSlot.setName("Discharge1");
 
 			originalCargo = CargoFactory.eINSTANCE.createCargo();
-			originalCargo.setLoadSlot(originalLoadSlot);
-			originalCargo.setDischargeSlot(originalDischargeSlot);
+			originalCargo.getSlots().add(originalLoadSlot);
+			originalCargo.getSlots().add(originalDischargeSlot);
 			originalCargo.setName("Cargo1");
 
 			originalLoadSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID1");
@@ -755,8 +756,8 @@ public class CargoImportActionTest {
 			newDischargeSlot.setName("Discharge2");
 
 			newCargo = CargoFactory.eINSTANCE.createCargo();
-			newCargo.setLoadSlot(newLoadSlot);
-			newCargo.setDischargeSlot(newDischargeSlot);
+			newCargo.getSlots().add(newLoadSlot);
+			newCargo.getSlots().add(newDischargeSlot);
 			newCargo.setName("Cargo2");
 
 			newLoadSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "newUUID1");
@@ -801,22 +802,25 @@ public class CargoImportActionTest {
 		// Should no longer be contained
 		Assert.assertNull(originalCargo.eContainer());
 		// Discharge slot should not be connected to a cargo
-		Assert.assertNull(originalCargo.getDischargeSlot());
+		Assert.assertFalse(originalCargo.getSlots().contains(originalDischargeSlot));
 		Assert.assertNull(originalDischargeSlot.getCargo());
 
 		Cargo importedCargo = cargoModel.getCargoes().get(0);
-		Assert.assertSame(cargoModel.getLoadSlots().get(0), importedCargo.getLoadSlot());
-		Assert.assertSame(cargoModel.getDischargeSlots().get(1), importedCargo.getDischargeSlot());
+		
+		// Failure - most likely we need to null a slot reference that was normally done automatically in the 2 slot case
+		Assert.assertEquals(2, importedCargo.getSlots().size());
+		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(0)));
+		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(1)));
 
 		// Assert.assertEquals(100, importedCargo.getLoadSlot().getDuration());
 		// Assert.assertEquals(200, importedCargo.getDischargeSlot().getDuration());
 
 		// Slot References should be the newly created imported object
-		LoadSlot importedCargoLoadSlot = importedCargo.getLoadSlot();
+		Slot importedCargoLoadSlot = importedCargo.getSlots().get(0);
 		Assert.assertSame(originalLoadSlot, importedCargoLoadSlot);
 		Assert.assertSame(importedCargoLoadSlot, cargoModel.getLoadSlots().get(0));
 
-		DischargeSlot importedDischargeSlot = importedCargo.getDischargeSlot();
+		Slot importedDischargeSlot = importedCargo.getSlots().get(1);
 		Assert.assertSame(newDischargeSlot, importedDischargeSlot);
 
 		// Check expected UUID fields - only load slot should have the original UUID
@@ -859,13 +863,13 @@ public class CargoImportActionTest {
 			originalDischargeSlot2.setName("Discharge2");
 
 			originalCargo1 = CargoFactory.eINSTANCE.createCargo();
-			originalCargo1.setLoadSlot(originalLoadSlot1);
-			originalCargo1.setDischargeSlot(originalDischargeSlot1);
+			originalCargo1.getSlots().add(originalLoadSlot1);
+			originalCargo1.getSlots().add(originalDischargeSlot1);
 			originalCargo1.setName("Cargo1");
 
 			originalCargo2 = CargoFactory.eINSTANCE.createCargo();
-			originalCargo2.setLoadSlot(originalLoadSlot2);
-			originalCargo2.setDischargeSlot(originalDischargeSlot2);
+			originalCargo2.getSlots().add(originalLoadSlot2);
+			originalCargo2.getSlots().add(originalDischargeSlot2);
 			originalCargo2.setName("Cargo2");
 
 			originalLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID1");
@@ -942,13 +946,13 @@ public class CargoImportActionTest {
 			newDischargeSlot2.setName("Discharge2");
 
 			newCargo1 = CargoFactory.eINSTANCE.createCargo();
-			newCargo1.setLoadSlot(newLoadSlot1);
-			newCargo1.setDischargeSlot(newDischargeSlot2);
+			newCargo1.getSlots().add(newLoadSlot1);
+			newCargo1.getSlots().add(newDischargeSlot2);
 			newCargo1.setName("Cargo1");
 
 			newCargo2 = CargoFactory.eINSTANCE.createCargo();
-			newCargo2.setLoadSlot(newLoadSlot2);
-			newCargo2.setDischargeSlot(newDischargeSlot1);
+			newCargo2.getSlots().add(newLoadSlot2);
+			newCargo2.getSlots().add(newDischargeSlot1);
 			newCargo2.setName("Cargo2");
 
 			newLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "newUUID1");
@@ -1003,10 +1007,10 @@ public class CargoImportActionTest {
 		Assert.assertSame(originalCargo2, importedCargo2);
 
 		// Check new wiring
-		Assert.assertSame(originalLoadSlot1, importedCargo1.getLoadSlot());
-		Assert.assertSame(originalDischargeSlot2, importedCargo1.getDischargeSlot());
-		Assert.assertSame(originalLoadSlot2, importedCargo2.getLoadSlot());
-		Assert.assertSame(originalDischargeSlot1, importedCargo2.getDischargeSlot());
+		Assert.assertSame(originalLoadSlot1, importedCargo1.getSlots().get(0));
+		Assert.assertSame(originalDischargeSlot2, importedCargo1.getSlots().get(1));
+		Assert.assertSame(originalLoadSlot2, importedCargo2.getSlots().get(0));
+		Assert.assertSame(originalDischargeSlot1, importedCargo2.getSlots().get(1));
 
 		// Check expected UUID fields - all original
 		Assert.assertEquals("originalUUID1", cargoModel.getLoadSlots().get(0).getUuid());
@@ -1024,6 +1028,7 @@ public class CargoImportActionTest {
 		Assert.assertTrue(cargoModel.getCargoes().get(0).isAllowRewiring());
 		Assert.assertFalse(cargoModel.getCargoes().get(1).isAllowRewiring());
 	}
+
 	/**
 	 * Update and re-wire Cargoes. Two existing cargoes, but swap loads
 	 */
@@ -1052,13 +1057,13 @@ public class CargoImportActionTest {
 			originalDischargeSlot2.setName("Discharge2");
 
 			originalCargo1 = CargoFactory.eINSTANCE.createCargo();
-			originalCargo1.setLoadSlot(originalLoadSlot1);
-			originalCargo1.setDischargeSlot(originalDischargeSlot1);
+			originalCargo1.getSlots().add(originalLoadSlot1);
+			originalCargo1.getSlots().add(originalDischargeSlot1);
 			originalCargo1.setName("Cargo1");
 
 			originalCargo2 = CargoFactory.eINSTANCE.createCargo();
-			originalCargo2.setLoadSlot(originalLoadSlot2);
-			originalCargo2.setDischargeSlot(originalDischargeSlot2);
+			originalCargo2.getSlots().add(originalLoadSlot2);
+			originalCargo2.getSlots().add(originalDischargeSlot2);
 			originalCargo2.setName("Cargo2");
 
 			originalLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID1");
@@ -1135,13 +1140,13 @@ public class CargoImportActionTest {
 			newDischargeSlot2.setName("Discharge2");
 
 			newCargo1 = CargoFactory.eINSTANCE.createCargo();
-			newCargo1.setLoadSlot(newLoadSlot2);
-			newCargo1.setDischargeSlot(newDischargeSlot1);
+			newCargo1.getSlots().add(newLoadSlot2);
+			newCargo1.getSlots().add(newDischargeSlot1);
 			newCargo1.setName("Cargo1");
 
 			newCargo2 = CargoFactory.eINSTANCE.createCargo();
-			newCargo2.setLoadSlot(newLoadSlot1);
-			newCargo2.setDischargeSlot(newDischargeSlot2);
+			newCargo2.getSlots().add(newLoadSlot1);
+			newCargo2.getSlots().add(newDischargeSlot2);
 			newCargo2.setName("Cargo2");
 
 			newLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "newUUID1");
@@ -1196,10 +1201,12 @@ public class CargoImportActionTest {
 		Assert.assertSame(originalCargo2, importedCargo2);
 
 		// Check new wiring
-		Assert.assertSame(originalLoadSlot2, importedCargo1.getLoadSlot());
-		Assert.assertSame(originalDischargeSlot1, importedCargo1.getDischargeSlot());
-		Assert.assertSame(originalLoadSlot1, importedCargo2.getLoadSlot());
-		Assert.assertSame(originalDischargeSlot2, importedCargo2.getDischargeSlot());
+		Assert.assertEquals(2, importedCargo1.getSlots().size());
+		Assert.assertEquals(2, importedCargo2.getSlots().size());
+		Assert.assertTrue(importedCargo1.getSlots().contains(originalLoadSlot2));
+		Assert.assertTrue(importedCargo1.getSlots().contains(originalDischargeSlot1));
+		Assert.assertTrue(importedCargo2.getSlots().contains(originalLoadSlot1));
+		Assert.assertTrue(importedCargo2.getSlots().contains(originalDischargeSlot2));
 
 		// Check expected UUID fields - all original
 		Assert.assertEquals("originalUUID1", cargoModel.getLoadSlots().get(0).getUuid());
