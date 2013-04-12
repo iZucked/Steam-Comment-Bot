@@ -83,15 +83,6 @@ public interface CargoPackage extends EPackage {
 	int CARGO__EXTENSIONS = TypesPackage.ACARGO__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__PROXIES = TypesPackage.ACARGO__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -154,51 +145,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___MAKE_PROXIES = TypesPackage.ACARGO___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___RESOLVE_PROXIES__MAP = TypesPackage.ACARGO___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___RESTORE_PROXIES = TypesPackage.ACARGO___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___COLLECT_UUID_OBJECTS__MAP = TypesPackage.ACARGO___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___COLLECT_UUID_OBJECTS = TypesPackage.ACARGO___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -273,15 +219,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT__EXTENSIONS = TypesPackage.ASLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__PROXIES = TypesPackage.ASLOT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -421,51 +358,6 @@ public interface CargoPackage extends EPackage {
 	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 11;
 
 	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___MAKE_PROXIES = TypesPackage.ASLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___RESOLVE_PROXIES__MAP = TypesPackage.ASLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___RESTORE_PROXIES = TypesPackage.ASLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___COLLECT_UUID_OBJECTS__MAP = TypesPackage.ASLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___COLLECT_UUID_OBJECTS = TypesPackage.ASLOT___COLLECT_UUID_OBJECTS;
-
-	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -582,15 +474,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__EXTENSIONS = SLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__PROXIES = SLOT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -756,51 +639,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
 
 	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___MAKE_PROXIES = SLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___RESOLVE_PROXIES__MAP = SLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___RESTORE_PROXIES = SLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___COLLECT_UUID_OBJECTS__MAP = SLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___COLLECT_UUID_OBJECTS = SLOT___COLLECT_UUID_OBJECTS;
-
-	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -926,15 +764,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__EXTENSIONS = SLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__PROXIES = SLOT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1092,51 +921,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 2;
 
 	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___MAKE_PROXIES = SLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___RESOLVE_PROXIES__MAP = SLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___RESTORE_PROXIES = SLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___COLLECT_UUID_OBJECTS__MAP = SLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___COLLECT_UUID_OBJECTS = SLOT___COLLECT_UUID_OBJECTS;
-
-	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1255,15 +1039,6 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1316,51 +1091,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1418,15 +1148,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_SLOT__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1443,51 +1164,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_SLOT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1543,15 +1219,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__EXTENSIONS = LOAD_SLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__PROXIES = LOAD_SLOT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1726,51 +1393,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT_FEATURE_COUNT = LOAD_SLOT_FEATURE_COUNT + 1;
 
 	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___MAKE_PROXIES = LOAD_SLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___RESOLVE_PROXIES__MAP = LOAD_SLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___RESTORE_PROXIES = LOAD_SLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___COLLECT_UUID_OBJECTS__MAP = LOAD_SLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___COLLECT_UUID_OBJECTS = LOAD_SLOT___COLLECT_UUID_OBJECTS;
-
-	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1896,15 +1518,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__EXTENSIONS = DISCHARGE_SLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__PROXIES = DISCHARGE_SLOT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -2072,51 +1685,6 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___MAKE_PROXIES = DISCHARGE_SLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___RESOLVE_PROXIES__MAP = DISCHARGE_SLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___RESTORE_PROXIES = DISCHARGE_SLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___COLLECT_UUID_OBJECTS__MAP = DISCHARGE_SLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___COLLECT_UUID_OBJECTS = DISCHARGE_SLOT___COLLECT_UUID_OBJECTS;
-
-	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2235,15 +1803,6 @@ public interface CargoPackage extends EPackage {
 	int CARGO_GROUP__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2278,51 +1837,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_GROUP_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___MAKE_PROXIES = MMXCorePackage.NAMED_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___RESOLVE_PROXIES__MAP = MMXCorePackage.NAMED_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___RESTORE_PROXIES = MMXCorePackage.NAMED_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.NAMED_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___COLLECT_UUID_OBJECTS = MMXCorePackage.NAMED_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.

@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.port;
 
 import com.mmxlabs.models.lng.types.ARoute;
+import org.eclipse.emf.common.util.EList;
+import com.mmxlabs.models.lng.types.ARoute;
 
 import org.eclipse.emf.common.util.EList;
 

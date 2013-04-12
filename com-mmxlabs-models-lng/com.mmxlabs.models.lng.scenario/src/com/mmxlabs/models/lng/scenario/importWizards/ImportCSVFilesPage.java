@@ -254,6 +254,12 @@ public class ImportCSVFilesPage extends WizardPage {
 						final List<EObject> models = new LinkedList<EObject>();
 						if (doImport(context, models) != null) {
 
+							
+							MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+							for (EObject model : models) {
+								rootObject.addSubModel((UUIDObject)model);
+							}
+							
 							monitor.worked(1);
 
 							ImportCSVFilesPage.this.importContext = context;
@@ -261,7 +267,7 @@ public class ImportCSVFilesPage extends WizardPage {
 							final IScenarioService scenarioService = container.getScenarioService();
 
 							try {
-								final ScenarioInstance instance = scenarioService.insert(container, Collections.<ScenarioInstance> emptySet(), models);
+								final ScenarioInstance instance = scenarioService.insert(container, rootObject);
 
 								try {
 									final String versionContext = migrationRegistry.getDefaultMigrationContext();
@@ -310,6 +316,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		return super.getNextPage();
 	}
 
+	@Override
 	public boolean canFlipToNextPage() {
 		return isPageComplete();
 	}

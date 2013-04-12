@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
  * <!-- begin-user-doc -->

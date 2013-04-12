@@ -7,6 +7,8 @@ import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

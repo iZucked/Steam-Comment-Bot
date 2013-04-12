@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
+import com.mmxlabs.models.lng.types.PortCapability;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.types.PortCapability;

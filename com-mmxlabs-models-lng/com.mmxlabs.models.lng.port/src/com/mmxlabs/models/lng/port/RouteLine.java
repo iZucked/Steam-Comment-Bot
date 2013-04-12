@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.port;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

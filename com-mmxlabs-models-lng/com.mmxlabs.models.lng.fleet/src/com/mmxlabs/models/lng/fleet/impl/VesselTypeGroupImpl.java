@@ -3,6 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.VesselType;
+import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
+import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;

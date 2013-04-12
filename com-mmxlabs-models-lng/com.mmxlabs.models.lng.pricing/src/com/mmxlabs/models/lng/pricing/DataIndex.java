@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

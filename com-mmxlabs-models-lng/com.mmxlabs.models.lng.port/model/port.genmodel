@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.port/src"
-    modelPluginID="com.mmxlabs.models.lng.port" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.port/src" modelPluginID="com.mmxlabs.models.lng.port"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" redirection="" modelName="Port" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
   <foreignModel>port.ecore</foreignModel>
   <genPackages prefix="Port" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
-      ecorePackage="port.ecore#/">
+      multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="port.ecore#/">
     <genClasses ecoreClass="port.ecore#//Port">
       <genFeatures createChild="false" propertyDescription="Whether ships can visit this port for this purpose"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/capabilities"/>
@@ -25,11 +25,14 @@
           ecoreFeature="ecore:EAttribute port.ecore#//Port/allowCooldown"/>
       <genFeatures createChild="false" propertyDescription="The typical size (in hours) of a load / discharge time window at this port (can be overridden by the cargo)"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/defaultWindowSize"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/portCode"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Port/location"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Route">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
       <genFeatures createChild="false" propertyDescription="If true, this route is a canal"
           ecoreFeature="ecore:EAttribute port.ecore#//Route/canal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Route/routingOptions"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//PortGroup">
       <genFeatures notify="false" createChild="false" propertyDescription="This port group will contain all ports set here, and the contents of all port groups set here."
@@ -47,6 +50,15 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/ports"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portGroups"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/routes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/specialPortGroups"/>
+    </genClasses>
+    <genClasses ecoreClass="port.ecore#//CapabilityGroup">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//CapabilityGroup/capability"/>
+    </genClasses>
+    <genClasses ecoreClass="port.ecore#//Location">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/country"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lat"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Location/lon"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

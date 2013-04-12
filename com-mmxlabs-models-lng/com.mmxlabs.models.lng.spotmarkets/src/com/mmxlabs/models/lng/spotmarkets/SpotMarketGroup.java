@@ -7,9 +7,9 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import com.mmxlabs.models.mmxcore.MMXObject;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

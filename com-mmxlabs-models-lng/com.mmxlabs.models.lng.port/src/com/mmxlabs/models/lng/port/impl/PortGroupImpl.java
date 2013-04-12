@@ -6,6 +6,15 @@ package com.mmxlabs.models.lng.port.impl;
 
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.impl.APortSetImpl;
+import java.util.Collection;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import com.mmxlabs.models.lng.port.PortGroup;
+import com.mmxlabs.models.lng.port.PortPackage;
 
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;

@@ -30,7 +30,7 @@ All rights reserved.
       <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.ui.runtime.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.rcp.common.feature" version="2.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.scenario.service.feature" version="4.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.migration.feature" version="2.0.0" match="compatible"/>
    </requires>
 
@@ -119,34 +119,6 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.models.lng.input"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.input.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.input.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.input.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.mmxlabs.models.lng.port"
          download-size="0"
          install-size="0"
@@ -225,27 +197,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.schedule.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.optimiser"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.optimiser.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.optimiser.editor"
          download-size="0"
          install-size="0"
          version="0.0.0"

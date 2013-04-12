@@ -3,6 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.fleet.DryDockEvent;

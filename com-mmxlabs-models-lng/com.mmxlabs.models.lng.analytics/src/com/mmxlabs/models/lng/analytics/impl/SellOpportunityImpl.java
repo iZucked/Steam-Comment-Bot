@@ -9,6 +9,16 @@
 package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import java.util.Date;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.commercial.SalesContract;

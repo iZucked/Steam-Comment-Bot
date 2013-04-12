@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.pricing;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

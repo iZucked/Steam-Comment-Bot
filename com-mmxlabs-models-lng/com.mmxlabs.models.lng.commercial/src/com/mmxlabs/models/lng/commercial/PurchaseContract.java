@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.lng.types.APurchaseContract;
 import com.mmxlabs.models.lng.types.APurchaseContract;
+import com.mmxlabs.models.lng.types.APurchaseContract;
 
 /**
  * <!-- begin-user-doc -->

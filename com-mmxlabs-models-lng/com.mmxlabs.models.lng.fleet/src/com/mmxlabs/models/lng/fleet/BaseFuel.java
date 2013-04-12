@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet;
 import com.mmxlabs.models.lng.types.ABaseFuel;
+import com.mmxlabs.models.lng.types.ABaseFuel;
 
 /**
  * <!-- begin-user-doc -->

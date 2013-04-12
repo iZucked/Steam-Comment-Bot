@@ -7,9 +7,8 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.types.ASpotMarket;
 
 /**
  * <!-- begin-user-doc -->

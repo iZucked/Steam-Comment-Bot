@@ -7,10 +7,9 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.types.APortSet;
 
 /**
  * <!-- begin-user-doc -->

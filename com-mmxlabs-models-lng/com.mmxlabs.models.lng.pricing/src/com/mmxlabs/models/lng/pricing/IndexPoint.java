@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.pricing;
 import java.util.Date;
+import org.eclipse.emf.ecore.EObject;
+import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;
 

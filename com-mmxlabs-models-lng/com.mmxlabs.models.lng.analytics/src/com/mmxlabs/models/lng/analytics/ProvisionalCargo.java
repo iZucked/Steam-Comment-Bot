@@ -9,6 +9,8 @@
 package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

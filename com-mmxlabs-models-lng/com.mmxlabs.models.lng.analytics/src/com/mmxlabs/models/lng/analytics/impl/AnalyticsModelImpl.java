@@ -3,6 +3,21 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.CargoSandbox;
+import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
+import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;

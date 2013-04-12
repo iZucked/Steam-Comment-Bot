@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.PortCapability;
 
 /**
  * <!-- begin-user-doc -->

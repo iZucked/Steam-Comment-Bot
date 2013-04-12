@@ -6,8 +6,9 @@
     containmentProxies="true" complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore"
     operationReflection="true">
   <foreignModel>cargo.ecore</foreignModel>
-  <genPackages prefix="Cargo" basePackage="com.mmxlabs.models.lng" resource="XMI"
-      disposableProviderFactory="true" ecorePackage="cargo.ecore#/">
+  <genPackages prefix="Cargo" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="cargo.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//CargoType">
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//CargoType/FLEET"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//CargoType/FOB"/>

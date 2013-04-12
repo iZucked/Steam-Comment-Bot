@@ -3,6 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import java.util.Date;
+import org.eclipse.emf.common.util.EList;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;

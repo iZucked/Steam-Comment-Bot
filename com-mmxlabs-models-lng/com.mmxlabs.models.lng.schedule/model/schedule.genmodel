@@ -7,7 +7,8 @@
     operationReflection="true">
   <foreignModel>schedule.ecore</foreignModel>
   <genPackages prefix="Schedule" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
-      ecorePackage="schedule.ecore#/">
+      multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
+      childCreationExtenders="true" ecorePackage="schedule.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="schedule.ecore#//FuelUnit">
       <genEnumLiterals ecoreEnumLiteral="schedule.ecore#//FuelUnit/M3"/>
       <genEnumLiterals ecoreEnumLiteral="schedule.ecore#//FuelUnit/MT"/>
@@ -122,7 +123,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SlotAllocation/cargoAllocation"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SlotAllocation/slotVisit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//SlotAllocation/price"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//SlotAllocation/volumeTransfered"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//SlotAllocation/volumeTransferred"/>
       <genOperations ecoreOperation="schedule.ecore#//SlotAllocation/getPort"/>
       <genOperations ecoreOperation="schedule.ecore#//SlotAllocation/getLocalStart"/>
       <genOperations ecoreOperation="schedule.ecore#//SlotAllocation/getLocalEnd"/>

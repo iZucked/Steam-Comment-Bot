@@ -3,6 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import java.util.Collections;
 import java.util.Date;
 

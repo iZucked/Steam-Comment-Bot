@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 
 /**
  * <!-- begin-user-doc -->

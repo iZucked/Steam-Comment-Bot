@@ -3,6 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.mmxcore.MMXObject;

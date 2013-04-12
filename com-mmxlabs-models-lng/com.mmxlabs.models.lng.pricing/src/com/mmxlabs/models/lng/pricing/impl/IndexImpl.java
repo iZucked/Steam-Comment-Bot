@@ -3,6 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.types.impl.AIndexImpl;
+import java.util.Date;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;

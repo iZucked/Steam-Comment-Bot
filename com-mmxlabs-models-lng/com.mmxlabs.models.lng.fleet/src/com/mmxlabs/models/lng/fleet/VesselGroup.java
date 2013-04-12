@@ -3,6 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
+import com.mmxlabs.models.lng.types.AVessel;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.types.AVessel;

@@ -3,6 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.fleet.Vessel;

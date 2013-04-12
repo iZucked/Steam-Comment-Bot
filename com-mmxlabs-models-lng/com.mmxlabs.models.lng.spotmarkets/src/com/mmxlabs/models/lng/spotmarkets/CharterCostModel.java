@@ -7,13 +7,11 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import com.mmxlabs.models.lng.pricing.Index;
+import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.fleet.VesselClass;
-
+import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.mmxcore.MMXObject;
-
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
