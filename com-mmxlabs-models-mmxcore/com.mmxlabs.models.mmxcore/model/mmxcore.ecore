@@ -39,7 +39,7 @@
       </eParameters>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subModels" upperBound="-1"
-        eType="#//MMXSubModel" transient="true" containment="true"/>
+        eType="#//MMXSubModel" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MMXSubModel" eSuperTypes="#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="subModelInstance" lowerBound="1"

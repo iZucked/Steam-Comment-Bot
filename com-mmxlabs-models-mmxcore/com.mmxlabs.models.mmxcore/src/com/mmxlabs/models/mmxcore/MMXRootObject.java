@@ -35,7 +35,7 @@ public interface MMXRootObject extends UUIDObject, NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Sub Models</em>' containment reference list.
 	 * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXRootObject_SubModels()
-	 * @model containment="true" transient="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<MMXSubModel> getSubModels();

@@ -157,8 +157,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @generated NO
 	 */
 	public void addSubModel(UUIDObject subModel) {
-		assert(subModel.eContainer() == null);
-		final Resource resource = subModel.eResource();
 		final MMXSubModel container = MMXCoreFactory.eINSTANCE.createMMXSubModel();
 		container.setSubModelInstance(subModel);
 		getSubModels().add(container);

@@ -377,7 +377,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		initEAttribute(getUUIDObject_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, UUIDObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mmxRootObjectEClass, MMXRootObject.class, "MMXRootObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMMXRootObject_SubModels(), this.getMMXSubModel(), null, "subModels", null, 0, -1, MMXRootObject.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMMXRootObject_SubModels(), this.getMMXSubModel(), null, "subModels", null, 0, -1, MMXRootObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = initEOperation(getMMXRootObject__AddSubModel__UUIDObject(), null, "addSubModel", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getUUIDObject(), "subModel", 1, 1, IS_UNIQUE, IS_ORDERED);
