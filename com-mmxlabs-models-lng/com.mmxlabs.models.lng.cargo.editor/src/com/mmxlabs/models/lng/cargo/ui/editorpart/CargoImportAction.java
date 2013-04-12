@@ -92,16 +92,12 @@ public final class CargoImportAction extends SimpleImportAction {
 			if (o instanceof Cargo) {
 				final Cargo cargo = (Cargo) o;
 				// Filter out broken cargoes - those with less than two slots
-				if (cargo.getLoadSlot() == null || cargo.getDischargeSlot() == null) {
-					if (cargo.getLoadSlot() != null) {
-						cargo.getLoadSlot().setCargo(null);
-					}
-					if (cargo.getDischargeSlot() != null) {
-						cargo.getDischargeSlot().setCargo(null);
+				if (cargo.getSlots().size() < 2) {
+					for (final Slot slot : cargo.getSlots()) {
+						slot.setCargo(null);
 					}
 					// EOpposite should have already done this - but just to be sure
-					cargo.setLoadSlot(null);
-					cargo.setDischargeSlot(null);
+					cargo.getSlots().clear();
 				} else {
 					cargoes.add(cargo);
 					// Overwrite UUID field with original
@@ -249,14 +245,15 @@ public final class CargoImportAction extends SimpleImportAction {
 
 			existingCargoMap.put(c.getName(), c);
 
-			int count = 0;
-			if (c.getLoadSlot() != null) {
-				++count;
-				existingLoadSlotMap.put(c.getLoadSlot().getName(), c);
-			}
-			if (c.getDischargeSlot() != null) {
-				++count;
-				existingDischargeSlotMap.put(c.getDischargeSlot().getName(), c);
+			final int count = c.getSlots().size();
+			for (final Slot slot : c.getSlots()) {
+				if (slot instanceof LoadSlot) {
+					existingLoadSlotMap.put(slot.getName(), c);
+				} else if (slot instanceof DischargeSlot) {
+					existingDischargeSlotMap.put(slot.getName(), c);
+				} else {
+					throw new ClassCastException("Slot is not a Load or Discharge");
+				}
 			}
 			cargoSlotCount.put(c, count);
 		}
@@ -269,59 +266,73 @@ public final class CargoImportAction extends SimpleImportAction {
 			if (existingCargoMap.containsKey(newCargo.getName())) {
 				final Cargo existingCargo = existingCargoMap.get(newCargo.getName());
 
-				// Existing load slot? Then update reference counting
-				if (existingLoadSlotMap.containsKey(newCargo.getLoadSlot().getName())) {
-					final Cargo oldCargo = existingLoadSlotMap.get(newCargo.getLoadSlot().getName());
-					if (!oldCargo.getName().equals(newCargo.getName())) {
-						// Re-wired!
-						{
-							// Decrement existing count
-							final int count = cargoSlotCount.get(oldCargo);
-							cargoSlotCount.put(oldCargo, count - 1);
+				for (final Slot newSlot : newCargo.getSlots()) {
+
+					if (newSlot instanceof LoadSlot) {
+						// Existing load slot? Then update reference counting
+						if (existingLoadSlotMap.containsKey(newSlot.getName())) {
+							final Cargo oldCargo = existingLoadSlotMap.get(newSlot.getName());
+							if (!oldCargo.getName().equals(newCargo.getName())) {
+								// Re-wired!
+								{
+									// Decrement existing count
+									final int count = cargoSlotCount.get(oldCargo);
+									cargoSlotCount.put(oldCargo, count - 1);
+								}
+								{
+									// Increment current cargo counter
+									final int count = cargoSlotCount.get(existingCargo);
+									cargoSlotCount.put(existingCargo, count + 1);
+								}
+							}
 						}
-						{
-							// Increment current cargo counter
-							final int count = cargoSlotCount.get(existingCargo);
-							cargoSlotCount.put(existingCargo, count + 1);
+					} else if (newSlot instanceof DischargeSlot) {
+						// Existing discharge slot? Then update reference counting
+						if (existingDischargeSlotMap.containsKey(newSlot.getName())) {
+							final Cargo oldCargo = existingDischargeSlotMap.get(newSlot.getName());
+							if (!oldCargo.getName().equals(newCargo.getName())) {
+								// Re-wired!
+								{
+									// Decrement existing count
+									final int count = cargoSlotCount.get(oldCargo);
+									cargoSlotCount.put(oldCargo, count - 1);
+								}
+								{
+									// Increment current cargo counter
+									final int count = cargoSlotCount.get(existingCargo);
+									cargoSlotCount.put(existingCargo, count + 1);
+								}
+							}
 						}
+					} else {
+						throw new ClassCastException("Slot is not a Load or Discharge");
 					}
 				}
-
-				// Existing discharge slot? Then update reference counting
-				if (existingDischargeSlotMap.containsKey(newCargo.getDischargeSlot().getName())) {
-					final Cargo oldCargo = existingDischargeSlotMap.get(newCargo.getDischargeSlot().getName());
-					if (!oldCargo.getName().equals(newCargo.getName())) {
-						// Re-wired!
-						{
-							// Decrement existing count
-							final int count = cargoSlotCount.get(oldCargo);
-							cargoSlotCount.put(oldCargo, count - 1);
-						}
-						{
-							// Increment current cargo counter
-							final int count = cargoSlotCount.get(existingCargo);
-							cargoSlotCount.put(existingCargo, count + 1);
-						}
-					}
-				}
-
 			} else {
 				// New Cargo, but check for re-wiring of slots
 				mergeCommand.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 
 				// Check re-wiring
-				if (existingLoadSlotMap.containsKey(newCargo.getLoadSlot().getName())) {
-					final Cargo oldCargo = existingLoadSlotMap.get(newCargo.getLoadSlot().getName());
-					// Decrement existing count
-					final int count = cargoSlotCount.get(oldCargo);
-					cargoSlotCount.put(oldCargo, count - 1);
-				}
+				for (final Slot newSlot : newCargo.getSlots()) {
+					if (newSlot instanceof LoadSlot) {
+						if (existingLoadSlotMap.containsKey(newSlot.getName())) {
 
-				if (existingDischargeSlotMap.containsKey(newCargo.getDischargeSlot().getName())) {
-					final Cargo oldCargo = existingDischargeSlotMap.get(newCargo.getDischargeSlot().getName());
-					// Decrement existing count
-					final int count = cargoSlotCount.get(oldCargo);
-					cargoSlotCount.put(oldCargo, count - 1);
+							final Cargo oldCargo = existingLoadSlotMap.get(newSlot.getName());
+							// Decrement existing count
+							final int count = cargoSlotCount.get(oldCargo);
+							cargoSlotCount.put(oldCargo, count - 1);
+						}
+
+					} else if (newSlot instanceof DischargeSlot) {
+						if (existingDischargeSlotMap.containsKey(newSlot.getName())) {
+							final Cargo oldCargo = existingDischargeSlotMap.get(newSlot.getName());
+							// Decrement existing count
+							final int count = cargoSlotCount.get(oldCargo);
+							cargoSlotCount.put(oldCargo, count - 1);
+						}
+					} else {
+						throw new ClassCastException("Slot is not a Load or Discharge");
+					}
 				}
 			}
 
@@ -330,16 +341,18 @@ public final class CargoImportAction extends SimpleImportAction {
 
 			// Look up original cargo if is exists.
 			final Cargo cargo = nameToCargo.containsKey(newCargo.getName()) ? nameToCargo.get(newCargo.getName()) : newCargo;
-			if (newCargo.getLoadSlot() != null) {
-				// Look up original slot, unless this is a new slot
-				final LoadSlot slot = nameToLoad.containsKey(newCargo.getLoadSlot().getName()) ? nameToLoad.get(newCargo.getLoadSlot().getName()) : newCargo.getLoadSlot();
-				mergeCommand.append(SetCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_LoadSlot(), slot));
-			}
-			if (newCargo.getDischargeSlot() != null) {
-				// Look up original slot, unless this is a new slot
-				final DischargeSlot slot = nameToDischarge.containsKey(newCargo.getDischargeSlot().getName()) ? nameToDischarge.get(newCargo.getDischargeSlot().getName()) : newCargo
-						.getDischargeSlot();
-				mergeCommand.append(SetCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), slot));
+			for (final Slot newSlot : newCargo.getSlots()) {
+				if (newSlot instanceof LoadSlot) {
+					// Look up original slot, unless this is a new slot
+					final LoadSlot slot = nameToLoad.containsKey(newSlot.getName()) ? nameToLoad.get(newSlot.getName()) : (LoadSlot) newSlot;
+					mergeCommand.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+				} else if (newSlot instanceof DischargeSlot) {
+					// Look up original slot, unless this is a new slot
+					final DischargeSlot slot = nameToDischarge.containsKey(newSlot.getName()) ? nameToDischarge.get(newSlot.getName()) : (DischargeSlot) newSlot;
+					mergeCommand.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+				} else {
+					throw new ClassCastException("Slot is not a Load or Discharge");
+				}
 			}
 		}
 
@@ -396,16 +409,10 @@ public final class CargoImportAction extends SimpleImportAction {
 	 * @return
 	 */
 	private boolean needsToBeReplaced(final EStructuralFeature feature) {
-		if (feature == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
+		if (feature == CargoPackage.eINSTANCE.getCargo_Slots()) {
 			return false;
 		}
-		if (feature == CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
-			return false;
-		}
-		if (feature == CargoPackage.eINSTANCE.getLoadSlot_Cargo()) {
-			return false;
-		}
-		if (feature == CargoPackage.eINSTANCE.getDischargeSlot_Cargo()) {
+		if (feature == CargoPackage.eINSTANCE.getSlot_Cargo()) {
 			return false;
 		}
 
