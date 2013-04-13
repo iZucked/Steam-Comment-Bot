@@ -40,7 +40,7 @@ public class ContractCvValueConstraint extends AbstractModelConstraint  {
 				LoadSlot loadSlot = cargo.getLoadSlot();
 				final SalesContract salesContract = (SalesContract) contract;
 				double cv = loadSlot.getSlotOrPortCV();
-				String format = "Cargo '%s' has CV %.2f which is %s than the %s CV (%.2f) for the sales contract '%s'.";
+				String format = "[Cargo|%s] Purchase CV %.2f is %s than the %s CV (%.2f) for sales contract '%s'.";
 				if (salesContract.isSetMinCvValue()) {
 					double minCvValue = salesContract.getMinCvValue(); 
 					if (cv < minCvValue) {
