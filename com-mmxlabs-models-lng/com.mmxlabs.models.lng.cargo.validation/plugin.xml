@@ -56,7 +56,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Cargo {0} has invalid load and discharge dates - the load occurs after the discharge.
+                  [Cargo|{0}] Load is after discharge (note timezone).
                </message>
                <description>
                   The end of the discharge slot's time window should be after the start of the load slot's time window.
@@ -74,7 +74,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Cargo {0} has a very large amount of travel time allocated - {1} days are allocated, and {2} is a sensible upper bound.
+                  [Cargo|{0}] Travel time is excessive ({1} days); {2} is a sensible maximum.
                </message>
                <description>
                   If a cargo has a very large amount of slack in its travel time, lots of fuel will be wasted idling at the destination
@@ -93,7 +93,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  A slot has invalid minimum and maximum load volumes.
+                  [Slot|{0}] {1}
                </message>
                <description>
                   Every slot's minimum and maximum volume should be non-negative, and the minimum should not exceed the maximum.
@@ -111,7 +111,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Cargo {0} does not have enough travel time - {1} is required for the journey, but only {2} is available.
+                  [Cargo|{0}] Travel time is too short (by {1}).
                </message>
                <description>
                   The load and discharge dates for a cargo should allow enough time between them for
@@ -149,7 +149,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  A {0} slot has a port without the required {0} capability.
+                  [Slot|{1}, {0}] Port {2} lacks the required {0} capability.
                </message>
                <description>
                   Load and Discharge slots need ports with Load and Discharge capabilities respectively.
@@ -223,15 +223,15 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Non-optional slot {0} is not assigned to a cargo.
+                  [Slot|{0}]: Non-optional slot must be assigned to a cargo.
                </message>
                <target
                      class="Slot">
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.FOBDESCargoDatesContraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.FOBDESCargoDatesContraint"
+                  class="com.mmxlabs.models.lng.cargo.validation.FOBDESCargoDatesConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.FOBDESCargoDatesConstraint"
                   lang="Java"
                   mode="Batch"
                   name="FOB/DES Cargo dates"
@@ -245,7 +245,7 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.MarketSlotContraint"
+                  class="com.mmxlabs.models.lng.cargo.validation.MarketSlotConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.MarketSlotContraint"
                   lang="Java"
                   mode="Batch"

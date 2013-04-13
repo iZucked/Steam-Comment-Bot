@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-public class FOBDESCargoDatesContraint extends AbstractModelConstraint {
+public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
@@ -38,7 +38,7 @@ public class FOBDESCargoDatesContraint extends AbstractModelConstraint {
 							|| checkDates(dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowStartWithSlotOrPortTime())
 							|| checkDates(dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime()))) {
 
-						final String message = String.format("Cargo %s does not have compatible slot windows.", cargo.getName());
+						final String message = String.format("[Cargo|%s] Incompatible slot windows.", cargo.getName());
 
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						status.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
