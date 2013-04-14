@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.actions;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
@@ -88,13 +89,13 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 					if (sel instanceof IStructuredSelection) {
 						final EditingDomain ed = part.getEditingDomain();
 						// Copy selection
-						final ArrayList<Object> cargoes = new ArrayList<Object>(((IStructuredSelection) sel).toList());
+						final ArrayList<Object> selectedObjects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
 						// Set up a list of objects for deletion
 						// This will include the cargoes but may also include load or discharge slots
 						final Set<Object> trash = new LinkedHashSet<Object>();
-						trash.addAll(cargoes);
+						trash.addAll(selectedObjects);
 						// Filter out slots which are already linked to a cargo - this dialog below will re-add them if required.
-						for (Object obj : cargoes) {
+						for (Object obj : selectedObjects) {
 							if (obj instanceof Cargo) {
 								Cargo cargo = (Cargo) obj;
 								trash.remove(cargo.getLoadSlot());
@@ -105,10 +106,11 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 						int dialogResponse = 0;
 						boolean useResponseForAll = false;
 						boolean dialogDefault = true;
-						final int size = cargoes.size();
+						final List<Object> targetObjects = new ArrayList<Object>(trash);
+						final int size = targetObjects.size();
 
 						for (int i = 0; i < size; i++) {
-							final Object object = cargoes.get(i);
+							final Object object = targetObjects.get(i);
 							final Cargo cargo = (object instanceof Cargo ? (Cargo) object : null);
 							if (cargo != null) {
 								final boolean spotLoad = cargo.getLoadSlot() instanceof SpotSlot;
