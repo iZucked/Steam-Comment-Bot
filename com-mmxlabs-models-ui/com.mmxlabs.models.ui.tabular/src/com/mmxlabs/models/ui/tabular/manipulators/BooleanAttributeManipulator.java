@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -15,8 +15,7 @@ import org.eclipse.swt.widgets.Composite;
  * An implementation of {@link BasicAttributeManipulator} to handle boolean objects. By default this will show a Y/N choice, but this can changed using the alternative constructor,
  * 
  * @author Simon Goodall
- * @since 2.0
- * 
+ * @since 3.0
  */
 public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 

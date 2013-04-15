@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import com.mmxlabs.common.Pair;
  * You can specify a list of name/value pairs at construction time and the editor will display a combo with the names which sets the values.
  * 
  * @author hinton
+ * @since 3.0
  * 
  */
 public class ValueListAttributeManipulator extends BasicAttributeManipulator {

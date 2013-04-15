@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.List;
 
@@ -11,6 +11,8 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.ui.tabular.ICellManipulator;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * An {@link ICellManipulator} and {@link ICellRenderer} wrapper class to take an existing implemention of these interfaces and disable the editing capabilities.
