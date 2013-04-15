@@ -138,7 +138,7 @@ public class LNGModelCorrector {
 
 	private void fixIndexName(final CompoundCommand parent, final Index<?> index, final EditingDomain ed) {
 		String name = index.getName();
-		name = name.replaceAll(" ", "_");
+		name = name.replaceAll("[^a-zA-Z0-9_]", "_");
 
 		if (!name.equals(index.getName())) {
 			parent.append(SetCommand.create(ed, index, MMXCorePackage.eINSTANCE.getNamedObject_Name(), name));
