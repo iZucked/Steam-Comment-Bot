@@ -177,6 +177,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
 
+			// Unload scenario prior to deletion
 			unload(instance);
 
 			if (scenarioService != null) {
