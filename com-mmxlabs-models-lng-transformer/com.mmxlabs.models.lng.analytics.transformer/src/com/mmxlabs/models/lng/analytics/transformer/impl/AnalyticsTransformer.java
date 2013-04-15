@@ -44,7 +44,6 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.transformer.TransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
-import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -178,16 +177,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			final List<Port> loadPorts = new ArrayList<Port>();
 			final List<Port> dischargePorts = new ArrayList<Port>();
 
-			for (final APort port : SetUtils.getPorts(spec.getFromPorts())) {
-				if (port instanceof Port) {
-					loadPorts.add((Port) port);
-				}
+			for (final Port port : SetUtils.getObjects(spec.getFromPorts())) {
+				loadPorts.add(port);
 			}
 
-			for (final APort port : SetUtils.getPorts(spec.getToPorts())) {
-				if (port instanceof Port) {
-					dischargePorts.add((Port) port);
-				}
+			for (final Port port : SetUtils.getObjects(spec.getToPorts())) {
+				dischargePorts.add(port);
 			}
 
 			if (loadPorts.isEmpty()) {
@@ -479,7 +474,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					line.setHireCost((spec.getNotionalDayRate() * totalDuration) / 24);
 					line.setPortCost(totalPortCost);
 
-					assert(allocation.getSlots().size() == 2);
+					assert (allocation.getSlots().size() == 2);
 					IPortSlot loadSlot = allocation.getSlots().get(0);
 					IPortSlot dischargeSlot = allocation.getSlots().get(1);
 					line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(loadSlot)));
@@ -610,7 +605,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 		result.addExtraData("location", "Location", port.getName(), ExtraDataFormatType.AUTO);
 		int total = 0;
 		for (final PortCost cost : pricing.getPortCosts()) {
-			if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
+			if (SetUtils.getObjects(cost.getPorts()).contains(port)) {
 				// this is the cost for the given port
 				total += cost.getPortCost(spec.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
 				result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);

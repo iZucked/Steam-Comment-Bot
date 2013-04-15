@@ -657,7 +657,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 		int total = 0;
 		if (row.isIncludePortCosts()) {
 			for (final PortCost cost : pricing.getPortCosts()) {
-				if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
+				if (SetUtils.getObjects(cost.getPorts()).contains(port)) {
 					// this is the cost for the given port
 					// FIXME: This does not take into account START/END/OTHER COSTS
 					total += cost.getPortCost(plan.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);

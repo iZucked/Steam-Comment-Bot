@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -80,7 +79,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						}
 					}
 
-					for (final APort p : SetUtils.getPorts(pc.getRestrictedPorts())) {
+					for (final Port p : SetUtils.getObjects(pc.getRestrictedPorts())) {
 						if (portMap.containsKey(p)) {
 							Collection<ISequenceElement> destinationElements = portMap.get(p);
 							if (pc.isRestrictedListsArePermissive()) {
@@ -114,7 +113,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						}
 					}
 
-					for (final APort p : SetUtils.getPorts(sc.getRestrictedPorts())) {
+					for (final Port p : SetUtils.getObjects(sc.getRestrictedPorts())) {
 						if (portMap.containsKey(p)) {
 							Collection<ISequenceElement> destinationElements = portMap.get(p);
 							if (sc.isRestrictedListsArePermissive()) {

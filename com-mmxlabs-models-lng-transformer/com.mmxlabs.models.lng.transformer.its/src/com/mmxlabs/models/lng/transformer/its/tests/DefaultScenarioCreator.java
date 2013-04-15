@@ -133,16 +133,6 @@ public class DefaultScenarioCreator {
 		return r;
 	}
 
-	public Route getRoute(String name) {
-		final PortModel portModel = scenario.getSubModel(PortModel.class);
-		for (Route route : portModel.getRoutes()) {
-			if (route.getName().equals(name)) {
-				return route;
-			}
-		}
-		return null;
-	}
-
 	public class DefaultVesselStateAttributesCreator {
 		public static final int fuelTravelConsumptionPerHour = 15;
 		public static final int NBOIdleRatePerHour = 5; // should this be converted to per-day?
@@ -960,7 +950,7 @@ public class DefaultScenarioCreator {
 	public void checkJourneyGeography(Journey journey, Port from, Port to) {
 		Assert.assertEquals(journey.getPort(), from);
 		Assert.assertEquals(journey.getDestination(), to);
-		Route route = getRoute(journey.getRoute());
+		Route route = journey.getRoute();
 		Assert.assertEquals((int) journey.getDistance(), (int) getDistance(from, to, route));
 	}
 

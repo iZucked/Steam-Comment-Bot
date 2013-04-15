@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -147,8 +146,8 @@ public class ContractCvConstraintCheckTest {
 
 			// check that the cargo allocations wire load ports up with the expected discharge ports
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-				APort loadPort = ca.getSlotAllocations().get(0).getPort();
-				APort dischargePort = ca.getSlotAllocations().get(1).getPort();
+				Port loadPort = ca.getSlotAllocations().get(0).getPort();
+				Port dischargePort = ca.getSlotAllocations().get(1).getPort();
 
 				int index = Arrays.asList(loadPorts).indexOf(loadPort);
 				Assert.assertTrue(String.format("Load port '%s' was assigned a wiring but the expected wiring does not contain it.", loadPort.getName()), index >= 0);
