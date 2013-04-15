@@ -5,23 +5,13 @@
 package com.mmxlabs.models.lng.port.provider;
 
 
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortPackage;
-
-import com.mmxlabs.models.lng.types.provider.APortItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -31,6 +21,11 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.types.provider.APortSetItemProvider;
+
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.port.Port} object.
  * <!-- begin-user-doc -->
@@ -38,7 +33,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class PortItemProvider
-	extends APortItemProvider
+	extends APortSetItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -377,17 +372,6 @@ public class PortItemProvider
 			(createChildParameter
 				(PortPackage.Literals.PORT__LOCATION,
 				 PortFactory.eINSTANCE.createLocation()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

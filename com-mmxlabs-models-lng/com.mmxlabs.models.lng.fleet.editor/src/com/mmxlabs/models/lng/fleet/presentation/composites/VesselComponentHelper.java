@@ -11,9 +11,9 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
-import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
@@ -43,7 +43,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	public VesselComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.AVESSEL));
+		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.AVESSEL_SET));
 	}
 	
 	/**

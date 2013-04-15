@@ -36,7 +36,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 public interface CharterCostModel extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Vessel Classes</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.VesselClass}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselClass}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Vessel Classes</em>' reference list isn't clear,

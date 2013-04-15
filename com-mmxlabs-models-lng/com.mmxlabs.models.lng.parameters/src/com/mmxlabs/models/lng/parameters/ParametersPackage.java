@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
@@ -132,7 +131,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__EXTENSIONS = TypesPackage.AOPTIMISATION_SETTINGS__EXTENSIONS;
+	int OPTIMISER_SETTINGS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -141,7 +140,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__UUID = TypesPackage.AOPTIMISATION_SETTINGS__UUID;
+	int OPTIMISER_SETTINGS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -150,7 +149,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__NAME = TypesPackage.AOPTIMISATION_SETTINGS__NAME;
+	int OPTIMISER_SETTINGS__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -159,7 +158,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__OTHER_NAMES = TypesPackage.AOPTIMISATION_SETTINGS__OTHER_NAMES;
+	int OPTIMISER_SETTINGS__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
@@ -168,7 +167,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__OBJECTIVES = TypesPackage.AOPTIMISATION_SETTINGS_FEATURE_COUNT + 0;
+	int OPTIMISER_SETTINGS__OBJECTIVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
@@ -177,7 +176,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__CONSTRAINTS = TypesPackage.AOPTIMISATION_SETTINGS_FEATURE_COUNT + 1;
+	int OPTIMISER_SETTINGS__CONSTRAINTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Range</b></em>' containment reference.
@@ -186,7 +185,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__RANGE = TypesPackage.AOPTIMISATION_SETTINGS_FEATURE_COUNT + 2;
+	int OPTIMISER_SETTINGS__RANGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
@@ -195,7 +194,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__ANNEALING_SETTINGS = TypesPackage.AOPTIMISATION_SETTINGS_FEATURE_COUNT + 3;
+	int OPTIMISER_SETTINGS__ANNEALING_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Seed</b></em>' attribute.
@@ -204,7 +203,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__SEED = TypesPackage.AOPTIMISATION_SETTINGS_FEATURE_COUNT + 4;
+	int OPTIMISER_SETTINGS__SEED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
@@ -213,7 +212,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__ARGUMENTS = TypesPackage.AOPTIMISATION_SETTINGS_FEATURE_COUNT + 5;
+	int OPTIMISER_SETTINGS__ARGUMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Rewire</b></em>' attribute.
@@ -222,7 +221,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__REWIRE = TypesPackage.AOPTIMISATION_SETTINGS_FEATURE_COUNT + 6;
+	int OPTIMISER_SETTINGS__REWIRE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Optimiser Settings</em>' class.
@@ -231,7 +230,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS_FEATURE_COUNT = TypesPackage.AOPTIMISATION_SETTINGS_FEATURE_COUNT + 7;
+	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.

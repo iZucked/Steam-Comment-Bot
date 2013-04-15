@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -62,7 +63,7 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> destinationPorts;
+	protected EList<APortSet<Port>> destinationPorts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -109,9 +110,9 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getDestinationPorts() {
+	public EList<APortSet<Port>> getDestinationPorts() {
 		if (destinationPorts == null) {
-			destinationPorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, SpotMarketsPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS);
+			destinationPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS);
 		}
 		return destinationPorts;
 	}
@@ -146,7 +147,7 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 				return;
 			case SpotMarketsPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS:
 				getDestinationPorts().clear();
-				getDestinationPorts().addAll((Collection<? extends APortSet>)newValue);
+				getDestinationPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

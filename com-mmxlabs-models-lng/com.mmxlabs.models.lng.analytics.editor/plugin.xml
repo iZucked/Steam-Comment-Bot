@@ -154,7 +154,7 @@
           factory="com.mmxlabs.models.lng.analytics.ui.valueproviders.JourneyPortReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.analytics.editor.journeyValueProvider"
           ownerEClass="com.mmxlabs.models.lng.analytics.Journey"
-          referenceEClass="com.mmxlabs.models.lng.types.APort">
+          referenceEClass="com.mmxlabs.models.lng.port.Port">
     </valueProvider>
  </extension>
  <extension

@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.commercial.presentation.composites;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class LNGPriceCalculatorParametersComponentHelper extends BaseComponentHe
 	 */
 	public LNGPriceCalculatorParametersComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ALNG_PRICE_CALCULATOR_PARAMETERS));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 	}
 	
 	/**

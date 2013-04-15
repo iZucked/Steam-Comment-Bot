@@ -2,6 +2,8 @@
  */
 package com.mmxlabs.models.lng.assignment.presentation;
 
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -44,8 +46,10 @@ public final class AssignmentEditorPlugin extends EMFPlugin {
 	public AssignmentEditorPlugin() {
 		super
 			(new ResourceLocator [] {
+				FleetEditPlugin.INSTANCE,
 				LNGTypesEditPlugin.INSTANCE,
 				MmxcoreEditPlugin.INSTANCE,
+				PortEditPlugin.INSTANCE,
 			});
 	}
 

@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.models.lng.port;
 
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.PortCapability;
 import org.eclipse.emf.common.util.EList;
-import com.mmxlabs.models.lng.types.APort;
+
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,7 +34,7 @@ import org.eclipse.emf.common.util.EList;
  * @model annotation="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject showOtherNames='true'"
  * @generated
  */
-public interface Port extends APort {
+public interface Port extends APortSet<Port> {
 
 	/**
 	 * Returns the value of the '<em><b>Capabilities</b></em>' attribute list.

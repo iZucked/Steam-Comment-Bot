@@ -3,14 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import java.util.Date;
-import org.eclipse.emf.common.util.EList;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
@@ -40,7 +37,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 public interface VesselAvailability extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Start At</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Start At</em>' reference list isn't clear,
@@ -52,7 +49,7 @@ public interface VesselAvailability extends MMXObject {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getStartAt();
+	EList<APortSet<Port>> getStartAt();
 
 	/**
 	 * Returns the value of the '<em><b>Start After</b></em>' attribute.
@@ -162,7 +159,7 @@ public interface VesselAvailability extends MMXObject {
 
 	/**
 	 * Returns the value of the '<em><b>End At</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>End At</em>' reference list isn't clear,
@@ -174,7 +171,7 @@ public interface VesselAvailability extends MMXObject {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getEndAt();
+	EList<APortSet<Port>> getEndAt();
 
 	/**
 	 * Returns the value of the '<em><b>End After</b></em>' attribute.

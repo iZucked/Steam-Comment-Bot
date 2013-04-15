@@ -4,24 +4,12 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.AVesselImpl;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -31,10 +19,10 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.AVesselImpl;
+import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Vessel</b></em>'. <!-- end-user-doc -->
@@ -51,7 +39,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselImpl;
  *
  * @generated
  */
-public class VesselImpl extends AVesselImpl implements Vessel {
+public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -68,7 +56,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> inaccessiblePorts;
+	protected EList<APortSet<Port>> inaccessiblePorts;
 
 	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
@@ -216,9 +204,9 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getInaccessiblePorts() {
+	public EList<APortSet<Port>> getInaccessiblePorts() {
 		if (inaccessiblePorts == null) {
-			inaccessiblePorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL__INACCESSIBLE_PORTS);
+			inaccessiblePorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, FleetPackage.VESSEL__INACCESSIBLE_PORTS);
 		}
 		return inaccessiblePorts;
 	}
@@ -357,8 +345,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * 
-	 * @since 3.0 <!-- end-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isSetFillCapacity() {
@@ -366,12 +354,15 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
+	 * <!-- begin-user-doc --> 
+	 * <!-- end-user-doc -->
+	 * @generated NOT
 	 */
-	public EList<AVessel> collect(EList<AVesselSet> marked) {
-		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
-		final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
+	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Vessel> result = new UniqueEList<Vessel>();
 		marked.add(this);
 		result.add(this);
 		return result;
@@ -433,7 +424,7 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return;
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
-				getInaccessiblePorts().addAll((Collection<? extends APortSet>)newValue);
+				getInaccessiblePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				setTimeCharterRate((Integer)newValue);

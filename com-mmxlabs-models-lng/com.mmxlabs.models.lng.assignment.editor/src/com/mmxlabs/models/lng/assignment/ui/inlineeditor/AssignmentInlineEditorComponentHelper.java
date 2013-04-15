@@ -40,8 +40,8 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
@@ -292,15 +292,15 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 		public void updateDisplay(final EObject object) {
 			ElementAssignment assignment = null;
-			for (final EObject r: range) {
-				if (r instanceof ElementAssignment) 
+			for (final EObject r : range) {
+				if (r instanceof ElementAssignment)
 					assignment = (ElementAssignment) r;
-				
+
 			}
-				
+
 			final EObject target = (assignment == null ? object : assignment);
-			
-			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(target, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());			
+
+			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(target, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 
 			combo.removeAll();
 			nameList.clear();
@@ -371,13 +371,16 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 										maxSpot = Math.max(maxSpot, ea.getSpotIndex());
 									}
 									maxSpot++;
-									handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet) vessel, elementAssignment, maxSpot), elementAssignment,
+									handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (VesselClass) vessel, elementAssignment, maxSpot), elementAssignment,
 											AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 									return;
 								}
+							} else if (vessel instanceof Vessel) {
+								handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (Vessel) vessel, elementAssignment), elementAssignment,
+										AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+							} else {
+								throw new RuntimeException("Unexpected vessel assignment type");
 							}
-							handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet) vessel, elementAssignment), elementAssignment,
-									AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 						}
 					}
 				}
@@ -412,7 +415,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 			setEditorEnabled(enabled);
 
-			Object feature = notification.getFeature(); 
+			Object feature = notification.getFeature();
 			if (valueProvider.updateOnChangeToFeature(feature))
 				updateDisplay(inputObject);
 
@@ -466,13 +469,13 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		@Override
 		public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 

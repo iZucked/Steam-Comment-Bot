@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
-import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -51,10 +51,10 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 				if (vesselClass == null) {
 					return Activator.PLUGIN_ID;
 				}
-				final Set<APort> inaccessiblePortSet = SetUtils.getPorts(vesselClass.getInaccessiblePorts());
+				final Set<Port> inaccessiblePortSet = SetUtils.getObjects(vesselClass.getInaccessiblePorts());
 				if (!availablility.getStartAt().isEmpty()) {
 
-					final Set<APort> availabilityPortSet = SetUtils.getPorts(availablility.getStartAt());
+					final Set<Port> availabilityPortSet = SetUtils.getObjects(availablility.getStartAt());
 
 					if (availabilityPortSet.size() > 1) {
 						final String message = String.format("Vessel %s's start requirement has multiple ports. Only one can be specified.", vessel.getName());
@@ -64,7 +64,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 						statuses.add(dcsd);
 					}
 
-					for (final APort p : availabilityPortSet) {
+					for (final Port p : availabilityPortSet) {
 
 						if (inaccessiblePortSet.contains(p)) {
 							final String message = String.format("Vessel %s's %s requirement is set for port %s, but the vessel is of class %s which cannot dock at %s.", vessel.getName(), "start",
@@ -78,8 +78,8 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 					}
 				}
 				if (!availablility.getEndAt().isEmpty()) {
-					final Set<APort> availabilityPortSet = SetUtils.getPorts(availablility.getEndAt());
-					for (final APort p : availabilityPortSet) {
+					final Set<Port> availabilityPortSet = SetUtils.getObjects(availablility.getEndAt());
+					for (final Port p : availabilityPortSet) {
 
 						if (inaccessiblePortSet.contains(p)) {
 							final String message = String.format("Vessel %s's %s requirement is set for port %s, but the vessel is of class %s which cannot dock at %s.", vessel.getName(), "end",
@@ -108,12 +108,12 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 				final Vessel v = availability.getVessel();
 				if (extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
 
-					final Set<APort> inaccessiblePortSet = SetUtils.getPorts(vesselClass.getInaccessiblePorts());
+					final Set<Port> inaccessiblePortSet = SetUtils.getObjects(vesselClass.getInaccessiblePorts());
 
 					boolean bad = false;
 					{
-						final Set<APort> availabilityPortSet = SetUtils.getPorts(availability.getStartAt());
-						for (final APort p : availabilityPortSet) {
+						final Set<Port> availabilityPortSet = SetUtils.getObjects(availability.getStartAt());
+						for (final Port p : availabilityPortSet) {
 
 							// No port match
 							if (inaccessiblePortSet.contains(p)) {
@@ -127,8 +127,8 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 						}
 					}
 					{
-						final Set<APort> availabilityPortSet = SetUtils.getPorts(availability.getEndAt());
-						for (final APort p : availabilityPortSet) {
+						final Set<Port> availabilityPortSet = SetUtils.getObjects(availability.getEndAt());
+						for (final Port p : availabilityPortSet) {
 
 							// No port match
 							if (inaccessiblePortSet.contains(p)) {

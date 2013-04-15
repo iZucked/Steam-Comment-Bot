@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselType;
@@ -465,7 +466,7 @@ public class LNGModelCorrector {
 				events.remove(ea.getAssignedObject());
 				if (ea.getAssignedObject() instanceof VesselEvent) {
 					final VesselEvent vesselEvent = (VesselEvent) ea.getAssignedObject();
-					final EList<AVesselSet> allowedVessels = vesselEvent.getAllowedVessels();
+					final EList<AVesselSet<Vessel>> allowedVessels = vesselEvent.getAllowedVessels();
 					if (allowedVessels.size() == 1) {
 						if (ea.getAssignment() != allowedVessels.get(0)) {
 							cmd.append(SetCommand.create(ed, ea, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment(), allowedVessels.get(0)));
@@ -480,7 +481,7 @@ public class LNGModelCorrector {
 				cmd.append(AddCommand.create(ed, assignmentModel, AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), ea));
 
 				final VesselEvent vesselEvent = (VesselEvent) ea.getAssignedObject();
-				final EList<AVesselSet> allowedVessels = vesselEvent.getAllowedVessels();
+				final EList<AVesselSet<Vessel>> allowedVessels = vesselEvent.getAllowedVessels();
 				if (allowedVessels.size() == 1) {
 					cmd.append(SetCommand.create(ed, ea, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment(), allowedVessels.get(0)));
 				}

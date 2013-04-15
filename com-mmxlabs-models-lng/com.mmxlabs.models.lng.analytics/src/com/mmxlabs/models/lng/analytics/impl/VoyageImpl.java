@@ -3,17 +3,14 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.Voyage;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.Voyage;
+import com.mmxlabs.models.lng.port.Route;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,24 +32,14 @@ import com.mmxlabs.models.lng.analytics.Voyage;
  */
 public class VoyageImpl extends CostComponentImpl implements Voyage {
 	/**
-	 * The default value of the '{@link #getRoute() <em>Route</em>}' attribute.
+	 * The cached value of the '{@link #getRoute() <em>Route</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRoute()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String ROUTE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getRoute() <em>Route</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRoute()
-	 * @generated
-	 * @ordered
-	 */
-	protected String route = ROUTE_EDEFAULT;
+	protected Route route;
 
 	/**
 	 * The default value of the '{@link #getRouteCost() <em>Route Cost</em>}' attribute.
@@ -175,20 +162,42 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getRoute() {
+	@Override
+	public Route getRoute() {
+		if (route != null && route.eIsProxy()) {
+			InternalEObject oldRoute = (InternalEObject)route;
+			route = (Route)eResolveProxy(oldRoute);
+			if (route != oldRoute) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.VOYAGE__ROUTE, oldRoute, route));
+			}
+		}
 		return route;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setRoute(String newRoute) {
-		String oldRoute = route;
+	public Route basicGetRoute() {
+		return route;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRoute(Route newRoute) {
+		Route oldRoute = route;
 		route = newRoute;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.VOYAGE__ROUTE, oldRoute, route));
@@ -199,6 +208,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getRouteCost() {
 		return routeCost;
 	}
@@ -208,6 +218,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRouteCost(int newRouteCost) {
 		int oldRouteCost = routeCost;
 		routeCost = newRouteCost;
@@ -220,6 +231,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getSpeed() {
 		return speed;
 	}
@@ -229,6 +241,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpeed(double newSpeed) {
 		double oldSpeed = speed;
 		speed = newSpeed;
@@ -241,6 +254,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDistance() {
 		return distance;
 	}
@@ -250,6 +264,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDistance(int newDistance) {
 		int oldDistance = distance;
 		distance = newDistance;
@@ -262,6 +277,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIdleTime() {
 		return idleTime;
 	}
@@ -271,6 +287,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIdleTime(int newIdleTime) {
 		int oldIdleTime = idleTime;
 		idleTime = newIdleTime;
@@ -283,6 +300,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTravelTime() {
 		return travelTime;
 	}
@@ -292,6 +310,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTravelTime(int newTravelTime) {
 		int oldTravelTime = travelTime;
 		travelTime = newTravelTime;
@@ -308,7 +327,8 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case AnalyticsPackage.VOYAGE__ROUTE:
-				return getRoute();
+				if (resolve) return getRoute();
+				return basicGetRoute();
 			case AnalyticsPackage.VOYAGE__ROUTE_COST:
 				return getRouteCost();
 			case AnalyticsPackage.VOYAGE__SPEED:
@@ -332,7 +352,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case AnalyticsPackage.VOYAGE__ROUTE:
-				setRoute((String)newValue);
+				setRoute((Route)newValue);
 				return;
 			case AnalyticsPackage.VOYAGE__ROUTE_COST:
 				setRouteCost((Integer)newValue);
@@ -362,7 +382,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case AnalyticsPackage.VOYAGE__ROUTE:
-				setRoute(ROUTE_EDEFAULT);
+				setRoute((Route)null);
 				return;
 			case AnalyticsPackage.VOYAGE__ROUTE_COST:
 				setRouteCost(ROUTE_COST_EDEFAULT);
@@ -392,7 +412,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case AnalyticsPackage.VOYAGE__ROUTE:
-				return ROUTE_EDEFAULT == null ? route != null : !ROUTE_EDEFAULT.equals(route);
+				return route != null;
 			case AnalyticsPackage.VOYAGE__ROUTE_COST:
 				return routeCost != ROUTE_COST_EDEFAULT;
 			case AnalyticsPackage.VOYAGE__SPEED:
@@ -417,9 +437,7 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (route: ");
-		result.append(route);
-		result.append(", routeCost: ");
+		result.append(" (routeCost: ");
 		result.append(routeCost);
 		result.append(", speed: ");
 		result.append(speed);

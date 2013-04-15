@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.PortCapability;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +22,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
  * @model
  * @generated
  */
-public interface CapabilityGroup extends APortSet {
+public interface CapabilityGroup extends APortSet<Port> {
 	/**
 	 * Returns the value of the '<em><b>Capability</b></em>' attribute.
 	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.PortCapability}.

@@ -14,8 +14,9 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.AllowedFieldFilteredReferenceValueProvider;
@@ -26,7 +27,7 @@ public class PreferredPortProviderFactory implements IReferenceValueProviderFact
 	private final IReferenceValueProviderFactory delegateFactory;
 
 	public PreferredPortProviderFactory() {
-		this.delegateFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), TypesPackage.eINSTANCE.getAPort());
+		this.delegateFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), PortPackage.eINSTANCE.getPort());
 	}
 
 
@@ -35,24 +36,24 @@ public class PreferredPortProviderFactory implements IReferenceValueProviderFact
 			EReference reference, MMXRootObject rootObject) {
 		IReferenceValueProvider delegate = delegateFactory.createReferenceValueProvider(owner, reference, rootObject);
 		
-		return new AllowedFieldFilteredReferenceValueProvider<APortSet>(delegate) {
+		return new AllowedFieldFilteredReferenceValueProvider<APortSet<Port>>(delegate) {
 
 			@Override
-			protected EList<APortSet> getAllowedValuesFromField(EObject target,
+			protected EList<APortSet<Port>> getAllowedValuesFromField(EObject target,
 					EStructuralFeature field) {
 				return ((Contract) target).getAllowedPorts();
 			}
 
 			@Override
-			protected APortSet getCurrentValue(EObject target,
+			protected APortSet<Port> getCurrentValue(EObject target,
 					EStructuralFeature field) {
 				return ((Contract) target).getPreferredPort();
 			}
 
 			@Override
-			protected boolean fieldValueIncludesObject(APortSet fieldValue,
-					APortSet queryValue) {
-				final UniqueEList<APortSet> marks = new UniqueEList<APortSet>();
+			protected boolean fieldValueIncludesObject(APortSet<Port> fieldValue,
+					APortSet<Port> queryValue) {
+				final UniqueEList<APortSet<Port>> marks = new UniqueEList<APortSet<Port>>();
 				return fieldValue.collect(marks).contains(queryValue) && false;
 			}
 			

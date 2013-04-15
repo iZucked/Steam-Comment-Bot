@@ -27,10 +27,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
         eType="#//Event" containment="true" eOpposite="#//Event/sequence"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel"
+        eType="ecore:EClass ../../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselClass"
+        eType="ecore:EClass ../../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fitnesses" upperBound="-1"
         eType="#//Fitness" containment="true"/>
@@ -49,7 +49,7 @@
     <eOperations name="getHireCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass ../../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="previousEvent" eType="#//Event"
         eOpposite="#//Event/nextEvent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nextEvent" eType="#//Event"
@@ -63,13 +63,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselEvent"/>
+        eType="ecore:EClass ../../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselEvent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Journey" eSuperTypes="#//Event #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
+        eType="ecore:EClass ../../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="laden" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="route" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="route" eType="ecore:EClass ../../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="toll" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -112,7 +112,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" lowerBound="1"
         upperBound="-1" eType="#//SlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputCargo" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ACargo"
+        eType="ecore:EClass ../../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" lowerBound="1"
         upperBound="-1" eType="#//Event"/>
@@ -120,15 +120,15 @@
         eType="#//Sequence" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotAllocation" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
-    <eOperations name="getPort" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
+    <eOperations name="getPort" lowerBound="1" eType="ecore:EClass ../../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eOperations name="getLocalStart" lowerBound="1" eType="#//Calendar"/>
     <eOperations name="getLocalEnd" lowerBound="1" eType="#//Calendar"/>
-    <eOperations name="getContract" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AContract"/>
+    <eOperations name="getContract" lowerBound="1" eType="ecore:EClass ../../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASlot"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1" eType="ecore:EClass ../../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="spotMarket" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASpotMarket"
+        eType="ecore:EClass ../../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" lowerBound="1"
         eType="#//CargoAllocation"/>

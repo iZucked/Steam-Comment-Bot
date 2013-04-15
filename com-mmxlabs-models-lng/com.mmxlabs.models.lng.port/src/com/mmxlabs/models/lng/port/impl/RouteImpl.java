@@ -4,11 +4,8 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.lng.types.impl.ARouteImpl;
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -18,27 +15,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
-
-import com.mmxlabs.models.lng.types.impl.ARouteImpl;
-
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -47,6 +30,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getLines <em>Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#isCanal <em>Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteImpl#getRoutingOptions <em>Routing Options</em>}</li>
@@ -55,7 +39,29 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class RouteImpl extends ARouteImpl implements Route {
+public class RouteImpl extends NamedObjectImpl implements Route {
+	/**
+	 * The default value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getUuid()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String UUID_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getUuid()
+	 * @generated
+	 * @ordered
+	 */
+	protected String uuid = UUID_EDEFAULT;
+
 	/**
 	 * The cached value of the '{@link #getLines() <em>Lines</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -113,6 +119,29 @@ public class RouteImpl extends ARouteImpl implements Route {
 	@Override
 	protected EClass eStaticClass() {
 		return PortPackage.Literals.ROUTE;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getUuid() {
+		return uuid;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUuid(String newUuid) {
+		String oldUuid = uuid;
+		uuid = newUuid;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE__UUID, oldUuid, uuid));
 	}
 
 	/**
@@ -182,6 +211,8 @@ public class RouteImpl extends ARouteImpl implements Route {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case PortPackage.ROUTE__UUID:
+				return getUuid();
 			case PortPackage.ROUTE__LINES:
 				return getLines();
 			case PortPackage.ROUTE__CANAL:
@@ -201,6 +232,9 @@ public class RouteImpl extends ARouteImpl implements Route {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case PortPackage.ROUTE__UUID:
+				setUuid((String)newValue);
+				return;
 			case PortPackage.ROUTE__LINES:
 				getLines().clear();
 				getLines().addAll((Collection<? extends RouteLine>)newValue);
@@ -224,6 +258,9 @@ public class RouteImpl extends ARouteImpl implements Route {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case PortPackage.ROUTE__UUID:
+				setUuid(UUID_EDEFAULT);
+				return;
 			case PortPackage.ROUTE__LINES:
 				getLines().clear();
 				return;
@@ -245,6 +282,8 @@ public class RouteImpl extends ARouteImpl implements Route {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case PortPackage.ROUTE__UUID:
+				return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
 			case PortPackage.ROUTE__LINES:
 				return lines != null && !lines.isEmpty();
 			case PortPackage.ROUTE__CANAL:
@@ -261,11 +300,45 @@ public class RouteImpl extends ARouteImpl implements Route {
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == UUIDObject.class) {
+			switch (derivedFeatureID) {
+				case PortPackage.ROUTE__UUID: return MMXCorePackage.UUID_OBJECT__UUID;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == UUIDObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.UUID_OBJECT__UUID: return PortPackage.ROUTE__UUID;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (canal: ");
+		result.append(" (uuid: ");
+		result.append(uuid);
+		result.append(", canal: ");
 		result.append(canal);
 		result.append(", routingOptions: ");
 		result.append(routingOptions);

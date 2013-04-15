@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.fleet/src" modelPluginID="com.mmxlabs.models.lng.fleet"
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="Fleet" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port">
   <foreignModel>fleet.ecore</foreignModel>
   <genPackages prefix="Fleet" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
@@ -29,15 +29,12 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/vesselClass"/>
       <genFeatures notify="false" createChild="false" propertyDescription="A list of ports and port groups where this vessel cannot go"
           propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/inaccessiblePorts"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="The starting heel for this vessel"
-          propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//Vessel/startHeel"/>
       <genFeatures createChild="false" propertyDescription="If set, the vessel is a time charter hired at this day rate in dollars"
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/timeCharterRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/capacity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/fillCapacity"/>
-      <genOperations ecoreOperation="fleet.ecore#//Vessel/collect">
-        <genParameters ecoreParameter="fleet.ecore#//Vessel/collect/marked"/>
-      </genOperations>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrVesselClassCapacity"/>
+      <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrVesselClassFillCapacity"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//VesselClass">
       <genFeatures notify="false" createChild="false" propertyDescription="A list of ports where vessels of this class cannot go"
@@ -63,15 +60,9 @@
       <genFeatures children="true" createChild="true" propertyDescription="" ecoreFeature="ecore:EReference fleet.ecore#//VesselClass/routeParameters"/>
       <genFeatures createChild="false" propertyDescription="The rate at which base fuel must be used to run the pilot light, when running on LNG"
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselClass/pilotLightRate"/>
-      <genOperations ecoreOperation="fleet.ecore#//VesselClass/collect">
-        <genParameters ecoreParameter="fleet.ecore#//VesselClass/collect/marked"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//VesselGroup">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselGroup/vessels"/>
-      <genOperations ecoreOperation="fleet.ecore#//VesselGroup/collect">
-        <genParameters ecoreParameter="fleet.ecore#//VesselGroup/collect/marked"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//VesselTypeGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselTypeGroup/vesselType"/>
@@ -131,6 +122,7 @@
       <genFeatures createChild="false" propertyDescription="The vessel must have finished use by this date"
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselAvailability/endBy"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselAvailability/vessel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselAvailability/startHeel"/>
     </genClasses>
     <genClasses image="false" ecoreClass="fleet.ecore#//VesselEvent">
       <genFeatures createChild="false" propertyDescription="How long the {0} will occupy its vessel for"

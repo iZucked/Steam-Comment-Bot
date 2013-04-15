@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -20,7 +20,7 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 
 public class ParametersSettingsCompositeFactory implements IDisplayCompositeFactory {
 
-	final IDisplayCompositeFactory delegate = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(TypesPackage.eINSTANCE.getAOptimisationSettings());
+	final IDisplayCompositeFactory delegate = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(ParametersPackage.eINSTANCE.getOptimiserSettings());
 
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {

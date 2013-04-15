@@ -5,15 +5,24 @@
 package com.mmxlabs.models.lng.cargo.impl;
 
 import com.mmxlabs.models.lng.cargo.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoGroup;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 
 /**
  * <!-- begin-user-doc -->
@@ -63,7 +72,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.LOAD_SLOT: return createLoadSlot();
 			case CargoPackage.DISCHARGE_SLOT: return createDischargeSlot();
 			case CargoPackage.CARGO_MODEL: return createCargoModel();
-			case CargoPackage.SPOT_SLOT: return createSpotSlot();
 			case CargoPackage.SPOT_LOAD_SLOT: return createSpotLoadSlot();
 			case CargoPackage.SPOT_DISCHARGE_SLOT: return createSpotDischargeSlot();
 			case CargoPackage.CARGO_GROUP: return createCargoGroup();
@@ -140,16 +148,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public CargoModel createCargoModel() {
 		CargoModelImpl cargoModel = new CargoModelImpl();
 		return cargoModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotSlot createSpotSlot() {
-		SpotSlotImpl spotSlot = new SpotSlotImpl();
-		return spotSlot;
 	}
 
 	/**

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.analytics.impl;
 
-import com.mmxlabs.models.lng.analytics.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -15,8 +14,16 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
+import com.mmxlabs.models.lng.analytics.CargoSandbox;
 import com.mmxlabs.models.lng.analytics.CostComponent;
+import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.FuelCost;
+import com.mmxlabs.models.lng.analytics.Journey;
+import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
+import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
+import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
@@ -120,6 +127,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AnalyticsModel createAnalyticsModel() {
 		AnalyticsModelImpl analyticsModel = new AnalyticsModelImpl();
 		return analyticsModel;
@@ -130,6 +138,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UnitCostMatrix createUnitCostMatrix() {
 		UnitCostMatrixImpl unitCostMatrix = new UnitCostMatrixImpl();
 		return unitCostMatrix;
@@ -140,6 +149,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UnitCostLine createUnitCostLine() {
 		UnitCostLineImpl unitCostLine = new UnitCostLineImpl();
 		return unitCostLine;
@@ -150,6 +160,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Voyage createVoyage() {
 		VoyageImpl voyage = new VoyageImpl();
 		return voyage;
@@ -160,6 +171,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Visit createVisit() {
 		VisitImpl visit = new VisitImpl();
 		return visit;
@@ -170,6 +182,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CostComponent createCostComponent() {
 		CostComponentImpl costComponent = new CostComponentImpl();
 		return costComponent;
@@ -180,6 +193,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public FuelCost createFuelCost() {
 		FuelCostImpl fuelCost = new FuelCostImpl();
 		return fuelCost;
@@ -190,6 +204,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Journey createJourney() {
 		JourneyImpl journey = new JourneyImpl();
 		return journey;
@@ -201,6 +216,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ShippingCostPlan createShippingCostPlan() {
 		ShippingCostPlanImpl shippingCostPlan = new ShippingCostPlanImpl();
 		return shippingCostPlan;
@@ -212,6 +228,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ShippingCostRow createShippingCostRow() {
 		ShippingCostRowImpl shippingCostRow = new ShippingCostRowImpl();
 		return shippingCostRow;
@@ -223,6 +240,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoSandbox createCargoSandbox() {
 		CargoSandboxImpl cargoSandbox = new CargoSandboxImpl();
 		return cargoSandbox;
@@ -234,6 +252,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ProvisionalCargo createProvisionalCargo() {
 		ProvisionalCargoImpl provisionalCargo = new ProvisionalCargoImpl();
 		return provisionalCargo;
@@ -245,6 +264,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BuyOpportunity createBuyOpportunity() {
 		BuyOpportunityImpl buyOpportunity = new BuyOpportunityImpl();
 		return buyOpportunity;
@@ -256,6 +276,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SellOpportunity createSellOpportunity() {
 		SellOpportunityImpl sellOpportunity = new SellOpportunityImpl();
 		return sellOpportunity;
@@ -288,6 +309,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AnalyticsPackage getAnalyticsPackage() {
 		return (AnalyticsPackage)getEPackage();
 	}

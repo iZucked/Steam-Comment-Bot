@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.spotmarkets.presentation.composites;
 
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 
 import java.util.ArrayList;
@@ -47,7 +48,8 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	 */
 	public SpotMarketComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ASPOT_MARKET));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**

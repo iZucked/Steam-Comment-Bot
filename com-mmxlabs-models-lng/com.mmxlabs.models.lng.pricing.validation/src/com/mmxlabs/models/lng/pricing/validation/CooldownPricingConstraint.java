@@ -6,15 +6,12 @@ package com.mmxlabs.models.lng.pricing.validation;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -24,7 +21,6 @@ import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
-import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -50,8 +46,8 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 				final PortModel ports = rootObject.getSubModel(PortModel.class);
 				if (ports != null) {
 					// count the number of cooldown prices attached to each port
-					final HashMap<APort, Set<CooldownPrice>> pricingPerPort = new HashMap<APort, Set<CooldownPrice>>();
-					for (final APort port : ports.getPorts()) {
+					final HashMap<Port, Set<CooldownPrice>> pricingPerPort = new HashMap<Port, Set<CooldownPrice>>();
+					for (final Port port : ports.getPorts()) {
 						pricingPerPort.put(port, new HashSet<CooldownPrice>());
 					}
 
@@ -64,14 +60,14 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 						}
 						
 						
-						for (final APort port : SetUtils.getPorts(c.getPorts())) {
+						for (final Port port : SetUtils.getObjects(c.getPorts())) {
 							pricingPerPort.get(port).add(c);
 						}
 					}
 
 
-					for (final Entry<APort, Set<CooldownPrice>> entry : pricingPerPort.entrySet()) {
-						final APort port = entry.getKey();
+					for (final Entry<Port, Set<CooldownPrice>> entry : pricingPerPort.entrySet()) {
+						final Port port = entry.getKey();
 						final int count = entry.getValue().size();
 
 						if (count != 1 && (port instanceof Port) && ((Port) port).getCapabilities().contains(PortCapability.LOAD)) {

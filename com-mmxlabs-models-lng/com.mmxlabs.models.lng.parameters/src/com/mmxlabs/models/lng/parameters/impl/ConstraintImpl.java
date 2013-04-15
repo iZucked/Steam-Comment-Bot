@@ -3,12 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.impl;
-import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.ParametersPackage;
-import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;

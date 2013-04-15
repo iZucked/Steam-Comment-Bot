@@ -53,7 +53,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 
 			final UUIDObject assignedObject = assignment.getAssignedObject();
 
-			final AVesselSet vesselAssignment = assignment.getAssignment();
+			final AVesselSet<Vessel> vesselAssignment = assignment.getAssignment();
 			if (vesselAssignment == null) {
 				if (assignedObject instanceof VesselEvent) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
@@ -71,7 +71,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 				return ctx.createSuccessStatus();
 			}
 
-			EList<AVesselSet> allowedVessels = null;
+			EList<AVesselSet<Vessel>> allowedVessels = null;
 			if (assignedObject instanceof Cargo) {
 				final Cargo cargo = (Cargo) assignedObject;
 				allowedVessels = cargo.getAllowedVessels();
@@ -84,14 +84,14 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 			}
 
 			// Expand out VesselGroups
-			final Set<AVesselSet> expandedVessels = new HashSet<AVesselSet>();
-			for (final AVesselSet s : allowedVessels) {
+			final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
+			for (final AVesselSet<Vessel> s : allowedVessels) {
 				if (s instanceof Vessel) {
 					expandedVessels.add(s);
 				} else if (s instanceof VesselClass) {
 					expandedVessels.add(s);
 				} else {
-					expandedVessels.addAll(SetUtils.getVessels(s));
+					expandedVessels.addAll(SetUtils.getObjects(s));
 				}
 			}
 
@@ -100,7 +100,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 				permitted = true;
 			} else if (vesselAssignment instanceof Vessel) {
 				final Vessel vessel = (Vessel) vesselAssignment;
-				for (final AVesselSet vs : expandedVessels) {
+				for (final AVesselSet<Vessel> vs : expandedVessels) {
 					if (vs instanceof VesselClass) {
 						if (vs == vessel.getVesselClass()) {
 							permitted = true;

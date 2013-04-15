@@ -3,36 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import java.util.Calendar;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import java.util.Calendar;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import java.util.Calendar;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import java.util.Calendar;
 import java.util.Calendar;
 
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
@@ -117,20 +93,22 @@ public interface SlotAllocation extends MMXObject {
 	 * If the meaning of the '<em>Spot Market</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Spot Market</em>' reference.
 	 * @see #isSetSpotMarket()
 	 * @see #unsetSpotMarket()
-	 * @see #setSpotMarket(ASpotMarket)
+	 * @see #setSpotMarket(SpotMarket)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_SpotMarket()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	ASpotMarket getSpotMarket();
+	SpotMarket getSpotMarket();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSpotMarket <em>Spot Market</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Spot Market</em>' reference.
 	 * @see #isSetSpotMarket()
@@ -138,7 +116,7 @@ public interface SlotAllocation extends MMXObject {
 	 * @see #getSpotMarket()
 	 * @generated
 	 */
-	void setSpotMarket(ASpotMarket value);
+	void setSpotMarket(SpotMarket value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSpotMarket <em>Spot Market</em>}' reference.
@@ -146,7 +124,7 @@ public interface SlotAllocation extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetSpotMarket()
 	 * @see #getSpotMarket()
-	 * @see #setSpotMarket(ASpotMarket)
+	 * @see #setSpotMarket(SpotMarket)
 	 * @generated
 	 */
 	void unsetSpotMarket();
@@ -158,7 +136,7 @@ public interface SlotAllocation extends MMXObject {
 	 * @return whether the value of the '<em>Spot Market</em>' reference is set.
 	 * @see #unsetSpotMarket()
 	 * @see #getSpotMarket()
-	 * @see #setSpotMarket(ASpotMarket)
+	 * @see #setSpotMarket(SpotMarket)
 	 * @generated
 	 */
 	boolean isSetSpotMarket();
@@ -300,11 +278,12 @@ public interface SlotAllocation extends MMXObject {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @generated
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 * @generated
+	 * @since 3.0
 	 */
-	APort getPort();
+	Port getPort();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -324,11 +303,12 @@ public interface SlotAllocation extends MMXObject {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	AContract getContract();
+	Contract getContract();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -3,26 +3,17 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselGroup;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
-import java.util.Collection;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import java.util.Collection;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
-import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 
@@ -39,7 +30,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *
  * @generated
  */
-public class VesselGroupImpl extends AVesselSetImpl implements VesselGroup {
+public class VesselGroupImpl extends AVesselSetImpl<Vessel> implements VesselGroup {
 	/**
 	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -84,11 +75,13 @@ public class VesselGroupImpl extends AVesselSetImpl implements VesselGroup {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	public EList<AVessel> collect(EList<AVesselSet> marked) {
-		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
-		final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
+	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Vessel> result = new UniqueEList<Vessel>();
 		marked.add(this);
 		for (final Vessel v : getVessels()) {
 			result.addAll(v.collect(marked));

@@ -44,7 +44,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
-import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -494,7 +493,7 @@ public class CargoEditorMenuHelper {
 			menuName = "DES Purchase";
 			final SpotMarketGroup group = pricingModel.getDesPurchaseSpotMarket();
 			for (final SpotMarket market : group.getMarkets()) {
-				final Set<APort> ports = SetUtils.getPorts(((DESPurchaseMarket) market).getDestinationPorts());
+				final Set<Port> ports = SetUtils.getObjects(((DESPurchaseMarket) market).getDestinationPorts());
 				if (ports.contains(source.getPort())) {
 					validMarkets.add(market);
 				}
@@ -510,7 +509,7 @@ public class CargoEditorMenuHelper {
 			menuName = "FOB Sale";
 			final SpotMarketGroup group = pricingModel.getFobSalesSpotMarket();
 			for (final SpotMarket market : group.getMarkets()) {
-				final APort loadPort = ((FOBSalesMarket) market).getLoadPort();
+				final Port loadPort = ((FOBSalesMarket) market).getLoadPort();
 				if (loadPort == source.getPort()) {
 					validMarkets.add(market);
 				}

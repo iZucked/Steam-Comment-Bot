@@ -3,16 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselClass;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import org.eclipse.emf.common.util.EList;
+import com.mmxlabs.models.lng.port.Port;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
@@ -43,10 +37,10 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * @model
  * @generated
  */
-public interface VesselClass extends AVesselClass {
+public interface VesselClass extends AVesselSet<Vessel> {
 	/**
 	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Inaccessible Ports</em>' reference list isn't clear,
@@ -58,7 +52,7 @@ public interface VesselClass extends AVesselClass {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getInaccessiblePorts();
+	EList<APortSet<Port>> getInaccessiblePorts();
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference.
@@ -374,15 +368,6 @@ public interface VesselClass extends AVesselClass {
 	 * @generated
 	 */
 	void setPilotLightRate(int value);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model markedMany="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();\n\tfinal org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();\n\tmarked.add(this);\n\t\n\tfinal FleetModel myModel = (FleetModel) eContainer();\n\tfor (final Vessel v : myModel.getVessels()) {\n\t\tif (v.getVesselClass() == this) {\n\t\t\tresult.add(v);\n\t\t}\n\t}\n\nreturn result;'"
-	 * @generated
-	 */
-	EList<AVessel> collect(EList<AVesselSet> marked);
 
 } // end of  VesselClass
 

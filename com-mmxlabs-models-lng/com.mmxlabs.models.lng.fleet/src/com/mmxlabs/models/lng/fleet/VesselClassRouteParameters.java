@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.fleet;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

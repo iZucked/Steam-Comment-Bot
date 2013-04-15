@@ -1078,7 +1078,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
+	int VESSEL_EVENT_VISIT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -1199,7 +1199,7 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__LADEN = EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' attribute.
+	 * The feature id for the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1794,7 +1794,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
+	int GENERATED_CHARTER_OUT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -2268,7 +2268,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
+	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -3060,7 +3060,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 4;
+	int START_EVENT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -3341,7 +3341,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 4;
+	int END_EVENT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -4006,15 +4006,15 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getJourney_Laden();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Route</em>'.
+	 * @return the meta object for the reference '<em>Route</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Journey#getRoute()
 	 * @see #getJourney()
 	 * @generated
 	 */
-	EAttribute getJourney_Route();
+	EReference getJourney_Route();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}'.
@@ -5010,12 +5010,12 @@ public interface SchedulePackage extends EPackage {
 		EAttribute JOURNEY__LADEN = eINSTANCE.getJourney_Laden();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute JOURNEY__ROUTE = eINSTANCE.getJourney_Route();
+		EReference JOURNEY__ROUTE = eINSTANCE.getJourney_Route();
 
 		/**
 		 * The meta object literal for the '<em><b>Toll</b></em>' attribute feature.

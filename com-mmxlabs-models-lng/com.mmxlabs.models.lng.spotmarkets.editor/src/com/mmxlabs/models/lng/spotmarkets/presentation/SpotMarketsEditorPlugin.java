@@ -6,6 +6,9 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.presentation;
 
+import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
 
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
@@ -50,9 +53,12 @@ public final class SpotMarketsEditorPlugin extends EMFPlugin {
 	public SpotMarketsEditorPlugin() {
 		super
 			(new ResourceLocator [] {
-				PricingEditPlugin.INSTANCE,
+				CommercialEditPlugin.INSTANCE,
+				FleetEditPlugin.INSTANCE,
 				LNGTypesEditPlugin.INSTANCE,
 				MmxcoreEditPlugin.INSTANCE,
+				PortEditPlugin.INSTANCE,
+				PricingEditPlugin.INSTANCE,
 			});
 	}
 

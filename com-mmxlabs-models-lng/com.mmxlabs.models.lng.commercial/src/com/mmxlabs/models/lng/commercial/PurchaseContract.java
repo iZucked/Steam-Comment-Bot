@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.commercial;
 
-import com.mmxlabs.models.lng.types.APurchaseContract;
-import com.mmxlabs.models.lng.types.APurchaseContract;
-import com.mmxlabs.models.lng.types.APurchaseContract;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,7 +15,7 @@ import com.mmxlabs.models.lng.types.APurchaseContract;
  * @model
  * @generated
  */
-public interface PurchaseContract extends Contract, APurchaseContract {
+public interface PurchaseContract extends Contract {
 } // end of  PurchaseContract
 
 // finish type fixing

@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -50,11 +49,11 @@ public class VesselAvailabilityPortConstraintTest {
 		final Vessel vessel = mock(Vessel.class);
 		// Mock a port to think about
 		@SuppressWarnings("unchecked")
-		final EList<APortSet> startPortSet = mock(EList.class,  "Port Set A");
+		final EList<APortSet<Port>> startPortSet = mock(EList.class,  "Port Set A");
 		@SuppressWarnings("unchecked")
-		final EList<APortSet> endPortSet = mock(EList.class,  "Port Set B");
+		final EList<APortSet<Port>> endPortSet = mock(EList.class,  "Port Set B");
 		
-		final APort portA= mock(APort.class,  "Port A");
+		final Port portA= mock(Port.class,  "Port A");
 		
 		// Finally mock a vessel class for the vessel to have
 		final VesselClass vesselClass = mock(VesselClass.class);
@@ -64,7 +63,7 @@ public class VesselAvailabilityPortConstraintTest {
 		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
 
 		@SuppressWarnings("unchecked")
-		final EList<APortSet> inaccessiblePorts = mock(EList.class, "Inaccessible Ports");
+		final EList<APortSet<Port>> inaccessiblePorts = mock(EList.class, "Inaccessible Ports");
 
 		// The constraint will need to be able to get at the port and
 		// time's eContainer (the vessel owning it, in this case)

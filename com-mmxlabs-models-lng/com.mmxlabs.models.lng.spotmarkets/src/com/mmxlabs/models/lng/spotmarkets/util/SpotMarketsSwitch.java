@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -107,7 +106,6 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 			case SpotMarketsPackage.SPOT_MARKET: {
 				SpotMarket spotMarket = (SpotMarket)theEObject;
 				T result = caseSpotMarket(spotMarket);
-				if (result == null) result = caseASpotMarket(spotMarket);
 				if (result == null) result = caseUUIDObject(spotMarket);
 				if (result == null) result = caseNamedObject(spotMarket);
 				if (result == null) result = caseMMXObject(spotMarket);
@@ -118,7 +116,6 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 				DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket)theEObject;
 				T result = caseDESPurchaseMarket(desPurchaseMarket);
 				if (result == null) result = caseSpotMarket(desPurchaseMarket);
-				if (result == null) result = caseASpotMarket(desPurchaseMarket);
 				if (result == null) result = caseUUIDObject(desPurchaseMarket);
 				if (result == null) result = caseNamedObject(desPurchaseMarket);
 				if (result == null) result = caseMMXObject(desPurchaseMarket);
@@ -129,7 +126,6 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 				DESSalesMarket desSalesMarket = (DESSalesMarket)theEObject;
 				T result = caseDESSalesMarket(desSalesMarket);
 				if (result == null) result = caseSpotMarket(desSalesMarket);
-				if (result == null) result = caseASpotMarket(desSalesMarket);
 				if (result == null) result = caseUUIDObject(desSalesMarket);
 				if (result == null) result = caseNamedObject(desSalesMarket);
 				if (result == null) result = caseMMXObject(desSalesMarket);
@@ -140,7 +136,6 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 				FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket)theEObject;
 				T result = caseFOBPurchasesMarket(fobPurchasesMarket);
 				if (result == null) result = caseSpotMarket(fobPurchasesMarket);
-				if (result == null) result = caseASpotMarket(fobPurchasesMarket);
 				if (result == null) result = caseUUIDObject(fobPurchasesMarket);
 				if (result == null) result = caseNamedObject(fobPurchasesMarket);
 				if (result == null) result = caseMMXObject(fobPurchasesMarket);
@@ -151,7 +146,6 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 				FOBSalesMarket fobSalesMarket = (FOBSalesMarket)theEObject;
 				T result = caseFOBSalesMarket(fobSalesMarket);
 				if (result == null) result = caseSpotMarket(fobSalesMarket);
-				if (result == null) result = caseASpotMarket(fobSalesMarket);
 				if (result == null) result = caseUUIDObject(fobSalesMarket);
 				if (result == null) result = caseNamedObject(fobSalesMarket);
 				if (result == null) result = caseMMXObject(fobSalesMarket);
@@ -345,21 +339,6 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ASpot Market</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ASpot Market</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseASpotMarket(ASpotMarket object) {
 		return null;
 	}
 

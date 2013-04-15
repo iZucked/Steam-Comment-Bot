@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.editors.ldd;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
@@ -16,7 +15,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class CellRendererColumnLabelProvider extends ColumnLabelProvider {

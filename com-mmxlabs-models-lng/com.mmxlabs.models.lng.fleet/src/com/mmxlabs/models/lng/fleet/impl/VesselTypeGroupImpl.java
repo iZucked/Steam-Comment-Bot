@@ -3,15 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselType;
-import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
-import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -21,7 +16,6 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselType;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
-import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 
@@ -39,7 +33,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *
  * @generated
  */
-public class VesselTypeGroupImpl extends AVesselSetImpl implements VesselTypeGroup {
+public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements VesselTypeGroup {
 	/**
 	 * The default value of the '{@link #getVesselType() <em>Vessel Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -175,12 +169,14 @@ public class VesselTypeGroupImpl extends AVesselSetImpl implements VesselTypeGro
 	}
 
 	/**
-	 * @generated NO
+	 * @generated NOT
 	 */
 	@Override
-	public EList<AVessel> collect(EList<AVesselSet> marked) {
-		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
-		final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
+	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Vessel> result = new UniqueEList<Vessel>();
 		marked.add(this);
 		final EObject parent = eContainer();
 		if (parent instanceof FleetModel) {

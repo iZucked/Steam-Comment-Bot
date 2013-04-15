@@ -4,14 +4,13 @@
  */
 package com.mmxlabs.models.lng.port;
 
-import com.mmxlabs.models.lng.types.TypesPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -78,7 +77,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__EXTENSIONS = TypesPackage.APORT__EXTENSIONS;
+	int PORT__EXTENSIONS = TypesPackage.APORT_SET__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -87,7 +86,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__UUID = TypesPackage.APORT__UUID;
+	int PORT__UUID = TypesPackage.APORT_SET__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -96,7 +95,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__NAME = TypesPackage.APORT__NAME;
+	int PORT__NAME = TypesPackage.APORT_SET__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -105,7 +104,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__OTHER_NAMES = TypesPackage.APORT__OTHER_NAMES;
+	int PORT__OTHER_NAMES = TypesPackage.APORT_SET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Capabilities</b></em>' attribute list.
@@ -114,7 +113,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__CAPABILITIES = TypesPackage.APORT_FEATURE_COUNT + 0;
+	int PORT__CAPABILITIES = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Time Zone</b></em>' attribute.
@@ -123,7 +122,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__TIME_ZONE = TypesPackage.APORT_FEATURE_COUNT + 1;
+	int PORT__TIME_ZONE = TypesPackage.APORT_SET_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Load Duration</b></em>' attribute.
@@ -132,7 +131,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__LOAD_DURATION = TypesPackage.APORT_FEATURE_COUNT + 2;
+	int PORT__LOAD_DURATION = TypesPackage.APORT_SET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Duration</b></em>' attribute.
@@ -141,7 +140,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DISCHARGE_DURATION = TypesPackage.APORT_FEATURE_COUNT + 3;
+	int PORT__DISCHARGE_DURATION = TypesPackage.APORT_SET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
@@ -150,7 +149,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__CV_VALUE = TypesPackage.APORT_FEATURE_COUNT + 4;
+	int PORT__CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Default Start Time</b></em>' attribute.
@@ -159,7 +158,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_START_TIME = TypesPackage.APORT_FEATURE_COUNT + 5;
+	int PORT__DEFAULT_START_TIME = TypesPackage.APORT_SET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Allow Cooldown</b></em>' attribute.
@@ -168,7 +167,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__ALLOW_COOLDOWN = TypesPackage.APORT_FEATURE_COUNT + 6;
+	int PORT__ALLOW_COOLDOWN = TypesPackage.APORT_SET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Default Window Size</b></em>' attribute.
@@ -177,7 +176,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_WINDOW_SIZE = TypesPackage.APORT_FEATURE_COUNT + 7;
+	int PORT__DEFAULT_WINDOW_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Port Code</b></em>' attribute.
@@ -186,7 +185,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__PORT_CODE = TypesPackage.APORT_FEATURE_COUNT + 8;
+	int PORT__PORT_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' containment reference.
@@ -195,7 +194,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__LOCATION = TypesPackage.APORT_FEATURE_COUNT + 9;
+	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -204,7 +203,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 10;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -223,16 +222,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__EXTENSIONS = TypesPackage.AROUTE__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROUTE__UUID = TypesPackage.AROUTE__UUID;
+	int ROUTE__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -241,7 +231,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__NAME = TypesPackage.AROUTE__NAME;
+	int ROUTE__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -250,7 +240,16 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__OTHER_NAMES = TypesPackage.AROUTE__OTHER_NAMES;
+	int ROUTE__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__UUID = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Lines</b></em>' containment reference list.
@@ -259,7 +258,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__LINES = TypesPackage.AROUTE_FEATURE_COUNT + 0;
+	int ROUTE__LINES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Canal</b></em>' attribute.
@@ -268,7 +267,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__CANAL = TypesPackage.AROUTE_FEATURE_COUNT + 1;
+	int ROUTE__CANAL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Routing Options</b></em>' attribute list.
@@ -277,7 +276,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__ROUTING_OPTIONS = TypesPackage.AROUTE_FEATURE_COUNT + 2;
+	int ROUTE__ROUTING_OPTIONS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Route</em>' class.
@@ -286,7 +285,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_FEATURE_COUNT = TypesPackage.AROUTE_FEATURE_COUNT + 3;
+	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.

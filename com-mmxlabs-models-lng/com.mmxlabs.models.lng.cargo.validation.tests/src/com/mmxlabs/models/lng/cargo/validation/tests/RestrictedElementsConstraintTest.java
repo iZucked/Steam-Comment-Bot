@@ -7,21 +7,16 @@ package com.mmxlabs.models.lng.cargo.validation.tests;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreEList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -77,8 +72,8 @@ public class RestrictedElementsConstraintTest {
 		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(otherContract));
 		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(otherContract));
 
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> singletonEList(otherPort));
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> singletonEList(otherPort));
+		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(otherPort));
+		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(otherPort));
 
 		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
 		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
@@ -140,8 +135,8 @@ public class RestrictedElementsConstraintTest {
 		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
 		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(loadContract));
 
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> emptyEList());
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> emptyEList());
+		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
+		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
 
 		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
 		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
@@ -203,8 +198,8 @@ public class RestrictedElementsConstraintTest {
 		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.singletonEList(dischargeContract));
 		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
 
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> emptyEList());
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> emptyEList());
+		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
+		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
 
 		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
 		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
@@ -265,8 +260,8 @@ public class RestrictedElementsConstraintTest {
 		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
 		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
 
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> emptyEList());
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> singletonEList(loadPort));
+		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
+		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(loadPort));
 
 		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
 		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);
@@ -328,8 +323,8 @@ public class RestrictedElementsConstraintTest {
 		when(loadContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
 		when(dischargeContract.getRestrictedContracts()).thenReturn(ECollections.<Contract> emptyEList());
 
-		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> singletonEList(dischargePort));
-		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet> emptyEList());
+		when(loadContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> singletonEList(dischargePort));
+		when(dischargeContract.getRestrictedPorts()).thenReturn(ECollections.<APortSet<Port>> emptyEList());
 
 		when(loadContract.isRestrictedListsArePermissive()).thenReturn(false);
 		when(dischargeContract.isRestrictedListsArePermissive()).thenReturn(false);

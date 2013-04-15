@@ -145,6 +145,8 @@ import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 
 import com.mmxlabs.models.lng.assignment.provider.AssignmentItemProviderAdapterFactory;
 
+import com.mmxlabs.models.lng.fleet.provider.FleetItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
 
 import com.mmxlabs.models.mmxcore.provider.MMXCoreItemProviderAdapterFactory;
@@ -635,8 +637,10 @@ public class AssignmentEditor
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new AssignmentItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new TypesItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new MMXCoreItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the command stack that will notify this editor as commands are executed.

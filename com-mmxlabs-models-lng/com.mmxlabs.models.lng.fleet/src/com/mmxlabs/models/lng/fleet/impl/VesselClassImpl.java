@@ -3,30 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
-import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.AVesselClassImpl;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -41,10 +24,10 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.AVesselClassImpl;
+import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -71,7 +54,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselClassImpl;
  *
  * @generated
  */
-public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
+public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselClass {
 	/**
 	 * The cached value of the '{@link #getInaccessiblePorts() <em>Inaccessible Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -80,7 +63,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> inaccessiblePorts;
+	protected EList<APortSet<Port>> inaccessiblePorts;
 
 	/**
 	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference.
@@ -306,9 +289,9 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getInaccessiblePorts() {
+	public EList<APortSet<Port>> getInaccessiblePorts() {
 		if (inaccessiblePorts == null) {
-			inaccessiblePorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS);
+			inaccessiblePorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS);
 		}
 		return inaccessiblePorts;
 	}
@@ -620,19 +603,21 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	public EList<AVessel> collect(EList<AVesselSet> marked) {
-		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
-			final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
-			marked.add(this);
-			
-			final FleetModel myModel = (FleetModel) eContainer();
-			for (final Vessel v : myModel.getVessels()) {
-				if (v.getVesselClass() == this) {
-					result.add(v);
-				}
+	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Vessel> result = new UniqueEList<Vessel>();
+		marked.add(this);
+		
+		final FleetModel myModel = (FleetModel) eContainer();
+		for (final Vessel v : myModel.getVessels()) {
+			if (v.getVesselClass() == this) {
+				result.add(v);
 			}
+		}
 		
 		return result;
 	}
@@ -705,7 +690,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 		switch (featureID) {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
-				getInaccessiblePorts().addAll((Collection<? extends APortSet>)newValue);
+				getInaccessiblePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				setBaseFuel((BaseFuel)newValue);

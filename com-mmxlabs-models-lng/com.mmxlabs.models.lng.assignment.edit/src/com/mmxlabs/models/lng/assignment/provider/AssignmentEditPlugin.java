@@ -2,13 +2,13 @@
  */
 package com.mmxlabs.models.lng.assignment.provider;
 
-import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
-
-import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-
 import org.eclipse.emf.common.EMFPlugin;
-
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
+import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
+import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
 /**
  * This is the central singleton for the Assignment edit plugin.
@@ -42,8 +42,10 @@ public final class AssignmentEditPlugin extends EMFPlugin {
 	public AssignmentEditPlugin() {
 		super
 		  (new ResourceLocator [] {
+		     FleetEditPlugin.INSTANCE,
 		     LNGTypesEditPlugin.INSTANCE,
 		     MmxcoreEditPlugin.INSTANCE,
+		     PortEditPlugin.INSTANCE,
 		   });
 	}
 

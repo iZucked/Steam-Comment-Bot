@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -69,11 +68,11 @@ public class AssignmentImporter {
 
 										final NamedObject v = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
 										if (v instanceof Vessel) {
-											ea.setAssignment((AVesselSet) v);
+											ea.setAssignment((Vessel) v);
 										} else if (v instanceof VesselClass) {
 
 											ea.setSpotIndex(spotIndex);
-											ea.setAssignment((AVesselSet) v);
+											ea.setAssignment((VesselClass)v);
 										}
 
 										im.getElementAssignments().add(ea);

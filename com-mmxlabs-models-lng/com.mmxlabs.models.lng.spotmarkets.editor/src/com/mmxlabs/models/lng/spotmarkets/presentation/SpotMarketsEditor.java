@@ -159,6 +159,9 @@ import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 
 import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsItemProviderAdapterFactory;
 
+import com.mmxlabs.models.lng.commercial.provider.CommercialItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.fleet.provider.FleetItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.pricing.provider.PricingItemProviderAdapterFactory;
 
 import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
@@ -651,9 +654,12 @@ public class SpotMarketsEditor
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new SpotMarketsItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new PricingItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new CommercialItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new TypesItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new MMXCoreItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new PricingItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the command stack that will notify this editor as commands are executed.

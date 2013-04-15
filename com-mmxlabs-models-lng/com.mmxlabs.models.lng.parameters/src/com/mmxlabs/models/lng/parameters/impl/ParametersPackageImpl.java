@@ -499,7 +499,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
-		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -507,7 +506,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Add supertypes to classes
 		parametersModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		optimiserSettingsEClass.getESuperTypes().add(theTypesPackage.getAOptimisationSettings());
+		optimiserSettingsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		optimiserSettingsEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		objectiveEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		constraintEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 

@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.analytics.presentation;
 
+import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -40,8 +43,11 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	public AnalyticsEditorPlugin() {
 		super
 			(new ResourceLocator [] {
+				CommercialEditPlugin.INSTANCE,
+				FleetEditPlugin.INSTANCE,
 				LNGTypesEditPlugin.INSTANCE,
 				MmxcoreEditPlugin.INSTANCE,
+				PortEditPlugin.INSTANCE,
 			});
 	}
 

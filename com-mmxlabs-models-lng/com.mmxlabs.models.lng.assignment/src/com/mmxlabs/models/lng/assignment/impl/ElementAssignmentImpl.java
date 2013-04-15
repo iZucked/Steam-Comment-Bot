@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
@@ -59,7 +60,7 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 	 * @generated
 	 * @ordered
 	 */
-	protected AVesselSet assignment;
+	protected AVesselSet<Vessel> assignment;
 
 	/**
 	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
@@ -183,10 +184,11 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AVesselSet getAssignment() {
+	@SuppressWarnings("unchecked")
+	public AVesselSet<Vessel> getAssignment() {
 		if (assignment != null && assignment.eIsProxy()) {
 			InternalEObject oldAssignment = (InternalEObject)assignment;
-			assignment = (AVesselSet)eResolveProxy(oldAssignment);
+			assignment = (AVesselSet<Vessel>)eResolveProxy(oldAssignment);
 			if (assignment != oldAssignment) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssignmentPackage.ELEMENT_ASSIGNMENT__ASSIGNMENT, oldAssignment, assignment));
@@ -200,7 +202,7 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AVesselSet basicGetAssignment() {
+	public AVesselSet<Vessel> basicGetAssignment() {
 		return assignment;
 	}
 
@@ -209,8 +211,8 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setAssignment(AVesselSet newAssignment) {
-		AVesselSet oldAssignment = assignment;
+	public void setAssignment(AVesselSet<Vessel> newAssignment) {
+		AVesselSet<Vessel> oldAssignment = assignment;
 		assignment = newAssignment;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AssignmentPackage.ELEMENT_ASSIGNMENT__ASSIGNMENT, oldAssignment, assignment));
@@ -308,6 +310,7 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -315,7 +318,7 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 				setAssignedObject((UUIDObject)newValue);
 				return;
 			case AssignmentPackage.ELEMENT_ASSIGNMENT__ASSIGNMENT:
-				setAssignment((AVesselSet)newValue);
+				setAssignment((AVesselSet<Vessel>)newValue);
 				return;
 			case AssignmentPackage.ELEMENT_ASSIGNMENT__LOCKED:
 				setLocked((Boolean)newValue);
@@ -342,7 +345,7 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 				setAssignedObject((UUIDObject)null);
 				return;
 			case AssignmentPackage.ELEMENT_ASSIGNMENT__ASSIGNMENT:
-				setAssignment((AVesselSet)null);
+				setAssignment((AVesselSet<Vessel>)null);
 				return;
 			case AssignmentPackage.ELEMENT_ASSIGNMENT__LOCKED:
 				setLocked(LOCKED_EDEFAULT);

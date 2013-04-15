@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.types.AVessel;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -46,7 +46,7 @@ public class CargoTypeAssignmentConstraint extends AbstractModelConstraint {
 			if (assignment.getAssignment() == null) {
 				return ctx.createSuccessStatus();
 			}
-			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getAssignment());
+			final Set<Vessel> vessels = SetUtils.getObjects(assignment.getAssignment());
 
 			Cargo cargo = null;
 			if (uuidObject instanceof LoadSlot) {

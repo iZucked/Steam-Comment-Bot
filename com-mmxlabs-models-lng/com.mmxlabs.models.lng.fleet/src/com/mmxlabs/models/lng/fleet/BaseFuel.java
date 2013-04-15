@@ -3,8 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.ABaseFuel;
-import com.mmxlabs.models.lng.types.ABaseFuel;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.types.ABaseFuel;
  * @model
  * @generated
  */
-public interface BaseFuel extends ABaseFuel {
+public interface BaseFuel extends UUIDObject, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Equivalence Factor</b></em>' attribute.

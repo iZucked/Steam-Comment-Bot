@@ -3,12 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import org.eclipse.emf.common.util.EList;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

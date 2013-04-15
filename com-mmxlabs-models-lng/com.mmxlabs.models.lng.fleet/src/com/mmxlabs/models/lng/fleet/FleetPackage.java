@@ -201,7 +201,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__EXTENSIONS = TypesPackage.ABASE_FUEL__EXTENSIONS;
+	int BASE_FUEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -210,7 +210,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__UUID = TypesPackage.ABASE_FUEL__UUID;
+	int BASE_FUEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -219,7 +219,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__NAME = TypesPackage.ABASE_FUEL__NAME;
+	int BASE_FUEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -229,7 +229,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__OTHER_NAMES = TypesPackage.ABASE_FUEL__OTHER_NAMES;
+	int BASE_FUEL__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Equivalence Factor</b></em>' attribute.
@@ -238,7 +238,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__EQUIVALENCE_FACTOR = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 0;
+	int BASE_FUEL__EQUIVALENCE_FACTOR = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Base Fuel</em>' class.
@@ -247,7 +247,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_FEATURE_COUNT = TypesPackage.ABASE_FUEL_FEATURE_COUNT + 1;
+	int BASE_FUEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -256,7 +256,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__EXTENSIONS = TypesPackage.AVESSEL__EXTENSIONS;
+	int VESSEL__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -265,7 +265,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__UUID = TypesPackage.AVESSEL__UUID;
+	int VESSEL__UUID = TypesPackage.AVESSEL_SET__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -274,7 +274,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__NAME = TypesPackage.AVESSEL__NAME;
+	int VESSEL__NAME = TypesPackage.AVESSEL_SET__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -284,7 +284,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__OTHER_NAMES = TypesPackage.AVESSEL__OTHER_NAMES;
+	int VESSEL__OTHER_NAMES = TypesPackage.AVESSEL_SET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
@@ -293,7 +293,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__VESSEL_CLASS = TypesPackage.AVESSEL_FEATURE_COUNT + 0;
+	int VESSEL__VESSEL_CLASS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -302,7 +302,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_FEATURE_COUNT + 1;
+	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
@@ -311,7 +311,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
+	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
@@ -321,7 +321,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__CAPACITY = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -331,7 +331,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -340,7 +340,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -349,7 +349,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__EXTENSIONS = TypesPackage.AVESSEL_CLASS__EXTENSIONS;
+	int VESSEL_CLASS__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -358,7 +358,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__UUID = TypesPackage.AVESSEL_CLASS__UUID;
+	int VESSEL_CLASS__UUID = TypesPackage.AVESSEL_SET__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -367,7 +367,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__NAME = TypesPackage.AVESSEL_CLASS__NAME;
+	int VESSEL_CLASS__NAME = TypesPackage.AVESSEL_SET__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -377,7 +377,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__OTHER_NAMES = TypesPackage.AVESSEL_CLASS__OTHER_NAMES;
+	int VESSEL_CLASS__OTHER_NAMES = TypesPackage.AVESSEL_SET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -386,7 +386,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 0;
+	int VESSEL_CLASS__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel</b></em>' reference.
@@ -395,7 +395,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BASE_FUEL = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 1;
+	int VESSEL_CLASS__BASE_FUEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
@@ -404,7 +404,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__CAPACITY = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 2;
+	int VESSEL_CLASS__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -413,7 +413,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__FILL_CAPACITY = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 3;
+	int VESSEL_CLASS__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Laden Attributes</b></em>' containment reference.
@@ -422,7 +422,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 4;
+	int VESSEL_CLASS__LADEN_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Attributes</b></em>' containment reference.
@@ -431,7 +431,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 5;
+	int VESSEL_CLASS__BALLAST_ATTRIBUTES = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Min Speed</b></em>' attribute.
@@ -440,7 +440,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 6;
+	int VESSEL_CLASS__MIN_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Max Speed</b></em>' attribute.
@@ -449,7 +449,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 7;
+	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Min Heel</b></em>' attribute.
@@ -458,7 +458,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 8;
+	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
@@ -467,7 +467,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 9;
+	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
@@ -476,7 +476,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 10;
+	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
@@ -485,7 +485,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 11;
+	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
@@ -494,7 +494,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 12;
+	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -503,7 +503,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_CLASS_FEATURE_COUNT + 13;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
@@ -1090,7 +1090,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__EXTENSIONS = TypesPackage.AVESSEL_EVENT__EXTENSIONS;
+	int VESSEL_EVENT__EXTENSIONS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1099,7 +1099,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__UUID = TypesPackage.AVESSEL_EVENT__UUID;
+	int VESSEL_EVENT__UUID = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1108,7 +1108,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__NAME = TypesPackage.AVESSEL_EVENT__NAME;
+	int VESSEL_EVENT__NAME = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -1118,7 +1118,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__OTHER_NAMES = TypesPackage.AVESSEL_EVENT__OTHER_NAMES;
+	int VESSEL_EVENT__OTHER_NAMES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
@@ -1127,7 +1127,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__DURATION_IN_DAYS = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 0;
+	int VESSEL_EVENT__DURATION_IN_DAYS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -1136,7 +1136,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__ALLOWED_VESSELS = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 1;
+	int VESSEL_EVENT__ALLOWED_VESSELS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -1145,7 +1145,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__PORT = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 2;
+	int VESSEL_EVENT__PORT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Start After</b></em>' attribute.
@@ -1154,7 +1154,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__START_AFTER = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 3;
+	int VESSEL_EVENT__START_AFTER = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Start By</b></em>' attribute.
@@ -1163,7 +1163,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__START_BY = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT__START_BY = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
@@ -1172,7 +1172,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_FEATURE_COUNT = TypesPackage.AVESSEL_EVENT_FEATURE_COUNT + 5;
+	int VESSEL_EVENT_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.

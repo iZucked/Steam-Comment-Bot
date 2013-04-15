@@ -3,19 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.CostComponent;
-import com.mmxlabs.models.lng.analytics.FuelCost;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -122,6 +109,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDuration() {
 		return duration;
 	}
@@ -131,6 +119,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDuration(int newDuration) {
 		int oldDuration = duration;
 		duration = newDuration;
@@ -143,6 +132,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHireCost() {
 		return hireCost;
 	}
@@ -152,6 +142,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHireCost(int newHireCost) {
 		int oldHireCost = hireCost;
 		hireCost = newHireCost;
@@ -164,6 +155,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelCost> getFuelCosts() {
 		if (fuelCosts == null) {
 			fuelCosts = new EObjectContainmentEList<FuelCost>(FuelCost.class, this, AnalyticsPackage.COST_COMPONENT__FUEL_COSTS);
@@ -176,6 +168,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFuelCost() {
 		int accumulator = 0;
 		for (final FuelCost fc : getFuelCosts()) {

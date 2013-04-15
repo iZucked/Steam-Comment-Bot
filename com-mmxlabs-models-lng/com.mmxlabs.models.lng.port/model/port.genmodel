@@ -37,9 +37,6 @@
     <genClasses ecoreClass="port.ecore#//PortGroup">
       <genFeatures notify="false" createChild="false" propertyDescription="This port group will contain all ports set here, and the contents of all port groups set here."
           propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//PortGroup/contents"/>
-      <genOperations ecoreOperation="port.ecore#//PortGroup/collect">
-        <genParameters ecoreParameter="port.ecore#//PortGroup/collect/marked"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//RouteLine">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/from"/>

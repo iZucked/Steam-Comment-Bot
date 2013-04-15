@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
@@ -23,7 +22,7 @@ public class CargoValueProviderFactory implements
 			EReference reference, MMXRootObject rootObject) {
 		final CargoModel cm = rootObject.getSubModel(CargoModel.class);
 		if (cm == null) return null;
-		if (TypesPackage.eINSTANCE.getACargo().isSuperTypeOf(reference.getEReferenceType())) {
+		if (CargoPackage.eINSTANCE.getCargo().isSuperTypeOf(reference.getEReferenceType())) {
 			return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 		} else if (reference.getEReferenceType().isSuperTypeOf(CargoPackage.eINSTANCE.getCargoGroup())) {
 			return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_CargoGroups());

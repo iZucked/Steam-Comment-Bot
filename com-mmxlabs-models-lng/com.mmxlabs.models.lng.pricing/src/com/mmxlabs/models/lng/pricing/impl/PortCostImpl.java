@@ -3,23 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.PortCost;
-import com.mmxlabs.models.lng.pricing.PortCostEntry;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVesselClass;
-import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -33,11 +16,11 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
@@ -65,7 +48,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> ports;
+	protected EList<APortSet<Port>> ports;
 
 	/**
 	 * The cached value of the '{@link #getEntries() <em>Entries</em>}' containment reference list.
@@ -130,9 +113,9 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getPorts() {
+	public EList<APortSet<Port>> getPorts() {
 		if (ports == null) {
-			ports = new EObjectResolvingEList<APortSet>(APortSet.class, this, PricingPackage.PORT_COST__PORTS);
+			ports = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, PricingPackage.PORT_COST__PORTS);
 		}
 		return ports;
 	}
@@ -197,10 +180,11 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getPortCost(AVesselClass vesselClass, PortCapability activity) {
+	public int getPortCost(VesselClass vesselClass, PortCapability activity) {
 		for (final PortCostEntry entry : getEntries()) {
 			if (entry.getActivity() == activity) {
 				if (isSetReferenceCapacity()) {
@@ -257,7 +241,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 		switch (featureID) {
 			case PricingPackage.PORT_COST__PORTS:
 				getPorts().clear();
-				getPorts().addAll((Collection<? extends APortSet>)newValue);
+				getPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case PricingPackage.PORT_COST__ENTRIES:
 				getEntries().clear();

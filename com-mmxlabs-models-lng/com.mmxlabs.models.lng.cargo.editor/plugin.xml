@@ -91,19 +91,19 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotPortValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.editor.slotRestrictedPortProvider"
-          ownerEClass="com.mmxlabs.models.lng.types.ASlot"
-          referenceEClass="com.mmxlabs.models.lng.types.APort">
+          ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
+          referenceEClass="com.mmxlabs.models.lng.port.Port">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotContractValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.editor.slotContractProvider"
-          ownerEClass="com.mmxlabs.models.lng.types.ASlot"
-          referenceEClass="com.mmxlabs.models.lng.types.AContract">
+          ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
+          referenceEClass="com.mmxlabs.models.lng.commercial.Contract">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.editor.cargoValueProvider"
-          referenceEClass="com.mmxlabs.models.lng.types.ACargo">
+          referenceEClass="com.mmxlabs.models.lng.cargo.Cargo">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
@@ -114,13 +114,13 @@
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SpotMarketValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.SpotMarketValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.cargo.SpotSlot"
-          referenceEClass="com.mmxlabs.models.lng.types.ASpotMarket">
+          referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
     </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.types.ACargo"
+          eClass="com.mmxlabs.models.lng.cargo.Cargo"
           factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.CargoModelCompositeFactory"
           id="com.mmxlabs.models.lng.cargo.editor.cargoCompositeFactory"
           inheritable="true">

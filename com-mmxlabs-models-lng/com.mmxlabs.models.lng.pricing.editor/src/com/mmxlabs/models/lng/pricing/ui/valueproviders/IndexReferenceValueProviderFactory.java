@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
@@ -28,9 +27,7 @@ public class IndexReferenceValueProviderFactory implements IReferenceValueProvid
 		final EClass referenceClass = reference.getEReferenceType();
 		
 		// TODO; there needs to be more cleverness involved here.
-		if (referenceClass == TypesPackage.eINSTANCE.getAIndex()) {
-			return new SimpleReferenceValueProvider(model, PricingPackage.eINSTANCE.getPricingModel_CommodityIndices());
-		} else if (referenceClass == PricingPackage.eINSTANCE.getIndex()) {
+		if (referenceClass == PricingPackage.eINSTANCE.getIndex()) {
 			// look at generic data??
 			// or look at reference? blah.
 			final EClassifier typeArgument = reference.getEGenericType().getETypeArguments().get(0).getERawType();

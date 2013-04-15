@@ -3,23 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.impl;
-import com.mmxlabs.models.lng.parameters.AnnealingSettings;
-import com.mmxlabs.models.lng.parameters.Argument;
-import com.mmxlabs.models.lng.parameters.Constraint;
-import com.mmxlabs.models.lng.parameters.Objective;
-import com.mmxlabs.models.lng.parameters.OptimisationRange;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.parameters.ParametersPackage;
-import com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -28,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -38,7 +22,9 @@ import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
-import com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -47,6 +33,8 @@ import com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getRange <em>Range</em>}</li>
@@ -59,7 +47,37 @@ import com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl;
  *
  * @generated
  */
-public class OptimiserSettingsImpl extends AOptimisationSettingsImpl implements OptimiserSettings {
+public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSettings {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
+
 	/**
 	 * The cached value of the '{@link #getObjectives() <em>Objectives</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -167,6 +185,39 @@ public class OptimiserSettingsImpl extends AOptimisationSettingsImpl implements 
 	@Override
 	protected EClass eStaticClass() {
 		return ParametersPackage.Literals.OPTIMISER_SETTINGS;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES);
+		}
+		return otherNames;
 	}
 
 	/**
@@ -374,6 +425,10 @@ public class OptimiserSettingsImpl extends AOptimisationSettingsImpl implements 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
+				return getName();
+			case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES:
+				return getOtherNames();
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
 				return getObjectives();
 			case ParametersPackage.OPTIMISER_SETTINGS__CONSTRAINTS:
@@ -401,6 +456,13 @@ public class OptimiserSettingsImpl extends AOptimisationSettingsImpl implements 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
+				setName((String)newValue);
+				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
+				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
 				getObjectives().clear();
 				getObjectives().addAll((Collection<? extends Objective>)newValue);
@@ -437,6 +499,12 @@ public class OptimiserSettingsImpl extends AOptimisationSettingsImpl implements 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
 				getObjectives().clear();
 				return;
@@ -470,6 +538,10 @@ public class OptimiserSettingsImpl extends AOptimisationSettingsImpl implements 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
 				return objectives != null && !objectives.isEmpty();
 			case ParametersPackage.OPTIMISER_SETTINGS__CONSTRAINTS:
@@ -494,11 +566,49 @@ public class OptimiserSettingsImpl extends AOptimisationSettingsImpl implements 
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (derivedFeatureID) {
+				case ParametersPackage.OPTIMISER_SETTINGS__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.NAMED_OBJECT__NAME: return ParametersPackage.OPTIMISER_SETTINGS__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (seed: ");
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
+		result.append(", seed: ");
 		result.append(seed);
 		result.append(", rewire: ");
 		result.append(rewire);

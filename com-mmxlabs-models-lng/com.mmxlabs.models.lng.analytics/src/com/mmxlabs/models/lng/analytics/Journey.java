@@ -3,11 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics;
-import com.mmxlabs.models.lng.port.Port;
 import org.eclipse.emf.ecore.EObject;
-import com.mmxlabs.models.lng.port.Port;
 
-import org.eclipse.emf.ecore.EObject;
+import com.mmxlabs.models.lng.port.Port;
 
 /**
  * <!-- begin-user-doc -->

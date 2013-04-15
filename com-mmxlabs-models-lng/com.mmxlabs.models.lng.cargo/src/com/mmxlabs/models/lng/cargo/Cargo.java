@@ -3,19 +3,15 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
-import com.mmxlabs.models.lng.types.ACargo;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import org.eclipse.emf.common.util.EList;
-import com.mmxlabs.models.lng.types.ACargo;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import org.eclipse.emf.common.util.EList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
-import com.mmxlabs.models.lng.types.ACargo;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,7 +31,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * @model
  * @generated
  */
-public interface Cargo extends ACargo {
+public interface Cargo extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -91,7 +87,7 @@ public interface Cargo extends ACargo {
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}&lt;com.mmxlabs.models.lng.fleet.Vessel>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
@@ -103,7 +99,7 @@ public interface Cargo extends ACargo {
 	 * @model
 	 * @generated
 	 */
-	EList<AVesselSet> getAllowedVessels();
+	EList<AVesselSet<Vessel>> getAllowedVessels();
 
 	/**
 	 * Returns the value of the '<em><b>Slots</b></em>' reference list.

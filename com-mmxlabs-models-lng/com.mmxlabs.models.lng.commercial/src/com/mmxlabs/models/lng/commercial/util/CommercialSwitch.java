@@ -4,22 +4,23 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
-import com.mmxlabs.models.lng.commercial.*;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Switch;
 
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.types.ALegalEntity;
-
-import com.mmxlabs.models.lng.types.APurchaseContract;
-import com.mmxlabs.models.lng.types.ASalesContract;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -89,7 +90,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 			case CommercialPackage.LEGAL_ENTITY: {
 				LegalEntity legalEntity = (LegalEntity)theEObject;
 				T result = caseLegalEntity(legalEntity);
-				if (result == null) result = caseALegalEntity(legalEntity);
 				if (result == null) result = caseUUIDObject(legalEntity);
 				if (result == null) result = caseNamedObject(legalEntity);
 				if (result == null) result = caseMMXObject(legalEntity);
@@ -99,7 +99,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 			case CommercialPackage.CONTRACT: {
 				Contract contract = (Contract)theEObject;
 				T result = caseContract(contract);
-				if (result == null) result = caseAContract(contract);
 				if (result == null) result = caseUUIDObject(contract);
 				if (result == null) result = caseNamedObject(contract);
 				if (result == null) result = caseMMXObject(contract);
@@ -110,8 +109,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 				SalesContract salesContract = (SalesContract)theEObject;
 				T result = caseSalesContract(salesContract);
 				if (result == null) result = caseContract(salesContract);
-				if (result == null) result = caseASalesContract(salesContract);
-				if (result == null) result = caseAContract(salesContract);
 				if (result == null) result = caseUUIDObject(salesContract);
 				if (result == null) result = caseNamedObject(salesContract);
 				if (result == null) result = caseMMXObject(salesContract);
@@ -122,8 +119,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 				PurchaseContract purchaseContract = (PurchaseContract)theEObject;
 				T result = casePurchaseContract(purchaseContract);
 				if (result == null) result = caseContract(purchaseContract);
-				if (result == null) result = caseAPurchaseContract(purchaseContract);
-				if (result == null) result = caseAContract(purchaseContract);
 				if (result == null) result = caseUUIDObject(purchaseContract);
 				if (result == null) result = caseNamedObject(purchaseContract);
 				if (result == null) result = caseMMXObject(purchaseContract);
@@ -139,7 +134,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 			case CommercialPackage.LNG_PRICE_CALCULATOR_PARAMETERS: {
 				LNGPriceCalculatorParameters lngPriceCalculatorParameters = (LNGPriceCalculatorParameters)theEObject;
 				T result = caseLNGPriceCalculatorParameters(lngPriceCalculatorParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(lngPriceCalculatorParameters);
 				if (result == null) result = caseUUIDObject(lngPriceCalculatorParameters);
 				if (result == null) result = caseMMXObject(lngPriceCalculatorParameters);
 				if (result == null) result = defaultCase(theEObject);
@@ -149,7 +143,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 				FixedPriceParameters fixedPriceParameters = (FixedPriceParameters)theEObject;
 				T result = caseFixedPriceParameters(fixedPriceParameters);
 				if (result == null) result = caseLNGPriceCalculatorParameters(fixedPriceParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(fixedPriceParameters);
 				if (result == null) result = caseUUIDObject(fixedPriceParameters);
 				if (result == null) result = caseMMXObject(fixedPriceParameters);
 				if (result == null) result = defaultCase(theEObject);
@@ -159,7 +152,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 				ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters)theEObject;
 				T result = caseExpressionPriceParameters(expressionPriceParameters);
 				if (result == null) result = caseLNGPriceCalculatorParameters(expressionPriceParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(expressionPriceParameters);
 				if (result == null) result = caseUUIDObject(expressionPriceParameters);
 				if (result == null) result = caseMMXObject(expressionPriceParameters);
 				if (result == null) result = defaultCase(theEObject);
@@ -350,82 +342,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ALegal Entity</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ALegal Entity</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseALegalEntity(ALegalEntity object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>AContract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>AContract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAContract(AContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ASales Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ASales Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseASalesContract(ASalesContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>APurchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>APurchase Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAPurchaseContract(APurchaseContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
 		return null;
 	}
 

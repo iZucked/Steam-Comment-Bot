@@ -2,7 +2,6 @@
  */
 package com.mmxlabs.models.lng.parameters.util;
 
-import com.mmxlabs.models.lng.parameters.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -15,7 +14,6 @@ import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
-import com.mmxlabs.models.lng.types.AOptimisationSettings;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -88,7 +86,6 @@ public class ParametersSwitch<T> extends Switch<T> {
 			case ParametersPackage.OPTIMISER_SETTINGS: {
 				OptimiserSettings optimiserSettings = (OptimiserSettings)theEObject;
 				T result = caseOptimiserSettings(optimiserSettings);
-				if (result == null) result = caseAOptimisationSettings(optimiserSettings);
 				if (result == null) result = caseUUIDObject(optimiserSettings);
 				if (result == null) result = caseNamedObject(optimiserSettings);
 				if (result == null) result = caseMMXObject(optimiserSettings);
@@ -280,21 +277,6 @@ public class ParametersSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>AOptimisation Settings</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>AOptimisation Settings</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAOptimisationSettings(AOptimisationSettings object) {
 		return null;
 	}
 

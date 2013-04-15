@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -92,7 +91,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 				}
 			}
 		} else {
-			if ((superValue instanceof AContract) || (superValue == null)) {
+			if ((superValue instanceof Contract) || (superValue == null)) {
 				return valueProvider.getName((EObject) object, CargoPackage.eINSTANCE.getSlot_Contract(), (EObject) superValue);
 			} else {
 				return "" + superValue;
@@ -109,7 +108,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 			return;
 		}
 		final Object newValue = valueList.get((Integer) value);
-		runSetCommand(object, (AContract) newValue);
+		runSetCommand(object, (Contract) newValue);
 	}
 
 	public CellEditor createCellEditor(final Composite c, final Object object) {
@@ -207,13 +206,13 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	@Override
 	public final void setValue(final Object object, final Object value) {
 		if (value == SetCommand.UNSET_VALUE && CargoPackage.eINSTANCE.getSlot_Contract().isUnsettable()) {
-			runSetCommand(object, (AContract) value);
+			runSetCommand(object, (Contract) value);
 		} else {
 			doSetValue(object, value);
 		}
 	}
 
-	public void runSetCommand(final Object object, final AContract value) {
+	public void runSetCommand(final Object object, final Contract value) {
 		final Object currentValue = reallyGetValue(object);
 		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
 			return;

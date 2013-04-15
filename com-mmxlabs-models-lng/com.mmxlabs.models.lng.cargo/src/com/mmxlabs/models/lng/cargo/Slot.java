@@ -3,21 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
-import com.mmxlabs.models.lng.types.ASlot;
-import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
-import com.mmxlabs.models.lng.port.Port;
 import java.util.Date;
-import com.mmxlabs.models.lng.types.ASlot;
+
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.port.Port;
-import java.util.Date;
-import com.mmxlabs.models.lng.types.ASlot;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
-import com.mmxlabs.models.lng.port.Port;
-import java.util.Date;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -45,7 +37,7 @@ import java.util.Date;
  * @model abstract="true"
  * @generated
  */
-public interface Slot extends ASlot, ITimezoneProvider {
+public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->

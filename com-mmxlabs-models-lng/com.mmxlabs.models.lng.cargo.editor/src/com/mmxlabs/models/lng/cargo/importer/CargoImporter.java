@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -189,7 +188,7 @@ public class CargoImporter extends DefaultClassImporter {
 						// attempt to find vessel
 						final NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
 						if (vessel instanceof Vessel) {
-							existing.setAssignment((AVesselSet) vessel);
+							existing.setAssignment((Vessel) vessel);
 						} else {
 							context.addProblem(noVessel);
 						}

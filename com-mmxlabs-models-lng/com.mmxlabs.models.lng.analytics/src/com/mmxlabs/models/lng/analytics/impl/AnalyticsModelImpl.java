@@ -3,21 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.CargoSandbox;
-import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
-import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
-import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -119,6 +104,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<UnitCostMatrix> getRoundTripMatrices() {
 		if (roundTripMatrices == null) {
 			roundTripMatrices = new EObjectContainmentEList<UnitCostMatrix>(UnitCostMatrix.class, this, AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
@@ -131,6 +117,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UnitCostMatrix getSelectedMatrix() {
 		if (selectedMatrix != null && selectedMatrix.eIsProxy()) {
 			InternalEObject oldSelectedMatrix = (InternalEObject)selectedMatrix;
@@ -157,6 +144,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSelectedMatrix(UnitCostMatrix newSelectedMatrix) {
 		UnitCostMatrix oldSelectedMatrix = selectedMatrix;
 		selectedMatrix = newSelectedMatrix;
@@ -170,6 +158,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ShippingCostPlan> getShippingCostPlans() {
 		if (shippingCostPlans == null) {
 			shippingCostPlans = new EObjectContainmentEList<ShippingCostPlan>(ShippingCostPlan.class, this, AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
@@ -183,6 +172,7 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CargoSandbox> getCargoSandboxes() {
 		if (cargoSandboxes == null) {
 			cargoSandboxes = new EObjectContainmentEList<CargoSandbox>(CargoSandbox.class, this, AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES);

@@ -19,21 +19,21 @@ import com.mmxlabs.models.ui.valueproviders.MergedReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
 public class PortValueProviderFactory implements IReferenceValueProviderFactory {
-	private static final Logger log = LoggerFactory
-			.getLogger(PortValueProviderFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(PortValueProviderFactory.class);
 
 	@Override
-	public IReferenceValueProvider createReferenceValueProvider(EClass owner,EReference reference, MMXRootObject rootObject) {
+	public IReferenceValueProvider createReferenceValueProvider(EClass owner, EReference reference, MMXRootObject rootObject) {
 		final EClass referenceClass = reference.getEReferenceType();
-		if (referenceClass == PortPackage.eINSTANCE.getPort() || referenceClass == TypesPackage.eINSTANCE.getAPort()) {
+		if (referenceClass == PortPackage.eINSTANCE.getPort()) {
 			return new SimpleReferenceValueProvider(rootObject.getSubModel(PortModel.class), PortPackage.eINSTANCE.getPortModel_Ports());
 		} else if (referenceClass == PortPackage.eINSTANCE.getPortGroup()) {
 			return new SimpleReferenceValueProvider(rootObject.getSubModel(PortModel.class), PortPackage.eINSTANCE.getPortModel_PortGroups());
 		} else if (referenceClass == TypesPackage.eINSTANCE.getAPortSet()) {
-			return new MergedReferenceValueProvider(rootObject.getSubModel(PortModel.class), PortPackage.eINSTANCE.getPortModel_Ports(), PortPackage.eINSTANCE.getPortModel_PortGroups(), PortPackage.eINSTANCE.getPortModel_SpecialPortGroups());
+			return new MergedReferenceValueProvider(rootObject.getSubModel(PortModel.class), PortPackage.eINSTANCE.getPortModel_Ports(), PortPackage.eINSTANCE.getPortModel_PortGroups(),
+					PortPackage.eINSTANCE.getPortModel_SpecialPortGroups());
 		} else {
-			log.warn("Port value provider factory cannot produce provider for " + referenceClass.getName() + " from " + referenceClass.getEPackage().getNsURI() + ", "
-					+ "called with " + owner.getName() + "." + reference.getName());
+			log.warn("Port value provider factory cannot produce provider for " + referenceClass.getName() + " from " + referenceClass.getEPackage().getNsURI() + ", " + "called with "
+					+ owner.getName() + "." + reference.getName());
 			return null;
 		}
 	}

@@ -3,10 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -38,6 +36,14 @@ public class DryDockEventImpl extends VesselEventImpl implements DryDockEvent {
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.DRY_DOCK_EVENT;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	@Override
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		return null;
 	}
 
 } // end of DryDockEventImpl

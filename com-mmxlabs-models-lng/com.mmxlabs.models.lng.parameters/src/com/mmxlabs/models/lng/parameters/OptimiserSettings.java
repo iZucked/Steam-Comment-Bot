@@ -3,11 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters;
-import com.mmxlabs.models.lng.types.AOptimisationSettings;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EList;
 
-import com.mmxlabs.models.lng.types.AOptimisationSettings;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +30,7 @@ import com.mmxlabs.models.lng.types.AOptimisationSettings;
  * @model
  * @generated
  */
-public interface OptimiserSettings extends AOptimisationSettings {
+public interface OptimiserSettings extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Objectives</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.parameters.Objective}.

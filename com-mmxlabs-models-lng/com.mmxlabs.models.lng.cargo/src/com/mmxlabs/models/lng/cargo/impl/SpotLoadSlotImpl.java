@@ -3,30 +3,15 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.types.ASpotMarket;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 /**
  * <!-- begin-user-doc -->
@@ -50,7 +35,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 	 * @generated
 	 * @ordered
 	 */
-	protected ASpotMarket market;
+	protected SpotMarket market;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -73,13 +58,14 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ASpotMarket getMarket() {
+	public SpotMarket getMarket() {
 		if (market != null && market.eIsProxy()) {
 			InternalEObject oldMarket = (InternalEObject)market;
-			market = (ASpotMarket)eResolveProxy(oldMarket);
+			market = (SpotMarket)eResolveProxy(oldMarket);
 			if (market != oldMarket) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SPOT_LOAD_SLOT__MARKET, oldMarket, market));
@@ -90,20 +76,22 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ASpotMarket basicGetMarket() {
+	public SpotMarket basicGetMarket() {
 		return market;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMarket(ASpotMarket newMarket) {
-		ASpotMarket oldMarket = market;
+	public void setMarket(SpotMarket newMarket) {
+		SpotMarket oldMarket = market;
 		market = newMarket;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SPOT_LOAD_SLOT__MARKET, oldMarket, market));
@@ -133,7 +121,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case CargoPackage.SPOT_LOAD_SLOT__MARKET:
-				setMarket((ASpotMarket)newValue);
+				setMarket((SpotMarket)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -148,7 +136,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CargoPackage.SPOT_LOAD_SLOT__MARKET:
-				setMarket((ASpotMarket)null);
+				setMarket((SpotMarket)null);
 				return;
 		}
 		super.eUnset(featureID);

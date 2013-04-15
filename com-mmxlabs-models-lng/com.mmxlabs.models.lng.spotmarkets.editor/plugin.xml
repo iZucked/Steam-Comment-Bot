@@ -10,16 +10,6 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditorID"
-            name="%_UI_SpotMarketsEditor_label"
-            icon="icons/full/obj16/SpotMarketsModelFile.gif"
-            extensions="spotmarkets"
-            class="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditor"
-            contributorClass="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsActionBarContributor">
-      </editor>
-   </extension>
 
 	
 	<extension
@@ -155,13 +145,13 @@
           factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketPortValueProviderFactory"
           id="com.mmxlabs.models.lng..editorspotmarkets.valueproviders.SpotMarketPortValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
-          referenceEClass="com.mmxlabs.models.lng.types.APort">
+          referenceEClass="com.mmxlabs.models.lng.port.Port">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
           id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.CharterCostModel"
-          referenceEClass="com.mmxlabs.models.lng.types.AIndex">
+          referenceEClass="com.mmxlabs.models.lng.pricing.Index">
     </valueProvider>
  </extension>
  <extension

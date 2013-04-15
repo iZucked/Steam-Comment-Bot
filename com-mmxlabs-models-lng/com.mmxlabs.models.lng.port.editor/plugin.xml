@@ -99,7 +99,7 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.port.ui.valueproviders.RouteValueProviderFactory"
           id="com.mmxlabs.models.lng.port.editor.routeValueProvider"
-          referenceEClass="com.mmxlabs.models.lng.types.ARoute">
+          referenceEClass="com.mmxlabs.models.lng.port.Route">
     </valueProvider>
  </extension>
  <extension

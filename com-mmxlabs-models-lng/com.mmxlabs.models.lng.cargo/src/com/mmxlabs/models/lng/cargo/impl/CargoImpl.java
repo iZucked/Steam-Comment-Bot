@@ -3,40 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CargoType;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.ACargoImpl;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CargoType;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.ACargoImpl;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
@@ -47,6 +13,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -58,8 +25,11 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.ACargoImpl;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -68,6 +38,8 @@ import com.mmxlabs.models.lng.types.impl.ACargoImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSlots <em>Slots</em>}</li>
@@ -76,7 +48,40 @@ import com.mmxlabs.models.lng.types.impl.ACargoImpl;
  *
  * @generated
  */
-public class CargoImpl extends ACargoImpl implements Cargo {
+public class CargoImpl extends UUIDObjectImpl implements Cargo {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
+
 	/**
 	 * The default value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -114,7 +119,7 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AVesselSet> allowedVessels;
+	protected EList<AVesselSet<Vessel>> allowedVessels;
 
 	/**
 	 * The cached value of the '{@link #getSlots() <em>Slots</em>}' reference list.
@@ -144,6 +149,42 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.CARGO;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, CargoPackage.CARGO__OTHER_NAMES);
+		}
+		return otherNames;
 	}
 
 	/**
@@ -197,9 +238,9 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AVesselSet> getAllowedVessels() {
+	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
-			allowedVessels = new EObjectResolvingEList<AVesselSet>(AVesselSet.class, this, CargoPackage.CARGO__ALLOWED_VESSELS);
+			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.CARGO__ALLOWED_VESSELS);
 		}
 		return allowedVessels;
 	}
@@ -287,6 +328,10 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case CargoPackage.CARGO__NAME:
+				return getName();
+			case CargoPackage.CARGO__OTHER_NAMES:
+				return getOtherNames();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
@@ -306,12 +351,19 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case CargoPackage.CARGO__NAME:
+				setName((String)newValue);
+				return;
+			case CargoPackage.CARGO__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
+				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				setAllowRewiring((Boolean)newValue);
 				return;
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
-				getAllowedVessels().addAll((Collection<? extends AVesselSet>)newValue);
+				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
 				return;
 			case CargoPackage.CARGO__SLOTS:
 				getSlots().clear();
@@ -329,6 +381,12 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case CargoPackage.CARGO__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case CargoPackage.CARGO__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				unsetAllowRewiring();
 				return;
@@ -350,6 +408,10 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case CargoPackage.CARGO__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case CargoPackage.CARGO__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isSetAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
@@ -358,6 +420,40 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return slots != null && !slots.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (derivedFeatureID) {
+				case CargoPackage.CARGO__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case CargoPackage.CARGO__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.NAMED_OBJECT__NAME: return CargoPackage.CARGO__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return CargoPackage.CARGO__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
@@ -386,7 +482,11 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (allowRewiring: ");
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
+		result.append(", allowRewiring: ");
 		if (allowRewiringESet) result.append(allowRewiring); else result.append("<unset>");
 		result.append(')');
 		return result.toString();

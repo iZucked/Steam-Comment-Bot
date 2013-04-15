@@ -3,20 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
-import com.mmxlabs.models.lng.analytics.ShippingCostRow;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -136,6 +122,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -162,6 +149,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -174,6 +162,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getNotionalDayRate() {
 		return notionalDayRate;
 	}
@@ -183,6 +172,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotionalDayRate(int newNotionalDayRate) {
 		int oldNotionalDayRate = notionalDayRate;
 		notionalDayRate = newNotionalDayRate;
@@ -195,6 +185,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getBaseFuelPrice() {
 		return baseFuelPrice;
 	}
@@ -204,6 +195,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseFuelPrice(double newBaseFuelPrice) {
 		double oldBaseFuelPrice = baseFuelPrice;
 		baseFuelPrice = newBaseFuelPrice;
@@ -216,6 +208,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ShippingCostRow> getRows() {
 		if (rows == null) {
 			rows = new EObjectContainmentEList<ShippingCostRow>(ShippingCostRow.class, this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS);

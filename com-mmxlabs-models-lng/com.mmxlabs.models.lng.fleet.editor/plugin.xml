@@ -117,7 +117,7 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.BaseFuelValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.editor.baseFuelProvider"
-          referenceEClass="com.mmxlabs.models.lng.types.ABaseFuel">
+          referenceEClass="com.mmxlabs.models.lng.fleet.BaseFuel">
     </valueProvider>
  </extension>
  <extension

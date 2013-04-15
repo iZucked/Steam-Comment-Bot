@@ -3,9 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.fleet.Vessel;

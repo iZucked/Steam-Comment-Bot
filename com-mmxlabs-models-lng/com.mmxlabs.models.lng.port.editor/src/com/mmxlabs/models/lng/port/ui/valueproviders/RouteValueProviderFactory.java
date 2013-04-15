@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
@@ -20,7 +19,7 @@ public class RouteValueProviderFactory implements IReferenceValueProviderFactory
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner,
 			final EReference reference, final MMXRootObject rootObject) {
 		final EClass referenceClass = reference.getEReferenceType();
-		if (TypesPackage.eINSTANCE.getARoute().isSuperTypeOf(referenceClass)) {
+		if (PortPackage.eINSTANCE.getRoute().isSuperTypeOf(referenceClass)) {
 			return new SimpleReferenceValueProvider(rootObject.getSubModel(PortModel.class), PortPackage.eINSTANCE.getPortModel_Routes());
 		}
 		return null;

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
-import java.util.Collections;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;

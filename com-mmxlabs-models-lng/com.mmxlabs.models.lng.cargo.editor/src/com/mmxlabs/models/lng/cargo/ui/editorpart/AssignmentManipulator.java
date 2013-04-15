@@ -17,12 +17,13 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -67,7 +68,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 			allowedValues = getAllowedValues((EObject) object, allowedValues);
 						
 			// locate the appropriate value in the list of options 
-			final AVesselSet set = (AVesselSet) (allowedValues.get((Integer) value).getSecond());
+			final AVesselSet<Vessel> set = (AVesselSet<Vessel>) (allowedValues.get((Integer) value).getSecond());
 			final EditingDomain ed = location.getEditingDomain();
 
 			ed.getCommandStack().execute(AssignmentEditorHelper.reassignElement(ed, input, (UUIDObject) object, set));
@@ -84,7 +85,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		return new ComboBoxCellEditor(parent, items);
 	}
 	
-	public AVesselSet getVessel(final Object object) {
+	public AVesselSet<Vessel> getVessel(final Object object) {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
@@ -92,7 +93,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 			if (input != null) {
 				ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, cargo);
 				if (assignment != null)
-					return (AVesselSet) assignment.getAssignment();
+					return assignment.getAssignment();
 			}
 		}
 

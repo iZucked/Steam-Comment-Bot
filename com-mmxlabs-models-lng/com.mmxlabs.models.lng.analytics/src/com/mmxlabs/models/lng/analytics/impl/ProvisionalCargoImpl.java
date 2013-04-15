@@ -7,6 +7,12 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.analytics.impl;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
@@ -14,27 +20,6 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BuyOpportunity;
-import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
-import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.UnitCostLine;
-
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -118,6 +103,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BuyOpportunity getBuy() {
 		return buy;
 	}
@@ -142,6 +128,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuy(BuyOpportunity newBuy) {
 		if (newBuy != buy) {
 			NotificationChain msgs = null;
@@ -161,6 +148,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SellOpportunity getSell() {
 		return sell;
 	}
@@ -185,6 +173,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSell(SellOpportunity newSell) {
 		if (newSell != sell) {
 			NotificationChain msgs = null;
@@ -204,6 +193,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UnitCostLine getCostLine() {
 		return costLine;
 	}
@@ -228,6 +218,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCostLine(UnitCostLine newCostLine) {
 		if (newCostLine != costLine) {
 			NotificationChain msgs = null;
@@ -247,6 +238,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -273,6 +265,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;

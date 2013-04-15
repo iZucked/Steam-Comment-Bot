@@ -50,7 +50,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	public PortComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.APORT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.APORT_SET));
 	}
 	
 	/**

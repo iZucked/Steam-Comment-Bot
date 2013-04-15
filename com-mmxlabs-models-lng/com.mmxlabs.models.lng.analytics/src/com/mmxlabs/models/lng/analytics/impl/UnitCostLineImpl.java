@@ -3,28 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.CostComponent;
-import com.mmxlabs.models.lng.analytics.UnitCostLine;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.ExtraDataFormatType;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import java.io.Serializable;
-import java.lang.Iterable;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-import java.io.Serializable;
-import java.lang.Iterable;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -340,6 +318,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ExtraData> getExtraData() {
 		if (extraData == null) {
 			extraData = new EObjectContainmentEList<ExtraData>(ExtraData.class, this, AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA);
@@ -352,6 +331,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getUnitCost() {
 		return unitCost;
 	}
@@ -361,6 +341,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnitCost(double newUnitCost) {
 		double oldUnitCost = unitCost;
 		unitCost = newUnitCost;
@@ -373,6 +354,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getTotalCost() {
 		return getHireCost() + getFuelCost() + getCanalCost() + getPortCost();
 	}
@@ -382,6 +364,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ExtraData getDataWithPath(Iterable<String> keys) {
 		java.util.Iterator<String> iterator = keys.iterator();
 				if (iterator.hasNext() == false) return null;
@@ -397,6 +380,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ExtraData getDataWithKey(String key) {
 		for (final ExtraData e : getExtraData()) {
 			if (e.getKey().equals(key)) return e;
@@ -409,6 +393,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ExtraData addExtraData(String key, String name) {
 		final ExtraData result = TypesFactory.eINSTANCE.createExtraData();
 		result.setKey(key);
@@ -419,10 +404,12 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExtraData addExtraData(String key, String name, Serializable value, ExtraDataFormatType format) {
+	@Override
+	public ExtraData addExtraData(String key, String name, Object value, ExtraDataFormatType format) {
 		final ExtraData result = addExtraData(key, name);
 		result.setValue(value);
 		result.setFormatType(format);
@@ -434,6 +421,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz, T defaultValue) {
 		final ExtraData ed = getDataWithPath(path);
 		if (ed == null) return defaultValue;
@@ -447,6 +435,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMmbtuDelivered() {
 		return mmbtuDelivered;
 	}
@@ -456,6 +445,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMmbtuDelivered(int newMmbtuDelivered) {
 		int oldMmbtuDelivered = mmbtuDelivered;
 		mmbtuDelivered = newMmbtuDelivered;
@@ -468,6 +458,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getFrom() {
 		if (from != null && from.eIsProxy()) {
 			InternalEObject oldFrom = (InternalEObject)from;
@@ -494,6 +485,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFrom(Port newFrom) {
 		Port oldFrom = from;
 		from = newFrom;
@@ -506,6 +498,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getTo() {
 		if (to != null && to.eIsProxy()) {
 			InternalEObject oldTo = (InternalEObject)to;
@@ -532,6 +525,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTo(Port newTo) {
 		Port oldTo = to;
 		to = newTo;
@@ -544,6 +538,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDuration() {
 		return duration;
 	}
@@ -553,6 +548,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDuration(int newDuration) {
 		int oldDuration = duration;
 		duration = newDuration;
@@ -565,6 +561,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolumeLoaded() {
 		return volumeLoaded;
 	}
@@ -574,6 +571,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeLoaded(int newVolumeLoaded) {
 		int oldVolumeLoaded = volumeLoaded;
 		volumeLoaded = newVolumeLoaded;
@@ -586,6 +584,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getVolumeDischarged() {
 		return volumeDischarged;
 	}
@@ -595,6 +594,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeDischarged(int newVolumeDischarged) {
 		int oldVolumeDischarged = volumeDischarged;
 		volumeDischarged = newVolumeDischarged;
@@ -607,6 +607,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHireCost() {
 		return hireCost;
 	}
@@ -616,6 +617,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHireCost(int newHireCost) {
 		int oldHireCost = hireCost;
 		hireCost = newHireCost;
@@ -628,6 +630,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFuelCost() {
 		return fuelCost;
 	}
@@ -637,6 +640,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFuelCost(int newFuelCost) {
 		int oldFuelCost = fuelCost;
 		fuelCost = newFuelCost;
@@ -649,6 +653,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCanalCost() {
 		return canalCost;
 	}
@@ -658,6 +663,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCanalCost(int newCanalCost) {
 		int oldCanalCost = canalCost;
 		canalCost = newCanalCost;
@@ -670,6 +676,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CostComponent> getCostComponents() {
 		if (costComponents == null) {
 			costComponents = new EObjectContainmentEList<CostComponent>(CostComponent.class, this, AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS);
@@ -682,6 +689,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPortCost() {
 		return portCost;
 	}
@@ -692,6 +700,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortCost(int newPortCost) {
 		int oldPortCost = portCost;
 		portCost = newPortCost;
@@ -705,6 +714,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getProfit() {
 		return profit;
 	}
@@ -715,6 +725,7 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setProfit(int newProfit) {
 		int oldProfit = profit;
 		profit = newProfit;

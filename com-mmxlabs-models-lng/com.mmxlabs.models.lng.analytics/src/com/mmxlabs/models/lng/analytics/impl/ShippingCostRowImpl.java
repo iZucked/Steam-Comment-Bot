@@ -3,16 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.DestinationType;
-import com.mmxlabs.models.lng.analytics.ShippingCostRow;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import java.util.Date;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -203,6 +193,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -229,6 +220,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -241,6 +233,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getDate() {
 		return date;
 	}
@@ -250,6 +243,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(Date newDate) {
 		Date oldDate = date;
 		date = newDate;
@@ -262,6 +256,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCargoPrice() {
 		return cargoPrice;
 	}
@@ -271,6 +266,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoPrice(double newCargoPrice) {
 		double oldCargoPrice = cargoPrice;
 		cargoPrice = newCargoPrice;
@@ -283,6 +279,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCvValue() {
 		return cvValue;
 	}
@@ -292,6 +289,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCvValue(double newCvValue) {
 		double oldCvValue = cvValue;
 		cvValue = newCvValue;
@@ -304,6 +302,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DestinationType getDestinationType() {
 		return destinationType;
 	}
@@ -313,6 +312,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDestinationType(DestinationType newDestinationType) {
 		DestinationType oldDestinationType = destinationType;
 		destinationType = newDestinationType == null ? DESTINATION_TYPE_EDEFAULT : newDestinationType;
@@ -325,6 +325,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelVolume() {
 		return heelVolume;
 	}
@@ -334,6 +335,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelVolume(int newHeelVolume) {
 		int oldHeelVolume = heelVolume;
 		heelVolume = newHeelVolume;
@@ -347,6 +349,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isIncludePortCosts() {
 		return includePortCosts;
 	}
@@ -357,6 +360,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIncludePortCosts(boolean newIncludePortCosts) {
 		boolean oldIncludePortCosts = includePortCosts;
 		includePortCosts = newIncludePortCosts;

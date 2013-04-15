@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
-import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class MarketSlotContraint extends AbstractModelConstraint {
@@ -37,7 +37,7 @@ public class MarketSlotContraint extends AbstractModelConstraint {
 		if (object instanceof SpotSlot) {
 
 			final SpotSlot spotSlot = (SpotSlot) object;
-			final ASpotMarket market = spotSlot.getMarket();
+			final SpotMarket market = spotSlot.getMarket();
 
 			if (spotSlot instanceof SpotLoadSlot) {
 				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;

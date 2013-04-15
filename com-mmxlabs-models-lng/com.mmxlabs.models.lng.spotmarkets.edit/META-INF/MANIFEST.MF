@@ -13,5 +13,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.lng.spotmarkets;visibility:=reexport,
  org.eclipse.emf.edit;visibility:=reexport,
  com.mmxlabs.models.lng.pricing.edit;visibility:=reexport,
- com.mmxlabs.models.lng.types.edit;visibility:=reexport
+ com.mmxlabs.models.lng.types.edit;visibility:=reexport,
+ com.mmxlabs.models.lng.commercial.edit;bundle-version="[3.0.0,4.0.0)";visibility:=reexport
 Bundle-ActivationPolicy: lazy

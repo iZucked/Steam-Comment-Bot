@@ -3,21 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import java.util.Collection;
-import java.util.Date;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -33,6 +18,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
@@ -65,7 +51,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> startAt;
+	protected EList<APortSet<Port>> startAt;
 
 	/**
 	 * The default value of the '{@link #getStartAfter() <em>Start After</em>}' attribute.
@@ -133,7 +119,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> endAt;
+	protected EList<APortSet<Port>> endAt;
 
 	/**
 	 * The default value of the '{@link #getEndAfter() <em>End After</em>}' attribute.
@@ -239,9 +225,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getStartAt() {
+	public EList<APortSet<Port>> getStartAt() {
 		if (startAt == null) {
-			startAt = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL_AVAILABILITY__START_AT);
+			startAt = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, FleetPackage.VESSEL_AVAILABILITY__START_AT);
 		}
 		return startAt;
 	}
@@ -343,9 +329,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getEndAt() {
+	public EList<APortSet<Port>> getEndAt() {
 		if (endAt == null) {
-			endAt = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL_AVAILABILITY__END_AT);
+			endAt = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, FleetPackage.VESSEL_AVAILABILITY__END_AT);
 		}
 		return endAt;
 	}
@@ -583,7 +569,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 		switch (featureID) {
 			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				getStartAt().clear();
-				getStartAt().addAll((Collection<? extends APortSet>)newValue);
+				getStartAt().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
 				setStartAfter((Date)newValue);
@@ -593,7 +579,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 				return;
 			case FleetPackage.VESSEL_AVAILABILITY__END_AT:
 				getEndAt().clear();
-				getEndAt().addAll((Collection<? extends APortSet>)newValue);
+				getEndAt().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case FleetPackage.VESSEL_AVAILABILITY__END_AFTER:
 				setEndAfter((Date)newValue);

@@ -3,10 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
@@ -38,6 +36,15 @@ public class MaintenanceEventImpl extends VesselEventImpl implements Maintenance
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.MAINTENANCE_EVENT;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	@Override
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 } // end of MaintenanceEventImpl

@@ -3,74 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 
@@ -82,15 +14,15 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
@@ -139,7 +71,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @generated
 	 * @ordered
 	 */
-	protected ASpotMarket spotMarket;
+	protected SpotMarket spotMarket;
 
 	/**
 	 * This is true if the Spot Market reference has been set.
@@ -305,13 +237,14 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ASpotMarket getSpotMarket() {
+	public SpotMarket getSpotMarket() {
 		if (spotMarket != null && spotMarket.eIsProxy()) {
 			InternalEObject oldSpotMarket = (InternalEObject)spotMarket;
-			spotMarket = (ASpotMarket)eResolveProxy(oldSpotMarket);
+			spotMarket = (SpotMarket)eResolveProxy(oldSpotMarket);
 			if (spotMarket != oldSpotMarket) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SLOT_ALLOCATION__SPOT_MARKET, oldSpotMarket, spotMarket));
@@ -322,20 +255,22 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ASpotMarket basicGetSpotMarket() {
+	public SpotMarket basicGetSpotMarket() {
 		return spotMarket;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setSpotMarket(ASpotMarket newSpotMarket) {
-		ASpotMarket oldSpotMarket = spotMarket;
+	public void setSpotMarket(SpotMarket newSpotMarket) {
+		SpotMarket oldSpotMarket = spotMarket;
 		spotMarket = newSpotMarket;
 		boolean oldSpotMarketESet = spotMarketESet;
 		spotMarketESet = true;
@@ -349,7 +284,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @generated
 	 */
 	public void unsetSpotMarket() {
-		ASpotMarket oldSpotMarket = spotMarket;
+		SpotMarket oldSpotMarket = spotMarket;
 		boolean oldSpotMarketESet = spotMarketESet;
 		spotMarket = null;
 		spotMarketESet = false;
@@ -562,16 +497,17 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public APort getPort() {
+	public Port getPort() {
 		if (isSetSlot()) {
 			return getSlot().getPort();
 		} else if (isSetSlotVisit()) {
 			return getSlotVisit().getPort();
 		} else if (isSetSpotMarket()) {
-			final ASpotMarket market = getSpotMarket();
+			final SpotMarket market = getSpotMarket();
 			if (market instanceof FOBSalesMarket) {
 				return ((FOBSalesMarket) market).getLoadPort();
 			} else if (market instanceof FOBPurchasesMarket) {
@@ -608,10 +544,11 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public AContract getContract() {
+	public Contract getContract() {
 		if (isSetSlot()) {
 			return slot.getContract();
 //		} else if (isSetSpotMarket()) {
@@ -705,7 +642,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				setSlot((Slot)newValue);
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__SPOT_MARKET:
-				setSpotMarket((ASpotMarket)newValue);
+				setSpotMarket((SpotMarket)newValue);
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)newValue);

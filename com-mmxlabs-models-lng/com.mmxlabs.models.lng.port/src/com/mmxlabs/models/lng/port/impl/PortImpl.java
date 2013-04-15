@@ -4,34 +4,24 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
-import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.lng.types.impl.APortImpl;
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
-
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.lng.types.impl.APortImpl;
-
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import com.mmxlabs.models.lng.types.impl.APortSetImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -55,7 +45,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *
  * @generated
  */
-public class PortImpl extends APortImpl implements Port {
+public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getCapabilities() <em>Capabilities</em>}' attribute list.
 	 * <!-- begin-user-doc -->
@@ -663,4 +653,19 @@ public class PortImpl extends APortImpl implements Port {
 		return result.toString();
 	}
 
+	/**
+	 * <!-- begin-user-doc --> 
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EList<Port> collect(EList<APortSet<Port>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Port> result = new UniqueEList<Port>();
+		marked.add(this);
+		result.add(this);
+		return result;
+	}
+	
 } //PortImpl

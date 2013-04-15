@@ -8,7 +8,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="activeSetting" lowerBound="1"
         eType="#//OptimiserSettings"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptimiserSettings" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AOptimisationSettings">
+  <eClassifiers xsi:type="ecore:EClass" name="OptimiserSettings" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="objectives" upperBound="-1"
         eType="#//Objective" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"

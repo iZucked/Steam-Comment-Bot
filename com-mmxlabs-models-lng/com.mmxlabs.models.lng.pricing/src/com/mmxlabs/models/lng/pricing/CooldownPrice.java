@@ -3,11 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
@@ -31,7 +29,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 public interface CooldownPrice extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Ports</em>' reference list isn't clear,
@@ -43,7 +41,7 @@ public interface CooldownPrice extends MMXObject {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getPorts();
+	EList<APortSet<Port>> getPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Index</b></em>' reference.

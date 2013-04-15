@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.spotmarkets.provider;
 
 
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,7 +29,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.types.provider.ASpotMarketItemProvider;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.spotmarkets.SpotMarket} object.
@@ -37,7 +39,7 @@ import com.mmxlabs.models.lng.types.provider.ASpotMarketItemProvider;
  * @generated
  */
 public class SpotMarketItemProvider
-	extends ASpotMarketItemProvider
+	extends UUIDObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -65,10 +67,56 @@ public class SpotMarketItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNamePropertyDescriptor(object);
+			addOtherNamesPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedObject_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Other Names feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOtherNamesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedObject_otherNames_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
+				 MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -172,6 +220,8 @@ public class SpotMarketItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SpotMarket.class)) {
+			case SpotMarketsPackage.SPOT_MARKET__NAME:
+			case SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES:
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
@@ -199,17 +249,16 @@ public class SpotMarketItemProvider
 			(createChildParameter
 				(SpotMarketsPackage.Literals.SPOT_MARKET__AVAILABILITY,
 				 SpotMarketsFactory.eINSTANCE.createSpotAvailability()));
-	}
 
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
+		newChildDescriptors.add
+			(createChildParameter
+				(SpotMarketsPackage.Literals.SPOT_MARKET__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SpotMarketsPackage.Literals.SPOT_MARKET__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
 	}
 
 }

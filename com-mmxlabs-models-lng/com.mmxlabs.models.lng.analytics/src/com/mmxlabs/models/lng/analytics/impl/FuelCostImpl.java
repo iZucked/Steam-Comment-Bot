@@ -3,12 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.FuelCost;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -138,6 +132,7 @@ public class FuelCostImpl extends EObjectImpl implements FuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -147,6 +142,7 @@ public class FuelCostImpl extends EObjectImpl implements FuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -159,6 +155,7 @@ public class FuelCostImpl extends EObjectImpl implements FuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUnit() {
 		return unit;
 	}
@@ -168,6 +165,7 @@ public class FuelCostImpl extends EObjectImpl implements FuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnit(String newUnit) {
 		String oldUnit = unit;
 		unit = newUnit;
@@ -180,6 +178,7 @@ public class FuelCostImpl extends EObjectImpl implements FuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getQuantity() {
 		return quantity;
 	}
@@ -189,6 +188,7 @@ public class FuelCostImpl extends EObjectImpl implements FuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setQuantity(int newQuantity) {
 		int oldQuantity = quantity;
 		quantity = newQuantity;
@@ -201,6 +201,7 @@ public class FuelCostImpl extends EObjectImpl implements FuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCost() {
 		return cost;
 	}
@@ -210,6 +211,7 @@ public class FuelCostImpl extends EObjectImpl implements FuelCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCost(int newCost) {
 		int oldCost = cost;
 		cost = newCost;

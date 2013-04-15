@@ -9,6 +9,7 @@
 package com.mmxlabs.models.lng.spotmarkets;
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 
 /**
@@ -57,7 +58,7 @@ public interface DESPurchaseMarket extends SpotMarket {
 
 	/**
 	 * Returns the value of the '<em><b>Destination Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Destination Ports</em>' reference list isn't clear,
@@ -69,7 +70,7 @@ public interface DESPurchaseMarket extends SpotMarket {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getDestinationPorts();
+	EList<APortSet<Port>> getDestinationPorts();
 
 } // end of  DESPurchaseMarket
 

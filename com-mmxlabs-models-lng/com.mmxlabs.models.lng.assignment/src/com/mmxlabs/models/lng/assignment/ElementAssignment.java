@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -71,7 +72,7 @@ public interface ElementAssignment extends MMXObject {
 	 * @model
 	 * @generated
 	 */
-	AVesselSet getAssignment();
+	AVesselSet<Vessel> getAssignment();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.assignment.ElementAssignment#getAssignment <em>Assignment</em>}' reference.
@@ -81,7 +82,7 @@ public interface ElementAssignment extends MMXObject {
 	 * @see #getAssignment()
 	 * @generated
 	 */
-	void setAssignment(AVesselSet value);
+	void setAssignment(AVesselSet<Vessel> value);
 
 	/**
 	 * Returns the value of the '<em><b>Locked</b></em>' attribute.

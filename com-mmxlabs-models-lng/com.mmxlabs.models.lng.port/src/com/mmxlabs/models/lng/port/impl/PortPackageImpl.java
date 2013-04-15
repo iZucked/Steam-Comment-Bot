@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.port.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -531,12 +531,22 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		portEClass.getESuperTypes().add(theTypesPackage.getAPort());
-		routeEClass.getESuperTypes().add(theTypesPackage.getARoute());
-		portGroupEClass.getESuperTypes().add(theTypesPackage.getAPortSet());
+		EGenericType g1 = createEGenericType(theTypesPackage.getAPortSet());
+		EGenericType g2 = createEGenericType(this.getPort());
+		g1.getETypeArguments().add(g2);
+		portEClass.getEGenericSuperTypes().add(g1);
+		routeEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		routeEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(this.getPort());
+		g1.getETypeArguments().add(g2);
+		portGroupEClass.getEGenericSuperTypes().add(g1);
 		routeLineEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		capabilityGroupEClass.getESuperTypes().add(theTypesPackage.getAPortSet());
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(this.getPort());
+		g1.getETypeArguments().add(g2);
+		capabilityGroupEClass.getEGenericSuperTypes().add(g1);
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -557,10 +567,10 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getRoute_RoutingOptions(), ecorePackage.getEString(), "routingOptions", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portGroupEClass, PortGroup.class, "PortGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPortGroup_Contents(), theTypesPackage.getAPortSet(), null, "contents", null, 0, -1, PortGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		EOperation op = addEOperation(portGroupEClass, theTypesPackage.getAPort(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theTypesPackage.getAPortSet(), "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(this.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getPortGroup_Contents(), g1, null, "contents", null, 0, -1, PortGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(routeLineEClass, RouteLine.class, "RouteLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRouteLine_From(), this.getPort(), null, "from", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -602,7 +612,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   source, 
 		   new String[] {
 			 "showOtherNames", "true"
-		   });	
+		   });
 	}
 
 } //PortPackageImpl

@@ -3,14 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.types.AIndex;
-import java.util.Date;
-import org.eclipse.emf.common.util.EList;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 
-import com.mmxlabs.models.lng.types.AIndex;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,7 +20,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  * @model abstract="true"
  * @generated
  */
-public interface Index<Value> extends AIndex {
+public interface Index<Value> extends UUIDObject, NamedObject {
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -602,7 +602,7 @@ public interface AnalyticsPackage extends EPackage {
 	int VOYAGE__FUEL_COSTS = COST_COMPONENT__FUEL_COSTS;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' attribute.
+	 * The feature id for the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1732,15 +1732,15 @@ public interface AnalyticsPackage extends EPackage {
 	EClass getVoyage();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Route</em>'.
+	 * @return the meta object for the reference '<em>Route</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.Voyage#getRoute()
 	 * @see #getVoyage()
 	 * @generated
 	 */
-	EAttribute getVoyage_Route();
+	EReference getVoyage_Route();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getRouteCost <em>Route Cost</em>}'.
@@ -2669,12 +2669,12 @@ public interface AnalyticsPackage extends EPackage {
 		EClass VOYAGE = eINSTANCE.getVoyage();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VOYAGE__ROUTE = eINSTANCE.getVoyage_Route();
+		EReference VOYAGE__ROUTE = eINSTANCE.getVoyage_Route();
 
 		/**
 		 * The meta object literal for the '<em><b>Route Cost</b></em>' attribute feature.

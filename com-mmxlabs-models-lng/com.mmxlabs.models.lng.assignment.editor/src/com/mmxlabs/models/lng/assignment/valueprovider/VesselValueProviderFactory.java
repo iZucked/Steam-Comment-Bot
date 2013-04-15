@@ -79,7 +79,7 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 							currentValue = assignment.getAssignment();
 					}
 
-					final EList<AVesselSet> allowedVessels;
+					final EList<AVesselSet<Vessel>> allowedVessels;
 
 					// populate the list of allowed vessels for the target object
 					if (target instanceof CargoImpl) {
@@ -96,14 +96,14 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 					if (allowedVessels != null) {
 
 						// Expand out VesselGroups
-						final Set<AVesselSet> expandedVessels = new HashSet<AVesselSet>();
-						for (final AVesselSet s : allowedVessels) {
+						final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
+						for (final AVesselSet<Vessel> s : allowedVessels) {
 							if (s instanceof Vessel) {
 								expandedVessels.add(s);
 							} else if (s instanceof VesselClass) {
 								expandedVessels.add(s);
 							} else {
-								expandedVessels.addAll(SetUtils.getVessels(s));
+								expandedVessels.addAll(SetUtils.getObjects(s));
 							}
 						}
 

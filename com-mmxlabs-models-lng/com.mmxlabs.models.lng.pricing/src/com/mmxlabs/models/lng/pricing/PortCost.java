@@ -3,15 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVesselClass;
-import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
@@ -36,7 +32,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 public interface PortCost extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Ports</em>' reference list isn't clear,
@@ -48,7 +44,7 @@ public interface PortCost extends MMXObject {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getPorts();
+	EList<APortSet<Port>> getPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Entries</b></em>' containment reference list.
@@ -121,12 +117,13 @@ public interface PortCost extends MMXObject {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @model required="true" vesselClassRequired="true" activityRequired="true"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (final PortCostEntry entry : getEntries()) {\n\tif (entry.getActivity() == activity) {\n\t\tif (isSetReferenceCapacity()) {\n\t\t\treturn (int)\n\t\t\t\t(entry.getCost() * (((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity()));\n\t\t} else {\n\t\t\treturn entry.getCost();\n\t\t}\n\t}\n}\nreturn 0;'"
 	 * @generated
 	 */
-	int getPortCost(AVesselClass vesselClass, PortCapability activity);
+	int getPortCost(VesselClass vesselClass, PortCapability activity);
 
 } // end of  PortCost
 

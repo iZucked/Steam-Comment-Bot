@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -51,9 +50,10 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		{
 
-			for (final IComponentHelper helper : registry.getComponentHelpers(TypesPackage.Literals.ASLOT)) {
-				if (helper != null)
+			for (final IComponentHelper helper : registry.getComponentHelpers(CargoPackage.Literals.SLOT)) {
+				if (helper != null) {
 					superClassesHelpers.add(helper);
+				}
 			}
 		}
 		// {

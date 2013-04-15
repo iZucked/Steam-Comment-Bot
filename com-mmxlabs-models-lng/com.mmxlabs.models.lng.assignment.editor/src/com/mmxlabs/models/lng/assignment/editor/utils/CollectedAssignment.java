@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -23,12 +24,12 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  */
 public class CollectedAssignment {
-	final AVesselSet vessel;
+	final AVesselSet<Vessel> vessel;
 	final ArrayList<UUIDObject> assignedObjects = new ArrayList<UUIDObject>();
 	List<ElementAssignment> assignments = null;
 	private int spotIndex;
 	
-	public CollectedAssignment(final List<ElementAssignment> assignments, final AVesselSet vessel, int spotIndex) {
+	public CollectedAssignment(final List<ElementAssignment> assignments, final AVesselSet<Vessel> vessel, int spotIndex) {
 		this.vessel = vessel;
 		this.assignments = assignments;
 		this.spotIndex = spotIndex;
@@ -83,7 +84,7 @@ public class CollectedAssignment {
 		return vessel instanceof VesselClass;
 	}
 	
-	public AVesselSet getVesselOrClass() {
+	public AVesselSet<Vessel> getVesselOrClass() {
 		return vessel;
 	}
 	
