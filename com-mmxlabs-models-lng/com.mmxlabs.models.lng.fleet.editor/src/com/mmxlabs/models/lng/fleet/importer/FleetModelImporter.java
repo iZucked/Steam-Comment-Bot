@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -65,7 +64,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 	private static final Map<String, String> inputs = new HashMap<String, String>();
 	static {
 		inputs.put(VESSELS_KEY, "Vessels");
-		inputs.put(VESSEL_AVAILABILITY_KEY, "Vessel Availabilities");
+		inputs.put(VESSEL_AVAILABILITY_KEY, "Vessel Availability");
 		inputs.put(VESSEL_CLASSES_KEY, "Vessel Classes");
 		inputs.put(GROUPS_KEY, "Vessel Groups");
 		inputs.put(FUELS_KEY, "Base Fuels");
