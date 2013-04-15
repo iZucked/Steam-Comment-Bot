@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -184,14 +185,28 @@ public class FileScenarioService extends AbstractScenarioService {
 				fireEvent(ScenarioServiceEvent.PRE_DELETE, instance);
 			}
 
+			// Find a resource set
+			ResourceSet instanceResourceSet = null;
 			if (instance.getAdapters() != null) {
-				final ResourceSet instanceResourceSet = (ResourceSet) instance.getAdapters().get(ResourceSet.class);
-				for (final Resource r : instanceResourceSet.getResources()) {
-					try {
-						r.delete(null);
-					} catch (final IOException e) {
-						log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + r.getURI(), e);
-					}
+				// As we have unloaded, we do not expect to get here...
+				instanceResourceSet = (ResourceSet) instance.getAdapters().get(ResourceSet.class);
+			}
+			if (instanceResourceSet == null) {
+				instanceResourceSet = createResourceSet();
+			}
+
+			// Create or re-use a Resource - again after unloading we should probably always we creating a new resource
+			final URI rooObjectURI = resolveURI(instance.getRootObjectURI());
+			if (instanceResourceSet.getResource(rooObjectURI, false) == null) {
+				instanceResourceSet.createResource(rooObjectURI);
+			}
+
+			// Copy list as delete will remove it from the resource set
+			for (final Resource r : new ArrayList<Resource>(instanceResourceSet.getResources())) {
+				try {
+					r.delete(null);
+				} catch (final IOException e) {
+					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + r.getURI(), e);
 				}
 			}
 
