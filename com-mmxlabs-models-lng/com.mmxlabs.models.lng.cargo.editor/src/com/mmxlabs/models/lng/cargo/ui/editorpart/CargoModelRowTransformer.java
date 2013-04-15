@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
-import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
