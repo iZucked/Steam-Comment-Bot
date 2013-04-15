@@ -14,7 +14,6 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter {
 	private List<Notification> missedNotifications = new LinkedList<Notification>();

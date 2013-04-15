@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.mmxcore;
 
-import java.util.Map;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -13,7 +11,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>MMX Object</b></em>'.
- * @noimplement
  * <!-- end-user-doc -->
  *
  * <p>

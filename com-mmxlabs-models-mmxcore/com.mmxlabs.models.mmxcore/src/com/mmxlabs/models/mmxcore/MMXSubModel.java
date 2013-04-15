@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.mmxcore;
 
-import org.eclipse.emf.ecore.resource.Resource;
 
 /**
  * <!-- begin-user-doc -->
