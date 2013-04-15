@@ -16,7 +16,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
-import com.mmxlabs.models.ui.tabular.ValueListAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 /**
  * A subclass of {@link ValueListAttributeManipulator} to handle the restricted set of {@link DestinationType} enums

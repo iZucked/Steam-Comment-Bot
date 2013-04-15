@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
-import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 
 /**
  * Quick hack for vessel route cost editing

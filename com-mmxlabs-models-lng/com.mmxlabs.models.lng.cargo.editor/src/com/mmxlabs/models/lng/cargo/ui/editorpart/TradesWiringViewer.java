@@ -45,6 +45,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -91,10 +92,13 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -105,12 +109,12 @@ import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
-import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.ReadOnlyManipulatorWrapper;
-import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
+import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -282,7 +286,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 				}, commandStack);
-
 			}
 
 			@Override
@@ -422,6 +425,20 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				} else if (a instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) a;
 					aSet.add(slotVisit.getSlotAllocation().getSlot());
+
+				} else if (a instanceof Event) {
+					Event evt = (Event) a;
+					while (evt != null) {
+						if (evt instanceof VesselEventVisit) {
+							return null;
+						} else if (evt instanceof GeneratedCharterOut) {
+							return null;
+						} else if (evt instanceof SlotVisit) {
+							return getObjectSet(evt);
+						}
+						evt = evt.getPreviousEvent();
+					}
+
 				} else {
 					aSet.add(a);
 				}

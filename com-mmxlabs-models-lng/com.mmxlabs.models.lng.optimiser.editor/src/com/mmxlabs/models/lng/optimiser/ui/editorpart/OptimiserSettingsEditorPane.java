@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 
 /**
  * Simplistic editor for optimiser settings.
