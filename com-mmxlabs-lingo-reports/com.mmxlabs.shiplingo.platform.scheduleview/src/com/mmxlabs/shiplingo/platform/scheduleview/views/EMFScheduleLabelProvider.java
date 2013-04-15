@@ -106,9 +106,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			text = seqText;
 		} else if (element instanceof Journey) {
 			Journey j = (Journey) element;
-			if (j.getRoute().contains("canal")) {
+			if (j.getRoute().isCanal()) {
 				if (memento.getBoolean(Show_Canals)) {
-					text = j.getRoute().replace("canal", "");
+					text = j.getRoute().getName().replace("canal", "");
 				}
 			}
 		}
@@ -229,7 +229,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				for (FuelQuantity fq : journey.getFuels()) {
 					eventText.append(String.format(" | %s", fq.getFuel().toString()));
 				}
-				if (journey.getRoute().contains("canal")) {
+				if (journey.getRoute().isCanal()) {
 					eventText.append(" | " + journey.getRoute() + "\n");
 				}	
 

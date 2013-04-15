@@ -5,6 +5,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -13,7 +14,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.AContract;
 
 /**
  * @since 3.0
@@ -65,8 +65,8 @@ public class ScheduleDiffUtils {
 				}
 
 				{
-					final AContract caContract = caAllocation.getContract();
-					final AContract refContract = refAllocation.getContract();
+					final Contract caContract = caAllocation.getContract();
+					final Contract refContract = refAllocation.getContract();
 					final String caName = caContract == null ? null : caContract.getName();
 					final String refName = refContract == null ? null : refContract.getName();
 
@@ -96,8 +96,8 @@ public class ScheduleDiffUtils {
 				return true;
 			}
 
-			final AContract caContract = ca.getSlotAllocation().getContract();
-			final AContract refContract = ref.getSlotAllocation().getContract();
+			final Contract caContract = ca.getSlotAllocation().getContract();
+			final Contract refContract = ref.getSlotAllocation().getContract();
 			final String caName = caContract == null ? null : caContract.getName();
 			final String refName = refContract == null ? null : refContract.getName();
 
