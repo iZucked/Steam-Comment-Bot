@@ -90,8 +90,9 @@ public class EObjectTableViewer extends GridTableViewer {
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
-					if (!getControl().isDisposed())
-						refresh();
+					if (!getControl().isDisposed()) {
+						doCommandStackChanged();
+					}
 				}
 			});
 		}
@@ -188,6 +189,10 @@ public class EObjectTableViewer extends GridTableViewer {
 //			}
 //		}
 //	};
+	
+	protected void doCommandStackChanged() {
+		refresh();
+	}
 
 	public EObject getElementForNotificationTarget(EObject source) {
 		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null))
