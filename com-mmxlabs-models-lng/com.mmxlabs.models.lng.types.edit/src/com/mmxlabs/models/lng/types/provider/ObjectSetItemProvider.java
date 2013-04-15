@@ -1,14 +1,22 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.types.provider;
+
+import com.mmxlabs.models.lng.types.ObjectSet;
+import com.mmxlabs.models.lng.types.TypesPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -19,32 +27,28 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.types.ASlot;
-import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.types.ASlot} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.types.ObjectSet} object.
  * <!-- begin-user-doc -->
+ * @since 5.0
  * <!-- end-user-doc -->
  * @generated
  */
-public class ASlotItemProvider extends UUIDObjectItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ObjectSetItemProvider extends UUIDObjectItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ASlotItemProvider(AdapterFactory adapterFactory) {
+	public ObjectSetItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	/**
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -62,7 +66,6 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements IEditin
 	/**
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -75,7 +78,6 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements IEditin
 	/**
 	 * This adds a property descriptor for the Other Names feature.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -88,21 +90,19 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements IEditin
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ASlot) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ASlot_type") : getString("_UI_ASlot_type") + " " + label;
+		String label = ((ObjectSet<?, ?>) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_ObjectSet_type") : getString("_UI_ObjectSet_type") + " " + label;
 	}
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
 	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -110,9 +110,9 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements IEditin
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ASlot.class)) {
-		case TypesPackage.ASLOT__NAME:
-		case TypesPackage.ASLOT__OTHER_NAMES:
+		switch (notification.getFeatureID(ObjectSet.class)) {
+		case TypesPackage.OBJECT_SET__NAME:
+		case TypesPackage.OBJECT_SET__OTHER_NAMES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}

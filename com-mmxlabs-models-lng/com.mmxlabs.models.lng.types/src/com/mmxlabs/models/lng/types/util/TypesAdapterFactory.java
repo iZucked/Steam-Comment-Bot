@@ -4,18 +4,21 @@
  */
 package com.mmxlabs.models.lng.types.util;
 
-import com.mmxlabs.models.lng.types.*;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.ObjectSet;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notifier;
-
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -73,98 +76,23 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 */
 	protected TypesSwitch<Adapter> modelSwitch = new TypesSwitch<Adapter>() {
 		@Override
-		public Adapter caseAPort(APort object) {
-			return createAPortAdapter();
+		public <T extends ObjectSet<T, U>, U> Adapter caseObjectSet(ObjectSet<T, U> object) {
+			return createObjectSetAdapter();
 		}
 
 		@Override
-		public Adapter caseAPortSet(APortSet object) {
+		public <U> Adapter caseAPortSet(APortSet<U> object) {
 			return createAPortSetAdapter();
 		}
 
 		@Override
-		public Adapter caseARoute(ARoute object) {
-			return createARouteAdapter();
-		}
-
-		@Override
-		public Adapter caseAVessel(AVessel object) {
-			return createAVesselAdapter();
-		}
-
-		@Override
-		public Adapter caseAFleetVessel(AFleetVessel object) {
-			return createAFleetVesselAdapter();
-		}
-
-		@Override
-		public Adapter caseAVesselClass(AVesselClass object) {
-			return createAVesselClassAdapter();
-		}
-
-		@Override
-		public Adapter caseAVesselEvent(AVesselEvent object) {
-			return createAVesselEventAdapter();
-		}
-
-		@Override
-		public Adapter caseAContract(AContract object) {
-			return createAContractAdapter();
-		}
-
-		@Override
-		public Adapter caseALegalEntity(ALegalEntity object) {
-			return createALegalEntityAdapter();
-		}
-
-		@Override
-		public Adapter caseAIndex(AIndex object) {
-			return createAIndexAdapter();
-		}
-
-		@Override
-		public Adapter caseACargo(ACargo object) {
-			return createACargoAdapter();
-		}
-
-		@Override
-		public Adapter caseASlot(ASlot object) {
-			return createASlotAdapter();
-		}
-
-		@Override
-		public Adapter caseAVesselSet(AVesselSet object) {
+		public <U> Adapter caseAVesselSet(AVesselSet<U> object) {
 			return createAVesselSetAdapter();
 		}
 
 		@Override
 		public Adapter caseITimezoneProvider(ITimezoneProvider object) {
 			return createITimezoneProviderAdapter();
-		}
-
-		@Override
-		public Adapter caseABaseFuel(ABaseFuel object) {
-			return createABaseFuelAdapter();
-		}
-
-		@Override
-		public Adapter caseASpotMarket(ASpotMarket object) {
-			return createASpotMarketAdapter();
-		}
-
-		@Override
-		public Adapter caseAOptimisationSettings(AOptimisationSettings object) {
-			return createAOptimisationSettingsAdapter();
-		}
-
-		@Override
-		public Adapter caseAPurchaseContract(APurchaseContract object) {
-			return createAPurchaseContractAdapter();
-		}
-
-		@Override
-		public Adapter caseASalesContract(ASalesContract object) {
-			return createASalesContractAdapter();
 		}
 
 		@Override
@@ -175,11 +103,6 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseExtraDataContainer(ExtraDataContainer object) {
 			return createExtraDataContainerAdapter();
-		}
-
-		@Override
-		public Adapter caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
-			return createALNGPriceCalculatorParametersAdapter();
 		}
 
 		@Override
@@ -217,20 +140,6 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.APort
-	 * @generated
-	 */
-	public Adapter createAPortAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -241,147 +150,6 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAPortSetAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ARoute <em>ARoute</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ARoute
-	 * @generated
-	 */
-	public Adapter createARouteAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AVessel <em>AVessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AVessel
-	 * @generated
-	 */
-	public Adapter createAVesselAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AFleetVessel <em>AFleet Vessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AFleetVessel
-	 * @generated
-	 */
-	public Adapter createAFleetVesselAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AVesselClass <em>AVessel Class</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AVesselClass
-	 * @generated
-	 */
-	public Adapter createAVesselClassAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AVesselEvent <em>AVessel Event</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AVesselEvent
-	 * @generated
-	 */
-	public Adapter createAVesselEventAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AContract <em>AContract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AContract
-	 * @generated
-	 */
-	public Adapter createAContractAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ALegalEntity <em>ALegal Entity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ALegalEntity
-	 * @generated
-	 */
-	public Adapter createALegalEntityAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AIndex <em>AIndex</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AIndex
-	 * @generated
-	 */
-	public Adapter createAIndexAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ACargo <em>ACargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ACargo
-	 * @generated
-	 */
-	public Adapter createACargoAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ASlot <em>ASlot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ASlot
-	 * @generated
-	 */
-	public Adapter createASlotAdapter() {
 		return null;
 	}
 
@@ -410,78 +178,6 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createITimezoneProviderAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ABaseFuel <em>ABase Fuel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ABaseFuel
-	 * @generated
-	 */
-	public Adapter createABaseFuelAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ASpotMarket <em>ASpot Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ASpotMarket
-	 * @generated
-	 */
-	public Adapter createASpotMarketAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AOptimisationSettings <em>AOptimisation Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AOptimisationSettings
-	 * @generated
-	 */
-	public Adapter createAOptimisationSettingsAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.APurchaseContract <em>APurchase Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.APurchaseContract
-	 * @generated
-	 */
-	public Adapter createAPurchaseContractAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ASalesContract <em>ASales Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ASalesContract
-	 * @generated
-	 */
-	public Adapter createASalesContractAdapter() {
 		return null;
 	}
 
@@ -516,17 +212,17 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters <em>ALNG Price Calculator Parameters</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ObjectSet <em>Object Set</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 4.0
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters
+	 * @see com.mmxlabs.models.lng.types.ObjectSet
 	 * @generated
 	 */
-	public Adapter createALNGPriceCalculatorParametersAdapter() {
+	public Adapter createObjectSetAdapter() {
 		return null;
 	}
 

@@ -1,52 +1,40 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.types.impl;
 
-import com.mmxlabs.models.lng.types.ACargo;
-import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-import com.mmxlabs.models.lng.types.ACargo;
-import com.mmxlabs.models.lng.types.TypesPackage;
 
+import com.mmxlabs.models.lng.types.ObjectSet;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
-
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ACargo</b></em>'.
+ * An implementation of the model object '<em><b>Object Set</b></em>'.
+ * @since 5.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.types.impl.ACargoImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.types.impl.ACargoImpl#getOtherNames <em>Other Names</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl#getOtherNames <em>Other Names</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
+public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDObjectImpl implements ObjectSet<T, U> {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -70,7 +58,6 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	/**
 	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getOtherNames()
 	 * @generated
@@ -83,7 +70,7 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ACargoImpl() {
+	protected ObjectSetImpl() {
 		super();
 	}
 
@@ -94,7 +81,7 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return TypesPackage.Literals.ACARGO;
+		return TypesPackage.Literals.OBJECT_SET;
 	}
 
 	/**
@@ -115,20 +102,30 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.ACARGO__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.OBJECT_SET__NAME, oldName, name));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.ACARGO__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.OBJECT_SET__OTHER_NAMES);
 		}
 		return otherNames;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<U> collect(EList<T> marked) {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -139,9 +136,9 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case TypesPackage.ACARGO__NAME:
+		case TypesPackage.OBJECT_SET__NAME:
 			return getName();
-		case TypesPackage.ACARGO__OTHER_NAMES:
+		case TypesPackage.OBJECT_SET__OTHER_NAMES:
 			return getOtherNames();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -156,10 +153,10 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case TypesPackage.ACARGO__NAME:
+		case TypesPackage.OBJECT_SET__NAME:
 			setName((String) newValue);
 			return;
-		case TypesPackage.ACARGO__OTHER_NAMES:
+		case TypesPackage.OBJECT_SET__OTHER_NAMES:
 			getOtherNames().clear();
 			getOtherNames().addAll((Collection<? extends String>) newValue);
 			return;
@@ -175,10 +172,10 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case TypesPackage.ACARGO__NAME:
+		case TypesPackage.OBJECT_SET__NAME:
 			setName(NAME_EDEFAULT);
 			return;
-		case TypesPackage.ACARGO__OTHER_NAMES:
+		case TypesPackage.OBJECT_SET__OTHER_NAMES:
 			getOtherNames().clear();
 			return;
 		}
@@ -193,9 +190,9 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case TypesPackage.ACARGO__NAME:
+		case TypesPackage.OBJECT_SET__NAME:
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case TypesPackage.ACARGO__OTHER_NAMES:
+		case TypesPackage.OBJECT_SET__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}
 		return super.eIsSet(featureID);
@@ -210,9 +207,9 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
-			case TypesPackage.ACARGO__NAME:
+			case TypesPackage.OBJECT_SET__NAME:
 				return MMXCorePackage.NAMED_OBJECT__NAME;
-			case TypesPackage.ACARGO__OTHER_NAMES:
+			case TypesPackage.OBJECT_SET__OTHER_NAMES:
 				return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 			default:
 				return -1;
@@ -231,14 +228,29 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 			case MMXCorePackage.NAMED_OBJECT__NAME:
-				return TypesPackage.ACARGO__NAME;
+				return TypesPackage.OBJECT_SET__NAME;
 			case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES:
-				return TypesPackage.ACARGO__OTHER_NAMES;
+				return TypesPackage.OBJECT_SET__OTHER_NAMES;
 			default:
 				return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+		case TypesPackage.OBJECT_SET___COLLECT__ELIST:
+			return collect((EList<T>) arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
@@ -260,4 +272,4 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 		return result.toString();
 	}
 
-} //ACargoImpl
+} //ObjectSetImpl

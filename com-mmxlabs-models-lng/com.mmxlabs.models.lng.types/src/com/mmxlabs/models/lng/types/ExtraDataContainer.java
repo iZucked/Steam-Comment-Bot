@@ -4,15 +4,7 @@
  */
 package com.mmxlabs.models.lng.types;
 
-import java.io.Serializable;
-import java.lang.Iterable;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-import java.io.Serializable;
-import java.lang.Iterable;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -78,12 +70,13 @@ public interface ExtraDataContainer extends EObject {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
-	 * @model required="true" keyRequired="true" nameRequired="true" valueDataType="com.mmxlabs.models.lng.types.SerializableObject" valueRequired="true" formatRequired="true"
+	 * @model required="true" keyRequired="true" nameRequired="true" valueRequired="true" formatRequired="true"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final ExtraData result = addExtraData(key, name);\nresult.setValue(value);\nresult.setFormatType(format);\nreturn result;'"
 	 * @generated
 	 */
-	ExtraData addExtraData(String key, String name, Serializable value, ExtraDataFormatType format);
+	ExtraData addExtraData(String key, String name, Object value, ExtraDataFormatType format);
 
 	/**
 	 * <!-- begin-user-doc -->

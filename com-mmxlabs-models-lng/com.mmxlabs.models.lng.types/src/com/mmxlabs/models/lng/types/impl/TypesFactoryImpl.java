@@ -4,17 +4,6 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
-import com.mmxlabs.models.lng.types.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-import java.lang.Iterable;
-import javax.xml.bind.DatatypeConverter;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -22,10 +11,10 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import com.mmxlabs.models.lng.types.ABaseFuel;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -96,8 +85,6 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return createExtraDataFormatTypeFromString(eDataType, initialValue);
 		case TypesPackage.CARGO_DELIVERY_TYPE:
 			return createCargoDeliveryTypeFromString(eDataType, initialValue);
-		case TypesPackage.SERIALIZABLE_OBJECT:
-			return createSerializableObjectFromString(eDataType, initialValue);
 		case TypesPackage.ITERABLE:
 			return createIterableFromString(eDataType, initialValue);
 		default:
@@ -119,8 +106,6 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return convertExtraDataFormatTypeToString(eDataType, instanceValue);
 		case TypesPackage.CARGO_DELIVERY_TYPE:
 			return convertCargoDeliveryTypeToString(eDataType, instanceValue);
-		case TypesPackage.SERIALIZABLE_OBJECT:
-			return convertSerializableObjectToString(eDataType, instanceValue);
 		case TypesPackage.ITERABLE:
 			return convertIterableToString(eDataType, instanceValue);
 		default:
@@ -215,48 +200,6 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 */
 	public String convertCargoDeliveryTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public Serializable createSerializableObjectFromString(EDataType eDataType, String initialValue) {
-		try {
-			final ByteArrayInputStream bais = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(initialValue));
-			final ObjectInputStream ois = new ObjectInputStream(bais);
-			return (Serializable) ois.readObject();
-		} catch (Exception e) {
-			return null;
-		} finally {
-
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public String convertSerializableObjectToString(EDataType eDataType, Object instanceValue) {
-		if (instanceValue instanceof Serializable) {
-			final Serializable s = (Serializable) instanceValue;
-			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			try {
-				final ObjectOutputStream oos = new ObjectOutputStream(baos);
-				oos.writeObject(s);
-				oos.flush();
-				oos.close();
-				final String b64 = DatatypeConverter.printBase64Binary(baos.toByteArray());
-				return b64;
-			} catch (IOException e) {
-			}
-
-		}
-		return "";
 	}
 
 	/**

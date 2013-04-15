@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.types;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -13,6 +11,8 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -64,6 +64,106 @@ public interface TypesPackage extends EPackage {
 	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.impl.ObjectSetImpl
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getObjectSet()
+	 * @generated
+	 */
+	int OBJECT_SET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Object Set</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Collect</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET___COLLECT__ELIST = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Object Set</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT_SET_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -80,7 +180,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int APORT_SET__EXTENSIONS = OBJECT_SET__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -89,7 +189,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int APORT_SET__UUID = OBJECT_SET__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -98,7 +198,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int APORT_SET__NAME = OBJECT_SET__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -108,7 +208,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int APORT_SET__OTHER_NAMES = OBJECT_SET__OTHER_NAMES;
 
 	/**
 	 * The number of structural features of the '<em>APort Set</em>' class.
@@ -117,7 +217,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int APORT_SET_FEATURE_COUNT = OBJECT_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -126,7 +226,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -135,7 +235,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -145,7 +245,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+	int APORT_SET___ECONTAINER_OP = OBJECT_SET___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Collect</em>' operation.
@@ -154,7 +254,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET___COLLECT__ELIST = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+	int APORT_SET___COLLECT__ELIST = OBJECT_SET___COLLECT__ELIST;
 
 	/**
 	 * The number of operations of the '<em>APort Set</em>' class.
@@ -163,202 +263,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int APORT_SET_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APortImpl <em>APort</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.APortImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAPort()
-	 * @generated
-	 */
-	int APORT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT__EXTENSIONS = APORT_SET__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT__UUID = APORT_SET__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT__NAME = APORT_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT__OTHER_NAMES = APORT_SET__OTHER_NAMES;
-
-	/**
-	 * The number of structural features of the '<em>APort</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_FEATURE_COUNT = APORT_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = APORT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___ECONTAINER_OP = APORT_SET___ECONTAINER_OP;
-
-	/**
-	 * The operation id for the '<em>Collect</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT___COLLECT__ELIST = APORT_SET_OPERATION_COUNT + 0;
-
-	/**
-	 * The number of operations of the '<em>APort</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_OPERATION_COUNT = APORT_SET_OPERATION_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ARouteImpl <em>ARoute</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ARouteImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getARoute()
-	 * @generated
-	 */
-	int AROUTE = 2;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>ARoute</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>ARoute</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AROUTE_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+	int APORT_SET_OPERATION_COUNT = OBJECT_SET_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselSetImpl <em>AVessel Set</em>}' class.
@@ -368,7 +273,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselSet()
 	 * @generated
 	 */
-	int AVESSEL_SET = 12;
+	int AVESSEL_SET = 2;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -377,7 +282,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int AVESSEL_SET__EXTENSIONS = OBJECT_SET__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -386,7 +291,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int AVESSEL_SET__UUID = OBJECT_SET__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -395,7 +300,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int AVESSEL_SET__NAME = OBJECT_SET__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -405,7 +310,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int AVESSEL_SET__OTHER_NAMES = OBJECT_SET__OTHER_NAMES;
 
 	/**
 	 * The number of structural features of the '<em>AVessel Set</em>' class.
@@ -414,7 +319,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int AVESSEL_SET_FEATURE_COUNT = OBJECT_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -423,7 +328,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = OBJECT_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -432,7 +337,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = OBJECT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -442,7 +347,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+	int AVESSEL_SET___ECONTAINER_OP = OBJECT_SET___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Collect</em>' operation.
@@ -451,7 +356,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET___COLLECT__ELIST = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+	int AVESSEL_SET___COLLECT__ELIST = OBJECT_SET___COLLECT__ELIST;
 
 	/**
 	 * The number of operations of the '<em>AVessel Set</em>' class.
@@ -460,850 +365,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int AVESSEL_SET_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselImpl <em>AVessel</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.AVesselImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVessel()
-	 * @generated
-	 */
-	int AVESSEL = 3;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL__EXTENSIONS = AVESSEL_SET__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL__UUID = AVESSEL_SET__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL__NAME = AVESSEL_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL__OTHER_NAMES = AVESSEL_SET__OTHER_NAMES;
-
-	/**
-	 * The number of structural features of the '<em>AVessel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_FEATURE_COUNT = AVESSEL_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___ECONTAINER_OP = AVESSEL_SET___ECONTAINER_OP;
-
-	/**
-	 * The operation id for the '<em>Collect</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL___COLLECT__ELIST = AVESSEL_SET_OPERATION_COUNT + 0;
-
-	/**
-	 * The number of operations of the '<em>AVessel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_OPERATION_COUNT = AVESSEL_SET_OPERATION_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.AFleetVesselImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAFleetVessel()
-	 * @generated
-	 */
-	int AFLEET_VESSEL = 4;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The number of structural features of the '<em>AFleet Vessel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>AFleet Vessel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AFLEET_VESSEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselClassImpl <em>AVessel Class</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.AVesselClassImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselClass()
-	 * @generated
-	 */
-	int AVESSEL_CLASS = 5;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS__EXTENSIONS = AVESSEL_SET__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS__UUID = AVESSEL_SET__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS__NAME = AVESSEL_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS__OTHER_NAMES = AVESSEL_SET__OTHER_NAMES;
-
-	/**
-	 * The number of structural features of the '<em>AVessel Class</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS_FEATURE_COUNT = AVESSEL_SET_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___ECONTAINER_OP = AVESSEL_SET___ECONTAINER_OP;
-
-	/**
-	 * The operation id for the '<em>Collect</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS___COLLECT__ELIST = AVESSEL_SET___COLLECT__ELIST;
-
-	/**
-	 * The number of operations of the '<em>AVessel Class</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_CLASS_OPERATION_COUNT = AVESSEL_SET_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselEventImpl <em>AVessel Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.AVesselEventImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselEvent()
-	 * @generated
-	 */
-	int AVESSEL_EVENT = 6;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>AVessel Event</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>AVessel Event</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AContractImpl <em>AContract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.AContractImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAContract()
-	 * @generated
-	 */
-	int ACONTRACT = 7;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>AContract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>AContract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACONTRACT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ALegalEntityImpl <em>ALegal Entity</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ALegalEntityImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALegalEntity()
-	 * @generated
-	 */
-	int ALEGAL_ENTITY = 8;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>ALegal Entity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>ALegal Entity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALEGAL_ENTITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AIndexImpl <em>AIndex</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.AIndexImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAIndex()
-	 * @generated
-	 */
-	int AINDEX = 9;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>AIndex</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>AIndex</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AINDEX_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ACargoImpl <em>ACargo</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ACargoImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getACargo()
-	 * @generated
-	 */
-	int ACARGO = 10;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>ACargo</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>ACargo</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACARGO_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ASlotImpl <em>ASlot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ASlotImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASlot()
-	 * @generated
-	 */
-	int ASLOT = 11;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>ASlot</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>ASlot</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+	int AVESSEL_SET_OPERATION_COUNT = OBJECT_SET_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}' class.
@@ -1313,7 +375,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getITimezoneProvider()
 	 * @generated
 	 */
-	int ITIMEZONE_PROVIDER = 13;
+	int ITIMEZONE_PROVIDER = 3;
 
 	/**
 	 * The number of structural features of the '<em>ITimezone Provider</em>' class.
@@ -1343,487 +405,6 @@ public interface TypesPackage extends EPackage {
 	int ITIMEZONE_PROVIDER_OPERATION_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ABaseFuelImpl <em>ABase Fuel</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ABaseFuelImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getABaseFuel()
-	 * @generated
-	 */
-	int ABASE_FUEL = 14;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>ABase Fuel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>ABase Fuel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ABASE_FUEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ASpotMarketImpl <em>ASpot Market</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ASpotMarketImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASpotMarket()
-	 * @generated
-	 */
-	int ASPOT_MARKET = 15;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>ASpot Market</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>ASpot Market</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASPOT_MARKET_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl <em>AOptimisation Settings</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAOptimisationSettings()
-	 * @generated
-	 */
-	int AOPTIMISATION_SETTINGS = 16;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>AOptimisation Settings</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>AOptimisation Settings</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AOPTIMISATION_SETTINGS_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APurchaseContractImpl <em>APurchase Contract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.APurchaseContractImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAPurchaseContract()
-	 * @generated
-	 */
-	int APURCHASE_CONTRACT = 17;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT__EXTENSIONS = ACONTRACT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT__UUID = ACONTRACT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT__NAME = ACONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT__OTHER_NAMES = ACONTRACT__OTHER_NAMES;
-
-	/**
-	 * The number of structural features of the '<em>APurchase Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT_FEATURE_COUNT = ACONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = ACONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = ACONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT___ECONTAINER_OP = ACONTRACT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>APurchase Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APURCHASE_CONTRACT_OPERATION_COUNT = ACONTRACT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ASalesContractImpl <em>ASales Contract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ASalesContractImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASalesContract()
-	 * @generated
-	 */
-	int ASALES_CONTRACT = 18;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT__EXTENSIONS = ACONTRACT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT__UUID = ACONTRACT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT__NAME = ACONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT__OTHER_NAMES = ACONTRACT__OTHER_NAMES;
-
-	/**
-	 * The number of structural features of the '<em>ASales Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT_FEATURE_COUNT = ACONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = ACONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = ACONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT___ECONTAINER_OP = ACONTRACT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>ASales Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASALES_CONTRACT_OPERATION_COUNT = ACONTRACT_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl <em>Extra Data Container</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1832,7 +413,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataContainer()
 	 * @generated
 	 */
-	int EXTRA_DATA_CONTAINER = 20;
+	int EXTRA_DATA_CONTAINER = 5;
 
 	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
@@ -1887,12 +468,11 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = 3;
+	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = 3;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -1923,7 +503,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraData()
 	 * @generated
 	 */
-	int EXTRA_DATA = 19;
+	int EXTRA_DATA = 4;
 
 	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
@@ -2028,12 +608,11 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE;
+	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -2076,87 +655,6 @@ public interface TypesPackage extends EPackage {
 	int EXTRA_DATA_OPERATION_COUNT = EXTRA_DATA_CONTAINER_OPERATION_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl <em>ALNG Price Calculator Parameters</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALNGPriceCalculatorParameters()
-	 * @generated
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS = 21;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The number of structural features of the '<em>ALNG Price Calculator Parameters</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>ALNG Price Calculator Parameters</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2164,7 +662,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getPortCapability()
 	 * @generated
 	 */
-	int PORT_CAPABILITY = 22;
+	int PORT_CAPABILITY = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}' enum.
@@ -2175,7 +673,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataFormatType()
 	 * @generated
 	 */
-	int EXTRA_DATA_FORMAT_TYPE = 23;
+	int EXTRA_DATA_FORMAT_TYPE = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.
@@ -2186,18 +684,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getCargoDeliveryType()
 	 * @generated
 	 */
-	int CARGO_DELIVERY_TYPE = 24;
-
-	/**
-	 * The meta object id for the '<em>Serializable Object</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see java.io.Serializable
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getSerializableObject()
-	 * @generated
-	 */
-	int SERIALIZABLE_OBJECT = 25;
+	int CARGO_DELIVERY_TYPE = 8;
 
 	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
@@ -2208,27 +695,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 26;
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>APort</em>'.
-	 * @see com.mmxlabs.models.lng.types.APort
-	 * @generated
-	 */
-	EClass getAPort();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.APort#collect(org.eclipse.emf.common.util.EList) <em>Collect</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Collect</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.APort#collect(org.eclipse.emf.common.util.EList)
-	 * @generated
-	 */
-	EOperation getAPort__Collect__EList();
+	int ITERABLE = 9;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
@@ -2241,127 +708,6 @@ public interface TypesPackage extends EPackage {
 	EClass getAPortSet();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.APortSet#collect(org.eclipse.emf.common.util.EList) <em>Collect</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Collect</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.APortSet#collect(org.eclipse.emf.common.util.EList)
-	 * @generated
-	 */
-	EOperation getAPortSet__Collect__EList();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ARoute <em>ARoute</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ARoute</em>'.
-	 * @see com.mmxlabs.models.lng.types.ARoute
-	 * @generated
-	 */
-	EClass getARoute();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AVessel <em>AVessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>AVessel</em>'.
-	 * @see com.mmxlabs.models.lng.types.AVessel
-	 * @generated
-	 */
-	EClass getAVessel();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.AVessel#collect(org.eclipse.emf.common.util.EList) <em>Collect</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Collect</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.AVessel#collect(org.eclipse.emf.common.util.EList)
-	 * @generated
-	 */
-	EOperation getAVessel__Collect__EList();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AFleetVessel <em>AFleet Vessel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>AFleet Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.types.AFleetVessel
-	 * @generated
-	 */
-	EClass getAFleetVessel();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AVesselClass <em>AVessel Class</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>AVessel Class</em>'.
-	 * @see com.mmxlabs.models.lng.types.AVesselClass
-	 * @generated
-	 */
-	EClass getAVesselClass();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AVesselEvent <em>AVessel Event</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>AVessel Event</em>'.
-	 * @see com.mmxlabs.models.lng.types.AVesselEvent
-	 * @generated
-	 */
-	EClass getAVesselEvent();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AContract <em>AContract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>AContract</em>'.
-	 * @see com.mmxlabs.models.lng.types.AContract
-	 * @generated
-	 */
-	EClass getAContract();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ALegalEntity <em>ALegal Entity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ALegal Entity</em>'.
-	 * @see com.mmxlabs.models.lng.types.ALegalEntity
-	 * @generated
-	 */
-	EClass getALegalEntity();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AIndex <em>AIndex</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>AIndex</em>'.
-	 * @see com.mmxlabs.models.lng.types.AIndex
-	 * @generated
-	 */
-	EClass getAIndex();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ACargo <em>ACargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ACargo</em>'.
-	 * @see com.mmxlabs.models.lng.types.ACargo
-	 * @generated
-	 */
-	EClass getACargo();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ASlot <em>ASlot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ASlot</em>'.
-	 * @see com.mmxlabs.models.lng.types.ASlot
-	 * @generated
-	 */
-	EClass getASlot();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AVesselSet <em>AVessel Set</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2370,16 +716,6 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAVesselSet();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.AVesselSet#collect(org.eclipse.emf.common.util.EList) <em>Collect</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Collect</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.AVesselSet#collect(org.eclipse.emf.common.util.EList)
-	 * @generated
-	 */
-	EOperation getAVesselSet__Collect__EList();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}'.
@@ -2400,58 +736,6 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getITimezoneProvider__GetTimeZone__EAttribute();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ABaseFuel <em>ABase Fuel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ABase Fuel</em>'.
-	 * @see com.mmxlabs.models.lng.types.ABaseFuel
-	 * @generated
-	 */
-	EClass getABaseFuel();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ASpotMarket <em>ASpot Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ASpot Market</em>'.
-	 * @see com.mmxlabs.models.lng.types.ASpotMarket
-	 * @generated
-	 */
-	EClass getASpotMarket();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AOptimisationSettings <em>AOptimisation Settings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>AOptimisation Settings</em>'.
-	 * @see com.mmxlabs.models.lng.types.AOptimisationSettings
-	 * @generated
-	 */
-	EClass getAOptimisationSettings();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APurchaseContract <em>APurchase Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>APurchase Contract</em>'.
-	 * @see com.mmxlabs.models.lng.types.APurchaseContract
-	 * @generated
-	 */
-	EClass getAPurchaseContract();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ASalesContract <em>ASales Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ASales Contract</em>'.
-	 * @see com.mmxlabs.models.lng.types.ASalesContract
-	 * @generated
-	 */
-	EClass getASalesContract();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ExtraData <em>Extra Data</em>}'.
@@ -2603,15 +887,14 @@ public interface TypesPackage extends EPackage {
 	EOperation getExtraDataContainer__AddExtraData__String_String();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, com.mmxlabs.models.lng.types.ExtraDataFormatType) <em>Add Extra Data</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.lang.Object, com.mmxlabs.models.lng.types.ExtraDataFormatType) <em>Add Extra Data</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Add Extra Data</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, com.mmxlabs.models.lng.types.ExtraDataFormatType)
+	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.lang.Object, com.mmxlabs.models.lng.types.ExtraDataFormatType)
 	 * @generated
 	 */
-	EOperation getExtraDataContainer__AddExtraData__String_String_Serializable_ExtraDataFormatType();
+	EOperation getExtraDataContainer__AddExtraData__String_String_Object_ExtraDataFormatType();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getValueWithPathAs(java.lang.Iterable, java.lang.Class, java.lang.Object) <em>Get Value With Path As</em>}' operation.
@@ -2625,15 +908,24 @@ public interface TypesPackage extends EPackage {
 	EOperation getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters <em>ALNG Price Calculator Parameters</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ObjectSet <em>Object Set</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>ALNG Price Calculator Parameters</em>'.
-	 * @see com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters
+	 * @return the meta object for class '<em>Object Set</em>'.
+	 * @see com.mmxlabs.models.lng.types.ObjectSet
 	 * @generated
 	 */
-	EClass getALNGPriceCalculatorParameters();
+	EClass getObjectSet();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ObjectSet#collect(org.eclipse.emf.common.util.EList) <em>Collect</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Collect</em>' operation.
+	 * @see com.mmxlabs.models.lng.types.ObjectSet#collect(org.eclipse.emf.common.util.EList)
+	 * @generated
+	 */
+	EOperation getObjectSet__Collect__EList();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}'.
@@ -2666,18 +958,6 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getCargoDeliveryType();
-
-	/**
-	 * Returns the meta object for data type '{@link java.io.Serializable <em>Serializable Object</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Serializable Object</em>'.
-	 * @see java.io.Serializable
-	 * @model instanceClass="java.io.Serializable"
-	 * @generated
-	 */
-	EDataType getSerializableObject();
 
 	/**
 	 * Returns the meta object for data type '{@link java.lang.Iterable <em>Iterable</em>}'.
@@ -2715,24 +995,6 @@ public interface TypesPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APortImpl <em>APort</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.APortImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAPort()
-		 * @generated
-		 */
-		EClass APORT = eINSTANCE.getAPort();
-
-		/**
-		 * The meta object literal for the '<em><b>Collect</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation APORT___COLLECT__ELIST = eINSTANCE.getAPort__Collect__EList();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2743,123 +1005,6 @@ public interface TypesPackage extends EPackage {
 		EClass APORT_SET = eINSTANCE.getAPortSet();
 
 		/**
-		 * The meta object literal for the '<em><b>Collect</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE.getAPortSet__Collect__EList();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ARouteImpl <em>ARoute</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ARouteImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getARoute()
-		 * @generated
-		 */
-		EClass AROUTE = eINSTANCE.getARoute();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AVesselImpl <em>AVessel</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.AVesselImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVessel()
-		 * @generated
-		 */
-		EClass AVESSEL = eINSTANCE.getAVessel();
-
-		/**
-		 * The meta object literal for the '<em><b>Collect</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE.getAVessel__Collect__EList();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.AFleetVesselImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAFleetVessel()
-		 * @generated
-		 */
-		EClass AFLEET_VESSEL = eINSTANCE.getAFleetVessel();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AVesselClassImpl <em>AVessel Class</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.AVesselClassImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselClass()
-		 * @generated
-		 */
-		EClass AVESSEL_CLASS = eINSTANCE.getAVesselClass();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AVesselEventImpl <em>AVessel Event</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.AVesselEventImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselEvent()
-		 * @generated
-		 */
-		EClass AVESSEL_EVENT = eINSTANCE.getAVesselEvent();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AContractImpl <em>AContract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.AContractImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAContract()
-		 * @generated
-		 */
-		EClass ACONTRACT = eINSTANCE.getAContract();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ALegalEntityImpl <em>ALegal Entity</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ALegalEntityImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALegalEntity()
-		 * @generated
-		 */
-		EClass ALEGAL_ENTITY = eINSTANCE.getALegalEntity();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AIndexImpl <em>AIndex</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.AIndexImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAIndex()
-		 * @generated
-		 */
-		EClass AINDEX = eINSTANCE.getAIndex();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ACargoImpl <em>ACargo</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ACargoImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getACargo()
-		 * @generated
-		 */
-		EClass ACARGO = eINSTANCE.getACargo();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ASlotImpl <em>ASlot</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ASlotImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASlot()
-		 * @generated
-		 */
-		EClass ASLOT = eINSTANCE.getASlot();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AVesselSetImpl <em>AVessel Set</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2868,14 +1013,6 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EClass AVESSEL_SET = eINSTANCE.getAVesselSet();
-
-		/**
-		 * The meta object literal for the '<em><b>Collect</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE.getAVesselSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}' class.
@@ -2894,58 +1031,6 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ABaseFuelImpl <em>ABase Fuel</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ABaseFuelImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getABaseFuel()
-		 * @generated
-		 */
-		EClass ABASE_FUEL = eINSTANCE.getABaseFuel();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ASpotMarketImpl <em>ASpot Market</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ASpotMarketImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASpotMarket()
-		 * @generated
-		 */
-		EClass ASPOT_MARKET = eINSTANCE.getASpotMarket();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl <em>AOptimisation Settings</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.AOptimisationSettingsImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAOptimisationSettings()
-		 * @generated
-		 */
-		EClass AOPTIMISATION_SETTINGS = eINSTANCE.getAOptimisationSettings();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APurchaseContractImpl <em>APurchase Contract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.APurchaseContractImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAPurchaseContract()
-		 * @generated
-		 */
-		EClass APURCHASE_CONTRACT = eINSTANCE.getAPurchaseContract();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ASalesContractImpl <em>ASales Contract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ASalesContractImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASalesContract()
-		 * @generated
-		 */
-		EClass ASALES_CONTRACT = eINSTANCE.getASalesContract();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl <em>Extra Data</em>}' class.
@@ -3071,12 +1156,10 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = eINSTANCE
-				.getExtraDataContainer__AddExtraData__String_String_Serializable_ExtraDataFormatType();
+		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = eINSTANCE.getExtraDataContainer__AddExtraData__String_String_Object_ExtraDataFormatType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Value With Path As</b></em>' operation.
@@ -3088,15 +1171,22 @@ public interface TypesPackage extends EPackage {
 		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl <em>ALNG Price Calculator Parameters</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALNGPriceCalculatorParameters()
+		 * @see com.mmxlabs.models.lng.types.impl.ObjectSetImpl
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getObjectSet()
 		 * @generated
 		 */
-		EClass ALNG_PRICE_CALCULATOR_PARAMETERS = eINSTANCE.getALNGPriceCalculatorParameters();
+		EClass OBJECT_SET = eINSTANCE.getObjectSet();
+
+		/**
+		 * The meta object literal for the '<em><b>Collect</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation OBJECT_SET___COLLECT__ELIST = eINSTANCE.getObjectSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
@@ -3129,17 +1219,6 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum CARGO_DELIVERY_TYPE = eINSTANCE.getCargoDeliveryType();
-
-		/**
-		 * The meta object literal for the '<em>Serializable Object</em>' data type.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @see java.io.Serializable
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getSerializableObject()
-		 * @generated
-		 */
-		EDataType SERIALIZABLE_OBJECT = eINSTANCE.getSerializableObject();
 
 		/**
 		 * The meta object literal for the '<em>Iterable</em>' data type.

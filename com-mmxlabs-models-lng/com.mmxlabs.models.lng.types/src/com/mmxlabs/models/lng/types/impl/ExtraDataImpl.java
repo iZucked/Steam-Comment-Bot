@@ -4,16 +4,6 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataFormatType;
-import com.mmxlabs.models.lng.types.TypesPackage;
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -95,7 +85,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Serializable VALUE_EDEFAULT = null;
+	protected static final Object VALUE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -105,7 +95,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 * @generated
 	 * @ordered
 	 */
-	protected Serializable value = VALUE_EDEFAULT;
+	protected Object value = VALUE_EDEFAULT;
 
 	/**
 	 * This is true if the Value attribute has been set.
@@ -219,20 +209,22 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Serializable getValue() {
+	public Object getValue() {
 		return value;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setValue(Serializable newValue) {
-		Serializable oldValue = value;
+	public void setValue(Object newValue) {
+		Object oldValue = value;
 		value = newValue;
 		boolean oldValueESet = valueESet;
 		valueESet = true;
@@ -246,7 +238,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 * @generated
 	 */
 	public void unsetValue() {
-		Serializable oldValue = value;
+		Object oldValue = value;
 		boolean oldValueESet = valueESet;
 		value = VALUE_EDEFAULT;
 		valueESet = false;
@@ -408,7 +400,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 			setName((String) newValue);
 			return;
 		case TypesPackage.EXTRA_DATA__VALUE:
-			setValue((Serializable) newValue);
+			setValue(newValue);
 			return;
 		case TypesPackage.EXTRA_DATA__FORMAT:
 			setFormat((String) newValue);

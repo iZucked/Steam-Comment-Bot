@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.types;
 
-import java.io.Serializable;
-import java.io.Serializable;
 
 /**
  * <!-- begin-user-doc -->
@@ -88,20 +86,22 @@ public interface ExtraData extends ExtraDataContainer {
 	 * If the meaning of the '<em>Value</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Value</em>' attribute.
 	 * @see #isSetValue()
 	 * @see #unsetValue()
-	 * @see #setValue(Serializable)
+	 * @see #setValue(Object)
 	 * @see com.mmxlabs.models.lng.types.TypesPackage#getExtraData_Value()
-	 * @model unsettable="true" dataType="com.mmxlabs.models.lng.types.SerializableObject" required="true"
+	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	Serializable getValue();
+	Object getValue();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.types.ExtraData#getValue <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Value</em>' attribute.
 	 * @see #isSetValue()
@@ -109,7 +109,7 @@ public interface ExtraData extends ExtraDataContainer {
 	 * @see #getValue()
 	 * @generated
 	 */
-	void setValue(Serializable value);
+	void setValue(Object value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.types.ExtraData#getValue <em>Value</em>}' attribute.
@@ -117,7 +117,7 @@ public interface ExtraData extends ExtraDataContainer {
 	 * <!-- end-user-doc -->
 	 * @see #isSetValue()
 	 * @see #getValue()
-	 * @see #setValue(Serializable)
+	 * @see #setValue(Object)
 	 * @generated
 	 */
 	void unsetValue();
@@ -129,7 +129,7 @@ public interface ExtraData extends ExtraDataContainer {
 	 * @return whether the value of the '<em>Value</em>' attribute is set.
 	 * @see #unsetValue()
 	 * @see #getValue()
-	 * @see #setValue(Serializable)
+	 * @see #setValue(Object)
 	 * @generated
 	 */
 	boolean isSetValue();
