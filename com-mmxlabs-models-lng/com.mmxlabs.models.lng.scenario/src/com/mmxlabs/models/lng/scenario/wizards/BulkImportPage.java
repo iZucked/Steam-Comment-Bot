@@ -1,6 +1,8 @@
 package com.mmxlabs.models.lng.scenario.wizards;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,13 +39,21 @@ import com.mmxlabs.scenario.service.model.ScenarioService;
 
 public class BulkImportPage extends WizardPage {
 	protected Control control = null;
+	//protected RadioSelectionGroup dataImportGroup;
 	protected RadioSelectionGroup scenarioSelectionGroup;
 	protected RadioSelectionGroup csvSelectionGroup;
 	protected CheckboxTreeViewer scenarioTreeViewer;
 	protected FileFieldEditor importFileEditor;
+	final protected ScenarioInstance currentScenario;
 	
-	public BulkImportPage(String pageName) {
+	public enum ImportedField {
+		COMMODITY_INDICES,
+		CARGOES
+	}
+	
+	public BulkImportPage(String pageName, ScenarioInstance currentScenario) {
 		super(pageName);
+		this.currentScenario = currentScenario;
 		setTitle("Select Scenarios");
 		setDescription("Choose the scenarios to import into.");
 	}
@@ -216,21 +226,20 @@ public class BulkImportPage extends WizardPage {
 	 * @return
 	 */
 	public List<ScenarioInstance> getSelectedScenarios() {
-		List<ScenarioInstance> result = new ArrayList<ScenarioInstance>();
 		
 		switch(scenarioSelectionGroup.getSelectedIndex()) {
 			case 0: { // "All Scenarios"				
 				return getAllAvailableScenarioInstances();
 			}
 			case 1: { // "Current Scenario"
-				break;
+				return Arrays.asList(new ScenarioInstance[] {currentScenario});
 			}
 			case 2: { // "Selected Scenarios Only"
 				return getCheckedScenariosFromTree();
 			}
 		}
 		
-		return result;
+		return null;
 	}
 	
 	public String getImportFilename() {
@@ -239,6 +248,11 @@ public class BulkImportPage extends WizardPage {
 	
 	public char getCsvSeparator() {
 		return (csvSelectionGroup.getSelectedIndex() == 0 ? ',' : ';');
+	}
+	
+	public ImportedField getImportedField() {
+		//return (dataImportGroup.getSelectedIndex() == 0 ? ImportedField.COMMODITY_INDICES : ImportedField.CARGOES);
+		return ImportedField.COMMODITY_INDICES;
 	}
 	
 	/**
@@ -272,6 +286,8 @@ public class BulkImportPage extends WizardPage {
 			}
 			setLayout(new GridLayout(1, false));
 			group.setLayout(new GridLayout(labels.length, false));
+			GridData groupLayoutData = new GridData();
+			group.setLayoutData(groupLayoutData);
 			group.setText(title);
 		}
 		
@@ -322,18 +338,35 @@ public class BulkImportPage extends WizardPage {
 		GridData ld = new GridData();
 		ld.widthHint = 400;
 		container.setLayoutData(ld);
-		
-		// create a radiobutton group for specifying how scenarios are selected
-		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios to Import Into", SWT.NONE, "All Scenarios", "Current Scenario", "Selected Scenarios Only");
-		scenarioSelectionGroup.setSelectedIndex(0);
+
+		/*
+		dataImportGroup = new RadioSelectionGroup(container, "Data To Import", SWT.NONE, "Commodity Indices", "Cargoes");
+		dataImportGroup.setSelectedIndex(0);
+		*/
 		
 		// create a radiobutton group for specifying CSV import
 		csvSelectionGroup = new RadioSelectionGroup(container, "CSV Format", SWT.NONE, "Comma-Separated", "Semicolon-Separated");
 		csvSelectionGroup.setSelectedIndex(0);
+		GridData csvLayoutData = new GridData();
+		csvLayoutData.widthHint = 500;
+		//csvLayoutData.grabExcessHorizontalSpace = true;
+		csvSelectionGroup.setLayoutData(csvLayoutData);
+
+		importFileEditor = new FileFieldEditor("CSV Import File", "CSV Import File", csvSelectionGroup);
+		importFileEditor.setFileExtensions(new String[] { "*.csv" });		
+		
+		// create a radiobutton group for specifying how scenarios are selected
+		String currentScenarioOption = String.format("Current Scenario (%s)", currentScenario.getName());
+		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios to Import Into", SWT.NONE, "All Scenarios", currentScenarioOption, "Selected Scenarios Only");
+		scenarioSelectionGroup.setSelectedIndex(0);
 		
 		// create a container for the scenario tree control (so we can hide it)
 		final Composite viewerComposite = new Composite(container, SWT.BORDER);
 		viewerComposite.setLayout(new GridLayout(1, true));
+		GridData viewerLayoutData = new GridData();
+		viewerLayoutData.widthHint = 400;
+		viewerLayoutData.grabExcessVerticalSpace = true;
+		viewerComposite.setLayoutData(viewerLayoutData);
 
 		// create a control to display the scenario tree
 		scenarioTreeViewer = new CheckboxTreeViewer(viewerComposite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -353,22 +386,19 @@ public class BulkImportPage extends WizardPage {
 			}
 		});
 		
-		// only show the scenario tree when the appropriate radio button is selected 
+		// only enable the scenario tree when the appropriate radio button is selected 
 		final Button selectedOnlyButton = scenarioSelectionGroup.buttons.get(2);
-		viewerComposite.setVisible(selectedOnlyButton.getSelection());
+		scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 		selectedOnlyButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				viewerComposite.setVisible(selectedOnlyButton.getSelection());
+				scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 			}
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) { }			
 		});
 		
 		
-		importFileEditor = new FileFieldEditor("CSV Import File", "CSV Import File", csvSelectionGroup);
-		importFileEditor.setFileExtensions(new String[] { "*.csv" });		
-
 		setControl(container);
 		control = container;
 	}

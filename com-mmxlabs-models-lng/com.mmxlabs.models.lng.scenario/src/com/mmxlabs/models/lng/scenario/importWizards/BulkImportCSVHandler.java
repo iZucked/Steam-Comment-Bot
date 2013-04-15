@@ -46,6 +46,7 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
  * Class to bulk-import information from CSV files.
@@ -67,23 +68,46 @@ public class BulkImportCSVHandler extends AbstractHandler {
 			// action has been disposed
 			return null;
 		}
-		BulkImportWizard wizard = new BulkImportWizard();
-
-		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		Shell shell = HandlerUtil.getActiveShell(event);
+		IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
 
+
+		BulkImportWizard wizard = new BulkImportWizard(editor.getScenarioInstance());
+		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
+		
 		WizardDialog dialog = new WizardDialog(shell, wizard);
 		dialog.create();
 		dialog.open();
 		
 		List<ScenarioInstance> scenarios = wizard.getSelectedScenarios();
-		char separator = wizard.getCsvSeparator();
 		String importFilename = wizard.getImportFilename();
 		
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
-			bulkImport(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingModel.class, scenarios, importFilename, separator);
-			//bulkImport(CargoPackage.Literals.CARGO_MODEL__CARGOES, CargoModel.class, scenarios, importFilename, separator);
+			char separator = wizard.getCsvSeparator();
+			EReference containment;
+			Class<?> clazz;
+			
+			switch (wizard.getImportedField()) {
+				/*
+				case CARGOES: {
+					// this is incorrect logic to import cargoes
+					containment = CargoPackage.Literals.CARGO_MODEL__CARGOES;
+					clazz = CargoModel.class;
+					break;
+				}
+				*/
+				case COMMODITY_INDICES: {
+					containment = PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES;
+					clazz = PricingModel.class;
+					break;
+				}
+				
+				default: {
+					throw new ExecutionException(String.format("Unsupported import target (code %d).", wizard.getImportedField()) );
+				}			
+			}
+			bulkImport(containment, clazz, scenarios, importFilename, separator);
 		}
 
 		return null;

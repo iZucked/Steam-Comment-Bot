@@ -8,6 +8,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
+import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.ImportedField;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class BulkImportWizard extends Wizard implements IImportWizard {
@@ -16,11 +17,17 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private List<ScenarioInstance> selectedScenarios;
 	private String importFilename;
 	private char csvSeparator;
+	private ImportedField importedField;
+	final private ScenarioInstance currentScenario;
 	
 	
+	public BulkImportWizard(ScenarioInstance scenarioInstance) {
+		currentScenario = scenarioInstance;
+	}
+
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		bip = new BulkImportPage("selectScenarios");
+		bip = new BulkImportPage("selectScenarios", currentScenario);
 		this.setForcePreviousAndNextButtons(false);
 	}
 
@@ -35,6 +42,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		selectedScenarios = bip.getSelectedScenarios();
 		importFilename = bip.getImportFilename();
 		csvSeparator = bip.getCsvSeparator();
+		importedField = bip.getImportedField();
 		return true;
 	}
 
@@ -48,6 +56,10 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	
 	public char getCsvSeparator() {
 		return csvSeparator;
+	}
+	
+	public ImportedField getImportedField() {
+		return importedField;
 	}
 	
 }
