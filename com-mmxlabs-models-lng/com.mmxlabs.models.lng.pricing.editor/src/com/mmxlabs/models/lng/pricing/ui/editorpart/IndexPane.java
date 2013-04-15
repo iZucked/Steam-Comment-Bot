@@ -121,7 +121,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 			};
 		};
 	}
-
+	
 	private class IndexValueManipulator implements ICellRenderer, ICellManipulator {
 		private final BasicAttributeManipulator expressionManipulator = new BasicAttributeManipulator(PricingPackage.eINSTANCE.getDerivedIndex_Expression(), getEditingDomain());
 
@@ -270,6 +270,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 				}
 
+			}
+
+			@Override
+			protected void doCommandStackChanged() {
+				inputChanged(getInput(), getInput());
+				super.doCommandStackChanged();
 			}
 
 			private void addColumn(final Calendar cal, final boolean sortable, final boolean isIntegerBased) {
