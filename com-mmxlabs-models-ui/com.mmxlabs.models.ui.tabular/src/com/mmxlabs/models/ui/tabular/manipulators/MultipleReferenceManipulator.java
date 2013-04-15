@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +31,7 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
 /**
  * @author hinton
+ * @since 3.0
  * 
  */
 public class MultipleReferenceManipulator extends DialogFeatureManipulator {
