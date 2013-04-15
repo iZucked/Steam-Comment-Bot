@@ -17,7 +17,7 @@ import org.eclipse.nebula.widgets.formattedtext.DateFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 
 /**
  * A new date attribute manipulator which uses the {@link FormattedTextCellEditor} from nebula.
