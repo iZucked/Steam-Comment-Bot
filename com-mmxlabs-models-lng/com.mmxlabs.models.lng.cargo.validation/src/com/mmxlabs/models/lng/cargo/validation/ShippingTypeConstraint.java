@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-public class ShippingTypeConstraint  extends AbstractModelConstraint{
+public class ShippingTypeConstraint extends AbstractModelConstraint{
 	
 	@Override
 	public IStatus validate(IValidationContext ctx) {
@@ -42,25 +42,24 @@ public class ShippingTypeConstraint  extends AbstractModelConstraint{
 			if (dischargeSlot.isSetPurchaseDeliveryType()) {
 				requiredCargoType = dischargeSlot.getPurchaseDeliveryType();
 				featureChecked = CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE;
-				featureCheckedName = "slot";
+				featureCheckedName = "Slot";
 			}
 			else {
 				Contract contract = dischargeSlot.getContract();
 				if (contract instanceof SalesContract) {
 					requiredCargoType = ((SalesContract) contract).getPurchaseDeliveryType();
 					featureChecked = CargoPackage.Literals.SLOT__CONTRACT;
-					featureCheckedName = String.format("sales contract '%s'", contract.getName());
+					featureCheckedName = String.format("Sales contract '%s'", contract.getName());
 				}
 			}
 			
 			if (requiredCargoType != CargoDeliveryType.ANY && cargoType != requiredCargoType) {
-				final String format = "The %s specifies a purchase shipping type of '%s' which does not match the cargo shipping type of '%s'.";
+				final String format = "%s specifies '%s' purchase but cargo shipping type is '%s'.";
 				final String error = String.format(format, featureCheckedName, requiredCargoType.getName(), cargoType.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(error, IStatus.ERROR));
 				dsd.addEObjectAndFeature(dischargeSlot, featureChecked);
 				return dsd;
-
 			}
 		}
 		

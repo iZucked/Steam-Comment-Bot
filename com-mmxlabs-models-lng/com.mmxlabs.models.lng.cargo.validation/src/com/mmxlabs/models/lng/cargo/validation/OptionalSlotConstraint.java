@@ -40,7 +40,7 @@ public class OptionalSlotConstraint extends AbstractModelConstraint {
 			}
 			if (cargo == null && !slot.isOptional()) {
 
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName()), IStatus.WARNING);
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'"+slot.getName()+"'"), IStatus.WARNING);
 				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Optional());
 				return dsd;
 			}

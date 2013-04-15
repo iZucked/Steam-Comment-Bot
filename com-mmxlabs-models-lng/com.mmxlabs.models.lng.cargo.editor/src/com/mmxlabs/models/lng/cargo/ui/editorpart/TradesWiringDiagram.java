@@ -151,6 +151,11 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				int sortedDestination = sortedIndices == null ? unsortedDestination : sortedIndices[unsortedDestination];
 				int sortedSource = sortedIndices == null ? unsortedSource : sortedIndices[unsortedSource];
 
+				// Filtering can lead to missing terminals
+				if (sortedDestination == -1 || sortedSource == -1) {
+					continue;
+				}
+				
 				// If this is the wire currently being dragged, skip and handle in next code block
 				if (dragging) {
 					if (draggingFromLeft && draggingFrom == sortedSource) {

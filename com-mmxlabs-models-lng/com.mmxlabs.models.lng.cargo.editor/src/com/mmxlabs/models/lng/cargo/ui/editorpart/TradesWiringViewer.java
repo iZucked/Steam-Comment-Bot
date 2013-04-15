@@ -840,7 +840,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (dischargeSide != null) {
 					c = dischargeSide.cargo;
 					if (dischargeSide.dischargeSlot != null) {
-						setCommands.add(SetCommand.create(jointModelEditorPart.getEditingDomain(), dischargeSide.dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot(), null));
+						setCommands.add(SetCommand.create(jointModelEditorPart.getEditingDomain(), dischargeSide.dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_Cargo(), null));
 					}
 				} else if (loadSide != null) {
 					c = loadSide.cargo;

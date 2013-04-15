@@ -37,21 +37,22 @@ public class SlotVolumeConstraint extends AbstractModelConstraint {
 			if (eventType == EMFEventType.NULL) {
 
 				final Slot slot = (Slot) object;
+				String name = slot.getName();
 				// TODO return some placeholders for the error message
 				if (slot.getSlotOrContractMinQuantity() < 0) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Negative min volume"));
 
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					return dsd;
 				}
 				if (slot.getSlotOrContractMaxQuantity() < 0) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Negative max volume"));
 
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					return dsd;
 				}
 				if (slot.getSlotOrContractMinQuantity() > slot.getSlotOrContractMaxQuantity()) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(name, "Min volume greater than max volume."));
 
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 

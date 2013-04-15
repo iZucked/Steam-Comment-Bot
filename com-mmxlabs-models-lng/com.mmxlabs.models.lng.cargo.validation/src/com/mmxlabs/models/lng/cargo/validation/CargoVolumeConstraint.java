@@ -39,13 +39,13 @@ public class CargoVolumeConstraint extends AbstractModelConstraint {
 			if (loadSlot != null && dischargeSlot != null) {
 
 				if (loadSlot.getSlotOrContractMaxQuantity() < dischargeSlot.getSlotOrContractMinQuantity()) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getName() + " max load quantity is less than the minimum discharge quantity."));
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getName() + "] Max load volume less than min discharge)."));
 					status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					return status;
 				}
 				if (loadSlot.getSlotOrContractMinQuantity() > dischargeSlot.getSlotOrContractMaxQuantity()) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo " + cargo.getName() + " min load quantity is greater than the maximum discharge quantity."));
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getName() + "] Min load volume greater than max discharge)."));
 					status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 					status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					return status;
