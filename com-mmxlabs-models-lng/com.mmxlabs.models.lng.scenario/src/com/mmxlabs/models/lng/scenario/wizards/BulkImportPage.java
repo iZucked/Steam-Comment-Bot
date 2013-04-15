@@ -363,10 +363,11 @@ public class BulkImportPage extends WizardPage {
 		// create a container for the scenario tree control (so we can hide it)
 		final Composite viewerComposite = new Composite(container, SWT.BORDER);
 		viewerComposite.setLayout(new GridLayout(1, true));
-		GridData viewerLayoutData = new GridData();
-		viewerLayoutData.widthHint = 400;
-		viewerLayoutData.grabExcessVerticalSpace = true;
-		viewerComposite.setLayoutData(viewerLayoutData);
+		GridData viewerCompositeLayoutData = new GridData();
+		viewerCompositeLayoutData.widthHint = 450;
+		viewerCompositeLayoutData.grabExcessVerticalSpace = true;
+		viewerCompositeLayoutData.verticalAlignment = SWT.FILL;
+		viewerComposite.setLayoutData(viewerCompositeLayoutData);
 
 		// create a control to display the scenario tree
 		scenarioTreeViewer = new CheckboxTreeViewer(viewerComposite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -374,6 +375,11 @@ public class BulkImportPage extends WizardPage {
 		scenarioTreeViewer.setLabelProvider(new ScenarioLabelProvider());		
 		scenarioTreeViewer.setAutoExpandLevel(3);
 		scenarioTreeViewer.setInput(getServices());
+		GridData viewerLayoutData = new GridData();
+		viewerLayoutData.widthHint = 400;
+		viewerLayoutData.grabExcessVerticalSpace = true;
+		viewerLayoutData.verticalAlignment = SWT.FILL;
+		scenarioTreeViewer.getTree().setLayoutData(viewerLayoutData);
 		
 		// when a parent element checkbox is clicked in the tree, propagate the change to its descendants
 		scenarioTreeViewer.addCheckStateListener(new ICheckStateListener() {
