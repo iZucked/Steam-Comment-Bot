@@ -117,6 +117,13 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	@Override
 	public synchronized void paintControl(final PaintEvent e) {
+		final Rectangle ca = getCanvasClientArea();
+
+		// Could be null is column is no longer visible.
+		if (ca == null) {
+			return;
+		}
+
 		// Get a list of terminal positions from subclass
 		final List<Float> terminalPositions = getTerminalPositions(rootData);
 
@@ -127,7 +134,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		graphics.setAntialias(SWT.ON);
 
-		final Rectangle ca = getCanvasClientArea();
 		// Clip to reported client area to avoid overdraw
 		graphics.setClipping(ca);
 
@@ -155,7 +161,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				if (sortedDestination == -1 || sortedSource == -1) {
 					continue;
 				}
-				
+
 				// If this is the wire currently being dragged, skip and handle in next code block
 				if (dragging) {
 					if (draggingFromLeft && draggingFrom == sortedSource) {

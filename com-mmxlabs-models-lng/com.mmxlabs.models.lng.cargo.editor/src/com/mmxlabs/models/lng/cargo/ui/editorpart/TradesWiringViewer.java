@@ -660,27 +660,37 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Rectangle area = super.getCanvasClientArea();
 
 				int wiringColumnIndexTmp = -1;
+				boolean foundColumn = false;
 				for (final GridColumn gc : getScenarioViewer().getGrid().getColumns()) {
 					++wiringColumnIndexTmp;
 					if (gc == wiringColumn.getColumn()) {
+						foundColumn = true;
 						break;
 					}
+				}
+				if (!foundColumn) {
+					return null;
 				}
 				final int wiringColumnIndex = wiringColumnIndexTmp;
 
 				int offset = 0;
 				offset += getScenarioViewer().getGrid().getRowHeaderWidth();
 				// TODO: Get col number
+				foundColumn = false;
 				final int[] columnOrder = getScenarioViewer().getGrid().getColumnOrder();
 				for (int ii = getScenarioViewer().getGrid().getHorizontalBar().getSelection(); ii < columnOrder.length; ++ii) {
 					final int idx = columnOrder[ii];
 					if (idx == wiringColumnIndex) {
+						foundColumn = true;
 						break;
 					}
 					offset += getScenarioViewer().getGrid().getColumn(idx).getWidth();
 				}
-				// TODO: Take into account h scroll final int colWidth = getScenarioViewer().getGrid().getColumn(wiringColumnIndex).getWidth();
+				if (!foundColumn) {
+					return null;
+				}
 
+				// TODO: Take into account h scroll final int colWidth = getScenarioViewer().getGrid().getColumn(wiringColumnIndex).getWidth();
 				final Rectangle r = new Rectangle(area.x + offset, area.y + getScenarioViewer().getGrid().getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 
 				return r;
