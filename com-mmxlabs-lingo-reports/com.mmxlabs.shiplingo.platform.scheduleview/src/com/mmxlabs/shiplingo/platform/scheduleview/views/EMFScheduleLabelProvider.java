@@ -37,14 +37,14 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -231,7 +231,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 				if (journey.getRoute().isCanal()) {
 					eventText.append(" | " + journey.getRoute() + "\n");
-				}	
+				}
 
 			} else if (element instanceof SlotVisit) {
 				eventText.append("Time in port: " + durationTime + " \n");
@@ -426,7 +426,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	}
 
 	private Integer getPnL(Object object) {
-		ExtraDataContainer container = null;
+		ProfitAndLossContainer container = null;
 
 		if (object instanceof CargoAllocation) {
 			container = (CargoAllocation) object;
@@ -448,12 +448,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 
 		if (container != null) {
-			final ExtraData dataWithKey = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
 			if (dataWithKey != null) {
-				final Integer v = dataWithKey.getValueAs(Integer.class);
-				if (v != null) {
-					return v;
-				}
+				return (int) dataWithKey.getProfitAndLoss();
 			}
 		}
 

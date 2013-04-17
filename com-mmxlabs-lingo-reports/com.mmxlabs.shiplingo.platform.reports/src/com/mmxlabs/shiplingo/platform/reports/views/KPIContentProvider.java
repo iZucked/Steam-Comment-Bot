@@ -22,24 +22,24 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
  * Content provider for the {@link CargoReportView}.
  * 
  * @author Simon Goodall
+ * @since 3.0
  * 
  */
 public class KPIContentProvider implements IStructuredContentProvider {
@@ -166,8 +166,8 @@ public class KPIContentProvider implements IStructuredContentProvider {
 						totalPNL += getElementPNL(cargoAllocation);
 					}
 
-				} else if (evt instanceof ExtraDataContainer) {
-					totalPNL += getElementPNL((ExtraDataContainer) evt);
+				} else if (evt instanceof ProfitAndLossContainer) {
+					totalPNL += getElementPNL((ProfitAndLossContainer) evt);
 				}
 			}
 		}
@@ -187,15 +187,12 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		output.add(new RowData(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true));
 	}
 
-	private long getElementPNL(final ExtraDataContainer container) {
+	private long getElementPNL(final ProfitAndLossContainer container) {
 		final long total = 0l;
 
-		final ExtraData dataWithKey = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
-		if (dataWithKey != null) {
-			final Integer v = dataWithKey.getValueAs(Integer.class);
-			if (v != null) {
-				return v.longValue();
-			}
+		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+		if (groupProfitAndLoss != null) {
+			return groupProfitAndLoss.getProfitAndLoss();
 		}
 		return total;
 	}

@@ -5,11 +5,12 @@
 package com.mmxlabs.shiplingo.platform.reports.properties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -22,21 +23,25 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.models.util.emfpath.EMFPathPropertyDescriptor;
 import com.mmxlabs.shiplingo.platform.reports.properties.ScheduledEventPropertySourceProvider.SimpleLabelProvider;
 
+/**
+ * @since 3.0
+ */
 public class EventPropertySource implements IPropertySource {
 
 	private final Event event;
 	private IPropertyDescriptor[] descriptors = null;
-	private ExtraDataContainerPropertySource delegateSource;
+
+	// private ExtraDataContainerPropertySource delegateSource;
 
 	public EventPropertySource(final Event event) {
 		this.event = event;
@@ -51,6 +56,7 @@ public class EventPropertySource implements IPropertySource {
 	public synchronized IPropertyDescriptor[] getPropertyDescriptors() {
 		// create descriptors for whatever normal fields the event has
 		// then create descriptors for fuel mix, because fuel mix is special
+
 		if (descriptors != null) {
 			return descriptors;
 		}
@@ -211,18 +217,42 @@ public class EventPropertySource implements IPropertySource {
 			}
 		}
 
-		ExtraDataContainer container = null;
-		if (event instanceof ExtraDataContainer) {
-			container = (ExtraDataContainer) event;
+		java.util.List<EStructuralFeature> featureList = new ArrayList();
+		ProfitAndLossContainer container = null;
+		if (event instanceof ProfitAndLossContainer) {
+			container = (ProfitAndLossContainer) event;
 		} else if (event instanceof SlotAllocation) {
 			container = (((SlotAllocation) event).getCargoAllocation());
+			featureList.add(SchedulePackage.eINSTANCE.getSlotAllocation_CargoAllocation());
 		} else if (event instanceof SlotVisit) {
 			container = (((SlotVisit) event).getSlotAllocation().getCargoAllocation());
+			featureList.add(SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation());
+			featureList.add(SchedulePackage.eINSTANCE.getSlotAllocation_CargoAllocation());
 		}
 		if (container != null) {
-			final ExtraDataContainerPropertySource delegateSource = new ExtraDataContainerPropertySource(container);
-			this.delegateSource = delegateSource;
-			list.addAll(Arrays.asList(delegateSource.getPropertyDescriptors()));
+			ComposedAdapterFactory composedAdapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+			featureList.add(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss());
+			EMFPath path = new EMFPath(true, featureList);
+			EMFPathPropertyDescriptor desc = EMFPathPropertyDescriptor.create(event, composedAdapterFactory, SchedulePackage.eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss(), path);
+			if (desc != null) {
+				list.add(desc);
+			}
+			//
+			// GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+			// if (groupProfitAndLoss != null) {
+			// IItemPropertySource ps = (IItemPropertySource) composedAdapterFactory.adapt(groupProfitAndLoss, IItemPropertySource.class);
+			// if (ps != null) {
+			// IItemPropertyDescriptor propertyDescriptor = ps.getPropertyDescriptor(groupProfitAndLoss, SchedulePackage.eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss());
+			// if (propertyDescriptor != null) {
+			// org.eclipse.emf.edit.ui.provider.PropertyDescriptor desc = new org.eclipse.emf.edit.ui.provider.PropertyDescriptor(groupProfitAndLoss, propertyDescriptor);
+			// }
+			// }}
+			// list.addAll(Arrays.asList(af.getPropertySource(event).getPropertyDescriptors()));
+			// AdapProFa container.eResource().getResourceSet().getAdapterFactories()
+			// EMFPlugin.EclipsePlugin.Utils.corePlugin.getUtil.
+			// final ScenarioPropertySourceProvider delegateSource = new ScenarioPropertySourceProvider(container);
+			// // this.delegateSource = delegateSource;
+			// // list.addAll(Arrays.asList(delegateSource.getPropertyDescriptors()));
 		}
 		descriptors = list.toArray(new IPropertyDescriptor[0]);
 
@@ -241,8 +271,9 @@ public class EventPropertySource implements IPropertySource {
 			}
 			return null;
 		} else {// properties for fuelmix
-			return delegateSource.getPropertyValue(id);
+			// return delegateSource.getPropertyValue(id);
 		}
+		return null;
 	}
 
 	@Override
