@@ -583,7 +583,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public void init(final IStructuredContentProvider contentProvider, final CommandStack commandStack) {
 		final GridTableViewer viewer = this;
@@ -750,7 +750,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	private EReference currentReference;
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
 		init(new IStructuredContentProvider() {

@@ -38,7 +38,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	protected List<EReference> childReferences = new LinkedList<EReference>();
 	protected List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	protected List<EObject> childObjects = new LinkedList<EObject>();
 	protected ICommandHandler commandHandler;

@@ -18,7 +18,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  * An {@link ICellManipulator} and {@link ICellRenderer} wrapper class to take an existing implemention of these interfaces and disable the editing capabilities.
  * 
  * @author Simon Goodall
- * @since 3.0
+ * @since 3.1
  * 
  */
 public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRenderer> implements ICellManipulator, ICellRenderer {
