@@ -305,6 +305,9 @@ public class DefaultImportContext implements IImportContext {
 		return readerStack.peek();
 	}
 	
+	/**
+	 * @since 3.0
+	 */
 	public void registerNamedObjectsFromSubModels() {
 		// first set up all existing named objects
 		for (final MMXSubModel subModel : getRootObject().getSubModels()) {
