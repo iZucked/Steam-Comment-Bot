@@ -38,7 +38,7 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 class HorizontalKPIContentProvider implements IStructuredContentProvider {
 
 	public static class RowData {
-		public RowData(final String scheduleName, long pnl, long shippingCost, long idleTime) {
+		public RowData(final String scheduleName, Long pnl, Long shippingCost, Long idleTime) {
 			super();
 			this.scheduleName = scheduleName;
 			this.pnl = pnl;
@@ -47,9 +47,9 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		}
 
 		public final String scheduleName;
-		public final long pnl;
-		public final long shippingCost;
-		public final long idleTime;
+		public final Long pnl;
+		public final Long shippingCost;
+		public final Long idleTime;
 	}
 
 	private RowData[] rowData = new RowData[0];
@@ -152,7 +152,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			rowData = rowDataList.toArray(rowData);
 		}
 		if (rowData.length == 0) {
-			rowData = new RowData[] {new RowData("", 0, 0,0 )};
+			rowData = new RowData[] { new RowData("", null, null, null) };
 		}
 
 	}
