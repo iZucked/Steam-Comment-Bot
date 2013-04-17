@@ -158,7 +158,7 @@
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
                id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
-               name="Bulk Import Commodity Indices from CSV">
+               name="Bulk Import from CSV">
          </command>
       </extension>
 </plugin>

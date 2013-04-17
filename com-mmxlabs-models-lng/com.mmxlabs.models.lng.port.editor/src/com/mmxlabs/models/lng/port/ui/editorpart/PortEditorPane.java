@@ -152,7 +152,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 							CSVReader reader = null;
 							try {
-								reader = new CSVReader(new File(path));
+								reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 								final Route importRoute = routeImporter.importRoute(reader, context);
 								context.run();
 								final CompoundCommand cc = new CompoundCommand();
@@ -268,7 +268,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 							CSVReader reader = null;
 							try {
-								reader = new CSVReader(new File(path));
+								reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 
 								final Route importRoute = routeImporter.importRoute(reader, context);
 

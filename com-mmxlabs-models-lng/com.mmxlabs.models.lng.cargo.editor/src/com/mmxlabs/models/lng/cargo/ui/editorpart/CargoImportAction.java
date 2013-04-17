@@ -49,6 +49,10 @@ public final class CargoImportAction extends SimpleImportAction {
 		super(part, viewer);
 	}
 
+	public CargoImportAction(final ImportHooksProvider iph, final FieldInfoProvider fip) {
+		super(iph, fip);
+	}
+
 	/**
 	 * Merge the imported list of objects with the existing {@link Cargo}es and {@link Slot}s in the {@link CargoModel}.
 	 */

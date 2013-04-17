@@ -134,7 +134,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 
 						CSVReader reader = null;
 						try {
-							reader = new CSVReader(new File(path));
+							reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 							final Collection<EObject> importedObjects = importer.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), reader, context);
 							context.run();
 							importHooksProvider.getEditingDomain().getCommandStack()

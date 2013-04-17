@@ -153,7 +153,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
 						CSVReader reader = null;
 						try {
-							reader = new CSVReader(new File(path));
+							reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 							final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 							context.run();
 							importHooksProvider.getEditingDomain().getCommandStack().execute(mergeLists(container, containment, new ArrayList<EObject>(importedObjects)));
@@ -188,7 +188,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
 						CSVReader reader = null;
 						try {
-							reader = new CSVReader(new File(path));
+							reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 							final Collection<EObject> importedObjects = importer.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), reader, context);
 							context.run();
 							importHooksProvider.getEditingDomain().getCommandStack()

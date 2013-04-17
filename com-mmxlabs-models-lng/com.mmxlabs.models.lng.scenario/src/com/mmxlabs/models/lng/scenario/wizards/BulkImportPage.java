@@ -1,6 +1,5 @@
 package com.mmxlabs.models.lng.scenario.wizards;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -17,6 +16,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -45,11 +46,17 @@ public class BulkImportPage extends WizardPage {
 	protected CheckboxTreeViewer scenarioTreeViewer;
 	protected FileFieldEditor importFileEditor;
 	final protected ScenarioInstance currentScenario;
+	private RadioSelectionGroup dataImportGroup;
 	
-	public enum ImportedField {
-		COMMODITY_INDICES,
-		CARGOES
-	}
+	public final static int CHOICE_COMMODITY_INDICES = 0;
+	public final static int CHOICE_CARGOES = CHOICE_COMMODITY_INDICES + 1;
+	
+	public final static int CHOICE_COMMA = 0;
+	public final static int CHOICE_SEMICOLON = CHOICE_COMMA + 1;
+	
+	public final static int CHOICE_ALL_SCENARIOS = 0;
+	public final static int CHOICE_CURRENT_SCENARIO = CHOICE_ALL_SCENARIOS + 1;
+	public final static int CHOICE_SELECTED_SCENARIOS = CHOICE_CURRENT_SCENARIO + 1;
 	
 	public BulkImportPage(String pageName, ScenarioInstance currentScenario) {
 		super(pageName);
@@ -227,8 +234,8 @@ public class BulkImportPage extends WizardPage {
 	 */
 	public List<ScenarioInstance> getSelectedScenarios() {
 		
-		switch(scenarioSelectionGroup.getSelectedIndex()) {
-			case 0: { // "All Scenarios"				
+		switch(scenarioSelectionGroup.getSelectedValue()) {
+			case CHOICE_ALL_SCENARIOS: { // "All Scenarios"				
 				return getAllAvailableScenarioInstances();
 			}
 			case 1: { // "Current Scenario"
@@ -247,12 +254,11 @@ public class BulkImportPage extends WizardPage {
 	}
 	
 	public char getCsvSeparator() {
-		return (csvSelectionGroup.getSelectedIndex() == 0 ? ',' : ';');
+		return (csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';');
 	}
 	
-	public ImportedField getImportedField() {
-		//return (dataImportGroup.getSelectedIndex() == 0 ? ImportedField.COMMODITY_INDICES : ImportedField.CARGOES);
-		return ImportedField.COMMODITY_INDICES;
+	public int getImportedField() {
+		return dataImportGroup.getSelectedValue();
 	}
 	
 	/**
@@ -277,8 +283,9 @@ public class BulkImportPage extends WizardPage {
 		int selectedIndex = -1;
 		final ArrayList<Button> buttons = new ArrayList<Button>();
 		final Group group;
+		final int [] values;
 		
-		public RadioSelectionGroup(Composite parent, String title, int style, String ... labels) {
+		public RadioSelectionGroup(Composite parent, String title, int style, String [] labels, int [] values) {
 			super(parent, style);
 			group = new Group(parent, style);
 			for (String label: labels) {
@@ -289,6 +296,7 @@ public class BulkImportPage extends WizardPage {
 			GridData groupLayoutData = new GridData();
 			group.setLayoutData(groupLayoutData);
 			group.setText(title);
+			this.values = values;
 		}
 		
 
@@ -323,7 +331,11 @@ public class BulkImportPage extends WizardPage {
 		public void setSelectedIndex(int value) {
 			buttons.get(value).setSelection(true);
 			selectedIndex = value;
-		}				
+		}
+		
+		public int getSelectedValue() {
+			return values[getSelectedIndex()];
+		}
 		
 	}
 	
@@ -339,13 +351,11 @@ public class BulkImportPage extends WizardPage {
 		ld.widthHint = 400;
 		container.setLayoutData(ld);
 
-		/*
-		dataImportGroup = new RadioSelectionGroup(container, "Data To Import", SWT.NONE, "Commodity Indices", "Cargoes");
+		dataImportGroup = new RadioSelectionGroup(container, "Data To Import", SWT.NONE, new String[] {"Commodity Indices", "Cargoes"}, new int[] {CHOICE_COMMODITY_INDICES, CHOICE_CARGOES});
 		dataImportGroup.setSelectedIndex(0);
-		*/
 		
 		// create a radiobutton group for specifying CSV import
-		csvSelectionGroup = new RadioSelectionGroup(container, "CSV Format", SWT.NONE, "Comma-Separated", "Semicolon-Separated");
+		csvSelectionGroup = new RadioSelectionGroup(container, "CSV Format", SWT.NONE, new String[] {"Comma-Separated", "Semicolon-Separated"}, new int[] {CHOICE_COMMA, CHOICE_SEMICOLON});
 		csvSelectionGroup.setSelectedIndex(0);
 		GridData csvLayoutData = new GridData();
 		csvLayoutData.widthHint = 500;
@@ -353,11 +363,19 @@ public class BulkImportPage extends WizardPage {
 		csvSelectionGroup.setLayoutData(csvLayoutData);
 
 		importFileEditor = new FileFieldEditor("CSV Import File", "CSV Import File", csvSelectionGroup);
-		importFileEditor.setFileExtensions(new String[] { "*.csv" });		
+		importFileEditor.setFileExtensions(new String[] { "*.csv" });
+		
+		importFileEditor.getTextControl(csvSelectionGroup).addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				BulkImportPage.this.getContainer().updateButtons();				
+			}
+		});
 		
 		// create a radiobutton group for specifying how scenarios are selected
 		String currentScenarioOption = String.format("Current Scenario (%s)", currentScenario.getName());
-		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios to Import Into", SWT.NONE, "All Scenarios", currentScenarioOption, "Selected Scenarios Only");
+		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios to Import Into", SWT.NONE, new String[] { "All Scenarios", currentScenarioOption, "Selected Scenarios Only"}, new int[] {CHOICE_ALL_SCENARIOS, CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS});
 		scenarioSelectionGroup.setSelectedIndex(0);
 		
 		// create a container for the scenario tree control (so we can hide it)
