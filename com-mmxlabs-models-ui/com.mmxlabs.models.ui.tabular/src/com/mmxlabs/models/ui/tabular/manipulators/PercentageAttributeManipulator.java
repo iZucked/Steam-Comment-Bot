@@ -15,6 +15,7 @@ import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
  * Editor for percentages, modifies the behaviour of {@link NumericAttributeManipulator} by multiplying the displayed values by 100 and adding a % when rendering.
  * 
  * @author hinton
+ * @since 3.0
  * 
  */
 public class PercentageAttributeManipulator extends NumericAttributeManipulator {
