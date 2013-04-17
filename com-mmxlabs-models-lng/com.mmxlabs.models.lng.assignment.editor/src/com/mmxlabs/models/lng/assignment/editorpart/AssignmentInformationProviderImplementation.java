@@ -150,9 +150,10 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 
 			final Vessel v2 = (Vessel) resource.getVesselOrClass();
 			final VesselAvailability vesselAvailability = availabilityMap.get(v2);
-
-			if (vesselAvailability.isSetStartAfter()) {
-				return vesselAvailability.getStartAfter();
+			if (vesselAvailability != null) {
+				if (vesselAvailability.isSetStartAfter()) {
+					return vesselAvailability.getStartAfter();
+				}
 			}
 
 		}
@@ -165,8 +166,10 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 			final Vessel v2 = (Vessel) resource.getVesselOrClass();
 			final VesselAvailability vesselAvailability = availabilityMap.get(v2);
 
-			if (vesselAvailability.isSetStartAfter()) {
-				return vesselAvailability.getEndBy();
+			if (vesselAvailability != null) {
+				if (vesselAvailability.isSetStartAfter()) {
+					return vesselAvailability.getEndBy();
+				}
 			}
 		}
 
