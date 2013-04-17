@@ -38,6 +38,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  * Uses {@link ComboBoxCellEditor} for its edit control, and takes the values from an {@link IReferenceValueProvider}.
  * 
  * @author Simon Goodall
+ * @since 3.0
  * 
  */
 public class ContractManipulator implements ICellManipulator, ICellRenderer {

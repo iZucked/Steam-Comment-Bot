@@ -66,7 +66,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.setEditorWrapper(editorWrapper);
 
 		final TabItem priceInfoTabPage = new TabItem(tabFolder, SWT.None);
-		priceInfoTabPage.setText("Price Info");
+		priceInfoTabPage.setText("Pricing");
 		final Composite priceInfoTabComposite = new Composite(tabFolder, SWT.NONE);
 		priceInfoTabPage.setControl(priceInfoTabComposite);
 		priceInfoTabComposite.setLayout(new GridLayout(1, true));

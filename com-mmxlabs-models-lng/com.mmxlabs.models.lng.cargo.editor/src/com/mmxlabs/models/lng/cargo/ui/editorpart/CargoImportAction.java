@@ -42,6 +42,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
  * normally the newly imported objects replace their original counterpart.
  * 
  * @author Simon Goodall
+ * @since 3.0
  * 
  */
 public final class CargoImportAction extends SimpleImportAction {

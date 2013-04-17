@@ -36,6 +36,9 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 
+/**
+ * @since 3.0
+ */
 public class CargoEditingCommands {
 
 	private final IScenarioEditingLocation scenarioEditingLocation;
