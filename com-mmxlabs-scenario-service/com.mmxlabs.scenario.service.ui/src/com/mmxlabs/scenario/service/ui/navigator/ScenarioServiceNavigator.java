@@ -275,13 +275,14 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		final TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		checkColumn.setImage(showColumnImage);
 		checkColumn.setToolTipText("Display");
-		checkColumn.setMoveable(true);
-
+		checkColumn.setAlignment(SWT.CENTER);
+		checkColumn.setWidth(30);
+		checkColumn.setResizable(false);
+		
 		final TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		progressColumn.setImage(optImage);
-
-		checkColumn.pack();
-		progressColumn.pack();
+		progressColumn.setWidth(30);
+		progressColumn.setResizable(false);
 
 		final Tree tree = viewer.getTree();
 		tree.addMouseListener(new MouseAdapter() {
