@@ -41,7 +41,7 @@ public class CSVReader implements Closeable {
 		this(file, ',');
 	}
 	/**
-	 * @since 2.0
+	 * @since 3.0
 	 */
 	public CSVReader(final File file, char separator) throws IOException {
 		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString(), separator);
@@ -50,7 +50,7 @@ public class CSVReader implements Closeable {
 	/**
 	 * @param inputFileName
 	 * @throws IOException
-	 * @since 2.0
+	 * @since 3.0
 	 */
 	public CSVReader(final String base, final String inputFileName, char separator) throws IOException {
 		this.separator = separator;
