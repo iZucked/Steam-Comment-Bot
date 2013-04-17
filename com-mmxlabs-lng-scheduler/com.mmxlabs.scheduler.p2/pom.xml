@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
 		<groupId>com.mmxlabs.scheduler</groupId>
-		<version>4.0.1-SNAPSHOT</version>
+		<version>4.0.1.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.scheduler.p2</artifactId>
@@ -140,5 +140,5 @@
 		</plugins>
 	</build>
 
-	<version>4.0.1-SNAPSHOT</version>
+	<version>4.0.1.RELEASE</version>
 </project>
