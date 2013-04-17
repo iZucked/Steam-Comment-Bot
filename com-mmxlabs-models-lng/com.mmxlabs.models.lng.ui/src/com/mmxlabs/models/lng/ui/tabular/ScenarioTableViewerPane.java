@@ -407,11 +407,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
-		final Action importAction = createImportAction();
-		if (importAction != null) {
-			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
-		}
-
 		// add extension points to toolbar
 		{
 			final String toolbarID = getToolbarID();
@@ -457,10 +452,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
 		scenarioViewer.addSelectionChangedListener(result);
 		return result;
-	}
-
-	protected Action createImportAction() {
-		return new SimpleImportAction(jointModelEditorPart, scenarioViewer);
 	}
 
 	protected Action createDeleteAction() {
