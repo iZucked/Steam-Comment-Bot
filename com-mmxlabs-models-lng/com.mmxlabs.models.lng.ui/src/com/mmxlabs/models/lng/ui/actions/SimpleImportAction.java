@@ -30,6 +30,9 @@ public class SimpleImportAction extends ImportAction {
 
 	private static final Logger log = LoggerFactory.getLogger(SimpleImportAction.class);
 	
+	/**
+	 * @since 3.0
+	 */
 	public interface FieldInfoProvider {
 		EObject getContainer();
 		EReference getContainment();
@@ -37,6 +40,9 @@ public class SimpleImportAction extends ImportAction {
 
 	private final FieldInfoProvider fieldInfoProvider;
 	
+	/**
+	 * @since 3.0
+	 */
 	public SimpleImportAction(final ImportHooksProvider iph, final FieldInfoProvider fip) {
 		super(iph);
 		this.fieldInfoProvider = fip;
