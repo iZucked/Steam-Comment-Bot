@@ -12,7 +12,6 @@ import java.util.Collection;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.swt.widgets.FileDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +75,7 @@ public class SimpleImportAction extends ImportAction {
 
 		CSVReader reader = null;
 		try {
-			reader = new CSVReader(new File(path));
+			reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 			final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 			context.run();
 			final Command cmd = mergeImports(container, containment, importedObjects);

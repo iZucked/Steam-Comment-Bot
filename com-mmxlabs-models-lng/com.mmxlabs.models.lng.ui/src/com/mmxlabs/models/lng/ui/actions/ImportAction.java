@@ -61,6 +61,7 @@ public abstract class ImportAction extends LockableAction {
 		MMXRootObject getRootObject();
 		EditingDomain getEditingDomain();
 		String getImportFilePath();
+		char getCsvSeparator();
 		void lock();
 		void unlock();
 	}
@@ -111,6 +112,11 @@ public abstract class ImportAction extends LockableAction {
 				final FileDialog fileDialog = new FileDialog(getShell());
 				fileDialog.setFilterExtensions(new String[] { "*.csv" });
 				return fileDialog.open();
+			}
+
+			@Override
+			public char getCsvSeparator() {
+				return ',';
 			}
 		});
 	}
