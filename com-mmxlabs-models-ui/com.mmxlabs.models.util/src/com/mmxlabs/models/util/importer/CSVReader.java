@@ -47,6 +47,10 @@ public class CSVReader implements Closeable {
 		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString(), separator);
 	}
 
+
+	public CSVReader(final String base, final String inputFileName) throws IOException {
+		this(base, inputFileName, ',');
+	}
 	/**
 	 * @param inputFileName
 	 * @throws IOException
