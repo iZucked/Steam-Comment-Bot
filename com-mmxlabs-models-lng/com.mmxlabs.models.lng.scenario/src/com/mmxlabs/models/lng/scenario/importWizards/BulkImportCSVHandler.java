@@ -56,6 +56,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * TODO: Move duplicated code into a common code object.
  * 
  * @author Simon McGregor
+ * @since 3.0
  *
  */
 public class BulkImportCSVHandler extends AbstractHandler {

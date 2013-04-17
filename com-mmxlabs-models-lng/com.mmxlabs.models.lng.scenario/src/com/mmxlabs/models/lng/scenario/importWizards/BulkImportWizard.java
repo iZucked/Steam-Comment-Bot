@@ -11,6 +11,9 @@ import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.ImportedField;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
+/**
+ * @since 3.0
+ */
 public class BulkImportWizard extends Wizard implements IImportWizard {
 
 	private BulkImportPage bip;
