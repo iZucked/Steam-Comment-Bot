@@ -136,10 +136,8 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 						final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(containment.getEReferenceType());
 						// open file picker
 
-						final FileDialog fileDialog = new FileDialog(part.getShell());
-						fileDialog.setFilterExtensions(new String[] { "*.csv" });
-						final String path = fileDialog.open();
-
+						final String path = importHooksProvider.getImportFilePath();
+						
 						if (path == null)
 							return;
 
@@ -148,7 +146,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 							reader = new CSVReader(new File(path));
 							final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 							context.run();
-							part.getEditingDomain().getCommandStack().execute(mergeLists(container, containment, new ArrayList<EObject>(importedObjects)));
+							importHooksProvider.getEditingDomain().getCommandStack().execute(mergeLists(container, containment, new ArrayList<EObject>(importedObjects)));
 						} catch (final IOException e) {
 							log.error(e.getMessage(), e);
 						} finally {
@@ -173,10 +171,8 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 					protected void doImportStages(final DefaultImportContext context) {
 						final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getBaseFuel());
 
-						final FileDialog fileDialog = new FileDialog(part.getShell());
-						fileDialog.setFilterExtensions(new String[] { "*.csv" });
-						final String path = fileDialog.open();
-
+						final String path = importHooksProvider.getImportFilePath();
+						
 						if (path == null)
 							return;
 
@@ -185,7 +181,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 							reader = new CSVReader(new File(path));
 							final Collection<EObject> importedObjects = importer.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), reader, context);
 							context.run();
-							part.getEditingDomain().getCommandStack()
+							importHooksProvider.getEditingDomain().getCommandStack()
 									.execute(mergeLists(getScenarioViewer().getCurrentContainer(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels(), new ArrayList<EObject>(importedObjects)));
 						} catch (final IOException e) {
 							log.error(e.getMessage(), e);

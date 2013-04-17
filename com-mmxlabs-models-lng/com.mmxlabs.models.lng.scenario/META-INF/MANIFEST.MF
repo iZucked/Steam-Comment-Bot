@@ -35,4 +35,5 @@ Service-Component: OSGI-INF/*.xml
 Import-Package: com.google.inject;version="1.3.0",
  com.mmxlabs.common;version="2.1.0",
  com.mmxlabs.models.common.commandservice,
+ com.mmxlabs.models.lng.ui.actions,
  org.slf4j;version="1.6.4"
