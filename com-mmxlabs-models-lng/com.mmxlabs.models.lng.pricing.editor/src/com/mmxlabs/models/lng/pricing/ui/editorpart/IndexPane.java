@@ -17,11 +17,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
@@ -45,8 +43,6 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.importers.DataIndexImporter;
-import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -57,8 +53,6 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.DialogFeatureManipulator;
-import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 public class IndexPane extends ScenarioTableViewerPane {
 
@@ -98,30 +92,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 		this.useIntegers = b;
 	}
 
-	@Override
-	protected Action createImportAction() {
-		return new SimpleImportAction(getJointModelEditorPart(), getScenarioViewer()) {
-			@Override
-			protected void doImportStages(final DefaultImportContext context) {
-				super.doImportStages(context);
-				
-				// ugly hack: indirectly force a trigger of the inputChanged method
-				// TODO: do this more cleanly and directly
-				Viewer viewer = IndexPane.this.getViewer();
-				viewer.setInput(viewer.getInput());
-			}
-
-			@Override
-			protected IClassImporter getImporter(final EReference containment) {
-				final IClassImporter result = super.getImporter(containment);
-				if (result instanceof DataIndexImporter) {
-					((DataIndexImporter) result).setParseAsInt(useIntegers);
-				}
-				return result;
-			};
-		};
-	}
-	
 	private class IndexValueManipulator implements ICellRenderer, ICellManipulator {
 		private final BasicAttributeManipulator expressionManipulator = new BasicAttributeManipulator(PricingPackage.eINSTANCE.getDerivedIndex_Expression(), getEditingDomain());
 
@@ -461,5 +431,5 @@ public class IndexPane extends ScenarioTableViewerPane {
 		};
 		return result;
 	}
-	
+
 }

@@ -171,11 +171,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		super.dispose();
 	}
 
-	@Override
-	protected Action createImportAction() {
-		return new CargoImportAction(jointModelEditorPart, getScenarioViewer());
-	}
-
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
 		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart) {
@@ -510,11 +505,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 		if (actionBars != null) {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
-		}
-
-		final Action importAction = createImportAction();
-		if (importAction != null) {
-			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
 		}
 
 		Action copyToClipboardAction = null;

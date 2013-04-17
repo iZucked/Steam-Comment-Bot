@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.port.importer.RouteImporter;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
+import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -97,6 +98,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), PortPackage.eINSTANCE.getPortModel_PortGroups());
 			}
 		});
+		
+		final Action importAction = createImportAction();
+		if (importAction != null) {
+			getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, importAction);
+		}
+		
 		/*
 		 * Action tzAction = new Action("Update timezones") {
 		 * 
@@ -122,9 +129,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		defaultSetTitle("Ports");
 	}
 
-	@Override
 	protected Action createImportAction() {
-		final Action importPorts = super.createImportAction();
+		final Action importPorts = new SimpleImportAction(jointModelEditorPart, scenarioViewer);
 
 		importPorts.setText("Import ports...");
 		final AbstractMenuAction importMenu = new AbstractMenuAction("Import Ports and Distances") {
