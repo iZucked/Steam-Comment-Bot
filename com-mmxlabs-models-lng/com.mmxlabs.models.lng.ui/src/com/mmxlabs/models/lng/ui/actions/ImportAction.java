@@ -65,6 +65,9 @@ public abstract class ImportAction extends LockableAction {
 		}
 	}
 	
+	/**
+	 * @since 3.0
+	 */
 	protected DefaultImportContext safelyImport() {
 		DefaultImportContext context = null;
 		try {
