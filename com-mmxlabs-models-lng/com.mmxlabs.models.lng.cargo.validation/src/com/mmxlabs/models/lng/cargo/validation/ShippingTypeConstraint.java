@@ -33,7 +33,7 @@ public class ShippingTypeConstraint extends AbstractModelMultiConstraint {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
-			final CargoDeliveryType cargoType = cargo.getCargoType() == CargoType.DES ? CargoDeliveryType.DELIVERED : CargoDeliveryType.SHIPPED;
+			final CargoDeliveryType cargoType = cargo.getCargoType() == CargoType.DES ? CargoDeliveryType.NOT_SHIPPED : CargoDeliveryType.SHIPPED;
 
 			for (final Slot slot : cargo.getSlots()) {
 
