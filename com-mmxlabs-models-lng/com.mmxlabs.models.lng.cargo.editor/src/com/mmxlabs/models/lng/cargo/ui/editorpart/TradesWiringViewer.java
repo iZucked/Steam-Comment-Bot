@@ -183,11 +183,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		return new CargoImportAction(scenarioEditingLocation, getScenarioViewer());
 	}
 
-	@Override
-	protected Action createDeleteAction() {
-		return new DeleteSelectedCargoAction(scenarioEditingLocation, viewer);
-	}
-
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
 		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
