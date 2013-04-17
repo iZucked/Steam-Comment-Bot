@@ -358,7 +358,6 @@ public class UnitCostLineItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 			childrenFeatures.add(AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS);
 		}
 		return childrenFeatures;
@@ -424,7 +423,6 @@ public class UnitCostLineItemProvider
 			case AnalyticsPackage.UNIT_COST_LINE__PROFIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA:
 			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -442,11 +440,6 @@ public class UnitCostLineItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA,
-				 TypesFactory.eINSTANCE.createExtraData()));
 
 		newChildDescriptors.add
 			(createChildParameter

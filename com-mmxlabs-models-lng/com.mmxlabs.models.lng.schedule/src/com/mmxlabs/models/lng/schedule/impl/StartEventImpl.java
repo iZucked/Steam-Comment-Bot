@@ -22,15 +22,12 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.ExtraDataFormatType;
-import com.mmxlabs.models.lng.types.TypesFactory;
-import com.mmxlabs.models.lng.types.TypesPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,7 +39,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getPortCost <em>Port Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getExtraData <em>Extra Data</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  * </p>
@@ -92,14 +89,14 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	protected int portCost = PORT_COST_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getExtraData() <em>Extra Data</em>}' containment reference list.
+	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getExtraData()
+	 * @see #getGroupProfitAndLoss()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ExtraData> extraData;
+	protected GroupProfitAndLoss groupProfitAndLoss;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocation() <em>Slot Allocation</em>}' reference.
@@ -181,11 +178,42 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<ExtraData> getExtraData() {
-		if (extraData == null) {
-			extraData = new EObjectContainmentEList<ExtraData>(ExtraData.class, this, SchedulePackage.START_EVENT__EXTRA_DATA);
+	public GroupProfitAndLoss getGroupProfitAndLoss() {
+		return groupProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetGroupProfitAndLoss(GroupProfitAndLoss newGroupProfitAndLoss, NotificationChain msgs) {
+		GroupProfitAndLoss oldGroupProfitAndLoss = groupProfitAndLoss;
+		groupProfitAndLoss = newGroupProfitAndLoss;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS, oldGroupProfitAndLoss, newGroupProfitAndLoss);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return extraData;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGroupProfitAndLoss(GroupProfitAndLoss newGroupProfitAndLoss) {
+		if (newGroupProfitAndLoss != groupProfitAndLoss) {
+			NotificationChain msgs = null;
+			if (groupProfitAndLoss != null)
+				msgs = ((InternalEObject)groupProfitAndLoss).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS, null, msgs);
+			if (newGroupProfitAndLoss != null)
+				msgs = ((InternalEObject)newGroupProfitAndLoss).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS, null, msgs);
+			msgs = basicSetGroupProfitAndLoss(newGroupProfitAndLoss, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS, newGroupProfitAndLoss, newGroupProfitAndLoss));
 	}
 
 	/**
@@ -231,72 +259,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExtraData getDataWithPath(Iterable<String> keys) {
-		java.util.Iterator<String> iterator = keys.iterator();
-				if (iterator.hasNext() == false) return null;
-				ExtraData edc = getDataWithKey(iterator.next());
-				while (edc != null && iterator.hasNext()) {
-					edc = edc.getDataWithKey(iterator.next());
-				}
-				return edc;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraData getDataWithKey(String key) {
-		for (final ExtraData e : getExtraData()) {
-			if (e.getKey().equals(key)) return e;
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraData addExtraData(String key, String name) {
-		final ExtraData result = TypesFactory.eINSTANCE.createExtraData();
-		result.setKey(key);
-		result.setName(name);
-		getExtraData().add(result);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraData addExtraData(String key, String name, Object value, ExtraDataFormatType format) {
-		final ExtraData result = addExtraData(key, name);
-		result.setValue(value);
-		result.setFormatType(format);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz, T defaultValue) {
-		final ExtraData ed = getDataWithPath(path);
-		if (ed == null) return defaultValue;
-		final T value = ed.getValueAs(clazz);
-		if (value == null) return defaultValue;
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {
@@ -317,8 +279,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.START_EVENT__VIOLATIONS:
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
-			case SchedulePackage.START_EVENT__EXTRA_DATA:
-				return ((InternalEList<?>)getExtraData()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
+				return basicSetGroupProfitAndLoss(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -338,8 +300,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				else return getViolations().map();
 			case SchedulePackage.START_EVENT__PORT_COST:
 				return getPortCost();
-			case SchedulePackage.START_EVENT__EXTRA_DATA:
-				return getExtraData();
+			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
+				return getGroupProfitAndLoss();
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
@@ -366,9 +328,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__PORT_COST:
 				setPortCost((Integer)newValue);
 				return;
-			case SchedulePackage.START_EVENT__EXTRA_DATA:
-				getExtraData().clear();
-				getExtraData().addAll((Collection<? extends ExtraData>)newValue);
+			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
+				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
 				return;
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
@@ -394,8 +355,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
-			case SchedulePackage.START_EVENT__EXTRA_DATA:
-				getExtraData().clear();
+			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
+				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
@@ -418,8 +379,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return violations != null && !violations.isEmpty();
 			case SchedulePackage.START_EVENT__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
-			case SchedulePackage.START_EVENT__EXTRA_DATA:
-				return extraData != null && !extraData.isEmpty();
+			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
+				return groupProfitAndLoss != null;
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				return slotAllocation != null;
 		}
@@ -451,9 +412,9 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				default: return -1;
 			}
 		}
-		if (baseClass == ExtraDataContainer.class) {
+		if (baseClass == ProfitAndLossContainer.class) {
 			switch (derivedFeatureID) {
-				case SchedulePackage.START_EVENT__EXTRA_DATA: return TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA;
+				case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
 				default: return -1;
 			}
 		}
@@ -485,9 +446,9 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				default: return -1;
 			}
 		}
-		if (baseClass == ExtraDataContainer.class) {
+		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseFeatureID) {
-				case TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA: return SchedulePackage.START_EVENT__EXTRA_DATA;
+				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS;
 				default: return -1;
 			}
 		}
@@ -517,13 +478,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				default: return -1;
 			}
 		}
-		if (baseClass == ExtraDataContainer.class) {
+		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseOperationID) {
-				case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE: return SchedulePackage.START_EVENT___GET_DATA_WITH_PATH__ITERABLE;
-				case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING: return SchedulePackage.START_EVENT___GET_DATA_WITH_KEY__STRING;
-				case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING: return SchedulePackage.START_EVENT___ADD_EXTRA_DATA__STRING_STRING;
-				case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE: return SchedulePackage.START_EVENT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE;
-				case TypesPackage.EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT: return SchedulePackage.START_EVENT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT;
 				default: return -1;
 			}
 		}
@@ -539,16 +495,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case SchedulePackage.START_EVENT___GET_DATA_WITH_PATH__ITERABLE:
-				return getDataWithPath((Iterable<String>)arguments.get(0));
-			case SchedulePackage.START_EVENT___GET_DATA_WITH_KEY__STRING:
-				return getDataWithKey((String)arguments.get(0));
-			case SchedulePackage.START_EVENT___ADD_EXTRA_DATA__STRING_STRING:
-				return addExtraData((String)arguments.get(0), (String)arguments.get(1));
-			case SchedulePackage.START_EVENT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE:
-				return addExtraData((String)arguments.get(0), (String)arguments.get(1), arguments.get(2), (ExtraDataFormatType)arguments.get(3));
-			case SchedulePackage.START_EVENT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT:
-				return getValueWithPathAs((Iterable<String>)arguments.get(0), (Class)arguments.get(1), arguments.get(2));
 			case SchedulePackage.START_EVENT___GET_FUEL_COST:
 				return getFuelCost();
 		}

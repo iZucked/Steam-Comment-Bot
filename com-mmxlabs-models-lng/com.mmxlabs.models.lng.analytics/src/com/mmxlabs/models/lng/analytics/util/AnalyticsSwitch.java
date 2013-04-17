@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -106,7 +105,6 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				UnitCostLine unitCostLine = (UnitCostLine)theEObject;
 				T result = caseUnitCostLine(unitCostLine);
 				if (result == null) result = caseMMXObject(unitCostLine);
-				if (result == null) result = caseExtraDataContainer(unitCostLine);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -448,21 +446,6 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseExtraDataContainer(ExtraDataContainer object) {
 		return null;
 	}
 

@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.schedule;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
@@ -28,7 +27,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @model
  * @generated
  */
-public interface CargoAllocation extends MMXObject, ExtraDataContainer {
+public interface CargoAllocation extends MMXObject, ProfitAndLossContainer {
 	/**
 	 * Returns the value of the '<em><b>Slot Allocations</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.SlotAllocation}.

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.provider;
 
 
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 import com.mmxlabs.models.lng.types.TypesFactory;
@@ -64,9 +65,33 @@ public class GeneratedCharterOutItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addGroupProfitAndLossPropertyDescriptor(object);
 			addRevenuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Group Profit And Loss feature.
+	 * @since 3.0
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGroupProfitAndLossPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitAndLossContainer_groupProfitAndLoss_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitAndLossContainer_groupProfitAndLoss_feature", "_UI_ProfitAndLossContainer_type"),
+				 SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS,
+				 false,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -103,7 +128,7 @@ public class GeneratedCharterOutItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
+			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
 		}
 		return childrenFeatures;
 	}
@@ -162,7 +187,7 @@ public class GeneratedCharterOutItemProvider
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.GENERATED_CHARTER_OUT__EXTRA_DATA:
+			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -182,8 +207,8 @@ public class GeneratedCharterOutItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA,
-				 TypesFactory.eINSTANCE.createExtraData()));
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS,
+				 ScheduleFactory.eINSTANCE.createGroupProfitAndLoss()));
 	}
 
 }

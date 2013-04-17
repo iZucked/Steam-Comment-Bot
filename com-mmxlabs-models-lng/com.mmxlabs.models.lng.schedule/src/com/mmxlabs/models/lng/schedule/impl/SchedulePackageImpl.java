@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -33,15 +34,18 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.ShippingCosts;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -49,6 +53,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import java.lang.Iterable;
 
 /**
  * <!-- begin-user-doc -->
@@ -203,6 +208,34 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass capacityMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass profitAndLossContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass groupProfitAndLossEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass entityProfitAndLossEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass shippingCostsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1169,6 +1202,96 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getProfitAndLossContainer() {
+		return profitAndLossContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProfitAndLossContainer_GroupProfitAndLoss() {
+		return (EReference)profitAndLossContainerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getGroupProfitAndLoss() {
+		return groupProfitAndLossEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGroupProfitAndLoss_ProfitAndLoss() {
+		return (EAttribute)groupProfitAndLossEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getGroupProfitAndLoss_EntityProfitAndLosses() {
+		return (EReference)groupProfitAndLossEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getEntityProfitAndLoss() {
+		return entityProfitAndLossEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEntityProfitAndLoss_Entity() {
+		return (EReference)entityProfitAndLossEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEntityProfitAndLoss_ProfitAndLoss() {
+		return (EAttribute)entityProfitAndLossEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getShippingCosts() {
+		return shippingCostsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1374,6 +1497,19 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(capacityMapEntryEClass, CAPACITY_MAP_ENTRY__KEY);
 		createEAttribute(capacityMapEntryEClass, CAPACITY_MAP_ENTRY__VALUE);
 
+		profitAndLossContainerEClass = createEClass(PROFIT_AND_LOSS_CONTAINER);
+		createEReference(profitAndLossContainerEClass, PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
+
+		groupProfitAndLossEClass = createEClass(GROUP_PROFIT_AND_LOSS);
+		createEAttribute(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
+		createEReference(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES);
+
+		entityProfitAndLossEClass = createEClass(ENTITY_PROFIT_AND_LOSS);
+		createEReference(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__ENTITY);
+		createEAttribute(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
+
+		shippingCostsEClass = createEClass(SHIPPING_COSTS);
+
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		fuelEEnum = createEEnum(FUEL);
@@ -1434,17 +1570,17 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		slotVisitEClass.getESuperTypes().add(this.getPortVisit());
 		vesselEventVisitEClass.getESuperTypes().add(this.getEvent());
 		vesselEventVisitEClass.getESuperTypes().add(this.getPortVisit());
-		vesselEventVisitEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
+		vesselEventVisitEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		journeyEClass.getESuperTypes().add(this.getEvent());
 		journeyEClass.getESuperTypes().add(this.getFuelUsage());
 		idleEClass.getESuperTypes().add(this.getEvent());
 		idleEClass.getESuperTypes().add(this.getFuelUsage());
 		generatedCharterOutEClass.getESuperTypes().add(this.getEvent());
-		generatedCharterOutEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
+		generatedCharterOutEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		cargoAllocationEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
+		cargoAllocationEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		portVisitEClass.getESuperTypes().add(this.getEvent());
@@ -1452,11 +1588,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		startEventEClass.getESuperTypes().add(this.getEvent());
 		startEventEClass.getESuperTypes().add(this.getFuelUsage());
 		startEventEClass.getESuperTypes().add(this.getPortVisit());
-		startEventEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
+		startEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		endEventEClass.getESuperTypes().add(this.getEvent());
 		endEventEClass.getESuperTypes().add(this.getFuelUsage());
 		endEventEClass.getESuperTypes().add(this.getPortVisit());
-		endEventEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
+		endEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		capacityViolationsHolderEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
@@ -1590,6 +1726,19 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(capacityMapEntryEClass, Map.Entry.class, "CapacityMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCapacityMapEntry_Key(), this.getCapacityViolationType(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCapacityMapEntry_Value(), ecorePackage.getELongObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(profitAndLossContainerEClass, ProfitAndLossContainer.class, "ProfitAndLossContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProfitAndLossContainer_GroupProfitAndLoss(), this.getGroupProfitAndLoss(), null, "groupProfitAndLoss", null, 0, 1, ProfitAndLossContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(groupProfitAndLossEClass, GroupProfitAndLoss.class, "GroupProfitAndLoss", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getGroupProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getGroupProfitAndLoss_EntityProfitAndLosses(), this.getEntityProfitAndLoss(), null, "entityProfitAndLosses", null, 0, -1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(entityProfitAndLossEClass, EntityProfitAndLoss.class, "EntityProfitAndLoss", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEntityProfitAndLoss_Entity(), theCommercialPackage.getLegalEntity(), null, "entity", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEntityProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(shippingCostsEClass, ShippingCosts.class, "ShippingCosts", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");

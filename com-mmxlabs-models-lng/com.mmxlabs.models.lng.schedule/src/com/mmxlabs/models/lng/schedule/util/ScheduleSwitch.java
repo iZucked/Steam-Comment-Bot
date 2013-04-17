@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import com.mmxlabs.models.lng.schedule.*;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
@@ -15,15 +16,18 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -32,7 +36,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -141,7 +144,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				VesselEventVisit vesselEventVisit = (VesselEventVisit)theEObject;
 				T result = caseVesselEventVisit(vesselEventVisit);
 				if (result == null) result = casePortVisit(vesselEventVisit);
-				if (result == null) result = caseExtraDataContainer(vesselEventVisit);
+				if (result == null) result = caseProfitAndLossContainer(vesselEventVisit);
 				if (result == null) result = caseEvent(vesselEventVisit);
 				if (result == null) result = caseITimezoneProvider(vesselEventVisit);
 				if (result == null) result = caseCapacityViolationsHolder(vesselEventVisit);
@@ -173,7 +176,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut)theEObject;
 				T result = caseGeneratedCharterOut(generatedCharterOut);
 				if (result == null) result = caseEvent(generatedCharterOut);
-				if (result == null) result = caseExtraDataContainer(generatedCharterOut);
+				if (result == null) result = caseProfitAndLossContainer(generatedCharterOut);
 				if (result == null) result = caseMMXObject(generatedCharterOut);
 				if (result == null) result = caseITimezoneProvider(generatedCharterOut);
 				if (result == null) result = defaultCase(theEObject);
@@ -205,7 +208,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				CargoAllocation cargoAllocation = (CargoAllocation)theEObject;
 				T result = caseCargoAllocation(cargoAllocation);
 				if (result == null) result = caseMMXObject(cargoAllocation);
-				if (result == null) result = caseExtraDataContainer(cargoAllocation);
+				if (result == null) result = caseProfitAndLossContainer(cargoAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -245,7 +248,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				T result = caseStartEvent(startEvent);
 				if (result == null) result = caseFuelUsage(startEvent);
 				if (result == null) result = casePortVisit(startEvent);
-				if (result == null) result = caseExtraDataContainer(startEvent);
+				if (result == null) result = caseProfitAndLossContainer(startEvent);
 				if (result == null) result = caseEvent(startEvent);
 				if (result == null) result = caseITimezoneProvider(startEvent);
 				if (result == null) result = caseCapacityViolationsHolder(startEvent);
@@ -258,7 +261,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				T result = caseEndEvent(endEvent);
 				if (result == null) result = caseFuelUsage(endEvent);
 				if (result == null) result = casePortVisit(endEvent);
-				if (result == null) result = caseExtraDataContainer(endEvent);
+				if (result == null) result = caseProfitAndLossContainer(endEvent);
 				if (result == null) result = caseEvent(endEvent);
 				if (result == null) result = caseITimezoneProvider(endEvent);
 				if (result == null) result = caseCapacityViolationsHolder(endEvent);
@@ -276,6 +279,30 @@ public class ScheduleSwitch<T> extends Switch<T> {
 			case SchedulePackage.CAPACITY_MAP_ENTRY: {
 				@SuppressWarnings("unchecked") Map.Entry<CapacityViolationType, Long> capacityMapEntry = (Map.Entry<CapacityViolationType, Long>)theEObject;
 				T result = caseCapacityMapEntry(capacityMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER: {
+				ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer)theEObject;
+				T result = caseProfitAndLossContainer(profitAndLossContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS: {
+				GroupProfitAndLoss groupProfitAndLoss = (GroupProfitAndLoss)theEObject;
+				T result = caseGroupProfitAndLoss(groupProfitAndLoss);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS: {
+				EntityProfitAndLoss entityProfitAndLoss = (EntityProfitAndLoss)theEObject;
+				T result = caseEntityProfitAndLoss(entityProfitAndLoss);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.SHIPPING_COSTS: {
+				ShippingCosts shippingCosts = (ShippingCosts)theEObject;
+				T result = caseShippingCosts(shippingCosts);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -602,6 +629,66 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Profit And Loss Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Profit And Loss Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseProfitAndLossContainer(ProfitAndLossContainer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Group Profit And Loss</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Group Profit And Loss</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGroupProfitAndLoss(GroupProfitAndLoss object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Entity Profit And Loss</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Entity Profit And Loss</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEntityProfitAndLoss(EntityProfitAndLoss object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Shipping Costs</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Shipping Costs</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseShippingCosts(ShippingCosts object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>MMX Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -658,21 +745,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseITimezoneProvider(ITimezoneProvider object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseExtraDataContainer(ExtraDataContainer object) {
 		return null;
 	}
 

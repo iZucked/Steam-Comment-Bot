@@ -281,7 +281,7 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
-	 * @since 3.0
+	 * @generated
 	 */
 	Port getPort();
 

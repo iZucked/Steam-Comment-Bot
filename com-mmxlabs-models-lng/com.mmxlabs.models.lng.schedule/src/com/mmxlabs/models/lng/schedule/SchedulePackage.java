@@ -928,13 +928,13 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__EXTRA_DATA = EVENT_FEATURE_COUNT + 2;
+	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -1045,58 +1045,13 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
 
 	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 4;
-
-	/**
 	 * The number of operations of the '<em>Vessel Event Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 5;
+	int VESSEL_EVENT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
@@ -1641,14 +1596,13 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__EXTRA_DATA = EVENT_FEATURE_COUNT + 0;
+	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
@@ -1761,58 +1715,13 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
 
 	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 4;
-
-	/**
 	 * The number of operations of the '<em>Generated Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 5;
+	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.
@@ -2152,13 +2061,13 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__EXTRA_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
@@ -2235,58 +2144,13 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
 
 	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_DATA_WITH_KEY__STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
-
-	/**
 	 * The operation id for the '<em>Get Name</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
+	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Cargo Allocation</em>' class.
@@ -2295,7 +2159,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
+	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
@@ -2901,13 +2765,13 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__EXTRA_DATA = EVENT_FEATURE_COUNT + 3;
+	int START_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -3027,58 +2891,13 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 5;
-
-	/**
 	 * The number of operations of the '<em>Start Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 6;
+	int START_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl <em>End Event</em>}' class.
@@ -3182,13 +3001,13 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__EXTRA_DATA = EVENT_FEATURE_COUNT + 3;
+	int END_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -3308,58 +3127,13 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 5;
-
-	/**
 	 * The number of operations of the '<em>End Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 6;
+	int END_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
@@ -3494,6 +3268,163 @@ public interface SchedulePackage extends EPackage {
 	int CAPACITY_MAP_ENTRY_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
+	 * @generated
+	 */
+	int PROFIT_AND_LOSS_CONTAINER = 21;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Profit And Loss Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
+	 * @generated
+	 */
+	int GROUP_PROFIT_AND_LOSS = 22;
+
+	/**
+	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Entity Profit And Losses</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = 1;
+
+	/**
+	 * The number of structural features of the '<em>Group Profit And Loss</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Group Profit And Loss</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl <em>Entity Profit And Loss</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
+	 * @generated
+	 */
+	int ENTITY_PROFIT_AND_LOSS = 23;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS__ENTITY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Entity Profit And Loss</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Entity Profit And Loss</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.ShippingCostsImpl <em>Shipping Costs</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.ShippingCostsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getShippingCosts()
+	 * @generated
+	 */
+	int SHIPPING_COSTS = 24;
+
+	/**
+	 * The number of structural features of the '<em>Shipping Costs</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COSTS_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Shipping Costs</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COSTS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3501,7 +3432,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 21;
+	int FUEL_UNIT = 25;
 
 
 	/**
@@ -3512,7 +3443,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 22;
+	int FUEL = 26;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -3523,7 +3454,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 23;
+	int SEQUENCE_TYPE = 27;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -3534,7 +3465,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 24;
+	int CAPACITY_VIOLATION_TYPE = 28;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -3544,7 +3475,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 25;
+	int CALENDAR = 29;
 
 
 	/**
@@ -3555,7 +3486,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 26;
+	int ITERABLE = 30;
 
 
 	/**
@@ -3566,7 +3497,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 27;
+	int OBJECT = 31;
 
 
 	/**
@@ -4569,6 +4500,101 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getCapacityMapEntry_Value();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer <em>Profit And Loss Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Profit And Loss Container</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer
+	 * @generated
+	 */
+	EClass getProfitAndLossContainer();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss <em>Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Group Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss()
+	 * @see #getProfitAndLossContainer()
+	 * @generated
+	 */
+	EReference getProfitAndLossContainer_GroupProfitAndLoss();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss <em>Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Group Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss
+	 * @generated
+	 */
+	EClass getGroupProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss()
+	 * @see #getGroupProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getGroupProfitAndLoss_ProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entity Profit And Losses</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses()
+	 * @see #getGroupProfitAndLoss()
+	 * @generated
+	 */
+	EReference getGroupProfitAndLoss_EntityProfitAndLosses();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss <em>Entity Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Entity Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss
+	 * @generated
+	 */
+	EClass getEntityProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity()
+	 * @see #getEntityProfitAndLoss()
+	 * @generated
+	 */
+	EReference getEntityProfitAndLoss_Entity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss()
+	 * @see #getEntityProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getEntityProfitAndLoss_ProfitAndLoss();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.ShippingCosts <em>Shipping Costs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Shipping Costs</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ShippingCosts
+	 * @generated
+	 */
+	EClass getShippingCosts();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5462,6 +5488,86 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CAPACITY_MAP_ENTRY__VALUE = eINSTANCE.getCapacityMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
+		 * @generated
+		 */
+		EClass PROFIT_AND_LOSS_CONTAINER = eINSTANCE.getProfitAndLossContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Group Profit And Loss</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
+		 * @generated
+		 */
+		EClass GROUP_PROFIT_AND_LOSS = eINSTANCE.getGroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity Profit And Losses</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = eINSTANCE.getGroupProfitAndLoss_EntityProfitAndLosses();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl <em>Entity Profit And Loss</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
+		 * @generated
+		 */
+		EClass ENTITY_PROFIT_AND_LOSS = eINSTANCE.getEntityProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTITY_PROFIT_AND_LOSS__ENTITY = eINSTANCE.getEntityProfitAndLoss_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getEntityProfitAndLoss_ProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.ShippingCostsImpl <em>Shipping Costs</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.ShippingCostsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getShippingCosts()
+		 * @generated
+		 */
+		EClass SHIPPING_COSTS = eINSTANCE.getShippingCosts();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,7 +20,7 @@ import com.mmxlabs.models.lng.types.ExtraDataContainer;
  * @model
  * @generated
  */
-public interface StartEvent extends Event, FuelUsage, PortVisit, ExtraDataContainer {
+public interface StartEvent extends Event, FuelUsage, PortVisit, ProfitAndLossContainer {
 	/**
 	 * Returns the value of the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->

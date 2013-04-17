@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.schedule.*;
+import java.lang.Iterable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -35,9 +38,11 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -115,6 +120,10 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.END_EVENT: return createEndEvent();
 			case SchedulePackage.CAPACITY_VIOLATIONS_HOLDER: return createCapacityViolationsHolder();
 			case SchedulePackage.CAPACITY_MAP_ENTRY: return (EObject)createCapacityMapEntry();
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER: return createProfitAndLossContainer();
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS: return createGroupProfitAndLoss();
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS: return createEntityProfitAndLoss();
+			case SchedulePackage.SHIPPING_COSTS: return createShippingCosts();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -385,6 +394,46 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public Map.Entry<CapacityViolationType, Long> createCapacityMapEntry() {
 		CapacityMapEntryImpl capacityMapEntry = new CapacityMapEntryImpl();
 		return capacityMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitAndLossContainer createProfitAndLossContainer() {
+		ProfitAndLossContainerImpl profitAndLossContainer = new ProfitAndLossContainerImpl();
+		return profitAndLossContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GroupProfitAndLoss createGroupProfitAndLoss() {
+		GroupProfitAndLossImpl groupProfitAndLoss = new GroupProfitAndLossImpl();
+		return groupProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EntityProfitAndLoss createEntityProfitAndLoss() {
+		EntityProfitAndLossImpl entityProfitAndLoss = new EntityProfitAndLossImpl();
+		return entityProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ShippingCosts createShippingCosts() {
+		ShippingCostsImpl shippingCosts = new ShippingCostsImpl();
+		return shippingCosts;
 	}
 
 	/**

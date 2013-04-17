@@ -18,11 +18,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.CostComponent;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.ExtraDataFormatType;
-import com.mmxlabs.models.lng.types.TypesFactory;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
@@ -32,7 +27,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getExtraData <em>Extra Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getUnitCost <em>Unit Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getMmbtuDelivered <em>Mmbtu Delivered</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getFrom <em>From</em>}</li>
@@ -52,16 +46,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * @generated
  */
 public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
-	/**
-	 * The cached value of the '{@link #getExtraData() <em>Extra Data</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getExtraData()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ExtraData> extraData;
-
 	/**
 	 * The default value of the '{@link #getUnitCost() <em>Unit Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -319,19 +303,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * @generated
 	 */
 	@Override
-	public EList<ExtraData> getExtraData() {
-		if (extraData == null) {
-			extraData = new EObjectContainmentEList<ExtraData>(ExtraData.class, this, AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA);
-		}
-		return extraData;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public double getUnitCost() {
 		return unitCost;
 	}
@@ -357,77 +328,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	@Override
 	public int getTotalCost() {
 		return getHireCost() + getFuelCost() + getCanalCost() + getPortCost();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ExtraData getDataWithPath(Iterable<String> keys) {
-		java.util.Iterator<String> iterator = keys.iterator();
-				if (iterator.hasNext() == false) return null;
-				ExtraData edc = getDataWithKey(iterator.next());
-				while (edc != null && iterator.hasNext()) {
-					edc = edc.getDataWithKey(iterator.next());
-				}
-				return edc;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ExtraData getDataWithKey(String key) {
-		for (final ExtraData e : getExtraData()) {
-			if (e.getKey().equals(key)) return e;
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ExtraData addExtraData(String key, String name) {
-		final ExtraData result = TypesFactory.eINSTANCE.createExtraData();
-		result.setKey(key);
-		result.setName(name);
-		getExtraData().add(result);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ExtraData addExtraData(String key, String name, Object value, ExtraDataFormatType format) {
-		final ExtraData result = addExtraData(key, name);
-		result.setValue(value);
-		result.setFormatType(format);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz, T defaultValue) {
-		final ExtraData ed = getDataWithPath(path);
-		if (ed == null) return defaultValue;
-		final T value = ed.getValueAs(clazz);
-		if (value == null) return defaultValue;
-		return value;
 	}
 
 	/**
@@ -741,8 +641,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA:
-				return ((InternalEList<?>)getExtraData()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
 				return ((InternalEList<?>)getCostComponents()).basicRemove(otherEnd, msgs);
 		}
@@ -757,8 +655,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA:
-				return getExtraData();
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
 				return getUnitCost();
 			case AnalyticsPackage.UNIT_COST_LINE__MMBTU_DELIVERED:
@@ -800,10 +696,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA:
-				getExtraData().clear();
-				getExtraData().addAll((Collection<? extends ExtraData>)newValue);
-				return;
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
 				setUnitCost((Double)newValue);
 				return;
@@ -856,9 +748,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA:
-				getExtraData().clear();
-				return;
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
 				setUnitCost(UNIT_COST_EDEFAULT);
 				return;
@@ -910,8 +799,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA:
-				return extraData != null && !extraData.isEmpty();
 			case AnalyticsPackage.UNIT_COST_LINE__UNIT_COST:
 				return unitCost != UNIT_COST_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_LINE__MMBTU_DELIVERED:
@@ -940,38 +827,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 				return profit != PROFIT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == ExtraDataContainer.class) {
-			switch (derivedFeatureID) {
-				case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA: return TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == ExtraDataContainer.class) {
-			switch (baseFeatureID) {
-				case TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA: return AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**

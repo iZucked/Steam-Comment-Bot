@@ -4,6 +4,12 @@
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
+import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
+import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
+import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
+import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
@@ -44,8 +50,14 @@ public final class ScheduleEditPlugin extends EMFPlugin {
 	public ScheduleEditPlugin() {
 		super
 		  (new ResourceLocator [] {
+		     CargoEditPlugin.INSTANCE,
+		     CommercialEditPlugin.INSTANCE,
+		     FleetEditPlugin.INSTANCE,
 		     LNGTypesEditPlugin.INSTANCE,
 		     MmxcoreEditPlugin.INSTANCE,
+		     PortEditPlugin.INSTANCE,
+		     PricingEditPlugin.INSTANCE,
+		     SpotMarketsEditPlugin.INSTANCE,
 		   });
 	}
 

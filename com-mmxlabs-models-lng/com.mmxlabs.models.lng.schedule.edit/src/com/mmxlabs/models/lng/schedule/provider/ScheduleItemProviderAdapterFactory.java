@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.util.CommercialSwitch;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.util.ScheduleAdapterFactory;
@@ -581,6 +584,101 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProfitAndLossContainerItemProvider profitAndLossContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProfitAndLossContainerAdapter() {
+		if (profitAndLossContainerItemProvider == null) {
+			profitAndLossContainerItemProvider = new ProfitAndLossContainerItemProvider(this);
+		}
+
+		return profitAndLossContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GroupProfitAndLossItemProvider groupProfitAndLossItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGroupProfitAndLossAdapter() {
+		if (groupProfitAndLossItemProvider == null) {
+			groupProfitAndLossItemProvider = new GroupProfitAndLossItemProvider(this);
+		}
+
+		return groupProfitAndLossItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EntityProfitAndLossItemProvider entityProfitAndLossItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEntityProfitAndLossAdapter() {
+		if (entityProfitAndLossItemProvider == null) {
+			entityProfitAndLossItemProvider = new EntityProfitAndLossItemProvider(this);
+		}
+
+		return entityProfitAndLossItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.ShippingCosts} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ShippingCostsItemProvider shippingCostsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.ShippingCosts}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createShippingCostsAdapter() {
+		if (shippingCostsItemProvider == null) {
+			shippingCostsItemProvider = new ShippingCostsItemProvider(this);
+		}
+
+		return shippingCostsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -730,6 +828,98 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (endEventItemProvider != null) endEventItemProvider.dispose();
 		if (capacityViolationsHolderItemProvider != null) capacityViolationsHolderItemProvider.dispose();
 		if (capacityMapEntryItemProvider != null) capacityMapEntryItemProvider.dispose();
+		if (profitAndLossContainerItemProvider != null) profitAndLossContainerItemProvider.dispose();
+		if (groupProfitAndLossItemProvider != null) groupProfitAndLossItemProvider.dispose();
+		if (entityProfitAndLossItemProvider != null) entityProfitAndLossItemProvider.dispose();
+		if (shippingCostsItemProvider != null) shippingCostsItemProvider.dispose();
+	}
+
+	/**
+	 * A child creation extender for the {@link CommercialPackage}.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static class CommercialChildCreationExtender implements IChildCreationExtender {
+		/**
+		 * The switch for creating child descriptors specific to each extended class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		protected static class CreationSwitch extends CommercialSwitch<Object> {
+			/**
+			 * The child descriptors being populated.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected List<Object> newChildDescriptors;
+
+			/**
+			 * The domain in which to create the children.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected EditingDomain editingDomain;
+
+			/**
+			 * Creates the a switch for populating child descriptors in the given domain.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			CreationSwitch(List<Object> newChildDescriptors, EditingDomain editingDomain) {
+				this.newChildDescriptors = newChildDescriptors;
+				this.editingDomain = editingDomain;
+			}
+			/**
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			@Override
+			public Object caseCommercialModel(CommercialModel object) {
+				newChildDescriptors.add
+					(createChildParameter
+						(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+						 ScheduleFactory.eINSTANCE.createScheduleModel()));
+
+				return null;
+			}
+ 
+			/**
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected CommandParameter createChildParameter(Object feature, Object child) {
+				return new CommandParameter(null, feature, child);
+			}
+
+		}
+
+		/**
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
+			ArrayList<Object> result = new ArrayList<Object>();
+		   new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
+		   return result;
+		}
+
+		/**
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public ResourceLocator getResourceLocator() {
+			return ScheduleEditPlugin.INSTANCE;
+		}
 	}
 
 	/**

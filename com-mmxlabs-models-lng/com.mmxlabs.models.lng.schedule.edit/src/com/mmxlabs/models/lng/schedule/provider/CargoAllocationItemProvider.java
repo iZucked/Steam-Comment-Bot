@@ -66,12 +66,36 @@ public class CargoAllocationItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addGroupProfitAndLossPropertyDescriptor(object);
 			addSlotAllocationsPropertyDescriptor(object);
 			addInputCargoPropertyDescriptor(object);
 			addEventsPropertyDescriptor(object);
 			addSequencePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Group Profit And Loss feature.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGroupProfitAndLossPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitAndLossContainer_groupProfitAndLoss_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitAndLossContainer_groupProfitAndLoss_feature", "_UI_ProfitAndLossContainer_type"),
+				 SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS,
+				 false,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -176,7 +200,7 @@ public class CargoAllocationItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
+			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
 			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__INPUT_CARGO);
 		}
 		return childrenFeatures;
@@ -235,7 +259,7 @@ public class CargoAllocationItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoAllocation.class)) {
-			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
+			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -255,8 +279,8 @@ public class CargoAllocationItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA,
-				 TypesFactory.eINSTANCE.createExtraData()));
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS,
+				 ScheduleFactory.eINSTANCE.createGroupProfitAndLoss()));
 	}
 
 }

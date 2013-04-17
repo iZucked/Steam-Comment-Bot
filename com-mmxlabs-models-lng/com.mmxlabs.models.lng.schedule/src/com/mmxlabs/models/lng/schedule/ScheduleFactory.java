@@ -206,6 +206,42 @@ public interface ScheduleFactory extends EFactory {
 	CapacityViolationsHolder createCapacityViolationsHolder();
 
 	/**
+	 * Returns a new object of class '<em>Profit And Loss Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Profit And Loss Container</em>'.
+	 * @generated
+	 */
+	ProfitAndLossContainer createProfitAndLossContainer();
+
+	/**
+	 * Returns a new object of class '<em>Group Profit And Loss</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Group Profit And Loss</em>'.
+	 * @generated
+	 */
+	GroupProfitAndLoss createGroupProfitAndLoss();
+
+	/**
+	 * Returns a new object of class '<em>Entity Profit And Loss</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Entity Profit And Loss</em>'.
+	 * @generated
+	 */
+	EntityProfitAndLoss createEntityProfitAndLoss();
+
+	/**
+	 * Returns a new object of class '<em>Shipping Costs</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Shipping Costs</em>'.
+	 * @generated
+	 */
+	ShippingCosts createShippingCosts();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

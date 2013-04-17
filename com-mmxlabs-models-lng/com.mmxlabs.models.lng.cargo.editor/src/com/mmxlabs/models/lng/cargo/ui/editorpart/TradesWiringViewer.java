@@ -97,13 +97,12 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -624,7 +623,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			});
 		}
 
-		addPNLColumn("P&L", new BasicAttributeManipulator(TypesPackage.eINSTANCE.getExtraDataContainer_ExtraData(), editingDomain), new RowDataEMFPath(Type.CARGO_ALLOCATION, true));
+		addPNLColumn("P&L", new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(Type.CARGO_ALLOCATION, true));
 
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
@@ -731,11 +730,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@Override
 			public Comparable getComparable(final Object element) {
 				final Object object = path.get((EObject) element);
-				if (object instanceof ExtraDataContainer) {
-					final ExtraDataContainer container = (ExtraDataContainer) object;
-					final ExtraData data = container.getDataWithKey("GroupValue");
+				if (object instanceof ProfitAndLossContainer) {
+					final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
+					final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
 					if (data != null) {
-						return data.getValueAs(Integer.class);
+						return data.getProfitAndLoss();
 					}
 				}
 				return super.getComparable(element);
@@ -749,11 +748,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			public String getText(final Object element) {
 
 				final Object object = path.get((EObject) element);
-				if (object instanceof ExtraDataContainer) {
-					final ExtraDataContainer container = (ExtraDataContainer) object;
-					final ExtraData data = container.getDataWithKey("GroupValue");
+				if (object instanceof ProfitAndLossContainer) {
+					final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
+					final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
 					if (data != null) {
-						return data.formatValue();
+						return String.format("$%,d", data.getProfitAndLoss());
 					}
 				}
 				return super.getText(element);

@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.schedule/src" modelPluginID="com.mmxlabs.models.lng.schedule"
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="Schedule" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
     operationReflection="true">
   <foreignModel>schedule.ecore</foreignModel>
   <genPackages prefix="Schedule" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
@@ -160,5 +160,17 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CapacityMapEntry/key"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CapacityMapEntry/value"/>
     </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//ProfitAndLossContainer">
+      <genFeatures property="Readonly" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//ProfitAndLossContainer/groupProfitAndLoss"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//GroupProfitAndLoss">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//GroupProfitAndLoss/profitAndLoss"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//GroupProfitAndLoss/entityProfitAndLosses"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//EntityProfitAndLoss">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//EntityProfitAndLoss/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//EntityProfitAndLoss/profitAndLoss"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//ShippingCosts"/>
   </genPackages>
 </genmodel:GenModel>
