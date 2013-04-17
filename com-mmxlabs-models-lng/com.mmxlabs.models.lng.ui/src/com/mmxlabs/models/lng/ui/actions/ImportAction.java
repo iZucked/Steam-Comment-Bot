@@ -21,7 +21,6 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
@@ -31,6 +30,8 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -47,10 +48,71 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
  *
  */
 public abstract class ImportAction extends LockableAction {
-	protected final IScenarioEditingLocation part;
-	public ImportAction(final IScenarioEditingLocation part) {
+	/**
+	 * Encapsulation of the data required to perform the import action.
+	 * Typically pulled from an IScenarioEditingLocation, but can also be
+	 * pulled from elsewhere, e.g. in a bulk import. 
+	 * 
+	 * @author Simon McGregor
+	 *
+	 */
+	public interface ImportHooksProvider {
+		Shell getShell();
+		MMXRootObject getRootObject();
+		EditingDomain getEditingDomain();
+		String getImportFilePath();
+		void lock();
+		void unlock();
+	}
+	
+	protected final ImportHooksProvider importHooksProvider;
+	
+	public ImportAction(final ImportHooksProvider ihp) {
 		super("Import", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
-		this.part = part;
+		importHooksProvider = ihp;
+		
+	}
+	
+	public ImportAction(final IScenarioEditingLocation part) {
+		// create a new import hooks provider which pulls the data from the scenario editing location
+		// and gets the import filename from a dialog
+		this(new ImportHooksProvider() {
+			
+			@Override
+			public Shell getShell() {
+				return part.getShell();
+			}
+			
+			@Override
+			public MMXRootObject getRootObject() {
+				return part.getRootObject();
+			}
+			
+			@Override
+			public EditingDomain getEditingDomain() {
+				return part.getEditingDomain();
+			}
+
+			@Override
+			public void lock() {
+				part.setDisableCommandProviders(true);
+				part.setDisableUpdates(true);				
+			}
+
+			@Override
+			public void unlock() {
+				part.setDisableCommandProviders(false);
+				part.setDisableUpdates(false);
+				
+			}
+
+			@Override
+			public String getImportFilePath() {
+				final FileDialog fileDialog = new FileDialog(getShell());
+				fileDialog.setFilterExtensions(new String[] { "*.csv" });
+				return fileDialog.open();
+			}
+		});
 	}
 
 	@Override
@@ -60,25 +122,23 @@ public abstract class ImportAction extends LockableAction {
 		
 		// if there were any problems, pop up a problem dialog 
 		if (context != null && context.getProblems().isEmpty() == false) {
-			final ImportProblemDialog ipd = new ImportProblemDialog(part.getShell());
+			final ImportProblemDialog ipd = new ImportProblemDialog(importHooksProvider.getShell());
 			ipd.open(context);
 		}
 	}
 	
-	protected DefaultImportContext safelyImport() {
+	public DefaultImportContext safelyImport() {
 		DefaultImportContext context = null;
 		try {
-			part.setDisableCommandProviders(true);
-			part.setDisableUpdates(true);
+			importHooksProvider.lock();
 			context = new DefaultImportContext();
-			context.setRootObject(part.getRootObject());
+			context.setRootObject(importHooksProvider.getRootObject());
 			context.registerNamedObjectsFromSubModels();
 			
 			doImportStages(context);
 
 		} finally {
-			part.setDisableCommandProviders(false);
-			part.setDisableUpdates(false);
+			importHooksProvider.unlock();
 		}		
 		
 		return context;
@@ -98,7 +158,7 @@ public abstract class ImportAction extends LockableAction {
 	protected CompoundCommand mergeLists(final EObject container, final EReference containment, final List<EObject> importedObjects) {
 		final CompoundCommand merge = new CompoundCommand();
 		
-		final EditingDomain domain = part.getEditingDomain();
+		final EditingDomain domain = importHooksProvider.getEditingDomain();
 		final CompoundCommand setter = new CompoundCommand();
 		setter.append(IdentityCommand.INSTANCE);
 		@SuppressWarnings("unchecked")
@@ -115,7 +175,7 @@ public abstract class ImportAction extends LockableAction {
 			final EObject newObject = newNamedObjects.get(name);
 			
 			// update references to point from old object to new object
-			setter.append(replace(domain, oldObject, newObject, part.getRootObject()));
+			setter.append(replace(domain, oldObject, newObject, importHooksProvider.getRootObject()));
 			// add new object
 
 			deletedObjects.add(oldObject);
