@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.scenario.importWizards;
 
+import java.io.File;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -8,7 +9,6 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
-import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.ImportedField;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -20,7 +20,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private List<ScenarioInstance> selectedScenarios;
 	private String importFilename;
 	private char csvSeparator;
-	private ImportedField importedField;
+	private int importedField;
 	final private ScenarioInstance currentScenario;
 	
 	
@@ -61,8 +61,14 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		return csvSeparator;
 	}
 	
-	public ImportedField getImportedField() {
+	public int getImportedField() {
 		return importedField;
+	}
+	
+	@Override
+	public boolean canFinish() {
+		File file = new File(bip.getImportFilename());
+		return file.isFile() && file.canRead();
 	}
 	
 }

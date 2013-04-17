@@ -49,13 +49,17 @@ public final class CargoImportAction extends SimpleImportAction {
 		super(part, viewer);
 	}
 
+	public CargoImportAction(final ImportHooksProvider iph, final FieldInfoProvider fip) {
+		super(iph, fip);
+	}
+
 	/**
 	 * Merge the imported list of objects with the existing {@link Cargo}es and {@link Slot}s in the {@link CargoModel}.
 	 */
 	@Override
 	public Command mergeImports(final EObject container, final EReference containment, final Collection<EObject> imports) {
 
-		final EditingDomain domain = part.getEditingDomain();
+		final EditingDomain domain = importHooksProvider.getEditingDomain();
 
 		final List<EObject> cargoes = new ArrayList<EObject>();
 		final List<EObject> loads = new ArrayList<EObject>();
@@ -218,7 +222,7 @@ public final class CargoImportAction extends SimpleImportAction {
 	 * @return
 	 */
 	private Command rewireCargoes(final CargoModel cargoModel, final List<EObject> newCargoes, final List<EObject> newLoads, final List<EObject> newDischarges) {
-		final EditingDomain domain = part.getEditingDomain();
+		final EditingDomain domain = importHooksProvider.getEditingDomain();
 		final CompoundCommand mergeCommand = new CompoundCommand();
 		// Add Identity command incase there is no other command added here
 		mergeCommand.append(IdentityCommand.INSTANCE);
