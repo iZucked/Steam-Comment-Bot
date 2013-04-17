@@ -5,8 +5,12 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -20,14 +24,15 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scheduler.optimiser.TradingConstants;
-import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -37,8 +42,19 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
  */
 class HorizontalKPIContentProvider implements IStructuredContentProvider {
 
+	private final CommandStackListener commandStackListener = new CommandStackListener() {
+
+		@Override
+		public void commandStackChanged(final EventObject event) {
+			currentViewer.setInput(currentViewer.getInput());
+		}
+	};
+
+	private CommandStack currentCommandStack;
+	private Viewer currentViewer;
+
 	public static class RowData {
-		public RowData(final String scheduleName, Long pnl, Long shippingCost, Long idleTime) {
+		public RowData(final String scheduleName, final Long pnl, final Long shippingCost, final Long idleTime) {
 			super();
 			this.scheduleName = scheduleName;
 			this.pnl = pnl;
@@ -126,30 +142,36 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		return total;
 	}
 
-	private final List<RowData> pinnedData = new ArrayList<RowData>();
-
-	public List<RowData> getPinnedData() {
-		return pinnedData;
-	}
-
 	@Override
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+
+		if (currentCommandStack != null) {
+			currentCommandStack.removeCommandStackListener(commandStackListener);
+		}
+		currentViewer = viewer;
+
 		rowData = new RowData[0];
-		pinnedData.clear();
-		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
-			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
-			for (final Object o : synchOutput.getCollectedElements()) {
-				if (o instanceof Schedule) {
-					final ScenarioInstance scenarioInstance = synchOutput.getScenarioInstance(o);
-					final boolean isPinned = synchOutput.isPinned(o);
-					createRowData((Schedule) o, scenarioInstance, isPinned ? pinnedData : rowDataList);
-					if (isPinned) {
-						rowDataList.addAll(pinnedData);
+		if (newInput instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) newInput;
+			final ScenarioInstance scenarioInstance = editorInput.getScenarioInstance();
+			if (scenarioInstance != null) {
+
+				currentCommandStack = (CommandStack) scenarioInstance.getAdapters().get(BasicCommandStack.class);
+				currentCommandStack.addCommandStackListener(commandStackListener);
+
+				final EObject instance = scenarioInstance.getInstance();
+
+				if (instance instanceof MMXRootObject) {
+					final MMXRootObject mmxRootObject = (MMXRootObject) instance;
+					final ScheduleModel scheduleModel = mmxRootObject.getSubModel(ScheduleModel.class);
+					final Schedule schedule = scheduleModel.getSchedule();
+					if (schedule != null) {
+						final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
+						createRowData(schedule, scenarioInstance, rowDataList);
+						rowData = rowDataList.toArray(rowData);
 					}
 				}
 			}
-			rowData = rowDataList.toArray(rowData);
 		}
 		if (rowData.length == 0) {
 			rowData = new RowData[] { new RowData("", null, null, null) };

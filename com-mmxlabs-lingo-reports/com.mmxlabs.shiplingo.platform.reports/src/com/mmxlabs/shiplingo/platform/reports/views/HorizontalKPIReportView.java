@@ -8,21 +8,18 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.jface.viewers.CellLabelProvider;
-import org.eclipse.jface.viewers.IOpenListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
@@ -38,11 +35,11 @@ public class HorizontalKPIReportView extends ViewPart {
 
 	private GridTableViewer viewer;
 
-	private ScenarioViewerSynchronizer viewerSynchronizer;
-
 	private HorizontalKPIContentProvider contentProvider;
 
-	private GridViewerColumn scheduleColumnViewer;
+	private IEditorPart activeEditor = null;
+
+	private IPartListener partListener;
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider {
 		@Override
@@ -51,18 +48,16 @@ public class HorizontalKPIReportView extends ViewPart {
 				final RowData d = (RowData) obj;
 				switch (index) {
 				case 0:
-					return d.scheduleName;
-				case 1:
 					return "P&L";
-				case 2:
+				case 1:
 					return format(d.pnl, KPIContentProvider.TYPE_COST);
-				case 3:
+				case 2:
 					return "Shipping Cost";
-				case 4:
+				case 3:
 					return format(d.shippingCost, KPIContentProvider.TYPE_COST);
-				case 5:
+				case 4:
 					return "Idle Time";
-				case 6:
+				case 5:
 					return format(d.idleTime, KPIContentProvider.TYPE_TIME);
 				}
 			}
@@ -110,9 +105,6 @@ public class HorizontalKPIReportView extends ViewPart {
 		viewer.setContentProvider(contentProvider);
 		viewer.setInput(getViewSite());
 
-		scheduleColumnViewer = new GridViewerColumn(viewer, SWT.NONE);
-		scheduleColumnViewer.getColumn().setText("Schedule");
-		scheduleColumnViewer.getColumn().pack();
 		// For some reason we've ended up with a small row height.
 		// This appears to fix it, but no idea why the problem occurs in first place.
 		// SG: 2013-04-17
@@ -131,50 +123,45 @@ public class HorizontalKPIReportView extends ViewPart {
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), ID);
 
-		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			private int numberOfSchedules;
+		partListener = new IPartListener() {
 
 			@Override
-			public void beginCollecting() {
-				numberOfSchedules = 0;
+			public void partOpened(IWorkbenchPart part) {
+
 			}
 
 			@Override
-			public void endCollecting() {
-				setShowColumns(numberOfSchedules);
+			public void partDeactivated(IWorkbenchPart part) {
+				if (part == activeEditor) {
+					activeEditor = null;
+					viewer.setInput(null);
+				}
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
-				++numberOfSchedules;
-				return Collections.singleton(schedule);
-			}
-		});
+			public void partClosed(IWorkbenchPart part) {
 
-		// viewer.addOpenListener(new IOpenListener() {
-		//
-		// @Override
-		// public void open(final OpenEvent event) {
-		// if (event.getSelection() instanceof IStructuredSelection) {
-		// final IStructuredSelection structuredSelection = (IStructuredSelection) event.getSelection();
-		// if (structuredSelection.size() == 1) {
-		// final Object obj = structuredSelection.getFirstElement();
-		// if (obj instanceof RowData) {
-		// final RowData rowData = (RowData) obj;
-		// // final String viewId = rowData.viewID;
-		// // if (viewId != null) {
-		// // try {
-		// // getSite().getPage().showView(viewId);
-		// // } catch (final PartInitException e) {
-		// // log.error(e.getMessage(), e);
-		// // }
-		// // }
-		//
-		// }
-		// }
-		// }
-		// }
-		// });
+			}
+
+			@Override
+			public void partBroughtToTop(IWorkbenchPart part) {
+
+			}
+
+			@Override
+			public void partActivated(IWorkbenchPart part) {
+				if (part instanceof IEditorPart) {
+					// Active editor changed
+					activeEditor = (IEditorPart) part;
+					viewer.setInput(activeEditor.getEditorInput());
+				}
+			}
+		};
+		getSite().getPage().addPartListener(partListener);
+		IEditorPart aEditor = getSite().getPage().getActiveEditor();
+		if (aEditor != null) {
+			viewer.setInput(aEditor.getEditorInput());
+		}
 	}
 
 	/**
@@ -212,12 +199,8 @@ public class HorizontalKPIReportView extends ViewPart {
 	@Override
 	public void dispose() {
 
-		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
+		getSite().getPage().removePartListener(partListener);
 		super.dispose();
 	}
 
-	private void setShowColumns(int numberOfSchedules) {
-
-		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > 1);
-	}
 }
