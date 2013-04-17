@@ -237,7 +237,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// This is not calculator.multiply, because hireRate is not scaled.
 					if (hireRateCurve != null) {
-						int hireRate = (int) hireRateCurve.getValueAtPoint(vesselStartTime);
+						int hireRate = hireRateCurve.getValueAtPoint(vesselStartTime);
 						final long hireCost = (long) hireRate * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
 						currentCost += hireCost;
 					}
