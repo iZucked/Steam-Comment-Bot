@@ -68,7 +68,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 
 		if (modelSlot instanceof LoadSlot) {
 			if (((LoadSlot) modelSlot).isDESPurchase()) {
-				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.DELIVERED);
+				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
 			}
 			else {
 				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);				

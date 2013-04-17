@@ -44,7 +44,7 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 
 	@Test
 	public void test1() {
-		testConstraints(CargoDeliveryType.SHIPPED, CargoDeliveryType.DELIVERED);
+		testConstraints(CargoDeliveryType.SHIPPED, CargoDeliveryType.NOT_SHIPPED);
 	}
 	
 	@Test
@@ -59,7 +59,7 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 	
 	@Test
 	public void test4() {
-		testConstraints(CargoDeliveryType.DELIVERED, CargoDeliveryType.SHIPPED);
+		testConstraints(CargoDeliveryType.NOT_SHIPPED, CargoDeliveryType.SHIPPED);
 	}
 	
 	private ShippingTypeRequirementConstraintChecker createChecker(final String name, final IShippingTypeRequirementProviderEditor restrictedElementsProvider) {

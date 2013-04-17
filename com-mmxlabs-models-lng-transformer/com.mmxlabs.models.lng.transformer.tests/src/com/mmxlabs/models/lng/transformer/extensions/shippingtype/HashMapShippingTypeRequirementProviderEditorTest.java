@@ -24,7 +24,7 @@ public class HashMapShippingTypeRequirementProviderEditorTest {
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 		
-		final CargoDeliveryType cargoType1 = CargoDeliveryType.DELIVERED;
+		final CargoDeliveryType cargoType1 = CargoDeliveryType.NOT_SHIPPED;
 		final CargoDeliveryType cargoType2 = CargoDeliveryType.SHIPPED;
 
 		provider.setPurchaseSlotDeliveryType(element1, cargoType1);
