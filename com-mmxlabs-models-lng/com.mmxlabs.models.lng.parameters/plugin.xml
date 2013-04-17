@@ -18,7 +18,7 @@
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <package
-            uri="http://www.mmxlabs.com/models/lng/optimiser/1/"
+            uri="http://www.mmxlabs.com/models/lng/parameters/1/"
             class="com.mmxlabs.models.lng.parameters.ParametersPackage"
             genModel="model/optimiser.genmodel"/>
    </extension>
