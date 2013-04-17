@@ -45,7 +45,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -85,7 +84,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
-import com.mmxlabs.models.lng.cargo.ui.actions.DeleteSelectedCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
@@ -152,7 +150,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final CargoEditingCommands cec;
 	private final CargoEditorMenuHelper menuHelper;
 
-	private final Image wiredImage;
 	private final Image lockedImage;
 
 	private final Object updateLock = new Object();
@@ -163,7 +160,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		super(page, part, jointModelEditorPart, actionBars);
 		this.cec = new CargoEditingCommands(jointModelEditorPart);
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), jointModelEditorPart);
-		wiredImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LINK);
 		lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
 	}
 
@@ -178,11 +174,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	@Override
 	protected Action createImportAction() {
 		return new CargoImportAction(jointModelEditorPart, getScenarioViewer());
-	}
-
-	@Override
-	protected Action createDeleteAction() {
-		return new DeleteSelectedCargoAction(jointModelEditorPart, viewer);
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
@@ -660,27 +651,37 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Rectangle area = super.getCanvasClientArea();
 
 				int wiringColumnIndexTmp = -1;
+				boolean foundColumn = false;
 				for (final GridColumn gc : getScenarioViewer().getGrid().getColumns()) {
 					++wiringColumnIndexTmp;
 					if (gc == wiringColumn.getColumn()) {
+						foundColumn = true;
 						break;
 					}
+				}
+				if (!foundColumn) {
+					return null;
 				}
 				final int wiringColumnIndex = wiringColumnIndexTmp;
 
 				int offset = 0;
 				offset += getScenarioViewer().getGrid().getRowHeaderWidth();
 				// TODO: Get col number
+				foundColumn = false;
 				final int[] columnOrder = getScenarioViewer().getGrid().getColumnOrder();
 				for (int ii = getScenarioViewer().getGrid().getHorizontalBar().getSelection(); ii < columnOrder.length; ++ii) {
 					final int idx = columnOrder[ii];
 					if (idx == wiringColumnIndex) {
+						foundColumn = true;
 						break;
 					}
 					offset += getScenarioViewer().getGrid().getColumn(idx).getWidth();
 				}
-				// TODO: Take into account h scroll final int colWidth = getScenarioViewer().getGrid().getColumn(wiringColumnIndex).getWidth();
+				if (!foundColumn) {
+					return null;
+				}
 
+				// TODO: Take into account h scroll final int colWidth = getScenarioViewer().getGrid().getColumn(wiringColumnIndex).getWidth();
 				final Rectangle r = new Rectangle(area.x + offset, area.y + getScenarioViewer().getGrid().getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 
 				return r;

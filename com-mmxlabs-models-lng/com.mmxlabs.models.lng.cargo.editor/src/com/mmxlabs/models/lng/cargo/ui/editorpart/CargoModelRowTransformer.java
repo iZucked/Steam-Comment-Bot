@@ -45,7 +45,7 @@ public class CargoModelRowTransformer {
 	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
-	public RootData transform(final InputModel inputModel, final CargoModel cargoModel, ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo) {
+	public RootData transform(final InputModel inputModel, final CargoModel cargoModel, final ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo) {
 		return transform(inputModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo);
 
 	}
@@ -60,18 +60,18 @@ public class CargoModelRowTransformer {
 	 * @param validationInfo
 	 * @return
 	 */
-	public RootData transform(final InputModel inputModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, Schedule schedule,
+	public RootData transform(final InputModel inputModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, final Schedule schedule,
 			final Map<Object, IStatus> validationInfo) {
 
 		final RootData root = new RootData();
 
-		Map<Cargo, CargoAllocation> cargoAllocationMap = new HashMap<Cargo, CargoAllocation>();
-		Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<Slot, SlotAllocation>();
+		final Map<Cargo, CargoAllocation> cargoAllocationMap = new HashMap<Cargo, CargoAllocation>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<Slot, SlotAllocation>();
 		if (schedule != null) {
-			for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 				cargoAllocationMap.put(cargoAllocation.getInputCargo(), cargoAllocation);
 			}
-			for (SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
+			for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 				slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
 			}
 		}
@@ -154,7 +154,11 @@ public class CargoModelRowTransformer {
 				root.getRows().add(row);
 				row.loadSlot = slot;
 
-				row.loadTerminalColour = red;
+				if (slot.isOptional()) {
+					row.loadTerminalColour = green;
+				} else {
+					row.loadTerminalColour = red;
+				}
 				row.dischargeTerminalColour = red;
 			}
 		}
@@ -172,8 +176,12 @@ public class CargoModelRowTransformer {
 				root.getRows().add(row);
 				row.dischargeSlot = slot;
 
+				if (slot.isOptional()) {
+					row.dischargeTerminalColour = green;
+				} else {
+					row.dischargeTerminalColour = red;
+				}
 				row.loadTerminalColour = red;
-				row.dischargeTerminalColour = red;
 			}
 		}
 

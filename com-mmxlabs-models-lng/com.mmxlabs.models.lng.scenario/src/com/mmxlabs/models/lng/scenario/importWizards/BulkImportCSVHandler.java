@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoImportAction;
  * TODO: Move duplicated code into a common code object.
  * 
  * @author Simon McGregor
+ * @since 3.0
  *
  */
 public class BulkImportCSVHandler extends AbstractHandler {
