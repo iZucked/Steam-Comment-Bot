@@ -12,7 +12,6 @@ import java.util.Collection;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.swt.widgets.FileDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,37 +29,57 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 public class SimpleImportAction extends ImportAction {
 
 	private static final Logger log = LoggerFactory.getLogger(SimpleImportAction.class);
+	
+	public interface FieldInfoProvider {
+		EObject getContainer();
+		EReference getContainment();
+	}
 
-	private final ScenarioTableViewer viewer;
-
+	private final FieldInfoProvider fieldInfoProvider;
+	
+	public SimpleImportAction(final ImportHooksProvider iph, final FieldInfoProvider fip) {
+		super(iph);
+		this.fieldInfoProvider = fip;
+	}
+	
 	public SimpleImportAction(final IScenarioEditingLocation part, final ScenarioTableViewer viewer) {
 		super(part);
-		this.viewer = viewer;
+		fieldInfoProvider = new FieldInfoProvider() {
+
+			@Override
+			public EObject getContainer() {
+				return viewer.getCurrentContainer();
+			}
+
+			@Override
+			public EReference getContainment() {
+				return viewer.getCurrentContainment();
+			}
+			
+		};
 	}
 
 	@Override
 	protected void doImportStages(final DefaultImportContext context) {
-		final EObject container = viewer.getCurrentContainer();
-		final EReference containment = viewer.getCurrentContainment();
+		final EObject container = fieldInfoProvider.getContainer();
+		final EReference containment = fieldInfoProvider.getContainment();
 
 		final IClassImporter importer = getImporter(containment);
 		// open file picker
 
-		final FileDialog fileDialog = new FileDialog(part.getShell());
-		fileDialog.setFilterExtensions(new String[] { "*.csv" });
-		final String path = fileDialog.open();
-
+		final String path = importHooksProvider.getImportFilePath();
+				
 		if (path == null) {
 			return;
 		}
 
 		CSVReader reader = null;
 		try {
-			reader = new CSVReader(new File(path));
+			reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 			final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 			context.run();
 			final Command cmd = mergeImports(container, containment, importedObjects);
-			part.getEditingDomain().getCommandStack().execute(cmd);
+			importHooksProvider.getEditingDomain().getCommandStack().execute(cmd);
 		} catch (final IOException e) {
 			log.error(e.getMessage(), e);
 		} finally {
@@ -72,6 +91,8 @@ public class SimpleImportAction extends ImportAction {
 			}
 		}
 	}
+	
+	
 
 	protected IClassImporter getImporter(final EReference containment) {
 		return Activator.getDefault().getImporterRegistry().getClassImporter(containment.getEReferenceType());
