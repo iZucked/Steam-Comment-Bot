@@ -16,9 +16,6 @@
 
 <plugin>
 
-
-
-	
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
 		
@@ -27,13 +24,6 @@
 			helperClass="com.mmxlabs.models.lng.input.presentation.composites.InputModelComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.input.InputModel" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.input.helpers.Assignment"
-			helperClass="com.mmxlabs.models.lng.input.presentation.composites.AssignmentComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.input.Assignment" />
-		
 	</extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
