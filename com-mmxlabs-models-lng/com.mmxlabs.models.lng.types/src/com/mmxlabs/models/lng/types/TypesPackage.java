@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.models.lng.types;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -66,6 +64,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.impl.ObjectSetImpl
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getObjectSet()
@@ -76,6 +75,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -85,6 +85,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -94,6 +95,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -103,6 +105,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -112,6 +115,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Object Set</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -121,6 +125,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -130,6 +135,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -139,6 +145,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -148,6 +155,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -157,6 +165,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Object Set</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -405,256 +414,6 @@ public interface TypesPackage extends EPackage {
 	int ITIMEZONE_PROVIDER_OPERATION_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl <em>Extra Data Container</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataContainer()
-	 * @generated
-	 */
-	int EXTRA_DATA_CONTAINER = 5;
-
-	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_CONTAINER__EXTRA_DATA = 0;
-
-	/**
-	 * The number of structural features of the '<em>Extra Data Container</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_CONTAINER_FEATURE_COUNT = 1;
-
-	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE = 0;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = 1;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = 3;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = 4;
-
-	/**
-	 * The number of operations of the '<em>Extra Data Container</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_CONTAINER_OPERATION_COUNT = 5;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl <em>Extra Data</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.impl.ExtraDataImpl
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraData()
-	 * @generated
-	 */
-	int EXTRA_DATA = 4;
-
-	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA__EXTRA_DATA = EXTRA_DATA_CONTAINER__EXTRA_DATA;
-
-	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA__KEY = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA__NAME = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA__VALUE = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Format</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA__FORMAT = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Format Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA__FORMAT_TYPE = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 4;
-
-	/**
-	 * The number of structural features of the '<em>Extra Data</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_FEATURE_COUNT = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 5;
-
-	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA___GET_DATA_WITH_PATH__ITERABLE = EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA___GET_DATA_WITH_KEY__STRING = EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT;
-
-	/**
-	 * The operation id for the '<em>Get Value As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA___GET_VALUE_AS__CLASS = EXTRA_DATA_CONTAINER_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Format Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA___FORMAT_VALUE = EXTRA_DATA_CONTAINER_OPERATION_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Extra Data</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXTRA_DATA_OPERATION_COUNT = EXTRA_DATA_CONTAINER_OPERATION_COUNT + 2;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -662,18 +421,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getPortCapability()
 	 * @generated
 	 */
-	int PORT_CAPABILITY = 6;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}' enum.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
-	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataFormatType()
-	 * @generated
-	 */
-	int EXTRA_DATA_FORMAT_TYPE = 7;
+	int PORT_CAPABILITY = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.
@@ -684,7 +432,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getCargoDeliveryType()
 	 * @generated
 	 */
-	int CARGO_DELIVERY_TYPE = 8;
+	int CARGO_DELIVERY_TYPE = 5;
 
 	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
@@ -695,7 +443,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 9;
+	int ITERABLE = 6;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
@@ -738,178 +486,9 @@ public interface TypesPackage extends EPackage {
 	EOperation getITimezoneProvider__GetTimeZone__EAttribute();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ExtraData <em>Extra Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Extra Data</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraData
-	 * @generated
-	 */
-	EClass getExtraData();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getKey <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraData#getKey()
-	 * @see #getExtraData()
-	 * @generated
-	 */
-	EAttribute getExtraData_Key();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraData#getName()
-	 * @see #getExtraData()
-	 * @generated
-	 */
-	EAttribute getExtraData_Name();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraData#getValue()
-	 * @see #getExtraData()
-	 * @generated
-	 */
-	EAttribute getExtraData_Value();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getFormat <em>Format</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Format</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraData#getFormat()
-	 * @see #getExtraData()
-	 * @generated
-	 */
-	EAttribute getExtraData_Format();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getFormatType <em>Format Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Format Type</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraData#getFormatType()
-	 * @see #getExtraData()
-	 * @generated
-	 */
-	EAttribute getExtraData_FormatType();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraData#getValueAs(java.lang.Class) <em>Get Value As</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Value As</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraData#getValueAs(java.lang.Class)
-	 * @generated
-	 */
-	EOperation getExtraData__GetValueAs__Class();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraData#formatValue() <em>Format Value</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Format Value</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraData#formatValue()
-	 * @generated
-	 */
-	EOperation getExtraData__FormatValue();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ExtraDataContainer <em>Extra Data Container</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Extra Data Container</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer
-	 * @generated
-	 */
-	EClass getExtraDataContainer();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getExtraData <em>Extra Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Extra Data</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getExtraData()
-	 * @see #getExtraDataContainer()
-	 * @generated
-	 */
-	EReference getExtraDataContainer_ExtraData();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getDataWithPath(java.lang.Iterable) <em>Get Data With Path</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Data With Path</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getDataWithPath(java.lang.Iterable)
-	 * @generated
-	 */
-	EOperation getExtraDataContainer__GetDataWithPath__Iterable();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getDataWithKey(java.lang.String) <em>Get Data With Key</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Data With Key</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getDataWithKey(java.lang.String)
-	 * @generated
-	 */
-	EOperation getExtraDataContainer__GetDataWithKey__String();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String) <em>Add Extra Data</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Add Extra Data</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String)
-	 * @generated
-	 */
-	EOperation getExtraDataContainer__AddExtraData__String_String();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.lang.Object, com.mmxlabs.models.lng.types.ExtraDataFormatType) <em>Add Extra Data</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Add Extra Data</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.lang.Object, com.mmxlabs.models.lng.types.ExtraDataFormatType)
-	 * @generated
-	 */
-	EOperation getExtraDataContainer__AddExtraData__String_String_Object_ExtraDataFormatType();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getValueWithPathAs(java.lang.Iterable, java.lang.Class, java.lang.Object) <em>Get Value With Path As</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Value With Path As</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getValueWithPathAs(java.lang.Iterable, java.lang.Class, java.lang.Object)
-	 * @generated
-	 */
-	EOperation getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ObjectSet <em>Object Set</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Object Set</em>'.
 	 * @see com.mmxlabs.models.lng.types.ObjectSet
@@ -920,6 +499,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ObjectSet#collect(org.eclipse.emf.common.util.EList) <em>Collect</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Collect</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ObjectSet#collect(org.eclipse.emf.common.util.EList)
@@ -936,17 +516,6 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getPortCapability();
-
-	/**
-	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Extra Data Format Type</em>'.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
-	 * @generated
-	 */
-	EEnum getExtraDataFormatType();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}'.
@@ -1033,146 +602,9 @@ public interface TypesPackage extends EPackage {
 		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl <em>Extra Data</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ExtraDataImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraData()
-		 * @generated
-		 */
-		EClass EXTRA_DATA = eINSTANCE.getExtraData();
-
-		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute EXTRA_DATA__KEY = eINSTANCE.getExtraData_Key();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute EXTRA_DATA__NAME = eINSTANCE.getExtraData_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute EXTRA_DATA__VALUE = eINSTANCE.getExtraData_Value();
-
-		/**
-		 * The meta object literal for the '<em><b>Format</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute EXTRA_DATA__FORMAT = eINSTANCE.getExtraData_Format();
-
-		/**
-		 * The meta object literal for the '<em><b>Format Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute EXTRA_DATA__FORMAT_TYPE = eINSTANCE.getExtraData_FormatType();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Value As</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EXTRA_DATA___GET_VALUE_AS__CLASS = eINSTANCE.getExtraData__GetValueAs__Class();
-
-		/**
-		 * The meta object literal for the '<em><b>Format Value</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EXTRA_DATA___FORMAT_VALUE = eINSTANCE.getExtraData__FormatValue();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl <em>Extra Data Container</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataContainer()
-		 * @generated
-		 */
-		EClass EXTRA_DATA_CONTAINER = eINSTANCE.getExtraDataContainer();
-
-		/**
-		 * The meta object literal for the '<em><b>Extra Data</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference EXTRA_DATA_CONTAINER__EXTRA_DATA = eINSTANCE.getExtraDataContainer_ExtraData();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Data With Path</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE = eINSTANCE.getExtraDataContainer__GetDataWithPath__Iterable();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Data With Key</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = eINSTANCE.getExtraDataContainer__GetDataWithKey__String();
-
-		/**
-		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = eINSTANCE.getExtraDataContainer__AddExtraData__String_String();
-
-		/**
-		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_OBJECT_EXTRADATAFORMATTYPE = eINSTANCE.getExtraDataContainer__AddExtraData__String_String_Object_ExtraDataFormatType();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Value With Path As</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.impl.ObjectSetImpl
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getObjectSet()
@@ -1183,6 +615,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Collect</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1197,17 +630,6 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum PORT_CAPABILITY = eINSTANCE.getPortCapability();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}' enum.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
-		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataFormatType()
-		 * @generated
-		 */
-		EEnum EXTRA_DATA_FORMAT_TYPE = eINSTANCE.getExtraDataFormatType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.

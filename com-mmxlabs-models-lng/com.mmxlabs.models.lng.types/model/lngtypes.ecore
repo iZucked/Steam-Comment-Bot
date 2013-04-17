@@ -45,99 +45,8 @@
     <eLiterals name="DRYDOCK" value="2" literal="DRYDOCK"/>
     <eLiterals name="MAINTENANCE" value="3" literal="MAINTENANCE"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExtraData" eSuperTypes="#//ExtraDataContainer">
-    <eOperations name="getValueAs" lowerBound="1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if (isSetValue()) {&#xA;&#x9;&#x9;&#x9;if (clazz.isInstance(getValue())) {&#xA;&#x9;&#x9;&#x9;&#x9;return clazz.cast(getValue());&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;return null;&#xA;"/>
-      </eAnnotations>
-      <eGenericType eTypeParameter="#//ExtraData/getValueAs/T"/>
-      <eTypeParameters name="T"/>
-      <eParameters name="clazz" lowerBound="1">
-        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
-          <eTypeArguments eTypeParameter="#//ExtraData/getValueAs/T"/>
-        </eGenericType>
-      </eParameters>
-    </eOperations>
-    <eOperations name="formatValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if (isSetValue()) {&#xA;&#x9;&#x9;&#x9;final Object o = getValue();&#xA;&#x9;&#x9;&#x9;final String format = getFormat();&#xA;&#x9;&#x9;&#x9;ExtraDataFormatType f = getFormatType();&#xA;&#x9;&#x9;&#x9;if (f == ExtraDataFormatType.AUTO) {&#xA;&#x9;&#x9;&#x9;&#x9;if (o instanceof Integer)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;f = ExtraDataFormatType.INTEGER;&#xA;&#x9;&#x9;&#x9;&#x9;else if (o instanceof Date)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;f = ExtraDataFormatType.DATE;&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;switch (getFormatType()) {&#xA;&#x9;&#x9;&#x9;case AUTO:&#xA;&#x9;&#x9;&#x9;&#x9;return &quot;&quot; + o;&#xA;&#x9;&#x9;&#x9;case INTEGER:&#xA;&#x9;&#x9;&#x9;&#x9;return String.format(&quot;%,d&quot;, o);&#xA;&#x9;&#x9;&#x9;case DURATION:&#xA;&#x9;&#x9;&#x9;&#x9;if (o instanceof Integer) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;final int totalHours = (Integer) o;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;final int hrs = totalHours % 24;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;final int days = totalHours / 24;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (days > 0) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return String.format(&quot;%d:%d&quot;, days, hrs);&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;return String.format(&quot;%d&quot;, hrs);&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;&#x9;break;&#xA;&#x9;&#x9;&#x9;case CURRENCY:&#xA;&#x9;&#x9;&#x9;&#x9;return String.format(&quot;$%,d&quot;, o);&#xA;&#x9;&#x9;&#x9;case DATE:&#xA;&#x9;&#x9;&#x9;&#x9;DateFormat dateFormat;&#xA;&#x9;&#x9;&#x9;&#x9;if (format != null &amp;&amp; !format.isEmpty()) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;dateFormat = new SimpleDateFormat(format);&#xA;&#x9;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;dateFormat = DateFormat.getDateTimeInstance();&#xA;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;&#x9;return dateFormat.format(o);&#xA;&#x9;&#x9;&#x9;case STRING_FORMAT:&#xA;&#x9;&#x9;&#x9;&#x9;return String.format(format, o);&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return &quot;&quot;;"/>
-      </eAnnotations>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="format" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="formatType" lowerBound="1"
-        eType="#//ExtraDataFormatType" defaultValueLiteral="AUTO"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ExtraDataContainer">
-    <eOperations name="getDataWithPath" lowerBound="1" eType="#//ExtraData">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="java.util.Iterator&lt;String> iterator = keys.iterator();&#xA;&#x9;&#x9;if (iterator.hasNext() == false) return null;&#xA;&#x9;&#x9;ExtraData edc = getDataWithKey(iterator.next());&#xA;&#x9;&#x9;while (edc != null &amp;&amp; iterator.hasNext()) {&#xA;&#x9;&#x9;&#x9;edc = edc.getDataWithKey(iterator.next());&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return edc;"/>
-      </eAnnotations>
-      <eParameters name="keys" lowerBound="1">
-        <eGenericType eClassifier="#//Iterable">
-          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        </eGenericType>
-      </eParameters>
-    </eOperations>
-    <eOperations name="getDataWithKey" lowerBound="1" eType="#//ExtraData">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="for (final ExtraData e : getExtraData()) {&#xA;&#x9;if (e.getKey().equals(key)) return e;&#xA;}&#xA;return null;"/>
-      </eAnnotations>
-      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="addExtraData" lowerBound="1" eType="#//ExtraData">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="final ExtraData result = TypesFactory.eINSTANCE.createExtraData();&#xA;result.setKey(key);&#xA;result.setName(name);&#xA;getExtraData().add(result);&#xA;return result;"/>
-      </eAnnotations>
-      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="addExtraData" lowerBound="1" eType="#//ExtraData">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="final ExtraData result = addExtraData(key, name);&#xA;result.setValue(value);&#xA;result.setFormatType(format);&#xA;return result;"/>
-      </eAnnotations>
-      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      <eParameters name="format" lowerBound="1" eType="#//ExtraDataFormatType"/>
-    </eOperations>
-    <eOperations name="getValueWithPathAs" lowerBound="1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="final ExtraData ed = getDataWithPath(path);&#xA;if (ed == null) return defaultValue;&#xA;final T value = ed.getValueAs(clazz);&#xA;if (value == null) return defaultValue;&#xA;return value;"/>
-      </eAnnotations>
-      <eGenericType eTypeParameter="#//ExtraDataContainer/getValueWithPathAs/T"/>
-      <eTypeParameters name="T"/>
-      <eParameters name="path" lowerBound="1">
-        <eGenericType eClassifier="#//Iterable">
-          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        </eGenericType>
-      </eParameters>
-      <eParameters name="clazz" lowerBound="1">
-        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
-          <eTypeArguments eTypeParameter="#//ExtraDataContainer/getValueWithPathAs/T"/>
-        </eGenericType>
-      </eParameters>
-      <eParameters name="defaultValue" lowerBound="1">
-        <eGenericType eTypeParameter="#//ExtraDataContainer/getValueWithPathAs/T"/>
-      </eParameters>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extraData" upperBound="-1"
-        eType="#//ExtraData" containment="true"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">
     <eTypeParameters name="T"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="ExtraDataFormatType">
-    <eLiterals name="AUTO" literal="AUTO"/>
-    <eLiterals name="INTEGER" value="1" literal="INTEGER"/>
-    <eLiterals name="DURATION" value="2" literal="DURATION"/>
-    <eLiterals name="CURRENCY" value="3" literal="CURRENCY"/>
-    <eLiterals name="DATE" value="4" literal="DATE"/>
-    <eLiterals name="STRING_FORMAT" value="5" literal="STRING_FORMAT"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="CargoDeliveryType">
     <eLiterals name="Any">
@@ -150,8 +59,11 @@
         <details key="documentation" value="The cargo must be shipped directly by the first party."/>
       </eAnnotations>
     </eLiterals>
-    <eLiterals name="Delivered" value="2">
+    <eLiterals name="NotShipped" value="2">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The cargo must be delivered by a third party."/>
+        </eAnnotations>
         <details key="documentation" value="The cargo must be delivered by a third party."/>
       </eAnnotations>
     </eLiterals>

@@ -10,8 +10,6 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -126,22 +124,6 @@ public class TypesSwitch<T1> extends Switch<T1> {
 				result = defaultCase(theEObject);
 			return result;
 		}
-		case TypesPackage.EXTRA_DATA: {
-			ExtraData extraData = (ExtraData) theEObject;
-			T1 result = caseExtraData(extraData);
-			if (result == null)
-				result = caseExtraDataContainer(extraData);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
-		case TypesPackage.EXTRA_DATA_CONTAINER: {
-			ExtraDataContainer extraDataContainer = (ExtraDataContainer) theEObject;
-			T1 result = caseExtraDataContainer(extraDataContainer);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -189,38 +171,6 @@ public class TypesSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseITimezoneProvider(ITimezoneProvider object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Extra Data</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Extra Data</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseExtraData(ExtraData object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseExtraDataContainer(ExtraDataContainer object) {
 		return null;
 	}
 

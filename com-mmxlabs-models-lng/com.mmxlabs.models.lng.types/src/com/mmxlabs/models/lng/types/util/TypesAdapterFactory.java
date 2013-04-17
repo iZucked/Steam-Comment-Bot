@@ -11,8 +11,6 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -96,16 +94,6 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseExtraData(ExtraData object) {
-			return createExtraDataAdapter();
-		}
-
-		@Override
-		public Adapter caseExtraDataContainer(ExtraDataContainer object) {
-			return createExtraDataContainerAdapter();
-		}
-
-		@Override
 		public Adapter caseMMXObject(MMXObject object) {
 			return createMMXObjectAdapter();
 		}
@@ -178,36 +166,6 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createITimezoneProviderAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ExtraData <em>Extra Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ExtraData
-	 * @generated
-	 */
-	public Adapter createExtraDataAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ExtraDataContainer <em>Extra Data Container</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer
-	 * @generated
-	 */
-	public Adapter createExtraDataContainerAdapter() {
 		return null;
 	}
 
