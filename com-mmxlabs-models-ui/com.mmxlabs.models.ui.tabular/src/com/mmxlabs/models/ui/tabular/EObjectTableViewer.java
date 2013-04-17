@@ -190,6 +190,9 @@ public class EObjectTableViewer extends GridTableViewer {
 //		}
 //	};
 	
+	/**
+	 * @since 3.0
+	 */
 	protected void doCommandStackChanged() {
 		refresh();
 	}
