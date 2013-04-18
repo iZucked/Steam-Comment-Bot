@@ -68,131 +68,133 @@ public class TradingExporterExtension implements IExporterExtension {
 		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 		final IVesselProvider vesselProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
-			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
-			final IShippingCostAnnotation shippingCost = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCost, IShippingCostAnnotation.class);
-			final IShippingCostAnnotation shippingCostWithBoilOff = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
-					IShippingCostAnnotation.class);
+			{
+				final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
+				final IShippingCostAnnotation shippingCost = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCost, IShippingCostAnnotation.class);
+				final IShippingCostAnnotation shippingCostWithBoilOff = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
+						IShippingCostAnnotation.class);
 
-			if (profitAndLoss != null) {
-				// emit p&l entry - depends on the type of slot associated with the element.
-				final IPortSlot slot = slotProvider.getPortSlot(element);
+				if (profitAndLoss != null) {
+					// emit p&l entry - depends on the type of slot associated with the element.
+					final IPortSlot slot = slotProvider.getPortSlot(element);
 
-				if (slot instanceof ILoadOption) {
-					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
-					CargoAllocation cargoAllocation = null;
-					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-							if (slotAllocation.getSlot() == modelSlot) {
-								cargoAllocation = allocation;
-								break;
-							}
-						}
-					}
-					if (cargoAllocation != null) {
-						setPandLentries(profitAndLoss, cargoAllocation);
-						setShippingCosts(shippingCost, cargoAllocation, false);
-						setShippingCosts(shippingCostWithBoilOff, cargoAllocation, true);
-					}
-				} else if (slot instanceof IVesselEventPortSlot) {
-					final com.mmxlabs.models.lng.fleet.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.fleet.VesselEvent.class);
-					VesselEventVisit visit = null;
-					//
-					for (final Sequence sequence : outputSchedule.getSequences()) {
-						for (final Event event : sequence.getEvents()) {
-							if (event instanceof VesselEventVisit) {
-								if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
-									visit = (VesselEventVisit) event;
+					if (slot instanceof ILoadOption) {
+						final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+						CargoAllocation cargoAllocation = null;
+						for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
+							for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+								if (slotAllocation.getSlot() == modelSlot) {
+									cargoAllocation = allocation;
+									break;
 								}
 							}
 						}
-					}
-					if (visit != null) {
-						setPandLentries(profitAndLoss, visit);
-						setShippingCosts(shippingCost, visit, false);
-						setShippingCosts(shippingCostWithBoilOff, visit, true);
-					}
-					// }
-				} else if (slot instanceof StartPortSlot) {
-					StartEvent startEvent = null;
-					//
-					LOOP_OUTER: for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
-
-						// Find the optimiser sequence for the start element
-						final ISequence seq = annotatedSolution.getSequences().getSequence(i);
-						if (seq.get(0) == element) {
-							// Found the sequence, so no find the matching EMF sequence
-							for (final Sequence sequence : outputSchedule.getSequences()) {
-								// Get the EMF Vessel
-								final Vessel vessel = sequence.getVessel();
-								if (vessel == null) {
-									continue;
+						if (cargoAllocation != null) {
+							setPandLentries(profitAndLoss, cargoAllocation);
+							setShippingCosts(shippingCost, cargoAllocation, false);
+							setShippingCosts(shippingCostWithBoilOff, cargoAllocation, true);
+						}
+					} else if (slot instanceof IVesselEventPortSlot) {
+						final com.mmxlabs.models.lng.fleet.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.fleet.VesselEvent.class);
+						VesselEventVisit visit = null;
+						//
+						for (final Sequence sequence : outputSchedule.getSequences()) {
+							for (final Event event : sequence.getEvents()) {
+								if (event instanceof VesselEventVisit) {
+									if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
+										visit = (VesselEventVisit) event;
+									}
 								}
-								// Find the matching
-								final IResource res = annotatedSolution.getSequences().getResources().get(i);
-								final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+							}
+						}
+						if (visit != null) {
+							setPandLentries(profitAndLoss, visit);
+							setShippingCosts(shippingCost, visit, false);
+							setShippingCosts(shippingCostWithBoilOff, visit, true);
+						}
+						// }
+					} else if (slot instanceof StartPortSlot) {
+						StartEvent startEvent = null;
+						//
+						LOOP_OUTER: for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
 
-								// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
-								if (iVessel == vesselProvider.getVessel(res)) {
-									if (sequence.getEvents().size() > 0) {
-										final Event evt = sequence.getEvents().get(0);
-										if (evt instanceof StartEvent) {
-											startEvent = (StartEvent) evt;
-											break LOOP_OUTER;
+							// Find the optimiser sequence for the start element
+							final ISequence seq = annotatedSolution.getSequences().getSequence(i);
+							if (seq.get(0) == element) {
+								// Found the sequence, so no find the matching EMF sequence
+								for (final Sequence sequence : outputSchedule.getSequences()) {
+									// Get the EMF Vessel
+									final Vessel vessel = sequence.getVessel();
+									if (vessel == null) {
+										continue;
+									}
+									// Find the matching
+									final IResource res = annotatedSolution.getSequences().getResources().get(i);
+									final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+
+									// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
+									if (iVessel == vesselProvider.getVessel(res)) {
+										if (sequence.getEvents().size() > 0) {
+											final Event evt = sequence.getEvents().get(0);
+											if (evt instanceof StartEvent) {
+												startEvent = (StartEvent) evt;
+												break LOOP_OUTER;
+											}
 										}
 									}
 								}
 							}
 						}
-					}
 
-					if (startEvent != null) {
-						setPandLentries(profitAndLoss, startEvent);
-						setShippingCosts(shippingCost, startEvent, false);
-						setShippingCosts(shippingCostWithBoilOff, startEvent, true);
-					}
-				} else if (slot instanceof EndPortSlot) {
-					EndEvent endEvent = null;
-					//
-					for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
-						final ISequence seq = annotatedSolution.getSequences().getSequence(i);
-						final IResource res = annotatedSolution.getSequences().getResources().get(i);
-						if (seq.get(0) == element) {
-							for (final Sequence sequence : outputSchedule.getSequences()) {
-								final Vessel vessel = sequence.getVessel();
-								if (vessel == null) {
-									continue;
-								}
+						if (startEvent != null) {
+							setPandLentries(profitAndLoss, startEvent);
+							setShippingCosts(shippingCost, startEvent, false);
+							setShippingCosts(shippingCostWithBoilOff, startEvent, true);
+						}
+					} else if (slot instanceof EndPortSlot) {
+						EndEvent endEvent = null;
+						//
+						for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
+							final ISequence seq = annotatedSolution.getSequences().getSequence(i);
+							final IResource res = annotatedSolution.getSequences().getResources().get(i);
+							if (seq.get(0) == element) {
+								for (final Sequence sequence : outputSchedule.getSequences()) {
+									final Vessel vessel = sequence.getVessel();
+									if (vessel == null) {
+										continue;
+									}
 
-								final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
-								if (iVessel == res) {
-									if (sequence.getEvents().size() > 0) {
-										final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
-										if (evt instanceof EndEvent) {
-											endEvent = (EndEvent) evt;
-											break;
+									final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+									if (iVessel == res) {
+										if (sequence.getEvents().size() > 0) {
+											final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
+											if (evt instanceof EndEvent) {
+												endEvent = (EndEvent) evt;
+												break;
+											}
 										}
 									}
 								}
 							}
 						}
-					}
 
-					if (endEvent != null) {
-						setPandLentries(profitAndLoss, endEvent);
-						setShippingCosts(shippingCost, endEvent, false);
-						setShippingCosts(shippingCostWithBoilOff, endEvent, true);
+						if (endEvent != null) {
+							setPandLentries(profitAndLoss, endEvent);
+							setShippingCosts(shippingCost, endEvent, false);
+							setShippingCosts(shippingCostWithBoilOff, endEvent, true);
+						}
+					} else {
+						// for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
+						// AdditionalData additionalData = ScheduleFactory.eINSTANCE.createAdditionalData();
+						//
+						// final BookedRevenue revenue = ScheduleFactory.eINSTANCE.createBookedRevenue();
+						// revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
+						// revenue.setDate(entities.getDateFromHours(profitAndLoss.getBookingTime()));
+						// revenue.setValue((int) (entry.getFinalGroupValue() / Calculator.ScaleFactor));
+						// revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
+						// revenues.add(revenue);
+						// }
 					}
-				} else {
-					// for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-					// AdditionalData additionalData = ScheduleFactory.eINSTANCE.createAdditionalData();
-					//
-					// final BookedRevenue revenue = ScheduleFactory.eINSTANCE.createBookedRevenue();
-					// revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
-					// revenue.setDate(entities.getDateFromHours(profitAndLoss.getBookingTime()));
-					// revenue.setValue((int) (entry.getFinalGroupValue() / Calculator.ScaleFactor));
-					// revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
-					// revenues.add(revenue);
-					// }
 				}
 			}
 			final IProfitAndLossAnnotation generatedCharterOutProfitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss,
@@ -201,19 +203,43 @@ public class TradingExporterExtension implements IExporterExtension {
 				// emit p&l entry - depends on the type of slot associated with the element.
 				final IPortSlot slot = slotProvider.getPortSlot(element);
 
-				if (slot instanceof ILoadOption) {
-					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
-					// Find the slot visit linked to this load.
-					SlotVisit slotVisit = null;
-					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-							if (slotAllocation.getSlot() == modelSlot) {
-								slotVisit = slotAllocation.getSlotVisit();
-								break;
+				Event slotVisit = null;
+				final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+				// if (slot instanceof ILoadOption) {
+				// // Find the slot visit linked to this load.
+				// LOOP_SEARCH:
+				// for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
+				// for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+				// if (slotAllocation.getSlot() == modelSlot) {
+				// slotVisit = slotAllocation.getSlotVisit();
+				// break LOOP_SEARCH;
+				// }
+				// }
+				// }
+				// } else
+				{
+					// Slower lookup
+					LOOP_SEARCH: for (final Sequence sequence : outputSchedule.getSequences()) {
+						for (final Event event : sequence.getEvents()) {
+//							if (event instanceof StartEvent) {
+//								StartEvent startEvent = (StartEvent) event;
+//								if (startEvent.getSlotAllocation().getSlot() == modelSlot) {
+//									slotVisit = startEvent;
+//								}
+								// FIXME: no allocation etc linked up?
+//							} else 
+								if (event instanceof SlotVisit) {
+								final SlotVisit sv = (SlotVisit) event;
+								if (sv.getSlotAllocation().getSlot() == modelSlot) {
+									slotVisit = sv;
+									break LOOP_SEARCH;
+								}
 							}
 						}
 					}
+				}
 
+				if (slotVisit != null) {
 					// Loop forward until we find the event;
 					Event evt = slotVisit;
 					while (evt != null) {
