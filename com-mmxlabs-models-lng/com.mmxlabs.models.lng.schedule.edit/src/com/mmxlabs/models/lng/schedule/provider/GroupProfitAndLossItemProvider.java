@@ -137,12 +137,12 @@ public class GroupProfitAndLossItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		GroupProfitAndLoss groupProfitAndLoss = (GroupProfitAndLoss)object;
-		return getString("_UI_GroupProfitAndLoss_type") + " " + groupProfitAndLoss.getProfitAndLoss();
+		return String.format("$%,d", groupProfitAndLoss.getProfitAndLoss());
 	}
 
 	/**
