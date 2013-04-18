@@ -5,11 +5,11 @@
 package com.mmxlabs.shiplingo.platform.reports.properties;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -38,10 +38,9 @@ import com.mmxlabs.shiplingo.platform.reports.properties.ScheduledEventPropertyS
  */
 public class EventPropertySource implements IPropertySource {
 
+	private final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 	private final Event event;
 	private IPropertyDescriptor[] descriptors = null;
-
-	// private ExtraDataContainerPropertySource delegateSource;
 
 	public EventPropertySource(final Event event) {
 		this.event = event;
@@ -217,7 +216,8 @@ public class EventPropertySource implements IPropertySource {
 			}
 		}
 
-		java.util.List<EStructuralFeature> featureList = new ArrayList();
+		// Find the path to a ProfieAndLossContainer
+		final List<Object> featureList = new ArrayList<Object>();
 		ProfitAndLossContainer container = null;
 		if (event instanceof ProfitAndLossContainer) {
 			container = (ProfitAndLossContainer) event;
@@ -230,29 +230,13 @@ public class EventPropertySource implements IPropertySource {
 			featureList.add(SchedulePackage.eINSTANCE.getSlotAllocation_CargoAllocation());
 		}
 		if (container != null) {
-			ComposedAdapterFactory composedAdapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+			// Add final step the the group object
 			featureList.add(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss());
-			EMFPath path = new EMFPath(true, featureList);
-			EMFPathPropertyDescriptor desc = EMFPathPropertyDescriptor.create(event, composedAdapterFactory, SchedulePackage.eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss(), path);
+			// Create the property!
+			final EMFPathPropertyDescriptor desc = EMFPathPropertyDescriptor.create(event, adapterFactory, SchedulePackage.eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss(), featureList);
 			if (desc != null) {
 				list.add(desc);
 			}
-			//
-			// GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
-			// if (groupProfitAndLoss != null) {
-			// IItemPropertySource ps = (IItemPropertySource) composedAdapterFactory.adapt(groupProfitAndLoss, IItemPropertySource.class);
-			// if (ps != null) {
-			// IItemPropertyDescriptor propertyDescriptor = ps.getPropertyDescriptor(groupProfitAndLoss, SchedulePackage.eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss());
-			// if (propertyDescriptor != null) {
-			// org.eclipse.emf.edit.ui.provider.PropertyDescriptor desc = new org.eclipse.emf.edit.ui.provider.PropertyDescriptor(groupProfitAndLoss, propertyDescriptor);
-			// }
-			// }}
-			// list.addAll(Arrays.asList(af.getPropertySource(event).getPropertyDescriptors()));
-			// AdapProFa container.eResource().getResourceSet().getAdapterFactories()
-			// EMFPlugin.EclipsePlugin.Utils.corePlugin.getUtil.
-			// final ScenarioPropertySourceProvider delegateSource = new ScenarioPropertySourceProvider(container);
-			// // this.delegateSource = delegateSource;
-			// // list.addAll(Arrays.asList(delegateSource.getPropertyDescriptors()));
 		}
 		descriptors = list.toArray(new IPropertyDescriptor[0]);
 
