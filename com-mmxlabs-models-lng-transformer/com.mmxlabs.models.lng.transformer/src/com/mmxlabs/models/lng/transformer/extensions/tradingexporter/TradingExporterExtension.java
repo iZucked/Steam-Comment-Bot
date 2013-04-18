@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -71,6 +72,7 @@ public class TradingExporterExtension implements IExporterExtension {
 			final IShippingCostAnnotation shippingCost = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCost, IShippingCostAnnotation.class);
 			final IShippingCostAnnotation shippingCostWithBoilOff = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
 					IShippingCostAnnotation.class);
+
 			if (profitAndLoss != null) {
 				// emit p&l entry - depends on the type of slot associated with the element.
 				final IPortSlot slot = slotProvider.getPortSlot(element);
@@ -201,22 +203,25 @@ public class TradingExporterExtension implements IExporterExtension {
 
 				if (slot instanceof ILoadOption) {
 					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
-					CargoAllocation cargoAllocation = null;
+					// Find the slot visit linked to this load.
+					SlotVisit slotVisit = null;
 					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
 						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 							if (slotAllocation.getSlot() == modelSlot) {
-								cargoAllocation = allocation;
+								slotVisit = slotAllocation.getSlotVisit();
 								break;
 							}
 						}
 					}
-					if (cargoAllocation != null) {
-						for (final Event event : cargoAllocation.getEvents()) {
-							// TODO: Quick hack to find the charter event. Should do better search in case it is not here!
-							if (event instanceof GeneratedCharterOut) {
-								setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) event);
-							}
+
+					// Loop forward until we find the event;
+					Event evt = slotVisit;
+					while (evt != null) {
+						if (evt instanceof GeneratedCharterOut) {
+							setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) evt);
+							break;
 						}
+						evt = evt.getNextEvent();
 					}
 				}
 			}
@@ -229,21 +234,15 @@ public class TradingExporterExtension implements IExporterExtension {
 	}
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container) {
-		int idx = 0;
 		int totalGroupValue = 0;
-		GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+		final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
 		container.setGroupProfitAndLoss(groupProfitAndLoss);
 
 		final Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
-		if (entries.size() == 1) {
-			// For single entry, we look at shipping only.
-			// TODO: This is a mess!
-			idx = 1;
-		}
 		for (final IProfitAndLossEntry entry : entries) {
 
-//			TODO_CHECK_DUPLICATES_E_G_SAME FOR_EACH STAGE;
-			
+			// TODO_CHECK_DUPLICATES_E_G_SAME FOR_EACH STAGE;
+
 			// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
 			final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
 			streamData.setEntity(entities.getModelObject(entry.getEntity(), LegalEntity.class));
@@ -274,9 +273,8 @@ public class TradingExporterExtension implements IExporterExtension {
 			// detail.setName("Details");
 			// pnlData.getExtraData().add(detail);
 			groupProfitAndLoss.getEntityProfitAndLosses().add(streamData);
-			++idx;
 		}
-//		container.addExtraData(TradingConstants.ExtraData_GroupValue, "Group Value", totalGroupValue, ExtraDataFormatType.CURRENCY);
+		// container.addExtraData(TradingConstants.ExtraData_GroupValue, "Group Value", totalGroupValue, ExtraDataFormatType.CURRENCY);
 		groupProfitAndLoss.setProfitAndLoss(totalGroupValue);
 	}
 
@@ -284,73 +282,73 @@ public class TradingExporterExtension implements IExporterExtension {
 		if (shippingCostAnnotation == null) {
 			return;
 		}
-//		final int shippingCostValue = OptimiserUnitConvertor.convertToExternalFixedCost(shippingCostAnnotation.getShippingCost());
-//		final ExtraData shippingCostData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", shippingCostValue,
-//				ExtraDataFormatType.CURRENCY) : container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", shippingCostValue, ExtraDataFormatType.CURRENCY);
-//
-//		shippingCostData.addExtraData("date", "Date", entities.getDateFromHours(shippingCostAnnotation.getBookingTime()), ExtraDataFormatType.AUTO);
-//
-//		if (shippingCostAnnotation.getDetails() != null) {
-//			final ExtraData detail = exportDetailTree(shippingCostAnnotation.getDetails());
-//			detail.setName("Details");
-//			shippingCostData.getExtraData().add(detail);
-//		}
+		// final int shippingCostValue = OptimiserUnitConvertor.convertToExternalFixedCost(shippingCostAnnotation.getShippingCost());
+		// final ExtraData shippingCostData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", shippingCostValue,
+		// ExtraDataFormatType.CURRENCY) : container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", shippingCostValue, ExtraDataFormatType.CURRENCY);
+		//
+		// shippingCostData.addExtraData("date", "Date", entities.getDateFromHours(shippingCostAnnotation.getBookingTime()), ExtraDataFormatType.AUTO);
+		//
+		// if (shippingCostAnnotation.getDetails() != null) {
+		// final ExtraData detail = exportDetailTree(shippingCostAnnotation.getDetails());
+		// detail.setName("Details");
+		// shippingCostData.getExtraData().add(detail);
+		// }
 	}
 
-//	private ExtraData exportDetailTree(final IDetailTree details) {
-//		final ExtraData ad = TypesFactory.eINSTANCE.createExtraData();
-//
-//		ad.setName(details.getKey());
-//		ad.setKey(details.getKey());
-//
-//		Object value = details.getValue();
-//		boolean round = false;
-//		boolean valueSet = false;
-//		if (value instanceof IDetailTreeElement) {
-//			final IDetailTreeElement element = (IDetailTreeElement) value;
-//			value = element.getObject();
-//			if (element instanceof CurrencyDetailElement) {
-//				ad.setFormatType(ExtraDataFormatType.CURRENCY);
-//				round = true;
-//			} else if (element instanceof TotalCostDetailElement) {
-//				round = true;
-//				ad.setFormatType(ExtraDataFormatType.CURRENCY);
-//			} else if (element instanceof UnitPriceDetailElement) {
-//				ad.setFormatType(ExtraDataFormatType.STRING_FORMAT);
-//				ad.setFormat("$%,f");
-//			} else if (element instanceof DurationDetailElement) {
-//				// Set value here to avoid scaling below. Force to an Int as ExtraDataImpl expects an Integer object.
-//				ad.setFormatType(ExtraDataFormatType.DURATION);
-//				ad.setValue(((Number) value).intValue());
-//				valueSet = true;
-//			}
-//		}
-//		if (!valueSet) {
-//			if (value instanceof Serializable) {
-//				if (value instanceof Integer) {
-//					final int x = (Integer) value;
-//					if (round || x % Calculator.ScaleFactor == 0) {
-//						ad.setValue(x / Calculator.ScaleFactor);
-//					} else {
-//						ad.setValue(x / (double) Calculator.ScaleFactor);
-//					}
-//				} else if (value instanceof Long) {
-//					final long x = (Long) value;
-//					if (round || x % Calculator.ScaleFactor == 0) {
-//						ad.setValue((int) (x / Calculator.ScaleFactor));
-//					} else {
-//						ad.setValue(x / (double) Calculator.ScaleFactor);
-//					}
-//				} else {
-//					ad.setValue((Serializable) value);
-//				}
-//			}
-//		}
-//
-//		for (final IDetailTree child : details.getChildren()) {
-//			ad.getExtraData().add(exportDetailTree(child));
-//		}
-//
-//		return ad;
-//	}
+	// private ExtraData exportDetailTree(final IDetailTree details) {
+	// final ExtraData ad = TypesFactory.eINSTANCE.createExtraData();
+	//
+	// ad.setName(details.getKey());
+	// ad.setKey(details.getKey());
+	//
+	// Object value = details.getValue();
+	// boolean round = false;
+	// boolean valueSet = false;
+	// if (value instanceof IDetailTreeElement) {
+	// final IDetailTreeElement element = (IDetailTreeElement) value;
+	// value = element.getObject();
+	// if (element instanceof CurrencyDetailElement) {
+	// ad.setFormatType(ExtraDataFormatType.CURRENCY);
+	// round = true;
+	// } else if (element instanceof TotalCostDetailElement) {
+	// round = true;
+	// ad.setFormatType(ExtraDataFormatType.CURRENCY);
+	// } else if (element instanceof UnitPriceDetailElement) {
+	// ad.setFormatType(ExtraDataFormatType.STRING_FORMAT);
+	// ad.setFormat("$%,f");
+	// } else if (element instanceof DurationDetailElement) {
+	// // Set value here to avoid scaling below. Force to an Int as ExtraDataImpl expects an Integer object.
+	// ad.setFormatType(ExtraDataFormatType.DURATION);
+	// ad.setValue(((Number) value).intValue());
+	// valueSet = true;
+	// }
+	// }
+	// if (!valueSet) {
+	// if (value instanceof Serializable) {
+	// if (value instanceof Integer) {
+	// final int x = (Integer) value;
+	// if (round || x % Calculator.ScaleFactor == 0) {
+	// ad.setValue(x / Calculator.ScaleFactor);
+	// } else {
+	// ad.setValue(x / (double) Calculator.ScaleFactor);
+	// }
+	// } else if (value instanceof Long) {
+	// final long x = (Long) value;
+	// if (round || x % Calculator.ScaleFactor == 0) {
+	// ad.setValue((int) (x / Calculator.ScaleFactor));
+	// } else {
+	// ad.setValue(x / (double) Calculator.ScaleFactor);
+	// }
+	// } else {
+	// ad.setValue((Serializable) value);
+	// }
+	// }
+	// }
+	//
+	// for (final IDetailTree child : details.getChildren()) {
+	// ad.getExtraData().add(exportDetailTree(child));
+	// }
+	//
+	// return ad;
+	// }
 }
