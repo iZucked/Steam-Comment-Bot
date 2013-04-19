@@ -53,6 +53,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -223,10 +224,12 @@ public class LDDEditor extends Dialog {
 			}
 
 			final MenuManager mgr = new MenuManager();
+			final LNGScenarioModel root = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+			
 			viewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
 
 				private Menu menu;
-				private CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), scenarioEditingLocation);
+				private CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), scenarioEditingLocation, root, root.getPortfolioModel());
 
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
