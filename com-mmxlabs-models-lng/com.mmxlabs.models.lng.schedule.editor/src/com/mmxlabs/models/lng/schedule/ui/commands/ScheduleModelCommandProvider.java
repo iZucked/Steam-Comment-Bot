@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -51,18 +52,25 @@ public class ScheduleModelCommandProvider extends BaseModelCommandProvider<Objec
 	 */
 	@Override
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		final ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
-		if (scheduleModel == null)
-			return null;
 
-		final List<EObject> delete = new ArrayList<EObject>(2);
+		if (rootObject instanceof LNGScenarioModel) {
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+			final ScheduleModel scheduleModel = scenarioModel.getPortfolioModel().getScheduleModel();
+			if (scheduleModel == null) {
+				return null;
+			}
 
-		if (scheduleModel.getSchedule() != null) {
-			delete.add(scheduleModel.getSchedule());
+			final List<EObject> delete = new ArrayList<EObject>(2);
+
+			if (scheduleModel.getSchedule() != null) {
+				delete.add(scheduleModel.getSchedule());
+			}
+
+			if (delete.isEmpty()) {
+				return null;
+			}
+			return DeleteCommand.create(domain, delete);
 		}
-			
-		if (delete.isEmpty())
-			return null;
-		return DeleteCommand.create(domain, delete);
+		return null;
 	}
 }

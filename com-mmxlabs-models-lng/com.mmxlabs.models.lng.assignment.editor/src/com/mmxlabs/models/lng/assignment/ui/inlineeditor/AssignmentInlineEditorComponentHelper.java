@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
@@ -364,16 +365,18 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 						if (elementAssignment != null) {
 							if (vessel instanceof VesselClass) {
 								// assign to a new spot
-								final AssignmentModel im = rootObject.getSubModel(AssignmentModel.class);
-								if (im != null) {
-									int maxSpot = 0;
-									for (final ElementAssignment ea : im.getElementAssignments()) {
-										maxSpot = Math.max(maxSpot, ea.getSpotIndex());
+								if (rootObject instanceof LNGScenarioModel) {
+									final AssignmentModel im = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
+									if (im != null) {
+										int maxSpot = 0;
+										for (final ElementAssignment ea : im.getElementAssignments()) {
+											maxSpot = Math.max(maxSpot, ea.getSpotIndex());
+										}
+										maxSpot++;
+										handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (VesselClass) vessel, elementAssignment, maxSpot), elementAssignment,
+												AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+										return;
 									}
-									maxSpot++;
-									handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (VesselClass) vessel, elementAssignment, maxSpot), elementAssignment,
-											AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
-									return;
 								}
 							} else if (vessel instanceof Vessel) {
 								handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (Vessel) vessel, elementAssignment), elementAssignment,
@@ -492,11 +495,13 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
-		final EObject assignment = (EObject) AssignmentEditorHelper.getElementAssignment(root.getSubModel(AssignmentModel.class), (UUIDObject) value);
-		if (assignment == null) {
-			return super.getExternalEditingRange(root, value);
+		if (root instanceof LNGScenarioModel) {
+			final EObject assignment = (EObject) AssignmentEditorHelper.getElementAssignment(((LNGScenarioModel) root).getPortfolioModel().getAssignmentModel(), (UUIDObject) value);
+			if (assignment != null) {
+				return Collections.singletonList(assignment);
+			}
 		}
-		return Collections.singletonList(assignment);
+		return super.getExternalEditingRange(root, value);
 	}
 
 	@Override

@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -69,7 +70,10 @@ public class DistanceLineViewer extends GridTableViewer {
 		super(parent, style);
 	}
 
-	public void init(final EditingDomain editingDomain, final MMXRootObject scenario) {
+	/**
+	 * @since 3.0
+	 */
+	public void init(final EditingDomain editingDomain, final LNGScenarioModel scenario) {
 		setContentProvider(new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -86,7 +90,7 @@ public class DistanceLineViewer extends GridTableViewer {
 				if (inputElement instanceof Route) {
 					final Route dm = (Route) inputElement;
 					final Map<Port, Map<Port, RouteLine>> values = new HashMap<Port, Map<Port, RouteLine>>();
-					final PortModel portModel = scenario.getSubModel(PortModel.class);
+					final PortModel portModel = scenario.getPortModel();
 					for (final Port p : portModel.getPorts()) {
 						values.put(p, new HashMap<Port, RouteLine>());
 					}
@@ -124,7 +128,7 @@ public class DistanceLineViewer extends GridTableViewer {
 		// });
 
 		final ArrayList<Port> ports = new ArrayList<Port>();
-		final PortModel portModel = scenario.getSubModel(PortModel.class);
+		final PortModel portModel = scenario.getPortModel();
 		ports.addAll(portModel.getPorts());
 		Collections.sort(ports, new Comparator<Port>() {
 			@Override

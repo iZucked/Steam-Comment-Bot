@@ -25,10 +25,13 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.provider.CargoItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class CargoImportActionTest {
@@ -149,10 +152,10 @@ public class CargoImportActionTest {
 		}
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -219,10 +222,10 @@ public class CargoImportActionTest {
 		}
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -349,10 +352,10 @@ public class CargoImportActionTest {
 		}
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -419,10 +422,10 @@ public class CargoImportActionTest {
 		}
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -495,10 +498,10 @@ public class CargoImportActionTest {
 		}
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -594,10 +597,10 @@ public class CargoImportActionTest {
 		}
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -737,10 +740,10 @@ public class CargoImportActionTest {
 
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -806,7 +809,7 @@ public class CargoImportActionTest {
 		Assert.assertNull(originalDischargeSlot.getCargo());
 
 		Cargo importedCargo = cargoModel.getCargoes().get(0);
-		
+
 		// Failure - most likely we need to null a slot reference that was normally done automatically in the 2 slot case
 		Assert.assertEquals(2, importedCargo.getSlots().size());
 		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(0)));
@@ -923,10 +926,10 @@ public class CargoImportActionTest {
 
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -1117,10 +1120,10 @@ public class CargoImportActionTest {
 
 		// Build the MMXRootObject used when replacing references
 		{
-			final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-			final MMXSubModel subModel = MMXCoreFactory.eINSTANCE.createMMXSubModel();
-			rootObject.getSubModels().add(subModel);
-			subModel.setSubModelInstance(cargoModel);
+			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+			rootObject.setPortfolioModel(portfolioModel);
+			portfolioModel.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();

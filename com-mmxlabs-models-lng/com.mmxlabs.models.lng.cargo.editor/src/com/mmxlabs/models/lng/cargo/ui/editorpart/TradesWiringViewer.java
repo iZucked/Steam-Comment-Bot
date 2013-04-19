@@ -60,9 +60,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -96,6 +93,8 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootD
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -154,7 +153,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final CargoEditingCommands cec;
 	private final CargoEditorMenuHelper menuHelper;
 
-	private final Image wiredImage;
 	private final Image lockedImage;
 
 	private final Object updateLock = new Object();
@@ -163,9 +161,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
 		super(page, part, scenarioEditingLocation, actionBars);
-		this.cec = new CargoEditingCommands(scenarioEditingLocation);
-		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation);
-		wiredImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LINK);
+
+		final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+		this.cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, scenarioModel.getPortfolioModel());
+		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel, scenarioModel.getPortfolioModel());
 		lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
 	}
 
@@ -198,7 +197,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public EObject getCurrentContainer() {
-				return scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+				return getPortfolioModel().getCargoModel();
 			}
 
 			/**
@@ -271,9 +270,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					@Override
 					public Object[] getElements(final Object inputElement) {
 
-						final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
-						final AssignmentModel assignmentModel = scenarioEditingLocation.getRootObject().getSubModel(AssignmentModel.class);
-						final ScheduleModel scheduleModel = scenarioEditingLocation.getRootObject().getSubModel(ScheduleModel.class);
+						final CargoModel cargoModel = getPortfolioModel().getCargoModel();
+						final AssignmentModel assignmentModel = getPortfolioModel().getAssignmentModel();
+						final ScheduleModel scheduleModel = getPortfolioModel().getScheduleModel();
 
 						final RootData root = setCargoes(assignmentModel, cargoModel, scheduleModel);
 
@@ -875,8 +874,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final List<Command> setCommands = new LinkedList<Command>();
 		final List<Command> deleteCommands = new LinkedList<Command>();
 
-		final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
-		final AssignmentModel assignmentModel = scenarioEditingLocation.getRootObject().getSubModel(AssignmentModel.class);
+		final CargoModel cargoModel = getPortfolioModel().getCargoModel();
+		final AssignmentModel assignmentModel = getPortfolioModel().getAssignmentModel();
 
 		final Set<Slot> slotsToRemove = new HashSet<Slot>();
 		final Set<Slot> slotsToKeep = new HashSet<Slot>();
@@ -975,6 +974,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		executeCurrentWiringCommand(currentWiringCommand);
 	}
 
+	protected LNGPortfolioModel getPortfolioModel() {
+		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getPortfolioModel();
+	}
+
 	private void executeCurrentWiringCommand(final CompoundCommand currentWiringCommand) {
 		// Delete commands can be slow, so show the busy indicator while deleting.
 		if (currentWiringCommand.isEmpty()) {
@@ -990,11 +993,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		BusyIndicator.showWhile(null, runnable);
 	}
 
-	private void refreshContent() {
-
-		performControlUpdate(true);
-	}
-
 	/**
 	 * Sub-classes should override to handle mouse drag notifications
 	 * 
@@ -1003,40 +1001,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 */
 	protected void requestScrollTo(final int newXPos, final int newYPos) {
 
-	}
-
-	/**
-	 * A combined {@link MouseListener} and {@link MouseMoveListener} to call {@link CargoWiringComposite#requestScrollTo(int, int)} during mouse drag
-	 * 
-	 */
-	private class WiringDiagramMouseListener implements MouseListener, MouseMoveListener {
-
-		private boolean dragging = false;
-
-		@Override
-		public void mouseMove(final MouseEvent e) {
-			if (dragging) {
-
-				final Point p = getScenarioViewer().getGrid().toDisplay(e.x, e.y);
-				requestScrollTo(p.x, p.y);
-			}
-		}
-
-		@Override
-		public void mouseDoubleClick(final MouseEvent e) {
-
-		}
-
-		@Override
-		public void mouseDown(final MouseEvent e) {
-			dragging = true;
-
-		}
-
-		@Override
-		public void mouseUp(final MouseEvent e) {
-			dragging = false;
-		}
 	}
 
 	private GridViewerColumn addWiringColumn() {
@@ -1120,7 +1084,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
-			final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+			final CargoModel cargoModel = getPortfolioModel().getCargoModel();
 
 			{
 				final Action newDESPurchase = new Action("New DES Purchase") {
@@ -1240,7 +1204,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 				if (ret == Window.OK) {
 
-					final CargoModel cargomodel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+					final CargoModel cargomodel = getPortfolioModel().getCargoModel();
 
 					final CompoundCommand cmd = new CompoundCommand("New LDD Cargo");
 					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
@@ -1267,7 +1231,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							throw new IllegalStateException("Unable to cancel edit - command stack history is corrupt");
 						}
 					}
-					
+
 				}
 			} finally {
 				scenarioEditingLocation.setDisableUpdates(false);

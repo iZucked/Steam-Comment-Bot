@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -30,32 +31,37 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  * @author Simon McGregor
  * 
- * Utility class to provide methods for help when validating contract constraints. 
+ *         Utility class to provide methods for help when validating contract constraints.
  * @since 3.0
- *
+ * 
  */
 public class PriceExpressionUtils {
 	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*()])");
 
-	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression,
-			final List<IStatus> failures) {
+	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final List<IStatus> failures) {
 		validatePriceExpression(ctx, object, feature, priceExpression, getParser(), failures);
 	}
-		
+
 	/**
 	 * @author Simon McGregor
 	 * 
-	 * Validates a price expression for a given EMF object
+	 *         Validates a price expression for a given EMF object
 	 * 
-	 * @param ctx A validation context.
-	 * @param object The EMF object to associate validation failures with.
-	 * @param feature The structural feature to attach validation failures to.
-	 * @param priceExpression The price expression to validate.
-	 * @param parser A parser for price expressions.
-	 * @param failures The list of validation failures to append to.
+	 * @param ctx
+	 *            A validation context.
+	 * @param object
+	 *            The EMF object to associate validation failures with.
+	 * @param feature
+	 *            The structural feature to attach validation failures to.
+	 * @param priceExpression
+	 *            The price expression to validate.
+	 * @param parser
+	 *            A parser for price expressions.
+	 * @param failures
+	 *            The list of validation failures to append to.
 	 */
-	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression,
-			final SeriesParser parser, final List<IStatus> failures) {
+	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final SeriesParser parser,
+			final List<IStatus> failures) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Price Expression is missing."));
@@ -65,7 +71,7 @@ public class PriceExpressionUtils {
 		}
 
 		Matcher matcher = pattern.matcher(priceExpression);
-		
+
 		if (matcher.find()) {
 			String message = String.format("Price Expression contains unexpected character '%s'.", matcher.group(1));
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
@@ -73,7 +79,7 @@ public class PriceExpressionUtils {
 			failures.add(dsd);
 			return;
 		}
-		
+
 		if (parser != null) {
 			ISeries parsed = null;
 			String hints = "";
@@ -107,20 +113,23 @@ public class PriceExpressionUtils {
 		if (extraValidationContext != null) {
 			final MMXRootObject rootObject = extraValidationContext.getRootObject();
 
-			final SeriesParser indices = new SeriesParser();
+			if (rootObject instanceof LNGScenarioModel) {
+				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final SeriesParser indices = new SeriesParser();
 
-			final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
-			for (final Index<Double> index : pricingModel.getCommodityIndices()) {
-				if (index instanceof DataIndex) {
-					// For this validation, we do not need real times or values
-					final int[] times = new int[1];
-					final Number[] nums = new Number[1];
-					indices.addSeriesData(index.getName(), times, nums);
-				} else if (index instanceof DerivedIndex) {
-					indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+				for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+					if (index instanceof DataIndex) {
+						// For this validation, we do not need real times or values
+						final int[] times = new int[1];
+						final Number[] nums = new Number[1];
+						indices.addSeriesData(index.getName(), times, nums);
+					} else if (index instanceof DerivedIndex) {
+						indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+					}
 				}
+				return indices;
 			}
-			return indices;
 		}
 		return null;
 	}

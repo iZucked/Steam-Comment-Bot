@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.ui.editorpart.VesselClassViewerPane;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -25,8 +26,9 @@ public class VesselClassView extends ScenarioTableViewerView<VesselClassViewerPa
 
 	@Override
 	protected void initViewerPane(final VesselClassViewerPane pane) {
-		pane.init(Arrays.asList(new EReference[] { FleetPackage.eINSTANCE.getFleetModel_VesselClasses() }), getAdapterFactory(), getEditingDomain().getCommandStack());
-		pane.getViewer().setInput(getRootObject().getSubModel(FleetModel.class));
+		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses() }), getAdapterFactory(),
+				getEditingDomain().getCommandStack());
+		pane.getViewer().setInput(getRootObject());
 	}
 
 	@Override

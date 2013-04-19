@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -111,16 +112,16 @@ public class CargoImporter extends DefaultClassImporter {
 		final List<EObject> newResults = new ArrayList<EObject>(3);
 		boolean keepCargo = true;
 		if (load == null || load.getWindowStart() == null) {
-				keepCargo = false;
-			} else {
-				newResults.add(load);
-			}
+			keepCargo = false;
+		} else {
+			newResults.add(load);
+		}
 		if (discharge == null || discharge.getWindowStart() == null) {
 
-				keepCargo = false;
-			} else {
-				newResults.add(discharge);
-			}
+			keepCargo = false;
+		} else {
+			newResults.add(discharge);
+		}
 
 		if (!keepCargo) {
 			cargo.getSlots().clear();
@@ -170,27 +171,30 @@ public class CargoImporter extends DefaultClassImporter {
 			context.doLater(new IDeferment() {
 				@Override
 				public void run(final IImportContext context) {
-					final AssignmentModel assignmentModel = context.getRootObject().getSubModel(AssignmentModel.class);
-					if (assignmentModel != null) {
-						ElementAssignment existing = null;
-						for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
-							if (ea.getAssignedObject() == cargo_) {
-								existing = ea;
-								break;
+					MMXRootObject rootObject = context.getRootObject();
+					if (rootObject instanceof LNGScenarioModel) {
+						final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
+						if (assignmentModel != null) {
+							ElementAssignment existing = null;
+							for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
+								if (ea.getAssignedObject() == cargo_) {
+									existing = ea;
+									break;
+								}
 							}
-						}
-						if (existing == null) {
-							existing = AssignmentFactory.eINSTANCE.createElementAssignment();
-							assignmentModel.getElementAssignments().add(existing);
-							existing.setAssignedObject(cargo_);
-						}
+							if (existing == null) {
+								existing = AssignmentFactory.eINSTANCE.createElementAssignment();
+								assignmentModel.getElementAssignments().add(existing);
+								existing.setAssignedObject(cargo_);
+							}
 
-						// attempt to find vessel
-						final NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
-						if (vessel instanceof Vessel) {
-							existing.setAssignment((Vessel) vessel);
-						} else {
-							context.addProblem(noVessel);
+							// attempt to find vessel
+							final NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
+							if (vessel instanceof Vessel) {
+								existing.setAssignment((Vessel) vessel);
+							} else {
+								context.addProblem(noVessel);
+							}
 						}
 					}
 				}

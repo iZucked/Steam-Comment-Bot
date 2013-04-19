@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -33,7 +34,7 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		// Check for correct owner. For example we do not want to trigger this for cargoes being added to cargo groups.
-		if (parameter.getOwner()  == null || parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel) {
+		if (parameter.getOwner() == null || parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel) {
 			return super.provideAdditionalCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
 		}
 
@@ -67,19 +68,27 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 
 	@Override
 	protected Command objectAdded(final EditingDomain domain, final MMXRootObject rootObject, final Object added, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
-		ea.setAssignedObject((UUIDObject) added);
-		return AddCommand.create(domain, rootObject.getSubModel(AssignmentModel.class), AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), ea);
+		if (rootObject instanceof LNGScenarioModel) {
+
+			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
+			ea.setAssignedObject((UUIDObject) added);
+			return AddCommand.create(domain, lngScenarioModel.getPortfolioModel().getAssignmentModel(), AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), ea);
+		}
+		return null;
 	}
 
 	@Override
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		final ElementAssignment ea = AssignmentEditorHelper.getElementAssignment(rootObject.getSubModel(AssignmentModel.class), (UUIDObject) deleted);
-		if (ea != null) {
-			return DeleteCommand.create(domain, ea);
-		} else {
-			return null;
+		if (rootObject instanceof LNGScenarioModel) {
+
+			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final ElementAssignment ea = AssignmentEditorHelper.getElementAssignment(lngScenarioModel.getPortfolioModel().getAssignmentModel(), (UUIDObject) deleted);
+			if (ea != null) {
+				return DeleteCommand.create(domain, ea);
+			}
 		}
+		return null;
 	}
 
 }

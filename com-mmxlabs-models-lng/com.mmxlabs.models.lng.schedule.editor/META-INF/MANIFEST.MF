@@ -16,9 +16,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.ui;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.lng.schedule.edit;bundle-version="[3.0.0,4.0.0)";visibility:=reexport,
  com.mmxlabs.models.util;bundle-version="[3.0.0,4.0.0)",
- com.mmxlabs.models.lng.cargo;bundle-version="[3.0.0,4.0.0)",
- com.mmxlabs.models.lng.fleet;bundle-version="[3.0.0,4.0.0)",
- com.mmxlabs.models.lng.port;bundle-version="[3.0.0,4.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.common;bundle-version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
 Import-Package: org.slf4j;version="1.6.4"

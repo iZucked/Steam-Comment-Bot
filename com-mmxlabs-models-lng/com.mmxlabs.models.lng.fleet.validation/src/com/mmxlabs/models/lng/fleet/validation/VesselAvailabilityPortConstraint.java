@@ -14,13 +14,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -96,58 +97,58 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 		} else if (target instanceof VesselClass) {
 			final VesselClass vesselClass = (VesselClass) target;
 			final MMXRootObject rootObject = extraContext.getRootObject();
-			if (rootObject == null) {
-				return Activator.PLUGIN_ID;
-			}
+			if (rootObject instanceof LNGScenarioModel) {
 
-			final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
 
-			final HashSet<String> badPorts = new HashSet<String>();
-			final List<String> badVessels = new LinkedList<String>();
-			for (final VesselAvailability availability : fleetModel.getScenarioFleetModel().getVesselAvailabilities()) {
-				final Vessel v = availability.getVessel();
-				if (extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
+				final HashSet<String> badPorts = new HashSet<String>();
+				final List<String> badVessels = new LinkedList<String>();
+				for (final VesselAvailability availability : portfolioModel.getScenarioFleetModel().getVesselAvailabilities()) {
+					final Vessel v = availability.getVessel();
+					if (extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
 
-					final Set<Port> inaccessiblePortSet = SetUtils.getObjects(vesselClass.getInaccessiblePorts());
+						final Set<Port> inaccessiblePortSet = SetUtils.getObjects(vesselClass.getInaccessiblePorts());
 
-					boolean bad = false;
-					{
-						final Set<Port> availabilityPortSet = SetUtils.getObjects(availability.getStartAt());
-						for (final Port p : availabilityPortSet) {
+						boolean bad = false;
+						{
+							final Set<Port> availabilityPortSet = SetUtils.getObjects(availability.getStartAt());
+							for (final Port p : availabilityPortSet) {
 
-							// No port match
-							if (inaccessiblePortSet.contains(p)) {
-								badPorts.add(p.getName());
-								if (!bad) {
+								// No port match
+								if (inaccessiblePortSet.contains(p)) {
+									badPorts.add(p.getName());
+									if (!bad) {
 
+										bad = true;
+										badVessels.add(v.getName());
+									}
+								}
+							}
+						}
+						{
+							final Set<Port> availabilityPortSet = SetUtils.getObjects(availability.getEndAt());
+							for (final Port p : availabilityPortSet) {
+
+								// No port match
+								if (inaccessiblePortSet.contains(p)) {
+									badPorts.add(p.getName());
 									bad = true;
 									badVessels.add(v.getName());
 								}
 							}
 						}
-					}
-					{
-						final Set<Port> availabilityPortSet = SetUtils.getObjects(availability.getEndAt());
-						for (final Port p : availabilityPortSet) {
 
-							// No port match
-							if (inaccessiblePortSet.contains(p)) {
-								badPorts.add(p.getName());
-								bad = true;
-								badVessels.add(v.getName());
-							}
-						}
 					}
 
 				}
 
-			}
-
-			if (badVessels.isEmpty() == false) {
-				final String message = String.format("The vessels %s have start / end requirements at the ports %s, which are in the inaccessible port list.", badVessels, badPorts);
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts());
-				statuses.add(dcsd);
+				if (badVessels.isEmpty() == false) {
+					final String message = String.format("The vessels %s have start / end requirements at the ports %s, which are in the inaccessible port list.", badVessels, badPorts);
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts());
+					statuses.add(dcsd);
+				}
 			}
 		}
 		return Activator.PLUGIN_ID;

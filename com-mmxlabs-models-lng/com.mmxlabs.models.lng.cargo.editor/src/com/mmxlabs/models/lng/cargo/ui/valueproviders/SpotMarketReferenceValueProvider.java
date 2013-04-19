@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -41,44 +42,47 @@ public class SpotMarketReferenceValueProvider extends BaseReferenceValueProvider
 	@Override
 	public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
 
-		final EStructuralFeature feature;
-		if (target instanceof SpotLoadSlot) {
+		if (rootObject instanceof LNGScenarioModel) {
+			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final EStructuralFeature feature;
+			if (target instanceof SpotLoadSlot) {
 
-			final SpotLoadSlot slot = (SpotLoadSlot) target;
+				final SpotLoadSlot slot = (SpotLoadSlot) target;
 
-			if (slot.isDESPurchase()) {
-				feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket();
+				if (slot.isDESPurchase()) {
+					feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket();
+				} else {
+					feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobPurchasesSpotMarket();
+				}
+			} else if (target instanceof SpotDischargeSlot) {
+
+				final SpotDischargeSlot slot = (SpotDischargeSlot) target;
+
+				if (slot.isFOBSale()) {
+					feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket();
+				} else {
+					feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesSalesSpotMarket();
+				}
 			} else {
-				feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobPurchasesSpotMarket();
+				feature = null;
 			}
-		} else if (target instanceof SpotDischargeSlot) {
 
-			final SpotDischargeSlot slot = (SpotDischargeSlot) target;
+			if (feature != null) {
 
-			if (slot.isFOBSale()) {
-				feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket();
-			} else {
-				feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesSalesSpotMarket();
-			}
-		} else {
-			feature = null;
-		}
+				final SpotMarketsModel spotMarketsModel = lngScenarioModel.getSpotMarketsModel();
+				final SpotMarketGroup group = (SpotMarketGroup) spotMarketsModel.eGet(feature);
+				if (group != null) {
+					final List<Pair<String, EObject>> values = Lists.transform(group.getMarkets(), new Function<SpotMarket, Pair<String, EObject>>() {
 
-		if (feature != null) {
+						@Override
+						public Pair<String, EObject> apply(final SpotMarket market) {
+							return new Pair<String, EObject>(market.getName(), market);
+						}
 
-			final SpotMarketsModel spotMarketsModel = rootObject.getSubModel(SpotMarketsModel.class);
-			final SpotMarketGroup group = (SpotMarketGroup) spotMarketsModel.eGet(feature);
-			if (group != null) {
-				final List<Pair<String, EObject>> values = Lists.transform(group.getMarkets(), new Function<SpotMarket, Pair<String, EObject>>() {
-
-					@Override
-					public Pair<String, EObject> apply(final SpotMarket market) {
-						return new Pair<String, EObject>(market.getName(), market);
-					}
-
-				});
-				// values.add(0, null);
-				return values;
+					});
+					// values.add(0, null);
+					return values;
+				}
 			}
 		}
 		return Collections.emptyList();

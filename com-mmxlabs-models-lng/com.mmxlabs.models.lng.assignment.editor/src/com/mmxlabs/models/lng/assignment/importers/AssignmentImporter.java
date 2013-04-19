@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -57,26 +58,30 @@ public class AssignmentImporter {
 						@Override
 						public void run(final IImportContext context) {
 							final MMXRootObject root = context.getRootObject();
-							final AssignmentModel im = root.getSubModel(AssignmentModel.class);
-							if (im != null) {
-								// Loop over all named objects and find the first object which can be used.
-								for (final NamedObject o : context.getNamedObjects(aon.trim())) {
-									if (o instanceof Cargo || o instanceof VesselEvent) {
-										final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
-										ea.setAssignedObject((UUIDObject) o);
-										ea.setSequence(seq);
+							if (root instanceof LNGScenarioModel) {
+								LNGScenarioModel lngScenarioModel = (LNGScenarioModel) root;
 
-										final NamedObject v = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
-										if (v instanceof Vessel) {
-											ea.setAssignment((Vessel) v);
-										} else if (v instanceof VesselClass) {
+								final AssignmentModel im = lngScenarioModel.getPortfolioModel().getAssignmentModel();
+								if (im != null) {
+									// Loop over all named objects and find the first object which can be used.
+									for (final NamedObject o : context.getNamedObjects(aon.trim())) {
+										if (o instanceof Cargo || o instanceof VesselEvent) {
+											final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
+											ea.setAssignedObject((UUIDObject) o);
+											ea.setSequence(seq);
 
-											ea.setSpotIndex(spotIndex);
-											ea.setAssignment((VesselClass)v);
+											final NamedObject v = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
+											if (v instanceof Vessel) {
+												ea.setAssignment((Vessel) v);
+											} else if (v instanceof VesselClass) {
+
+												ea.setSpotIndex(spotIndex);
+												ea.setAssignment((VesselClass) v);
+											}
+
+											im.getElementAssignments().add(ea);
+											break;
 										}
-
-										im.getElementAssignments().add(ea);
-										break;
 									}
 								}
 							}

@@ -136,6 +136,11 @@
           subModelClassName="com.mmxlabs.models.lng.fleet.FleetModel"
           subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.FleetModelImporter">
     </submodelImporter>
+     <submodelImporter
+          ID="com.mmxlabs.models.lng.fleet.editor.ScenarioFleetModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.fleet.ScenarioFleetModel"
+          subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.ScenarioFleetModelImporter">
+    </submodelImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">

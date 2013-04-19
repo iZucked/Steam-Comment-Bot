@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -46,28 +47,28 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	}
 
 	private List<Pair<String, EObject>> getAllowedValues(final EObject target, List<Pair<String, EObject>> storage) {
-		if (storage == null) 
+		if (storage == null)
 			storage = new ArrayList<Pair<String, EObject>>();
-		else 
+		else
 			storage.clear();
-		
+
 		storage.addAll(valueProvider.getAllowedValues(target, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment()));
-		
+
 		return storage;
 	}
-	
+
 	@Override
 	public void setValue(final Object object, final Object value) {
 		// grar.
-		final AssignmentModel input = location.getRootObject().getSubModel(AssignmentModel.class);
+		final AssignmentModel input = getAssignmentModel();
 		if (input != null) {
-			// 
+			//
 			if (value == null || value.equals(-1))
 				return;
-			
+
 			allowedValues = getAllowedValues((EObject) object, allowedValues);
-						
-			// locate the appropriate value in the list of options 
+
+			// locate the appropriate value in the list of options
 			final AVesselSet<Vessel> set = (AVesselSet<Vessel>) (allowedValues.get((Integer) value).getSecond());
 			final EditingDomain ed = location.getEditingDomain();
 
@@ -84,21 +85,29 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		}
 		return new ComboBoxCellEditor(parent, items);
 	}
-	
+
 	public AVesselSet<Vessel> getVessel(final Object object) {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
-			final AssignmentModel input = location.getRootObject().getSubModel(AssignmentModel.class);
+			final AssignmentModel input = getAssignmentModel();
 			if (input != null) {
-				ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, cargo);
+				final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, cargo);
 				if (assignment != null)
 					return assignment.getAssignment();
 			}
 		}
 
 		return null;
-		
+
+	}
+
+	protected AssignmentModel getAssignmentModel() {
+		if (location.getRootObject() instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) location.getRootObject();
+			return lngScenarioModel.getPortfolioModel().getAssignmentModel();
+		}
+		return null;
 	}
 
 	@Override
@@ -106,10 +115,10 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
-			final AssignmentModel input = location.getRootObject().getSubModel(AssignmentModel.class);
+			final AssignmentModel input = getAssignmentModel();
 			if (input != null) {
-				ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, cargo);
-				
+				final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, cargo);
+
 				allowedValues = getAllowedValues((EObject) object, allowedValues);
 				for (int i = 0; i < allowedValues.size(); i++) {
 					if (Equality.isEqual(allowedValues.get(i).getSecond(), assignment.getAssignment())) {
@@ -127,7 +136,6 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		return object instanceof Cargo && (((Cargo) object).getCargoType() == CargoType.FLEET);
 	}
 
-
 	@Override
 	public String render(final Object object) {
 		// TODO: document this case
@@ -135,23 +143,23 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 			return "";
 		}
 		if (object instanceof Cargo) {
-			Cargo cargo = (Cargo) object;
-			// get the VesselSet currently attached to the cargo 
-			AVesselSet vs = getVessel(cargo);
-			// by preference, find the string attached to this object by the value provider 
-			for (Pair<String, EObject> pair: getAllowedValues(cargo, allowedValues)) {
+			final Cargo cargo = (Cargo) object;
+			// get the VesselSet currently attached to the cargo
+			final AVesselSet vs = getVessel(cargo);
+			// by preference, find the string attached to this object by the value provider
+			for (final Pair<String, EObject> pair : getAllowedValues(cargo, allowedValues)) {
 				if (pair.getSecond() == vs)
 					return pair.getFirst();
 			}
 			// if no string has been attached to the object, return a default string representation
 			if (vs == null)
-				// this case should not occur, since the value provider should offer null as an option 
+				// this case should not occur, since the value provider should offer null as an option
 				return "(Null)";
 			else
 				// fall back on displaying the VesselSet's name
 				return vs.getName();
 		}
-		
+
 		// This case can happen in e.g. the wiring editor row slot only rows
 		return "";
 	}
@@ -168,6 +176,6 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
-		return Collections.singleton(new Pair<Notifier, List<Object>>(location.getRootObject().getSubModel(AssignmentModel.class), Collections.emptyList()));
+		return Collections.singleton(new Pair<Notifier, List<Object>>(getAssignmentModel(), Collections.emptyList()));
 	}
 }

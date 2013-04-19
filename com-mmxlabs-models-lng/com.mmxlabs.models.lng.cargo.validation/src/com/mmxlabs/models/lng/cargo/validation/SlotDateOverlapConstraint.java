@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -211,25 +212,27 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 		final PortSlotCounter psc = new PortSlotCounter();
 
 		final MMXRootObject rootObject = extraValidationContext.getRootObject();
-		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+		if (rootObject instanceof LNGScenarioModel) {
+			final CargoModel cargoModel = ((LNGScenarioModel)rootObject).getPortfolioModel().getCargoModel();
 
-		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-			if (slot instanceof SpotSlot) {
-				final SpotSlot spotSlot = (SpotSlot) slot;
-				if (spotSlot.getMarket() != null) {
-					continue;
+			for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+				if (slot instanceof SpotSlot) {
+					final SpotSlot spotSlot = (SpotSlot) slot;
+					if (spotSlot.getMarket() != null) {
+						continue;
+					}
 				}
+				psc.addSlot(slot);
 			}
-			psc.addSlot(slot);
-		}
-		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-			if (slot instanceof SpotSlot) {
-				final SpotSlot spotSlot = (SpotSlot) slot;
-				if (spotSlot.getMarket() != null) {
-					continue;
+			for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+				if (slot instanceof SpotSlot) {
+					final SpotSlot spotSlot = (SpotSlot) slot;
+					if (spotSlot.getMarket() != null) {
+						continue;
+					}
 				}
+				psc.addSlot(slot);
 			}
-			psc.addSlot(slot);
 		}
 		return psc;
 	}

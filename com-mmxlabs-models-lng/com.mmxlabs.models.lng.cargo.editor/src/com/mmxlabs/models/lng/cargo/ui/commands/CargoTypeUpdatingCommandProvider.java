@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.util.SpotSlotHelper;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -55,63 +56,139 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 				}
 				seenObjects.add(parameter.getEOwner());
 			}
-			final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
 
-			if (parameter.getEOwner() instanceof LoadSlot) {
-				final LoadSlot slot = (LoadSlot) parameter.getEOwner();
+			if (rootObject instanceof LNGScenarioModel) {
 
-				if (slot.getCargo() != null) {
-					final Cargo cargo = slot.getCargo();
-					final ElementAssignment assignment = getAssignmentForCargo(overrides, assignmentModel, cargo);
-					DischargeSlot dischargeSlot = null;
-					for (final Slot slot2 : cargo.getSlots()) {
-						if (slot2 instanceof DischargeSlot) {
-							dischargeSlot = (DischargeSlot) slot2;
-							break;
-						}
-					}
-					if (dischargeSlot != null) {
+				final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
 
-						if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
-							final boolean desPurchase = (Boolean) parameter.getValue();
-							if (desPurchase) {
+				if (parameter.getEOwner() instanceof LoadSlot) {
+					final LoadSlot slot = (LoadSlot) parameter.getEOwner();
 
-								final CompoundCommand cmd = new CompoundCommand("Convert to DES Purchase");
-								cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, assignment));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getLoadSlot_ArriveCold(), false));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
-
-								if (slot instanceof SpotSlot) {
-									SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, dischargeSlot, cmd);
-								} else {
-									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
-									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
-								}
-								return cmd;
+					if (slot.getCargo() != null) {
+						final Cargo cargo = slot.getCargo();
+						final ElementAssignment assignment = getAssignmentForCargo(overrides, assignmentModel, cargo);
+						DischargeSlot dischargeSlot = null;
+						for (final Slot slot2 : cargo.getSlots()) {
+							if (slot2 instanceof DischargeSlot) {
+								dischargeSlot = (DischargeSlot) slot2;
+								break;
 							}
-						} else if (dischargeSlot.isFOBSale()) {
-							if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port() || parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
-								final CompoundCommand cmd = new CompoundCommand("FOB Sale update");
+						}
+						if (dischargeSlot != null) {
 
-								if (dischargeSlot instanceof SpotSlot) {
-									final Port port = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) ? ((Port) parameter.getValue()) : slot.getPort();
-									final Date date = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) ? ((Date) parameter.getValue()) : slot.getWindowStart();
-									if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) {
+							if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+								final boolean desPurchase = (Boolean) parameter.getValue();
+								if (desPurchase) {
+
+									final CompoundCommand cmd = new CompoundCommand("Convert to DES Purchase");
+									cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, assignment));
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getLoadSlot_ArriveCold(), false));
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
+
+									if (slot instanceof SpotSlot) {
+										SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, dischargeSlot, cmd);
+									} else {
+										cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
+										cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+									}
+									return cmd;
+								}
+							} else if (dischargeSlot.isFOBSale()) {
+								if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port() || parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
+									final CompoundCommand cmd = new CompoundCommand("FOB Sale update");
+
+									if (dischargeSlot instanceof SpotSlot) {
+										final Port port = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) ? ((Port) parameter.getValue()) : slot.getPort();
+										final Date date = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) ? ((Date) parameter.getValue()) : slot.getWindowStart();
+										if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) {
+											cmd.append(SetCommand.create(editingDomain, dischargeSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+										}
+										SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, dischargeSlot, slot.getPort(), port, date, cmd);
+									} else {
 										cmd.append(SetCommand.create(editingDomain, dischargeSlot, parameter.getEStructuralFeature(), parameter.getValue()));
 									}
-									SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, dischargeSlot, slot.getPort(), port, date, cmd);
-								} else {
-									cmd.append(SetCommand.create(editingDomain, dischargeSlot, parameter.getEStructuralFeature(), parameter.getValue()));
-								}
 
-								return cmd;
+									return cmd;
+								}
 							}
+						}
+					}
+					// Fall through to Spot Slots which are not DES Purchases / FOB Sales
+					if (parameter.getEOwner() instanceof SpotSlot) {
+						if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
+
+							final CompoundCommand cmd = new CompoundCommand("Update spot slot date range");
+							final Date newDate = (Date) parameter.getValue();
+							SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, slot.getPort(), slot.getPort(), newDate, cmd);
+							if (cmd.isEmpty()) {
+								return null;
+							}
+
+							return cmd.unwrap();
+						}
+					}
+
+				}
+				if (parameter.getEOwner() instanceof DischargeSlot) {
+					final DischargeSlot slot = (DischargeSlot) parameter.getEOwner();
+					if (slot.getCargo() != null) {
+						final Cargo cargo = slot.getCargo();
+
+						final ElementAssignment assignment = getAssignmentForCargo(overrides, assignmentModel, cargo);
+						LoadSlot loadSlot = null;
+						for (final Slot slot2 : cargo.getSlots()) {
+							if (slot2 instanceof LoadSlot) {
+								loadSlot = (LoadSlot) slot2;
+								break;
+							}
+						}
+						if (loadSlot != null) {
+
+							if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+								final boolean fobSale = (Boolean) parameter.getValue();
+								if (fobSale) {
+
+									final CompoundCommand cmd = new CompoundCommand("Convert to FOB Sale");
+									cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, assignment));
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
+
+									if (slot instanceof SpotSlot) {
+										SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, loadSlot, cmd);
+									} else {
+										cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
+										cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+									}
+									return cmd;
+								}
+							} else if (loadSlot.isDESPurchase()) {
+								if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port() || parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
+									final CompoundCommand cmd = new CompoundCommand("DES Purchase update");
+
+									if (loadSlot instanceof SpotSlot) {
+										final Port port = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) ? ((Port) parameter.getValue()) : slot.getPort();
+										final Date date = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) ? ((Date) parameter.getValue()) : slot.getWindowStart();
+
+										if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) {
+											cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+										}
+										SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, loadSlot, slot.getPort(), port, date, cmd);
+
+									} else {
+										cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+									}
+									return cmd;
+								}
+							}
+
 						}
 					}
 				}
+
 				// Fall through to Spot Slots which are not DES Purchases / FOB Sales
 				if (parameter.getEOwner() instanceof SpotSlot) {
+					final Slot slot = (Slot) parameter.getEOwner();
 					if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
 
 						final CompoundCommand cmd = new CompoundCommand("Update spot slot date range");
@@ -126,78 +203,6 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 				}
 
 			}
-			if (parameter.getEOwner() instanceof DischargeSlot) {
-				final DischargeSlot slot = (DischargeSlot) parameter.getEOwner();
-				if (slot.getCargo() != null) {
-					final Cargo cargo = slot.getCargo();
-
-					final ElementAssignment assignment = getAssignmentForCargo(overrides, assignmentModel, cargo);
-					LoadSlot loadSlot = null;
-					for (final Slot slot2 : cargo.getSlots()) {
-						if (slot2 instanceof LoadSlot) {
-							loadSlot = (LoadSlot) slot2;
-							break;
-						}
-					}
-					if (loadSlot != null) {
-
-						if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
-							final boolean fobSale = (Boolean) parameter.getValue();
-							if (fobSale) {
-
-								final CompoundCommand cmd = new CompoundCommand("Convert to FOB Sale");
-								cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, assignment));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
-
-								if (slot instanceof SpotSlot) {
-									SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, loadSlot, cmd);
-								} else {
-									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
-									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
-								}
-								return cmd;
-							}
-						} else if (loadSlot.isDESPurchase()) {
-							if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port() || parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
-								final CompoundCommand cmd = new CompoundCommand("DES Purchase update");
-
-								if (loadSlot instanceof SpotSlot) {
-									final Port port = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) ? ((Port) parameter.getValue()) : slot.getPort();
-									final Date date = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) ? ((Date) parameter.getValue()) : slot.getWindowStart();
-
-									if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) {
-										cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
-									}
-									SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, loadSlot, slot.getPort(), port, date, cmd);
-
-								} else {
-									cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
-								}
-								return cmd;
-							}
-						}
-
-					}
-				}
-			}
-
-			// Fall through to Spot Slots which are not DES Purchases / FOB Sales
-			if (parameter.getEOwner() instanceof SpotSlot) {
-				final Slot slot = (Slot) parameter.getEOwner();
-				if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
-
-					final CompoundCommand cmd = new CompoundCommand("Update spot slot date range");
-					final Date newDate = (Date) parameter.getValue();
-					SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, slot.getPort(), slot.getPort(), newDate, cmd);
-					if (cmd.isEmpty()) {
-						return null;
-					}
-
-					return cmd.unwrap();
-				}
-			}
-
 		}
 		return null;
 	}

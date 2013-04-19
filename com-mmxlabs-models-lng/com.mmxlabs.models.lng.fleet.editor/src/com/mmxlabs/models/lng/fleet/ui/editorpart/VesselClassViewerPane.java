@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.fleet.importer.FuelCurveImporter;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
@@ -174,48 +175,51 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 							return;
 
 						CSVReader reader = null;
-						try {
-							jointModelEditor.setDisableUpdates(true);
-							jointModelEditor.setDisableCommandProviders(true);
-							reader = new CSVReader(new File(path));
-							final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> consumptions = importer.readConsumptions(reader, context);
-							final EditingDomain ed = jointModelEditor.getEditingDomain();
-							final CompoundCommand command = new CompoundCommand();
-							final FleetModel fleet = jointModelEditor.getRootObject().getSubModel(FleetModel.class);
-							each_vessel: for (final String vesselName : consumptions.keySet()) {
-								// find vessel class
-								for (final VesselClass vc : fleet.getVesselClasses()) {
-									if (vc.getName().equals(vesselName)) {
-										final Pair<List<FuelConsumption>, List<FuelConsumption>> ladenAndBallastConsumptions = consumptions.get(vesselName).getSecond();
-										// apply change
-										if (vc.getLadenAttributes().getFuelConsumption().isEmpty() == false)
-											command.append(DeleteCommand.create(ed, vc.getLadenAttributes().getFuelConsumption()));
-										if (vc.getBallastAttributes().getFuelConsumption().isEmpty() == false)
-											command.append(DeleteCommand.create(ed, vc.getBallastAttributes().getFuelConsumption()));
-										if (ladenAndBallastConsumptions.getFirst().isEmpty() == false)
-											command.append(AddCommand.create(ed, vc.getLadenAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(),
-													ladenAndBallastConsumptions.getFirst()));
-										if (ladenAndBallastConsumptions.getSecond().isEmpty() == false)
-											command.append(AddCommand.create(ed, vc.getBallastAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(),
-													ladenAndBallastConsumptions.getSecond()));
-										continue each_vessel;
+						MMXRootObject rootObject = jointModelEditor.getRootObject();
+						if (rootObject instanceof LNGScenarioModel) {
+							final FleetModel fleet = ((LNGScenarioModel) rootObject).getFleetModel();
+							try {
+								jointModelEditor.setDisableUpdates(true);
+								jointModelEditor.setDisableCommandProviders(true);
+								reader = new CSVReader(new File(path));
+								final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> consumptions = importer.readConsumptions(reader, context);
+								final EditingDomain ed = jointModelEditor.getEditingDomain();
+								final CompoundCommand command = new CompoundCommand();
+								each_vessel: for (final String vesselName : consumptions.keySet()) {
+									// find vessel class
+									for (final VesselClass vc : fleet.getVesselClasses()) {
+										if (vc.getName().equals(vesselName)) {
+											final Pair<List<FuelConsumption>, List<FuelConsumption>> ladenAndBallastConsumptions = consumptions.get(vesselName).getSecond();
+											// apply change
+											if (vc.getLadenAttributes().getFuelConsumption().isEmpty() == false)
+												command.append(DeleteCommand.create(ed, vc.getLadenAttributes().getFuelConsumption()));
+											if (vc.getBallastAttributes().getFuelConsumption().isEmpty() == false)
+												command.append(DeleteCommand.create(ed, vc.getBallastAttributes().getFuelConsumption()));
+											if (ladenAndBallastConsumptions.getFirst().isEmpty() == false)
+												command.append(AddCommand.create(ed, vc.getLadenAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(),
+														ladenAndBallastConsumptions.getFirst()));
+											if (ladenAndBallastConsumptions.getSecond().isEmpty() == false)
+												command.append(AddCommand.create(ed, vc.getBallastAttributes(), FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(),
+														ladenAndBallastConsumptions.getSecond()));
+											continue each_vessel;
+										}
 									}
+									// collect problem
+									context.addProblem(consumptions.get(vesselName).getFirst());
 								}
-								// collect problem
-								context.addProblem(consumptions.get(vesselName).getFirst());
-							}
 
-							ed.getCommandStack().execute(command);
-						} catch (final IOException e) {
-							context.addProblem(context.createProblem("IO Error: " + e.getMessage(), false, false, false));
-						} finally {
-							jointModelEditor.setDisableUpdates(false);
-							jointModelEditor.setDisableCommandProviders(false);
+								ed.getCommandStack().execute(command);
+							} catch (final IOException e) {
+								context.addProblem(context.createProblem("IO Error: " + e.getMessage(), false, false, false));
+							} finally {
+								jointModelEditor.setDisableUpdates(false);
+								jointModelEditor.setDisableCommandProviders(false);
 
-							if (reader != null) {
-								try {
-									reader.close();
-								} catch (final IOException e) {
+								if (reader != null) {
+									try {
+										reader.close();
+									} catch (final IOException e) {
+									}
 								}
 							}
 						}
@@ -238,70 +242,74 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 
 		@Override
 		protected void populate(final Menu menu) {
-			final FleetModel fleetModel = jointModelEditor.getRootObject().getSubModel(FleetModel.class);
-			boolean b = false;
-			for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
-				b = true;
-				final Action editBase = new AbstractMenuAction(baseFuel.getName()) {
+			final MMXRootObject rootObject = jointModelEditor.getRootObject();
+			if (rootObject instanceof LNGScenarioModel) {
+				final FleetModel fleetModel = ((LNGScenarioModel)rootObject).getFleetModel();
+				boolean b = false;
+				for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
+					b = true;
+					final Action editBase = new AbstractMenuAction(baseFuel.getName()) {
+						@Override
+						protected void populate(final Menu submenu) {
+							final LockableAction edit = new LockableAction("Edit...") {
+								public void run() {
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
+									dcd.open(jointModelEditor, rootObject, Collections.singletonList((EObject) baseFuel));
+								}
+							};
+							addActionToMenu(edit, submenu);
+
+							final Action delete = new LockableAction("Delete...") {
+								public void run() {
+									final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
+									handler.handleCommand(DeleteCommand.create(handler.getEditingDomain(), Collections.singleton(baseFuel)), fleetModel,
+											FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
+								}
+							};
+							addActionToMenu(delete, submenu);
+						}
+					};
+					addActionToMenu(editBase, menu);
+				}
+
+				if (b) {
+					new MenuItem(menu, SWT.SEPARATOR);
+				}
+				final Action newBase = AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
 					@Override
-					protected void populate(final Menu submenu) {
-						final LockableAction edit = new LockableAction("Edit...") {
-							public void run() {
-								final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
-								dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
-							}
-						};
-						addActionToMenu(edit, submenu);
-
-						final Action delete = new LockableAction("Delete...") {
-							public void run() {
-								final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
-								handler.handleCommand(DeleteCommand.create(handler.getEditingDomain(), Collections.singleton(baseFuel)), fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
-							}
-						};
-						addActionToMenu(delete, submenu);
+					public MMXRootObject getRootObject() {
+						return rootObject;
 					}
-				};
-				addActionToMenu(editBase, menu);
-			}
 
-			if (b) {
-				new MenuItem(menu, SWT.SEPARATOR);
-			}
-			final Action newBase = AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
-				@Override
-				public MMXRootObject getRootObject() {
-					return jointModelEditor.getRootObject();
-				}
+					@Override
+					public EReference getContainment() {
+						return FleetPackage.eINSTANCE.getFleetModel_BaseFuels();
+					}
 
-				@Override
-				public EReference getContainment() {
-					return FleetPackage.eINSTANCE.getFleetModel_BaseFuels();
-				}
+					@Override
+					public EObject getContainer() {
+						return fleetModel;
+					}
 
-				@Override
-				public EObject getContainer() {
-					return fleetModel;
-				}
+					@Override
+					public ICommandHandler getCommandHandler() {
+						return jointModelEditor.getDefaultCommandHandler();
+					}
 
-				@Override
-				public ICommandHandler getCommandHandler() {
-					return jointModelEditor.getDefaultCommandHandler();
-				}
+					@Override
+					public IScenarioEditingLocation getEditorPart() {
+						return jointModelEditor;
+					}
 
-				@Override
-				public IScenarioEditingLocation getEditorPart() {
-					return jointModelEditor;
+					@Override
+					public ISelection getCurrentSelection() {
+						return viewer.getSelection();
+					}
+				});
+				if (newBase != null) {
+					newBase.setText("Add new base fuel...");
+					addActionToMenu(newBase, menu);
 				}
-
-				@Override
-				public ISelection getCurrentSelection() {
-					return viewer.getSelection();
-				}
-			});
-			if (newBase != null) {
-				newBase.setText("Add new base fuel...");
-				addActionToMenu(newBase, menu);
 			}
 		}
 	}

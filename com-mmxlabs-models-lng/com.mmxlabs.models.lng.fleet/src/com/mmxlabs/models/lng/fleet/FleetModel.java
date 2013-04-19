@@ -20,7 +20,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getBaseFuels <em>Base Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroups <em>Vessel Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getSpecialVesselGroups <em>Special Vessel Groups</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getScenarioFleetModel <em>Scenario Fleet Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -109,34 +108,6 @@ public interface FleetModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<VesselTypeGroup> getSpecialVesselGroups();
-
-	/**
-	 * Returns the value of the '<em><b>Scenario Fleet Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Scenario Fleet Model</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Scenario Fleet Model</em>' containment reference.
-	 * @see #setScenarioFleetModel(ScenarioFleetModel)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_ScenarioFleetModel()
-	 * @model containment="true"
-	 * @generated
-	 */
-	ScenarioFleetModel getScenarioFleetModel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.FleetModel#getScenarioFleetModel <em>Scenario Fleet Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Scenario Fleet Model</em>' containment reference.
-	 * @see #getScenarioFleetModel()
-	 * @generated
-	 */
-	void setScenarioFleetModel(ScenarioFleetModel value);
 
 } // end of  FleetModel
 

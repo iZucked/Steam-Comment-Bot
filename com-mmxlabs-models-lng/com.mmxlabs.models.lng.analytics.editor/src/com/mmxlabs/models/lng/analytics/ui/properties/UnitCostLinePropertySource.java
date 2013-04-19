@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.analytics.FuelCost;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
-import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 
 /**
  * Properties display for unit cost lines.

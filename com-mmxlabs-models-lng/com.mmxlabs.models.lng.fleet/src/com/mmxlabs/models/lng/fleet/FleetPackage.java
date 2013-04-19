@@ -166,23 +166,13 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__SPECIAL_VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Scenario Fleet Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__SCENARIO_FLEET_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
-
-	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -1847,18 +1837,6 @@ public interface FleetPackage extends EPackage {
 	EReference getFleetModel_SpecialVesselGroups();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.FleetModel#getScenarioFleetModel <em>Scenario Fleet Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Scenario Fleet Model</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getScenarioFleetModel()
-	 * @see #getFleetModel()
-	 * @generated
-	 */
-	EReference getFleetModel_ScenarioFleetModel();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.BaseFuel <em>Base Fuel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2647,15 +2625,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_MODEL__SPECIAL_VESSEL_GROUPS = eINSTANCE.getFleetModel_SpecialVesselGroups();
-
-		/**
-		 * The meta object literal for the '<em><b>Scenario Fleet Model</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLEET_MODEL__SCENARIO_FLEET_MODEL = eINSTANCE.getFleetModel_ScenarioFleetModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.

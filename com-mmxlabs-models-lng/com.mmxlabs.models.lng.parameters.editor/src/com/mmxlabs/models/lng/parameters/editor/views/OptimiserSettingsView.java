@@ -10,10 +10,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-import com.mmxlabs.models.lng.parameters.ParametersModel;
-import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.ui.editorpart.OptimiserSettingsEditorPane;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -25,8 +25,8 @@ public class OptimiserSettingsView extends ScenarioTableViewerView<OptimiserSett
 
 	@Override
 	protected void initViewerPane(final OptimiserSettingsEditorPane pane) {
-		pane.init(Arrays.asList(new EReference[] { ParametersPackage.eINSTANCE.getParametersModel_Settings() }), getAdapterFactory(), getEditingDomain().getCommandStack());
-		pane.getViewer().setInput(getRootObject().getSubModel(ParametersModel.class));
+		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel(), ParametersPackage.eINSTANCE.getParametersModel_Settings() }), getAdapterFactory(), getEditingDomain().getCommandStack());
+		pane.getViewer().setInput(getRootObject());
 	}
 
 	@Override

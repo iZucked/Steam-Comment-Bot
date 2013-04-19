@@ -9,8 +9,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -24,17 +24,22 @@ public class PortValueProviderFactory implements IReferenceValueProviderFactory 
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(EClass owner, EReference reference, MMXRootObject rootObject) {
 		final EClass referenceClass = reference.getEReferenceType();
-		if (referenceClass == PortPackage.eINSTANCE.getPort()) {
-			return new SimpleReferenceValueProvider(rootObject.getSubModel(PortModel.class), PortPackage.eINSTANCE.getPortModel_Ports());
-		} else if (referenceClass == PortPackage.eINSTANCE.getPortGroup()) {
-			return new SimpleReferenceValueProvider(rootObject.getSubModel(PortModel.class), PortPackage.eINSTANCE.getPortModel_PortGroups());
-		} else if (referenceClass == TypesPackage.eINSTANCE.getAPortSet()) {
-			return new MergedReferenceValueProvider(rootObject.getSubModel(PortModel.class), PortPackage.eINSTANCE.getPortModel_Ports(), PortPackage.eINSTANCE.getPortModel_PortGroups(),
-					PortPackage.eINSTANCE.getPortModel_SpecialPortGroups());
-		} else {
-			log.warn("Port value provider factory cannot produce provider for " + referenceClass.getName() + " from " + referenceClass.getEPackage().getNsURI() + ", " + "called with "
-					+ owner.getName() + "." + reference.getName());
-			return null;
+
+		if (rootObject instanceof LNGScenarioModel) {
+
+			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (referenceClass == PortPackage.eINSTANCE.getPort()) {
+				return new SimpleReferenceValueProvider(lngScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Ports());
+			} else if (referenceClass == PortPackage.eINSTANCE.getPortGroup()) {
+				return new SimpleReferenceValueProvider(lngScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups());
+			} else if (referenceClass == TypesPackage.eINSTANCE.getAPortSet()) {
+				return new MergedReferenceValueProvider(lngScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Ports(), PortPackage.eINSTANCE.getPortModel_PortGroups(),
+						PortPackage.eINSTANCE.getPortModel_SpecialPortGroups());
+			} else {
+				log.warn("Port value provider factory cannot produce provider for " + referenceClass.getName() + " from " + referenceClass.getEPackage().getNsURI() + ", " + "called with "
+						+ owner.getName() + "." + reference.getName());
+			}
 		}
+		return null;
 	}
 }

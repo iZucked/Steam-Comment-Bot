@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
@@ -73,39 +74,42 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 
 	protected void updateEditorInput() {
 
-		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+		if (rootObject instanceof LNGScenarioModel) {
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
+			final FleetModel fleetModel = scenarioModel.getFleetModel();
 
-		final List<CollectedAssignment> resources = AssignmentEditorHelper.collectAssignments(modelObject, fleetModel);
+			final List<CollectedAssignment> resources = AssignmentEditorHelper.collectAssignments(modelObject, fleetModel);
 
-		Collections.sort(resources, new Comparator<CollectedAssignment>() {
-			@Override
-			public int compare(final CollectedAssignment o1, final CollectedAssignment o2) {
-				final int spotCompare = ((Boolean) o1.isSpotVessel()).compareTo(o2.isSpotVessel());
-				if (spotCompare == 0) {
-					return o1.getVesselOrClass().getName().compareTo(o2.getVesselOrClass().getName());
-				} else {
-					return spotCompare;
+			Collections.sort(resources, new Comparator<CollectedAssignment>() {
+				@Override
+				public int compare(final CollectedAssignment o1, final CollectedAssignment o2) {
+					final int spotCompare = ((Boolean) o1.isSpotVessel()).compareTo(o2.isSpotVessel());
+					if (spotCompare == 0) {
+						return o1.getVesselOrClass().getName().compareTo(o2.getVesselOrClass().getName());
+					} else {
+						return spotCompare;
+					}
+				}
+			});
+
+			editor.setResources(resources);
+
+			final List<UUIDObject> tasks = new ArrayList<UUIDObject>();
+			if (cargoModel != null) {
+				for (final Cargo c : cargoModel.getCargoes()) {
+					if (c.getCargoType() == CargoType.FLEET) {
+						tasks.add(c);
+					}
 				}
 			}
-		});
-
-		editor.setResources(resources);
-
-		final List<UUIDObject> tasks = new ArrayList<UUIDObject>();
-		if (cargoModel != null) {
-			for (final Cargo c : cargoModel.getCargoes()) {
-				if (c.getCargoType() == CargoType.FLEET) {
-					tasks.add(c);
-				}
+			if (fleetModel != null) {
+				tasks.addAll(scenarioModel.getPortfolioModel().getScenarioFleetModel().getVesselEvents());
 			}
-		}
-		if (fleetModel != null) {
-			tasks.addAll(fleetModel.getScenarioFleetModel().getVesselEvents());
-		}
 
-		editor.setTasks(tasks);
-		editor.update();
+			editor.setTasks(tasks);
+			editor.update();
+		}
 	}
 
 	@Override
@@ -150,7 +154,9 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 			}
 		});
 
-		final IAssignmentInformationProvider<CollectedAssignment, UUIDObject> timing = new AssignmentInformationProviderImplementation(rootObject);
+		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+
+		final IAssignmentInformationProvider<CollectedAssignment, UUIDObject> timing = new AssignmentInformationProviderImplementation(scenarioModel, scenarioModel.getPortfolioModel());
 
 		editor.setInformationProvider(timing);
 

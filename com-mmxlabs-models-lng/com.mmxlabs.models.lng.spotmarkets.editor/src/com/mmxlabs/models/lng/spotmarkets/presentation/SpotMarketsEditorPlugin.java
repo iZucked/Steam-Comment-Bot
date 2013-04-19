@@ -6,20 +6,16 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.presentation;
 
+import org.eclipse.emf.common.EMFPlugin;
+import org.eclipse.emf.common.ui.EclipseUIPlugin;
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
 import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
-
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
-
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-
-import org.eclipse.emf.common.EMFPlugin;
-
-import org.eclipse.emf.common.ui.EclipseUIPlugin;
-
-import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
  * This is the central singleton for the SpotMarkets editor plugin.

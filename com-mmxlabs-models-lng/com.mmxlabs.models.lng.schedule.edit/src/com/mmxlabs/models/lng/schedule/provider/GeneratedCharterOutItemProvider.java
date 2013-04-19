@@ -73,8 +73,8 @@ public class GeneratedCharterOutItemProvider
 
 	/**
 	 * This adds a property descriptor for the Group Profit And Loss feature.
-	 * @since 3.0
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -26,9 +26,9 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -95,10 +95,10 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		if (availableTime >= 0) {
 
 			final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
-			if (scenario != null) {
+			if (scenario instanceof LNGScenarioModel) {
 
 				double maxSpeedKnots = 0.0;
-				final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+				final FleetModel fleetModel = ((LNGScenarioModel)scenario).getFleetModel();
 
 				if (fleetModel.getVesselClasses().isEmpty()) {
 					// Cannot perform our validation, so return
@@ -121,7 +121,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						}
 					}
 
-					for (final Route route : scenario.getSubModel(PortModel.class).getRoutes()) {
+					for (final Route route : ((LNGScenarioModel)scenario).getPortModel().getRoutes()) {
 						if (route.isCanal() == false) {
 							collectMinTimes(minTimes, route, 0, maxSpeedKnots);
 						}

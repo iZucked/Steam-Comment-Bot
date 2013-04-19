@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -31,23 +32,27 @@ public class RoutePortCommandProvider extends BaseModelCommandProvider<Object> {
 	@Override
 	protected Command handleDeletion(final EditingDomain editingDomain, final MMXRootObject rootObject, final Collection<Object> deleted, final Map<EObject, EObject> overrides,
 			final Set<EObject> editSet) {
-		final PortModel portModel = rootObject.getSubModel(PortModel.class);
-		if (portModel == null)
-			return null;
-		final HashSet<RouteLine> dead = new HashSet<RouteLine>();
-		for (final Object object : deleted) {
-			if (object instanceof Port) {
-				for (final Route route : portModel.getRoutes()) {
-					for (final RouteLine line : route.getLines()) {
-						if (line.getFrom() == object || line.getTo() == object)
-							dead.add(line);
+
+		if (rootObject instanceof LNGScenarioModel) {
+
+			final PortModel portModel = ((LNGScenarioModel) rootObject).getPortModel();
+			if (portModel == null)
+				return null;
+			final HashSet<RouteLine> dead = new HashSet<RouteLine>();
+			for (final Object object : deleted) {
+				if (object instanceof Port) {
+					for (final Route route : portModel.getRoutes()) {
+						for (final RouteLine line : route.getLines()) {
+							if (line.getFrom() == object || line.getTo() == object)
+								dead.add(line);
+						}
 					}
 				}
 			}
+			if (!dead.isEmpty()) {
+				return DeleteCommand.create(editingDomain, dead);
+			}
 		}
-		if (dead.isEmpty())
-			return null;
-		else
-			return DeleteCommand.create(editingDomain, dead);
+		return null;
 	}
 }

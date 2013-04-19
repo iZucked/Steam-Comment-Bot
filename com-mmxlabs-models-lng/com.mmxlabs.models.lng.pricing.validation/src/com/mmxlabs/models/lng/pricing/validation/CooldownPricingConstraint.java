@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -42,8 +43,8 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof PricingModel) {
 			final PricingModel pm = (PricingModel) target;
 			final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
-			if (rootObject != null) {
-				final PortModel ports = rootObject.getSubModel(PortModel.class);
+			if (rootObject instanceof LNGScenarioModel) {
+				final PortModel ports = ((LNGScenarioModel)rootObject).getPortModel();
 				if (ports != null) {
 					// count the number of cooldown prices attached to each port
 					final HashMap<Port, Set<CooldownPrice>> pricingPerPort = new HashMap<Port, Set<CooldownPrice>>();
@@ -70,7 +71,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 						final Port port = entry.getKey();
 						final int count = entry.getValue().size();
 
-						if (count != 1 && (port instanceof Port) && ((Port) port).getCapabilities().contains(PortCapability.LOAD)) {
+						if (count != 1 && port.getCapabilities().contains(PortCapability.LOAD)) {
 							final String message = String.format("Load port %s has %d cooldown prices specified - there should be exactly one price.", port.getName(), count);
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 							dcsd.addEObjectAndFeature(port, null);

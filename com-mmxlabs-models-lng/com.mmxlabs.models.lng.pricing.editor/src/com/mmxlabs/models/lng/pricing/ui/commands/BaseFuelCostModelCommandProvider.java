@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -39,12 +40,19 @@ public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider<O
 	@Override
 	protected Command objectAdded(final EditingDomain domain, final MMXRootObject rootObject, final Object added, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (added instanceof BaseFuel) {
-			final PricingModel pricing = rootObject.getSubModel(PricingModel.class);
-			if (pricing == null)
+			if (!(rootObject instanceof LNGScenarioModel)) {
 				return null;
+			}
+			LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+
+			final PricingModel pricing = scenarioModel.getPricingModel();
+			if (pricing == null) {
+				return null;
+			}
 			for (final BaseFuelCost existing : pricing.getFleetCost().getBaseFuelPrices()) {
-				if (existing.getFuel() == added)
+				if (existing.getFuel() == added) {
 					return null;
+				}
 			}
 			final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
 			cost.setFuel((BaseFuel) added);
@@ -56,9 +64,15 @@ public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider<O
 	@Override
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (deleted instanceof BaseFuel) {
-			final PricingModel pricing = rootObject.getSubModel(PricingModel.class);
-			if (pricing == null)
+			if (!(rootObject instanceof LNGScenarioModel)) {
 				return null;
+			}
+			LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+
+			final PricingModel pricing = scenarioModel.getPricingModel();
+			if (pricing == null) {
+				return null;
+			}
 			for (final BaseFuelCost cost : pricing.getFleetCost().getBaseFuelPrices()) {
 				if (cost.getFuel() == deleted) {
 					return DeleteCommand.create(domain, cost);

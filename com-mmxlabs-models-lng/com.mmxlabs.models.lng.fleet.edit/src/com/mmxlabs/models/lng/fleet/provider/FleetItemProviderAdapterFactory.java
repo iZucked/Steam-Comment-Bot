@@ -12,8 +12,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ChangeNotifier;
 import org.eclipse.emf.edit.provider.ChildCreationExtenderManager;
@@ -29,12 +27,8 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.util.FleetAdapterFactory;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
-import com.mmxlabs.models.mmxcore.util.MMXCoreSwitch;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -584,139 +578,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (maintenanceEventItemProvider != null) maintenanceEventItemProvider.dispose();
 		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
 		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
-	}
-
-	/**
-	 * A child creation extender for the {@link MMXCorePackage}.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public static class MMXCoreChildCreationExtender implements IChildCreationExtender {
-		/**
-		 * The switch for creating child descriptors specific to each extended class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		protected static class CreationSwitch extends MMXCoreSwitch<Object> {
-			/**
-			 * The child descriptors being populated.
-			 * <!-- begin-user-doc -->
-			 * <!-- end-user-doc -->
-			 * @generated
-			 */
-			protected List<Object> newChildDescriptors;
-
-			/**
-			 * The domain in which to create the children.
-			 * <!-- begin-user-doc -->
-			 * <!-- end-user-doc -->
-			 * @generated
-			 */
-			protected EditingDomain editingDomain;
-
-			/**
-			 * Creates the a switch for populating child descriptors in the given domain.
-			 * <!-- begin-user-doc -->
-			 * <!-- end-user-doc -->
-			 * @generated
-			 */
-			CreationSwitch(List<Object> newChildDescriptors, EditingDomain editingDomain) {
-				this.newChildDescriptors = newChildDescriptors;
-				this.editingDomain = editingDomain;
-			}
-			/**
-			 * <!-- begin-user-doc -->
-			 * <!-- end-user-doc -->
-			 * @generated
-			 */
-			@Override
-			public Object caseMMXSubModel(MMXSubModel object) {
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createFleetModel()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createBaseFuel()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createVessel()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createVesselClass()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createVesselGroup()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createVesselTypeGroup()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createScenarioFleetModel()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createMaintenanceEvent()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createDryDockEvent()));
-
-				newChildDescriptors.add
-					(createChildParameter
-						(MMXCorePackage.Literals.MMX_SUB_MODEL__SUB_MODEL_INSTANCE,
-						 FleetFactory.eINSTANCE.createCharterOutEvent()));
-
-				return null;
-			}
- 
-			/**
-			 * <!-- begin-user-doc -->
-			 * <!-- end-user-doc -->
-			 * @generated
-			 */
-			protected CommandParameter createChildParameter(Object feature, Object child) {
-				return new CommandParameter(null, feature, child);
-			}
-
-		}
-
-		/**
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
-			ArrayList<Object> result = new ArrayList<Object>();
-		   new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
-		   return result;
-		}
-
-		/**
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		public ResourceLocator getResourceLocator() {
-			return FleetEditPlugin.INSTANCE;
-		}
 	}
 
 }

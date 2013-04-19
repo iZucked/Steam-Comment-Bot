@@ -13,8 +13,8 @@ import javax.management.timer.Timer;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.IAssignmentInformationProvider;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
@@ -30,7 +30,8 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -38,19 +39,19 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 	/**
 	 * 
 	 */
-	private final MMXRootObject rootObject;
 	private final AssignmentModel modelObject;
 	private final HashMap<Pair<Port, Port>, Integer> minTravelTimes = new HashMap<Pair<Port, Port>, Integer>();
 	private final Map<Vessel, VesselAvailability> availabilityMap = new HashMap<Vessel, VesselAvailability>();
+	private final LNGScenarioModel scenarioModel;
 
 	/**
 	 * @param inputJointModelEditorContribution
 	 */
-	public AssignmentInformationProviderImplementation(final MMXRootObject rootObject) {
-		this.rootObject = rootObject;
-		this.modelObject = rootObject.getSubModel(AssignmentModel.class);
+	public AssignmentInformationProviderImplementation(final LNGScenarioModel scenarioModel, final LNGPortfolioModel portfolioModel) {
+		this.scenarioModel = scenarioModel;
+		this.modelObject = portfolioModel.getAssignmentModel();
 		updateMinTravelTimes();
-		for (final VesselAvailability vesselAvailability : rootObject.getSubModel(FleetModel.class).getScenarioFleetModel().getVesselAvailabilities()) {
+		for (final VesselAvailability vesselAvailability : portfolioModel.getScenarioFleetModel().getVesselAvailabilities()) {
 			availabilityMap.put(vesselAvailability.getVessel(), vesselAvailability);
 		}
 	}
@@ -196,8 +197,8 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 
 	protected void updateMinTravelTimes() {
 		// TODO run this only when ports change or speeds change.
-		final PortModel pm = rootObject.getSubModel(PortModel.class);
-		final FleetModel fm = rootObject.getSubModel(FleetModel.class);
+		final PortModel pm = scenarioModel.getPortModel();
+		final FleetModel fm = scenarioModel.getFleetModel();
 		minTravelTimes.clear();
 		if (pm != null && fm != null) {
 			double maxSpeed = 0;

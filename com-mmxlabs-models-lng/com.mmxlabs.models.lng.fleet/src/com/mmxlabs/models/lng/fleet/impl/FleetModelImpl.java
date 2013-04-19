@@ -36,7 +36,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getBaseFuels <em>Base Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselGroups <em>Vessel Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getSpecialVesselGroups <em>Special Vessel Groups</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getScenarioFleetModel <em>Scenario Fleet Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -93,17 +92,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * @ordered
 	 */
 	protected EList<VesselTypeGroup> specialVesselGroups;
-
-	/**
-	 * The cached value of the '{@link #getScenarioFleetModel() <em>Scenario Fleet Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @see #getScenarioFleetModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected ScenarioFleetModel scenarioFleetModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -187,52 +175,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ScenarioFleetModel getScenarioFleetModel() {
-		return scenarioFleetModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetScenarioFleetModel(ScenarioFleetModel newScenarioFleetModel, NotificationChain msgs) {
-		ScenarioFleetModel oldScenarioFleetModel = scenarioFleetModel;
-		scenarioFleetModel = newScenarioFleetModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL, oldScenarioFleetModel, newScenarioFleetModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setScenarioFleetModel(ScenarioFleetModel newScenarioFleetModel) {
-		if (newScenarioFleetModel != scenarioFleetModel) {
-			NotificationChain msgs = null;
-			if (scenarioFleetModel != null)
-				msgs = ((InternalEObject)scenarioFleetModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL, null, msgs);
-			if (newScenarioFleetModel != null)
-				msgs = ((InternalEObject)newScenarioFleetModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL, null, msgs);
-			msgs = basicSetScenarioFleetModel(newScenarioFleetModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL, newScenarioFleetModel, newScenarioFleetModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -249,8 +191,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return ((InternalEList<?>)getVesselGroups()).basicRemove(otherEnd, msgs);
 			case FleetPackage.FLEET_MODEL__SPECIAL_VESSEL_GROUPS:
 				return ((InternalEList<?>)getSpecialVesselGroups()).basicRemove(otherEnd, msgs);
-			case FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL:
-				return basicSetScenarioFleetModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -273,8 +213,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return getVesselGroups();
 			case FleetPackage.FLEET_MODEL__SPECIAL_VESSEL_GROUPS:
 				return getSpecialVesselGroups();
-			case FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL:
-				return getScenarioFleetModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -308,9 +246,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				getSpecialVesselGroups().clear();
 				getSpecialVesselGroups().addAll((Collection<? extends VesselTypeGroup>)newValue);
 				return;
-			case FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL:
-				setScenarioFleetModel((ScenarioFleetModel)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -338,9 +273,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__SPECIAL_VESSEL_GROUPS:
 				getSpecialVesselGroups().clear();
 				return;
-			case FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL:
-				setScenarioFleetModel((ScenarioFleetModel)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -363,8 +295,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return vesselGroups != null && !vesselGroups.isEmpty();
 			case FleetPackage.FLEET_MODEL__SPECIAL_VESSEL_GROUPS:
 				return specialVesselGroups != null && !specialVesselGroups.isEmpty();
-			case FleetPackage.FLEET_MODEL__SCENARIO_FLEET_MODEL:
-				return scenarioFleetModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

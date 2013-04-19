@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -70,10 +71,12 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Latest Start", new DateAttributeManipulator(FleetPackage.eINSTANCE.getVesselEvent_StartBy(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Port", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVesselEvent_Port(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Duration", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselEvent_DurationInDays(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Vessels",
-				new VesselEventVesselsManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
-						MMXCorePackage.eINSTANCE.getNamedObject_Name(),jointModelEditor.getRootObject().getSubModel(AssignmentModel.class)));
-
+		if (jointModelEditor.getRootObject() instanceof LNGScenarioModel) {
+			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) jointModelEditor.getRootObject();
+			addTypicalColumn("Vessels",
+					new VesselEventVesselsManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
+							MMXCorePackage.eINSTANCE.getNamedObject_Name(), lngScenarioModel.getPortfolioModel().getAssignmentModel()));
+		}
 		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
 		// IElementComparer to handle selection objects from e.g. schedule

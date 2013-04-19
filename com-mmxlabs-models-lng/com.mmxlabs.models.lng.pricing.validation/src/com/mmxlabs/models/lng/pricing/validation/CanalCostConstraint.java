@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -43,12 +44,13 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 
 			final EObject original = extraValidationContext.getOriginal(vesselClass);
 			final EObject replacement = extraValidationContext.getReplacement(vesselClass);
-			final MMXRootObject scenario = extraValidationContext.getRootObject();
+			final MMXRootObject rootObject = extraValidationContext.getRootObject();
 
-			if (scenario != null) {
+			if (rootObject instanceof LNGScenarioModel) {
+				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final StringBuffer missingCanalNames = new StringBuffer();
-				final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
-				final PortModel portModel = scenario.getSubModel(PortModel.class);
+				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+				final PortModel portModel = lngScenarioModel.getPortModel();
 				if (pricingModel != null && portModel != null) {
 
 					boolean seenAnyCanalCosts = false;

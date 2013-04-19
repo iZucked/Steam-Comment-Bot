@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -107,9 +108,9 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 	 */
 	private void validateSlotTravelTime(final IValidationContext ctx, final ShippingCostPlan plan, final List<IStatus> statuses) {
 
-		final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
-		if (scenario != null) {
-
+		final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
+		if (rootObject instanceof LNGScenarioModel) {
+			final LNGScenarioModel scenario = (LNGScenarioModel) rootObject;
 			final VesselClass vesselClass = plan.getVessel().getVesselClass();
 			if (plan.getVessel() == null || vesselClass == null) {
 				return;
@@ -126,7 +127,7 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 					collectMinTimes(minTimes, parameters.getRoute(), parameters.getExtraTransitTime(), maxSpeedKnots);
 				}
 
-				for (final Route route : scenario.getSubModel(PortModel.class).getRoutes()) {
+				for (final Route route : scenario.getPortModel().getRoutes()) {
 					if (route.isCanal() == false) {
 						collectMinTimes(minTimes, route, 0, maxSpeedKnots);
 					}
@@ -140,20 +141,18 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 
 				if (lastRow != null && lastRow.getPort() != null && row.getPort() != null) {
 
-					
 					if (row.getDate() != null && lastRow.getDate() != null) {
 
-
 						int visitDuration = 0;
-						if (lastRow.getDestinationType() == DestinationType.LOAD ) {
+						if (lastRow.getDestinationType() == DestinationType.LOAD) {
 							visitDuration = lastRow.getPort().getLoadDuration();
-						} else  if(lastRow.getDestinationType() == DestinationType.DISCHARGE) {
+						} else if (lastRow.getDestinationType() == DestinationType.DISCHARGE) {
 							visitDuration = lastRow.getPort().getDischargeDuration();
-						} else  if(lastRow.getDestinationType() == DestinationType.OTHER) {
+						} else if (lastRow.getDestinationType() == DestinationType.OTHER) {
 							visitDuration = 24;
 						}
 						final int availableTime = (int) ((row.getDate().getTime() - lastRow.getDate().getTime()) / Timer.ONE_HOUR) - visitDuration;
-						
+
 						if (availableTime < 0) {
 							final String msg = String.format("Date is before the previous date.");
 							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(msg);

@@ -38,6 +38,8 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.LDDEditor;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -52,6 +54,22 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 public class CargoEditorMenuHelper {
 
 	private final Shell shell;
+
+	private final IScenarioEditingLocation scenarioEditingLocation;
+
+	private final LNGPortfolioModel portfolioModel;
+
+	private final CargoEditingCommands cec;
+
+	private final LNGScenarioModel scenarioModel;
+
+	public CargoEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, LNGScenarioModel scenarioModel, LNGPortfolioModel portfolioModel) {
+		this.shell = shell;
+		this.scenarioEditingLocation = scenarioEditingLocation;
+		this.scenarioModel = scenarioModel;
+		this.portfolioModel = portfolioModel;
+		cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, portfolioModel);
+	}
 
 	private final class EditAction extends Action {
 		private final EObject target;
@@ -93,15 +111,6 @@ public class CargoEditorMenuHelper {
 			}
 
 		}
-	}
-
-	private final IScenarioEditingLocation scenarioEditingLocation;
-	private final CargoEditingCommands cec;
-
-	public CargoEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation) {
-		this.scenarioEditingLocation = scenarioEditingLocation;
-		cec = new CargoEditingCommands(scenarioEditingLocation);
-		this.shell = shell;
 	}
 
 	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Map<String, Set<Slot>> targets, final boolean includeContract,
@@ -183,7 +192,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	IMenuListener createDischargeSlotMenuListener(final List<DischargeSlot> dischargeSlots, final int index) {
-		final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+		final CargoModel cargoModel = portfolioModel.getCargoModel();
 		final IMenuListener l = new IMenuListener() {
 
 			@Override
@@ -229,7 +238,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	public IMenuListener createLoadSlotMenuListener(final List<LoadSlot> loadSlots, final int index) {
-		final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+		final CargoModel cargoModel = portfolioModel.getCargoModel();
 		final IMenuListener l = new IMenuListener() {
 
 			@Override
@@ -256,7 +265,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	public IMenuListener createSwapSlotsMenuListener(final List<Slot> slots, final int index) {
-		final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+		final CargoModel cargoModel = portfolioModel.getCargoModel();
 		final IMenuListener l = new IMenuListener() {
 
 			@Override
@@ -485,7 +494,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, final boolean sourceIsLoad) {
-		final SpotMarketsModel pricingModel = scenarioEditingLocation.getRootObject().getSubModel(SpotMarketsModel.class);
+		final SpotMarketsModel pricingModel = scenarioModel.getSpotMarketsModel();
 		final Collection<SpotMarket> validMarkets = new LinkedList<SpotMarket>();
 		String menuName = "";
 		boolean isSpecial = false;
@@ -620,7 +629,7 @@ public class CargoEditorMenuHelper {
 
 		@Override
 		public void run() {
-			final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+			final CargoModel cargoModel = portfolioModel.getCargoModel();
 
 			final List<Command> setCommands = new LinkedList<Command>();
 			final List<Command> deleteCommands = new LinkedList<Command>();
@@ -726,7 +735,7 @@ public class CargoEditorMenuHelper {
 			final int ret = editor.open(cargo);
 			final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 			if (ret == Window.OK) {
-				final CargoModel cargomodel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
+				final CargoModel cargomodel = portfolioModel.getCargoModel();
 
 				final CompoundCommand cmd = new CompoundCommand("Edit LDD Cargo");
 				if (cargo.eContainer() == null) {

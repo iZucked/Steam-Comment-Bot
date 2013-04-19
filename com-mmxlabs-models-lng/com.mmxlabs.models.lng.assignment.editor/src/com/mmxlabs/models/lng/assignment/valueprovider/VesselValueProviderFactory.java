@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -41,7 +42,12 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject theRootObject) {
 		final MMXRootObject rootObject = theRootObject;
-		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+		if (!(rootObject instanceof LNGScenarioModel)) {
+			return null;
+		}
+		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+
+		final FleetModel fleetModel = scenarioModel.getFleetModel();
 		final EClass referenceClass = reference.getEReferenceType();
 		final TypesPackage types = TypesPackage.eINSTANCE;
 		final FleetPackage fleet = FleetPackage.eINSTANCE;
@@ -66,7 +72,7 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 						}
 						// otherwise, use a default ElementAssignment to determine the current value
 						else {
-							final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
+							final AssignmentModel assignmentModel = scenarioModel.getPortfolioModel().getAssignmentModel();
 							if (assignmentModel != null)
 								assignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, (UUIDObject) target);
 							else
@@ -192,5 +198,4 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 
 		return null;
 	}
-
 }
