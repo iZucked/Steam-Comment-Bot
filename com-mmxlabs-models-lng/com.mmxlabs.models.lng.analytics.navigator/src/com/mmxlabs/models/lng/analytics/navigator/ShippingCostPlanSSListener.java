@@ -59,15 +59,16 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 			final LNGScenarioModel rootObject = (LNGScenarioModel) scenarioInstance.getInstance();
 			analyticsModel = rootObject.getAnalyticsModel();
 
-			for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
-				createFragment(plan);
-			}
-			for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
-				createFragment(box);
-			}
+			if (analyticsModel != null) {
+				for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
+					createFragment(plan);
+				}
+				for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
+					createFragment(box);
+				}
 
-			analyticsModel.eAdapters().add(ModelAdapter.this);
-
+				analyticsModel.eAdapters().add(ModelAdapter.this);
+			}
 		}
 
 		public void dispose() {
