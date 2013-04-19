@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.scenario.importWizards;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,7 +15,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -39,11 +36,23 @@ import org.eclipse.swt.widgets.Group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.internal.Activator;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.migration.IMigrationRegistry;
-import com.mmxlabs.models.mmxcore.MMXCoreFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -193,9 +202,13 @@ public class ImportCSVFilesPage extends WizardPage {
 		setControl(c1);
 	}
 
-	public MMXRootObject doImport(final DefaultImportContext context, final Collection<EObject> models) {
-		final MMXRootObject root = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		// final DefaultImportContext context = new DefaultImportContext();
+	public LNGScenarioModel doImport(final DefaultImportContext context) {
+
+		final LNGScenarioModel scenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+		scenarioModel.setPortfolioModel(portfolioModel);
+
+		context.setRootObject(scenarioModel);
 
 		for (final Chunk c : chunks) {
 			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
@@ -211,8 +224,7 @@ public class ImportCSVFilesPage extends WizardPage {
 				}
 				try {
 					final UUIDObject subModel = c.importer.importModel(readers, context);
-					models.add(subModel);
-					root.addSubModel(subModel);
+					setSubModel(scenarioModel, subModel);
 				} catch (final Throwable th) {
 					log.error(th.getMessage(), th);
 				}
@@ -228,10 +240,41 @@ public class ImportCSVFilesPage extends WizardPage {
 
 		}
 
-		context.setRootObject(root);
+		context.setRootObject(scenarioModel);
 
 		context.run();
-		return root;
+		return scenarioModel;
+	}
+
+	private void setSubModel(final LNGScenarioModel scenarioModel, final UUIDObject subModel) {
+		final LNGPortfolioModel portfolioModel = scenarioModel.getPortfolioModel();
+		if (subModel instanceof PortModel) {
+			scenarioModel.setPortModel((PortModel) subModel);
+		} else if (subModel instanceof FleetModel) {
+			scenarioModel.setFleetModel((FleetModel) subModel);
+		} else if (subModel instanceof PricingModel) {
+			scenarioModel.setPricingModel((PricingModel) subModel);
+		} else if (subModel instanceof CommercialModel) {
+			scenarioModel.setCommercialModel((CommercialModel) subModel);
+		} else if (subModel instanceof SpotMarketsModel) {
+			scenarioModel.setSpotMarketsModel((SpotMarketsModel) subModel);
+		} else if (subModel instanceof ParametersModel) {
+			scenarioModel.setParametersModel((ParametersModel) subModel);
+		} else if (subModel instanceof AnalyticsModel) {
+			scenarioModel.setAnalyticsModel((AnalyticsModel) subModel);
+		} else if (subModel instanceof ScenarioFleetModel) {
+			portfolioModel.setScenarioFleetModel((ScenarioFleetModel) subModel);
+		} else if (subModel instanceof CargoModel) {
+			portfolioModel.setCargoModel((CargoModel) subModel);
+		} else if (subModel instanceof AssignmentModel) {
+			portfolioModel.setAssignmentModel((AssignmentModel) subModel);
+		} else if (subModel instanceof ScheduleModel) {
+			portfolioModel.setScheduleModel((ScheduleModel) subModel);
+		} else {
+			log.error("Unknown sub model type: " + subModel.eClass().getName());
+		}
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -251,15 +294,9 @@ public class ImportCSVFilesPage extends WizardPage {
 
 						final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 
-						final List<EObject> models = new LinkedList<EObject>();
-						if (doImport(context, models) != null) {
+						LNGScenarioModel scenarioModel = doImport(context);
+						if (scenarioModel != null) {
 
-							
-							MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-							for (EObject model : models) {
-								rootObject.addSubModel((UUIDObject)model);
-							}
-							
 							monitor.worked(1);
 
 							ImportCSVFilesPage.this.importContext = context;
@@ -267,7 +304,7 @@ public class ImportCSVFilesPage extends WizardPage {
 							final IScenarioService scenarioService = container.getScenarioService();
 
 							try {
-								final ScenarioInstance instance = scenarioService.insert(container, rootObject);
+								final ScenarioInstance instance = scenarioService.insert(container, scenarioModel);
 
 								try {
 									final String versionContext = migrationRegistry.getDefaultMigrationContext();
