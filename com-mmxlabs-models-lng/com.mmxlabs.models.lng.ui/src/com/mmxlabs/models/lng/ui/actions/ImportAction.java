@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 /**
-// * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ // * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.ui.actions;
@@ -35,7 +35,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -44,10 +43,11 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 
 /**
  * @author hinton
- *
+ * 
  */
 public abstract class ImportAction extends LockableAction {
 	protected final IScenarioEditingLocation part;
+
 	public ImportAction(final IScenarioEditingLocation part) {
 		super("Import", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 		this.part = part;
@@ -62,16 +62,16 @@ public abstract class ImportAction extends LockableAction {
 			context.setRootObject(part.getRootObject());
 
 			// first set up all existing named objects
-			for (final MMXSubModel subModel : context.getRootObject().getSubModels()) {
-				final TreeIterator<EObject> allObjects = subModel.getSubModelInstance().eAllContents();
-				
-				while (allObjects.hasNext()) {
-					final EObject o = allObjects.next();
-					if (o instanceof NamedObject)
-						context.registerNamedObject((NamedObject) o);
+			final MMXRootObject rootObject = context.getRootObject();
+			final TreeIterator<EObject> allObjects = rootObject.eAllContents();
+
+			while (allObjects.hasNext()) {
+				final EObject o = allObjects.next();
+				if (o instanceof NamedObject) {
+					context.registerNamedObject((NamedObject) o);
 				}
 			}
-			
+
 			doImportStages(context);
 			if (context.getProblems().isEmpty() == false) {
 				final ImportProblemDialog ipd = new ImportProblemDialog(part.getShell());
@@ -96,7 +96,7 @@ public abstract class ImportAction extends LockableAction {
 
 	protected CompoundCommand mergeLists(final EObject container, final EReference containment, final List<EObject> importedObjects) {
 		final CompoundCommand merge = new CompoundCommand();
-		
+
 		final EditingDomain domain = part.getEditingDomain();
 		final CompoundCommand setter = new CompoundCommand();
 		setter.append(IdentityCommand.INSTANCE);
@@ -107,19 +107,19 @@ public abstract class ImportAction extends LockableAction {
 		// intersect key set
 		final Set<String> updatedObjectNames = new HashSet<String>(existingNamedObjects.keySet());
 		updatedObjectNames.retainAll(newNamedObjects.keySet());
-		
+
 		final List<EObject> deletedObjects = new ArrayList<EObject>();
 		for (final String name : updatedObjectNames) {
 			final EObject oldObject = existingNamedObjects.get(name);
 			final EObject newObject = newNamedObjects.get(name);
-			
+
 			// update references to point from old object to new object
 			setter.append(replace(domain, oldObject, newObject, part.getRootObject()));
 			// add new object
 
 			deletedObjects.add(oldObject);
 		}
-		
+
 		merge.append(setter);
 		if (deletedObjects.isEmpty() == false) {
 			merge.append(DeleteCommand.create(domain, deletedObjects));
@@ -127,7 +127,7 @@ public abstract class ImportAction extends LockableAction {
 		if (importedObjects.isEmpty() == false) {
 			merge.append(AddCommand.create(domain, container, containment, importedObjects));
 		}
-		
+
 		return merge;
 	}
 
@@ -143,14 +143,11 @@ public abstract class ImportAction extends LockableAction {
 		final CompoundCommand result = new CompoundCommand();
 		result.append(IdentityCommand.INSTANCE);
 		result.setDescription("Replacing " + oldObject + " with " + newObject);
-		if (oldObject == null) return result;
-		
+		if (oldObject == null)
+			return result;
+
 		// update old references
-		final List<EObject> subModels = new ArrayList<EObject>();
-		for (final MMXSubModel sub : rootObject.getSubModels()) {
-			subModels.add(sub.getSubModelInstance());
-		}
-		final Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, subModels);
+		final Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, rootObject);
 		for (final Setting setting : refsToOldObject) {
 			if (setting.getEStructuralFeature().isMany()) {
 				result.append(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), oldObject, Collections.singleton(newObject)));
@@ -158,7 +155,7 @@ public abstract class ImportAction extends LockableAction {
 				result.append(SetCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), newObject));
 			}
 		}
-		
+
 		if (newObject != null) {
 			// recurse on contents
 			final EList<EReference> newContainments = newObject.eClass().getEAllContainments();
@@ -168,15 +165,16 @@ public abstract class ImportAction extends LockableAction {
 				}
 			}
 		}
-		
+
 		// equalize UUIDs for replacements.
 		// this is safe because we delete the old objects before adding new objects.
 		if (oldObject instanceof UUIDObject && newObject instanceof UUIDObject) {
 			result.append(SetCommand.create(domain, newObject, MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), ((UUIDObject) oldObject).getUuid()));
 		}
-		
+
 		return result;
 	}
+
 	private Map<String, NamedObject> collectNamedObjects(final List<EObject> existingObjects) {
 		final HashMap<String, NamedObject> result = new HashMap<String, NamedObject>();
 		for (final EObject object : existingObjects) {
