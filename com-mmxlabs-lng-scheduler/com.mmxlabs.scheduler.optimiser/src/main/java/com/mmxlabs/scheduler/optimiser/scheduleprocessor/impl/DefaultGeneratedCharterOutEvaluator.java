@@ -79,7 +79,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				boolean isCargoPlan = false;
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
-				final int[] arrivalTimes = new int[5];
+				final int n = vp.getSequence().length;
+				final int[] arrivalTimes = new int[n * 2 - 1];
 				int idx = -1;
 				arrivalTimes[++idx] = currentTime;
 				final Object[] currentSequence = vp.getSequence();
