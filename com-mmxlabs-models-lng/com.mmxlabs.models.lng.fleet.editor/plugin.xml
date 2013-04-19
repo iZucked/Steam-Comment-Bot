@@ -126,7 +126,7 @@
           id="com.mmxlabs.models.lng.fleet.editor.jointModelEditorContribution"
           implementation="com.mmxlabs.models.lng.fleet.ui.editorpart.FleetModelEditorContribution"
           priority="30"
-          subModelClass="com.mmxlabs.models.lng.fleet.FleetModel">
+          subModelClass="com.mmxlabs.models.lng.fleet.ScenarioFleetModel">
     </jointModelEditor>
  </extension>
  <extension

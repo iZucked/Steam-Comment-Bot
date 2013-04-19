@@ -30,13 +30,11 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 
 		vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		vesselViewerPane.createControl(sash);
-		vesselViewerPane.init(Lists.newArrayList(FleetPackage.eINSTANCE.getFleetModel_ScenarioFleetModel(), FleetPackage.eINSTANCE.getScenarioFleetModel_VesselAvailabilities()),
-				editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		vesselViewerPane.init(Lists.newArrayList(FleetPackage.eINSTANCE.getScenarioFleetModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 
 		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		eventViewerPane.createControl(sash);
-		eventViewerPane.init(Lists.newArrayList(FleetPackage.eINSTANCE.getFleetModel_ScenarioFleetModel(), FleetPackage.eINSTANCE.getScenarioFleetModel_VesselEvents()),
-				editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		eventViewerPane.init(Lists.newArrayList(FleetPackage.eINSTANCE.getScenarioFleetModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 
 		vesselViewerPane.getViewer().setInput(modelObject);
 		eventViewerPane.getViewer().setInput(modelObject);
