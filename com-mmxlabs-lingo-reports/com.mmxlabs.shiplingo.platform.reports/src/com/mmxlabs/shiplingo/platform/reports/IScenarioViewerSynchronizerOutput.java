@@ -6,28 +6,26 @@ package com.mmxlabs.shiplingo.platform.reports;
 
 import java.util.Collection;
 
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public interface IScenarioViewerSynchronizerOutput {
 	/**
-	 * Returns a collection of objects which are of interest to 
-	 * a particular report, for all scenarios which have been changed.
-	 * Each collected element is going to be a row in a tabular report.
-	 *  
+	 * Returns a collection of objects which are of interest to a particular report, for all scenarios which have been changed. Each collected element is going to be a row in a tabular report.
+	 * 
 	 * @return
 	 */
 	public Collection<Object> getCollectedElements();
-	
+
 	/**
-	 * Tells you which scenario instance an object from the getCollectedElements()
-	 * method came from.
+	 * Tells you which scenario instance an object from the {@link #getCollectedElements()} method came from.
 	 * 
 	 * @param object
 	 * @return
 	 */
 	public ScenarioInstance getScenarioInstance(Object object);
-	
+
 	/**
 	 * Is the object from the "pinned" scenario (used as a reference scenario)?
 	 * 
@@ -35,22 +33,35 @@ public interface IScenarioViewerSynchronizerOutput {
 	 * @return
 	 */
 	public boolean isPinned(Object object);
-	
+
 	/**
-	 * Gets the MMX root object for a particular object from the 
-	 * getCollectedElements list.
+	 * Gets the {@link LNGScenarioModel} object for a particular object from the {@link #getCollectedElements()} list.
 	 * 
 	 * @param object
 	 * @return
+	 * @since 3.0
 	 */
-	public MMXRootObject getRootObject(Object object);
-	
+	public LNGScenarioModel getLNGScenarioModel(Object object);
+
 	/**
-	 * Returns the MMX root objects for all the currently selected scenarios
-	 * regardless of whether or not there are getCollectedElements objects coming
-	 * from them. 
-	 *  
+	 * Gets the {@link LNGPortfolioModel} object for a particular object from the {@link #getCollectedElements()} list.
+	 * 
+	 * @param object
 	 * @return
+	 * @since 3.0
 	 */
-	public Collection<MMXRootObject> getRootObjects();
+	public LNGPortfolioModel getLNGPortfolioModel(Object object);
+
+	/**
+	 * Returns the {@link LNGScenarioModel} objects for all the currently selected scenarios regardless of whether or not there are getCollectedElements objects coming from them.
+	 * 
+	 * @return
+	 * @since 3.0
+	 */
+	public Collection<LNGScenarioModel> getLNGScenarioModels();
+
+	/**
+	 * @since 3.0
+	 */
+	public Collection<LNGPortfolioModel> getLNGPortfolioModels();
 }

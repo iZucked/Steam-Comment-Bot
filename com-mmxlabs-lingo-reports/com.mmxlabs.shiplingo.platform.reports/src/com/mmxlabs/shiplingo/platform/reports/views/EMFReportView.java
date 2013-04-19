@@ -315,7 +315,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					if (scheduleColumnHandler != null) {
 						final GridViewerColumn c = scheduleColumnHandler.column;
 						if (c != null) {
-							c.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
+							c.getColumn().setVisible(synchronizerOutput.getLNGPortfolioModels().size() > 1);
 						}
 					}
 				}

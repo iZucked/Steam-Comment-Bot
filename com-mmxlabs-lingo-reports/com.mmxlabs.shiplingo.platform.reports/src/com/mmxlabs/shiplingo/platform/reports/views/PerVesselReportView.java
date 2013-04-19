@@ -144,7 +144,7 @@ public class PerVesselReportView extends ViewPart {
 				if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 					final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
 					if (scheduleColumnViewer != null) {
-						scheduleColumnViewer.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
+						scheduleColumnViewer.getColumn().setVisible(synchronizerOutput.getLNGPortfolioModels().size() > 1);
 					}
 				}
 			}

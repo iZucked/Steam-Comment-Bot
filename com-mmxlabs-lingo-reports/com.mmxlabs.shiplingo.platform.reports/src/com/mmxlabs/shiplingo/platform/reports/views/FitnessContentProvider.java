@@ -14,8 +14,9 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.parameters.Objective;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -79,8 +80,9 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 			for (final Object o : svso.getCollectedElements()) {
 				if (o instanceof Schedule) {
 
-					final MMXRootObject rootObject = svso.getRootObject(o);
-					final ParametersModel optimiserModel = rootObject.getSubModel(ParametersModel.class);
+					final LNGScenarioModel lngScenarioModel = svso.getLNGScenarioModel(o);
+
+					final ParametersModel optimiserModel = lngScenarioModel.getParametersModel();
 					final OptimiserSettings settings = optimiserModel.getActiveSetting();
 					final Map<String, Double> weightsMap = new HashMap<String, Double>();
 					if (settings != null) {
@@ -89,7 +91,7 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 						}
 					}
 
-					boolean isPinned = svso.isPinned(o);
+					final boolean isPinned = svso.isPinned(o);
 					final List<RowData> destination = isPinned ? pinnedData : rowDataList;
 
 					final Schedule schedule = (Schedule) o;

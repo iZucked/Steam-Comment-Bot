@@ -10,14 +10,15 @@ import java.util.Date;
 import org.eclipse.swt.graphics.RGB;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -26,8 +27,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 public class ColourSchemeUtil {
@@ -101,9 +100,8 @@ public class ColourSchemeUtil {
 
 				final Collection<Object> collectedElements = output.getCollectedElements();
 				if (collectedElements.size() > 0) {
-					final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
-					final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
-					final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
+					final LNGPortfolioModel portfolioModel = output.getLNGPortfolioModel(sequence.eContainer());
+					final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
 					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
 					if (elementAssignment != null && elementAssignment.isLocked()) {
 						return true;

@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -35,8 +36,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -261,13 +260,13 @@ public class SchedulePnLReport extends EMFReportView {
 
 		// supplying null for the entity name indicates that the total group P&L should be returned
 		if (entity == null) {
-			return (int)groupProfitAndLoss.getProfitAndLoss();
+			return (int) groupProfitAndLoss.getProfitAndLoss();
 		}
 		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
 		else {
 			for (EntityProfitAndLoss ePnl : groupProfitAndLoss.getEntityProfitAndLosses()) {
 				if (ePnl.getEntity().getName().equals(entity)) {
-					return (int)ePnl.getProfitAndLoss();
+					return (int) ePnl.getProfitAndLoss();
 				}
 			}
 
@@ -329,16 +328,16 @@ public class SchedulePnLReport extends EMFReportView {
 
 						if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 							final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
-							final Collection<MMXRootObject> rootObjects = synchronizerOutput.getRootObjects();
+							final Collection<LNGScenarioModel> rootObjects = synchronizerOutput.getLNGScenarioModels();
 							for (final String s : entityColumnNames) {
 								removeColumn(s);
 							}
 
 							entityColumnNames.clear();
 
-							for (final MMXRootObject rootObject : rootObjects) {
+							for (final LNGScenarioModel rootObject : rootObjects) {
 
-								final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+								final CommercialModel commercialModel = rootObject.getCommercialModel();
 								if (commercialModel != null) {
 									for (final LegalEntity e : commercialModel.getEntities()) {
 										addPNLColumn(e.getName());

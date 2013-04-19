@@ -27,9 +27,10 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
@@ -145,9 +146,11 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 	private IScenarioViewerSynchronizerOutput collectObjects() {
 		final IScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
 
-		final HashMap<Object, Pair<ScenarioInstance, MMXRootObject>> sourceByElement = new HashMap<Object, Pair<ScenarioInstance, MMXRootObject>>();
+		final HashMap<Object, Pair<ScenarioInstance, LNGScenarioModel>> sourceScenarioByElement = new HashMap<Object, Pair<ScenarioInstance, LNGScenarioModel>>();
+		final HashMap<Object, Pair<ScenarioInstance, LNGPortfolioModel>> sourcePortfolioByElement = new HashMap<Object, Pair<ScenarioInstance, LNGPortfolioModel>>();
 		final ArrayList<Object> selectedObjects = new ArrayList<Object>();
-		final List<MMXRootObject> rootObjects = new ArrayList<MMXRootObject>();
+		final List<LNGScenarioModel> scenarioModels = new ArrayList<LNGScenarioModel>();
+		final List<LNGPortfolioModel> portfolioModels = new ArrayList<LNGPortfolioModel>();
 
 		collector.beginCollecting();
 
@@ -163,12 +166,14 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 			} catch (final IOException e) {
 			}
 
-			if (instance instanceof MMXRootObject) {
-				final MMXRootObject rootObject = (MMXRootObject) instance;
-				rootObjects.add(rootObject);
+			if (instance instanceof LNGScenarioModel) {
+				final LNGScenarioModel rootObject = (LNGScenarioModel) instance;
+				scenarioModels.add(rootObject);
+				portfolioModels.add(rootObject.getPortfolioModel());
 				final Collection<? extends Object> viewerContent = collector.collectElements(rootObject, isPinned);
 				for (final Object o : viewerContent) {
-					sourceByElement.put(o, new Pair<ScenarioInstance, MMXRootObject>(job, rootObject));
+					sourceScenarioByElement.put(o, new Pair<ScenarioInstance, LNGScenarioModel>(job, rootObject));
+					sourcePortfolioByElement.put(o, new Pair<ScenarioInstance, LNGPortfolioModel>(job, rootObject.getPortfolioModel()));
 				}
 				selectedObjects.addAll(viewerContent);
 			}
@@ -179,12 +184,17 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 		return new IScenarioViewerSynchronizerOutput() {
 			@Override
 			public ScenarioInstance getScenarioInstance(final Object object) {
-				return sourceByElement.get(object).getFirst();
+				return sourceScenarioByElement.get(object).getFirst();
 			}
 
 			@Override
-			public MMXRootObject getRootObject(final Object object) {
-				return sourceByElement.get(object).getSecond();
+			public LNGScenarioModel getLNGScenarioModel(final Object object) {
+				return sourceScenarioByElement.get(object).getSecond();
+			}
+
+			@Override
+			public LNGPortfolioModel getLNGPortfolioModel(final Object object) {
+				return sourcePortfolioByElement.get(object).getSecond();
 			}
 
 			@Override
@@ -193,8 +203,13 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 			}
 
 			@Override
-			public Collection<MMXRootObject> getRootObjects() {
-				return rootObjects;
+			public Collection<LNGScenarioModel> getLNGScenarioModels() {
+				return scenarioModels;
+			}
+
+			@Override
+			public Collection<LNGPortfolioModel> getLNGPortfolioModels() {
+				return portfolioModels;
 			}
 
 			@Override
