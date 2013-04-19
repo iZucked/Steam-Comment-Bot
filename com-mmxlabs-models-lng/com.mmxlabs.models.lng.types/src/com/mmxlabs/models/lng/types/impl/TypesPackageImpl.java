@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import java.lang.Iterable;
 
 /**
  * <!-- begin-user-doc -->
