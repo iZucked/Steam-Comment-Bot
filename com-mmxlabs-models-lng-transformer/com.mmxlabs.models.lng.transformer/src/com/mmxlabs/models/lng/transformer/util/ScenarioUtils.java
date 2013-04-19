@@ -13,8 +13,8 @@ import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
@@ -43,9 +43,10 @@ public class ScenarioUtils {
 	 * TODO check these are reasonable settings (num. iters etc)
 	 * 
 	 * @param scenario
+	 * @since 3.0
 	 */
-	public static void addDefaultSettings(MMXRootObject scenario) {
-		ParametersModel om = scenario.getSubModel(ParametersModel.class);
+	public static void addDefaultSettings(LNGScenarioModel scenario) {
+		ParametersModel om = scenario.getParametersModel();
 		OptimiserSettings settings = createDefaultSettings();
 		om.getSettings().add(settings);
 		om.setActiveSetting(settings);

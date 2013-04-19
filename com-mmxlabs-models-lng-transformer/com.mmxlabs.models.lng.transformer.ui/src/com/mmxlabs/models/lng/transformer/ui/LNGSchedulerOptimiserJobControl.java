@@ -18,6 +18,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
@@ -40,7 +41,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private final ScenarioInstance scenarioInstance;
 
-	private final MMXRootObject scenario;
+	private final LNGScenarioModel scenario;
 
 	private ModelEntityMap entities;
 
@@ -60,7 +61,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				(jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.scenario = (MMXRootObject) scenarioInstance.getInstance();
+		this.scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 		editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 	}
 

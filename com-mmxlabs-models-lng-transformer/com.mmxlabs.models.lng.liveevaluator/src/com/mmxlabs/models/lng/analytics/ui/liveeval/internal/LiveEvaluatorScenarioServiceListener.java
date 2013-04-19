@@ -12,8 +12,8 @@ import java.util.concurrent.Executors;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.Container;
@@ -45,17 +45,14 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 		for (final Container c : container.getElements()) {
 			if (c instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
-				final EObject obj = scenarioInstance.getInstance();
-				if (obj instanceof MMXRootObject) {
-					final MMXRootObject rootObject = (MMXRootObject) obj;
-					final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
-					if (schedule != null) {
-						final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
-						evaluator.setEnabled(enabled);
-						schedule.eAdapters().add(evaluator);
-						scenarioInstance.eAdapters().add(evaluator);
-						evaluatorMap.put(scenarioInstance, evaluator);
-					}
+				final ScheduleModel schedule = getScheduleModel(scenarioInstance);
+
+				if (schedule != null) {
+					final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
+					evaluator.setEnabled(enabled);
+					schedule.eAdapters().add(evaluator);
+					scenarioInstance.eAdapters().add(evaluator);
+					evaluatorMap.put(scenarioInstance, evaluator);
 				}
 			}
 			hookExisting(c);
@@ -64,18 +61,15 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 
 	@Override
 	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-		final EObject obj = scenarioInstance.getInstance();
-		if (obj instanceof MMXRootObject) {
-			final MMXRootObject rootObject = (MMXRootObject) obj;
-			final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
-			if (schedule != null) {
-				final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
-				evaluator.setScenarioInstanceEvaluator(scenarioInstanceEvaluator);
-				evaluator.setEnabled(enabled);
-				schedule.eAdapters().add(evaluator);
-				scenarioInstance.eAdapters().add(evaluator);
-				evaluatorMap.put(scenarioInstance, evaluator);
-			}
+		final ScheduleModel schedule = getScheduleModel(scenarioInstance);
+
+		if (schedule != null) {
+			final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
+			evaluator.setScenarioInstanceEvaluator(scenarioInstanceEvaluator);
+			evaluator.setEnabled(enabled);
+			schedule.eAdapters().add(evaluator);
+			scenarioInstance.eAdapters().add(evaluator);
+			evaluatorMap.put(scenarioInstance, evaluator);
 		}
 	}
 
@@ -89,17 +83,25 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 		final LiveEvaluator eval = evaluatorMap.get(scenarioInstance);
 
 		if (scenarioInstance != null && eval != null) {
-			final EObject obj = scenarioInstance.getInstance();
 			scenarioInstance.eAdapters().remove(eval);
-			if (obj instanceof MMXRootObject) {
-				final MMXRootObject rootObject = (MMXRootObject) obj;
-				final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
-				if (schedule != null) {
-					schedule.eAdapters().remove(eval);
-				}
+			final ScheduleModel schedule = getScheduleModel(scenarioInstance);
+			if (schedule != null) {
+				schedule.eAdapters().remove(eval);
 			}
 		}
 		evaluatorMap.remove(scenarioInstance);
+	}
+
+	private ScheduleModel getScheduleModel(ScenarioInstance scenarioInstance) {
+		if (scenarioInstance != null) {
+			final EObject obj = scenarioInstance.getInstance();
+			if (obj instanceof LNGScenarioModel) {
+				final LNGScenarioModel rootObject = (LNGScenarioModel) obj;
+				final ScheduleModel scheduleModel = rootObject.getPortfolioModel().getScheduleModel();
+				return scheduleModel;
+			}
+		}
+		return null;
 	}
 
 	public void dispose() {
@@ -108,13 +110,9 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 			final LiveEvaluator eval = e.getValue();
 			if (scenarioInstance != null && eval != null) {
 				scenarioInstance.eAdapters().remove(eval);
-				final EObject obj = scenarioInstance.getInstance();
-				if (obj instanceof MMXRootObject) {
-					final MMXRootObject rootObject = (MMXRootObject) obj;
-					final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
-					if (schedule != null) {
-						schedule.eAdapters().remove(eval);
-					}
+				final ScheduleModel schedule = getScheduleModel(scenarioInstance);
+				if (schedule != null) {
+					schedule.eAdapters().remove(eval);
 				}
 			}
 		}

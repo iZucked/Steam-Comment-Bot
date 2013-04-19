@@ -13,6 +13,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
@@ -34,30 +35,32 @@ public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint 
 			final Slot slot = (Slot) target;
 			final IExtraValidationContext extraContext = Activator.getDefault().getExtraValidationContext();
 			final MMXRootObject rootObject = extraContext.getRootObject();
-			final SpotMarketsModel spotMarketsModel = rootObject.getSubModel(SpotMarketsModel.class);
+			if (rootObject instanceof LNGScenarioModel) {
+				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) rootObject).getSpotMarketsModel();
 
-			if (spotMarketsModel == null) {
-				// Nothing to validate against
-				return Activator.PLUGIN_ID;
-			}
-			boolean charterOutEnabled = false;
-			for (final CharterCostModel ccm : spotMarketsModel.getCharteringSpotMarkets()) {
-				if (ccm.getCharterOutPrice() != null) {
-					charterOutEnabled = true;
-					break;
+				if (spotMarketsModel == null) {
+					// Nothing to validate against
+					return Activator.PLUGIN_ID;
 				}
-			}
+				boolean charterOutEnabled = false;
+				for (final CharterCostModel ccm : spotMarketsModel.getCharteringSpotMarkets()) {
+					if (ccm.getCharterOutPrice() != null) {
+						charterOutEnabled = true;
+						break;
+					}
+				}
 
-			if (!charterOutEnabled) {
-				// Charter out mode not enabled
-				return Activator.PLUGIN_ID;
-			}
+				if (!charterOutEnabled) {
+					// Charter out mode not enabled
+					return Activator.PLUGIN_ID;
+				}
 
-			if (slot.isSetPriceExpression() && slot.getPriceExpression().contains(IBreakEvenEvaluator.MARKER)) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus("Missing prices cannot be used with charter out generation"));
-				dcsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
-				statuses.add(dcsd);
+				if (slot.isSetPriceExpression() && slot.getPriceExpression().contains(IBreakEvenEvaluator.MARKER)) {
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus("Missing prices cannot be used with charter out generation"));
+					dcsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
+					statuses.add(dcsd);
+				}
 			}
 		}
 

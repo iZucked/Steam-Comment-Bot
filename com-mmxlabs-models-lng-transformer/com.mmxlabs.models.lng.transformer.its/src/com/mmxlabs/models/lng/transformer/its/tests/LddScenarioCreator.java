@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
 /**
@@ -48,9 +49,9 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	public LddScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 		
-		final CommercialModel commercialModel = scenario.getSubModel(CommercialModel.class);
-		final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
-		
+		final CommercialModel commercialModel = scenario.getCommercialModel();
+		final FleetModel fleetModel = scenario.getFleetModel();
+		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
 		// need to create a legal entity for shipping
@@ -108,13 +109,13 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		Date endDate = addHours(lastDischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 		
-		this.vesselAvailability = fleetCreator.setAvailability(fleetModel, vessel, originPort, startDate, originPort, endDate);			
+		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessel, originPort, startDate, originPort, endDate);			
 
 		// complete hack: forcibly assign the cargo to the vessel
 		final ElementAssignment assignment = AssignmentFactory.eINSTANCE.createElementAssignment();
 		assignment.setAssignedObject(cargo);
 		assignment.setAssignment(vessel);
-		final AssignmentModel assignmentModel = scenario.getSubModel(AssignmentModel.class);
+		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
 		assignmentModel.getElementAssignments().add(assignment);	
 	
 	}

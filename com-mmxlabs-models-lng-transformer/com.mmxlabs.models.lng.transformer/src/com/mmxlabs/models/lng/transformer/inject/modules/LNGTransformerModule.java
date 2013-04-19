@@ -14,8 +14,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -49,9 +50,12 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
 
-	private final MMXRootObject scenario;
+	private final LNGScenarioModel scenario;
 
-	public LNGTransformerModule(final MMXRootObject scenario) {
+	/**
+	 * @since 3.0
+	 */
+	public LNGTransformerModule(final LNGScenarioModel scenario) {
 		this.scenario = scenario;
 	}
 
@@ -62,7 +66,7 @@ public class LNGTransformerModule extends AbstractModule {
 		install(new SequencesManipulatorModule());
 		install(new SchedulerModule());
 
-		bind(MMXRootObject.class).toInstance(scenario);
+		bind(LNGScenarioModel.class).toInstance(scenario);
 
 		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
@@ -110,8 +114,8 @@ public class LNGTransformerModule extends AbstractModule {
 	 * 
 	 * @return
 	 */
-	OptimiserSettings getOptimisationSettings(MMXRootObject rootObject) {
-		final ParametersModel om = rootObject.getSubModel(ParametersModel.class);
+	OptimiserSettings getOptimisationSettings(LNGScenarioModel rootObject) {
+		final ParametersModel om = rootObject.getParametersModel();
 		if (om != null) {
 			// select settings
 			final OptimiserSettings x = om.getActiveSetting();

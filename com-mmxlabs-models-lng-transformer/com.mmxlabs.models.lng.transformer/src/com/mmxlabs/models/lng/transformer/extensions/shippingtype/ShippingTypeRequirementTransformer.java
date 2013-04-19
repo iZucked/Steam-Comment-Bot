@@ -17,10 +17,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -38,12 +38,12 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-	
+
 	/**
 	 * @since 3.0
 	 */
 	@Override
-	public void startTransforming(final MMXRootObject rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
+	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 	}
 
 	/**
@@ -69,29 +69,27 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 		if (modelSlot instanceof LoadSlot) {
 			if (((LoadSlot) modelSlot).isDESPurchase()) {
 				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
-			}
-			else {
-				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);				
+			} else {
+				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
 			}
 		}
-				
+
 		else if (modelSlot instanceof DischargeSlot) {
 			DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
 			CargoDeliveryType cargoType = CargoDeliveryType.ANY;
-			
+
 			if (dischargeSlot.isSetPurchaseDeliveryType()) {
 				cargoType = dischargeSlot.getPurchaseDeliveryType();
-			}
-			else {
+			} else {
 				Contract contract = dischargeSlot.getContract();
 				if (contract instanceof SalesContract) {
-					cargoType = ((SalesContract) contract).getPurchaseDeliveryType();					
+					cargoType = ((SalesContract) contract).getPurchaseDeliveryType();
 				}
 			}
 			if (cargoType != CargoDeliveryType.ANY) {
 				desPermissionProviderEditor.setSalesSlotRequiredPurchaseType(sequenceElement, cargoType);
 			}
-		} 				
+		}
 	}
 
 	@Override
@@ -100,7 +98,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	}
 
 	@Override
-	public void finishTransforming() {		
+	public void finishTransforming() {
 	}
 
 }

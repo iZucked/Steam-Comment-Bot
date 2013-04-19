@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -71,8 +72,8 @@ public class InputAttributesCheckTest {
 		// create some cargoes.
 		SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue);
 
-		final MMXRootObject scenario = csc.buildScenario();
-		final MMXRootObject copiedScenario = EcoreUtil.copy(scenario);
+		final LNGScenarioModel scenario = csc.buildScenario();
+		final LNGScenarioModel copiedScenario = EcoreUtil.copy(scenario);
 
 		assertScenariosEqual("Copy has been made correctly", copiedScenario, scenario);
 		ScenarioTools.evaluate(scenario);

@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
@@ -172,7 +173,7 @@ public class RouteSameCostTest {
 		final int ladenIdleNBORate = NBOIdleRatePerDay;
 		final int ladenNBORate = NBOTravelRatePerDay;
 
-		final MMXRootObject canalScenario = ScenarioTools.createScenarioWithCanals(distancesBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed,
+		final LNGScenarioModel canalScenario = ScenarioTools.createScenarioWithCanals(distancesBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed,
 				capacity, ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed,
 				ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume);
 		
@@ -219,7 +220,7 @@ public class RouteSameCostTest {
 
 	}
 
-	private void addCanalParameters(CanalParameters canalParameters, MMXRootObject canalScenario) {
+	private void addCanalParameters(CanalParameters canalParameters, LNGScenarioModel canalScenario) {
 		if (canalParameters != null) {
 			CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalName, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance, canalParameters.canalCost, canalParameters.canalCost, canalParameters.canalTransitFuelPerDay, canalParameters.NBOTravelRatePerDay  , canalParameters.canalTransitTime);
 		}

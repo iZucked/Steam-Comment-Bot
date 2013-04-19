@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.transformer.ICargoSandboxTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.CargoSandboxTransformer;
 import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -275,32 +276,34 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 			@Override
 			public void run() {
 				final MMXRootObject rootObject = location.getRootObject();
-				final AnalyticsModel analyticsModel = rootObject.getSubModel(AnalyticsModel.class);
+				if (rootObject instanceof LNGScenarioModel) {
+					final AnalyticsModel analyticsModel = ((LNGScenarioModel)rootObject).getAnalyticsModel();
 
-				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_CargoSandboxes(), null);
-				if (settings.isEmpty()) {
-					return;
-				}
-
-				final ScenarioLock editorLock = location.getEditorLock();
-				try {
-					editorLock.claim();
-					location.setDisableUpdates(true);
-
-					// now create an add command, which will include adding any
-					// other relevant objects
-					final CompoundCommand add = new CompoundCommand();
-					for (final ISetting setting : settings) {
-						// final DetailCompositeDialog dialog = new DetailCompositeDialog(location.getShell(), location.getDefaultCommandHandler());
-						// if (dialog.open(CargoSandboxesViewerPane.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
-						add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
-						// }
+					final Collection<? extends ISetting> settings = factory.createInstance(rootObject, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_CargoSandboxes(), null);
+					if (settings.isEmpty()) {
+						return;
 					}
-					getEditingDomain().getCommandStack().execute(add);
-					viewer.refresh();
-				} finally {
-					location.setDisableUpdates(false);
-					editorLock.release();
+
+					final ScenarioLock editorLock = location.getEditorLock();
+					try {
+						editorLock.claim();
+						location.setDisableUpdates(true);
+
+						// now create an add command, which will include adding any
+						// other relevant objects
+						final CompoundCommand add = new CompoundCommand();
+						for (final ISetting setting : settings) {
+							// final DetailCompositeDialog dialog = new DetailCompositeDialog(location.getShell(), location.getDefaultCommandHandler());
+							// if (dialog.open(CargoSandboxesViewerPane.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
+							add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+							// }
+						}
+						getEditingDomain().getCommandStack().execute(add);
+						viewer.refresh();
+					} finally {
+						location.setDisableUpdates(false);
+						editorLock.release();
+					}
 				}
 			}
 		};

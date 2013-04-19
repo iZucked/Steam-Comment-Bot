@@ -16,7 +16,6 @@ import javax.management.timer.Timer;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
@@ -45,6 +44,7 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -60,6 +60,8 @@ import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -83,7 +85,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModu
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -136,8 +137,9 @@ public class ScenarioTools {
 	 * @param useDryDock
 	 * @param pilotLightRate
 	 * @return
+	 * @since 3.0
 	 */
-	public static MMXRootObject createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+	public static LNGScenarioModel createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
@@ -153,8 +155,10 @@ public class ScenarioTools {
 	 * Same as
 	 * {@link #createScenarioWithCanal(int[], float, float, float, int, float, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, boolean, int, int, VesselClassCost)}
 	 * but only has argument for one distance between the two ports.
+	 * 
+	 * @since 3.0
 	 */
-	public static MMXRootObject createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+	public static LNGScenarioModel createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
@@ -199,18 +203,19 @@ public class ScenarioTools {
 	 * @param canalCost
 	 *            If this is not null a canal is added. If it is null no canal is added.
 	 * @return
+	 * @since 3.0
 	 */
-	public static MMXRootObject createScenarioWithCanals(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+	public static LNGScenarioModel createScenarioWithCanals(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final boolean useDryDock,
 			final int pilotLightRate, final int minHeelVolume) {
 
-		final MMXRootObject scenario = ManifestJointModel.createEmptyInstance(null);
+		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
 
-		final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+		final PricingModel pricingModel = scenario.getPricingModel();
 		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-		final SpotMarketsModel spotMarketsModel = scenario.getSubModel(SpotMarketsModel.class);
+		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -243,8 +248,13 @@ public class ScenarioTools {
 		bfc.setPrice(baseFuelUnitPrice);
 		fleetCostModel.getBaseFuelPrices().add(bfc);
 
-		final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+		final FleetModel fleetModel = scenario.getFleetModel();
 		fleetModel.getBaseFuels().add(baseFuel);
+
+		PortModel portModel = scenario.getPortModel();
+
+		LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
+		ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
 
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
 		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
@@ -314,9 +324,8 @@ public class ScenarioTools {
 		availablility.setStartHeel(heelOptions);
 
 		fleetModel.getVessels().add(vessel);
-		fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availablility);
+		scenarioFleetModel.getVesselAvailabilities().add(availablility);
 
-		final PortModel portModel = scenario.getSubModel(PortModel.class);
 		portModel.getPorts().add(A);
 		portModel.getPorts().add(B);
 
@@ -338,7 +347,7 @@ public class ScenarioTools {
 			r.getLines().add(distancLineBack);
 		}
 
-		final CommercialModel commercialModel = scenario.getSubModel(CommercialModel.class);
+		final CommercialModel commercialModel = scenario.getCommercialModel();
 
 		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
 		commercialModel.getEntities().add(e);
@@ -438,7 +447,7 @@ public class ScenarioTools {
 			dryDock.setDurationInDays(0);
 			dryDock.setPort(A);
 			// add to scenario's fleet model
-			fleetModel.getScenarioFleetModel().getVesselEvents().add(dryDock);
+			scenarioFleetModel.getVesselEvents().add(dryDock);
 			// set the date to be after the discharge date
 			final Date thenNext = new Date(dischargeDate.getTime() + (Timer.ONE_HOUR * travelTime));
 			dryDock.setStartAfter(thenNext);
@@ -449,7 +458,7 @@ public class ScenarioTools {
 
 		cargo.setName("CARGO");
 
-		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
+		final CargoModel cargoModel = portfolioModel.getCargoModel();
 		cargoModel.getCargoes().add(cargo);
 		cargoModel.getLoadSlots().add(load);
 		cargoModel.getDischargeSlots().add(dis);
@@ -461,19 +470,24 @@ public class ScenarioTools {
 
 	/**
 	 * Creates a scenario with a charter out.
+	 * 
+	 * @since 3.0
 	 */
-	public static MMXRootObject createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
+	public static LNGScenarioModel createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
 			final int ballastMaxConsumption, final int ballastIdleConsumptionRate, final int ballastIdleNBORate, final int ballastNBORate, final int ladenMinSpeed, final int ladenMinConsumption,
 			final int ladenMaxSpeed, final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate,
 			final int charterOutTimeDays, final int heelLimit) {
 
-		final MMXRootObject scenario = ManifestJointModel.createEmptyInstance(null);
-		final PortModel portModel = scenario.getSubModel(PortModel.class);
-		final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
-		final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
+		final PortModel portModel = scenario.getPortModel();
+		final FleetModel fleetModel = scenario.getFleetModel();
+		final PricingModel pricingModel = scenario.getPricingModel();
 		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-		final SpotMarketsModel spotMarketsModel = scenario.getSubModel(SpotMarketsModel.class);
+		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
+
+		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
+		final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -565,7 +579,7 @@ public class ScenarioTools {
 		availability.setVessel(vessel);
 
 		fleetModel.getVessels().add(vessel);
-		fleetModel.getScenarioFleetModel().getVesselAvailabilities().add(availability);
+		scenarioFleetModel.getVesselAvailabilities().add(availability);
 
 		portModel.getPorts().add(A);
 		portModel.getPorts().add(B);
@@ -588,7 +602,7 @@ public class ScenarioTools {
 		r.getLines().add(distance);
 		r.getLines().add(distance2);
 
-		final CommercialModel commercialModel = scenario.getSubModel(CommercialModel.class);
+		final CommercialModel commercialModel = scenario.getCommercialModel();
 		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
 		commercialModel.getEntities().add(e);
 		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
@@ -642,7 +656,7 @@ public class ScenarioTools {
 		// charterOut.setDailyCharterOutPrice(0);
 		charterOut.setRepositioningFee(0);
 		// add to the scenario's fleet model
-		fleetModel.getScenarioFleetModel().getVesselEvents().add(charterOut);
+		scenarioFleetModel.getVesselEvents().add(charterOut);
 
 		// Set up dry dock to cause journey
 		final DryDockEvent dryDockJourney = FleetFactory.eINSTANCE.createDryDockEvent();
@@ -652,7 +666,7 @@ public class ScenarioTools {
 		dryDockJourney.setStartAfter(dryDockJourneyStartDate);
 		dryDockJourney.setStartBy(dryDockJourneyStartDate);
 		// add to scenario's fleet model
-		fleetModel.getScenarioFleetModel().getVesselEvents().add(dryDockJourney);
+		scenarioFleetModel.getVesselEvents().add(dryDockJourney);
 
 		ScenarioUtils.addDefaultSettings(scenario);
 
@@ -664,8 +678,9 @@ public class ScenarioTools {
 	 * 
 	 * @param scenario
 	 * @return the evaluated schedule
+	 * @since 3.0
 	 */
-	public static Schedule evaluate(final MMXRootObject scenario) {
+	public static Schedule evaluate(final LNGScenarioModel scenario) {
 
 		// String[] hints = null;
 		// if (optimise) {
@@ -876,38 +891,13 @@ public class ScenarioTools {
 
 		manifestResource.getContents().add(manifest);
 
-		int index = 0;
-		// long l = System.currentTimeMillis();
-		//
-		for (final MMXSubModel sub : instance.getSubModels()) {
-			final EObject top = sub.getSubModelInstance();
-			final URI relativeURI = URI.createURI("/" + top.eClass().getName() + index++ + ".xmi");
-			manifest.getModelURIs().add(relativeURI.toString());
-			final URI resolved = relativeURI.resolve(manifestURI);
-			final Resource r2 = resourceSet.createResource(resolved);
-			r2.getContents().add(top);
-			r2.save(null);
-		}
+		final URI relativeURI = URI.createURI("/rootObject.xmi");
+		manifest.getModelURIs().add(relativeURI.toString());
+		final URI resolved = relativeURI.resolve(manifestURI);
+		final Resource r2 = resourceSet.createResource(resolved);
+		r2.getContents().add(instance);
+		r2.save(null);
 
-		// for (final String partURI : partURIs) {
-		// final URI u = scenarioService.resolveURI(partURI);
-		// final InputStream input = conv.createInputStream(u);
-		// final URI relativeURI = URI.createURI("/" + index++ +"-" + u.segment(u.segmentCount()-1));
-		// manifest.getModelURIs().add(relativeURI.toString());
-		// final URI resolved = relativeURI.resolve(manifestURI);
-		// final OutputStream output = conv.createOutputStream(resolved);
-		// try {
-		// int b;
-		// while ((b = input.read(buffer)) != -1) {
-		// output.write(buffer, 0, b);
-		// }
-		//
-		// output.flush();
-		// } finally {
-		// output.close();
-		// }
-		// }
-		// System.err.println("time: " + (System.currentTimeMillis() - l));
 		manifestResource.save(null);
 	}
 

@@ -18,8 +18,8 @@ import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -27,9 +27,8 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -60,7 +59,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 
 	@Inject
-	private MMXRootObject rootObject;
+	private LNGScenarioModel rootObject;
 
 	@Inject
 	private IInitialSequenceBuilder builder;
@@ -87,7 +86,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.
 		 */
 		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
-		final AssignmentModel assignmentModel = rootObject.getSubModel(AssignmentModel.class);
+		final AssignmentModel assignmentModel = rootObject.getPortfolioModel().getAssignmentModel();
 
 		final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
@@ -207,7 +206,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		// Process initial vessel assignments list
 		if (!assignmentModel.getElementAssignments().isEmpty()) {
-			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, rootObject.getSubModel(FleetModel.class));
+			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, rootObject.getFleetModel());
 			for (final CollectedAssignment seq : assignments) {
 				IVessel vessel = null;
 				log.debug("Processing assignment " + seq.getVesselOrClass().getName());

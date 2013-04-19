@@ -17,6 +17,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
+import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
 import org.eclipse.emf.ecore.EClass;
@@ -64,6 +65,8 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.transformer.IShippingCostTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.ShippingCostTransformer;
 import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -149,9 +152,10 @@ public class ShippingCostsView extends ScenarioInstanceView {
 	}
 
 	private void createContents() {
-		final IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(), AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
+		final IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(),
+				FeaturePath.fromList(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel(), AnalyticsPackage.eINSTANCE.getAnalyticsModel_ShippingCostPlans()));
 		// TODO Auto-generated method stub
-		final IObservableList modelObserver = prop.observe(getRootObject().getSubModel(AnalyticsModel.class));
+		final IObservableList modelObserver = prop.observe(getRootObject());
 		selectionViewer.setInput(modelObserver);
 
 		// IViewerValueProperty targetObserver = ViewerProperties.input();
@@ -467,33 +471,35 @@ public class ShippingCostsView extends ScenarioInstanceView {
 			@Override
 			public void run() {
 				final MMXRootObject rootObject = getRootObject();
-				final AnalyticsModel analyticsModel = rootObject.getSubModel(AnalyticsModel.class);
+				if (rootObject instanceof LNGScenarioModel) {
+					final AnalyticsModel analyticsModel = ((LNGScenarioModel) rootObject).getAnalyticsModel();
 
-				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ShippingCostPlans(), null);
-				if (settings.isEmpty()) {
-					return;
-				}
-
-				final ScenarioLock editorLock = getEditorLock();
-				try {
-					editorLock.claim();
-					setDisableUpdates(true);
-
-					// now create an add command, which will include adding any
-					// other relevant objects
-					final CompoundCommand add = new CompoundCommand();
-					for (final ISetting setting : settings) {
-						final EObject instance = setting.getInstance();
-						final DetailCompositeDialog dialog = new DetailCompositeDialog(getSite().getShell(), getDefaultCommandHandler());
-						if (dialog.open(ShippingCostsView.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
-							add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
-						}
+					final Collection<? extends ISetting> settings = factory.createInstance(rootObject, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ShippingCostPlans(), null);
+					if (settings.isEmpty()) {
+						return;
 					}
-					getEditingDomain().getCommandStack().execute(add);
-					selectionViewer.refresh();
-				} finally {
-					setDisableUpdates(false);
-					editorLock.release();
+
+					final ScenarioLock editorLock = getEditorLock();
+					try {
+						editorLock.claim();
+						setDisableUpdates(true);
+
+						// now create an add command, which will include adding any
+						// other relevant objects
+						final CompoundCommand add = new CompoundCommand();
+						for (final ISetting setting : settings) {
+							final EObject instance = setting.getInstance();
+							final DetailCompositeDialog dialog = new DetailCompositeDialog(getSite().getShell(), getDefaultCommandHandler());
+							if (dialog.open(ShippingCostsView.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
+								add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+							}
+						}
+						getEditingDomain().getCommandStack().execute(add);
+						selectionViewer.refresh();
+					} finally {
+						setDisableUpdates(false);
+						editorLock.release();
+					}
 				}
 			}
 		};

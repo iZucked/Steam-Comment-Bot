@@ -40,6 +40,8 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -97,7 +99,7 @@ public class LNGSchedulerJobUtils {
 	 * @param LABEL_PREFIX
 	 * @return
 	 */
-	public static Schedule exportSolution(final Injector injector, final MMXRootObject scenario, final EditingDomain editingDomain, final ModelEntityMap entities, final IAnnotatedSolution solution,
+	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, final ModelEntityMap entities, final IAnnotatedSolution solution,
 			final int solutionCurrentProgress) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
@@ -105,10 +107,12 @@ public class LNGSchedulerJobUtils {
 			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 			childInjector.injectMembers(exporter);
 		}
+		LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
+		
 		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
-		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-		final AssignmentModel assignmentModel = scenario.getSubModel(AssignmentModel.class);
-		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
+		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
+		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
+		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
 		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");
 		final CompoundCommand command = new CompoundCommand(label);

@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
@@ -48,7 +49,7 @@ public class SimpleCalculationTest {
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
-		final MMXRootObject scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final LNGScenarioModel scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
@@ -76,7 +77,7 @@ public class SimpleCalculationTest {
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
-		final MMXRootObject scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final LNGScenarioModel scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
@@ -103,7 +104,7 @@ public class SimpleCalculationTest {
 	 * 
 	 * @return
 	 */
-	private MMXRootObject createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
+	private LNGScenarioModel createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class

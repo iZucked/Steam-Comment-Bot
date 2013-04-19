@@ -21,9 +21,9 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -42,8 +42,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  */
 public class SimpleContractTransformer implements IContractTransformer {
 
-	private ModelEntityMap map;
-
 	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceParameters(), CommercialPackage.eINSTANCE.getExpressionPriceParameters(),
 			CommercialPackage.eINSTANCE.getSalesContract(), CommercialPackage.eINSTANCE.getPurchaseContract());
 
@@ -54,13 +52,11 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public void startTransforming(final MMXRootObject rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
-		this.map = map;
+	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 	}
 
 	@Override
 	public void finishTransforming() {
-		this.map = null;
 	}
 
 	private SimpleContract instantiate(final LNGPriceCalculatorParameters priceInfo) {

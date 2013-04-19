@@ -15,9 +15,9 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -56,7 +56,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 		scenarioInstance.getLock(jobDescriptor.getLockKey()).awaitClaim();
 		try {
-			final MMXRootObject scenario = (MMXRootObject) scenarioInstance.getInstance();
+			final LNGScenarioModel scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
 			// Create the transformer and object reference to the data objects

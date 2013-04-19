@@ -43,8 +43,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public MinimalScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 		
-		final CommercialModel commercialModel = scenario.getSubModel(CommercialModel.class);
-		final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+		final CommercialModel commercialModel = scenario.getCommercialModel();
+		final FleetModel fleetModel = scenario.getFleetModel();
 		
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
@@ -94,6 +94,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		Date endDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
 		
-		this.vesselAvailability = fleetCreator.setAvailability(fleetModel, vessel, originPort, startDate, originPort, endDate);			
+		
+		this.vesselAvailability = fleetCreator.setAvailability(scenario.getPortfolioModel().getScenarioFleetModel(), vessel, originPort, startDate, originPort, endDate);			
 	}
 }

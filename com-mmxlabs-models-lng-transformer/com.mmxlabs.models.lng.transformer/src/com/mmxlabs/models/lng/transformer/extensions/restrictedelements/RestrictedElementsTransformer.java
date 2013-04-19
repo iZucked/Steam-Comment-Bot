@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -44,7 +45,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
-	private MMXRootObject rootObject;
+	private LNGScenarioModel rootObject;
 	private final Map<Contract, Collection<ISequenceElement>> contractMap = new HashMap<Contract, Collection<ISequenceElement>>();
 	private final Map<Port, Collection<ISequenceElement>> portMap = new HashMap<Port, Collection<ISequenceElement>>();
 	private final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
@@ -53,13 +54,13 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public void startTransforming(final MMXRootObject rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
+	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
 	}
 
 	@Override
 	public void finishTransforming() {
-		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+		final CommercialModel commercialModel = rootObject.getCommercialModel();
 		if (commercialModel != null) {
 			// Process purchase contract restrictions - these are the follower restrictions
 			for (final PurchaseContract pc : commercialModel.getPurchaseContracts()) {
