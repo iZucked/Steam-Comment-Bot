@@ -4,20 +4,17 @@
  */
 package com.mmxlabs.models.ui.validation.scenarios;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -44,9 +41,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		if (instance instanceof MMXRootObject) {
 			final MMXRootObject rootObject = (MMXRootObject) instance;
 			extraContext = new DefaultExtraValidationContext(rootObject);
-			for (final MMXSubModel model : rootObject.getSubModels()) {
-				model.getSubModelInstance().eAdapters().add(ScenarioInstanceValidator.this);
-			}
+			rootObject.eAdapters().add(ScenarioInstanceValidator.this);
 		}
 	}
 
@@ -54,9 +49,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		final Object instance = scenarioInstance.getInstance();
 		if (instance instanceof MMXRootObject) {
 			final MMXRootObject rootObject = (MMXRootObject) instance;
-			for (final MMXSubModel model : rootObject.getSubModels()) {
-				model.getSubModelInstance().eAdapters().remove(ScenarioInstanceValidator.this);
-			}
+			rootObject.eAdapters().remove(ScenarioInstanceValidator.this);
 		}
 		extraContext = null;
 	}
@@ -73,20 +66,16 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 						return;
 					}
 
-					final Collection<EObject> modelRoots = new LinkedList<EObject>();
 					final MMXRootObject rootObject = extraContext.getRootObject();
 					if (rootObject == null) {
 						return;
-					}
-					for (final MMXSubModel subModel : rootObject.getSubModels()) {
-						modelRoots.add(subModel.getSubModelInstance());
 					}
 
 					IStatus status = null;
 					// Perform initial validation
 					if (claimValidationLock()) {
 						try {
-							status = helper.runValidation(createValidator(), extraContext, modelRoots);
+							status = helper.runValidation(createValidator(), extraContext, Collections.singleton(rootObject));
 
 						} finally {
 							releaseValidationLock();
@@ -115,6 +104,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		scenarioInstance.setValidationStatusCode(status.getSeverity());
 	}
 
+	@Override
 	public void reallyNotifyChanged(final Notification notification) {
 		processNotification(notification);
 	}

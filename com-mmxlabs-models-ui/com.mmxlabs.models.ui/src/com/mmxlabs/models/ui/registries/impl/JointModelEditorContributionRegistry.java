@@ -31,7 +31,7 @@ public class JointModelEditorContributionRegistry implements IJointModelEditorCo
 
 	@Override
 	public List<IJointModelEditorContribution> initEditorContributions(final JointModelEditorPart part, final MMXRootObject root) {
-		final List<Pair<IJointModelEditorExtension, UUIDObject>> matches = new ArrayList<Pair<IJointModelEditorExtension, UUIDObject>>(root.getSubModels().size());
+		final List<Pair<IJointModelEditorExtension, UUIDObject>> matches = new ArrayList<Pair<IJointModelEditorExtension, UUIDObject>>(10);
 
 		final HashMap<String, IJointModelEditorExtension> extensionsByModel = new HashMap<String, IJointModelEditorExtension>();
 		for (final IJointModelEditorExtension ex : extensions) {
