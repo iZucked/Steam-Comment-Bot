@@ -89,29 +89,6 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXObject} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MMXObjectItemProvider mmxObjectItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.MMXObject}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMMXObjectAdapter() {
-		if (mmxObjectItemProvider == null) {
-			mmxObjectItemProvider = new MMXObjectItemProvider(this);
-		}
-
-		return mmxObjectItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.NamedObject} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -178,29 +155,6 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 		}
 
 		return mmxRootObjectItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXSubModel} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MMXSubModelItemProvider mmxSubModelItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.MMXSubModel}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMMXSubModelAdapter() {
-		if (mmxSubModelItemProvider == null) {
-			mmxSubModelItemProvider = new MMXSubModelItemProvider(this);
-		}
-
-		return mmxSubModelItemProvider;
 	}
 
 	/**
@@ -332,11 +286,9 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	 * @generated
 	 */
 	public void dispose() {
-		if (mmxObjectItemProvider != null) mmxObjectItemProvider.dispose();
 		if (namedObjectItemProvider != null) namedObjectItemProvider.dispose();
 		if (uuidObjectItemProvider != null) uuidObjectItemProvider.dispose();
 		if (mmxRootObjectItemProvider != null) mmxRootObjectItemProvider.dispose();
-		if (mmxSubModelItemProvider != null) mmxSubModelItemProvider.dispose();
 	}
 
 }

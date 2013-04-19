@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * </p>
  *
  * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXObject()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface MMXObject extends EObject {

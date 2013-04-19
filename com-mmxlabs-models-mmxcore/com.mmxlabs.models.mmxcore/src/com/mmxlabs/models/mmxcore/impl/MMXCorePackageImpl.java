@@ -6,18 +6,15 @@ package com.mmxlabs.models.mmxcore.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -55,13 +52,6 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * @generated
 	 */
 	private EClass mmxRootObjectEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass mmxSubModelEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -229,51 +219,6 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getMMXRootObject_SubModels() {
-		return (EReference)mmxRootObjectEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getMMXRootObject__AddSubModel__UUIDObject() {
-		return mmxRootObjectEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getMMXRootObject__GetSubModel__Class() {
-		return mmxRootObjectEClass.getEOperations().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getMMXSubModel() {
-		return mmxSubModelEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getMMXSubModel_SubModelInstance() {
-		return (EReference)mmxSubModelEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public MMXCoreFactory getMMXCoreFactory() {
 		return (MMXCoreFactory)getEFactoryInstance();
 	}
@@ -311,12 +256,6 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		createEAttribute(uuidObjectEClass, UUID_OBJECT__UUID);
 
 		mmxRootObjectEClass = createEClass(MMX_ROOT_OBJECT);
-		createEReference(mmxRootObjectEClass, MMX_ROOT_OBJECT__SUB_MODELS);
-		createEOperation(mmxRootObjectEClass, MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT);
-		createEOperation(mmxRootObjectEClass, MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS);
-
-		mmxSubModelEClass = createEClass(MMX_SUB_MODEL);
-		createEReference(mmxSubModelEClass, MMX_SUB_MODEL__SUB_MODEL_INSTANCE);
 	}
 
 	/**
@@ -351,10 +290,9 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		uuidObjectEClass.getESuperTypes().add(this.getMMXObject());
 		mmxRootObjectEClass.getESuperTypes().add(this.getUUIDObject());
 		mmxRootObjectEClass.getESuperTypes().add(this.getNamedObject());
-		mmxSubModelEClass.getESuperTypes().add(this.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(mmxObjectEClass, MMXObject.class, "MMXObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(mmxObjectEClass, MMXObject.class, "MMXObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMMXObject_Extensions(), this.getUUIDObject(), null, "extensions", null, 0, -1, MMXObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		EOperation op = initEOperation(getMMXObject__GetUnsetValue__EStructuralFeature(), ecorePackage.getEJavaObject(), "getUnsetValue", 1, 1, IS_UNIQUE, IS_ORDERED);
@@ -373,22 +311,6 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		initEAttribute(getUUIDObject_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, UUIDObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mmxRootObjectEClass, MMXRootObject.class, "MMXRootObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMMXRootObject_SubModels(), this.getMMXSubModel(), null, "subModels", null, 0, -1, MMXRootObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		op = initEOperation(getMMXRootObject__AddSubModel__UUIDObject(), null, "addSubModel", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, this.getUUIDObject(), "subModel", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		op = initEOperation(getMMXRootObject__GetSubModel__Class(), null, "getSubModel", 1, 1, IS_UNIQUE, IS_ORDERED);
-		ETypeParameter t1 = addETypeParameter(op, "T");
-		EGenericType g1 = createEGenericType(ecorePackage.getEJavaClass());
-		EGenericType g2 = createEGenericType(t1);
-		g1.getETypeArguments().add(g2);
-		addEParameter(op, g1, "subModelClass", 0, 1, IS_UNIQUE, IS_ORDERED);
-		g1 = createEGenericType(t1);
-		initEOperation(op, g1);
-
-		initEClass(mmxSubModelEClass, MMXSubModel.class, "MMXSubModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMMXSubModel_SubModelInstance(), this.getUUIDObject(), null, "subModelInstance", null, 1, 1, MMXSubModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

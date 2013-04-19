@@ -326,22 +326,13 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_ROOT_OBJECT__OTHER_NAMES = UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Sub Models</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_ROOT_OBJECT__SUB_MODELS = UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The number of structural features of the '<em>MMX Root Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 3;
+	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -371,104 +362,13 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_ROOT_OBJECT___ECONTAINER_OP = UUID_OBJECT___ECONTAINER_OP;
 
 	/**
-	 * The operation id for the '<em>Add Sub Model</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT = UUID_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Sub Model</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS = UUID_OBJECT_OPERATION_COUNT + 1;
-
-	/**
 	 * The number of operations of the '<em>MMX Root Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT_OPERATION_COUNT = UUID_OBJECT_OPERATION_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.MMXSubModelImpl <em>MMX Sub Model</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.mmxcore.impl.MMXSubModelImpl
-	 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getMMXSubModel()
-	 * @generated
-	 */
-	int MMX_SUB_MODEL = 4;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_SUB_MODEL__EXTENSIONS = MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Sub Model Instance</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_SUB_MODEL__SUB_MODEL_INSTANCE = MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>MMX Sub Model</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_SUB_MODEL_FEATURE_COUNT = MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_SUB_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_SUB_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_SUB_MODEL___ECONTAINER_OP = MMX_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>MMX Sub Model</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_SUB_MODEL_OPERATION_COUNT = MMX_OBJECT_OPERATION_COUNT + 0;
+	int MMX_ROOT_OBJECT_OPERATION_COUNT = UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
@@ -584,58 +484,6 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getMMXRootObject();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.mmxcore.MMXRootObject#getSubModels <em>Sub Models</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Sub Models</em>'.
-	 * @see com.mmxlabs.models.mmxcore.MMXRootObject#getSubModels()
-	 * @see #getMMXRootObject()
-	 * @generated
-	 */
-	EReference getMMXRootObject_SubModels();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXRootObject#addSubModel(com.mmxlabs.models.mmxcore.UUIDObject) <em>Add Sub Model</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Add Sub Model</em>' operation.
-	 * @see com.mmxlabs.models.mmxcore.MMXRootObject#addSubModel(com.mmxlabs.models.mmxcore.UUIDObject)
-	 * @generated
-	 */
-	EOperation getMMXRootObject__AddSubModel__UUIDObject();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.mmxcore.MMXRootObject#getSubModel(java.lang.Class) <em>Get Sub Model</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Sub Model</em>' operation.
-	 * @see com.mmxlabs.models.mmxcore.MMXRootObject#getSubModel(java.lang.Class)
-	 * @generated
-	 */
-	EOperation getMMXRootObject__GetSubModel__Class();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.MMXSubModel <em>MMX Sub Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>MMX Sub Model</em>'.
-	 * @see com.mmxlabs.models.mmxcore.MMXSubModel
-	 * @generated
-	 */
-	EClass getMMXSubModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.mmxcore.MMXSubModel#getSubModelInstance <em>Sub Model Instance</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Sub Model Instance</em>'.
-	 * @see com.mmxlabs.models.mmxcore.MMXSubModel#getSubModelInstance()
-	 * @see #getMMXSubModel()
-	 * @generated
-	 */
-	EReference getMMXSubModel_SubModelInstance();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -755,48 +603,6 @@ public interface MMXCorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass MMX_ROOT_OBJECT = eINSTANCE.getMMXRootObject();
-
-		/**
-		 * The meta object literal for the '<em><b>Sub Models</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MMX_ROOT_OBJECT__SUB_MODELS = eINSTANCE.getMMXRootObject_SubModels();
-
-		/**
-		 * The meta object literal for the '<em><b>Add Sub Model</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT = eINSTANCE.getMMXRootObject__AddSubModel__UUIDObject();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Sub Model</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS = eINSTANCE.getMMXRootObject__GetSubModel__Class();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.MMXSubModelImpl <em>MMX Sub Model</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.mmxcore.impl.MMXSubModelImpl
-		 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getMMXSubModel()
-		 * @generated
-		 */
-		EClass MMX_SUB_MODEL = eINSTANCE.getMMXSubModel();
-
-		/**
-		 * The meta object literal for the '<em><b>Sub Model Instance</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MMX_SUB_MODEL__SUB_MODEL_INSTANCE = eINSTANCE.getMMXSubModel_SubModelInstance();
 
 	}
 

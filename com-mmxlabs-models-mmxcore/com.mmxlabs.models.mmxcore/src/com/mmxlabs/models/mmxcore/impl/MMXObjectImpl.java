@@ -31,7 +31,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * @generated
  */
-public class MMXObjectImpl extends EObjectImpl implements MMXObject {
+public abstract class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	/**
 	 * The cached value of the '{@link #getExtensions() <em>Extensions</em>}' reference list.
 	 * <!-- begin-user-doc -->

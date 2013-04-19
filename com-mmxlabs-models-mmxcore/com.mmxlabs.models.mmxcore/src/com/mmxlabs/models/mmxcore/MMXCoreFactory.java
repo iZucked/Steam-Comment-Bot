@@ -24,15 +24,6 @@ public interface MMXCoreFactory extends EFactory {
 	MMXCoreFactory eINSTANCE = com.mmxlabs.models.mmxcore.impl.MMXCoreFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>MMX Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>MMX Object</em>'.
-	 * @generated
-	 */
-	MMXObject createMMXObject();
-
-	/**
 	 * Returns a new object of class '<em>Named Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -58,15 +49,6 @@ public interface MMXCoreFactory extends EFactory {
 	 * @generated
 	 */
 	MMXRootObject createMMXRootObject();
-
-	/**
-	 * Returns a new object of class '<em>MMX Sub Model</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>MMX Sub Model</em>'.
-	 * @generated
-	 */
-	MMXSubModel createMMXSubModel();
 
 	/**
 	 * Returns the package supported by this factory.

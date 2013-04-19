@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mmxcore" nsURI="http://www.mmxlabs.com/models/mmxcore/1/" nsPrefix="models.mmxcore">
-  <eClassifiers xsi:type="ecore:EClass" name="MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="MMXObject" abstract="true">
     <eOperations name="getUnsetValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
       <eParameters name="feature" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
     </eOperations>
@@ -25,24 +25,5 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MMXRootObject" eSuperTypes="#//UUIDObject #//NamedObject">
-    <eOperations name="addSubModel" lowerBound="1">
-      <eParameters name="subModel" lowerBound="1" eType="#//UUIDObject"/>
-    </eOperations>
-    <eOperations name="getSubModel" lowerBound="1">
-      <eGenericType eTypeParameter="#//MMXRootObject/getSubModel/T"/>
-      <eTypeParameters name="T"/>
-      <eParameters name="subModelClass">
-        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
-          <eTypeArguments eTypeParameter="#//MMXRootObject/getSubModel/T"/>
-        </eGenericType>
-      </eParameters>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subModels" upperBound="-1"
-        eType="#//MMXSubModel" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MMXSubModel" eSuperTypes="#//MMXObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subModelInstance" lowerBound="1"
-        eType="#//UUIDObject" containment="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MMXRootObject" eSuperTypes="#//UUIDObject #//NamedObject"/>
 </ecore:EPackage>
