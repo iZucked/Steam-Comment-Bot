@@ -484,10 +484,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ICargo createCargo(final Collection<IPortSlot> slots, final boolean allowRewiring) {
+	public ICargo createCargo(final Collection<IPortSlot> slots, boolean allowRewiring) {
 
 		final Cargo cargo = new Cargo(new ArrayList<IPortSlot>(slots));
 		cargoes.add(cargo);
+		
+		if (slots.size() > 2) {
+			allowRewiring = false;
+		}
 
 		if (!allowRewiring) {
 
