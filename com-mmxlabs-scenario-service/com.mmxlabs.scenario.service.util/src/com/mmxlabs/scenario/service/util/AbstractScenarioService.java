@@ -47,7 +47,6 @@ import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
@@ -230,10 +229,8 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
 
 				final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
-				for (final MMXSubModel subModel : rootObject.getSubModels()) {
-					final Resource eResource = subModel.getSubModelInstance().eResource();
-					eResource.save(null);
-				}
+				final Resource eResource = rootObject.eResource();
+				eResource.save(null);
 
 				// Update last modified date
 				final Metadata metadata = scenarioInstance.getMetadata();
@@ -356,9 +353,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		for (final Resource r : resourceSet.getResources()) {
 			r.unload();
 		}
-
-		final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
-		rootObject.getSubModels().clear();
 
 		instance.setInstance(null);
 
