@@ -26,14 +26,19 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
 
-		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.5f, IPageLayout.ID_EDITOR_AREA);
-		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.RIGHT, 0.5f, IPageLayout.ID_EDITOR_AREA);
+//		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.5f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.7f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, "reportsFolder");
 
-		reportsFolder.addView(KPIReportView.ID);
-		reportsFolder.addView(CargoPnLReportView.ID);
+		miscFolder.addView("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
+		miscFolder.addView("org.eclipse.pde.runtime.LogView");
+		miscFolder.addPlaceholder(TotalsHierarchyView.ID);		
+		
+//		reportsFolder.addView(KPIReportView.ID);
+		reportsFolder.addView(SchedulerView.ID);
+//		reportsFolder.addView(CargoPnLReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
 		reportsFolder.addPlaceholder(TotalsReportView.ID);
-		reportsFolder.addPlaceholder(TotalsHierarchyView.ID);
 		reportsFolder.addPlaceholder(BasicCargoReportView.ID);
 		reportsFolder.addPlaceholder(SchedulePnLReport.ID);
 		reportsFolder.addPlaceholder(PortRotationReportView.ID);
