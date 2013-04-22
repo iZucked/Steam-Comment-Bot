@@ -33,6 +33,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scheduler.optimiser.TradingConstants;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.shiplingo.platform.reports.views.KPIContentProvider.RowData;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -75,7 +77,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		return rowData;
 	}
 
-	private void createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance, final List<RowData> output) {
+	private RowData createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance) {
 
 		long totalCost = 0l;
 		long totalPNL = 0l;
@@ -126,7 +128,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		output.add(new RowData(scenarioInstance.getName(), totalPNL, totalCost, totalIdleHours));
+		return new RowData(scenarioInstance.getName(), totalPNL, totalCost, totalIdleHours);
 	}
 
 	private long getElementPNL(final ExtraDataContainer container) {
@@ -151,32 +153,33 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		currentViewer = viewer;
 
 		rowData = new RowData[0];
-		if (newInput instanceof IScenarioServiceEditorInput) {
-			final IScenarioServiceEditorInput editorInput = (IScenarioServiceEditorInput) newInput;
-			final ScenarioInstance scenarioInstance = editorInput.getScenarioInstance();
-			if (scenarioInstance != null) {
-
-				currentCommandStack = (CommandStack) scenarioInstance.getAdapters().get(BasicCommandStack.class);
-				currentCommandStack.addCommandStackListener(commandStackListener);
-
-				final EObject instance = scenarioInstance.getInstance();
-
-				if (instance instanceof MMXRootObject) {
-					final MMXRootObject mmxRootObject = (MMXRootObject) instance;
-					final ScheduleModel scheduleModel = mmxRootObject.getSubModel(ScheduleModel.class);
-					final Schedule schedule = scheduleModel.getSchedule();
-					if (schedule != null) {
-						final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
-						createRowData(schedule, scenarioInstance, rowDataList);
-						rowData = rowDataList.toArray(rowData);
+		
+		pinnedData = null;
+		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
+			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
+			for (final Object o : synchOutput.getCollectedElements()) {
+				if (o instanceof Schedule) {
+					RowData rd = createRowData((Schedule) o, synchOutput.getScenarioInstance(o));
+					rowDataList.add(rd);
+					if (synchOutput.isPinned(o)) {
+						pinnedData = rd;
 					}
 				}
 			}
+			rowData = rowDataList.toArray(rowData);
 		}
+		
 		if (rowData.length == 0) {
 			rowData = new RowData[] { new RowData("", null, null, null) };
 		}
 
+	}
+
+	private RowData pinnedData = new RowData("", null, null, null);
+
+	public RowData getPinnedData() {
+		return pinnedData;
 	}
 
 	@Override

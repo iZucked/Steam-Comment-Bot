@@ -17,6 +17,32 @@
             name="Analysis">
       </perspective>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="com.mmxlabs.shiplingo.platform.app.perspective.analysis">
+         <view
+               closeable="false"
+               id="com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView"
+               ratio="0.05"
+               relationship="top"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false"
+               standalone="true">
+         </view>
+<!--         <view
+               closeable="false"
+               id="com.mmxlabs.shiplingo.platform.reports.views.KPIReportView"
+               minimized="false"
+               ratio="0.95"
+               relationship="bottom"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false"
+               standalone="true">
+         </view>
+-->
+      </perspectiveExtension>
+   </extension>
  
 
 
