@@ -1,10 +1,6 @@
-
-
 /**
- * <copyright>
- * </copyright>
- *
- * $Id$
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
