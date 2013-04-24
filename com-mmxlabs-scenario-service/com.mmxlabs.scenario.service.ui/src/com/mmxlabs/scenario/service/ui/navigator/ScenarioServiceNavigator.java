@@ -58,6 +58,7 @@ import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
+import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
 
 public class ScenarioServiceNavigator extends CommonNavigator {
 
@@ -70,7 +71,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	private final Image showColumnImage;
 	private final Image optImage;
 
-//	private boolean selectionModeTrackEditor = true;
+	// private boolean selectionModeTrackEditor = true;
 
 	protected AdapterFactoryEditingDomain editingDomain;
 
@@ -100,23 +101,23 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
-//			if (selectionModeTrackEditor) {
-				// If the selection tracks editor, then get the scenario instance and make it the only selection.
-				if (part instanceof IEditorPart) {
-					final IEditorPart editorPart = (IEditorPart) part;
-					final IEditorInput editorInput = editorPart.getEditorInput();
-					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
-					if (scenarioInstance != null) {
-//						ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-						if (lastAutoSelection == scenarioInstance) {
-							lastAutoSelection = null;
-//							if (selectionProvider.isSelected(scenarioInstance) && scenarioInstance != selectionProvider.getPinnedInstance()) {
-//								selectionProvider.deselect(scenarioInstance);
-//							}
-						}
+			// if (selectionModeTrackEditor) {
+			// If the selection tracks editor, then get the scenario instance and make it the only selection.
+			if (part instanceof IEditorPart) {
+				final IEditorPart editorPart = (IEditorPart) part;
+				final IEditorInput editorInput = editorPart.getEditorInput();
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+				if (scenarioInstance != null) {
+					// ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+					if (lastAutoSelection == scenarioInstance) {
+						lastAutoSelection = null;
+						// if (selectionProvider.isSelected(scenarioInstance) && scenarioInstance != selectionProvider.getPinnedInstance()) {
+						// selectionProvider.deselect(scenarioInstance);
+						// }
 					}
 				}
-//			}
+			}
+			// }
 		}
 
 		@Override
@@ -126,28 +127,28 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partActivated(final IWorkbenchPart part) {
-//			if (selectionModeTrackEditor) {
-				// If the selection tracks editor, then get the scenario instance and make it the only selection.
-				if (part instanceof IEditorPart) {
-					final IEditorPart editorPart = (IEditorPart) part;
-					final IEditorInput editorInput = editorPart.getEditorInput();
-					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
-					if (scenarioInstance != null) {
-//						ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-//						if (lastAutoSelection != null && lastAutoSelection != scenarioInstance) {
-//							if (selectionProvider.isSelected(lastAutoSelection) && selectionProvider.getPinnedInstance() != lastAutoSelection) {
-//								selectionProvider.deselect(lastAutoSelection);
-//							}
-//							lastAutoSelection = null;
-//						}
-//						if (!selectionProvider.isSelected(scenarioInstance)) {
-							lastAutoSelection = scenarioInstance;
-//							selectionProvider.select(scenarioInstance);
-//						}
-					}
+			// if (selectionModeTrackEditor) {
+			// If the selection tracks editor, then get the scenario instance and make it the only selection.
+			if (part instanceof IEditorPart) {
+				final IEditorPart editorPart = (IEditorPart) part;
+				final IEditorInput editorInput = editorPart.getEditorInput();
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+				if (scenarioInstance != null) {
+					// ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+					// if (lastAutoSelection != null && lastAutoSelection != scenarioInstance) {
+					// if (selectionProvider.isSelected(lastAutoSelection) && selectionProvider.getPinnedInstance() != lastAutoSelection) {
+					// selectionProvider.deselect(lastAutoSelection);
+					// }
+					// lastAutoSelection = null;
+					// }
+					// if (!selectionProvider.isSelected(scenarioInstance)) {
+					lastAutoSelection = scenarioInstance;
+					// selectionProvider.select(scenarioInstance);
+					// }
 				}
 			}
-//		}
+		}
+		// }
 	};
 
 	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
@@ -278,7 +279,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		checkColumn.setAlignment(SWT.CENTER);
 		checkColumn.setWidth(30);
 		checkColumn.setResizable(false);
-		
+
 		final TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		progressColumn.setImage(optImage);
 		progressColumn.setWidth(30);
@@ -286,6 +287,40 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		final Tree tree = viewer.getTree();
 		tree.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				TreeItem selected = null;
+				for (final TreeItem i : tree.getItems()) {
+					selected = processTreeItem(i, e);
+					if (selected != null) {
+						break;
+					}
+				}
+				if (selected != null) {
+					if (e.button == 1) {
+						// if (!selectionModeTrackEditor) {
+						final Rectangle imageBounds = selected.getImageBounds(COLUMN_SHOW_IDX);
+						if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + selected.getImage().getBounds().width))) {
+							if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + selected.getImage().getBounds().height))) {
+
+								final Object data = selected.getData();
+								if (data instanceof ScenarioInstance) {
+									final ScenarioInstance instance = (ScenarioInstance) data;
+									ScenarioServiceSelectionProvider scenarioServiceSelectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+									if (scenarioServiceSelectionProvider.getPinnedInstance() == instance) {
+										scenarioServiceSelectionProvider.setPinnedInstance(null);
+									} else {
+										scenarioServiceSelectionProvider.setPinnedInstance(instance);
+									}
+								}
+							}
+						}
+					}
+				} else {
+					viewer.setSelection(StructuredSelection.EMPTY);
+				}
+			}
 
 			/*
 			 * (non-Javadoc)
@@ -312,9 +347,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 								final Object data = selected.getData();
 								if (data instanceof ScenarioInstance) {
 									final ScenarioInstance instance = (ScenarioInstance) data;
-//									if (!selectionModeTrackEditor || instance != lastAutoSelection) {
-										Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
-//									}
+									// if (!selectionModeTrackEditor || instance != lastAutoSelection) {
+									Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+									// }
 								}
 							}
 						}
@@ -354,7 +389,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 						final Object data = item.getData();
 						if (data instanceof ScenarioInstance) {
 							final ScenarioInstance instance = (ScenarioInstance) data;
-							if (/*!selectionModeTrackEditor ||*/ instance != lastAutoSelection) {
+							if (/* !selectionModeTrackEditor || */instance != lastAutoSelection) {
 								Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
 							}
 						}
@@ -368,23 +403,18 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 			}
 		});
-/*
-		final Action a = new Action("Toggle Track Editor", IAction.AS_CHECK_BOX) {
-
-			public void run() {
-
-				selectionModeTrackEditor = !selectionModeTrackEditor;
-
-				if (selectionModeTrackEditor) {
-					partListener.partActivated(getSite().getPage().getActiveEditor());
-				}
-			}
-		};
-		a.setImageDescriptor(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/synced.gif"));
-		a.setChecked(selectionModeTrackEditor);
-
-		getViewSite().getActionBars().getToolBarManager().add(a);
-		*/
+		/*
+		 * final Action a = new Action("Toggle Track Editor", IAction.AS_CHECK_BOX) {
+		 * 
+		 * public void run() {
+		 * 
+		 * selectionModeTrackEditor = !selectionModeTrackEditor;
+		 * 
+		 * if (selectionModeTrackEditor) { partListener.partActivated(getSite().getPage().getActiveEditor()); } } }; a.setImageDescriptor(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
+		 * "/icons/synced.gif")); a.setChecked(selectionModeTrackEditor);
+		 * 
+		 * getViewSite().getActionBars().getToolBarManager().add(a);
+		 */
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 		return viewer;
