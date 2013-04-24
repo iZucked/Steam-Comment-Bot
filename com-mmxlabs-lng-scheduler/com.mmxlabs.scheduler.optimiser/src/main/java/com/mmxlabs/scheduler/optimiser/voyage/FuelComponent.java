@@ -116,7 +116,7 @@ public enum FuelComponent {
 	/**
 	 * Returns true of the given {@link FuelComponent} is a type of LNG
 	 * 
-	 * @since 4.0
+	 * @since 3.1
 	 */
 	public static boolean isLNGFuelComponent(final FuelComponent fc) {
 		if (fc == FuelComponent.NBO || fc == FuelComponent.FBO || fc == FuelComponent.IdleNBO) {

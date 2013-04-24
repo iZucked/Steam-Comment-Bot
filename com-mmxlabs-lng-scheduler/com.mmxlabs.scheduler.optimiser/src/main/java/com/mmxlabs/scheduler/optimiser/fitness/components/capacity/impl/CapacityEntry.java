@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl;
 
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 /**
  * Implementation of {@link ICapacityEntry}
@@ -14,17 +15,17 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntr
  */
 public final class CapacityEntry implements ICapacityEntry {
 
-	private final String type;
+	private final CapacityViolationType type;
 
 	private final long volume;
 
-	public CapacityEntry(String type, long volume) {
+	public CapacityEntry(CapacityViolationType type, long volume) {
 		this.type = type;
 		this.volume = volume;
 	}
 
 	@Override
-	public String getType() {
+	public CapacityViolationType getType() {
 		return type;
 	}
 

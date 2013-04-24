@@ -195,7 +195,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		// Remove the optional elements from further consideration by the builder
 		unsequencedElements.removeAll(optionalElements);
 
-		log.info("Elements remaining to be sequenced: " + unsequencedElements);
+		log.debug("Elements remaining to be sequenced: " + unsequencedElements);
 
 		// Loop through the unsequenced elements and determine which elements can follow other elements.
 
@@ -421,11 +421,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		final Map<IResource, List<SequenceChunk>> sequences = new LinkedHashMap<IResource, List<SequenceChunk>>();
 
 		if (suggestion == null) {
-			log.info("No suggested start solution - constructing one");
+			log.debug("No suggested start solution - constructing one");
 			for (final IResource resource : resources) {
 				final SequenceChunk end = endChunks.get(resource);
 
-				log.info("Scheduling elements for resource " + resource);
+				log.debug("Scheduling elements for resource " + resource);
 				final List<SequenceChunk> sequence = new ArrayList<SequenceChunk>();
 				sequences.put(resource, sequence);
 
@@ -458,7 +458,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 								log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
 							}
 						}
-						log.info("Adding chunk " + there);
+						log.debug("Adding chunk " + there);
 						here = there;
 						iterator.remove();
 					}
@@ -466,7 +466,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			}
 		} else {
 			// copy suggestion state into one-element chunks.
-			log.info("Starting with suggested solution");
+			log.debug("Starting with suggested solution");
 			for (final IResource resource : suggestion.getResources()) {
 				final List<SequenceChunk> sequence = new ArrayList<SequenceChunk>();
 				sequences.put(resource, sequence);
@@ -528,7 +528,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
-		log.info("Trying to insert " + chunks.size() + " unscheduled elements into solution (" + chunks + ")");
+		log.debug("Trying to insert " + chunks.size() + " unscheduled elements into solution (" + chunks + ")");
 		int numTries = chunks.size();
 		while (!chunks.isEmpty() && numTries-- != 0) {
 			final Iterator<SequenceChunk> iterator = chunks.iterator();
@@ -549,13 +549,13 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 					if (suggestedResource != null) {
 						// try inserting on suggested resource first
-						log.info("Trying to insert on " + suggestedResource);
+						log.debug("Trying to insert on " + suggestedResource);
 						final List<SequenceChunk> sequence = sequences.get(suggestedResource);
 
 						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource, sequencedElements)) {
 							break top;
 						} else {
-							log.info("Could not insert at suggested location");
+							log.debug("Could not insert at suggested location");
 						}
 					}
 

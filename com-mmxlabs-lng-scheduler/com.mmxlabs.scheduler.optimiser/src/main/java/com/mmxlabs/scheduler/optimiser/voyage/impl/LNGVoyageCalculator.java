@@ -242,8 +242,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final int warmingTimeInHours = idleTimeInHours - deltaTimeInHours;
 
 						if (warmingTimeInHours > vesselClass.getWarmupTime()) {
-							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime()))) {
+							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime() /* + vesselClass.getCooldownTime() */))) {
 								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
+								// don't use any idle base during the cooldown
+								// remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 							} else {
 								// warming time = idle - delta
 								// therefore we need
@@ -275,6 +277,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// sequence scheduler unless it's unavoidable.
 						if (options.isWarm() || (options.getAvailableTime() > vesselClass.getWarmupTime())) {
 							output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
+//							remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 						}
 					}
 				}
@@ -370,7 +373,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * Calculates the fuel consumptions for a sequence of alternating PortDetails / VoyageDetails objects, populating the fuel price fields of those objects and returning a total consumption array.
+	 * Calculates the fuel consumptions for a sequence of alternating PortDetails / VoyageDetails
+	 * objects, populating the fuel price fields of those objects and returning a total consumption
+	 * array. 
 	 * 
 	 * @param vessel
 	 * @param sequence
@@ -665,8 +670,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				availableHeelinM3 = ((IHeelOptionsPortSlot) slot).getHeelOptions().getHeelLimit();
 			}
 		}
-
-		// The last sequence element that used some kind of boil-off
+		
+		// The index of the last sequence element that used some kind of boil-off
 		VoyageDetails lastBoiloffElement = null;
 
 		// add up route cost and find the last boiloff element
