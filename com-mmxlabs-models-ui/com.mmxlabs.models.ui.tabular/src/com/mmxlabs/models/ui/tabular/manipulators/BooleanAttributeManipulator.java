@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
  * 
  * @author Simon Goodall
  * @since 3.0
- * 
  */
 public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 

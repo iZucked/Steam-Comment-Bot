@@ -87,7 +87,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 	// }
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public void setFilterSupport(final EObjectTableViewerFilterSupport filterSupport) {
 		this.filterSupport = filterSupport;

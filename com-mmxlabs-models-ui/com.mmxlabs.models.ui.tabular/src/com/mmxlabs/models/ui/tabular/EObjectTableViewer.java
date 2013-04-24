@@ -68,8 +68,9 @@ public class EObjectTableViewer extends GridTableViewer {
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
-					if (!getControl().isDisposed())
-						refresh();
+					if (!getControl().isDisposed()) {
+						doCommandStackChanged();
+					}
 				}
 			});
 		}
@@ -96,6 +97,13 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		}
 	};
+
+	/**
+	 * @since 3.1
+	 */
+	protected void doCommandStackChanged() {
+		refresh();
+	}
 
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
 
@@ -304,7 +312,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public void init(final IStructuredContentProvider contentProvider, final CommandStack commandStack) {
 		final GridTableViewer viewer = this;
@@ -396,7 +404,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	private EReference currentReference;
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
 		init(new IStructuredContentProvider() {

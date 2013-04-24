@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.ui.editors.util;
 
 import java.util.Collection;
@@ -10,7 +14,7 @@ import org.eclipse.emf.ecore.change.ChangeDescription;
 /**
  * Class to wrap a {@link ChangeDescription} in a {@link Command}
  * 
- * @since 3.0
+ * @since 3.1
  * 
  */
 public class ChangeDescriptionCommand extends AbstractCommand {

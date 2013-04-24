@@ -27,7 +27,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  * Displays a text box for rendering the result of an {@link EOperation}
  * 
  * @author Simon Goodall
- * @since 3.0
+ * @since 4.0
  * 
  */
 public class BasicOperationRenderer implements ICellManipulator, ICellRenderer {

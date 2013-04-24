@@ -1,8 +1,6 @@
 package com.mmxlabs.models.ui.tabular;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +10,8 @@ import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.tabular.filter.FilterUtils;
@@ -30,7 +22,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * Filtering related code for the {@link EObjectTableViewer}
  * 
  * @author Simon Goodall
- * @since 3.0
+ * @since 4.0
  * 
  */
 public class EObjectTableViewerFilterSupport {

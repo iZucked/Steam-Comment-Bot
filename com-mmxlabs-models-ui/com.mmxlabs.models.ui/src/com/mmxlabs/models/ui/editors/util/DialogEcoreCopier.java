@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * A class to maintain changes in e.g a Dialog where we wish to edit objects but have a Cancel button to trash changes.s Based on code from EMF forum
  * http://www.eclipse.org/forums/index.php?t=msg&th=200576/
  * 
- * @since 3.0
+ * @since 4.0
  */
 public class DialogEcoreCopier {
 	private final List<EObject> originals = new ArrayList<EObject>();

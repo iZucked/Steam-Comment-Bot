@@ -38,7 +38,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	protected List<EReference> childReferences = new LinkedList<EReference>();
 	protected List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	protected List<EObject> childObjects = new LinkedList<EObject>();
 	protected ICommandHandler commandHandler;
@@ -95,7 +95,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {

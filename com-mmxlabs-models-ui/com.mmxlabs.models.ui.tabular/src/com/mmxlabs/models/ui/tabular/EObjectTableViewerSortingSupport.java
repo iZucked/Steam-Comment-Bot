@@ -20,7 +20,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * Sorting related code for the {@link EObjectTableViewer}
  * 
  * @author Simon Goodall
- * @since 3.0
+ * @since 4.0
  * 
  */
 public class EObjectTableViewerSortingSupport {

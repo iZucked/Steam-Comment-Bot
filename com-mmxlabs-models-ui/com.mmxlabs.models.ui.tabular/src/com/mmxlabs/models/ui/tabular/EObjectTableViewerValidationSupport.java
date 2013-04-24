@@ -16,7 +16,7 @@ import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
  * Validation related code for the {@link EObjectTableViewer}
  * 
  * @author Simon Goodall
- * @since 3.0
+ * @since 4.0
  * 
  */
 public class EObjectTableViewerValidationSupport {

@@ -21,7 +21,7 @@ import com.google.common.base.Optional;
  * {@link PropertyDescriptor#createPropertyEditor(Composite)}. The purpose of this class is to collapse the tree structure of an object hierarchy so that features of reference objects appear in the
  * same level as the main object features. Note: {@link #getId()} will return an {@link EMFPath}. This should be used by {@link IPropertySource} implementations to find the real data to display.
  * 
- * @since 3.0
+ * @since 4.0
  */
 public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 

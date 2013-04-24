@@ -15,7 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -300,5 +302,20 @@ public class DefaultImportContext implements IImportContext {
 	@Override
 	public CSVReader peekReader() {
 		return readerStack.peek();
+	}
+
+	/**
+	 * @since 3.1
+	 */
+	public void registerNamedObjectsFromSubModels() {
+		// first set up all existing named objects
+		final TreeIterator<EObject> allObjects = rootObject.eAllContents();
+
+		while (allObjects.hasNext()) {
+			final EObject o = allObjects.next();
+			if (o instanceof NamedObject) {
+				registerNamedObject((NamedObject) o);
+			}
+		}
 	}
 }

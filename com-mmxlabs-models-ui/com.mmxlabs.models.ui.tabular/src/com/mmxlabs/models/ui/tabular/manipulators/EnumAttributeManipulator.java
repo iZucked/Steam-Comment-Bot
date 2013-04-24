@@ -19,7 +19,6 @@ import com.mmxlabs.common.Pair;
  * 
  * @author hinton
  * @since 3.0
- * 
  */
 public class EnumAttributeManipulator extends ValueListAttributeManipulator {
 	public EnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain) {
