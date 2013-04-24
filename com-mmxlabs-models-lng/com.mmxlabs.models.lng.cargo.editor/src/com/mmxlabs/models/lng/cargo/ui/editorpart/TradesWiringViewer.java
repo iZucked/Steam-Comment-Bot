@@ -600,8 +600,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
-		addPNLColumn("P&L", new BasicAttributeManipulator(TypesPackage.eINSTANCE.getExtraDataContainer_ExtraData(), editingDomain), new RowDataEMFPath(Type.CARGO_ALLOCATION, true));
-
 		{
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(Type.CARGO, true);
@@ -777,6 +775,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * Set the cargoes, and reset the wiring to match these cargoes.
 	 * 
 	 * @param newCargoes
+	 * @since 4.0
 	 */
 	public RootData setCargoes(final AssignmentModel assignmentModel, final CargoModel cargoModel, final ScheduleModel scheduleModel) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
@@ -986,6 +985,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		executeCurrentWiringCommand(currentWiringCommand);
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	protected LNGPortfolioModel getPortfolioModel() {
 		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getPortfolioModel();
 	}

@@ -46,6 +46,9 @@ public class CargoModelRowTransformer {
 	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
+	/**
+	 * @since 4.0
+	 */
 	public RootData transform(final AssignmentModel assignmentModel, final CargoModel cargoModel, ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo) {
 		return transform(assignmentModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo);
 
@@ -60,6 +63,7 @@ public class CargoModelRowTransformer {
 	 * @param allDischargeSlots
 	 * @param validationInfo
 	 * @return
+	 * @since 4.0
 	 */
 	public RootData transform(final AssignmentModel assignmentModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, Schedule schedule,
 			final Map<Object, IStatus> validationInfo) {
@@ -262,6 +266,9 @@ public class CargoModelRowTransformer {
 			this.dischargeSlot = dischargeSlot;
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public void setElementAssignment(final ElementAssignment elementAssignment) {
 			this.elementAssignment = elementAssignment;
 		}
@@ -282,6 +289,9 @@ public class CargoModelRowTransformer {
 			return dischargeSlot;
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public ElementAssignment getElementAssignment() {
 			return elementAssignment;
 		}

@@ -51,8 +51,10 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingCommands;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -92,7 +94,7 @@ public class LDDEditor extends Dialog {
 	}
 
 	@Override
-	protected void configureShell(Shell newShell) {
+	protected void configureShell(final Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Edit Complex Cargo");
 	}
@@ -136,7 +138,7 @@ public class LDDEditor extends Dialog {
 				// final ContractManipulator manipulator = new ContractManipulator(scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getEditingDomain());
 				column.setLabelProvider(new ColumnLabelProvider() {
 					@Override
-					public String getText(Object element) {
+					public String getText(final Object element) {
 						if (element instanceof LoadSlot) {
 							return "L";
 						} else if (element instanceof DischargeSlot) {
@@ -161,7 +163,7 @@ public class LDDEditor extends Dialog {
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
 				column.setEditingSupport(es);
 			}
-			
+
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("Contract");
@@ -223,10 +225,13 @@ public class LDDEditor extends Dialog {
 			}
 
 			final MenuManager mgr = new MenuManager();
+
 			viewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
 
+				private final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+
 				private Menu menu;
-				private CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), scenarioEditingLocation);
+				private final CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), scenarioEditingLocation, scenarioModel, scenarioModel.getPortfolioModel());
 
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
@@ -287,7 +292,7 @@ public class LDDEditor extends Dialog {
 		});
 	}
 
-	public int open(Cargo c) {
+	public int open(final Cargo c) {
 
 		create();
 		setCargo(c);
@@ -299,7 +304,7 @@ public class LDDEditor extends Dialog {
 
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(scenarioEditingLocation.getExtraValidationContext()));
 
-		List<EObject> validationTargets = new ArrayList<EObject>();
+		final List<EObject> validationTargets = new ArrayList<EObject>();
 		validationTargets.add(cargo);
 		validationTargets.addAll(cargo.getSlots());
 		validationSupport.setValidationTargets(validationTargets);

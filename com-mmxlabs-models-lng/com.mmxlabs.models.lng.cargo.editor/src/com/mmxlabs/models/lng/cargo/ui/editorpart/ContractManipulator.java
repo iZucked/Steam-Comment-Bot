@@ -213,6 +213,9 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		}
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public void runSetCommand(final Object object, final Contract value) {
 		final Object currentValue = reallyGetValue(object);
 		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {

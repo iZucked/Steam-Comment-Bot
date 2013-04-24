@@ -48,6 +48,9 @@ public class CargoEditingCommands {
 
 	private final LNGScenarioModel rootObject;
 
+	/**
+	 * @since 4.0
+	 */
 	public CargoEditingCommands(final EditingDomain editingDomain, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
 		this.editingDomain = editingDomain;
 		this.rootObject = rootObject;
@@ -139,6 +142,9 @@ public class CargoEditingCommands {
 		return newDischarge;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public void appendFOBDESCommands(final List<Command> setCommands, final List<Command> deleteCommands, final EditingDomain editingDomain, final AssignmentModel assignmentModel, final Cargo cargo,
 			final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 

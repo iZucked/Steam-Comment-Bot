@@ -28,6 +28,8 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -39,9 +41,6 @@ import com.mmxlabs.models.lng.cargo.editor.editors.ldd.LDDEditor;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -72,7 +71,10 @@ public class CargoEditorMenuHelper {
 
 	private final LNGScenarioModel scenarioModel;
 
-	public CargoEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, LNGScenarioModel scenarioModel, LNGPortfolioModel portfolioModel) {
+	/**
+	 * @since 4.0
+	 */
+	public CargoEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel scenarioModel, final LNGPortfolioModel portfolioModel) {
 		this.shell = shell;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.scenarioModel = scenarioModel;
@@ -224,8 +226,7 @@ public class CargoEditorMenuHelper {
 				createEditContractMenu(manager, dischargeSlot, dischargeSlot.getContract());
 				createDeleteSlotMenu(manager, dischargeSlot);
 				if (dischargeSlot.getCargo() != null) {
-					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(scenarioEditingLocation.getRootObject().getSubModel(InputModel.class),
-							dischargeSlot.getCargo());
+					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), dischargeSlot.getCargo());
 					createAssignmentMenus(manager, dischargeSlot.getCargo(), elementAssignment);
 				}
 			}
@@ -259,7 +260,7 @@ public class CargoEditorMenuHelper {
 			menuManager.add(reassignMenuManager);
 
 			final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-			final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+			final FleetModel fleetModel = scenarioModel.getFleetModel();
 			class AssignAction extends Action {
 				private final Vessel vessel;
 
@@ -338,7 +339,7 @@ public class CargoEditorMenuHelper {
 				createEditContractMenu(manager, loadSlot, loadSlot.getContract());
 				createDeleteSlotMenu(manager, loadSlot);
 				if (loadSlot.getCargo() != null) {
-					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(scenarioEditingLocation.getRootObject().getSubModel(InputModel.class), loadSlot.getCargo());
+					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), loadSlot.getCargo());
 					createAssignmentMenus(manager, loadSlot.getCargo(), elementAssignment);
 				}
 			}
@@ -347,6 +348,9 @@ public class CargoEditorMenuHelper {
 
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public IMenuListener createSwapSlotsMenuListener(final List<Slot> slots, final int index) {
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
 		final IMenuListener l = new IMenuListener() {
@@ -807,6 +811,9 @@ public class CargoEditorMenuHelper {
 
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public void editLDDCargo(final Cargo cargo) {
 		try {
 			scenarioEditingLocation.getEditorLock().claim();
@@ -838,7 +845,7 @@ public class CargoEditorMenuHelper {
 
 				commandStack.execute(cmd);
 			} else {
-				Iterator<Command> itr = new LinkedList<Command>(editor.getExecutedCommands()).descendingIterator();
+				final Iterator<Command> itr = new LinkedList<Command>(editor.getExecutedCommands()).descendingIterator();
 				while (itr.hasNext()) {
 					final Command cmd = itr.next();
 					if (commandStack.getUndoCommand() == cmd) {
