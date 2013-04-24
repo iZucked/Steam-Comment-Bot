@@ -91,7 +91,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	 */
 	protected ScenarioTableViewer scenarioViewer;
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	protected final IScenarioEditingLocation scenarioEditingLocation;
 
