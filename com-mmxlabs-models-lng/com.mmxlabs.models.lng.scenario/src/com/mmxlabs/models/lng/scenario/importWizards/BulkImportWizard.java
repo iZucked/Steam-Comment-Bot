@@ -26,6 +26,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	
 	public BulkImportWizard(ScenarioInstance scenarioInstance) {
 		currentScenario = scenarioInstance;
+		setWindowTitle("Bulk data import");
 	}
 
 	@Override

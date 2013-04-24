@@ -64,8 +64,8 @@ public class BulkImportPage extends WizardPage {
 	public BulkImportPage(String pageName, ScenarioInstance currentScenario) {
 		super(pageName);
 		this.currentScenario = currentScenario;
-		setTitle("Select Scenarios");
-		setDescription("Choose the scenarios to import into.");
+		setTitle("Select data and scenarios");
+		setDescription("Choose scenario(s) and a file for bulk data import.");
 	}
 
 	/**
@@ -354,18 +354,18 @@ public class BulkImportPage extends WizardPage {
 		ld.widthHint = 400;
 		container.setLayoutData(ld);
 
-		dataImportGroup = new RadioSelectionGroup(container, "Data To Import", SWT.NONE, new String[] {"Commodity Indices", "Cargoes"}, new int[] {CHOICE_COMMODITY_INDICES, CHOICE_CARGOES});
-		dataImportGroup.setSelectedIndex(0);
+//		dataImportGroup = new RadioSelectionGroup(container, "Data to import", SWT.NONE, new String[] {"Price curves", "Cargoes"}, new int[] {CHOICE_COMMODITY_INDICES, CHOICE_CARGOES});
+//		dataImportGroup.setSelectedIndex(0);
 		
 		// create a radiobutton group for specifying CSV import
-		csvSelectionGroup = new RadioSelectionGroup(container, "CSV Format", SWT.NONE, new String[] {"Comma-Separated", "Semicolon-Separated"}, new int[] {CHOICE_COMMA, CHOICE_SEMICOLON});
+		csvSelectionGroup = new RadioSelectionGroup(container, "Format separator", SWT.NONE, new String[] {"comma (\",\")", "semicolon (\";\")"}, new int[] {CHOICE_COMMA, CHOICE_SEMICOLON});
 		csvSelectionGroup.setSelectedIndex(0);
 		GridData csvLayoutData = new GridData();
 		csvLayoutData.widthHint = 500;
 		//csvLayoutData.grabExcessHorizontalSpace = true;
 		csvSelectionGroup.setLayoutData(csvLayoutData);
 
-		importFileEditor = new FileFieldEditor("CSV Import File", "CSV Import File", csvSelectionGroup);
+		importFileEditor = new FileFieldEditor("Data file", "Data file", csvSelectionGroup);
 		importFileEditor.setFileExtensions(new String[] { "*.csv" });
 		
 		importFileEditor.getTextControl(csvSelectionGroup).addModifyListener(new ModifyListener() {
@@ -377,8 +377,8 @@ public class BulkImportPage extends WizardPage {
 		});
 		
 		// create a radiobutton group for specifying how scenarios are selected
-		String currentScenarioOption = String.format("Current Scenario (%s)", currentScenario.getName());
-		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios to Import Into", SWT.NONE, new String[] { "All Scenarios", currentScenarioOption, "Selected Scenarios Only"}, new int[] {CHOICE_ALL_SCENARIOS, CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS});
+		String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
+		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected"}, new int[] {CHOICE_ALL_SCENARIOS, CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS});
 		scenarioSelectionGroup.setSelectedIndex(0);
 		
 		// create a container for the scenario tree control (so we can hide it)

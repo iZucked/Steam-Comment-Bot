@@ -137,7 +137,7 @@
                locationURI="menu:data?after=additions">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
-                  label="Bulk Import Commodity Indices from CSV"
+                  label="Bulk import price curves"
                   style="push">
             </command>
          </menuContribution>
