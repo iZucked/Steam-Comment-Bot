@@ -31,6 +31,7 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer {
 	/**
 	 * Returns the value of the '<em><b>Slot Allocations</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.SlotAllocation}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation <em>Cargo Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Slot Allocations</em>' reference list isn't clear,
@@ -40,7 +41,8 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Slot Allocations</em>' reference list.
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_SlotAllocations()
-	 * @model required="true"
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation
+	 * @model opposite="cargoAllocation" required="true"
 	 * @generated
 	 */
 	EList<SlotAllocation> getSlotAllocations();

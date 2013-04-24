@@ -110,7 +110,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject #//ProfitAndLossContainer">
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" lowerBound="1"
-        upperBound="-1" eType="#//SlotAllocation"/>
+        upperBound="-1" eType="#//SlotAllocation" eOpposite="#//SlotAllocation/cargoAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputCargo" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"
         unsettable="true"/>
@@ -131,7 +131,7 @@
         eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" lowerBound="1"
-        eType="#//CargoAllocation"/>
+        eType="#//CargoAllocation" eOpposite="#//CargoAllocation/slotAllocations"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotVisit" lowerBound="1"
         eType="#//SlotVisit" unsettable="true" eOpposite="#//SlotVisit/slotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>

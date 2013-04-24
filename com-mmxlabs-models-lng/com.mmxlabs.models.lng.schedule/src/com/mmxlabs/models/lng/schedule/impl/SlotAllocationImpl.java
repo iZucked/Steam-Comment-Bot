@@ -332,11 +332,33 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
+	public NotificationChain basicSetCargoAllocation(CargoAllocation newCargoAllocation, NotificationChain msgs) {
 		CargoAllocation oldCargoAllocation = cargoAllocation;
 		cargoAllocation = newCargoAllocation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION, oldCargoAllocation, cargoAllocation));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION, oldCargoAllocation, newCargoAllocation);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
+		if (newCargoAllocation != cargoAllocation) {
+			NotificationChain msgs = null;
+			if (cargoAllocation != null)
+				msgs = ((InternalEObject)cargoAllocation).eInverseRemove(this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, CargoAllocation.class, msgs);
+			if (newCargoAllocation != null)
+				msgs = ((InternalEObject)newCargoAllocation).eInverseAdd(this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, CargoAllocation.class, msgs);
+			msgs = basicSetCargoAllocation(newCargoAllocation, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION, newCargoAllocation, newCargoAllocation));
 	}
 
 	/**
@@ -580,6 +602,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
+				if (cargoAllocation != null)
+					msgs = ((InternalEObject)cargoAllocation).eInverseRemove(this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, CargoAllocation.class, msgs);
+				return basicSetCargoAllocation((CargoAllocation)otherEnd, msgs);
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				if (slotVisit != null)
 					msgs = ((InternalEObject)slotVisit).eInverseRemove(this, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, SlotVisit.class, msgs);
@@ -596,6 +622,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
+				return basicSetCargoAllocation(null, msgs);
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				return basicUnsetSlotVisit(msgs);
 		}

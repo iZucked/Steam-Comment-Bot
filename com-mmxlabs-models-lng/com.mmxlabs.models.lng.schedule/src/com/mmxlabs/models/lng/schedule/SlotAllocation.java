@@ -143,6 +143,7 @@ public interface SlotAllocation extends MMXObject {
 
 	/**
 	 * Returns the value of the '<em><b>Cargo Allocation</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Cargo Allocation</em>' reference isn't clear,
@@ -152,7 +153,8 @@ public interface SlotAllocation extends MMXObject {
 	 * @return the value of the '<em>Cargo Allocation</em>' reference.
 	 * @see #setCargoAllocation(CargoAllocation)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_CargoAllocation()
-	 * @model required="true"
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations
+	 * @model opposite="slotAllocations" required="true"
 	 * @generated
 	 */
 	CargoAllocation getCargoAllocation();
