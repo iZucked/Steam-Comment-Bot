@@ -79,7 +79,7 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public String formatDate(final Date date, final TimeZone zone, boolean includeTime) {
 		final SimpleDateFormat c = (SimpleDateFormat) (includeTime ? consistentDateTime.clone() : consistentDate.clone());
