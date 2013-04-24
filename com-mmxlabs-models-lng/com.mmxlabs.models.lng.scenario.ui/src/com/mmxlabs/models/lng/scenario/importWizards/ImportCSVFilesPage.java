@@ -273,8 +273,6 @@ public class ImportCSVFilesPage extends WizardPage {
 		} else {
 			log.error("Unknown sub model type: " + subModel.eClass().getName());
 		}
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
