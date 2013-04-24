@@ -41,7 +41,6 @@ public class LiveEvaluator extends MMXAdapterImpl {
 
 	private IScenarioInstanceEvaluator scenarioInstanceEvaluator;
 
-	
 	public LiveEvaluator(final ScenarioInstance instance, final ExecutorService executor) {
 		this.instance = instance;
 		this.executor = executor;
@@ -116,7 +115,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 					if (scenarioInstanceEvaluator != null) {
 
 						// Perform some checks here - retry again after lock is claimed just in case....
-						
+
 						if (!enabled) {
 							return;
 						}
@@ -157,7 +156,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 								instance.getLock(ScenarioLock.EVALUATOR).release();
 							}
 						} else {
-//							log.debug("Didn't get lock, spinning");
+							// log.debug("Didn't get lock, spinning");
 							spinLock = true;
 						}
 					} else {
@@ -198,7 +197,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		return scenarioInstanceEvaluator;
 	}
 
-	public void setScenarioInstanceEvaluator(IScenarioInstanceEvaluator scenarioInstanceEvaluator) {
+	public void setScenarioInstanceEvaluator(final IScenarioInstanceEvaluator scenarioInstanceEvaluator) {
 		this.scenarioInstanceEvaluator = scenarioInstanceEvaluator;
 	}
 }
