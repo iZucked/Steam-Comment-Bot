@@ -5,13 +5,13 @@
 package com.mmxlabs.models.lng.transformer.its.tests;
 
 import com.google.inject.Injector;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
@@ -25,7 +25,7 @@ import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
  */
 public class ScenarioRunner {
 
-	private final MMXRootObject scenario;
+	private final LNGScenarioModel scenario;
 
 	private IOptimisationContext context;
 	private ModelEntityMap entities;
@@ -37,7 +37,10 @@ public class ScenarioRunner {
 
 	private Injector injector;
 
-	public ScenarioRunner(final MMXRootObject scenario) {
+	/**
+	 * @since 3.0
+	 */
+	public ScenarioRunner(final LNGScenarioModel scenario) {
 		this.scenario = scenario;
 	}
 
@@ -49,7 +52,10 @@ public class ScenarioRunner {
 		return intialSchedule;
 	}
 
-	protected final MMXRootObject getScenario() {
+	/**
+	 * @since 3.0
+	 */
+	protected final LNGScenarioModel getScenario() {
 		return scenario;
 	}
 
