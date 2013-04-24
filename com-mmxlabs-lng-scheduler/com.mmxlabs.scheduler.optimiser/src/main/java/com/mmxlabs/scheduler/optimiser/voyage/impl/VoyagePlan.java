@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import java.util.Arrays;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 

@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;

@@ -4,15 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
