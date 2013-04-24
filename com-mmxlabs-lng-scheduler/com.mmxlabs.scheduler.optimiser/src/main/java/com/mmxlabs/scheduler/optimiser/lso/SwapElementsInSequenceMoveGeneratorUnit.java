@@ -37,7 +37,6 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public SwapSingleSequenceElements generateMove() {
 
