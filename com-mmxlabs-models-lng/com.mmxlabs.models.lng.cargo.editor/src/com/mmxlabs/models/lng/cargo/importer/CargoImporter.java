@@ -117,12 +117,10 @@ public class CargoImporter extends DefaultClassImporter {
 			newResults.add(load);
 		}
 		if (discharge == null || discharge.getWindowStart() == null) {
-
 			keepCargo = false;
 		} else {
 			newResults.add(discharge);
 		}
-
 		if (!keepCargo) {
 			cargo.getSlots().clear();
 		} else {

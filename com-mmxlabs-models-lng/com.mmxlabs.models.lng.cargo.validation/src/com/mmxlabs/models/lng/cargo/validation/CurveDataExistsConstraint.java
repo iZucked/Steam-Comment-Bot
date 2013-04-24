@@ -141,7 +141,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 			for (Index<?> index : pricingModel.getCommodityIndices()) {
 				if (Exposures.getExposureCoefficient(slot, index) != 0) {
 					if (!curveCovers(date, indexFinder, index, ctx)) {
-						String format = "There is no data in index '%s' for '%s' (the window start of slot '%s').";
+						String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
 						final String failureMessage = String.format(format, index.getName(), sdf.format(slot.getWindowStart()), slot.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 						if (slot.isSetPriceExpression()) {
@@ -164,7 +164,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 
 			// check entity tax rates
 			if (!curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
-				String format = "There is no tax data in contract entity '%s' for '%s' (the window start of slot '%s').";
+				String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
 				final String failureMessage = String.format(format, entity.getName(), sdf.format(date), slot.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
@@ -197,7 +197,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 
 				// check entity tax rates
 				if (!curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
-					String format = "There is no tax data in shipping entity '%s' for '%s' (the load date for cargo '%s').";
+					String format = "[Entity|'%s'] No tax data for '%s', the load date for cargo '%s'.";
 					final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 					dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);

@@ -63,7 +63,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, Slot slot, final int availableTime, final boolean inDialog, List<IStatus> failures) {
 		if (availableTime < 0) {
 			final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()), severity);
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'"+cargo.getName()+"'"), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		}
@@ -130,21 +130,21 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					ctx.putCurrentConstraintData(minTimes);
 				}
 
-				final Integer time = minTimes.get(key);
+				final Integer minTime = minTimes.get(key);
 
 				final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
-				if (time == null) {
+				if (minTime == null) {
 					// distance line is missing
 					// TODO customise message for this case.
 					// seems like a waste to run the same code twice
-					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(cargo.getName(), "infinity", formatHours(availableTime));
+					final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus("'"+cargo.getName()+"'", "infinity", formatHours(availableTime));
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, severity);
 					dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_Port());
 					failures.add(dsd);
 				} else {
-					if (time > availableTime) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), formatHours(time),
-								formatHours(availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
+					if (minTime > availableTime) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'"+cargo.getName()+"'",
+								formatHours(minTime-availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
 						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						dsd.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						failures.add(dsd);
@@ -176,7 +176,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, Slot slot, final int availableTime, final boolean inDialog, List<IStatus> failures) {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 			final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), availableTime / 24, SENSIBLE_TRAVEL_TIME),
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'"+cargo.getName()+"'", availableTime / 24, SENSIBLE_TRAVEL_TIME),
 					severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);

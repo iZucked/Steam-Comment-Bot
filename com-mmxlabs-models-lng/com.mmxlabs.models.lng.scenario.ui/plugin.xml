@@ -132,6 +132,15 @@
                   style="push">
             </command>
          </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=additions">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
+                  label="Bulk import price curves"
+                  style="push">
+            </command>
+         </menuContribution>
 
      </extension>
       <extension
@@ -145,6 +154,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizardHandler"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
                name="Export Scenario as CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
+               name="Bulk Import from CSV">
          </command>
       </extension>
 </plugin>

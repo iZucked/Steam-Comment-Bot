@@ -92,7 +92,7 @@
 						</dependency>
 						<dependency>
 							<type>eclipse-plugin</type>
-							<artifactId>com.mmxlabs.models.lng.cargo.validation</artifactId>
+							<artifactId>com.mmxlabs.models.lng.cargo.editor</artifactId>
 							<version>0.0.0</version>
 						</dependency>
 

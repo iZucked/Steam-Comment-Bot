@@ -16,31 +16,7 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
-      <wizard
-            id="com.mmxlabs.models.lng.port.presentation.PortModelWizardID"
-            name="%_UI_PortModelWizard_label"
-            class="com.mmxlabs.models.lng.port.presentation.PortModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/PortModelFile.gif">
-         <description>%_UI_PortModelWizard_description</description>
-         <selection class="org.eclipse.core.resources.IResource"/>
-      </wizard>
-   </extension>
 
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="com.mmxlabs.models.lng.port.presentation.PortEditorID"
-            name="%_UI_PortEditor_label"
-            icon="icons/full/obj16/PortModelFile.gif"
-            extensions="port"
-            class="com.mmxlabs.models.lng.port.presentation.PortEditor"
-            contributorClass="com.mmxlabs.models.lng.port.presentation.PortActionBarContributor">
-      </editor>
-   </extension>
 
 	
 	<extension

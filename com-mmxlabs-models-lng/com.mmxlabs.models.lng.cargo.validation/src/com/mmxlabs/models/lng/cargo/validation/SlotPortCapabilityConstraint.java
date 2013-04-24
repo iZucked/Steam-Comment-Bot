@@ -39,7 +39,7 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 
 					if (slot instanceof LoadSlot) {
 						if (!((LoadSlot) slot).isDESPurchase() && !capabilities.contains(PortCapability.LOAD)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.LOAD.getName()));
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.LOAD.getName(), "'"+slot.getName()+"'", "'"+port.getName()+"'"));
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 							final Cargo cargo = ((LoadSlot) slot).getCargo();
 							if (cargo != null) {
@@ -51,7 +51,7 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 
 					if (slot instanceof DischargeSlot) {
 						if (!((DischargeSlot) slot).isFOBSale() && !capabilities.contains(PortCapability.DISCHARGE)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.DISCHARGE.getName()));
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.DISCHARGE.getName(), "'"+slot.getName()+"'", "'"+port.getName()+"'"));
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 							final Cargo cargo = ((DischargeSlot) slot).getCargo();
 							if (cargo != null) {

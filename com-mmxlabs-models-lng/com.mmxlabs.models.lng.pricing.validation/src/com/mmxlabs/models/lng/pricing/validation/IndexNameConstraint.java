@@ -13,6 +13,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class IndexNameConstraint extends AbstractModelConstraint {
+	Pattern pattern = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*$");
 
 	@Override
 	public IStatus validate(IValidationContext ctx) {
@@ -21,8 +22,7 @@ public class IndexNameConstraint extends AbstractModelConstraint {
 		if (target instanceof Index<?>) {
 			Index<?> index = (Index<?>) target;
 			
-			Pattern pattern = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*$");
-			if (!pattern.matcher(index.getName()).matches()) {
+			if ((index.getName() == null) || !pattern.matcher(index.getName()).matches()) {
 				String message = "The name of an index can only contain letters, numbers and underscores.";
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(index, MMXCorePackage.Literals.NAMED_OBJECT__NAME);

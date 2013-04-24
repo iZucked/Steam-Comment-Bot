@@ -191,12 +191,7 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			final String slotStr = sb.toString();
 
 			final String message;
-			if (slot.getName() == null) {
-				message = String.format("A Slot overlaps with slot(s) %s", slotStr);
-			} else {
-				message = String.format("Slot %s overlaps with slot(s) %s", slot.getName(), slotStr);
-
-			}
+			message = String.format("[Slot|'%s'] Overlaps with slot(s) '%s'", slot.getName() == null? "(no ID)":slot.getName(), slotStr);
 
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());

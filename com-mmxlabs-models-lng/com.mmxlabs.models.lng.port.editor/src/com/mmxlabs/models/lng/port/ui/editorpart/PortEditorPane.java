@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
+import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -99,6 +100,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), PortPackage.eINSTANCE.getPortModel_PortGroups());
 			}
 		});
+		
+		final Action importAction = createImportAction();
+		if (importAction != null) {
+			getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, importAction);
+		}
+		
 		/*
 		 * Action tzAction = new Action("Update timezones") {
 		 * 
@@ -124,9 +131,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		defaultSetTitle("Ports");
 	}
 
-	@Override
 	protected Action createImportAction() {
-		final Action importPorts = super.createImportAction();
+		final Action importPorts = new SimpleImportAction(jointModelEditorPart, scenarioViewer);
 
 		importPorts.setText("Import ports...");
 		final AbstractMenuAction importMenu = new AbstractMenuAction("Import Ports and Distances") {
@@ -149,17 +155,14 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 						final ImportAction importR = new ImportAction(getJointModelEditorPart()) {
 							@Override
 							protected void doImportStages(final DefaultImportContext context) {
-								final FileDialog fileDialog = new FileDialog(part.getShell());
-								fileDialog.setFilterExtensions(new String[] { "*.csv" });
-								final String path = fileDialog.open();
-
+								final String path = importHooksProvider.getImportFilePath();
 								if (path == null)
 									return;
 								final RouteImporter routeImporter = new RouteImporter();
 
 								CSVReader reader = null;
 								try {
-									reader = new CSVReader(new File(path));
+								reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 									final Route importRoute = routeImporter.importRoute(reader, context);
 									context.run();
 									final CompoundCommand cc = new CompoundCommand();
@@ -197,14 +200,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 						@Override
 						protected void doImportStages(final DefaultImportContext context) {
-							final FileDialog fileDialog = new FileDialog(part.getShell());
-							fileDialog.setFilterExtensions(new String[] { "*.csv" });
-							final String path = fileDialog.open();
-
+							final String path = importHooksProvider.getImportFilePath();
+						
 							if (path == null)
 								return;
 
-							final InputDialog input = new InputDialog(part.getShell(), "Name for new canal", "Enter a new name for the new canal", "canal", new IInputValidator() {
+							final InputDialog input = new InputDialog(importHooksProvider.getShell(), "Name for new canal", "Enter a new name for the new canal", "canal", new IInputValidator() {
 								@Override
 								public String isValid(final String newText) {
 									if (newText.trim().isEmpty()) {
@@ -267,10 +268,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 							@Override
 							protected void doImportStages(final DefaultImportContext context) {
-								final FileDialog fileDialog = new FileDialog(part.getShell());
-								fileDialog.setFilterExtensions(new String[] { "*.csv" });
-								final String path = fileDialog.open();
-
+							final String path = importHooksProvider.getImportFilePath();
+							
 								if (path == null)
 									return;
 
@@ -279,7 +278,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 								CSVReader reader = null;
 								try {
-									reader = new CSVReader(new File(path));
+									reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 
 									final Route importRoute = routeImporter.importRoute(reader, context);
 

@@ -117,7 +117,7 @@ public class LNGModelCorrector {
 	// Remove special characters from index names
 	private void fixIndexNames(final CompoundCommand parent, final LNGScenarioModel rootObject, final EditingDomain ed) {
 
-		final CompoundCommand cmd = new CompoundCommand("Fix canal cost vessel types");
+		final CompoundCommand cmd = new CompoundCommand("Fix index names");
 
 		final PricingModel pricingModel = rootObject.getPricingModel();
 

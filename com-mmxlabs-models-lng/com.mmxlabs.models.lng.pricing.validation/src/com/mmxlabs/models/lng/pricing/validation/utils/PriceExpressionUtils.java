@@ -73,7 +73,7 @@ public class PriceExpressionUtils {
 		Matcher matcher = pattern.matcher(priceExpression);
 
 		if (matcher.find()) {
-			String message = String.format("Price Expression contains unexpected character '%s'.", matcher.group(1));
+			String message = String.format("[Price expression|'"+priceExpression+"'] Contains unexpected character '%s'.", matcher.group(1));
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 			dsd.addEObjectAndFeature(object, feature);
 			failures.add(dsd);
@@ -91,7 +91,7 @@ public class PriceExpressionUtils {
 				hints = e.getMessage();
 			}
 			if (parsed == null) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Unable to parse price expression. " + hints));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Price expression|"+priceExpression+"] Unable to parse: " + hints));
 				dsd.addEObjectAndFeature(object, feature);
 				failures.add(dsd);
 			}

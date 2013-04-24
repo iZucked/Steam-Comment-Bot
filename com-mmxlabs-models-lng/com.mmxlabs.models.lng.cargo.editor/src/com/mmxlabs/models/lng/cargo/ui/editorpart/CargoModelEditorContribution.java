@@ -18,6 +18,9 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
+/**
+ * @since 3.0
+ */
 public class CargoModelEditorContribution extends BaseJointModelEditorContribution<CargoModel> {
 	private int tradesViewerPageNumber = -1;
 	private TradesWiringViewer tradesViewer;

@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireD
  *         FIXME: Fork of {@link WiringDiagram} as which this does work as is, partial re-paints do not work - bg fill is ok, but terminals and lines are only partially drawn if at all. Unknown why
  *         this is the case as it is the same listener code on a canvas, but the objects are separated. Disabling double buffer does not help. Only idea is that some methods are synchronized - it
  *         maybe by splitting the classes code which was previously synchronious can now be executed in parallel.
+ * @since 3.0
  */
 public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener {
 
@@ -116,6 +117,13 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	@Override
 	public synchronized void paintControl(final PaintEvent e) {
+		final Rectangle ca = getCanvasClientArea();
+
+		// Could be null is column is no longer visible.
+		if (ca == null) {
+			return;
+		}
+
 		// Get a list of terminal positions from subclass
 		final List<Float> terminalPositions = getTerminalPositions(rootData);
 
@@ -126,7 +134,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		graphics.setAntialias(SWT.ON);
 
-		final Rectangle ca = getCanvasClientArea();
 		// Clip to reported client area to avoid overdraw
 		graphics.setClipping(ca);
 
@@ -149,6 +156,11 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				// Map back between current row (sorted) and data (unsorted)
 				int sortedDestination = sortedIndices == null ? unsortedDestination : sortedIndices[unsortedDestination];
 				int sortedSource = sortedIndices == null ? unsortedSource : sortedIndices[unsortedSource];
+
+				// Filtering can lead to missing terminals
+				if (sortedDestination == -1 || sortedSource == -1) {
+					continue;
+				}
 
 				// If this is the wire currently being dragged, skip and handle in next code block
 				if (dragging) {

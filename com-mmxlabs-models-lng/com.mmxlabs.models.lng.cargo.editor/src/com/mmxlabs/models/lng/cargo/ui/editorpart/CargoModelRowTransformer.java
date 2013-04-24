@@ -36,6 +36,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * wiring, colour information for terminal and wiring colouring.
  * 
  * @author Simon Goodall
+ * @since 3.0
  * 
  */
 public class CargoModelRowTransformer {
@@ -65,13 +66,13 @@ public class CargoModelRowTransformer {
 
 		final RootData root = new RootData();
 
-		Map<Cargo, CargoAllocation> cargoAllocationMap = new HashMap<Cargo, CargoAllocation>();
-		Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<Slot, SlotAllocation>();
+		final Map<Cargo, CargoAllocation> cargoAllocationMap = new HashMap<Cargo, CargoAllocation>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<Slot, SlotAllocation>();
 		if (schedule != null) {
-			for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 				cargoAllocationMap.put(cargoAllocation.getInputCargo(), cargoAllocation);
 			}
-			for (SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
+			for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 				slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
 			}
 		}
@@ -167,7 +168,11 @@ public class CargoModelRowTransformer {
 				root.getRows().add(row);
 				row.loadSlot = slot;
 
-				row.loadTerminalColour = red;
+				if (slot.isOptional()) {
+					row.loadTerminalColour = green;
+				} else {
+					row.loadTerminalColour = red;
+				}
 				row.dischargeTerminalColour = red;
 			}
 		}
@@ -185,8 +190,12 @@ public class CargoModelRowTransformer {
 				root.getRows().add(row);
 				row.dischargeSlot = slot;
 
+				if (slot.isOptional()) {
+					row.dischargeTerminalColour = green;
+				} else {
+					row.dischargeTerminalColour = red;
+				}
 				row.loadTerminalColour = red;
-				row.dischargeTerminalColour = red;
 			}
 		}
 

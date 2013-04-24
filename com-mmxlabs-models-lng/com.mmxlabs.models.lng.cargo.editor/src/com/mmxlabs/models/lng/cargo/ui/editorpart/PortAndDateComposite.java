@@ -40,6 +40,9 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 
+/**
+ * @since 3.0
+ */
 public class PortAndDateComposite extends Composite implements IDisplayComposite, IInlineEditorContainer {
 
 	private Slot slot;

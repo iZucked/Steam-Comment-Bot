@@ -56,11 +56,11 @@ public class ShippingTypeConstraint extends AbstractModelMultiConstraint {
 						if (contract instanceof SalesContract) {
 							requiredCargoType = ((SalesContract) contract).getPurchaseDeliveryType();
 							featureChecked = CargoPackage.Literals.SLOT__CONTRACT;
-							featureCheckedName = String.format("sales contract '%s'", contract.getName());
+							featureCheckedName = String.format("Sales contract '%s'", contract.getName());
 						}
 					}
 					if (requiredCargoType != CargoDeliveryType.ANY && cargoType != requiredCargoType) {
-						final String format = "The %s specifies a purchase shipping type of '%s' which does not match the cargo shipping type of '%s'.";
+						final String format = "%s specifies '%s' purchase but cargo shipping type is '%s'.";
 						final String error = String.format(format, featureCheckedName, requiredCargoType.getName(), cargoType.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(error, IStatus.ERROR));
 						dsd.addEObjectAndFeature(dischargeSlot, featureChecked);

@@ -14,6 +14,7 @@ import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
+import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.SlotVolumeConstraint;
@@ -107,6 +108,7 @@ public class SlotVolumeConstraintTest {
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 
 		// Set up the expected return values of methods.
+		when(slot.getName()).thenReturn("Slot");
 		when(slot.eContainingFeature()).thenReturn(null);
 		when(slot.getSlotOrContractMinQuantity()).thenReturn(min);
 		when(slot.getSlotOrContractMaxQuantity()).thenReturn(max);
@@ -116,19 +118,20 @@ public class SlotVolumeConstraintTest {
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(successStatus);
 		} else {
-			when(validationContext.createFailureStatus()).thenReturn(successStatus);
+			when(validationContext.createFailureStatus(Matchers.anyVararg())).thenReturn(successStatus);
 		}
 
 		// validate the constraint using the mocked expected values set above
 		constraint.validate(validationContext);
 
 		// verify that the mocked methods are called.
+		verify(slot, atLeast(0)).getName();
 		verify(slot, atLeast(0)).getSlotOrContractMinQuantity();
 		verify(slot, atLeast(0)).getSlotOrContractMaxQuantity();
 		verify(validationContext).getTarget();
 		verify(validationContext).getEventType();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
-		verify(validationContext, atLeast(0)).createFailureStatus();
+		verify(validationContext, atLeast(0)).createFailureStatus(Matchers.anyVararg());
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(slot);
 		verifyNoMoreInteractions(validationContext);
