@@ -12,10 +12,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.nebula.widgets.formattedtext.DateFormatter;
 
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -74,7 +76,14 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	}
 
 	public String formatDate(final Date date, final TimeZone zone) {
-		final SimpleDateFormat c = (SimpleDateFormat) consistentDateTime.clone();
+		return formatDate(date, zone, true);
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public String formatDate(final Date date, final TimeZone zone, boolean includeTime) {
+		final SimpleDateFormat c = (SimpleDateFormat) (includeTime ? consistentDateTime.clone() : consistentDate.clone());
 		c.setTimeZone(zone);
 		return c.format(date);
 	}
@@ -138,8 +147,20 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 
 	@Override
 	protected String stringFromAttribute(final EObject container, final EAttribute attribute, final Object value) {
-		if (attribute.isUnsettable() && container.eIsSet(attribute) == false)
+		if (attribute.isUnsettable() && container.eIsSet(attribute) == false) {
 			return "";
-		return formatDate((Date) value, LocalDateUtil.getTimeZone(container, attribute));
+		}
+
+		// Determine whether or not to include the time component in the export
+		final EAnnotation annotation = attribute.getEAnnotation("http://www.mmxlabs.com/models/lng/ui/datetime");
+		boolean showTime = true;
+		if (annotation != null) {
+			final String showTimeAnnotation = annotation.getDetails().get("showTime");
+			if (showTimeAnnotation != null) {
+				showTime = Boolean.parseBoolean(showTimeAnnotation);
+			}
+		}
+
+		return formatDate((Date) value, LocalDateUtil.getTimeZone(container, attribute), showTime);
 	}
 }
