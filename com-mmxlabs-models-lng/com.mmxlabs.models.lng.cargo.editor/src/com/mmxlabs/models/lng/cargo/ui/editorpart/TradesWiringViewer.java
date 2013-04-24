@@ -129,6 +129,7 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
  * 
  * 
  * @author Simon Goodall
+ * @since 3.0
  * 
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {

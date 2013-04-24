@@ -44,6 +44,9 @@ import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 
+/**
+ * @since 3.0
+ */
 public class CargoEditorMenuHelper {
 
 	private final Shell shell;

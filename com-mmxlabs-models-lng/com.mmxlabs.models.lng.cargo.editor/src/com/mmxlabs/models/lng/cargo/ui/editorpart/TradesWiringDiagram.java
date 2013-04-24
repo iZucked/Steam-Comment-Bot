@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireD
  *         FIXME: Fork of {@link WiringDiagram} as which this does work as is, partial re-paints do not work - bg fill is ok, but terminals and lines are only partially drawn if at all. Unknown why
  *         this is the case as it is the same listener code on a canvas, but the objects are separated. Disabling double buffer does not help. Only idea is that some methods are synchronized - it
  *         maybe by splitting the classes code which was previously synchronious can now be executed in parallel.
+ * @since 3.0
  */
 public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener {
 
