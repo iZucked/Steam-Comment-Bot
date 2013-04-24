@@ -23,9 +23,8 @@ import com.mmxlabs.models.lng.analytics.Voyage;
  * @since 2.0
  *
  */
-public class UnitCostLinePropertySource extends ExtraDataContainerPropertySource {
-	/**
-	 * 
+public class UnitCostLinePropertySource /* extends ExtraDataContainerPropertySource*/ {
+	/*
 	 */
 	private static final String OVERVIEW = "1. Overview";
 	private final UnitCostLine line;
@@ -80,11 +79,10 @@ public class UnitCostLinePropertySource extends ExtraDataContainerPropertySource
 	}
 	
 	public UnitCostLinePropertySource(final UnitCostLine line) {
-		super(line);
+//		super(line);
 		this.line = line;
 	}
 
-	@Override
 	protected void createExtraDescriptors(List<IPropertyDescriptor> descriptors) {
 		if (true) return;
 		
@@ -302,12 +300,12 @@ public class UnitCostLinePropertySource extends ExtraDataContainerPropertySource
 		return result;
 	}
 	
-	@Override
-	public Object getPropertyValue(Object id) {
-		if (id instanceof IPropertyGetter) {
-			return ((IPropertyGetter) id).get(line);
-		} else {
-			return super.getPropertyValue(id);
-		}
-	}
+//	@Override
+//	public Object getPropertyValue(Object id) {
+//		if (id instanceof IPropertyGetter) {
+//			return ((IPropertyGetter) id).get(line);
+//		} else {
+//			return super.getPropertyValue(id);
+//		}
+//	}
 }
