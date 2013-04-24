@@ -255,8 +255,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					charterOut.setEndTime(currentTime + travelTime + idleTime);
 					charterOut.setSequenceElement(element);
 
-					// TODO: Calculate revenue
-
+					// Calculate revenue
+					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutHourlyRate(), idleTime));
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 
 				} else {
@@ -285,7 +285,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					idle.setVesselState(details.getOptions().getVesselState());
 
 					if (idle.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
-						idle.setCooldownDuration(Math.min(idleTime, /*vessel.getVesselClass().getCooldownTime()*/ 0));
+						idle.setCooldownDuration(Math.min(idleTime, /* vessel.getVesselClass().getCooldownTime() */0));
 					}
 
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);
