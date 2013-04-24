@@ -102,13 +102,34 @@
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
-            targetID="*">
+            targetID="com.mmxlabs.shiplingo.platform.app.perspective.analysis">
          <view
                closeable="false"
                id="com.mmxlabs.scenario.service.ui.navigator"
-               minimized="true"
+               minimized="false"
+               moveable="false"
+               ratio="0.25"
                relationship="left"
-               relative="org.eclipse.ui.editorss">
+               relative="org.eclipse.ui.editorss"
+               showTitle="true"
+               standalone="true">
+         </view>
+         <viewShortcut
+               id="com.mmxlabs.scenario.service.ui.navigator">
+         </viewShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="com.mmxlabs.shiplingo.platform.app.perspective.editing">
+         <view
+               closeable="false"
+               id="com.mmxlabs.scenario.service.ui.navigator"
+               minimized="false"
+               moveable="false"
+               ratio="0.25"
+               relationship="left"
+               relative="physicalFolder"
+               showTitle="true"
+               standalone="true">
          </view>
          <viewShortcut
                id="com.mmxlabs.scenario.service.ui.navigator">
