@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +16,7 @@ import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -62,6 +64,8 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -852,6 +856,24 @@ public class ScenarioTools {
 				System.err.println("Unknown:");
 				System.err.println("\t" + e.getClass());
 				System.err.println("\tStart: " + e.getStart() + ", End: " + e.getEnd());
+			}
+			
+			// show any capacity violations
+			if (e instanceof CapacityViolationsHolder) {
+				EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) e).getViolations();
+				if (violations != null && !violations.isEmpty()) {
+					String violationString = null;
+					for (Map.Entry<CapacityViolationType, Long> entry: violations) {
+						if (violationString == null) {
+							violationString = "\tCapacity violations: ";
+						}
+						else {
+							violationString += ", ";
+						}
+						violationString += String.format("%s (%d m3)", entry.getKey().getLiteral(), entry.getValue());
+					}
+					System.err.println(violationString);
+				}
 			}
 		}
 	}
