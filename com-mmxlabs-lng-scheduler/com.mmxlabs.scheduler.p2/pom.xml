@@ -95,7 +95,7 @@
 						</goals>
 						<phase>package</phase>
 						<configuration>
-							<target>${project.build.directory}/repository</target>
+					vanilla.hg/com.mmxlabs.shiplingo.platform.vanilla.product-definition/target/products/		<target>${project.build.directory}/repository</target>
 						</configuration>
 					</execution>
 				</executions>

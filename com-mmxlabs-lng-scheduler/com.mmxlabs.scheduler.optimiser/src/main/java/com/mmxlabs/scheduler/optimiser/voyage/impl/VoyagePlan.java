@@ -23,6 +23,7 @@ public final class VoyagePlan implements Cloneable {
 
 	/**
 	 * An enum for use with remaining heel to denote it's allocation.
+	 * @since 3.1
 	 * 
 	 */
 	public enum HeelType {
@@ -200,6 +201,9 @@ public final class VoyagePlan implements Cloneable {
 		this.ignoreEnd = ignoreEnd;
 	}
 
+	/**
+	 * @since 3.1
+	 */
 	public long getRemainingHeelInM3() {
 		return remainingHeelInM3;
 	}
@@ -210,12 +214,16 @@ public final class VoyagePlan implements Cloneable {
 	 * 
 	 * @param remainingHeelInM3
 	 * @param remainingHeelType
+	 * @since 3.1
 	 */
 	public void setRemainingHeelInM3(final long remainingHeelInM3, final HeelType remainingHeelType) {
 		this.remainingHeelInM3 = remainingHeelInM3;
 		this.remainingHeelType = remainingHeelType;
 	}
 
+	/**
+	 * @since 3.1
+	 */
 	public HeelType getRemainingHeelType() {
 		return remainingHeelType;
 	}
