@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -354,6 +355,23 @@ public class DefaultClassImporter implements IClassImporter {
 	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result) {
 		final IAttributeImporter ai = Activator.getDefault().getImporterRegistry().getAttributeImporter(attribute.getEAttributeType());
 		if (ai != null) {
+
+			// Determine whether or not to export the othernames feature
+			if (attribute == MMXCorePackage.eINSTANCE.getNamedObject_OtherNames()) {
+				// Annotation is not on the feature itself, but rather the sub-class
+				final EAnnotation annotation = object.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/annotations/namedobject");
+				boolean exportOtherNames = false;
+				if (annotation != null) {
+					final String showOtherNamesAnnotation = annotation.getDetails().get("showOtherNames");
+					if (showOtherNamesAnnotation != null) {
+						exportOtherNames = Boolean.parseBoolean(showOtherNamesAnnotation);
+					}
+				}
+				if (!exportOtherNames) {
+					return;
+				}
+			}
+
 			result.put(attribute.getName(), ai.writeAttribute(object, attribute, object.eGet(attribute)));
 		}
 	}
@@ -372,6 +390,7 @@ public class DefaultClassImporter implements IClassImporter {
 			}
 		} else {
 			if (reference.isMany()) {
+				@SuppressWarnings("unchecked")
 				final List<? extends Object> values = (List<? extends Object>) object.eGet(reference);
 				final StringBuffer sb = new StringBuffer();
 				boolean comma = false;
@@ -398,7 +417,8 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
-		return !(feature == MMXCorePackage.eINSTANCE.getMMXObject_Extensions() || feature == MMXCorePackage.eINSTANCE.getMMXObject_Proxies() || feature == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid());
+		return !(feature == MMXCorePackage.eINSTANCE.getMMXObject_Extensions() || feature == MMXCorePackage.eINSTANCE.getMMXObject_Proxies() || feature == MMXCorePackage.eINSTANCE
+				.getUUIDObject_Uuid());
 	}
 
 	protected boolean shouldFlattenReference(final EReference reference) {
