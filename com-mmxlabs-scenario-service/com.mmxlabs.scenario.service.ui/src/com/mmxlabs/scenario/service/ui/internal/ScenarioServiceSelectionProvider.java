@@ -39,11 +39,13 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	@Override
 	public void deselect(final ScenarioInstance instance) {
 		if (isSelected(instance)) {
-			selection.remove(instance);
-			if (instance == pin)
+			if (instance == pin) {
 				setPinnedInstance(null);
-			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
-				listener.deselected(this, Collections.singleton(instance));
+			} else {
+				selection.remove(instance);
+				for (final IScenarioServiceSelectionChangedListener listener : listeners) {
+					listener.deselected(this, Collections.singleton(instance));
+				}
 			}
 		}
 	}
@@ -103,7 +105,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 			if (instance != null && !isSelected(instance)) {
 				select(instance);
 			} else if (oldPin != null && pin == null) {
-				deselect(instance);
+				// deselect(instance);
 			}
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 				listener.pinned(this, oldPin, pin);
