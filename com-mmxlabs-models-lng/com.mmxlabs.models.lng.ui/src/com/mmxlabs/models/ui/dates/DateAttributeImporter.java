@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.nebula.widgets.formattedtext.DateFormatter;
 
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.util.importer.IImportContext;
