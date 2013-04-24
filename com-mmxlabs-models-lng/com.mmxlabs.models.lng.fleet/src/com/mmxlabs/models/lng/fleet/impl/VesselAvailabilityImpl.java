@@ -182,7 +182,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getVessel()
 	 * @generated
@@ -193,7 +193,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	/**
 	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getStartHeel()
 	 * @generated
@@ -430,7 +430,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -448,7 +448,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -458,7 +458,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -471,7 +471,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -481,7 +481,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -497,7 +497,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

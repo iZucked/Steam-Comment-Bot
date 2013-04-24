@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
@@ -28,59 +29,58 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoImportAction;
 
-
 /**
  * Class to bulk-import information from CSV files.
- *  
- * Contains modified cut&paste code from ImportAction and SimpleImportAction (class was
- * written in a hurry). 
- * TODO: Move duplicated code into a common code object.
+ * 
+ * Contains modified cut&paste code from ImportAction and SimpleImportAction (class was written in a hurry). TODO: Move duplicated code into a common code object.
  * 
  * @author Simon McGregor
  * @since 3.0
- *
+ * 
  */
 public class BulkImportCSVHandler extends AbstractHandler {
 	public ImportAction getImportAction(final int importTarget, final ImportAction.ImportHooksProvider ihp) {
 		final MMXRootObject root = ihp.getRootObject();
-		if (importTarget == BulkImportPage.CHOICE_COMMODITY_INDICES) {
-			return new SimpleImportAction(ihp, new SimpleImportAction.FieldInfoProvider() {
-				@Override
-				public EObject getContainer() {
-					return root.getSubModel(PricingModel.class);
-				}
+		if (root instanceof LNGScenarioModel) {
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
+			if (importTarget == BulkImportPage.CHOICE_COMMODITY_INDICES) {
+				return new SimpleImportAction(ihp, new SimpleImportAction.FieldInfoProvider() {
+					@Override
+					public EObject getContainer() {
+						return scenarioModel.getPricingModel();
+					}
 
-				@Override
-				public EReference getContainment() {
-					return PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES;
-				}
-				
-			});
-		}
-		
-		if (importTarget == BulkImportPage.CHOICE_CARGOES) {
-			return new CargoImportAction(ihp, new SimpleImportAction.FieldInfoProvider() {
-				
-				@Override
-				public EReference getContainment() {
-					return CargoPackage.Literals.CARGO_MODEL__CARGOES;
-				}
-				
-				@Override
-				public EObject getContainer() {
-					return root.getSubModel(CargoModel.class);
-				}
-			}); 
+					@Override
+					public EReference getContainment() {
+						return PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES;
+					}
+
+				});
+			}
+
+			if (importTarget == BulkImportPage.CHOICE_CARGOES) {
+				return new CargoImportAction(ihp, new SimpleImportAction.FieldInfoProvider() {
+
+					@Override
+					public EReference getContainment() {
+						return CargoPackage.Literals.CARGO_MODEL__CARGOES;
+					}
+
+					@Override
+					public EObject getContainer() {
+						return scenarioModel.getPortfolioModel().getCargoModel();
+					}
+				});
+			}
 		}
 
 		return null;
 	}
-	
 
 	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final Shell shell, final String importFilePath, final char csvSeparator) {
 		return new ImportAction.ImportHooksProvider() {
 			ScenarioLock lock;
-			
+
 			@Override
 			public Shell getShell() {
 				return shell;
@@ -113,20 +113,20 @@ public class BulkImportCSVHandler extends AbstractHandler {
 				((CommandProviderAwareEditingDomain) getEditingDomain()).setCommandProvidersDisabled(false);
 				if (lock != null) {
 					lock.release();
-				}			
+				}
 			}
 
 			@Override
 			public char getCsvSeparator() {
 				return csvSeparator;
 			}
-			
+
 		};
 	}
-	
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+
 		IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
 		if (activeWorkbenchWindow == null) {
 			// action has been disposed
@@ -136,31 +136,30 @@ public class BulkImportCSVHandler extends AbstractHandler {
 		Shell shell = HandlerUtil.getActiveShell(event);
 		IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
 
-
 		BulkImportWizard wizard = new BulkImportWizard(editor.getScenarioInstance());
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
-		
+
 		WizardDialog dialog = new WizardDialog(shell, wizard);
 		dialog.create();
 		dialog.open();
-		
+
 		List<ScenarioInstance> scenarios = wizard.getSelectedScenarios();
 		String importFilename = wizard.getImportFilename();
-		
+
 		int importTarget = wizard.getImportedField();
-		
+
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
 			char separator = wizard.getCsvSeparator();
-			
+
 			bulkImport(importTarget, shell, scenarios, importFilename, separator);
 		}
 
 		return null;
 	}
-	
+
 	void bulkImport(int importTarget, Shell shell, List<ScenarioInstance> instances, String filename, char separator) {
 		try {
-			for (ScenarioInstance instance: instances) {
+			for (ScenarioInstance instance : instances) {
 				if (instance.getInstance() == null) {
 					instance.getScenarioService().load(instance);
 				}
@@ -168,14 +167,14 @@ public class BulkImportCSVHandler extends AbstractHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		for (ScenarioInstance instance: instances) {
+
+		for (ScenarioInstance instance : instances) {
 			ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, shell, filename, separator);
 			ImportAction action = getImportAction(importTarget, ihp);
-			
+
 			action.safelyImport();
-		}		
-		
+		}
+
 	}
-	
+
 }

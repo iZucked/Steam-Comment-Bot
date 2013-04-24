@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Shipping Costs</b></em>'.
- * @since 3.0
+ * @since 4.0
  * <!-- end-user-doc -->
  * <p>
  * </p>

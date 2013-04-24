@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Shipping Costs</b></em>'.
- * @since 3.0
+ * @since 4.0
  * <!-- end-user-doc -->
  *
  *

@@ -30,7 +30,7 @@ public interface SpotSlot extends MMXObject {
 	 * If the meaning of the '<em>Market</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Market</em>' reference.
 	 * @see #setMarket(SpotMarket)
@@ -43,7 +43,7 @@ public interface SpotSlot extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.SpotSlot#getMarket <em>Market</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Market</em>' reference.
 	 * @see #getMarket()

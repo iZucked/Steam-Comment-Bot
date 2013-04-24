@@ -59,7 +59,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -336,7 +336,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -346,7 +346,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -356,7 +356,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

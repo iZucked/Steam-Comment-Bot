@@ -53,7 +53,7 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	/**
 	 * The cached value of the '{@link #getExtensions() <em>Extensions</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getExtensions()
 	 * @generated
@@ -64,7 +64,7 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	/**
 	 * The default value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getUuid()
 	 * @generated
@@ -75,7 +75,7 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	/**
 	 * The cached value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getUuid()
 	 * @generated
@@ -86,7 +86,7 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -97,7 +97,7 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -108,7 +108,7 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	/**
 	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getOtherNames()
 	 * @generated

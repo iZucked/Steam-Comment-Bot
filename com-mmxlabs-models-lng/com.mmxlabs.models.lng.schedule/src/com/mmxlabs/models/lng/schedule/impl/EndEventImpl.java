@@ -91,6 +91,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLoss()
 	 * @generated
@@ -175,6 +176,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -184,6 +186,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -199,6 +202,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

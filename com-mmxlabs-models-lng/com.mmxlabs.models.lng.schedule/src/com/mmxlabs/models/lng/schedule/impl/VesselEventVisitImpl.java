@@ -73,6 +73,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLoss()
 	 * @generated
@@ -144,6 +145,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -153,6 +155,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -168,6 +171,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

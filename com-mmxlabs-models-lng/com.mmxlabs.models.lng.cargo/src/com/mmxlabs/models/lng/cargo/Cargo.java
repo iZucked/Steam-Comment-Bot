@@ -111,7 +111,7 @@ public interface Cargo extends UUIDObject, NamedObject {
 	 *  - or any other slot implementation. Note this list is unsorted. Clients of this method should date sort the slots if required.
 	 *  See {@link #getSortedSlots()} or {@link CargoSlotSorter} to help with this.
 	 * </p>
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Slots</em>' reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_Slots()
@@ -132,7 +132,7 @@ public interface Cargo extends UUIDObject, NamedObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * Returns date sorted copy of the {@link #getSlots()} {@link List}. A new list is created each time this method is called.
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated

@@ -27,7 +27,7 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
- * @since 3.0
+ * @since 4.0
  */
 public class ScenarioFleetModelImporter implements ISubmodelImporter {
 	public static final String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";

@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Profit And Loss Container</b></em>'.
+ * @since 4.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

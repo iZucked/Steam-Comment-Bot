@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Entity Profit And Loss</b></em>'.
- * @since 3.0
+ * @since 4.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

@@ -59,7 +59,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -308,7 +308,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -318,8 +318,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -329,7 +328,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

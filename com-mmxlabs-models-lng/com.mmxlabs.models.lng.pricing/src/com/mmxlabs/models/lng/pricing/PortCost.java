@@ -117,7 +117,7 @@ public interface PortCost extends MMXObject {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @model required="true" vesselClassRequired="true" activityRequired="true"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (final PortCostEntry entry : getEntries()) {\n\tif (entry.getActivity() == activity) {\n\t\tif (isSetReferenceCapacity()) {\n\t\t\treturn (int)\n\t\t\t\t(entry.getCost() * (((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity()));\n\t\t} else {\n\t\t\treturn entry.getCost();\n\t\t}\n\t}\n}\nreturn 0;'"

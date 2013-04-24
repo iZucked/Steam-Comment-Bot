@@ -133,10 +133,11 @@ public class MetamodelVersionsUtil {
 
 		return loader;
 	}
+
 	public static MetamodelLoader createV2Loader(final Map<String, URI> extraPackages) {
-		
+
 		final MetamodelLoader loader = new MetamodelLoader();
-		
+
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
 		final EPackage typesPackage = loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
@@ -149,22 +150,25 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
-		
+
 		hookSerializableObjectConvertor(typesPackage);
-		
+
 		if (extraPackages != null) {
 			for (final Map.Entry<String, URI> e : extraPackages.entrySet()) {
 				loader.loadEPackage(e.getValue(), e.getKey());
 			}
 		}
-		
+
 		return loader;
 	}
-	
-public static MetamodelLoader createV3Loader(final Map<String, URI> extraPackages) {
-		
+
+	/**
+	 * @since 4.0
+	 */
+	public static MetamodelLoader createV3Loader(final Map<String, URI> extraPackages) {
+
 		final MetamodelLoader loader = new MetamodelLoader();
-		
+
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
 		final EPackage typesPackage = loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
@@ -177,15 +181,15 @@ public static MetamodelLoader createV3Loader(final Map<String, URI> extraPackage
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
-		
+
 		hookSerializableObjectConvertor(typesPackage);
-		
+
 		if (extraPackages != null) {
 			for (final Map.Entry<String, URI> e : extraPackages.entrySet()) {
 				loader.loadEPackage(e.getValue(), e.getKey());
 			}
 		}
-		
+
 		return loader;
 	}
 }

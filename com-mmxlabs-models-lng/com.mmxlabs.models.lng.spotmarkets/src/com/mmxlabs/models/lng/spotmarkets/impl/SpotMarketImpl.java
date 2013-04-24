@@ -47,6 +47,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -57,6 +58,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -67,6 +69,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	/**
 	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getOtherNames()
 	 * @generated

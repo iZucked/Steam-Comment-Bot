@@ -71,7 +71,7 @@ public class DistanceLineViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public void init(final EditingDomain editingDomain, final LNGScenarioModel scenario) {
 		setContentProvider(new IStructuredContentProvider() {

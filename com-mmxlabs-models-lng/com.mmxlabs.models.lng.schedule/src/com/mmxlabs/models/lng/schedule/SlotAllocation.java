@@ -93,7 +93,7 @@ public interface SlotAllocation extends MMXObject {
 	 * If the meaning of the '<em>Spot Market</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Spot Market</em>' reference.
 	 * @see #isSetSpotMarket()
@@ -108,7 +108,7 @@ public interface SlotAllocation extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSpotMarket <em>Spot Market</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Spot Market</em>' reference.
 	 * @see #isSetSpotMarket()
@@ -257,7 +257,7 @@ public interface SlotAllocation extends MMXObject {
 	 * If the meaning of the '<em>Volume Transferred</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Volume Transferred</em>' attribute.
 	 * @see #setVolumeTransferred(int)
@@ -270,7 +270,7 @@ public interface SlotAllocation extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Volume Transferred</em>' attribute.
 	 * @see #getVolumeTransferred()
@@ -281,6 +281,7 @@ public interface SlotAllocation extends MMXObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * @generated
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated
@@ -305,7 +306,7 @@ public interface SlotAllocation extends MMXObject {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated

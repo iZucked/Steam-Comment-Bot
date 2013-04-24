@@ -30,7 +30,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	/**
 	 * The default value of the '{@link #getUnit() <em>Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getUnit()
 	 * @generated

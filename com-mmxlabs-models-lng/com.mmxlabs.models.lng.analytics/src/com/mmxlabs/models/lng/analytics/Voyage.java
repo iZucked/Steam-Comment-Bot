@@ -35,7 +35,7 @@ public interface Voyage extends CostComponent {
 	 * If the meaning of the '<em>Route</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Route</em>' reference.
 	 * @see #setRoute(Route)
@@ -48,7 +48,7 @@ public interface Voyage extends CostComponent {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Route</em>' reference.
 	 * @see #getRoute()

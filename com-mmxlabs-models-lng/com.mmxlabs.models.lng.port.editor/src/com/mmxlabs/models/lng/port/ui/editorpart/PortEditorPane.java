@@ -132,7 +132,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 	}
 
 	protected Action createImportAction() {
-		final Action importPorts = new SimpleImportAction(jointModelEditorPart, scenarioViewer);
+		final Action importPorts = new SimpleImportAction(scenarioEditingLocation, scenarioViewer);
 
 		importPorts.setText("Import ports...");
 		final AbstractMenuAction importMenu = new AbstractMenuAction("Import Ports and Distances") {
