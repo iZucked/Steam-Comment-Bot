@@ -30,8 +30,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -55,8 +53,6 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class VesselClassViewerPane extends ScenarioTableViewerPane {
-
-	private static final Logger log = LoggerFactory.getLogger(VesselClassViewerPane.class);
 
 	private final IScenarioEditingLocation jointModelEditor;
 
@@ -87,7 +83,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 		setTitle("Vessel Classes", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
-					}
+					
 	class BaseFuelEditorAction extends AbstractMenuAction {
 		public BaseFuelEditorAction() {
 			super("Base Fuels");
