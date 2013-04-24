@@ -3,9 +3,9 @@
 	<parent>
 		<groupId>com.mmxlabs.scenario.service</groupId>
 		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
-		<version>3.1.1-SNAPSHOT</version>
+		<version>3.1.1.RELEASE</version>
 	</parent>
 	<artifactId>target-definition</artifactId>
-	<version>3.1.1-SNAPSHOT</version>
+	<version>3.1.1.RELEASE</version>
 	<packaging>eclipse-target-definition</packaging>
 </project>
