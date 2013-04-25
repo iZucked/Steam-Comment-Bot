@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.text.DateFormat;
@@ -31,6 +35,11 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.input.ElementAssignment;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
@@ -40,10 +49,14 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 
+/**
+ * @since 3.0
+ */
 public class CargoEditorMenuHelper {
 
 	private final Shell shell;
@@ -157,6 +170,11 @@ public class CargoEditorMenuHelper {
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getCargo());
 				createEditContractMenu(manager, dischargeSlot, dischargeSlot.getContract());
 				createDeleteSlotMenu(manager, dischargeSlot);
+				if (dischargeSlot.getCargo() != null) {
+					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(scenarioEditingLocation.getRootObject().getSubModel(InputModel.class),
+							dischargeSlot.getCargo());
+					createAssignmentMenus(manager, dischargeSlot.getCargo(), elementAssignment);
+				}
 			}
 
 		};
@@ -177,6 +195,70 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
+	private void createAssignmentMenus(final IMenuManager menuManager, final Cargo cargo, final ElementAssignment elementAssignment) {
+		menuManager.add(new Separator());
+
+		{
+			final MenuManager reassignMenuManager = new MenuManager("Assign to...", null);
+			menuManager.add(reassignMenuManager);
+
+			final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+			final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+			class AssignAction extends Action {
+				private final Vessel vessel;
+
+				public AssignAction(final Vessel vessel) {
+					super(vessel.getName());
+					this.vessel = vessel;
+				}
+
+				public void run() {
+					final Command cmd = AssignmentEditorHelper.reassignElement(scenarioEditingLocation.getEditingDomain(), vessel, elementAssignment);
+					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+				}
+			}
+			for (final Vessel vessel : fleetModel.getVessels()) {
+				if (vessel != elementAssignment.getAssignment()) {
+					reassignMenuManager.add(new AssignAction(vessel));
+				}
+			}
+		}
+
+		if (elementAssignment.getAssignment() != null) {
+			if (elementAssignment.isLocked()) {
+				final Action action = new Action("Unlock") {
+					@Override
+					public void run() {
+						final Command cmd = AssignmentEditorHelper.unlockElement(scenarioEditingLocation.getEditingDomain(), elementAssignment);
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+				menuManager.add(action);
+			} else {
+				final Action action = new Action("Lock") {
+					@Override
+					public void run() {
+						final Command cmd = AssignmentEditorHelper.unlockElement(scenarioEditingLocation.getEditingDomain(), elementAssignment);
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+				menuManager.add(action);
+			}
+			{
+				final Action action = new Action("Unassign") {
+					@Override
+					public void run() {
+						final Command cmd = AssignmentEditorHelper.unassignElement(scenarioEditingLocation.getEditingDomain(), elementAssignment);
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+				menuManager.add(action);
+			}
+
+		}
+
+	}
+
 	public IMenuListener createLoadSlotMenuListener(final List<LoadSlot> loadSlots, final int index) {
 		final CargoModel cargoModel = scenarioEditingLocation.getRootObject().getSubModel(CargoModel.class);
 		final IMenuListener l = new IMenuListener() {
@@ -195,9 +277,14 @@ public class CargoEditorMenuHelper {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 				}
+
 				createEditMenu(manager, loadSlot, loadSlot.getCargo());
 				createEditContractMenu(manager, loadSlot, loadSlot.getContract());
 				createDeleteSlotMenu(manager, loadSlot);
+				if (loadSlot.getCargo() != null) {
+					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(scenarioEditingLocation.getRootObject().getSubModel(InputModel.class), loadSlot.getCargo());
+					createAssignmentMenus(manager, loadSlot.getCargo(), elementAssignment);
+				}
 			}
 		};
 		return l;
