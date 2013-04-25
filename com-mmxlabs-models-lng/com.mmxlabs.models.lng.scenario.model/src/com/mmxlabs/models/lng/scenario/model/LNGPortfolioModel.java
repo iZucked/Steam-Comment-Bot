@@ -3,13 +3,9 @@
 package com.mmxlabs.models.lng.scenario.model;
 
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
-
 import com.mmxlabs.models.lng.cargo.CargoModel;
-
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**

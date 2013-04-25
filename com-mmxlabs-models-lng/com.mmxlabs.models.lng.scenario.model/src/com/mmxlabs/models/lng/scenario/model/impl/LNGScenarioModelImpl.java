@@ -2,33 +2,23 @@
  */
 package com.mmxlabs.models.lng.scenario.model.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-
 import com.mmxlabs.models.lng.fleet.FleetModel;
-
 import com.mmxlabs.models.lng.parameters.ParametersModel;
-
 import com.mmxlabs.models.lng.port.PortModel;
-
 import com.mmxlabs.models.lng.pricing.PricingModel;
-
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
-
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-
 import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->

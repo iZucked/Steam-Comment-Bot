@@ -3,19 +3,12 @@
 package com.mmxlabs.models.lng.scenario.model;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-
 import com.mmxlabs.models.lng.fleet.FleetModel;
-
 import com.mmxlabs.models.lng.parameters.ParametersModel;
-
 import com.mmxlabs.models.lng.port.PortModel;
-
 import com.mmxlabs.models.lng.pricing.PricingModel;
-
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
