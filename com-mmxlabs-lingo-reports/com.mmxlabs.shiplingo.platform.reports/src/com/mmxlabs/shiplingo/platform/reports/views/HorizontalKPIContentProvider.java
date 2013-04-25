@@ -117,9 +117,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 
 		EObject object = schedule.eContainer();
 		while ((object != null) && !(object instanceof MMXRootObject)) {
-			if (object instanceof EObject) {
-				object = ((EObject) object).eContainer();
-			}
+			object = object.eContainer();
 		}
 
 		return new RowData(scenarioInstance.getName(), totalPNL, totalCost, totalIdleHours);
