@@ -5,6 +5,7 @@ import java.util.Date;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -45,6 +46,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		
 		final CommercialModel commercialModel = scenario.getCommercialModel();
 		final FleetModel fleetModel = scenario.getFleetModel();
+		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
 		
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
@@ -59,7 +61,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create a vessel in that class
-		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1)[0];
+		vessel = fleetCreator.createMultipleDefaultVessels(scenarioFleetModel, vc, 1)[0];
 		
 		// need to create a default route
 		addRoute(ScenarioTools.defaultRouteName);		
