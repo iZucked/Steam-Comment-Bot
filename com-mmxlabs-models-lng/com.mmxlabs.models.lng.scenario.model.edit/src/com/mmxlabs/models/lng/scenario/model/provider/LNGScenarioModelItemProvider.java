@@ -134,7 +134,7 @@ public class LNGScenarioModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGScenarioModel)object).getName();
+		String label = ((LNGScenarioModel)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_LNGScenarioModel_type") :
 			getString("_UI_LNGScenarioModel_type") + " " + label;

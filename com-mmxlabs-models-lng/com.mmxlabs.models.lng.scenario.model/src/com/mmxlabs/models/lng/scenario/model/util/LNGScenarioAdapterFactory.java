@@ -89,10 +89,6 @@ public class LNGScenarioAdapterFactory extends AdapterFactoryImpl {
 				return createUUIDObjectAdapter();
 			}
 			@Override
-			public Adapter caseNamedObject(NamedObject object) {
-				return createNamedObjectAdapter();
-			}
-			@Override
 			public Adapter caseMMXRootObject(MMXRootObject object) {
 				return createMMXRootObjectAdapter();
 			}
@@ -169,20 +165,6 @@ public class LNGScenarioAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createUUIDObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.NamedObject <em>Named Object</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.mmxcore.NamedObject
-	 * @generated
-	 */
-	public Adapter createNamedObjectAdapter() {
 		return null;
 	}
 
