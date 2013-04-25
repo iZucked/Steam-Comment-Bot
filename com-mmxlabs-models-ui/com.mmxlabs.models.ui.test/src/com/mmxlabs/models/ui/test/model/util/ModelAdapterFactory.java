@@ -2,14 +2,18 @@
  */
 package com.mmxlabs.models.ui.test.model.util;
 
-import com.mmxlabs.models.ui.test.model.*;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.ui.test.model.ModelPackage;
+import com.mmxlabs.models.ui.test.model.ModelRoot;
+import com.mmxlabs.models.ui.test.model.MultipleContainmentReference;
+import com.mmxlabs.models.ui.test.model.MultipleReference;
+import com.mmxlabs.models.ui.test.model.SimpleObject;
+import com.mmxlabs.models.ui.test.model.SingleContainmentReference;
+import com.mmxlabs.models.ui.test.model.SingleReference;
 
 /**
  * <!-- begin-user-doc -->

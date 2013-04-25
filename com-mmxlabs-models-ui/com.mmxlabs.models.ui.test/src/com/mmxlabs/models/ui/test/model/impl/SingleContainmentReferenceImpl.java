@@ -2,17 +2,16 @@
  */
 package com.mmxlabs.models.ui.test.model.impl;
 
-import com.mmxlabs.models.ui.test.model.ModelPackage;
-import com.mmxlabs.models.ui.test.model.SimpleObject;
-import com.mmxlabs.models.ui.test.model.SingleContainmentReference;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.ui.test.model.ModelPackage;
+import com.mmxlabs.models.ui.test.model.SimpleObject;
+import com.mmxlabs.models.ui.test.model.SingleContainmentReference;
 
 /**
  * <!-- begin-user-doc -->

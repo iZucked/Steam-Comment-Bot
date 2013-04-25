@@ -2,15 +2,13 @@
  */
 package com.mmxlabs.models.ui.test.model.impl;
 
-import com.mmxlabs.models.ui.test.model.ModelPackage;
-import com.mmxlabs.models.ui.test.model.SimpleObject;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.ui.test.model.ModelPackage;
+import com.mmxlabs.models.ui.test.model.SimpleObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -12,8 +12,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

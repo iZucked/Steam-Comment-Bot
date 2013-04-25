@@ -2,6 +2,12 @@
  */
 package com.mmxlabs.models.ui.test.model.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import com.mmxlabs.models.ui.test.model.ModelFactory;
 import com.mmxlabs.models.ui.test.model.ModelPackage;
 import com.mmxlabs.models.ui.test.model.ModelRoot;
@@ -10,13 +16,6 @@ import com.mmxlabs.models.ui.test.model.MultipleReference;
 import com.mmxlabs.models.ui.test.model.SimpleObject;
 import com.mmxlabs.models.ui.test.model.SingleContainmentReference;
 import com.mmxlabs.models.ui.test.model.SingleReference;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->

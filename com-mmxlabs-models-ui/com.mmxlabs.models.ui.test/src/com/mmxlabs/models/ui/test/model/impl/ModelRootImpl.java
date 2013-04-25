@@ -2,6 +2,17 @@
  */
 package com.mmxlabs.models.ui.test.model.impl;
 
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.ui.test.model.ModelPackage;
 import com.mmxlabs.models.ui.test.model.ModelRoot;
 import com.mmxlabs.models.ui.test.model.MultipleContainmentReference;
@@ -9,21 +20,6 @@ import com.mmxlabs.models.ui.test.model.MultipleReference;
 import com.mmxlabs.models.ui.test.model.SimpleObject;
 import com.mmxlabs.models.ui.test.model.SingleContainmentReference;
 import com.mmxlabs.models.ui.test.model.SingleReference;
-
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->

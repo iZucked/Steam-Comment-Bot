@@ -3,7 +3,6 @@ package com.mmxlabs.models.ui.editors.util;
 import junit.framework.Assert;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.ecore.EObject;
 import org.junit.Test;
 
 import com.mmxlabs.models.ui.test.model.ModelFactory;
