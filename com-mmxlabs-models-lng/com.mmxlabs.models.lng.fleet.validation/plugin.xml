@@ -203,6 +203,42 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityVesselConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityVesselConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Availability Attached To Vessel"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Vessel availability information for a portfolio must be attached to a particular vessel.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselUniqueAvailabilityConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselUniqueAvailabilityConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Availability Is Unique"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  A vessel cannot be given more than one availability for the same portfolio.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.fleet.validation.VesselEventDateConstraint"
                   id="com.mmxlabs.models.lng.fleet.validation.VesselEventDateConstraint"
                   lang="Java"
