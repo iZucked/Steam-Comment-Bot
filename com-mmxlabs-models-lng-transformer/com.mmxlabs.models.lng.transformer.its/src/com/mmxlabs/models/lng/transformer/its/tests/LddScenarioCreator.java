@@ -9,6 +9,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -25,15 +26,15 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	 */
 	public final VesselClass vc;
 	public final Vessel vessel;
-	
+
 	public final Port originPort;
 	public final Port loadPort;
 	public final Port dischargePort1;
 	public final Port dischargePort2;
-	
+
 	public final Cargo cargo;
-	private VesselAvailability vesselAvailability;
-	
+	private final VesselAvailability vesselAvailability;
+
 	/**
 	 * Initialises a minimal complete scenario, creating:
 	 * - contract and shipping legal entities
@@ -48,7 +49,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	 */
 	public LddScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
-		
+
 		final CommercialModel commercialModel = scenario.getCommercialModel();
 		final FleetModel fleetModel = scenario.getFleetModel();
 		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
@@ -61,65 +62,62 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
 		purchaseContract = addPurchaseContract("Purchase Contract");
-		
+
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create a vessel in that class
 		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1)[0];
-		
+
 		// need to create a default route
-		addRoute(ScenarioTools.defaultRouteName);		
+		addRoute(ScenarioTools.defaultRouteName);
 
 		final double maxSpeed = vc.getMaxSpeed();
-		
+
 		// initialise the port creator with a convenient base distance multiplier
 		if (vc.getMinSpeed() == maxSpeed) {
 			portCreator.baseDistanceMultiplier = maxSpeed;
 		}
-		
+
 		// create three ports (and their distances) all with default settings
-		final Port [] ports = portCreator.createDefaultPorts(4);
-		
+		final Port[] ports = portCreator.createDefaultPorts(4);
+
 		// these are start, load and discharge ports respectively
 		originPort = ports[0];
 		loadPort = ports[1];
 		dischargePort1 = ports[2];
 		dischargePort2 = ports[3];
-		
+
 		/*
-		 *  determine the time it will take the vessel to travel between load
-		 *  and discharge ports, and create a cargo with enough time to spare
+		 * determine the time it will take the vessel to travel between load and discharge ports, and create a cargo with enough time to spare
 		 */
-		
-		int duration1 = 2 * getTravelTime(loadPort, dischargePort1, null, (int) maxSpeed);
-		int duration2 = 2 * getTravelTime(loadPort, dischargePort2, null, (int) maxSpeed);
-		
+
+		final int duration1 = 2 * getTravelTime(loadPort, dischargePort1, null, (int) maxSpeed);
+		final int duration2 = 2 * getTravelTime(loadPort, dischargePort2, null, (int) maxSpeed);
+
 		cargo = cargoCreator.createDefaultLddCargo(null, ports[1], ports[2], ports[3], null, duration1, duration2);
-		
+
 		// set fixed discharge quantities on the discharge slots
 		for (int i = 1; i < cargo.getSlots().size(); i++) {
-			Slot slot = cargo.getSortedSlots().get(i);
+			final Slot slot = cargo.getSortedSlots().get(i);
 			slot.setMinQuantity(1000);
-			slot.setMaxQuantity(1000);			
+			slot.setMaxQuantity(1000);
 		}
-		
-		Date loadDate = cargo.getSlots().get(0).getWindowStart();
-		Date lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		
-		Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
-		Date endDate = addHours(lastDischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
-		
-		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessel, originPort, startDate, originPort, endDate);			
+
+		final Date loadDate = cargo.getSlots().get(0).getWindowStart();
+		final Date lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+
+		final Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
+		final Date endDate = addHours(lastDischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
+
+		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessel, originPort, startDate, originPort, endDate);
 
 		// complete hack: forcibly assign the cargo to the vessel
 		final ElementAssignment assignment = AssignmentFactory.eINSTANCE.createElementAssignment();
 		assignment.setAssignedObject(cargo);
 		assignment.setAssignment(vessel);
 		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
-		assignmentModel.getElementAssignments().add(assignment);	
-	
-	}
-	
+		assignmentModel.getElementAssignments().add(assignment);
 
+	}
 
 }
