@@ -148,7 +148,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 		fireEvent(ScenarioServiceEvent.PRE_LOAD, instance);
 
-		log.debug("Instance " + instance.getUuid() + " needs loading");
+		log.debug("Instance " + instance.getName() + " (" + instance.getUuid() + ") needs loading");
 		final List<EObject> parts = new ArrayList<EObject>();
 		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
 
