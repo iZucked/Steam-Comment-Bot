@@ -81,7 +81,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -398,11 +397,15 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 						} else if (event instanceof CargoAllocation) {
 							final CargoAllocation allocation = (CargoAllocation) event;
 
-							setInputEquivalents(
-									allocation,
-									Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
-											allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
-											allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
+							final List<Object> equivalents = new ArrayList<Object>();
+							for (final SlotAllocation sa : allocation.getSlotAllocations()) {
+								equivalents.add(sa.getSlotVisit());
+								equivalents.add(sa.getSlot());
+							}
+							equivalents.addAll(allocation.getEvents());
+							equivalents.add(allocation.getInputCargo());
+
+							setInputEquivalents(allocation, equivalents);
 
 						} else if (event instanceof VesselEventVisit) {
 							setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
@@ -691,17 +694,14 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				if (o instanceof CargoAllocation) {
 					final CargoAllocation allocation = (CargoAllocation) o;
 					objects.add(allocation.getInputCargo());
-					objects.add(allocation.getLoadAllocation().getSlotVisit());
-					objects.add(allocation.getLadenLeg());
-					objects.add(allocation.getLadenIdle());
-					objects.add(allocation.getDischargeAllocation().getSlotVisit());
-					objects.add(allocation.getBallastLeg());
-					objects.add(allocation.getBallastIdle());
+					objects.addAll(allocation.getEvents());
+					for (SlotAllocation sa : allocation.getSlotAllocations()) {
+						objects.add(sa.getSlotVisit());
+					}
 				} else if (o instanceof Cargo) {
 					final Cargo cargo = (Cargo) o;
 					objects.add(cargo);
-					objects.add(cargo.getLoadSlot());
-					objects.add(cargo.getDischargeSlot());
+					objects.addAll(cargo.getSlots());
 				} else {
 					objects.add(o);
 				}
@@ -749,10 +749,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 						final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 						if (cargoAllocation != null) {
 							newSelection.add(cargoAllocation);
-							newSelection.add(cargoAllocation.getLadenLeg());
-							newSelection.add(cargoAllocation.getLadenIdle());
-							newSelection.add(cargoAllocation.getBallastLeg());
-							newSelection.add(cargoAllocation.getBallastIdle());
+							newSelection.addAll(cargoAllocation.getEvents());
 						}
 					}
 				}
