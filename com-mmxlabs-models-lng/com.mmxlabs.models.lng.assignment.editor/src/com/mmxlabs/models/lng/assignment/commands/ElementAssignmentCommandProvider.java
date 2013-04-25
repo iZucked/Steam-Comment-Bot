@@ -16,12 +16,15 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
 import com.mmxlabs.models.lng.assignment.AssignmentFactory;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -62,7 +65,7 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 
 	@Override
 	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		return (deletedObject instanceof Cargo || deletedObject instanceof VesselEvent);
+		return (deletedObject instanceof Cargo || deletedObject instanceof VesselEvent || deletedObject instanceof VesselAvailability);
 	}
 
 	@Override
@@ -80,12 +83,22 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 	@Override
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (rootObject instanceof LNGScenarioModel) {
-
-			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final ElementAssignment ea = AssignmentEditorHelper.getElementAssignment(lngScenarioModel.getPortfolioModel().getAssignmentModel(), (UUIDObject) deleted);
-			if (ea != null) {
-				return DeleteCommand.create(domain, ea);
+			final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
+			
+			// if a vessel availability was deleted, unassign any associated element assignment
+			if (deleted instanceof VesselAvailability) {
+				final Vessel vessel = ((VesselAvailability) deleted).getVessel();
+				final ElementAssignment ea = AssignmentEditorHelper.getElementAssignment(assignmentModel, vessel);
+				return AssignmentEditorHelper.unassignElement(domain, ea);
 			}
+			// if a cargo or vessel event was deleted, delete any associated element assignment
+			else if (deleted instanceof Cargo || deleted instanceof VesselEvent) {
+				final ElementAssignment ea = AssignmentEditorHelper.getElementAssignment(assignmentModel, (UUIDObject) deleted);
+				if (ea != null) {
+					return DeleteCommand.create(domain, ea);
+				}
+			}
+			
 		}
 		return null;
 	}
