@@ -59,12 +59,12 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -100,6 +100,8 @@ public class DefaultScenarioCreator {
 	public final DefaultCargoCreator cargoCreator = new DefaultCargoCreator();
 	public final DefaultPricingCreator pricingCreator = new DefaultPricingCreator();
 
+	public MinimalScenarioSetup minimalScenarioSetup;
+
 	LNGScenarioModel scenario;
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
@@ -109,10 +111,100 @@ public class DefaultScenarioCreator {
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
+		minimalScenarioSetup = new MinimalScenarioSetup();
 	}
 
 	public Date addHours(Date date, int hours) {
 		return new Date(date.getTime() + Timer.ONE_HOUR * hours);
+	}
+
+	public class MinimalScenarioSetup {
+		public final VesselClass vc;
+		public final Vessel vessel;
+
+		public final Port originPort;
+		public final Port loadPort;
+		public final Port dischargePort;
+
+		public final Cargo cargo;
+
+		/**
+		 * Initialises a minimal complete scenario, creating: - contract and shipping legal entities - one vessel class and one vessel - one (default) route - one fixed-price sales contract and one
+		 * fixed-price purchase contract - three ports (one origin port, one load port and one discharge port) - one cargo The vessel starts at the origin port, must travel to the load port, pick up
+		 * the cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
+		 */
+		public MinimalScenarioSetup() {
+			final CommercialModel commercialModel = scenario.getCommercialModel();
+			final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
+
+			// need to create a legal entity for contracts
+			contractEntity = addEntity("Third-parties");
+			// need to create a legal entity for shipping
+			shippingEntity = addEntity("Shipping");
+			commercialModel.setShippingEntity(shippingEntity);
+
+			// need to create sales and purchase contracts
+			salesContract = addSalesContract("Sales Contract", dischargePrice);
+			purchaseContract = addPurchaseContract("Purchase Contract");
+
+			// create a vessel class with default name
+			vc = fleetCreator.createDefaultVesselClass(null);
+			// create a vessel in that class
+			vessel = fleetCreator.createMultipleDefaultVessels(scenarioFleetModel, vc, 1)[0];
+
+			// need to create a default route
+			addRoute(ScenarioTools.defaultRouteName);
+
+			final double maxSpeed = vc.getMaxSpeed();
+
+			// initialise the port creator with a convenient base distance multiplier
+			if (vc.getMinSpeed() == maxSpeed) {
+				portCreator.baseDistanceMultiplier = maxSpeed;
+			}
+
+			// create three ports (and their distances) all with default settings
+			final Port[] ports = portCreator.createDefaultPorts(3);
+
+			// these are start, load and discharge ports respectively
+			originPort = ports[0];
+			loadPort = ports[1];
+			dischargePort = ports[2];
+
+			/*
+			 * determine the time it will take the vessel to travel between load and discharge ports, and create a cargo with enough time to spare
+			 */
+
+			int duration = 2 * getTravelTime(loadPort, dischargePort, null, (int) maxSpeed);
+
+			cargo = cargoCreator.createDefaultCargo(null, ports[1], ports[2], null, duration);
+
+			Date loadDate = cargo.getSlots().get(0).getWindowStart();
+			Date dischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+
+			Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
+			Date endDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
+
+			fleetCreator.setAvailability(scenarioFleetModel, vessel, originPort, startDate, originPort, endDate);
+		}
+
+		/**
+		 * Sets up a cooldown pricing model including an index
+		 */
+		public void setupCooldown(double value) {
+			final PricingModel pricingModel = scenario.getPricingModel();
+			final PortModel portModel = scenario.getPortModel();
+
+			final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultIndex("cooldown", value);
+
+			final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
+			price.setIndex(cooldownIndex);
+
+			for (Port port : portModel.getPorts()) {
+				price.getPorts().add(port);
+			}
+
+			pricingModel.getCooldownPrices().add(price);
+		}
 	}
 
 	/**
@@ -231,6 +323,7 @@ public class DefaultScenarioCreator {
 		 */
 		public BaseFuel createDefaultBaseFuel() {
 			final PricingModel pricingModel = scenario.getPricingModel();
+			;
 			final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
 			final FleetModel fleetModel = scenario.getFleetModel();
 
@@ -295,10 +388,8 @@ public class DefaultScenarioCreator {
 		 * @param vc
 		 * @return
 		 */
-		public Vessel createDefaultVessel(String name, VesselClass vc) {
+		public Vessel createDefaultVessel(ScenarioFleetModel scenarioFleetModel, String name, VesselClass vc) {
 			final FleetModel fleetModel = scenario.getFleetModel();
-			LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-			final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
 
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			vessel.setVesselClass(vc);
@@ -307,10 +398,11 @@ public class DefaultScenarioCreator {
 			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
 
 			availability.setVessel(vessel);
+			scenarioFleetModel.getVesselAvailabilities().add(availability);
+
 			availability.setStartHeel(createDefaultHeelOptions());
 
 			fleetModel.getVessels().add(vessel);
-			scenarioFleetModel.getVesselAvailabilities().add(availability);
 
 			return vessel;
 		}
@@ -322,10 +414,10 @@ public class DefaultScenarioCreator {
 		 * @param num
 		 * @return
 		 */
-		public Vessel[] createMultipleDefaultVessels(final VesselClass vc, final int num) {
+		public Vessel[] createMultipleDefaultVessels(ScenarioFleetModel scenarioFleetModel, final VesselClass vc, final int num) {
 			Vessel[] result = new Vessel[num];
 			for (int i = 0; i < num; i++) {
-				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc);
+				result[i] = createDefaultVessel(scenarioFleetModel, i + "(class " + vc.getName() + ")", vc);
 			}
 			return result;
 		}
@@ -346,7 +438,9 @@ public class DefaultScenarioCreator {
 			availability.setStartAfter(startDate);
 			availability.setEndBy(endDate);
 			availability.setVessel(vessel);
+
 			scenarioFleetModel.getVesselAvailabilities().add(availability);
+
 			return availability;
 		}
 
@@ -690,14 +784,14 @@ public class DefaultScenarioCreator {
 			portModel.getPorts().add(startPort);
 		}
 
-		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
+		final ScenarioFleetModel fleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
 		// Set up dry dock.
 		final DryDockEvent dryDock = FleetFactory.eINSTANCE.createDryDockEvent();
 		dryDock.setName("Drydock");
 		dryDock.setDurationInDays(durationDays);
 		dryDock.setPort(startPort);
 		// add to scenario's fleet model
-		scenarioFleetModel.getVesselEvents().add(dryDock);
+		fleetModel.getVesselEvents().add(dryDock);
 
 		// define the start and end time
 		dryDock.setStartAfter(start);
@@ -710,7 +804,7 @@ public class DefaultScenarioCreator {
 			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
 		final CharterOutEvent charterOut = FleetFactory.eINSTANCE.createCharterOutEvent();
-		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
+		final ScenarioFleetModel fleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
 
 		// the start and end of the charter out starting-window is 0, for simplicity.
 		charterOut.setStartAfter(startCharterOut);
@@ -734,7 +828,7 @@ public class DefaultScenarioCreator {
 		charterOut.setHireRate(dailyCharterOutPrice);
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
-		scenarioFleetModel.getVesselEvents().add(charterOut);
+		fleetModel.getVesselEvents().add(charterOut);
 
 		return charterOut;
 	}
@@ -978,22 +1072,4 @@ public class DefaultScenarioCreator {
 		return null;
 	}
 
-	/**
-	 * Sets up a cooldown pricing model including an index
-	 */
-	public void setupCooldown(double value) {
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final PortModel portModel = scenario.getPortModel();
-
-		final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultIndex("cooldown", value);
-
-		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
-		price.setIndex(cooldownIndex);
-
-		for (Port port : portModel.getPorts()) {
-			price.getPorts().add(port);
-		}
-
-		pricingModel.getCooldownPrices().add(price);
-	}
 }
