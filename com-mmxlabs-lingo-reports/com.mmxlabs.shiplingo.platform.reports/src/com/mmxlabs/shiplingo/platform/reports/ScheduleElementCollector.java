@@ -40,7 +40,7 @@ public abstract class ScheduleElementCollector implements IScenarioInstanceEleme
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public Schedule getLastScheduleFromScenario(final LNGScenarioModel scenario) {
 		if (scenario == null) {
