@@ -195,7 +195,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		return scenarioInstanceEvaluator;
 	}
 
-	public void setScenarioInstanceEvaluator(IScenarioInstanceEvaluator scenarioInstanceEvaluator) {
+	public void setScenarioInstanceEvaluator(final IScenarioInstanceEvaluator scenarioInstanceEvaluator) {
 		this.scenarioInstanceEvaluator = scenarioInstanceEvaluator;
 	}
 }

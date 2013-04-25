@@ -21,6 +21,7 @@ public class LiveEvaluatorServiceListener implements ILiveEvaluatorService {
 
 	public void addScenarioService(final IScenarioService scenarioService) {
 		final LiveEvaluatorScenarioServiceListener listener = new LiveEvaluatorScenarioServiceListener(enabled);
+		listener.setScenarioInstanceEvaluator(scenarioInstanceEvaluator);
 		scenarioService.addScenarioServiceListener(listener);
 		evaluatorMap.put(scenarioService, listener);
 		listener.hookExisting(scenarioService);

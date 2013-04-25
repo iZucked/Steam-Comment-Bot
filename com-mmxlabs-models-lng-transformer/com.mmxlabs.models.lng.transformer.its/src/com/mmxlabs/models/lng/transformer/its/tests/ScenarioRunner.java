@@ -12,7 +12,6 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
@@ -38,6 +37,9 @@ public class ScenarioRunner {
 
 	private Injector injector;
 
+	/**
+	 * @since 3.0
+	 */
 	public ScenarioRunner(final LNGScenarioModel scenario) {
 		this.scenario = scenario;
 	}
@@ -50,7 +52,10 @@ public class ScenarioRunner {
 		return intialSchedule;
 	}
 
-	protected final MMXRootObject getScenario() {
+	/**
+	 * @since 3.0
+	 */
+	protected final LNGScenarioModel getScenario() {
 		return scenario;
 	}
 
