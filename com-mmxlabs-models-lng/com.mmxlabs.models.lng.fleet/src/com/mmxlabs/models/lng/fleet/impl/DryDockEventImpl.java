@@ -38,14 +38,6 @@ public class DryDockEventImpl extends VesselEventImpl implements DryDockEvent {
 		return FleetPackage.Literals.DRY_DOCK_EVENT;
 	}
 
-	/**
-	 * @since 3.0
-	 */
-	@Override
-	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
-		return null;
-	}
-
 } // end of DryDockEventImpl
 
 // finish type fixing
