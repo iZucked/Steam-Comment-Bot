@@ -18,9 +18,9 @@
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <package
-            uri="http://www.mmxlabs.com/models/lng/cargo/1/"
-            class="com.mmxlabs.models.lng.cargo.CargoPackage"
-            genModel="model/cargo.genmodel"/>
+            uri="http://www.mmxlabs.com/models/lng/scenario/1/"
+            class="com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage"
+            genModel="model/scenario.genmodel"/>
    </extension>
 
 </plugin>
