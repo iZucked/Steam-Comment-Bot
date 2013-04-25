@@ -99,6 +99,7 @@ public class LNGSchedulerJobUtils {
 	 * @param solutionCurrentProgress
 	 * @param LABEL_PREFIX
 	 * @return
+	 * @since 4.0
 	 */
 	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, final ModelEntityMap entities,
 			final IAnnotatedSolution solution, final int solutionCurrentProgress) {
@@ -195,6 +196,7 @@ public class LNGSchedulerJobUtils {
 	 * @param cargoModel
 	 * @param postExportProcessors
 	 * @return
+	 * @since 4.0
 	 */
 	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final AssignmentModel assignmentModel, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {
