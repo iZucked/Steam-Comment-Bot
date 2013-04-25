@@ -4,17 +4,10 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>MMX Root Object</b></em>'. <!-- end-user-doc -->
