@@ -25,5 +25,5 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MMXRootObject" eSuperTypes="#//UUIDObject #//NamedObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MMXRootObject" eSuperTypes="#//UUIDObject"/>
 </ecore:EPackage>

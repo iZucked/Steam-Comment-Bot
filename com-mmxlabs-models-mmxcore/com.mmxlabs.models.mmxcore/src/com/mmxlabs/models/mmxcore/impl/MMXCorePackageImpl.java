@@ -289,7 +289,6 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		namedObjectEClass.getESuperTypes().add(this.getMMXObject());
 		uuidObjectEClass.getESuperTypes().add(this.getMMXObject());
 		mmxRootObjectEClass.getESuperTypes().add(this.getUUIDObject());
-		mmxRootObjectEClass.getESuperTypes().add(this.getNamedObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(mmxObjectEClass, MMXObject.class, "MMXObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

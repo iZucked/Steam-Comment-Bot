@@ -307,32 +307,13 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_ROOT_OBJECT__UUID = UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_ROOT_OBJECT__NAME = UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.2
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MMX_ROOT_OBJECT__OTHER_NAMES = UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>MMX Root Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 2;
+	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.

@@ -16,7 +16,7 @@ package com.mmxlabs.models.mmxcore;
  * @model
  * @generated
  */
-public interface MMXRootObject extends UUIDObject, NamedObject {
+public interface MMXRootObject extends UUIDObject {
 
 	/**
 	 * Returns the value of the '<em><b>Sub Models</b></em>' containment reference list.
