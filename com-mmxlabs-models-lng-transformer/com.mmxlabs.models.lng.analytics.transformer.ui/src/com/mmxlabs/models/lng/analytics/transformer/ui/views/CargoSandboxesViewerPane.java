@@ -354,7 +354,7 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 				}
 				// }
 				if (costLine != null) {
-					return new UnitCostLinePropertySource(costLine);
+//					return new UnitCostLinePropertySource(costLine);
 				}
 			} else if (object instanceof IPropertySource) {
 				return (IPropertySource) object;
