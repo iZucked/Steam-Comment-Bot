@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Display;
 
 
 /**
- * @since 3.1
+ * @since 4.0
  */
 public class CellEditorWrapper<T extends Control> extends CellEditor {
 		private CheckedControl<T> inner;

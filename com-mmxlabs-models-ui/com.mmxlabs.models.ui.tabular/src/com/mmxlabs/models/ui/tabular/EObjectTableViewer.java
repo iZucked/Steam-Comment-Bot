@@ -170,7 +170,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	protected EObjectTableViewerValidationSupport createValidationSupport() {
 		return new EObjectTableViewerValidationSupport(this) {
@@ -463,7 +463,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public EObjectTableViewerValidationSupport getValidationSupport() {
 		return validationSupport;
@@ -476,14 +476,14 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public HashSet<EObject> getCurrentElements() {
 		return currentElements;
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public EObjectTableViewerFilterSupport getFilterSupport() {
 		return filterSupport;
@@ -494,7 +494,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public EObjectTableViewerSortingSupport getSortingSupport() {
 		return sortingSupport;
