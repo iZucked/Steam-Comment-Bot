@@ -10,7 +10,6 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
-import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 
 /**
@@ -42,7 +41,7 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 	@Override
 	public IPropertySource getPropertySource(Object object) {
 		if (object instanceof UnitCostLine) {
-			return new UnitCostLinePropertySource((UnitCostLine) object);
+//			return new UnitCostLinePropertySource((UnitCostLine) object);
 		} else if (object instanceof IPropertySource) {
 			return (IPropertySource) object;
 		}
