@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -99,8 +100,8 @@ public class LNGSchedulerJobUtils {
 	 * @param LABEL_PREFIX
 	 * @return
 	 */
-	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, final ModelEntityMap entities, final IAnnotatedSolution solution,
-			final int solutionCurrentProgress) {
+	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, final ModelEntityMap entities,
+			final IAnnotatedSolution solution, final int solutionCurrentProgress) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		{
@@ -108,7 +109,7 @@ public class LNGSchedulerJobUtils {
 			childInjector.injectMembers(exporter);
 		}
 		LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-		
+
 		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
 		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
 		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
@@ -208,9 +209,14 @@ public class LNGSchedulerJobUtils {
 		final Map<LoadSlot, Cargo> slotToCargoMap = new HashMap<LoadSlot, Cargo>();
 
 		// Maintain a two lists of commands. The null commands are the commands which unset (or set to null) references between cargoes and lots.. The set commands are the commands which then re-set
-		// the new slot/cargo references. They are kept separate to avoid issues where oppposite references changes can lead to unexpected results.
-		final List<Command> nullCommands = new LinkedList<Command>();
+		// the new slot/cargo references. They are kept separate to avoid issues where opposite references changes can lead to unexpected results.
+		// final List<Command> nullCommands = new LinkedList<Command>();
 		final List<Command> setCommands = new LinkedList<Command>();
+
+		// Set of slots which may not be linked to a cargo 
+		final Set<Slot> unsetCargoSlots = new HashSet<Slot>();
+		// Set of slots which really are linked to a cargo. This will later be taken out of the unsetCargoSlots
+		final Set<Slot> setCargoSlots = new HashSet<Slot>();
 
 		// First pass - add in generated slots to the slot containers
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
@@ -283,10 +289,11 @@ public class LNGSchedulerJobUtils {
 
 						firstLoad = false;
 					} else {
-						// Record different cargoes as possibly unused cargoes and remove the refernce
+						// Record different cargoes as possibly unused cargoes and remove the reference
 						if (slot.getCargo() != loadCargo) {
 							possibleUnusedCargoes.add(slot.getCargo());
-							nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+							unsetCargoSlots.add(slot);
+							// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 						}
 
 					}
@@ -295,10 +302,11 @@ public class LNGSchedulerJobUtils {
 					}
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					// Record different cargoes as possibly unused cargoes and remove the refernce
+					// Record different cargoes as possibly unused cargoes and remove the reference
 					if (dischargeSlot.getCargo() != loadCargo) {
 						possibleUnusedCargoes.add(dischargeSlot.getCargo());
-						nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+						unsetCargoSlots.add(slot);
+						// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 
 					}
 					if (dischargeSlot.isFOBSale()) {
@@ -334,21 +342,24 @@ public class LNGSchedulerJobUtils {
 			oldSlots.addAll(loadCargo.getSlots());
 			oldSlots.removeAll(cargoSlots);
 			for (final Slot slot : oldSlots) {
-				nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+				unsetCargoSlots.add(slot);
+				// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 			}
 
 			// Add in the slots which are currently not in the cargo
 			cargoSlots.removeAll(loadCargo.getSlots());
 			for (final Slot slot : cargoSlots) {
-				setCommands.add(AddCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), loadCargo));
+				setCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), loadCargo));
+				setCargoSlots.add(slot);
 			}
 			// Finally match the CargoAllocation to the Cargo object
 			cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
 		}
 
-		// Add the null commands first so they do not overwrite the set commands
-		for (final Command c : nullCommands) {
-			cmd.append(c);
+		// Add the unset commands first so they do not overwrite the set commands
+		unsetCargoSlots.removeAll(setCargoSlots);
+		for (Slot slot : unsetCargoSlots) {
+			cmd.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 		}
 		// Then add in the set commands
 		for (final Command c : setCommands) {
@@ -357,7 +368,7 @@ public class LNGSchedulerJobUtils {
 
 		// Remove any used cargoes from the possibly unused list
 		possibleUnusedCargoes.removeAll(usedCargoes);
-		// Make sure there is no null reference
+		// Make sure there is no null reference4
 		possibleUnusedCargoes.remove(null);
 
 		// For slots which are no longer used, remove the cargo
@@ -419,7 +430,7 @@ public class LNGSchedulerJobUtils {
 				thisIndex = spotIndex++;
 			}
 
-			final AVesselSet assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
+			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
 				UUIDObject object = null;
