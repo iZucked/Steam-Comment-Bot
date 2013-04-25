@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;

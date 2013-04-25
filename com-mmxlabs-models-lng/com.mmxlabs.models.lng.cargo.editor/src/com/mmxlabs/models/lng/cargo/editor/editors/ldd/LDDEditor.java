@@ -51,7 +51,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditingCommands;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;

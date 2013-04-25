@@ -2,8 +2,6 @@
  */
 package com.mmxlabs.models.lng.assignment.presentation;
 
-import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
-import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -11,6 +9,8 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
 
 import com.mmxlabs.models.lng.assignment.editor.AssignmentEditorColors;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 

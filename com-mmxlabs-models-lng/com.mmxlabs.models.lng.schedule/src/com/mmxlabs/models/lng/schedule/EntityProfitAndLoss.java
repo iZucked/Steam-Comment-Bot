@@ -2,8 +2,9 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.commercial.LegalEntity;
 
 /**
  * <!-- begin-user-doc -->

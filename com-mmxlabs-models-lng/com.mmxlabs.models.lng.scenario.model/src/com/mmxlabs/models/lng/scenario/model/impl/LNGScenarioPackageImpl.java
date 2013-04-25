@@ -2,38 +2,26 @@
  */
 package com.mmxlabs.models.lng.scenario.model.impl;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
-
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
-
 import com.mmxlabs.models.lng.port.PortPackage;
-
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
-
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->

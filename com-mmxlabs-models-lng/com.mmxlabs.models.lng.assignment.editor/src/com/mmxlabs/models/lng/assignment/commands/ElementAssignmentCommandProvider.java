@@ -16,7 +16,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
 import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
