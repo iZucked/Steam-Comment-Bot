@@ -261,7 +261,7 @@ public class BulkImportPage extends WizardPage {
 	}
 	
 	public int getImportedField() {
-		return dataImportGroup.getSelectedValue();
+		return 0;//dataImportGroup.getSelectedValue();
 	}
 	
 	/**
