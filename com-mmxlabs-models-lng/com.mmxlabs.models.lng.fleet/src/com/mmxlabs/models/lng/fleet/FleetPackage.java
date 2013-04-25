@@ -306,7 +306,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -316,7 +316,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -578,7 +578,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.ScenarioFleetModelImpl <em>Scenario Fleet Model</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.fleet.impl.ScenarioFleetModelImpl
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getScenarioFleetModel()
@@ -934,7 +934,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -944,7 +944,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -954,7 +954,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vessel Availabilities</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -964,7 +964,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -974,7 +974,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Scenario Fleet Model</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1047,7 +1047,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1057,7 +1057,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1531,7 +1531,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Capacity</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.Vessel#getCapacity()
@@ -1543,7 +1543,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Fill Capacity</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity()
@@ -2108,7 +2108,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Vessel</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel()
@@ -2120,7 +2120,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel <em>Start Heel</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Start Heel</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel()
@@ -2250,7 +2250,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel <em>Scenario Fleet Model</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Scenario Fleet Model</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.ScenarioFleetModel
@@ -2261,7 +2261,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel#getVesselAvailabilities <em>Vessel Availabilities</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Vessel Availabilities</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.ScenarioFleetModel#getVesselAvailabilities()
@@ -2273,7 +2273,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel#getVesselEvents <em>Vessel Events</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.ScenarioFleetModel#getVesselEvents()
@@ -2396,7 +2396,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2405,7 +2405,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Fill Capacity</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2841,7 +2841,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2850,7 +2850,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Start Heel</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2953,7 +2953,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.ScenarioFleetModelImpl <em>Scenario Fleet Model</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.fleet.impl.ScenarioFleetModelImpl
 		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getScenarioFleetModel()
@@ -2964,7 +2964,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vessel Availabilities</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2973,7 +2973,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

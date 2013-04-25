@@ -1725,6 +1725,7 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Route</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.Voyage#getRoute()

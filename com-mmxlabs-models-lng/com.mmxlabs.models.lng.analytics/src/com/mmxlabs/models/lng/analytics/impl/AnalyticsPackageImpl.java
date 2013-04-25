@@ -617,7 +617,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

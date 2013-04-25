@@ -59,7 +59,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -366,7 +366,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -494,7 +494,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -504,7 +504,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -514,7 +514,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

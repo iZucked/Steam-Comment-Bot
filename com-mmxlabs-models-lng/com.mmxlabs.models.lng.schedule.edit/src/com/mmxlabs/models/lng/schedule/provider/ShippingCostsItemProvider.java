@@ -25,6 +25,7 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
+ * @since 4.0
  */
 public class ShippingCostsItemProvider
 	extends ItemProviderAdapter

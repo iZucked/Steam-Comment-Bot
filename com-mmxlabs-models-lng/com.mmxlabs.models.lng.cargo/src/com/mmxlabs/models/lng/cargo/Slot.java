@@ -529,7 +529,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * If the meaning of the '<em>Cargo</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargo</em>' reference.
 	 * @see #setCargo(Cargo)
@@ -543,7 +543,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Cargo</em>' reference.
 	 * @see #getCargo()
