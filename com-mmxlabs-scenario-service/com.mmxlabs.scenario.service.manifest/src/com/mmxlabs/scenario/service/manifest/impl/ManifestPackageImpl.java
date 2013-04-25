@@ -4,15 +4,14 @@
  */
 package com.mmxlabs.scenario.service.manifest.impl;
 
-import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.manifest.ManifestFactory;
-import com.mmxlabs.scenario.service.manifest.ManifestPackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+
+import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.manifest.ManifestFactory;
+import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 
 /**
  * <!-- begin-user-doc -->

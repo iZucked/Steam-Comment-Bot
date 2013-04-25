@@ -4,19 +4,16 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
-import com.mmxlabs.scenario.service.model.ScenarioModel;
-import com.mmxlabs.scenario.service.model.ScenarioService;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.scenario.service.model.ScenarioModel;
+import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 /**
  * <!-- begin-user-doc -->

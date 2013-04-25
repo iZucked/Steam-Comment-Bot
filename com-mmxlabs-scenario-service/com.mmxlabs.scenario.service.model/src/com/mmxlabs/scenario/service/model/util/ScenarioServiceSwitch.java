@@ -4,12 +4,19 @@
  */
 package com.mmxlabs.scenario.service.model.util;
 
-import com.mmxlabs.scenario.service.model.*;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.ScenarioModel;
+import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 /**
  * <!-- begin-user-doc -->
