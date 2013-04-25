@@ -5,6 +5,8 @@
 package com.mmxlabs.models.lng.transformer.extensions.tradingexporter;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
@@ -221,14 +223,14 @@ public class TradingExporterExtension implements IExporterExtension {
 					// Slower lookup
 					LOOP_SEARCH: for (final Sequence sequence : outputSchedule.getSequences()) {
 						for (final Event event : sequence.getEvents()) {
-//							if (event instanceof StartEvent) {
-//								StartEvent startEvent = (StartEvent) event;
-//								if (startEvent.getSlotAllocation().getSlot() == modelSlot) {
-//									slotVisit = startEvent;
-//								}
-								// FIXME: no allocation etc linked up?
-//							} else 
-								if (event instanceof SlotVisit) {
+							// if (event instanceof StartEvent) {
+							// StartEvent startEvent = (StartEvent) event;
+							// if (startEvent.getSlotAllocation().getSlot() == modelSlot) {
+							// slotVisit = startEvent;
+							// }
+							// FIXME: no allocation etc linked up?
+							// } else
+							if (event instanceof SlotVisit) {
 								final SlotVisit sv = (SlotVisit) event;
 								if (sv.getSlotAllocation().getSlot() == modelSlot) {
 									slotVisit = sv;
@@ -265,42 +267,33 @@ public class TradingExporterExtension implements IExporterExtension {
 		container.setGroupProfitAndLoss(groupProfitAndLoss);
 
 		final Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
+
+		final Map<LegalEntity, Integer> groupProfitMap = new HashMap<LegalEntity, Integer>();
+
+		// We may see the same entity multiple times - so aggregate results
 		for (final IProfitAndLossEntry entry : entries) {
 
-			// TODO_CHECK_DUPLICATES_E_G_SAME FOR_EACH STAGE;
+			final LegalEntity entity = entities.getModelObject(entry.getEntity(), LegalEntity.class);
+			int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
 
-			// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
+			if (groupProfitMap.containsKey(entity)) {
+				groupProfit += groupProfitMap.get(entity);
+			}
+			groupProfitMap.put(entity, groupProfit);
+		}
+		// Now create output data on the unique set.
+		for (final Map.Entry<LegalEntity, Integer> e : groupProfitMap.entrySet()) {
+
 			final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
-			streamData.setEntity(entities.getModelObject(entry.getEntity(), LegalEntity.class));
+			streamData.setEntity(e.getKey());
+			final int groupValue = e.getValue();
 
-			// switch (idx) {
-			// case 0:
-			// streamData = container.addExtraData(TradingConstants.ExtraData_upstream, "Upstream");
-			// break;
-			// case 1:
-			// streamData = container.addExtraData(TradingConstants.ExtraData_shipped, "Shipping");
-			// break;
-			// case 2:
-			// streamData = container.addExtraData(TradingConstants.ExtraData_downstream, "Downstream");
-			// break;
-			// default:
-			// throw new IllegalStateException("Expected three item in the profit and loss list - got " + entries.size());
-			// }
-
-			// final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
-
-			final int groupValue = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
-			totalGroupValue += groupValue;
 			streamData.setProfitAndLoss(groupValue);
-			// final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", groupValue, ExtraDataFormatType.CURRENCY);
-			//
-			// pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
-			// final ExtraData detail = exportDetailTree(entry.getDetails());
-			// detail.setName("Details");
-			// pnlData.getExtraData().add(detail);
+			totalGroupValue += groupValue;
+
 			groupProfitAndLoss.getEntityProfitAndLosses().add(streamData);
 		}
-		// container.addExtraData(TradingConstants.ExtraData_GroupValue, "Group Value", totalGroupValue, ExtraDataFormatType.CURRENCY);
+
 		groupProfitAndLoss.setProfitAndLoss(totalGroupValue);
 	}
 
