@@ -6,9 +6,9 @@
 	<parent>
 		<groupId>com.mmxlabs.shiplingo.platform</groupId>
 		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
-		<version>3.0.1.RELEASE</version>
+		<version>3.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.shiplingo.platform.reports</artifactId>
-	<version>3.0.1.RELEASE</version>
+	<version>3.0.2-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>

@@ -6,11 +6,11 @@
 	<parent>
 		<groupId>com.mmxlabs.shiplingo.platform</groupId>
 		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
-		<version>3.0.1.RELEASE</version>
+		<version>3.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.shiplingo.platform.reports.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>3.0.1.RELEASE</version>
+	<version>3.0.2-SNAPSHOT</version>
 
 	<build>
 		<plugins>
