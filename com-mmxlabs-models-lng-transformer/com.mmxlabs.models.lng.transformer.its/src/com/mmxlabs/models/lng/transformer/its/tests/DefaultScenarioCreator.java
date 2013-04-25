@@ -956,7 +956,7 @@ public class DefaultScenarioCreator {
 		Assert.assertEquals(journey.getPort(), from);
 		Assert.assertEquals(journey.getDestination(), to);
 		Route route = journey.getRoute();
-		Assert.assertEquals((int) journey.getDistance(), (int) getDistance(from, to, route));
+		Assert.assertEquals(journey.getDistance(), (int) getDistance(from, to, route));
 	}
 
 	public RouteCost getRouteCost(VesselClass vc, Route route) {
