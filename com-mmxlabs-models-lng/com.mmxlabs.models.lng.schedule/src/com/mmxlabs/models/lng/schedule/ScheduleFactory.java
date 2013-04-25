@@ -233,15 +233,6 @@ public interface ScheduleFactory extends EFactory {
 	EntityProfitAndLoss createEntityProfitAndLoss();
 
 	/**
-	 * Returns a new object of class '<em>Shipping Costs</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Shipping Costs</em>'.
-	 * @generated
-	 */
-	ShippingCosts createShippingCosts();
-
-	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

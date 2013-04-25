@@ -286,12 +286,12 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createSlotVisit()));
+				 ScheduleFactory.eINSTANCE.createStartEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createVesselEventVisit()));
+				 ScheduleFactory.eINSTANCE.createEndEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -306,27 +306,27 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createPortVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createSlotVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createVesselEventVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createGeneratedCharterOut()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createCooldown()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createPortVisit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createStartEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createEndEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter

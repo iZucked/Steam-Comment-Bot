@@ -84,7 +84,7 @@ public class GroupProfitAndLossItemProvider
 				 getString("_UI_GroupProfitAndLoss_profitAndLoss_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_GroupProfitAndLoss_profitAndLoss_feature", "_UI_GroupProfitAndLoss_type"),
 				 SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS,
-				 true,
+				 false,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,

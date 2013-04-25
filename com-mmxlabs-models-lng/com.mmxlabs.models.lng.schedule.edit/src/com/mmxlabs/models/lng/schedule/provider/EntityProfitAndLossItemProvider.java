@@ -104,7 +104,7 @@ public class EntityProfitAndLossItemProvider
 				 getString("_UI_EntityProfitAndLoss_profitAndLoss_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_EntityProfitAndLoss_profitAndLoss_feature", "_UI_EntityProfitAndLoss_type"),
 				 SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS,
-				 true,
+				 false,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,

@@ -655,30 +655,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.ShippingCosts} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ShippingCostsItemProvider shippingCostsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.ShippingCosts}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createShippingCostsAdapter() {
-		if (shippingCostsItemProvider == null) {
-			shippingCostsItemProvider = new ShippingCostsItemProvider(this);
-		}
-
-		return shippingCostsItemProvider;
-	}
-
-	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -809,29 +785,28 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	public void dispose() {
 		if (scheduleModelItemProvider != null) scheduleModelItemProvider.dispose();
 		if (scheduleItemProvider != null) scheduleItemProvider.dispose();
-		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
-		if (eventItemProvider != null) eventItemProvider.dispose();
-		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
-		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
-		if (journeyItemProvider != null) journeyItemProvider.dispose();
-		if (idleItemProvider != null) idleItemProvider.dispose();
-		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
-		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
-		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
-		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
+		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
 		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
 		if (slotAllocationItemProvider != null) slotAllocationItemProvider.dispose();
-		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();
-		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
-		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
+		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
+		if (eventItemProvider != null) eventItemProvider.dispose();
 		if (startEventItemProvider != null) startEventItemProvider.dispose();
 		if (endEventItemProvider != null) endEventItemProvider.dispose();
+		if (journeyItemProvider != null) journeyItemProvider.dispose();
+		if (idleItemProvider != null) idleItemProvider.dispose();
+		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
+		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
+		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
+		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
+		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
+		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
+		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
+		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();
 		if (capacityViolationsHolderItemProvider != null) capacityViolationsHolderItemProvider.dispose();
 		if (capacityMapEntryItemProvider != null) capacityMapEntryItemProvider.dispose();
 		if (profitAndLossContainerItemProvider != null) profitAndLossContainerItemProvider.dispose();
 		if (groupProfitAndLossItemProvider != null) groupProfitAndLossItemProvider.dispose();
 		if (entityProfitAndLossItemProvider != null) entityProfitAndLossItemProvider.dispose();
-		if (shippingCostsItemProvider != null) shippingCostsItemProvider.dispose();
 	}
 
 	/**
