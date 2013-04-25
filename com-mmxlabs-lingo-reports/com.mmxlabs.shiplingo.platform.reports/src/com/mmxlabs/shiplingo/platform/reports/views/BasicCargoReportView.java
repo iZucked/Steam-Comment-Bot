@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
