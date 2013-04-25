@@ -10,8 +10,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
-
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
@@ -24,14 +22,11 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
-import com.mmxlabs.scheduler.optimiser.annotations.impl.LNGTransferDetailTree;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ShippingCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
