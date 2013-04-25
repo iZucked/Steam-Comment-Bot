@@ -72,9 +72,11 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				boolean isCargoPlan = false;
 				boolean missingPurchasePrice = false;
 				boolean missingSalesPrice = false;
+				
+				final int n = vp.getSequence().length;
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
-				final int[] arrivalTimes = new int[5];
+				final int[] arrivalTimes = new int[n * 2 - 1];
 				int idx = -1;
 				int loadIdx = -1;
 				int dischargeIdx = -1;
