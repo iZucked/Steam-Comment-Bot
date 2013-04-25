@@ -4,23 +4,16 @@
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
-import static org.ops4j.peaberry.Peaberry.service;
-
 import java.util.Collection;
 import java.util.Random;
 
 import javax.inject.Singleton;
-
-import org.eclipse.core.runtime.Platform;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
