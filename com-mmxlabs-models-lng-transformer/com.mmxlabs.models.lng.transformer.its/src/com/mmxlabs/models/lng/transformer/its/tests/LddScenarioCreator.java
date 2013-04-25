@@ -36,9 +36,16 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	private final VesselAvailability vesselAvailability;
 
 	/**
-	 * Initialises a minimal complete scenario, creating: - contract and shipping legal entities - one vessel class and one vessel - one (default) route - one fixed-price sales contract and one
-	 * fixed-price purchase contract - three ports (one origin port, one load port and one discharge port) - one cargo The vessel starts at the origin port, must travel to the load port, pick up the
-	 * cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
+	 * Initialises a minimal complete scenario, creating:
+	 * - contract and shipping legal entities
+	 * - one vessel class and one vessel
+	 * - one (default) route
+	 * - one fixed-price sales contract and one fixed-price purchase contract
+	 * - three ports (one origin port, one load port and one discharge port)
+	 * - one cargo
+	 * The vessel starts at the origin port, must travel to the load port, pick up the cargo,
+	 * travel to the discharge port and discharge it. There is enough time at every stage
+	 * to create some idling at the discharge port. 
 	 */
 	public LddScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
@@ -46,7 +53,6 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		final CommercialModel commercialModel = scenario.getCommercialModel();
 		final FleetModel fleetModel = scenario.getFleetModel();
 		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-		final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
 		// need to create a legal entity for shipping
@@ -60,7 +66,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create a vessel in that class
-		vessel = fleetCreator.createMultipleDefaultVessels(scenarioFleetModel, vc, 1)[0];
+		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1)[0];
 
 		// need to create a default route
 		addRoute(ScenarioTools.defaultRouteName);
