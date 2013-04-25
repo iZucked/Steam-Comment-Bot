@@ -60,7 +60,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  The minimum speed of {0} knots is outside the range of speeds in the fuel consumption curve ({1} to {2} knots).
+                  [VesselClass|{0}] {1} knots min speed is outside the range of the speed-fuel curve ({2} to {3} knots).
                </message>
                <description>
                   The minimum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
@@ -79,7 +79,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  The maximum speed of {0} knots is outside the range of speeds in the fuel consumption curve ({1} to {2} knots).
+                  [VesselClass|{0}] {1} knots max speed is outside the range of the speed-fuel curve ({2} to {3} knots).
                </message>
                <description>
                   The maximum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
@@ -98,7 +98,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Vessel class {0} has a minimum speed of {1}, which is not lower than its maximum speed of {2}.
+                  Vessel class|{0}: Min speed ({1}) must be lower than max speed ({2}).
                </message>
                <description>
                   The minimum speed of a vessel class should be lower than its maximum speed.
@@ -283,7 +283,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Equivalence factor needs to be none-zero
+                  BaseFuel|{0}: Equivalence factor must be non-zero
                </message>
                <description>
                   Check for valid base fuel equivalence factor

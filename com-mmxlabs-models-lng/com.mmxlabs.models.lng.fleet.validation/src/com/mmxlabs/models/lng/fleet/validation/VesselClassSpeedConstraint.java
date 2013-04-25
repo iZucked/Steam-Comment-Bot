@@ -44,7 +44,7 @@ public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 			if (ctx.getCurrentConstraintId().equals(ORDER_ID)) {
 				// min speed cannot be larger than max speed, but can be equal.
 				if (vesselClass.getMinSpeed() > vesselClass.getMaxSpeed()) {
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselClass.getName(), vesselClass.getMinSpeed(),
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'"+vesselClass.getName()+"'", vesselClass.getMinSpeed(),
 							vesselClass.getMaxSpeed()));
 
 					dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_MinSpeed());
@@ -72,7 +72,7 @@ public class VesselClassSpeedConstraint extends AbstractModelConstraint {
 			}
 
 			if (theSpeed < maxMinSpeed || theSpeed > minMaxSpeed) {
-				final IStatus fail = ctx.createFailureStatus(theSpeed, maxMinSpeed, minMaxSpeed);
+				final IStatus fail = ctx.createFailureStatus("'"+vesselClass.getName()+"'", theSpeed, maxMinSpeed, minMaxSpeed);
 				final DetailConstraintStatusDecorator detail = new DetailConstraintStatusDecorator((IConstraintStatus) fail);
 				detail.addEObjectAndFeature(vesselClass, theAttribute);
 				return detail;
