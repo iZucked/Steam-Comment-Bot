@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.its.tests;
 
 import com.google.inject.Injector;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -25,7 +26,7 @@ import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
  */
 public class ScenarioRunner {
 
-	private final MMXRootObject scenario;
+	private final LNGScenarioModel scenario;
 
 	private IOptimisationContext context;
 	private ModelEntityMap entities;
@@ -37,7 +38,7 @@ public class ScenarioRunner {
 
 	private Injector injector;
 
-	public ScenarioRunner(final MMXRootObject scenario) {
+	public ScenarioRunner(final LNGScenarioModel scenario) {
 		this.scenario = scenario;
 	}
 

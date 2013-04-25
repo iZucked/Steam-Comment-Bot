@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
@@ -25,7 +26,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
@@ -59,7 +59,7 @@ public class ContractCvConstraintCheckTest {
 		public Cargo smallToLargeCargo;
 		public Cargo largeToSmallCargo;
 
-		public MMXRootObject scenario;
+		public LNGScenarioModel scenario;
 
 		public SuboptimalScenarioTester() {
 			final CustomScenarioCreator csc = new CustomScenarioCreator(cscDischargePrice);
@@ -127,7 +127,7 @@ public class ContractCvConstraintCheckTest {
 			final int n = loadPorts.length;
 
 			// optimise the scenario
-			ScenarioRunner runner = new ScenarioRunner(scenario);
+			ScenarioRunner runner = new ScenarioRunner((LNGScenarioModel) scenario);
 			try {
 				runner.init();
 				runner.run();
