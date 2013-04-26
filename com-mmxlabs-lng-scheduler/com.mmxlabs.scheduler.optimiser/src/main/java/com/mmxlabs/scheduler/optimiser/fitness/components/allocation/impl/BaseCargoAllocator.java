@@ -413,7 +413,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 			addLoadDischargeCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, times[0], times[1], requiredFuelVolumeInM3, vessel);
 		} else {
-			addMultipleCargo(plan, portDetails, legs, times, requiredFuelVolumeInM3, vessel);
+			addComplexCargo(plan, portDetails, legs, times, requiredFuelVolumeInM3, vessel);
 		}
 	}
 
@@ -561,7 +561,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		cargoCount++;
 	}
 
-	public void addMultipleCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3, final IVessel vessel) {
+	public void addComplexCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3, final IVessel vessel) {
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
 		final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
