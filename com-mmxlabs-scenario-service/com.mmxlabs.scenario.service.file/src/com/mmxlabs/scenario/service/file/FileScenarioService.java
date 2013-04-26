@@ -18,13 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -84,56 +79,6 @@ public class FileScenarioService extends AbstractScenarioService {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 
 		storeURI = URI.createFileURI(workspaceLocation + modelURIString);
-
-		IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(storeURI.toFileString()));
-		if (resource == null) {
-			// get first part of it and make project
-			final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(modelURIString.split("/")[1]);
-			try {
-				project.create(null);
-				resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(storeURI.toFileString()));
-			} catch (CoreException e) {
-				log.error("Exception project folder for store: ", e);
-			}
-		}
-		if (resource != null) {
-			final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(modelURIString.split("/")[1]);
-			try {
-				project.open(null);
-			} catch (CoreException e) {
-				log.error("Exception opening project for store: ", e);
-			}
-		}
-		if (resource != null && resource.getParent().exists() == false) {
-			// create folder for resource somehow
-			try {
-				createFolder(resource.getParent());
-			} catch (CoreException e) {
-				log.error("Exception creating folder for store: ", e);
-			}
-		}
-		if (resource != null) {
-			final IFolder manifestsFolder = resource.getParent().getFolder(Path.fromPortableString("instances/"));
-			if (manifestsFolder.exists() == false) {
-				try {
-					createFolder(manifestsFolder);
-				} catch (CoreException e) {
-					log.error("Exception creating folder for instances: ", e);
-				}
-			}
-		}
-	}
-
-	private void createFolder(IResource resource) throws CoreException {
-		if (resource.exists())
-			return;
-		createFolder(resource.getParent()); // ensure parent exists
-		// create this resource
-		if (resource instanceof IProject) {
-			((IProject) resource).create(null);
-		} else if (resource instanceof IFolder) {
-			((IFolder) resource).create(true, true, null);
-		}
 	}
 
 	public void stop(final ComponentContext context) {
@@ -246,7 +191,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		}
 
 		// Construct new URIs into the model service for our models.
-		int index = 0;
+		final int index = 0;
 		final List<IModelInstance> modelInstances = new ArrayList<IModelInstance>();
 		for (final EObject model : models) {
 			// Construct internal URI based on UUID and model class name
