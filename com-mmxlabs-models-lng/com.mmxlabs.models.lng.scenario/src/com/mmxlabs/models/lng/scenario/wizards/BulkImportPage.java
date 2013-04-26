@@ -47,13 +47,12 @@ import com.mmxlabs.scenario.service.model.ScenarioService;
  */
 public class BulkImportPage extends WizardPage {
 	protected Control control = null;
-	//protected RadioSelectionGroup dataImportGroup;
+	//private RadioSelectionGroup dataImportGroup;
 	protected RadioSelectionGroup scenarioSelectionGroup;
 	protected RadioSelectionGroup csvSelectionGroup;
 	protected CheckboxTreeViewer scenarioTreeViewer;
 	protected FileFieldEditor importFileEditor;
 	final protected ScenarioInstance currentScenario;
-	private RadioSelectionGroup dataImportGroup;
 	
 	public final static int CHOICE_COMMODITY_INDICES = 0;
 	public final static int CHOICE_CARGOES = CHOICE_COMMODITY_INDICES + 1;
@@ -265,7 +264,7 @@ public class BulkImportPage extends WizardPage {
 	}
 	
 	public int getImportedField() {
-		return dataImportGroup.getSelectedValue();
+		return BulkImportPage.CHOICE_COMMODITY_INDICES;
 	}
 	
 	/**
