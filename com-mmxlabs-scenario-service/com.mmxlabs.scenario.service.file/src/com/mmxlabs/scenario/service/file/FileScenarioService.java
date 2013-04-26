@@ -191,7 +191,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		}
 
 		// Construct new URIs into the model service for our models.
-		final int index = 0;
+		int index = 0;
 		final List<IModelInstance> modelInstances = new ArrayList<IModelInstance>();
 		for (final EObject model : models) {
 			// Construct internal URI based on UUID and model class name
