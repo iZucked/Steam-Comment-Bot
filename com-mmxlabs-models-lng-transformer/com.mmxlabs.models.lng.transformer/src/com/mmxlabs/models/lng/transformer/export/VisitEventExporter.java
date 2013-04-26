@@ -37,10 +37,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 /**
  * Exporter for getting out the details of {@link IPortVisitEvent}

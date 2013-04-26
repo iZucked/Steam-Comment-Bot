@@ -127,7 +127,7 @@ public class ContractCvConstraintCheckTest {
 			final int n = loadPorts.length;
 
 			// optimise the scenario
-			ScenarioRunner runner = new ScenarioRunner(scenario);
+			ScenarioRunner runner = new ScenarioRunner((LNGScenarioModel) scenario);
 			try {
 				runner.init();
 				runner.run();

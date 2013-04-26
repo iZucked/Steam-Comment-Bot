@@ -5,7 +5,6 @@ import java.util.Date;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.TaxRate;
-import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
