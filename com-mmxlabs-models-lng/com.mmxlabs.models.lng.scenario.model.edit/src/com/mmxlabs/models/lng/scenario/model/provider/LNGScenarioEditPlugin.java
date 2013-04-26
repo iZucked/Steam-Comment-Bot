@@ -2,33 +2,21 @@
  */
 package com.mmxlabs.models.lng.scenario.model.provider;
 
-import com.mmxlabs.models.lng.analytics.provider.AnalyticsEditPlugin;
-
-import com.mmxlabs.models.lng.assignment.provider.AssignmentEditPlugin;
-
-import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
-
-import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
-
-import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
-
-import com.mmxlabs.models.lng.parameters.provider.ParametersEditPlugin;
-
-import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
-
-import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
-
-import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
-
-import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
-
-import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
-
-import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-
 import org.eclipse.emf.common.EMFPlugin;
-
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import com.mmxlabs.models.lng.analytics.provider.AnalyticsEditPlugin;
+import com.mmxlabs.models.lng.assignment.provider.AssignmentEditPlugin;
+import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
+import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.parameters.provider.ParametersEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
+import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
+import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
+import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
+import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
+import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
 /**
  * This is the central singleton for the LNGScenario edit plugin.

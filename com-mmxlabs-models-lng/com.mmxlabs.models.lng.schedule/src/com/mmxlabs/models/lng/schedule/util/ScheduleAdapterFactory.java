@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
-import com.mmxlabs.models.lng.schedule.*;
 import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -107,44 +106,8 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createScheduleAdapter();
 			}
 			@Override
-			public Adapter caseSequence(Sequence object) {
-				return createSequenceAdapter();
-			}
-			@Override
-			public Adapter caseEvent(Event object) {
-				return createEventAdapter();
-			}
-			@Override
-			public Adapter caseSlotVisit(SlotVisit object) {
-				return createSlotVisitAdapter();
-			}
-			@Override
-			public Adapter caseVesselEventVisit(VesselEventVisit object) {
-				return createVesselEventVisitAdapter();
-			}
-			@Override
-			public Adapter caseJourney(Journey object) {
-				return createJourneyAdapter();
-			}
-			@Override
-			public Adapter caseIdle(Idle object) {
-				return createIdleAdapter();
-			}
-			@Override
-			public Adapter caseGeneratedCharterOut(GeneratedCharterOut object) {
-				return createGeneratedCharterOutAdapter();
-			}
-			@Override
-			public Adapter caseFuelUsage(FuelUsage object) {
-				return createFuelUsageAdapter();
-			}
-			@Override
-			public Adapter caseFuelQuantity(FuelQuantity object) {
-				return createFuelQuantityAdapter();
-			}
-			@Override
-			public Adapter caseCooldown(Cooldown object) {
-				return createCooldownAdapter();
+			public Adapter caseFitness(Fitness object) {
+				return createFitnessAdapter();
 			}
 			@Override
 			public Adapter caseCargoAllocation(CargoAllocation object) {
@@ -155,16 +118,12 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createSlotAllocationAdapter();
 			}
 			@Override
-			public Adapter caseFuelAmount(FuelAmount object) {
-				return createFuelAmountAdapter();
+			public Adapter caseSequence(Sequence object) {
+				return createSequenceAdapter();
 			}
 			@Override
-			public Adapter caseFitness(Fitness object) {
-				return createFitnessAdapter();
-			}
-			@Override
-			public Adapter casePortVisit(PortVisit object) {
-				return createPortVisitAdapter();
+			public Adapter caseEvent(Event object) {
+				return createEventAdapter();
 			}
 			@Override
 			public Adapter caseStartEvent(StartEvent object) {
@@ -173,6 +132,46 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseEndEvent(EndEvent object) {
 				return createEndEventAdapter();
+			}
+			@Override
+			public Adapter caseJourney(Journey object) {
+				return createJourneyAdapter();
+			}
+			@Override
+			public Adapter caseIdle(Idle object) {
+				return createIdleAdapter();
+			}
+			@Override
+			public Adapter casePortVisit(PortVisit object) {
+				return createPortVisitAdapter();
+			}
+			@Override
+			public Adapter caseSlotVisit(SlotVisit object) {
+				return createSlotVisitAdapter();
+			}
+			@Override
+			public Adapter caseVesselEventVisit(VesselEventVisit object) {
+				return createVesselEventVisitAdapter();
+			}
+			@Override
+			public Adapter caseGeneratedCharterOut(GeneratedCharterOut object) {
+				return createGeneratedCharterOutAdapter();
+			}
+			@Override
+			public Adapter caseCooldown(Cooldown object) {
+				return createCooldownAdapter();
+			}
+			@Override
+			public Adapter caseFuelUsage(FuelUsage object) {
+				return createFuelUsageAdapter();
+			}
+			@Override
+			public Adapter caseFuelQuantity(FuelQuantity object) {
+				return createFuelQuantityAdapter();
+			}
+			@Override
+			public Adapter caseFuelAmount(FuelAmount object) {
+				return createFuelAmountAdapter();
 			}
 			@Override
 			public Adapter caseCapacityViolationsHolder(CapacityViolationsHolder object) {
@@ -195,10 +194,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createEntityProfitAndLossAdapter();
 			}
 			@Override
-			public Adapter caseShippingCosts(ShippingCosts object) {
-				return createShippingCostsAdapter();
-			}
-			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -207,12 +202,12 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createUUIDObjectAdapter();
 			}
 			@Override
-			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
-				return createITimezoneProviderAdapter();
-			}
-			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
+			}
+			@Override
+			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
+				return createITimezoneProviderAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -570,20 +565,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEntityProfitAndLossAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.ShippingCosts <em>Shipping Costs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.ShippingCosts
-	 * @generated
-	 */
-	public Adapter createShippingCostsAdapter() {
 		return null;
 	}
 

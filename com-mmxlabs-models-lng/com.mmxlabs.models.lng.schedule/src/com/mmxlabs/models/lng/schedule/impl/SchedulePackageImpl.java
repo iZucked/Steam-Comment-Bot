@@ -45,7 +45,6 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
-import com.mmxlabs.models.lng.schedule.ShippingCosts;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -53,7 +52,6 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import java.lang.Iterable;
 
 /**
  * <!-- begin-user-doc -->
@@ -229,13 +227,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass entityProfitAndLossEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass shippingCostsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1282,16 +1273,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getShippingCosts() {
-		return shippingCostsEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1394,6 +1375,29 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(scheduleEClass, SCHEDULE__FITNESSES);
 		createEReference(scheduleEClass, SCHEDULE__UNUSED_ELEMENTS);
 
+		fitnessEClass = createEClass(FITNESS);
+		createEAttribute(fitnessEClass, FITNESS__FITNESS_VALUE);
+
+		cargoAllocationEClass = createEClass(CARGO_ALLOCATION);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SLOT_ALLOCATIONS);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__INPUT_CARGO);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__EVENTS);
+		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SEQUENCE);
+		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_NAME);
+
+		slotAllocationEClass = createEClass(SLOT_ALLOCATION);
+		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT);
+		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SPOT_MARKET);
+		createEReference(slotAllocationEClass, SLOT_ALLOCATION__CARGO_ALLOCATION);
+		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT_VISIT);
+		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__PRICE);
+		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__VOLUME_TRANSFERRED);
+		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
+		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_START);
+		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_END);
+		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_CONTRACT);
+		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_NAME);
+
 		sequenceEClass = createEClass(SEQUENCE);
 		createEReference(sequenceEClass, SEQUENCE__EVENTS);
 		createEReference(sequenceEClass, SEQUENCE__VESSEL);
@@ -1421,11 +1425,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEOperation(eventEClass, EVENT___NAME);
 		createEOperation(eventEClass, EVENT___GET_HIRE_COST);
 
-		slotVisitEClass = createEClass(SLOT_VISIT);
-		createEReference(slotVisitEClass, SLOT_VISIT__SLOT_ALLOCATION);
+		startEventEClass = createEClass(START_EVENT);
+		createEReference(startEventEClass, START_EVENT__SLOT_ALLOCATION);
 
-		vesselEventVisitEClass = createEClass(VESSEL_EVENT_VISIT);
-		createEReference(vesselEventVisitEClass, VESSEL_EVENT_VISIT__VESSEL_EVENT);
+		endEventEClass = createEClass(END_EVENT);
+		createEReference(endEventEClass, END_EVENT__SLOT_ALLOCATION);
 
 		journeyEClass = createEClass(JOURNEY);
 		createEReference(journeyEClass, JOURNEY__DESTINATION);
@@ -1438,8 +1442,21 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__LADEN);
 
+		portVisitEClass = createEClass(PORT_VISIT);
+		createEAttribute(portVisitEClass, PORT_VISIT__PORT_COST);
+
+		slotVisitEClass = createEClass(SLOT_VISIT);
+		createEReference(slotVisitEClass, SLOT_VISIT__SLOT_ALLOCATION);
+
+		vesselEventVisitEClass = createEClass(VESSEL_EVENT_VISIT);
+		createEReference(vesselEventVisitEClass, VESSEL_EVENT_VISIT__VESSEL_EVENT);
+
 		generatedCharterOutEClass = createEClass(GENERATED_CHARTER_OUT);
 		createEAttribute(generatedCharterOutEClass, GENERATED_CHARTER_OUT__REVENUE);
+
+		cooldownEClass = createEClass(COOLDOWN);
+		createEAttribute(cooldownEClass, COOLDOWN__VOLUME);
+		createEAttribute(cooldownEClass, COOLDOWN__COST);
 
 		fuelUsageEClass = createEClass(FUEL_USAGE);
 		createEReference(fuelUsageEClass, FUEL_USAGE__FUELS);
@@ -1450,45 +1467,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(fuelQuantityEClass, FUEL_QUANTITY__COST);
 		createEReference(fuelQuantityEClass, FUEL_QUANTITY__AMOUNTS);
 
-		cooldownEClass = createEClass(COOLDOWN);
-		createEAttribute(cooldownEClass, COOLDOWN__VOLUME);
-		createEAttribute(cooldownEClass, COOLDOWN__COST);
-
-		cargoAllocationEClass = createEClass(CARGO_ALLOCATION);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SLOT_ALLOCATIONS);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__INPUT_CARGO);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__EVENTS);
-		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SEQUENCE);
-		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_NAME);
-
-		slotAllocationEClass = createEClass(SLOT_ALLOCATION);
-		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT);
-		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SPOT_MARKET);
-		createEReference(slotAllocationEClass, SLOT_ALLOCATION__CARGO_ALLOCATION);
-		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT_VISIT);
-		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__PRICE);
-		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__VOLUME_TRANSFERRED);
-		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
-		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_START);
-		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_END);
-		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_CONTRACT);
-		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_NAME);
-
 		fuelAmountEClass = createEClass(FUEL_AMOUNT);
 		createEAttribute(fuelAmountEClass, FUEL_AMOUNT__UNIT);
 		createEAttribute(fuelAmountEClass, FUEL_AMOUNT__QUANTITY);
-
-		fitnessEClass = createEClass(FITNESS);
-		createEAttribute(fitnessEClass, FITNESS__FITNESS_VALUE);
-
-		portVisitEClass = createEClass(PORT_VISIT);
-		createEAttribute(portVisitEClass, PORT_VISIT__PORT_COST);
-
-		startEventEClass = createEClass(START_EVENT);
-		createEReference(startEventEClass, START_EVENT__SLOT_ALLOCATION);
-
-		endEventEClass = createEClass(END_EVENT);
-		createEReference(endEventEClass, END_EVENT__SLOT_ALLOCATION);
 
 		capacityViolationsHolderEClass = createEClass(CAPACITY_VIOLATIONS_HOLDER);
 		createEReference(capacityViolationsHolderEClass, CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
@@ -1508,12 +1489,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__ENTITY);
 		createEAttribute(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
 
-		shippingCostsEClass = createEClass(SHIPPING_COSTS);
-
 		// Create enums
-		fuelUnitEEnum = createEEnum(FUEL_UNIT);
-		fuelEEnum = createEEnum(FUEL);
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
+		fuelEEnum = createEEnum(FUEL);
+		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		capacityViolationTypeEEnum = createEEnum(CAPACITY_VIOLATION_TYPE);
 
 		// Create data types
@@ -1547,12 +1526,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
-		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
-		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
-		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
+		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
+		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 
 		// Create type parameters
 		addETypeParameter(iterableEDataType, "T");
@@ -1562,29 +1541,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		// Add supertypes to classes
 		scheduleModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		scheduleEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		sequenceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		eventEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		eventEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
-		slotVisitEClass.getESuperTypes().add(this.getEvent());
-		slotVisitEClass.getESuperTypes().add(this.getFuelUsage());
-		slotVisitEClass.getESuperTypes().add(this.getPortVisit());
-		vesselEventVisitEClass.getESuperTypes().add(this.getEvent());
-		vesselEventVisitEClass.getESuperTypes().add(this.getPortVisit());
-		vesselEventVisitEClass.getESuperTypes().add(this.getProfitAndLossContainer());
-		journeyEClass.getESuperTypes().add(this.getEvent());
-		journeyEClass.getESuperTypes().add(this.getFuelUsage());
-		idleEClass.getESuperTypes().add(this.getEvent());
-		idleEClass.getESuperTypes().add(this.getFuelUsage());
-		generatedCharterOutEClass.getESuperTypes().add(this.getEvent());
-		generatedCharterOutEClass.getESuperTypes().add(this.getProfitAndLossContainer());
-		cooldownEClass.getESuperTypes().add(this.getEvent());
-		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
+		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cargoAllocationEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		portVisitEClass.getESuperTypes().add(this.getEvent());
-		portVisitEClass.getESuperTypes().add(this.getCapacityViolationsHolder());
+		sequenceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		eventEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		eventEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
 		startEventEClass.getESuperTypes().add(this.getEvent());
 		startEventEClass.getESuperTypes().add(this.getFuelUsage());
 		startEventEClass.getESuperTypes().add(this.getPortVisit());
@@ -1593,6 +1556,22 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		endEventEClass.getESuperTypes().add(this.getFuelUsage());
 		endEventEClass.getESuperTypes().add(this.getPortVisit());
 		endEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		journeyEClass.getESuperTypes().add(this.getEvent());
+		journeyEClass.getESuperTypes().add(this.getFuelUsage());
+		idleEClass.getESuperTypes().add(this.getEvent());
+		idleEClass.getESuperTypes().add(this.getFuelUsage());
+		portVisitEClass.getESuperTypes().add(this.getEvent());
+		portVisitEClass.getESuperTypes().add(this.getCapacityViolationsHolder());
+		slotVisitEClass.getESuperTypes().add(this.getEvent());
+		slotVisitEClass.getESuperTypes().add(this.getFuelUsage());
+		slotVisitEClass.getESuperTypes().add(this.getPortVisit());
+		vesselEventVisitEClass.getESuperTypes().add(this.getEvent());
+		vesselEventVisitEClass.getESuperTypes().add(this.getPortVisit());
+		vesselEventVisitEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		generatedCharterOutEClass.getESuperTypes().add(this.getEvent());
+		generatedCharterOutEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		cooldownEClass.getESuperTypes().add(this.getEvent());
+		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		capacityViolationsHolderEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
@@ -1606,6 +1585,35 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSchedule_SlotAllocations(), this.getSlotAllocation(), null, "slotAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_UnusedElements(), ecorePackage.getEObject(), null, "unusedElements", null, 0, -1, Schedule.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(fitnessEClass, Fitness.class, "Fitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFitness_FitnessValue(), ecorePackage.getELong(), "fitnessValue", null, 1, 1, Fitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(cargoAllocationEClass, CargoAllocation.class, "CargoAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCargoAllocation_SlotAllocations(), this.getSlotAllocation(), this.getSlotAllocation_CargoAllocation(), "slotAllocations", null, 1, -1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_InputCargo(), theCargoPackage.getCargo(), null, "inputCargo", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_Events(), this.getEvent(), null, "events", null, 1, -1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoAllocation_Sequence(), this.getSequence(), null, "sequence", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getCargoAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(slotAllocationEClass, SlotAllocation.class, "SlotAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSlotAllocation_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotAllocation_SpotMarket(), theSpotMarketsPackage.getSpotMarket(), null, "spotMarket", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotAllocation_CargoAllocation(), this.getCargoAllocation(), this.getCargoAllocation_SlotAllocations(), "cargoAllocation", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotAllocation_SlotVisit(), this.getSlotVisit(), this.getSlotVisit_SlotAllocation(), "slotVisit", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotAllocation_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotAllocation_VolumeTransferred(), ecorePackage.getEInt(), "volumeTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getSlotAllocation__GetPort(), thePortPackage.getPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlotAllocation__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlotAllocation__GetLocalEnd(), this.getCalendar(), "getLocalEnd", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlotAllocation__GetContract(), theCommercialPackage.getContract(), "getContract", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlotAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(sequenceEClass, Sequence.class, "Sequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSequence_Events(), this.getEvent(), this.getEvent_Sequence(), "events", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1644,11 +1652,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEOperation(getEvent__GetHireCost(), ecorePackage.getEInt(), "getHireCost", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEClass(slotVisitEClass, SlotVisit.class, "SlotVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSlotVisit_SlotAllocation(), this.getSlotAllocation(), this.getSlotAllocation_SlotVisit(), "slotAllocation", null, 1, 1, SlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(startEventEClass, StartEvent.class, "StartEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getStartEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, StartEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(vesselEventVisitEClass, VesselEventVisit.class, "VesselEventVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getVesselEventVisit_VesselEvent(), theFleetPackage.getVesselEvent(), null, "vesselEvent", null, 1, 1, VesselEventVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(endEventEClass, EndEvent.class, "EndEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEndEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, EndEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(journeyEClass, Journey.class, "Journey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getJourney_Destination(), thePortPackage.getPort(), null, "destination", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1661,8 +1669,21 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPortVisit_PortCost(), ecorePackage.getEInt(), "portCost", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(slotVisitEClass, SlotVisit.class, "SlotVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSlotVisit_SlotAllocation(), this.getSlotAllocation(), this.getSlotAllocation_SlotVisit(), "slotAllocation", null, 1, 1, SlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselEventVisitEClass, VesselEventVisit.class, "VesselEventVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselEventVisit_VesselEvent(), theFleetPackage.getVesselEvent(), null, "vesselEvent", null, 1, 1, VesselEventVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(generatedCharterOutEClass, GeneratedCharterOut.class, "GeneratedCharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGeneratedCharterOut_Revenue(), ecorePackage.getEInt(), "revenue", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(cooldownEClass, Cooldown.class, "Cooldown", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCooldown_Volume(), ecorePackage.getEInt(), "volume", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCooldown_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelUsageEClass, FuelUsage.class, "FuelUsage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFuelUsage_Fuels(), this.getFuelQuantity(), null, "fuels", null, 0, -1, FuelUsage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1674,51 +1695,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getFuelQuantity_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFuelQuantity_Amounts(), this.getFuelAmount(), null, "amounts", null, 0, -1, FuelQuantity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(cooldownEClass, Cooldown.class, "Cooldown", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCooldown_Volume(), ecorePackage.getEInt(), "volume", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCooldown_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(cargoAllocationEClass, CargoAllocation.class, "CargoAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCargoAllocation_SlotAllocations(), this.getSlotAllocation(), this.getSlotAllocation_CargoAllocation(), "slotAllocations", null, 1, -1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_InputCargo(), theCargoPackage.getCargo(), null, "inputCargo", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_Events(), this.getEvent(), null, "events", null, 1, -1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoAllocation_Sequence(), this.getSequence(), null, "sequence", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEOperation(getCargoAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEClass(slotAllocationEClass, SlotAllocation.class, "SlotAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSlotAllocation_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSlotAllocation_SpotMarket(), theSpotMarketsPackage.getSpotMarket(), null, "spotMarket", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSlotAllocation_CargoAllocation(), this.getCargoAllocation(), this.getCargoAllocation_SlotAllocations(), "cargoAllocation", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSlotAllocation_SlotVisit(), this.getSlotVisit(), this.getSlotVisit_SlotAllocation(), "slotVisit", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotAllocation_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotAllocation_VolumeTransferred(), ecorePackage.getEInt(), "volumeTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEOperation(getSlotAllocation__GetPort(), thePortPackage.getPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getSlotAllocation__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getSlotAllocation__GetLocalEnd(), this.getCalendar(), "getLocalEnd", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getSlotAllocation__GetContract(), theCommercialPackage.getContract(), "getContract", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getSlotAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
-
 		initEClass(fuelAmountEClass, FuelAmount.class, "FuelAmount", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFuelAmount_Unit(), this.getFuelUnit(), "unit", null, 1, 1, FuelAmount.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFuelAmount_Quantity(), ecorePackage.getEInt(), "quantity", null, 1, 1, FuelAmount.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(fitnessEClass, Fitness.class, "Fitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getFitness_FitnessValue(), ecorePackage.getELong(), "fitnessValue", null, 1, 1, Fitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getPortVisit_PortCost(), ecorePackage.getEInt(), "portCost", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(startEventEClass, StartEvent.class, "StartEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getStartEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, StartEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(endEventEClass, EndEvent.class, "EndEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getEndEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, EndEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(capacityViolationsHolderEClass, CapacityViolationsHolder.class, "CapacityViolationsHolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCapacityViolationsHolder_Violations(), this.getCapacityMapEntry(), null, "violations", null, 0, -1, CapacityViolationsHolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1738,13 +1717,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getEntityProfitAndLoss_Entity(), theCommercialPackage.getLegalEntity(), null, "entity", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getEntityProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(shippingCostsEClass, ShippingCosts.class, "ShippingCosts", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
 		// Initialize enums and add enum literals
-		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");
-		addEEnumLiteral(fuelUnitEEnum, FuelUnit.M3);
-		addEEnumLiteral(fuelUnitEEnum, FuelUnit.MT);
-		addEEnumLiteral(fuelUnitEEnum, FuelUnit.MMBTU);
+		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.VESSEL);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.SPOT_VESSEL);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.DES_PURCHASE);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.FOB_SALE);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.CARGO_SHORTS);
 
 		initEEnum(fuelEEnum, Fuel.class, "Fuel");
 		addEEnumLiteral(fuelEEnum, Fuel.BASE_FUEL);
@@ -1752,12 +1731,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(fuelEEnum, Fuel.NBO);
 		addEEnumLiteral(fuelEEnum, Fuel.PILOT_LIGHT);
 
-		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
-		addEEnumLiteral(sequenceTypeEEnum, SequenceType.VESSEL);
-		addEEnumLiteral(sequenceTypeEEnum, SequenceType.SPOT_VESSEL);
-		addEEnumLiteral(sequenceTypeEEnum, SequenceType.DES_PURCHASE);
-		addEEnumLiteral(sequenceTypeEEnum, SequenceType.FOB_SALE);
-		addEEnumLiteral(sequenceTypeEEnum, SequenceType.CARGO_SHORTS);
+		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");
+		addEEnumLiteral(fuelUnitEEnum, FuelUnit.M3);
+		addEEnumLiteral(fuelUnitEEnum, FuelUnit.MT);
+		addEEnumLiteral(fuelUnitEEnum, FuelUnit.MMBTU);
 
 		initEEnum(capacityViolationTypeEEnum, CapacityViolationType.class, "CapacityViolationType");
 		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.MAX_LOAD);

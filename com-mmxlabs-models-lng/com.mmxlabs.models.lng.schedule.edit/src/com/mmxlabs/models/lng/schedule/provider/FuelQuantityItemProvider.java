@@ -5,21 +5,13 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.schedule.Fuel;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -31,6 +23,11 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.FuelQuantity} object.
@@ -87,7 +84,7 @@ public class FuelQuantityItemProvider
 				 getString("_UI_FuelQuantity_fuel_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_FuelQuantity_fuel_feature", "_UI_FuelQuantity_type"),
 				 SchedulePackage.Literals.FUEL_QUANTITY__FUEL,
-				 true,
+				 false,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
@@ -109,7 +106,7 @@ public class FuelQuantityItemProvider
 				 getString("_UI_FuelQuantity_cost_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_FuelQuantity_cost_feature", "_UI_FuelQuantity_type"),
 				 SchedulePackage.Literals.FUEL_QUANTITY__COST,
-				 true,
+				 false,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,

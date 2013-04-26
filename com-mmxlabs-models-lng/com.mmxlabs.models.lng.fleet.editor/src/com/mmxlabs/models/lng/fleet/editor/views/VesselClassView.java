@@ -10,7 +10,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.ui.editorpart.VesselClassViewerPane;

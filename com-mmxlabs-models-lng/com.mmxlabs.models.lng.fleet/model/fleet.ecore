@@ -221,7 +221,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
         eType="#//HeelOptions" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEvent" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="durationInDays" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1">

@@ -37,16 +37,6 @@ public class MaintenanceEventImpl extends VesselEventImpl implements Maintenance
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.MAINTENANCE_EVENT;
 	}
-
-	/**
-	 * @since 3.0
-	 */
-	@Override
-	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 } // end of MaintenanceEventImpl
 
 // finish type fixing

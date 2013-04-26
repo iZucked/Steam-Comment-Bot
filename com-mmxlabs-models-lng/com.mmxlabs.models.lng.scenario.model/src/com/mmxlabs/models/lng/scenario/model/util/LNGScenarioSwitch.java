@@ -2,17 +2,17 @@
  */
 package com.mmxlabs.models.lng.scenario.model.util;
 
-import com.mmxlabs.models.lng.scenario.model.*;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Switch;
 
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -76,7 +76,6 @@ public class LNGScenarioSwitch<T> extends Switch<T> {
 				T result = caseLNGScenarioModel(lngScenarioModel);
 				if (result == null) result = caseMMXRootObject(lngScenarioModel);
 				if (result == null) result = caseUUIDObject(lngScenarioModel);
-				if (result == null) result = caseNamedObject(lngScenarioModel);
 				if (result == null) result = caseMMXObject(lngScenarioModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -150,21 +149,6 @@ public class LNGScenarioSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseUUIDObject(UUIDObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Named Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Named Object</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNamedObject(NamedObject object) {
 		return null;
 	}
 

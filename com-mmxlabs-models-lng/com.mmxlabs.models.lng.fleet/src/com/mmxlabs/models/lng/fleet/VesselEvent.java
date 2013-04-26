@@ -33,7 +33,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface VesselEvent extends ITimezoneProvider, UUIDObject, NamedObject {
+public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Duration In Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->

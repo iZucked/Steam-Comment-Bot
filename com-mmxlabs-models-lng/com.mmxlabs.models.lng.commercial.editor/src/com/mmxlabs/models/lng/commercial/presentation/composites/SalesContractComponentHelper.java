@@ -12,12 +12,10 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**

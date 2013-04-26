@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.schedule.*;
-import java.lang.Iterable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -101,29 +99,28 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 		switch (eClass.getClassifierID()) {
 			case SchedulePackage.SCHEDULE_MODEL: return createScheduleModel();
 			case SchedulePackage.SCHEDULE: return createSchedule();
-			case SchedulePackage.SEQUENCE: return createSequence();
-			case SchedulePackage.EVENT: return createEvent();
-			case SchedulePackage.SLOT_VISIT: return createSlotVisit();
-			case SchedulePackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
-			case SchedulePackage.JOURNEY: return createJourney();
-			case SchedulePackage.IDLE: return createIdle();
-			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
-			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
-			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
-			case SchedulePackage.COOLDOWN: return createCooldown();
+			case SchedulePackage.FITNESS: return createFitness();
 			case SchedulePackage.CARGO_ALLOCATION: return createCargoAllocation();
 			case SchedulePackage.SLOT_ALLOCATION: return createSlotAllocation();
-			case SchedulePackage.FUEL_AMOUNT: return createFuelAmount();
-			case SchedulePackage.FITNESS: return createFitness();
-			case SchedulePackage.PORT_VISIT: return createPortVisit();
+			case SchedulePackage.SEQUENCE: return createSequence();
+			case SchedulePackage.EVENT: return createEvent();
 			case SchedulePackage.START_EVENT: return createStartEvent();
 			case SchedulePackage.END_EVENT: return createEndEvent();
+			case SchedulePackage.JOURNEY: return createJourney();
+			case SchedulePackage.IDLE: return createIdle();
+			case SchedulePackage.PORT_VISIT: return createPortVisit();
+			case SchedulePackage.SLOT_VISIT: return createSlotVisit();
+			case SchedulePackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
+			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
+			case SchedulePackage.COOLDOWN: return createCooldown();
+			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
+			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
+			case SchedulePackage.FUEL_AMOUNT: return createFuelAmount();
 			case SchedulePackage.CAPACITY_VIOLATIONS_HOLDER: return createCapacityViolationsHolder();
 			case SchedulePackage.CAPACITY_MAP_ENTRY: return (EObject)createCapacityMapEntry();
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER: return createProfitAndLossContainer();
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS: return createGroupProfitAndLoss();
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS: return createEntityProfitAndLoss();
-			case SchedulePackage.SHIPPING_COSTS: return createShippingCosts();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -137,12 +134,12 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case SchedulePackage.FUEL_UNIT:
-				return createFuelUnitFromString(eDataType, initialValue);
-			case SchedulePackage.FUEL:
-				return createFuelFromString(eDataType, initialValue);
 			case SchedulePackage.SEQUENCE_TYPE:
 				return createSequenceTypeFromString(eDataType, initialValue);
+			case SchedulePackage.FUEL:
+				return createFuelFromString(eDataType, initialValue);
+			case SchedulePackage.FUEL_UNIT:
+				return createFuelUnitFromString(eDataType, initialValue);
 			case SchedulePackage.CAPACITY_VIOLATION_TYPE:
 				return createCapacityViolationTypeFromString(eDataType, initialValue);
 			case SchedulePackage.CALENDAR:
@@ -164,12 +161,12 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case SchedulePackage.FUEL_UNIT:
-				return convertFuelUnitToString(eDataType, instanceValue);
-			case SchedulePackage.FUEL:
-				return convertFuelToString(eDataType, instanceValue);
 			case SchedulePackage.SEQUENCE_TYPE:
 				return convertSequenceTypeToString(eDataType, instanceValue);
+			case SchedulePackage.FUEL:
+				return convertFuelToString(eDataType, instanceValue);
+			case SchedulePackage.FUEL_UNIT:
+				return convertFuelUnitToString(eDataType, instanceValue);
 			case SchedulePackage.CAPACITY_VIOLATION_TYPE:
 				return convertCapacityViolationTypeToString(eDataType, instanceValue);
 			case SchedulePackage.CALENDAR:
@@ -424,16 +421,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public EntityProfitAndLoss createEntityProfitAndLoss() {
 		EntityProfitAndLossImpl entityProfitAndLoss = new EntityProfitAndLossImpl();
 		return entityProfitAndLoss;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ShippingCosts createShippingCosts() {
-		ShippingCostsImpl shippingCosts = new ShippingCostsImpl();
-		return shippingCosts;
 	}
 
 	/**

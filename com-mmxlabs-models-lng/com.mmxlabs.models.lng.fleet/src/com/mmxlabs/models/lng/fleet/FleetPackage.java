@@ -1080,7 +1080,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__EXTENSIONS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 0;
+	int VESSEL_EVENT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1089,7 +1089,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__UUID = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 1;
+	int VESSEL_EVENT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1098,7 +1098,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__NAME = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 2;
+	int VESSEL_EVENT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -1108,7 +1108,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__OTHER_NAMES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 3;
+	int VESSEL_EVENT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
@@ -1117,7 +1117,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__DURATION_IN_DAYS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 4;
+	int VESSEL_EVENT__DURATION_IN_DAYS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -1126,7 +1126,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__ALLOWED_VESSELS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 5;
+	int VESSEL_EVENT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -1135,7 +1135,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__PORT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 6;
+	int VESSEL_EVENT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Start After</b></em>' attribute.
@@ -1144,7 +1144,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__START_AFTER = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 7;
+	int VESSEL_EVENT__START_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Start By</b></em>' attribute.
@@ -1153,7 +1153,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__START_BY = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 8;
+	int VESSEL_EVENT__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
@@ -1162,7 +1162,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 9;
+	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.

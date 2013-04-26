@@ -2,26 +2,19 @@
  */
 package com.mmxlabs.models.lng.scenario.model.impl;
 
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-
-import com.mmxlabs.models.lng.cargo.CargoModel;
-
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
-
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
-
-import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

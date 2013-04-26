@@ -166,6 +166,12 @@
           targetEClass="com.mmxlabs.models.lng.fleet.Vessel">
     </factory>
     <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselAvailabilityFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="VesselAvailability"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselAvailability">
+    </factory>
+    <factory
           ID="com.mmxlabs.models.lng.fleet.editor.charterOutFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Charter Out"

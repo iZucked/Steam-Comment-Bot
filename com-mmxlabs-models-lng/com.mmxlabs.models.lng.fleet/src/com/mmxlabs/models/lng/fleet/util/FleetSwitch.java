@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
-import com.mmxlabs.models.lng.fleet.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -196,9 +195,9 @@ public class FleetSwitch<T1> extends Switch<T1> {
 			case FleetPackage.VESSEL_EVENT: {
 				VesselEvent vesselEvent = (VesselEvent)theEObject;
 				T1 result = caseVesselEvent(vesselEvent);
-				if (result == null) result = caseITimezoneProvider(vesselEvent);
 				if (result == null) result = caseUUIDObject(vesselEvent);
 				if (result == null) result = caseNamedObject(vesselEvent);
+				if (result == null) result = caseITimezoneProvider(vesselEvent);
 				if (result == null) result = caseMMXObject(vesselEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -207,9 +206,9 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				MaintenanceEvent maintenanceEvent = (MaintenanceEvent)theEObject;
 				T1 result = caseMaintenanceEvent(maintenanceEvent);
 				if (result == null) result = caseVesselEvent(maintenanceEvent);
-				if (result == null) result = caseITimezoneProvider(maintenanceEvent);
 				if (result == null) result = caseUUIDObject(maintenanceEvent);
 				if (result == null) result = caseNamedObject(maintenanceEvent);
+				if (result == null) result = caseITimezoneProvider(maintenanceEvent);
 				if (result == null) result = caseMMXObject(maintenanceEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -218,9 +217,9 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				DryDockEvent dryDockEvent = (DryDockEvent)theEObject;
 				T1 result = caseDryDockEvent(dryDockEvent);
 				if (result == null) result = caseVesselEvent(dryDockEvent);
-				if (result == null) result = caseITimezoneProvider(dryDockEvent);
 				if (result == null) result = caseUUIDObject(dryDockEvent);
 				if (result == null) result = caseNamedObject(dryDockEvent);
+				if (result == null) result = caseITimezoneProvider(dryDockEvent);
 				if (result == null) result = caseMMXObject(dryDockEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -229,9 +228,9 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				CharterOutEvent charterOutEvent = (CharterOutEvent)theEObject;
 				T1 result = caseCharterOutEvent(charterOutEvent);
 				if (result == null) result = caseVesselEvent(charterOutEvent);
-				if (result == null) result = caseITimezoneProvider(charterOutEvent);
 				if (result == null) result = caseUUIDObject(charterOutEvent);
 				if (result == null) result = caseNamedObject(charterOutEvent);
+				if (result == null) result = caseITimezoneProvider(charterOutEvent);
 				if (result == null) result = caseMMXObject(charterOutEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

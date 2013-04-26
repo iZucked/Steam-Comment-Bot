@@ -2,11 +2,11 @@
  */
 package com.mmxlabs.models.lng.scenario.model;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -84,24 +84,6 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @ordered
 	 */
 	int LNG_SCENARIO_MODEL__UUID = MMXCorePackage.MMX_ROOT_OBJECT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_SCENARIO_MODEL__NAME = MMXCorePackage.MMX_ROOT_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_SCENARIO_MODEL__OTHER_NAMES = MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Port Model</b></em>' containment reference.

@@ -23,9 +23,11 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -35,8 +37,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getExtensions <em>Extensions</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getDurationInDays <em>Duration In Days</em>}</li>
@@ -49,40 +49,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * @generated
  */
-public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent {
-	/**
-	 * The cached value of the '{@link #getExtensions() <em>Extensions</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getExtensions()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<UUIDObject> extensions;
-
-	/**
-	 * The default value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getUuid()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String UUID_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getUuid()
-	 * @generated
-	 * @ordered
-	 */
-	protected String uuid = UUID_EDEFAULT;
-
+public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEvent {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -213,42 +180,6 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.VESSEL_EVENT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<UUIDObject> getExtensions() {
-		if (extensions == null) {
-			extensions = new EObjectResolvingEList<UUIDObject>(UUIDObject.class, this, FleetPackage.VESSEL_EVENT__EXTENSIONS);
-		}
-		return extensions;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getUuid() {
-		return uuid;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setUuid(String newUuid) {
-		String oldUuid = uuid;
-		uuid = newUuid;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__UUID, oldUuid, uuid));
 	}
 
 	/**
@@ -402,42 +333,6 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Object getUnsetValue(EStructuralFeature feature) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Object eGetWithDefault(EStructuralFeature feature) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EObject eContainerOp() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -454,10 +349,6 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_EVENT__EXTENSIONS:
-				return getExtensions();
-			case FleetPackage.VESSEL_EVENT__UUID:
-				return getUuid();
 			case FleetPackage.VESSEL_EVENT__NAME:
 				return getName();
 			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
@@ -486,13 +377,6 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_EVENT__EXTENSIONS:
-				getExtensions().clear();
-				getExtensions().addAll((Collection<? extends UUIDObject>)newValue);
-				return;
-			case FleetPackage.VESSEL_EVENT__UUID:
-				setUuid((String)newValue);
-				return;
 			case FleetPackage.VESSEL_EVENT__NAME:
 				setName((String)newValue);
 				return;
@@ -528,12 +412,6 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_EVENT__EXTENSIONS:
-				getExtensions().clear();
-				return;
-			case FleetPackage.VESSEL_EVENT__UUID:
-				setUuid(UUID_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_EVENT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -567,10 +445,6 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_EVENT__EXTENSIONS:
-				return extensions != null && !extensions.isEmpty();
-			case FleetPackage.VESSEL_EVENT__UUID:
-				return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
 			case FleetPackage.VESSEL_EVENT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
@@ -596,22 +470,15 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == MMXObject.class) {
-			switch (derivedFeatureID) {
-				case FleetPackage.VESSEL_EVENT__EXTENSIONS: return MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-				default: return -1;
-			}
-		}
-		if (baseClass == UUIDObject.class) {
-			switch (derivedFeatureID) {
-				case FleetPackage.VESSEL_EVENT__UUID: return MMXCorePackage.UUID_OBJECT__UUID;
-				default: return -1;
-			}
-		}
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case FleetPackage.VESSEL_EVENT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
 				case FleetPackage.VESSEL_EVENT__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		if (baseClass == ITimezoneProvider.class) {
+			switch (derivedFeatureID) {
 				default: return -1;
 			}
 		}
@@ -625,22 +492,15 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == MMXObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.MMX_OBJECT__EXTENSIONS: return FleetPackage.VESSEL_EVENT__EXTENSIONS;
-				default: return -1;
-			}
-		}
-		if (baseClass == UUIDObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.UUID_OBJECT__UUID: return FleetPackage.VESSEL_EVENT__UUID;
-				default: return -1;
-			}
-		}
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return FleetPackage.VESSEL_EVENT__NAME;
 				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return FleetPackage.VESSEL_EVENT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		if (baseClass == ITimezoneProvider.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}
@@ -657,9 +517,7 @@ public abstract class VesselEventImpl extends EObjectImpl implements VesselEvent
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (uuid: ");
-		result.append(uuid);
-		result.append(", name: ");
+		result.append(" (name: ");
 		result.append(name);
 		result.append(", otherNames: ");
 		result.append(otherNames);

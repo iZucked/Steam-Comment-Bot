@@ -4,23 +4,13 @@
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.util.CommercialSwitch;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.util.ScheduleAdapterFactory;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.util.MMXCoreSwitch;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import java.util.List;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
@@ -38,6 +28,13 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.util.CommercialSwitch;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.util.ScheduleAdapterFactory;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -585,7 +582,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -609,7 +606,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -652,30 +649,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		}
 
 		return entityProfitAndLossItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.ShippingCosts} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ShippingCostsItemProvider shippingCostsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.ShippingCosts}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createShippingCostsAdapter() {
-		if (shippingCostsItemProvider == null) {
-			shippingCostsItemProvider = new ShippingCostsItemProvider(this);
-		}
-
-		return shippingCostsItemProvider;
 	}
 
 	/**
@@ -809,29 +782,28 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	public void dispose() {
 		if (scheduleModelItemProvider != null) scheduleModelItemProvider.dispose();
 		if (scheduleItemProvider != null) scheduleItemProvider.dispose();
-		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
-		if (eventItemProvider != null) eventItemProvider.dispose();
-		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
-		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
-		if (journeyItemProvider != null) journeyItemProvider.dispose();
-		if (idleItemProvider != null) idleItemProvider.dispose();
-		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
-		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
-		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
-		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
+		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
 		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
 		if (slotAllocationItemProvider != null) slotAllocationItemProvider.dispose();
-		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();
-		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
-		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
+		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
+		if (eventItemProvider != null) eventItemProvider.dispose();
 		if (startEventItemProvider != null) startEventItemProvider.dispose();
 		if (endEventItemProvider != null) endEventItemProvider.dispose();
+		if (journeyItemProvider != null) journeyItemProvider.dispose();
+		if (idleItemProvider != null) idleItemProvider.dispose();
+		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
+		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
+		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
+		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
+		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
+		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
+		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
+		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();
 		if (capacityViolationsHolderItemProvider != null) capacityViolationsHolderItemProvider.dispose();
 		if (capacityMapEntryItemProvider != null) capacityMapEntryItemProvider.dispose();
 		if (profitAndLossContainerItemProvider != null) profitAndLossContainerItemProvider.dispose();
 		if (groupProfitAndLossItemProvider != null) groupProfitAndLossItemProvider.dispose();
 		if (entityProfitAndLossItemProvider != null) entityProfitAndLossItemProvider.dispose();
-		if (shippingCostsItemProvider != null) shippingCostsItemProvider.dispose();
 	}
 
 	/**

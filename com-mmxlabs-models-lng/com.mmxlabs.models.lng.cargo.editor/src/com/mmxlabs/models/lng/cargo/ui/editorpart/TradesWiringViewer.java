@@ -431,6 +431,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Set<Object> aSet = getObjectSet(a);
 				final Set<Object> bSet = getObjectSet(b);
 
+				if (aSet == null || bSet == null) {
+					return false;
+				}
 				aSet.retainAll(bSet);
 				if (!aSet.isEmpty()) {
 					return true;

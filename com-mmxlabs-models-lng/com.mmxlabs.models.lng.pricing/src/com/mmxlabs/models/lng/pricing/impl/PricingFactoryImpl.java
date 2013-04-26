@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
-import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;

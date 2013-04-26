@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.presentation;
 
-import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
-import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -13,6 +11,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider;
 import com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;

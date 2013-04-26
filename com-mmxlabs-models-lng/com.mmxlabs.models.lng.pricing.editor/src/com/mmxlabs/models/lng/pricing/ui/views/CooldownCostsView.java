@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.CooldownCostsPane;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;

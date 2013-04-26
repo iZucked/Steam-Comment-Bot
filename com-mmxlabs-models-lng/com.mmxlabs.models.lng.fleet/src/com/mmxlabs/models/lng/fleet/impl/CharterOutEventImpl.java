@@ -398,15 +398,6 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 		result.append(')');
 		return result.toString();
 	}
-
-	/**
-	 * @since 3.0
-	 */
-	@Override
-	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
-		return null;
-	}
-
 } // end of CharterOutEventImpl
 
 // finish type fixing

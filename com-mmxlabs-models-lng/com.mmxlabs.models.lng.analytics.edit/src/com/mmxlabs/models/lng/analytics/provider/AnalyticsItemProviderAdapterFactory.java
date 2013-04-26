@@ -35,8 +35,6 @@ import com.mmxlabs.models.lng.analytics.util.AnalyticsAdapterFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.util.CommercialSwitch;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.util.MMXCoreSwitch;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
