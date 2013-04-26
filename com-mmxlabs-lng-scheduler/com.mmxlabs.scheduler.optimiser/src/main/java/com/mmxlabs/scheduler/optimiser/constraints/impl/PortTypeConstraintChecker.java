@@ -48,7 +48,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Inject
 	private IOrderedSequenceElementsDataComponentProvider orderedSequenceProvider;
 
@@ -151,8 +151,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			}
 
 			// don't enforce any constraints here if the ordered sequence provider specifies a previous element
-			final boolean checkConstraint = (orderedSequenceProvider.getPreviousElement(t) == null); 
-			
+			final boolean checkConstraint = (orderedSequenceProvider.getPreviousElement(t) == null && (previous == null || orderedSequenceProvider.getNextElement(previous) == null));
+
 			switch (type) {
 			case Discharge:
 				if (seenDischarge && checkConstraint) {
@@ -267,7 +267,10 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		if (orderedSequenceProvider.getPreviousElement(second) != null) {
 			return true;
 		}
-		
+		if (orderedSequenceProvider.getNextElement(first) != null) {
+			return true;
+		}
+
 		// check the legality of this sequencing decision
 		// End can't come before anything and Start can't come after anything
 		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start)) {
