@@ -413,7 +413,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 			addLoadDischargeCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, times[0], times[1], requiredFuelVolumeInM3, vessel);
 		} else {
-			//addMultipleCargo(plan, portDetails, legs, times, requiredFuelVolumeInM3, vessel);
+			addMultipleCargo(plan, portDetails, legs, times, requiredFuelVolumeInM3, vessel);
 		}
 	}
 
