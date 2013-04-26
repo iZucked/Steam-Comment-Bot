@@ -103,11 +103,13 @@ public class FileScenarioService extends AbstractScenarioService {
 			throw new IllegalArgumentException("Cannot delete a container instance that belongs to another scenario service");
 		}
 		{
+			// Recursively delete contents
 			while (container.getElements().isEmpty() == false) {
 				delete(container.getElements().get(0));
 			}
 		}
 
+		// Remove container ref from it's parent
 		final EObject parent = container.eContainer();
 		if (parent != null) {
 			final EStructuralFeature containment = container.eContainingFeature();
