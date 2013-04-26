@@ -46,7 +46,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
