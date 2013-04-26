@@ -10,9 +10,9 @@
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
-		<artifactId>bundle-parent</artifactId>
+		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>14</version>
+		<version>20</version>
 	</parent>
 
 	<scm>
@@ -27,8 +27,83 @@
 	</ciManagement>
 
 	<modules>
+		<module>target-definition</module>
 		<module>com.mmxlabs.scheduler.optimiser</module>
-		<!--<module>com.mmxlabs.scheduler.spring</module>-->
+		<module>com.mmxlabs.scheduler.optimiser.tests</module>
+		<module>com.mmxlabs.scheduler.optimiser.feature</module>
 		<module>com.mmxlabs.scheduler.p2</module>
 	</modules>
+
+	<build>
+		<!-- Required for some tycho workaround - may no longer be needed -->
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<!-- Enable tycho packaging types -->
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+
+					<resolver>p2</resolver>
+
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.scheduler</groupId>
+							<artifactId>target-definition</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+					</target>
+
+					<environments>
+
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<inherited>true</inherited>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>
