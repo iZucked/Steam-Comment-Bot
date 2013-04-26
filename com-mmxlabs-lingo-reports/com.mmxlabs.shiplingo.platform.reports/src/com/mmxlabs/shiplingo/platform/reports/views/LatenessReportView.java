@@ -148,7 +148,7 @@ public class LatenessReportView extends EMFReportView {
 			if (vessel == null) {
 				return null;
 			}
-			final VesselAvailability availability = vessel.getAvailability();
+			final VesselAvailability availability = null;//vessel.getAvailability();
 			if (availability == null) {
 				return null;
 			}
@@ -240,7 +240,7 @@ public class LatenessReportView extends EMFReportView {
 					if (vessel == null) {
 						return false;
 					}
-					final VesselAvailability availability = vessel.getAvailability();
+					final VesselAvailability availability = null;//vessel.getAvailability();
 					if (availability == null) {
 						return false;
 					}
