@@ -5,7 +5,7 @@ target/
 
 
 syntax: regexp
-^com\.mmxlabs\.scheduler\.optimiser/\.settings$
+.settings$
 syntax: regexp
 ^com\.mmxlabs\.scheduler\.optimiser/\.classpath$
 syntax: regexp
