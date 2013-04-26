@@ -1,10 +1,12 @@
 package com.mmxlabs.models.util.emfpath;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.ui.provider.PropertyDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
@@ -34,6 +36,8 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 	 * propertyDescriptor. Otherwise the value of the {@link Optional} will be returned (it may of course still be null).
 	 */
 	private Optional<String> category = Optional.absent();
+	private Optional<String> displayName = Optional.absent();
+	private Optional<Object> id = Optional.absent();
 
 	/**
 	 * Editing disabled by default.
@@ -62,10 +66,19 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 	 */
 	public static EMFPathPropertyDescriptor create(final EObject object, final AdapterFactory adapterFactory, final EStructuralFeature feature, final EMFPath path) {
 		final Object object2 = path.get(object);
+
+		// Combine the existing path and the extra feature into a new path object
+		final List<Object> combinedPath = new ArrayList<Object>();
+		for (final Object o : path.path) {
+			combinedPath.add(o);
+		}
+		combinedPath.add(feature);
+		final EMFPath path2 = new EMFPath(true, combinedPath);
+
 		if (object2 != null) {
 			final IItemPropertySource ps = (IItemPropertySource) adapterFactory.adapt(object2, IItemPropertySource.class);
 			if (ps != null) {
-				return new EMFPathPropertyDescriptor(new PropertyDescriptor(object, ps.getPropertyDescriptor(object2, feature)), path);
+				return new EMFPathPropertyDescriptor(new PropertyDescriptor(object2, ps.getPropertyDescriptor(object2, feature)), path2);
 			}
 		}
 		return null;
@@ -104,6 +117,9 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 
 	@Override
 	public String getDisplayName() {
+		if (displayName.isPresent()) {
+			return displayName.get();
+		}
 		return propertyDescriptor.getDisplayName();
 	}
 
@@ -119,6 +135,11 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 
 	@Override
 	public Object getId() {
+		
+		if (id.isPresent()) {
+			return id.get();
+		}
+		
 		// It is intended that the containing property source will check this instance
 		return path;// propertyDescriptor.getId();
 	}
@@ -150,5 +171,9 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 	 */
 	public void setEditable(final boolean editable) {
 		this.editable = editable;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = Optional.fromNullable(displayName);
 	}
 }
