@@ -72,6 +72,7 @@ public class LNGSchedulerJobUtilsTest {
 			final Sequence sequence = ScheduleFactory.eINSTANCE.createSequence();
 			sequence.setVessel(vessel2);
 			sequence.setSequenceType(SequenceType.VESSEL);
+			schedule.getSequences().add(sequence);
 
 			final CargoAllocation cargoAllocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
 			cargoAllocation.setInputCargo(cargo);
