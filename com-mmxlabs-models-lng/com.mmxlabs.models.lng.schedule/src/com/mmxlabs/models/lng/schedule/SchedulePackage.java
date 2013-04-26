@@ -951,6 +951,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1622,6 +1623,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2083,6 +2085,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Port Visit</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2769,6 +2772,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3003,6 +3007,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3270,6 +3275,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
@@ -3280,6 +3286,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3289,6 +3296,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3298,6 +3306,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Profit And Loss Container</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3307,6 +3316,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
@@ -3317,6 +3327,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3326,6 +3337,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity Profit And Losses</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3335,6 +3347,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Group Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3344,6 +3357,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Group Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3353,6 +3367,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl <em>Entity Profit And Loss</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
@@ -3363,6 +3378,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3372,6 +3388,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3381,6 +3398,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Entity Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3390,6 +3408,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Entity Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3397,6 +3416,9 @@ public interface SchedulePackage extends EPackage {
 	int ENTITY_PROFIT_AND_LOSS_OPERATION_COUNT = 0;
 
 	/**
+	 * @since 4.0
+	 * @since 4.0
+	 * @since 4.0
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3911,6 +3933,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Route</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Journey#getRoute()
@@ -4115,7 +4138,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Slot Allocations</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations()
@@ -4138,7 +4161,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents <em>Events</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Events</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents()
@@ -4236,7 +4259,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Volume Transferred</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred()
@@ -4474,6 +4497,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer <em>Profit And Loss Container</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Profit And Loss Container</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer
@@ -4484,6 +4508,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss <em>Group Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Group Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss()
@@ -4495,6 +4520,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss <em>Group Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Group Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss
@@ -4505,6 +4531,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss()
@@ -4516,6 +4543,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Entity Profit And Losses</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses()
@@ -4527,6 +4555,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss <em>Entity Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Entity Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss
@@ -4537,6 +4566,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Entity</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity()
@@ -4548,6 +4578,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss()
@@ -4557,6 +4588,7 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getEntityProfitAndLoss_ProfitAndLoss();
 
 	/**
+	 * @since 4.0
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5166,7 +5198,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot Allocations</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5183,7 +5215,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Events</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5258,7 +5290,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Volume Transferred</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5454,6 +5486,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
@@ -5464,6 +5497,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Group Profit And Loss</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5472,6 +5506,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
@@ -5482,6 +5517,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5490,6 +5526,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Entity Profit And Losses</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5498,6 +5535,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl <em>Entity Profit And Loss</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
@@ -5508,6 +5546,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5516,12 +5555,14 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getEntityProfitAndLoss_ProfitAndLoss();
 
 		/**
+		 * @since 4.0
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->

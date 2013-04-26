@@ -25,7 +25,7 @@ import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel} object.
  * <!-- begin-user-doc -->
- * @since 3.0
+ * @since 4.0
  * <!-- end-user-doc -->
  * @generated
  */

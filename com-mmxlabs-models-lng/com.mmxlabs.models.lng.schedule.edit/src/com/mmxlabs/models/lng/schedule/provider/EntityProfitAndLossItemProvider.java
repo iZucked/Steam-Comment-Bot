@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss} object.
  * <!-- begin-user-doc -->
- * @since 3.0
+ * @since 4.0
  * <!-- end-user-doc -->
  * @generated
  */
