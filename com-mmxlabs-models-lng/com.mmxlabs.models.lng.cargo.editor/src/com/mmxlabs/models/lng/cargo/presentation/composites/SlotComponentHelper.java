@@ -50,11 +50,11 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		{
 
-			for (final IComponentHelper helper : registry.getComponentHelpers(CargoPackage.Literals.SLOT)) {
-				if (helper != null) {
-					superClassesHelpers.add(helper);
-				}
-			}
+//			for (final IComponentHelper helper : registry.getComponentHelpers(CargoPackage.Literals.SLOT)) {
+//				if (helper != null) {
+//					superClassesHelpers.add(helper);
+//				}
+//			}
 		}
 		// {
 		// final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
