@@ -18,7 +18,7 @@ public class VesselAvailabilityVesselConstraint extends AbstractModelConstraint 
 		if (target instanceof VesselAvailability) {
 			VesselAvailability availability = (VesselAvailability) target;
 			if (availability.getVessel() == null) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel must be specified for availability object."));
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel must be specified."));
 				dcsd.addEObjectAndFeature(availability, FleetPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
 				return dcsd;
 			}
