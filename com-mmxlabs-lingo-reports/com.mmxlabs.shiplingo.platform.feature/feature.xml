@@ -13,7 +13,7 @@
       plugin="com.mmxlabs.shiplingo.platform.app">
 
    <description url="http://www.minimaxlabs.com/">
-      MMX Labs Pugins for ShipLingo Demo
+      MMX Labs Pugins for Lingo Platform
    </description>
 
    <copyright url="http://www.example.com/copyright">
@@ -107,13 +107,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.shiplingo.platform.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.analytics.navigator"
          download-size="0"
          install-size="0"
          version="0.0.0"
