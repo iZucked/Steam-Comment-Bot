@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.transformer.ICargoSandboxTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.CargoSandboxTransformer;
 import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -343,17 +344,17 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 			if (object instanceof ProvisionalCargo) {
 
 				final ProvisionalCargo provisionalCargo = (ProvisionalCargo) object;
-				UnitCostLine costLine = provisionalCargo.getCostLine();
+				LNGPortfolioModel portfolioModel = null;//provisionalCargo.getPortfolioModel();
 				// if (costLine == null) {
 				try {
-					costLine = transformer.createCostLine(location.getRootObject(), (ProvisionalCargo) object);
-					((ProvisionalCargo) object).setCostLine(costLine);
+					portfolioModel = transformer.createCostLine((LNGScenarioModel) location.getRootObject(), (ProvisionalCargo) object);
+					((ProvisionalCargo) object).setPortfolioModel(portfolioModel);
 				} catch (final Exception e) {
 					// Log it!
 					e.printStackTrace();
 				}
 				// }
-				if (costLine != null) {
+				if (portfolioModel != null) {
 //					return new UnitCostLinePropertySource(costLine);
 				}
 			} else if (object instanceof IPropertySource) {
