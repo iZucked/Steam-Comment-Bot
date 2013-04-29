@@ -5,18 +5,20 @@
 package com.mmxlabs.shiplingo.platform.reports.properties;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -97,6 +99,8 @@ public class EventPropertySource implements IPropertySource {
 
 			list.add(descriptor);
 
+			addPropertyDescriptor(list, "Slot ID", MMXCorePackage.eINSTANCE.getNamedObject_Name(),
+					Lists.<Object> newArrayList(SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation(), SchedulePackage.eINSTANCE.getSlotAllocation_Slot()));
 			// if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
 			// descriptor = new PropertyDescriptor(
 			// new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
@@ -116,25 +120,32 @@ public class EventPropertySource implements IPropertySource {
 
 		if (event instanceof VesselEventVisit) {
 
-			final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
-			if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
-				{
-					final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent(),
-							FleetPackage.eINSTANCE.getCharterOutEvent_HireRate()), "Daily Hire Rate");
-					descriptor.setCategory(eClass.getName());
-					descriptor.setLabelProvider(lp);
+			{
 
-					list.add(descriptor);
-				}
-				{
-					final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent(),
-							FleetPackage.eINSTANCE.getCharterOutEvent_RepositioningFee()), "Repositioning Fee");
-					descriptor.setCategory(eClass.getName());
-					descriptor.setLabelProvider(lp);
-
-					list.add(descriptor);
-				}
+				addPropertyDescriptor(list, null, FleetPackage.eINSTANCE.getCharterOutEvent_HireRate(), Collections.<Object> singletonList(SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent()));
+				addPropertyDescriptor(list, null, FleetPackage.eINSTANCE.getCharterOutEvent_RepositioningFee(),
+						Collections.<Object> singletonList(SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent()));
 			}
+			//
+			// final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+			// if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
+			// {
+			// final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent(),
+			// FleetPackage.eINSTANCE.getCharterOutEvent_HireRate()), "Daily Hire Rate");
+			// descriptor.setCategory(eClass.getName());
+			// descriptor.setLabelProvider(lp);
+			//
+			// list.add(descriptor);
+			// }
+			// {
+			// final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent(),
+			// FleetPackage.eINSTANCE.getCharterOutEvent_RepositioningFee()), "Repositioning Fee");
+			// descriptor.setCategory(eClass.getName());
+			// descriptor.setLabelProvider(lp);
+			//
+			// list.add(descriptor);
+			// }
+			// }
 			// if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
 			// descriptor = new PropertyDescriptor(
 			// new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
@@ -184,6 +195,9 @@ public class EventPropertySource implements IPropertySource {
 			descriptor.setLabelProvider(lp);
 
 			list.add(descriptor);
+
+//			addPropertyDescriptor(list, "From Time", SchedulePackage.eINSTANCE.getEvent__GetLocalStart(), Collections.<Object> emptyList());
+//			addPropertyDescriptor(list, "To Time", SchedulePackage.eINSTANCE.getEvent__GetLocalEnd(), Collections.<Object> emptyList());
 
 			descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent__GetLocalEnd()),
 
@@ -292,6 +306,17 @@ public class EventPropertySource implements IPropertySource {
 			}
 		}
 		return sb.toString();
+	}
+
+	private void addPropertyDescriptor(List<IPropertyDescriptor> list, String displayName, final EStructuralFeature feature, final List<Object> featureList) {
+		// Create the property!
+		final EMFPathPropertyDescriptor desc = EMFPathPropertyDescriptor.create(event, adapterFactory, feature, featureList);
+		if (desc != null) {
+			if (displayName != null) {
+				desc.setDisplayName(displayName);
+			}
+			list.add(desc);
+		}
 	}
 
 }
