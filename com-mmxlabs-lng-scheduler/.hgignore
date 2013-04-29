@@ -3,24 +3,6 @@
 
 target/
 
-
-syntax: regexp
-.settings$
-syntax: regexp
-^com\.mmxlabs\.scheduler\.optimiser/\.classpath$
-syntax: regexp
-^com\.mmxlabs\.scheduler\.optimiser/\.project$
-syntax: regexp
-^com\.mmxlabs\.scheduler\.optimiser/META-INF$
-
-syntax: regexp
-^com\.mmxlabs\.scheduler\.spring/\.settings$
-syntax: regexp
-^com\.mmxlabs\.scheduler\.spring/META-INF/MANIFEST\.MF$
-syntax: regexp
-^com\.mmxlabs\.scheduler\.spring/\.classpath$
-syntax: regexp
-^com\.mmxlabs\.scheduler\.spring/\.project$
 syntax: regexp
 ^\.settings$
 syntax: regexp
