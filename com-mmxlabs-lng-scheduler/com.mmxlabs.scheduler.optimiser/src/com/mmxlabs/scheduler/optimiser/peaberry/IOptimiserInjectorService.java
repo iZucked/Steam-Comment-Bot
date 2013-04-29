@@ -32,9 +32,23 @@ public interface IOptimiserInjectorService {
 		 * Enum to specify modules to override the Module(s) providing transformations to the scenario
 		 */
 		Module_LNGTransformerModule,
+		
+		/**
+		 * Enum to specify evaluation only related modules
+		 * 
+		 * @since 3.0
+		 */
+		Module_Components,
 
 		/**
-		 * Enum to specify optimisation related modules
+		 * Enum to specify evaluation only related modules
+		 * 
+		 * @since 3.0
+		 */
+		Module_Evaluation,
+
+		/**
+		 * Enum to specify optimisation only related modules
 		 * 
 		 * @since 3.0
 		 */
