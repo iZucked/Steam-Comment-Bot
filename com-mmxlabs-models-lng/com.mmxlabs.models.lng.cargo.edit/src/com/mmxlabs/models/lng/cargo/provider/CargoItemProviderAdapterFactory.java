@@ -65,7 +65,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -314,7 +314,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -324,7 +324,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -334,7 +334,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -395,7 +395,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	/**
 	 * A child creation extender for the {@link CommercialPackage}.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

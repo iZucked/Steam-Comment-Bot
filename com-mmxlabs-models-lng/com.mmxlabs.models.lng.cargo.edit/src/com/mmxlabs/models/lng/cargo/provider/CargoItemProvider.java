@@ -162,7 +162,7 @@ public class CargoItemProvider
 	/**
 	 * This adds a property descriptor for the Slots feature.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

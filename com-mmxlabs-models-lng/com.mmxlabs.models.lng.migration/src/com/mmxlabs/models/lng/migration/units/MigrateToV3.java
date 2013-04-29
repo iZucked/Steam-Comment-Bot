@@ -28,6 +28,9 @@ import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
+/**
+ * @since 4.0
+ */
 public class MigrateToV3 extends AbstractMigrationUnit {
 
 	private MetamodelLoader destiniationLoader;
