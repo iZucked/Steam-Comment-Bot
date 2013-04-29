@@ -50,7 +50,7 @@ public class HorizontalKPIReportView extends ViewPart {
 	private ScenarioViewerSynchronizer viewerSynchronizer;
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
-		
+
 		private final Font boldFont;
 
 		public ViewLabelProvider() {
@@ -73,23 +73,22 @@ public class HorizontalKPIReportView extends ViewPart {
 			if (obj instanceof RowData) {
 				final RowData d = (RowData) obj;
 				final RowData pinD = contentProvider.getPinnedData();
-				boolean pin = pinD != null;
 				Long rtn = null;
 				switch (index) {
 				case 0:
 					return "P&L";
 				case 1:
-					rtn = (d.pnl != null ? d.pnl - (pin ? pinD.pnl : 0) : null);
+					rtn = (d.pnl != null ? d.pnl - (pinD != null ? pinD.pnl : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
 				case 2:
 					return "Shipping Cost";
 				case 3:
-					rtn = (d.shippingCost != null ? d.shippingCost - (pin ? pinD.shippingCost : 0) : null);
+					rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
 				case 4:
 					return "Idle Time";
 				case 5:
-					rtn = (d.idleTime != null ? d.idleTime - (pin ? pinD.idleTime : 0) : null);
+					rtn = (d.idleTime != null ? d.idleTime - (pinD != null ? pinD.idleTime : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_TIME);
 				}
 			}
@@ -119,24 +118,24 @@ public class HorizontalKPIReportView extends ViewPart {
 		public void update(final ViewerCell cell) {
 
 		}
-		
+
 		@Override
-		public Font getFont(final Object element) {					
+		public Font getFont(final Object element) {
 			return boldFont;
 		}
 
 		@Override
 		public Color getForeground(Object element, int columnIndex) {
-			
+
 			if (element instanceof RowData) {
 				int color = SWT.COLOR_DARK_GRAY;
-				switch(columnIndex){
+				switch (columnIndex) {
 				case 0:
 					color = SWT.COLOR_BLACK;
 					break;
 				case 1:
 					final RowData pinD = contentProvider.getPinnedData();
-					if(pinD == null){
+					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
 						final RowData d = (RowData) element;
@@ -180,7 +179,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		for (int i = 0; i < 2 * 3; ++i) {
 			final GridViewerColumn tvc = new GridViewerColumn(viewer, SWT.NONE);
 			int width = 100;
-			switch(i){
+			switch (i) {
 			case 0:
 				width = 33; // "P&L"
 				break;
@@ -205,7 +204,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
 			private boolean hasPin = false;
 			private int numberOfSchedules;
-			
+
 			@Override
 			public void beginCollecting() {
 				numberOfSchedules = 0;
@@ -213,7 +212,7 @@ public class HorizontalKPIReportView extends ViewPart {
 
 			@Override
 			public void endCollecting() {
-//				setShowColumns(false, 1);		
+				// setShowColumns(false, 1);
 			}
 
 			@Override
@@ -222,7 +221,7 @@ public class HorizontalKPIReportView extends ViewPart {
 				return Collections.singleton(schedule);
 			}
 		});
-		
+
 		partListener = new IPartListener() {
 
 			@Override
@@ -296,26 +295,26 @@ public class HorizontalKPIReportView extends ViewPart {
 		});
 	}
 
-//	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
-//		if (showDeltaColumn) {
-//			if (delta == null) {
-//				delta = new GridViewerColumn(viewer, SWT.NONE);
-//				delta.getColumn().setText("Change");
-//				delta.getColumn().pack();
-////				addSortSelectionListener(delta.getColumn(), 4);
-//				viewer.setLabelProvider(viewer.getLabelProvider());
-//			}
-//		} else {
-//			if (delta != null) {
-//				delta.getColumn().dispose();
-//				delta = null;
-//			}
-//		}
-//
-//		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > 1);
-//	}
-//		
-	
+	// private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
+	// if (showDeltaColumn) {
+	// if (delta == null) {
+	// delta = new GridViewerColumn(viewer, SWT.NONE);
+	// delta.getColumn().setText("Change");
+	// delta.getColumn().pack();
+	// // addSortSelectionListener(delta.getColumn(), 4);
+	// viewer.setLabelProvider(viewer.getLabelProvider());
+	// }
+	// } else {
+	// if (delta != null) {
+	// delta.getColumn().dispose();
+	// delta = null;
+	// }
+	// }
+	//
+	// scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > 1);
+	// }
+	//
+
 	@Override
 	public void dispose() {
 
