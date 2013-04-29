@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.ui.valueproviders;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,20 +39,32 @@ public class VesselAvailabilityVesselValueProviderFactory implements IReferenceV
 				@Override
 				public List<Pair<String, EObject>> getAllowedValues(EObject target,
 						EStructuralFeature field) {
-					// prepare to create a collection of unassigned vessels
-					final Set<Vessel> unassigned = new HashSet<Vessel>(fleetModel.getVessels());		
+					// determine the current vessel attached to the availability
+					Vessel currentValue = null;
 					
-					// remove assigned vessels from "unassigned" set
-					for (VesselAvailability availability: sfm.getVesselAvailabilities()) {
-						unassigned.remove(availability.getVessel());
-					}
-					
-					// re-add the vessel assigned to the current target (since it should be a legitimate selection)
 					if (target instanceof VesselAvailability) {
-						unassigned.add(((VesselAvailability) target).getVessel());
+						currentValue = ((VesselAvailability) target).getVessel();
 					}
 					
-					return getSortedNames(new BasicEList<Vessel>(unassigned), MMXCorePackage.Literals.NAMED_OBJECT__NAME);						
+					// make a list of admissible vessels
+					final Set<Vessel> admissible = new HashSet<Vessel>();		
+					
+					// if there is no vessel assigned to this availability, 
+					if (currentValue == null) {
+						// allow it to be any vessel...
+						admissible.addAll(fleetModel.getVessels());
+						// ... which not already available
+						for (VesselAvailability availability: sfm.getVesselAvailabilities()) {
+							admissible.remove(availability.getVessel());
+						}
+					}	
+					// if there is a vessel assigned to this availability,
+					else {
+						// don't allow any other value
+						admissible.add(currentValue);
+					}
+					
+					return getSortedNames(new BasicEList<Vessel>(admissible), MMXCorePackage.Literals.NAMED_OBJECT__NAME);						
 				}
 				
 			};
