@@ -1028,10 +1028,42 @@ public class DetailCompositeDialog extends Dialog {
 
 	private void validate() {
 		final IStatus status = dialogValidationSupport.validate();
+		
+		if (errorText != null) {
+			if (status.isOK()) {
+				errorText.setText("");
+				errorText.setVisible(false);
+				((GridData) errorText.getLayoutData()).heightHint = 0;
+				getContents().pack();
+				resizeAndCenter();
+			} else {
+
+				StringBuilder sb = new StringBuilder();
+				processMessages(sb, status);
+
+				errorText.setText(sb.toString());
+				errorText.setVisible(true);
+				((GridData) errorText.getLayoutData()).heightHint = 50;
+				getContents().pack();
+				resizeAndCenter();
+			}
+		}
+
 		if (displayComposite != null) {
 			displayComposite.displayValidationStatus(status);
 		}
 
 		checkButtonEnablement(!status.matches(IStatus.ERROR));
+	}
+	
+	private void processMessages(StringBuilder sb, IStatus status) {
+		if (status.isMultiStatus()) {
+			for (IStatus s : status.getChildren()) {
+				processMessages(sb, s);
+			}
+		} else {
+			sb.append(status.getMessage());
+			sb.append("\n");
+		}
 	}
 }
