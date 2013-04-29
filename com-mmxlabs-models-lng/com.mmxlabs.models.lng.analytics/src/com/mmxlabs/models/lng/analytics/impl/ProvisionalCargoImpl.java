@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -31,8 +32,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getBuy <em>Buy</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getSell <em>Sell</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getCostLine <em>Cost Line</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getPortfolioModel <em>Portfolio Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -60,16 +61,6 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	protected SellOpportunity sell;
 
 	/**
-	 * The cached value of the '{@link #getCostLine() <em>Cost Line</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCostLine()
-	 * @generated
-	 * @ordered
-	 */
-	protected UnitCostLine costLine;
-
-	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -78,6 +69,16 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * @ordered
 	 */
 	protected Vessel vessel;
+
+	/**
+	 * The cached value of the '{@link #getPortfolioModel() <em>Portfolio Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortfolioModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected EObject portfolioModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -194,51 +195,6 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * @generated
 	 */
 	@Override
-	public UnitCostLine getCostLine() {
-		return costLine;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetCostLine(UnitCostLine newCostLine, NotificationChain msgs) {
-		UnitCostLine oldCostLine = costLine;
-		costLine = newCostLine;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE, oldCostLine, newCostLine);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setCostLine(UnitCostLine newCostLine) {
-		if (newCostLine != costLine) {
-			NotificationChain msgs = null;
-			if (costLine != null)
-				msgs = ((InternalEObject)costLine).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE, null, msgs);
-			if (newCostLine != null)
-				msgs = ((InternalEObject)newCostLine).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE, null, msgs);
-			msgs = basicSetCostLine(newCostLine, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE, newCostLine, newCostLine));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -278,6 +234,49 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EObject getPortfolioModel() {
+		return portfolioModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPortfolioModel(EObject newPortfolioModel, NotificationChain msgs) {
+		EObject oldPortfolioModel = portfolioModel;
+		portfolioModel = newPortfolioModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL, oldPortfolioModel, newPortfolioModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortfolioModel(EObject newPortfolioModel) {
+		if (newPortfolioModel != portfolioModel) {
+			NotificationChain msgs = null;
+			if (portfolioModel != null)
+				msgs = ((InternalEObject)portfolioModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL, null, msgs);
+			if (newPortfolioModel != null)
+				msgs = ((InternalEObject)newPortfolioModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL, null, msgs);
+			msgs = basicSetPortfolioModel(newPortfolioModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL, newPortfolioModel, newPortfolioModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -285,8 +284,8 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 				return basicSetBuy(null, msgs);
 			case AnalyticsPackage.PROVISIONAL_CARGO__SELL:
 				return basicSetSell(null, msgs);
-			case AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE:
-				return basicSetCostLine(null, msgs);
+			case AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL:
+				return basicSetPortfolioModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -303,11 +302,11 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 				return getBuy();
 			case AnalyticsPackage.PROVISIONAL_CARGO__SELL:
 				return getSell();
-			case AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE:
-				return getCostLine();
 			case AnalyticsPackage.PROVISIONAL_CARGO__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
+			case AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL:
+				return getPortfolioModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -326,11 +325,11 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 			case AnalyticsPackage.PROVISIONAL_CARGO__SELL:
 				setSell((SellOpportunity)newValue);
 				return;
-			case AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE:
-				setCostLine((UnitCostLine)newValue);
-				return;
 			case AnalyticsPackage.PROVISIONAL_CARGO__VESSEL:
 				setVessel((Vessel)newValue);
+				return;
+			case AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL:
+				setPortfolioModel((EObject)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -350,11 +349,11 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 			case AnalyticsPackage.PROVISIONAL_CARGO__SELL:
 				setSell((SellOpportunity)null);
 				return;
-			case AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE:
-				setCostLine((UnitCostLine)null);
-				return;
 			case AnalyticsPackage.PROVISIONAL_CARGO__VESSEL:
 				setVessel((Vessel)null);
+				return;
+			case AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL:
+				setPortfolioModel((EObject)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -372,10 +371,10 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 				return buy != null;
 			case AnalyticsPackage.PROVISIONAL_CARGO__SELL:
 				return sell != null;
-			case AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE:
-				return costLine != null;
 			case AnalyticsPackage.PROVISIONAL_CARGO__VESSEL:
 				return vessel != null;
+			case AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL:
+				return portfolioModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

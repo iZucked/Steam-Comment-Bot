@@ -110,8 +110,8 @@
     <genClasses ecoreClass="analytics.ecore#//ProvisionalCargo">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ProvisionalCargo/buy"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ProvisionalCargo/sell"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ProvisionalCargo/costLine"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ProvisionalCargo/vessel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//ProvisionalCargo/portfolioModel"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BuyOpportunity">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/port"/>

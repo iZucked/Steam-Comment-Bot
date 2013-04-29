@@ -9,6 +9,7 @@
 package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,8 +22,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getBuy <em>Buy</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getSell <em>Sell</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getCostLine <em>Cost Line</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -84,32 +85,6 @@ public interface ProvisionalCargo extends MMXObject {
 	void setSell(SellOpportunity value);
 
 	/**
-	 * Returns the value of the '<em><b>Cost Line</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cost Line</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cost Line</em>' containment reference.
-	 * @see #setCostLine(UnitCostLine)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getProvisionalCargo_CostLine()
-	 * @model containment="true"
-	 * @generated
-	 */
-	UnitCostLine getCostLine();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getCostLine <em>Cost Line</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cost Line</em>' containment reference.
-	 * @see #getCostLine()
-	 * @generated
-	 */
-	void setCostLine(UnitCostLine value);
-
-	/**
 	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -134,6 +109,32 @@ public interface ProvisionalCargo extends MMXObject {
 	 * @generated
 	 */
 	void setVessel(Vessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Portfolio Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Portfolio Model</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Portfolio Model</em>' containment reference.
+	 * @see #setPortfolioModel(EObject)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getProvisionalCargo_PortfolioModel()
+	 * @model containment="true" transient="true"
+	 * @generated
+	 */
+	EObject getPortfolioModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Portfolio Model</em>' containment reference.
+	 * @see #getPortfolioModel()
+	 * @generated
+	 */
+	void setPortfolioModel(EObject value);
 
 } // end of  ProvisionalCargo
 

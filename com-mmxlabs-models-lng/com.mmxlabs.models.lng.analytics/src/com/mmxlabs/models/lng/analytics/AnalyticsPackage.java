@@ -1100,16 +1100,6 @@ public interface AnalyticsPackage extends EPackage {
 	int PROVISIONAL_CARGO__SELL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Cost Line</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO__COST_LINE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1117,7 +1107,16 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROVISIONAL_CARGO__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int PROVISIONAL_CARGO__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Portfolio Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROVISIONAL_CARGO__PORTFOLIO_MODEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Provisional Cargo</em>' class.
@@ -2154,18 +2153,6 @@ public interface AnalyticsPackage extends EPackage {
 	EReference getProvisionalCargo_Sell();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getCostLine <em>Cost Line</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Cost Line</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getCostLine()
-	 * @see #getProvisionalCargo()
-	 * @generated
-	 */
-	EReference getProvisionalCargo_CostLine();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -2176,6 +2163,17 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getProvisionalCargo_Vessel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Portfolio Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel()
+	 * @see #getProvisionalCargo()
+	 * @generated
+	 */
+	EReference getProvisionalCargo_PortfolioModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity <em>Buy Opportunity</em>}'.
@@ -3000,15 +2998,6 @@ public interface AnalyticsPackage extends EPackage {
 		EReference PROVISIONAL_CARGO__SELL = eINSTANCE.getProvisionalCargo_Sell();
 
 		/**
-		 * The meta object literal for the '<em><b>Cost Line</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PROVISIONAL_CARGO__COST_LINE = eINSTANCE.getProvisionalCargo_CostLine();
-
-		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * @since 3.0
@@ -3016,6 +3005,14 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROVISIONAL_CARGO__VESSEL = eINSTANCE.getProvisionalCargo_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Portfolio Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROVISIONAL_CARGO__PORTFOLIO_MODEL = eINSTANCE.getProvisionalCargo_PortfolioModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl <em>Buy Opportunity</em>}' class.
