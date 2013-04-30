@@ -135,7 +135,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 		fireEvent(ScenarioServiceEvent.PRE_LOAD, instance);
 
-		log.debug("Instance " + instance.getUuid() + " needs loading");
+		log.debug("Instance " + instance.getName() + " (" + instance.getUuid() + ") needs loading");
 
 		// create MMXRootObject and connect submodel instances into it.
 		final ResourceSet resourceSet = createResourceSet();
