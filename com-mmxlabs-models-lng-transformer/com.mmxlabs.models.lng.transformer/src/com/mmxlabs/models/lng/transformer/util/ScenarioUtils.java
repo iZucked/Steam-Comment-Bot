@@ -43,7 +43,7 @@ public class ScenarioUtils {
 	 * TODO check these are reasonable settings (num. iters etc)
 	 * 
 	 * @param scenario
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public static void addDefaultSettings(LNGScenarioModel scenario) {
 		ParametersModel om = scenario.getParametersModel();
@@ -69,7 +69,7 @@ public class ScenarioUtils {
 
 	/**
 	 * @return
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public static OptimiserSettings createDefaultSettings() {
 		final ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;

@@ -17,7 +17,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public interface IPostExportProcessor {
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	void postProcess(EditingDomain ed, MMXRootObject rootObject, Schedule scheduleModel, AssignmentModel assignmentModel, CompoundCommand commands);
 }
