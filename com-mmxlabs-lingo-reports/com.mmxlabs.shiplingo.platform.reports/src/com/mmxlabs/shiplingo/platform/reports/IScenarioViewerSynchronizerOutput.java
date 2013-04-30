@@ -39,7 +39,7 @@ public interface IScenarioViewerSynchronizerOutput {
 	 * 
 	 * @param object
 	 * @return
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public LNGScenarioModel getLNGScenarioModel(Object object);
 
@@ -48,7 +48,7 @@ public interface IScenarioViewerSynchronizerOutput {
 	 * 
 	 * @param object
 	 * @return
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public LNGPortfolioModel getLNGPortfolioModel(Object object);
 
@@ -56,12 +56,12 @@ public interface IScenarioViewerSynchronizerOutput {
 	 * Returns the {@link LNGScenarioModel} objects for all the currently selected scenarios regardless of whether or not there are getCollectedElements objects coming from them.
 	 * 
 	 * @return
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public Collection<LNGScenarioModel> getLNGScenarioModels();
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public Collection<LNGPortfolioModel> getLNGPortfolioModels();
 }
