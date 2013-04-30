@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.analytics.navigator.ShippingCostPlanSSListenerFactoryService">
    <implementation class="com.mmxlabs.models.lng.analytics.navigator.ShippingCostPlanSSListenerFactoryService"/>
    <reference bind="bindScenarioService" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbindScenarioService"/>

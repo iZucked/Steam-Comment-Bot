@@ -27,12 +27,12 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 
 	@Override
 	public int getSourceVersion() {
-		return -1;
+		return 1;
 	}
 
 	@Override
 	public int getDestinationVersion() {
-		return -2;
+		return 2;
 	}
 
 	@Override
