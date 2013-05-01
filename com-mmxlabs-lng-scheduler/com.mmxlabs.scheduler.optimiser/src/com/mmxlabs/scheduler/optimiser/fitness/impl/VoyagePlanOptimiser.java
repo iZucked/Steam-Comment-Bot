@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -242,8 +241,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 						currentCost += hireCost;
 					}
 
-					// Check for capacity violations, prefer solutions with fewer violations
-					currentProblemCount = currentPlan.getCapacityViolations();
+					// Check for violations, prefer solutions with fewer violations
+					currentProblemCount = currentPlan.getViolationsCount();
 
 					if (currentProblemCount < bestLastProblemCount || (currentProblemCount == bestLastProblemCount && currentCost < bestLastLegCost)) {
 						bestLastLegCost = currentCost;
@@ -273,9 +272,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			currentPlan = calculateVoyagePlan();
 			cost = evaluatePlan(currentPlan);
 			if (currentPlan != null) {
-				currentProblemCount = currentPlan.getCapacityViolations();
-			}
-			else {
+				currentProblemCount = currentPlan.getViolationsCount();
+			} else {
 				currentProblemCount = Integer.MAX_VALUE;
 			}
 		}

@@ -23,6 +23,7 @@ public final class VoyagePlan implements Cloneable {
 
 	/**
 	 * An enum for use with remaining heel to denote it's allocation.
+	 * 
 	 * @since 3.1
 	 * 
 	 */
@@ -48,7 +49,7 @@ public final class VoyagePlan implements Cloneable {
 	private final LongFastEnumMap<FuelComponent> routeAdditionalConsumption;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
 	private long lngFuelVolume;
-	private int capacityViolations;
+	private int violationsCount;
 	private boolean ignoreEnd;
 
 	private long remainingHeelInM3;
@@ -63,14 +64,14 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> routeAdditionalConsumption,
-			final LongFastEnumMap<FuelComponent> fuelCosts, final int capacityViolations, final boolean ignoreEnd, final long remainingHeelInM3, final HeelType remainingHeelType) {
+			final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd, final long remainingHeelInM3, final HeelType remainingHeelType) {
 		super();
 		this.sequence = sequence;
 		this.fuelConsumptions = fuelConsumptions;
 		this.routeAdditionalConsumption = routeAdditionalConsumption;
 		this.fuelCosts = fuelCosts;
 		this.lngFuelVolume = fuelVolume;
-		this.capacityViolations = capacityViolations;
+		this.violationsCount = violationsCount;
 		this.ignoreEnd = ignoreEnd;
 		this.remainingHeelInM3 = remainingHeelInM3;
 		this.remainingHeelType = remainingHeelType;
@@ -100,12 +101,12 @@ public final class VoyagePlan implements Cloneable {
 		fuelCosts.put(fuel, cost);
 	}
 
-	public final int getCapacityViolations() {
-		return capacityViolations;
+	public final int getViolationsCount() {
+		return violationsCount;
 	}
 
-	public final void setCapacityViolations(final int number) {
-		capacityViolations = number;
+	public final void setViolationsCount(final int violationsCount) {
+		this.violationsCount = violationsCount;
 	}
 
 	public final Object[] getSequence() {
@@ -126,7 +127,7 @@ public final class VoyagePlan implements Cloneable {
 			// @formatter:off
 			return Objects.equal(lngFuelVolume, plan.lngFuelVolume)
 					&& Objects.equal(sequence, plan.sequence)
-					&& Objects.equal(capacityViolations, plan.capacityViolations)
+					&& Objects.equal(violationsCount, plan.violationsCount)
 					&& Objects.equal(fuelConsumptions, plan.fuelConsumptions)
 					&& Objects.equal(routeAdditionalConsumption, plan.routeAdditionalConsumption)
 					&& Objects.equal(fuelCosts, plan.fuelCosts)
@@ -158,7 +159,7 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, capacityViolations, ignoreEnd, remainingHeelInM3, remainingHeelType);
+		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, violationsCount, ignoreEnd, remainingHeelInM3, remainingHeelType);
 	}
 
 	/**
