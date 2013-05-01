@@ -408,9 +408,6 @@ public class ShippingCalculationsTest {
 			int result = 0;
 			for (int i = index.startIndex; i <= index.endIndex; i++) {
 				Integer bfUsage = expectedArrays.get(Expectations.BF_USAGE)[i];
-				if (bfUsage == null) {
-					return null;
-				}
 				result -= bfUsage * bfPrice;
 				
 				Integer hireCost = expectedArrays.get(Expectations.HIRE_COSTS)[i];
@@ -420,9 +417,6 @@ public class ShippingCalculationsTest {
 				result -= routeCost;
 				
 				Integer loadDischargeVolume = expectedArrays.get(Expectations.LOAD_DISCHARGE)[i];
-				if (loadDischargeVolume == null) {
-					return null;
-				}
 				// discharge
 				if (loadDischargeVolume < 0) {
 					result -= loadDischargeVolume * salesPricePerM3;
@@ -642,7 +636,6 @@ public class ShippingCalculationsTest {
 		Assert.assertEquals("Toll for laden leg via canal", 1, ladenJourney.getToll());
 	}
 
-	@Ignore("Temporarily disabled since failure is known")
 	@Test
 	public void testPlentyStartHeel() {
 		System.err.println("\n\nGenerous Start Heel Means NBO on First Voyage");
@@ -753,7 +746,6 @@ public class ShippingCalculationsTest {
 		Assert.assertEquals("Exactly one leg uses FBO", 1, fboUsages);		
 	}
 
-	@Ignore("Temporarily disabled since failure is known")
 	@Test
 	public void testMinHeelForcesBfJourney() {
 		System.err.println("\n\nMinimum Heel Forces BF only journey");
@@ -1010,7 +1002,6 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);						
 	}
 
-	@Ignore("Temporarily disabled since failure is known")
 	@Test
 	public void testMaxLoadVolumeForcesBfIdle() {
 		System.err.println("\n\nMaximum Load Volume Forces BF Idle");
@@ -1034,7 +1025,6 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);				
 	}
 
-	@Ignore("Temporarily disabled since failure is known")
 	@Test
 	public void testIdleAfterVesselReturn() {
 		System.err.println("\n\nSpecified date for vessel return causes idling.");
@@ -1302,7 +1292,6 @@ public class ShippingCalculationsTest {
 	}
 	
 	
-	@Ignore("Temporarily disabled since failure is known")
 	@Test
 	public void testVesselStartsAnywhere() {
 		System.err.println("\n\nVessel starts anywhere.");
@@ -1385,7 +1374,6 @@ public class ShippingCalculationsTest {
 	
 	}
 
-	@Ignore("Temporarily disabled since failure is known")
 	@Test
 	public void testLimitedStartHeelForcesBfIdle() {
 		System.err.println("\n\nLimited Start Heel, should NBO travel and BF on idle");
