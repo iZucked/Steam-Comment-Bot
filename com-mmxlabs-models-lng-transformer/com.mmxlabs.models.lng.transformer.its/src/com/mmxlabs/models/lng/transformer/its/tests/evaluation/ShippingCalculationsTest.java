@@ -114,7 +114,8 @@ public class ShippingCalculationsTest {
 			Integer expected = values[i];
 			Integer actual = getValue(field, event);
 			if (expected != null && actual != null) {
-				Assert.assertEquals(field.name() + " " + event, expected, actual);
+				String message = String.format("%s %s", field.name(), event.toString());
+				Assert.assertEquals(message, expected, actual);
 			}
 		}
 	}
