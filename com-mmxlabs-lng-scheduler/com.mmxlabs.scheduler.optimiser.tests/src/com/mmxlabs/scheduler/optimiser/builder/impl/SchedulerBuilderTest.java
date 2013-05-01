@@ -113,9 +113,9 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
+		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
 
-		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
+		final ILoadSlot loadSlot = Mockito.mock(ILoadSlot.class);
 
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, false);
 
@@ -129,10 +129,10 @@ public class SchedulerBuilderTest {
 
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
-		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
+		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
 
 		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, false);
-		final IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);
+		final IDischargeSlot dischargeSlot = Mockito.mock(IDischargeSlot.class);
 
 		builder.createCargo("id", loadSlot, dischargeSlot, false);
 	}
