@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -78,46 +79,31 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				boolean isCargoPlan = false;
 				// Grab the current list of arrival times and update the rolling currentTime
-				// 5 as we know that is the max we need (currently - a single cargo)
-				final int n = vp.getSequence().length;
-				// Resize array if required
-				/**
-				 * Pre-created arrival times array to avoid creation in the main method. Dynamically sized arrays are very slow!
-				 */
-				final List<Integer> arrivalTimes = new ArrayList<Integer>(5);
-				// if (arrivalTimes.length < n) {
-				// assert (arrivalTimes.length >= n);
-				// arrivalTimes = new int[n * 2];
-				// }
-				int idx = -1;
-				arrivalTimes.add(currentTime);
-				++idx;
+				final List<Integer> arrivalTimes = new ArrayList<Integer>(3);
 				final Object[] currentSequence = vp.getSequence();
 				int ladenIdx = -1;
 				int ballastIdx = -1;
-				for (final Object obj : currentSequence) {
+
+				for (int idx = 0; idx < currentSequence.length; ++idx) {
+					final Object obj = currentSequence[idx];
 					if (obj instanceof PortDetails) {
 						final PortDetails details = (PortDetails) obj;
+						arrivalTimes.add(currentTime);
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
-							arrivalTimes.add(currentTime);
-							++idx;
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
 							}
-
 						}
 					} else if (obj instanceof VoyageDetails) {
 						final VoyageDetails details = (VoyageDetails) obj;
 						currentTime += details.getOptions().getAvailableTime();
-						arrivalTimes.add(currentTime);
-						++idx;
 						// record last ballast leg
 						if (details.getOptions().getVesselState() == VesselState.Ballast) {
-							ballastIdx = idx - 1;
+							ballastIdx = idx;
 						} else {
-							ladenIdx = idx - 1;
+							ladenIdx = idx;
 						}
 					}
 				}
