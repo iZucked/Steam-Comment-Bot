@@ -50,9 +50,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		}
 	}
 
-	private List<Integer> loadIndicesStorage = new ArrayList<Integer>();
-	private List<Integer> dischargeIndicesStorage = new ArrayList<Integer>();
-
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
 	 * 
@@ -418,12 +415,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return fuelConsumptions;
 	}
 
-	final public List<Integer> findLoadIndices(List<Integer> storage, Object... sequence) {
-		if (storage == null) {
-			storage = new ArrayList<Integer>();
-		} else {
-			storage.clear();
-		}
+	final public List<Integer> findLoadIndices(Object... sequence) {
+		List<Integer> storage = new ArrayList<Integer>();
 
 		/*
 		 * ignore the last element in the sequence, to avoid double-counting (it will be included in the next sequence)
@@ -440,12 +433,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return storage;
 	}
 
-	final public List<Integer> findDischargeIndices(List<Integer> storage, Object... sequence) {
-		if (storage == null) {
-			storage = new ArrayList<Integer>();
-		} else {
-			storage.clear();
-		}
+	final public List<Integer> findDischargeIndices(Object... sequence) {
+		List<Integer> storage = new ArrayList<Integer>();
 
 		for (int i = 0; i < sequence.length; i++) {
 			int index = i;
@@ -513,7 +502,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	}
 
-	final public int calculateCooldownPrices(final IVesselClass vesselClass, final int[] arrivalTimes, Object... sequence) {
+	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, Object... sequence) {
 		int cooldownM3Price = 0;
 
 		for (int i = 0; i < sequence.length; ++i) {
@@ -524,7 +513,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (details.getOptions().shouldBeCold() && (details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0)) {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
 
-					final int cooldownTime = arrivalTimes[i / 2];
+					final int cooldownTime = arrivalTimes.get(i / 2);
 
 					// TODO is this how cooldown gas ought to be priced?
 					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {
@@ -559,7 +548,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
 	 */
-	final public int[] getLngEffectivePrices(List<Integer> loadIndices, List<Integer> dischargeIndices, int[] arrivalTimes, final Object... sequence) {
+	final public int[] getLngEffectivePrices(List<Integer> loadIndices, List<Integer> dischargeIndices, List<Integer> arrivalTimes, final Object... sequence) {
 		// TODO: does not need to be this long
 		int[] result = new int[sequence.length];
 
@@ -601,7 +590,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			IDischargeSlot dischargeSlot = (IDischargeSlot) slot;
 
 			// calculate the effective LNG value based on this discharge slot
-			int dischargeUnitPrice = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, arrivalTimes[i / 2]);
+			int dischargeUnitPrice = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, arrivalTimes.get(i / 2));
 			lngValue = Calculator.costPerM3FromMMBTu(dischargeUnitPrice, cargoCvValue);
 
 			// and apply the value to prices on all preceding voyages
@@ -635,7 +624,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param loadTime
 	 */
 	@Override
-	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final int[] arrivalTimes, final Object... sequence) {
+	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final List<Integer> arrivalTimes, final Object... sequence) {
 		/*
 		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
 		 * VoyageDetails as separate parameters. Worth doing at some point?
@@ -719,7 +708,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
 
 			// Store unit prices for later on
-			dischargeUnitPrice = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, arrivalTimes[dischargeIdx / 2]);
+			dischargeUnitPrice = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, arrivalTimes.get(dischargeIdx / 2));
 			// Store cargoCVValue
 			cargoCVValue = loadSlot.getCargoCVValue();
 
@@ -837,8 +826,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 
-		List<Integer> loadIndices = findLoadIndices(loadIndicesStorage, sequence);
-		List<Integer> dischargeIndices = findDischargeIndices(dischargeIndicesStorage, sequence);
+		List<Integer> loadIndices = findLoadIndices(sequence);
+		List<Integer> dischargeIndices = findDischargeIndices(sequence);
 
 		// Process details, filling in LNG prices
 		// TODO: I don't really like altering the details at this stage of
