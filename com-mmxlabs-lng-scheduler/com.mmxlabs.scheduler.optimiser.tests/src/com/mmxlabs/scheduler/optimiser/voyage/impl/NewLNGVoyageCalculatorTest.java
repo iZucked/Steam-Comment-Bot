@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -20,7 +22,9 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -928,6 +932,7 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
+		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
 		loadDetails.setFuelConsumption(FuelComponent.Base, 1);
 		loadDetails.setFuelConsumption(FuelComponent.NBO, 2);
 		loadDetails.setFuelConsumption(FuelComponent.FBO, 3);
@@ -968,9 +973,7 @@ public class NewLNGVoyageCalculatorTest {
 		Assert.assertEquals(66, result[FuelComponent.IdleBase.ordinal()]);
 		Assert.assertEquals(77, result[FuelComponent.PilotLight.ordinal()]);
 		Assert.assertEquals(88, result[FuelComponent.IdlePilotLight.ordinal()]);
-
-		// TODO: Are we correctly including cooldown in our calculations?
-		Assert.assertEquals(999, result[FuelComponent.Cooldown.ordinal()]);
+		Assert.assertEquals(99, result[FuelComponent.Cooldown.ordinal()]);
 
 		Assert.assertEquals(expectedBasePrice, details.getFuelUnitPrice(FuelComponent.Base));
 		Assert.assertEquals(expectedBasePrice, details.getFuelUnitPrice(FuelComponent.Base_Supplemental));
@@ -983,6 +986,150 @@ public class NewLNGVoyageCalculatorTest {
 		Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.NBO));
 		Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.IdleNBO));
 		Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.Cooldown));
+	}
+
+	@Test
+	public void testCalculateCooldownPrices_NonLoad() {
+		final int expectedBasePrice = 99000;
+
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
+
+		final PortDetails fromPortDetails = new PortDetails();
+		fromPortDetails.setOptions(new PortOptions());
+
+		final PortDetails toPortDetails = new PortDetails();
+		toPortDetails.setOptions(new PortOptions());
+
+		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
+		final PortSlot toPortSlot = Mockito.mock(PortSlot.class);
+
+		fromPortDetails.getOptions().setPortSlot(fromPortSlot);
+		toPortDetails.getOptions().setPortSlot(toPortSlot);
+
+		final VoyageDetails voyageDetails = new VoyageDetails();
+		final VoyageOptions voyageOptions = new VoyageOptions();
+		voyageOptions.setVesselState(VesselState.Ballast);
+		voyageDetails.setOptions(voyageOptions);
+
+		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+
+		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
+
+		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
+		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, 9);
+
+		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 90);
+
+		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
+
+		final List<Integer> arrivalTimes = new ArrayList<Integer>();
+		arrivalTimes.add(1);
+		arrivalTimes.add(2);
+
+		final IPort toPort = Mockito.mock(IPort.class);
+		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
+
+		final ICooldownPriceCalculator cooldownPriceCalculator = Mockito.mock(ICooldownPriceCalculator.class);
+		voyageDetails.getOptions().setToPortSlot(toPortSlot);
+
+		Mockito.when(toPort.getCooldownPriceCalculator()).thenReturn(cooldownPriceCalculator);
+
+		Mockito.when(mockPortCVProvider.getPortCV(toPort)).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
+
+		final int expectedCooldownPrice = 1000;
+
+		voyageDetails.getOptions().setShouldBeCold(true);
+		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, 1000);
+
+		// Expect the non-load slot branch - time 3 == time of next Port
+		Mockito.when(cooldownPriceCalculator.calculateCooldownUnitPrice(2)).thenReturn(expectedCooldownPrice);
+
+		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), arrivalTimes, fromPortDetails, voyageDetails, toPortDetails);
+
+		Mockito.verify(cooldownPriceCalculator).calculateCooldownUnitPrice(2);
+
+		Assert.assertEquals(expectedCooldownPrice, cooldownM3Price);
+		Assert.assertEquals(expectedCooldownPrice, voyageDetails.getFuelUnitPrice(FuelComponent.Cooldown));
+
+	}
+
+	@Test
+	public void testCalculateCooldownPrices_Load() {
+		final int expectedBasePrice = 99000;
+
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
+
+		final PortDetails fromPortDetails = new PortDetails();
+		fromPortDetails.setOptions(new PortOptions());
+
+		final PortDetails toPortDetails = new PortDetails();
+		toPortDetails.setOptions(new PortOptions());
+
+		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
+		final ILoadSlot toPortSlot = Mockito.mock(ILoadSlot.class);
+
+		fromPortDetails.getOptions().setPortSlot(fromPortSlot);
+		toPortDetails.getOptions().setPortSlot(toPortSlot);
+
+		final VoyageDetails voyageDetails = new VoyageDetails();
+		final VoyageOptions voyageOptions = new VoyageOptions();
+		voyageOptions.setVesselState(VesselState.Ballast);
+		voyageDetails.setOptions(voyageOptions);
+
+		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+
+		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
+
+		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
+		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, 9);
+
+		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 90);
+
+		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
+
+		final List<Integer> arrivalTimes = new ArrayList<Integer>();
+		arrivalTimes.add(1);
+		arrivalTimes.add(2);
+		arrivalTimes.add(3);
+
+		final IPort toPort = Mockito.mock(IPort.class);
+		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
+
+		final ICooldownPriceCalculator cooldownPriceCalculator = Mockito.mock(ICooldownPriceCalculator.class);
+		voyageDetails.getOptions().setToPortSlot(toPortSlot);
+
+		Mockito.when(toPort.getCooldownPriceCalculator()).thenReturn(cooldownPriceCalculator);
+
+		Mockito.when(toPortSlot.getCargoCVValue()).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
+
+		final int expectedCooldownPrice = 1000;
+
+		voyageDetails.getOptions().setShouldBeCold(true);
+		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, 1000);
+
+		// Expect the load slot branch - time 3 == time of next Port
+		Mockito.when(cooldownPriceCalculator.calculateCooldownUnitPrice(toPortSlot, 2)).thenReturn(expectedCooldownPrice);
+
+		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), arrivalTimes, fromPortDetails, voyageDetails, toPortDetails);
+
+		Mockito.verify(cooldownPriceCalculator).calculateCooldownUnitPrice(toPortSlot, 2);
+
+		Assert.assertEquals(expectedCooldownPrice, cooldownM3Price);
+		Assert.assertEquals(expectedCooldownPrice, voyageDetails.getFuelUnitPrice(FuelComponent.Cooldown));
 
 	}
 
