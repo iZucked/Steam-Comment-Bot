@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +54,15 @@ import com.mmxlabs.scheduler.optimiser.TradingConstants;
 
 public class ShippingCalculationsTest {
 	
+	public class CargoIndexData {
+		int startIndex;
+		int endIndex;
+		public CargoIndexData(int start, int end) {
+			startIndex = start;
+			endIndex = end;
+		}
+	}
+	
 	public enum Expectations {
 		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE
 	}
@@ -71,62 +81,115 @@ public class ShippingCalculationsTest {
 		}		
 	}
 	
-	public void checkDurations(List<? extends Event> events, int [] durations) {
+	private int getValue(Expectations field, Event event) {
+		switch(field) {
+		case DURATIONS: 
+			return event.getDuration();
+		case HIRE_COSTS:
+			return event.getHireCost();
+		case FUEL_COSTS: {
+			if (event instanceof FuelUsage)
+				return ((FuelUsage) event).getFuelCost();
+			else 
+				return 0;
+		}
+		case BF_USAGE:
+			return getFuelConsumption(event, Fuel.BASE_FUEL);
+		case FBO_USAGE:
+			return getFuelConsumption(event, Fuel.FBO);
+		case NBO_USAGE:
+			return getFuelConsumption(event, Fuel.NBO);
+		case PILOT_USAGE:
+			return getFuelConsumption(event, Fuel.PILOT_LIGHT);
+		default:
+			return 0;
+		}
+	}
+	
+	public void checkValues(Expectations field, List<? extends Event> events, Integer [] values) {
+		Assert.assertEquals(values.length, events.size());
+		
+		for (int i = 0; i < values.length; i++) {
+			Integer value = values[i];
+			if (value != null) {
+				Event event = events.get(i);
+				Assert.assertEquals(field.name() + " " + event, (int) value, getValue(field, event));
+			}
+		}
+	}
+	
+	public void checkDurations(List<? extends Event> events, Integer[] durations) {
+		checkValues(Expectations.DURATIONS, events, durations);
+		/*
 		Assert.assertEquals(durations.length, events.size());
 		for (int i = 0; i < durations.length; i++) {
 			Event event = events.get(i);
 			Assert.assertEquals("Event duration for " + event, durations[i], event.getDuration());
 		}
+		*/
 	}
 	
-	public void checkFuelCosts(List<? extends FuelUsage> events, int [] costs) {
+	public void checkFuelCosts(List<? extends Event> events, Integer[] costs) {
+		checkValues(Expectations.FUEL_COSTS, events, costs);
+		/*
 		Assert.assertEquals(costs.length, events.size());
 		for (int i = 0; i < costs.length; i++) {
 			FuelUsage event = events.get(i);
 			Assert.assertEquals("Event cost for " + event, costs[i], event.getFuelCost());
 		}
+		*/
 	}	
 	
-	public int getFuelConsumption(FuelUsage event, Fuel fuel) {
-		int result = 0;
-		for (FuelQuantity quantity: event.getFuels()) {
-			if (quantity.getFuel() == fuel) {
-				for (FuelAmount a: quantity.getAmounts()) {
-					result += a.getQuantity();
+	public void checkHireCosts(List<? extends Event> events, Integer [] costs) {
+		checkValues(Expectations.HIRE_COSTS, events, costs);
+		/*
+		for (int i = 0; i < costs.length; i++) {
+			Event event = events.get(i);
+			Assert.assertEquals("Hire cost for " + event, (int) costs[i], event.getHireCost());
+		}
+		*/
+		
+	}
+	
+	public int getFuelConsumption(Event event, Fuel fuel) {
+		if (event instanceof FuelUsage) {
+			int result = 0;
+			for (FuelQuantity quantity: ((FuelUsage) event).getFuels()) {
+				if (quantity.getFuel() == fuel) {
+					for (FuelAmount a: quantity.getAmounts()) {
+						result += a.getQuantity();
+					}
+				}
+			}
+			return result;
+		}
+		return 0;		
+	}
+	
+	public void checkFuelConsumptions(List<? extends Event> events, Fuel fuel, Integer [] consumptions) {
+		for (int i = 0; i < consumptions.length; i++) {
+			Event event = events.get(i);
+			Assert.assertEquals(fuel.getName() + " consumption for " + event, (int) consumptions[i], getFuelConsumption(event, fuel));
+		}
+		
+	}
+	
+	public void checkPnlValues(List<? extends Event> events, CargoIndexData [] indices, int[] pnls) {
+		if (pnls != null) {
+			Assert.assertEquals(indices.length, pnls.length);
+			// each pnl value corresponds to a particular cargo
+			for (int i = 0; i < pnls.length; i++) {
+				int firstLoadIndex = indices[i].startIndex;
+				SlotVisit event = (SlotVisit) events.get(firstLoadIndex);
+				CargoAllocation ca = event.getSlotAllocation().getCargoAllocation();
+				ExtraData data = ca.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+				if (data != null) {
+					int pnl = data.getValueAs(Integer.class);
+				
+					Assert.assertEquals("PnL for " + event, pnls[i], pnl);
 				}
 			}
 		}
-		return result;
-		
-	}
-	
-	public void checkFuelConsumptions(List<? extends FuelUsage> events, Fuel fuel, int[] consumptions) {
-		for (int i = 0; i < consumptions.length; i++) {
-			FuelUsage event = events.get(i);
-			Assert.assertEquals(fuel.getName() + " consumption for " + event, consumptions[i], getFuelConsumption(event, fuel));
-		}
-		
-	}
-	
-	public void checkHireCosts(List<? extends Event> events, int[] costs) {
-		for (int i = 0; i < costs.length; i++) {
-			Event event = events.get(i);
-			Assert.assertEquals("Hire cost for " + event, costs[i], event.getHireCost());
-		}
-		
-	}
-	
-	public void checkPnlValues(List<? extends SlotVisit> events, int[] pnls) {
-		for (int i = 0; i < pnls.length; i++) {
-			SlotVisit event = events.get(i);
-			CargoAllocation ca = event.getSlotAllocation().getCargoAllocation();
-			ExtraData data = ca.getDataWithKey(TradingConstants.ExtraData_GroupValue);
-			if (data != null) {
-				int pnl = data.getValueAs(Integer.class);
-			
-				Assert.assertEquals("PnL for " + event, pnls[i], pnl);
-			}
-		}		
 	}
 	
 	public void checkLoadDischargeVolumes(List<? extends SlotVisit> events, int[] volumes) {
@@ -184,58 +247,59 @@ public class ShippingCalculationsTest {
 				EndEvent.class 
 		};
 	
-		final SequenceTester checker = new SequenceTester(expectedClasses);
-	
+		CargoIndexData [] cargoIndices = { new CargoIndexData(1,6) };
+		final SequenceTester checker = new SequenceTester(expectedClasses, cargoIndices);
+		
 		// expected durations of journeys
 		final int [] expectedJourneyDurations = { 1, 2, 1 };
-		checker.setExpectedDurations(Journey.class, expectedJourneyDurations);
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, expectedJourneyDurations);
 	
 		// expected FBO consumptions of journeys
 		// none (not economical in default)
 		final int [] expectedFboJourneyConsumptions = { 0, 0, 0 };
-		checker.setExpectedFboConsumptions(Journey.class, expectedFboJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.FBO, expectedFboJourneyConsumptions);
 	
 		// expected NBO consumptions of journeys
 		// 0 (no start heel)
 		// 20 = 2 { duration in hours } * 10 { NBO rate }
 		// 0 (vessel empty)
 		final int [] expectedNboJourneyConsumptions = { 0, 20, 0 };
-		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.NBO, expectedNboJourneyConsumptions);
 	
 		// expected base consumptions
 		// 15 = 1 { journey duration } * 15 { base fuel consumption }
 		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
 		// 15 = 1 { journey duration } * 15 { base fuel consumption }
 		final int [] expectedBaseFuelJourneyConsumptions = { 15, 10, 15 };
-		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.BASE_FUEL, expectedBaseFuelJourneyConsumptions);			
 	
 		// expected costs of journeys
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }  
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }   
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }  
 		final int [] expectedJourneyCosts = { 150, 520, 150 };
-		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
 	
 		// expected durations of idles
 		final int [] expectedIdleDurations = { 0, 2, 0 };
-		checker.setExpectedDurations(Idle.class, expectedIdleDurations);
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, expectedIdleDurations);
 		
 		// expected base idle consumptions
 		// 0 = no idle (start)
 		// 0 = no idle (idle on NBO)
 		// 0 = no idle (end)
 		final int [] expectedBfIdleConsumptions = { 0, 0, 0 };
-		checker.setExpectedBaseFuelConsumptions(Idle.class, expectedBfIdleConsumptions);
+		checker.setExpectedFuelConsumptions(Idle.class, Fuel.BASE_FUEL, expectedBfIdleConsumptions);
 		
 		// expected NBO idle consumptions
 		// 10 = 2 { idle duration } * 5 { idle NBO rate }
 		final int [] expectedNboIdleConsumptions = { 0, 10, 0 };
-		checker.setExpectedNboConsumptions(Idle.class, expectedNboIdleConsumptions);
+		checker.setExpectedFuelConsumptions(Idle.class, Fuel.NBO, expectedNboIdleConsumptions);
 
 		// idle costs
 		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }  
 		final int [] expectedIdleCosts = { 0, 210, 0 }; 
-		checker.setExpectedFuelCosts(Idle.class, expectedIdleCosts);
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, expectedIdleCosts);
 
 		// expected load / discharge volumes
 		// 10000 (load) = vessel capacity
@@ -243,14 +307,22 @@ public class ShippingCalculationsTest {
 		final int [] expectedLoadDischargeVolumes = { 10000, -9970 };
 		checker.setExpectedLoadDischargeVolumes(expectedLoadDischargeVolumes);
 		
-		// idle uses 15 NBO, journey uses 10
-		int [] expectedPnlValues = { 10000, -9975 };
+		// profit / loss
+		// 9970 { sales volume } * 1 { price per MMBTU } * 21 { CV } - 10000 { purchase volume } * 0.5 { price per MMBTU } * 21 { CV } - 250 { base fuel cost } 
+		//int [] expectedPnlValues = { 104120, 104120 };
+		//int [] expectedPnlValues = { 209120 };
+		int [] expectedPnlValues = null;
 		checker.setExpectedPnlValues(expectedPnlValues);
 
 		return checker;
 	}
 
 	public class SequenceTester {
+		Integer[] expectedDurationArray;
+		Integer[] expectedFuelCostArray;
+		Integer[] expectedHireCostArray;
+		Map<Fuel, Integer[]> expectedFuelConsumptionArray = new HashMap<Fuel, Integer[]>();
+		
 		Map<Class<? extends Event>, int []> expectedDurations = new HashMap<Class<? extends Event>, int []>();
 		Map<Class<? extends FuelUsage>, int []> expectedFuelCosts = new HashMap<Class<? extends FuelUsage>, int []>();
 		//Map<Class<? extends FuelUsage>, Map<Fuel, int []>> expectedFuelConsumptions = new HashMap<Class<? extends FuelUsage>, Map<Fuel, int []>>();
@@ -261,14 +333,27 @@ public class ShippingCalculationsTest {
 		
 		Class<?> [] classes;
 		
-		public SequenceTester(Class<?> [] classes) {
+		CargoIndexData [] cargoIndices;
+		
+		public SequenceTester(Class<?> [] classes, CargoIndexData[] cargoIndices) {
 			setClasses(classes);
+			setCargoIndices(cargoIndices);
+			expectedDurationArray = new Integer [classes.length];
+			expectedFuelCostArray = new Integer [classes.length];
+			expectedHireCostArray = new Integer [classes.length];
+			for (Fuel fuel: Fuel.values()) {
+				expectedFuelConsumptionArray.put(fuel, new Integer [classes.length]);
+			}
 		}
 		
+		public void setCargoIndices(CargoIndexData[] cargoIndices) {
+			this.cargoIndices = cargoIndices;			
+		}
+
 		public void setClasses(Class<?> [] classes) {
 			this.classes = classes;			
 		}
-		
+				
 		@SuppressWarnings("unchecked")
 		public <T> Map<Class<?>, int []> getLookup(Expectations field) {
 			Map<T, int []> lookup = null;
@@ -309,35 +394,85 @@ public class ShippingCalculationsTest {
 			return (Map<Class<?>, int[]>) lookup;
 		}
 		
-		public void setExpectedValues(Expectations field, Class<?> clazz, int [] values) {
-			getLookup(field).put(clazz, values);
+		private Integer [] getStorageArray(Expectations field) {
+			Fuel component = null;
+			
+			switch (field) {
+			case DURATIONS:
+				return expectedDurationArray;
+			case FUEL_COSTS:
+				return expectedFuelCostArray;
+			case HIRE_COSTS:
+				return expectedHireCostArray;
+			case FBO_USAGE:
+				component = Fuel.FBO;
+				break;
+			case NBO_USAGE:
+				component = Fuel.NBO;
+				break;
+			case BF_USAGE:
+				component = Fuel.BASE_FUEL;
+				break;
+			case PILOT_USAGE:
+				component = Fuel.PILOT_LIGHT;
+			}
+
+			return expectedFuelConsumptionArray.get(component);			
 		}
 		
-		public int [] getExpectedValues(Expectations field, Class<?> clazz) {
-			return getLookup(field).get(clazz);
+		private <T> List<Integer> getValueIndices(T [] array, T value) {
+			ArrayList<Integer> result = new ArrayList<Integer>();
+			for (int i = 0; i < array.length; i++) {
+				if  (array[i] == value) {
+					result.add(i);
+				}
+			}
+			return result;			
+		}
+		
+		public void setExpectedValues(Expectations field, Class<?> clazz, int [] values) {
+			Integer[] array = getStorageArray(field);
+			int perClassIndex = 0;
+			for (int index: getValueIndices(classes, clazz)) {
+				array[index] = values[perClassIndex];
+				perClassIndex += 1;
+			}
+			//getLookup(field).put(clazz, values);
+		}
+		
+		public Integer[] getExpectedValues(Expectations field, Class<?> clazz) {
+			List<Integer> indices = getValueIndices(classes, clazz);
+			Integer[] array = getStorageArray(field);
+			Integer [] result = new Integer [indices.size()];
+			
+			int perClassIndex = 0;
+			for (int index: indices) {
+				result[perClassIndex] = array[index];
+				perClassIndex += 1;
+			}
+			
+			return result;
+			//return getLookup(field).get(clazz);
 		}
 		
 		public void setExpectedValue(int value, Expectations field, Class<?> clazz, int index) {
-			getExpectedValues(field, clazz)[index] = value;
-		}
-		
-		public void setExpectedDurations(Class<? extends Event> clazz, int [] durations) {
-			expectedDurations.put(clazz, durations);
-		}
-		
-		public void setExpectedDuration(Class<? extends Event> clazz, int index, int duration) {
-			expectedDurations.get(clazz)[index] = duration;
-		}
-		
-		public void setExpectedHireCosts(Class<? extends Event> clazz, int [] costs) {
-			expectedHireCosts.put(clazz, costs);
-		}
-		
-		public void setExpectedFuelCosts(Class<? extends FuelUsage> clazz, int [] costs) {
-			expectedFuelCosts.put(clazz, costs);
+			List<Integer> indices = getValueIndices(classes, clazz);
+			Integer[] array = getStorageArray(field);
+			array[indices.get(index)] = value;
+			
+			//getExpectedValues(field, clazz)[index] = value;
 		}
 		
 		public void setExpectedFuelConsumptions(Class<? extends FuelUsage> clazz, Fuel component, int [] consumptions) {
+			Integer[] array = expectedFuelConsumptionArray.get(component);
+			List<Integer> indices = getValueIndices(classes, clazz);
+			
+			int perClassIndex = 0;
+			for (int index: indices) {
+				array[index] = consumptions[perClassIndex];
+				perClassIndex += 1;
+			}
+			/*
 			Map<Class<? extends FuelUsage>, int[]> lookup = expectedFuelConsumptions.get(component);
 			if (lookup == null) {
 				lookup = new HashMap<Class<? extends FuelUsage>, int []>();
@@ -345,19 +480,9 @@ public class ShippingCalculationsTest {
 			}
 			
 			lookup.put(clazz, consumptions);
+			*/
 		}
 		
-		public void setExpectedBaseFuelConsumptions(Class<? extends FuelUsage> clazz, int [] consumptions) {
-			setExpectedFuelConsumptions(clazz, Fuel.BASE_FUEL, consumptions);			
-		}
-		
-		public void setExpectedFboConsumptions(Class<? extends FuelUsage> clazz, int [] consumptions) {
-			setExpectedFuelConsumptions(clazz, Fuel.FBO, consumptions);			
-		}
-		
-		public void setExpectedNboConsumptions(Class<? extends FuelUsage> clazz, int [] consumptions) {
-			setExpectedFuelConsumptions(clazz, Fuel.NBO, consumptions);			
-		}
 		
 		public void setExpectedLoadDischargeVolumes(int [] volumes) {
 			expectedLoadDischargeVolumes = volumes;
@@ -375,42 +500,42 @@ public class ShippingCalculationsTest {
 			EList<Event> events = sequence.getEvents();
 			checkClasses(events, classes);
 			
+			//setupExpectedPnl(10.5, 21, 10);
+			
 			for (Class<?> clazz: new HashSet<Class<?>>(Arrays.asList(classes))) {
 				List<?> objects = extractObjectsOfClass(events, clazz);
-				
-				int [] expectedClassDurations = expectedDurations.get(clazz);
-				if (expectedClassDurations != null) {
-					checkDurations((List<? extends Event>) objects, expectedClassDurations);
+
+				for (Expectations field: Expectations.values()) {
+					checkValues(field, (List<? extends Event>) objects, getExpectedValues(field, clazz));
 				}
+				/*
+				Integer [] expectedClassDurations = getExpectedValues(Expectations.DURATIONS, clazz);
+				checkDurations((List<? extends Event>) objects, expectedClassDurations);
 				
-				int [] expectedClassHireCosts = expectedHireCosts.get(clazz);
-				if (expectedClassHireCosts != null) {
-					checkHireCosts((List<? extends Event>) objects, expectedClassHireCosts);
-				}
+				Integer[] expectedClassHireCosts = getExpectedValues(Expectations.HIRE_COSTS, clazz);
+				checkHireCosts((List<? extends Event>) objects, expectedClassHireCosts);
+				
+				Integer[] expectedClassCosts = getExpectedValues(Expectations.FUEL_COSTS, clazz);
+				checkFuelCosts((List<? extends Event>) objects, expectedClassCosts);
 				
 				for (Entry<Fuel, Map<Class<? extends FuelUsage>, int[]>> entry: expectedFuelConsumptions.entrySet()) {
 					int [] expectedFuelUsages = entry.getValue().get(clazz);
 					if (expectedFuelUsages != null) {
-						checkFuelConsumptions((List<? extends FuelUsage>) objects, entry.getKey(), expectedFuelUsages);
+						//checkFuelConsumptions((List<? extends Event>) objects, entry.getKey(), expectedFuelUsages);
 					}
 				}
-				
-				int [] expectedClassCosts = expectedFuelCosts.get(clazz);
-				if (expectedClassCosts != null) {
-					checkFuelCosts((List<? extends FuelUsage>) objects, expectedClassCosts);
-				}
+				*/
 				
 				if (clazz.equals(SlotVisit.class) && expectedLoadDischargeVolumes != null) {
 					checkLoadDischargeVolumes((List<? extends SlotVisit>) objects, expectedLoadDischargeVolumes);
 				}
 
-				if (clazz.equals(SlotVisit.class) && expectedPnlValues != null) {
-					checkPnlValues((List<? extends SlotVisit>) objects, expectedPnlValues );
-				}
-
 			}
+			
+			//checkPnlValues(events, cargoIndices, expectedPnlValues);
 		}
 		
+		@SuppressWarnings("unchecked")
 		public void setupExpectedHireCosts(int hireRatePerHour) {
 			// change from default scenario: all events should have time charter costs
 			for (Class<?> clazz: classes) {
@@ -421,10 +546,97 @@ public class ShippingCalculationsTest {
 					for (int i = 0; i < n; i++) {
 						classHireCosts[i] = classDurations[i] * hireRatePerHour;
 					}
-					setExpectedHireCosts((Class<? extends Event>) clazz, classHireCosts);
+					setExpectedValues(Expectations.HIRE_COSTS, (Class<? extends Event>) clazz, classHireCosts);
 				}
 			}
 			
+		}
+		
+		public CargoAllocation [] getCargoAllocations(EList<Event> events) {
+			List<CargoAllocation> result = new LinkedList<CargoAllocation>();
+			
+			for (Event event: events) {
+				if (event instanceof SlotVisit) {
+					CargoAllocation ca = ((SlotVisit) event).getSlotAllocation().getCargoAllocation();
+					if (!result.contains(ca)) {
+						result.add(ca);
+					}
+				}
+			}
+			
+			return result.toArray(new CargoAllocation[0]);
+		}
+		
+		/**
+		 * Given the index of an element in an array, returns the number of previous occurrences of 
+		 * a given value in the array.  
+		 * @param index
+		 * @param array
+		 * @param value
+		 * @return
+		 */
+		public <T> int previousOccurrences(int index, T [] array, T value) {
+			int result = 0;
+			for (int i = 0; i < index; i++) {
+				if (array[i] == value) {
+					result += 1;
+				}
+			}
+			return result;
+		}
+		
+		/*
+		private int computeExpectedPnl(CargoIndexData index, double purchasePricePerM3, double salesPricePerM3, double bfPrice) {
+			// start by calculating expected base fuel usage
+			
+			for (Class<?> clazz: new HashSet<Class<?>>(Arrays.asList(classes))) {
+				int [] bfUsage = getExpectedValues(Expectations.BF_USAGE, clazz);
+				// because expected values are provided on a per-event-class basis, we
+				// need to determine which indices of the given class correspond to 
+				// the indices of the cargo expectations
+				//int occurrences = previousOccurrences(index, classes, clazz);
+				
+			}
+			
+		}
+		*/
+		
+		public void setupExpectedPnl(double purchasePricePerM3, double salesPricePerM3, double bfPrice) {
+			// pnl expectations are a hack
+			// since they are per-cargo values
+			
+			for (int i = 0; i < cargoIndices.length; i++) {
+				
+			}
+			// start by calculating expected base fuel usage
+			
+			
+			
+			// expected PnL is sales volume * sales price - purchase volume * purchase price - base fuel cost - hire costs - canal costs
+			int totalBfUsage = 0;
+			
+			for (Class<?> clazz: classes) {
+				Integer[] bfUsage = getExpectedValues(Expectations.BF_USAGE, clazz);
+				if (bfUsage != null) {
+					// hack! assume first & second 
+					//totalBfUsage += usage[0] + usage[1]; 
+				}
+			}
+			
+			int pnl = (int) (- totalBfUsage * bfPrice);
+			for (int volume: expectedLoadDischargeVolumes) {
+				// load
+				if (volume > 0) {
+					pnl -= volume * purchasePricePerM3;
+				}
+				// discharge
+				else {
+					pnl += -volume * salesPricePerM3;
+				}
+			}
+			
+			setExpectedPnlValues(new int [] { pnl });
+
 		}
 		
 	}
@@ -740,15 +952,15 @@ public class ShippingCalculationsTest {
 				
 		// change from default: no NBO consumption (min heel forces BF travel)
 		final int [] expectedNboJourneyConsumptions = { 0, 0, 0 };
-		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.NBO, expectedNboJourneyConsumptions);
 	
 		// change from default: all BF consumption (min heel forces BF travel)
 		final int [] expectedBaseFuelJourneyConsumptions = { 15, 30, 15 };
-		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.BASE_FUEL, expectedBaseFuelJourneyConsumptions);
 	
 		// expected costs of journeys
 		final int [] expectedJourneyCosts = { 150, 300, 150 };
-		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
 	
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);				
@@ -860,19 +1072,19 @@ public class ShippingCalculationsTest {
 		// change from default scenario
 		// second and third journeys now use LNG only (no start heel means that first journey has to be on base fuel only)
 		final int [] expectedFboJourneyConsumptions = { 0, 10, 5 };
-		checker.setExpectedFboConsumptions(Journey.class, expectedFboJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.FBO, expectedFboJourneyConsumptions);
 	
 		// second and third journeys now use LNG only
 		final int [] expectedNboJourneyConsumptions = { 0, 20, 10 };
-		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.NBO, expectedNboJourneyConsumptions);
 	
 		// second and third journeys now use LNG only
 		final int [] expectedBaseFuelJourneyConsumptions = { 15, 0, 0 };
-		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.BASE_FUEL, expectedBaseFuelJourneyConsumptions);
 	
 		// first journey costs 10x as much, other journeys change costing too
 		final int [] expectedJourneyCosts = { 1500, 630, 315 };
-		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
 		
 		// idle LNG consumption is 10, plus 30 + 15 for journeys and 500 min heel
 		int [] expectedloadDischargeVolumes = { 10000, -9445 };
@@ -969,7 +1181,7 @@ public class ShippingCalculationsTest {
 		
 		// first & last journeys cost 10x as much
 		final int [] expectedJourneyCosts = { 1500, 1420, 1500 };
-		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
 	
 	
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -1137,7 +1349,7 @@ public class ShippingCalculationsTest {
 		
 		// change from default: cooldown time
 		final int [] expectedCooldownTimes = { 1 };
-		checker.setExpectedDurations(Cooldown.class, expectedCooldownTimes);
+		checker.setExpectedValues(Expectations.DURATIONS, Cooldown.class, expectedCooldownTimes);
 	
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);			
@@ -1202,7 +1414,7 @@ public class ShippingCalculationsTest {
 		
 		// change from default: cooldown time
 		final int [] expectedCooldownTimes = { 0 };
-		checker.setExpectedDurations(Cooldown.class, expectedCooldownTimes);
+		checker.setExpectedValues(Expectations.DURATIONS, Cooldown.class, expectedCooldownTimes);
 		
 	
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -1293,28 +1505,28 @@ public class ShippingCalculationsTest {
 		
 		// expected durations of journeys
 		final int [] expectedJourneyDurations = { 2, 1 };
-		checker.setExpectedDurations(Journey.class, expectedJourneyDurations);
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, expectedJourneyDurations);
 	
 		// expected FBO consumptions of journeys
 		// none (not economical in default)
 		final int [] expectedFboJourneyConsumptions = { 0, 0 };
-		checker.setExpectedFboConsumptions(Journey.class, expectedFboJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.FBO, expectedFboJourneyConsumptions);
 	
 		// expected NBO consumptions of journeys
 		// 0 (no start heel)
 		// 20 = 
 		final int [] expectedNboJourneyConsumptions = { 20, 0 };
-		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.NBO, expectedNboJourneyConsumptions);
 	
 		final int [] expectedBaseFuelJourneyConsumptions = { 10, 15 };
-		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
+		checker.setExpectedFuelConsumptions(Journey.class, Fuel.BASE_FUEL, expectedBaseFuelJourneyConsumptions);
 	
 		// expected costs of journeys
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }  
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }   
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }  
 		final int [] expectedJourneyCosts = { 520, 150 };
-		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);			
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);			
 	
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);			
