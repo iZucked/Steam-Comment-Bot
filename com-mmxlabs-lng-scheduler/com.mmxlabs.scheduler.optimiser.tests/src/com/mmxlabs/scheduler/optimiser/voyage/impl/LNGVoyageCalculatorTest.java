@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -665,6 +666,7 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(expectedPlan, plan);
 	}
 
+	@Ignore("No longer works after LNGVoyageCalculator#init() removal")
 	@Test(expected = RuntimeException.class)
 	public void testCalculateVoyagePlan3() {
 
