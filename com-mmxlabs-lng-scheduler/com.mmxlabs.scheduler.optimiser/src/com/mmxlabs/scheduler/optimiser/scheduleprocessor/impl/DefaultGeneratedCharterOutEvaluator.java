@@ -80,9 +80,18 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
 				final int n = vp.getSequence().length;
-				final int[] arrivalTimes = new int[n * 2 - 1];
+				// Resize array if required
+				/**
+				 * Pre-created arrival times array to avoid creation in the main method. Dynamically sized arrays are very slow!
+				 */
+				final List<Integer> arrivalTimes = new ArrayList<Integer>(5);
+				// if (arrivalTimes.length < n) {
+				// assert (arrivalTimes.length >= n);
+				// arrivalTimes = new int[n * 2];
+				// }
 				int idx = -1;
-				arrivalTimes[++idx] = currentTime;
+				arrivalTimes.add(currentTime);
+				++idx;
 				final Object[] currentSequence = vp.getSequence();
 				int ladenIdx = -1;
 				int ballastIdx = -1;
@@ -91,7 +100,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 						final PortDetails details = (PortDetails) obj;
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
-							arrivalTimes[++idx] = currentTime;
+							arrivalTimes.add(currentTime);
+							++idx;
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
@@ -101,8 +111,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					} else if (obj instanceof VoyageDetails) {
 						final VoyageDetails details = (VoyageDetails) obj;
 						currentTime += details.getOptions().getAvailableTime();
-						arrivalTimes[++idx] = currentTime;
-
+						arrivalTimes.add(currentTime);
+						++idx;
 						// record last ballast leg
 						if (details.getOptions().getVesselState() == VesselState.Ballast) {
 							ballastIdx = idx - 1;
@@ -123,7 +133,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				boolean foundMarketPrice = false;
 				int bestPrice = 0;
-				final int time = arrivalTimes[ballastIdx] + ballastDetails.getTravelTime();
+				final int time = arrivalTimes.get(ballastIdx) + ballastDetails.getTravelTime();
 
 				final int availableTime = ballastDetails.getOptions().getAvailableTime();
 				final int distance = ballastDetails.getOptions().getDistance();
@@ -179,10 +189,10 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				vpo.setBasicSequence(newRawSequence);
 
 				// Rebuilt the arrival times list
-				final List<Integer> currentTimes = new ArrayList<Integer>(3);
-				for (final int t : arrivalTimes) {
-					currentTimes.add(t);
-				}
+				final List<Integer> currentTimes = new ArrayList<Integer>(arrivalTimes);
+				// for (final int t : arrivalTimes) {
+				// currentTimes.add(t);
+				// }
 				vpo.setArrivalTimes(currentTimes);
 
 				// Add in the route choice
@@ -207,7 +217,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// Calculate our new plan
 				final VoyagePlan newVoyagePlan = vpo.optimise();
 
-				// Calculate the P&L of both the original and the new option 
+				// Calculate the P&L of both the original and the new option
 				final long originalOption;
 				final long newOption;
 				if (isCargoPlan) {
@@ -219,8 +229,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
 
 				} else {
-					originalOption = entityValueCalculator.evaluate(vp, vessel, arrivalTimes[0], seq.getStartTime(), null);
-					newOption = entityValueCalculator.evaluate(newVoyagePlan, vessel, arrivalTimes[0], seq.getStartTime(), null);
+					originalOption = entityValueCalculator.evaluate(vp, vessel, arrivalTimes.get(0), seq.getStartTime(), null);
+					newOption = entityValueCalculator.evaluate(newVoyagePlan, vessel, arrivalTimes.get(0), seq.getStartTime(), null);
 
 				}
 				// TODO: This should be recorded based on market availability groups and then processed.

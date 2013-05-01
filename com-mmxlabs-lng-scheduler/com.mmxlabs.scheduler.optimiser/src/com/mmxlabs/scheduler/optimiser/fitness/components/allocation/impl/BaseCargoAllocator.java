@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -245,11 +246,13 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		return result;
 	}
 
+//	TODO REVIEW THIS METHOD IN LIGHT OF COMPLEX CARGOES
 	/**
+	 * Allocate method designed for a SIMPLE cargo
 	 * @since 2.0
 	 */
 	@Override
-	public IAllocationAnnotation allocate(final IVessel vessel, final VoyagePlan plan, final int[] arrivalTimes) {
+	public IAllocationAnnotation allocate(final IVessel vessel, final VoyagePlan plan, final List<Integer> arrivalTimes) {
 
 		PortDetails loadDetails = null;
 		PortDetails dischargeDetails = null;
@@ -271,10 +274,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 				final IPortSlot slot = pd.getOptions().getPortSlot();
 				if (slot instanceof ILoadOption) {
 					loadDetails = pd;
-					loadTime = arrivalTimes[0];
+					loadTime = arrivalTimes.get(0);
 				} else if (slot instanceof IDischargeOption) {
 					dischargeDetails = pd;
-					dischargeTime = arrivalTimes[3];
+					dischargeTime = arrivalTimes.get(3);
 				}
 			} else if (object instanceof VoyageDetails) {
 				if ((dischargeDetails == null) && (loadDetails != null)) {

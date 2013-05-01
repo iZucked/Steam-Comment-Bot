@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -73,10 +76,10 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				final int n = vp.getSequence().length;
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
-				final int[] arrivalTimes = new int[n * 2 - 1];
+				final List<Integer> arrivalTimes = new ArrayList<Integer>();
 				int idx = -1;
 				int dischargeIdx = -1;
-				arrivalTimes[++idx] = currentTime;
+				arrivalTimes.add(currentTime);
 				final Object[] currentSequence = vp.getSequence();
 
 				ILoadOption originalLoad = null;
@@ -89,8 +92,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 						final PortDetails details = (PortDetails) obj;
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
-							arrivalTimes[++idx] = currentTime;
-
+							arrivalTimes.add(currentTime);
+							++idx;
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
 								ILoadOption loadOption = (ILoadOption) details.getOptions().getPortSlot();
@@ -120,7 +123,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					} else if (obj instanceof VoyageDetails) {
 						final VoyageDetails details = (VoyageDetails) obj;
 						currentTime += details.getOptions().getAvailableTime();
-						arrivalTimes[++idx] = currentTime;
+						arrivalTimes.add(currentTime);
+						++idx;
 					}
 				}
 
@@ -240,7 +244,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		}
 	}
 
-	private long evaluateSalesPrice(final ScheduledSequence seq, final IVessel vessel, final int[] arrivalTimes, final int dischargeIdx, final Object[] currentSequence,
+	private long evaluateSalesPrice(final ScheduledSequence seq, final IVessel vessel, final List<Integer> arrivalTimes, final int dischargeIdx, final Object[] currentSequence,
 			final IDischargeOption originalDischarge, final Object[] newSequence, final int currentPricePerMMBTu) {
 
 		// Overwrite current break even price with test price
@@ -258,8 +262,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		return newPnLValue;
 	}
 
-	private int search(final int min, final long minValue, final int max, final long maxValue, final ScheduledSequence seq, final IVessel vessel, final int[] arrivalTimes, final int dischargeIdx,
-			final Object[] currentSequence, final IDischargeOption originalDischarge, final Object[] newSequence) {
+	private int search(final int min, final long minValue, final int max, final long maxValue, final ScheduledSequence seq, final IVessel vessel, final List<Integer> arrivalTimes,
+			final int dischargeIdx, final Object[] currentSequence, final IDischargeOption originalDischarge, final Object[] newSequence) {
 
 		final int mid = min + ((max - min) / 2);
 

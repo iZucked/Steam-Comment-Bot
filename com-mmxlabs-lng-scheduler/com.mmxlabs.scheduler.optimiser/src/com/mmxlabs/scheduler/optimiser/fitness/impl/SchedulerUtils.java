@@ -64,8 +64,6 @@ public final class SchedulerUtils {
 
 		voyageCalculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
 
-		voyageCalculator.init();
-
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
 		return voyagePlanOptimiser;
 	}
@@ -76,8 +74,6 @@ public final class SchedulerUtils {
 		final LNGVoyageCalculator voyageCalculator = new LNGVoyageCalculator();
 
 		voyageCalculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
-
-		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
 
@@ -423,7 +419,7 @@ public final class SchedulerUtils {
 		final ITotalVolumeLimitProvider tvlp = data.getDataComponentProvider(SchedulerConstants.DCP_totalVolumeLimitProvider, ITotalVolumeLimitProvider.class);
 
 		IVolumeAllocator allocator;
-			allocator = new UnconstrainedCargoAllocator();
+		allocator = new UnconstrainedCargoAllocator();
 
 		allocator.setVesselProvider(data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class));
 		allocator.setTotalVolumeLimitProvider(tvlp);

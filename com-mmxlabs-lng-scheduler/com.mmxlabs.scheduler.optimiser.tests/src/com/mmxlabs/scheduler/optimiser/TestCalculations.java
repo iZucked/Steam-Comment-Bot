@@ -162,7 +162,6 @@ public class TestCalculations {
 		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
 		voyageCalculator.setPortCVProvider(portCVProvider);
-		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
 
@@ -592,8 +591,6 @@ public class TestCalculations {
 		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
 		voyageCalculator.setPortCVProvider(portCVProvider);
 
-		voyageCalculator.init();
-
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
 
 		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
@@ -1019,7 +1016,6 @@ public class TestCalculations {
 		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
 		voyageCalculator.setPortCVProvider(portCVProvider);
-		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
 

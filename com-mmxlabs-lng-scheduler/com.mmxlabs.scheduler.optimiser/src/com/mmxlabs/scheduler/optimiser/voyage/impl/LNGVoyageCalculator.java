@@ -40,16 +40,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	@Inject
 	private IPortCVProvider portCVProvider;
 
-	@Override
-	public final void init() {
-		if (routeCostProvider == null) {
-			throw new IllegalStateException("Route Cost Provider is not set");
-		}
-		if (portCVProvider == null) {
-			throw new IllegalStateException("Port CV Provider is not set");
-		}
-	}
-
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
 	 * 
@@ -484,23 +474,23 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return -1;
 	}
 
-	public void sanityCheckVesselState(int loadIdx, int dischargeIdx, Object... sequence) {
-		// If load or discharge has been set, then the other must be too.
-		assert (loadIdx < 0 && dischargeIdx < 0) || (loadIdx >= 0 && dischargeIdx >= 0);
-
-		for (int i = 0; i < sequence.length; ++i) {
-			if ((i % 2) == 1) {
-				// Voyage
-				final VoyageDetails details = (VoyageDetails) sequence[i];
-
-				// if (loadIdx <= i && i < dischargeIdx)
-				// assert(details.getOptions().getVesselState() == VesselState.Laden);
-				// else
-				// assert(details.getOptions().getVesselState() == VesselState.Ballast);
-			}
-		}
-
-	}
+	// public void sanityCheckVesselState(int loadIdx, int dischargeIdx, Object... sequence) {
+	// // If load or discharge has been set, then the other must be too.
+	// assert (loadIdx < 0 && dischargeIdx < 0) || (loadIdx >= 0 && dischargeIdx >= 0);
+	//
+	// for (int i = 0; i < sequence.length; ++i) {
+	// if ((i % 2) == 1) {
+	// // Voyage
+	// final VoyageDetails details = (VoyageDetails) sequence[i];
+	//
+	// // if (loadIdx <= i && i < dischargeIdx)
+	// // assert(details.getOptions().getVesselState() == VesselState.Laden);
+	// // else
+	// // assert(details.getOptions().getVesselState() == VesselState.Ballast);
+	// }
+	// }
+	//
+	// }
 
 	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, Object... sequence) {
 		int cooldownM3Price = 0;
@@ -637,7 +627,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		final int loadIdx = findLoadIndex(sequence);
 		final int dischargeIdx = findDischargeIndex(sequence);
-		sanityCheckVesselState(loadIdx, dischargeIdx, sequence);
+		// sanityCheckVesselState(loadIdx, dischargeIdx, sequence);
 
 		long availableHeelinM3 = Long.MAX_VALUE;
 
