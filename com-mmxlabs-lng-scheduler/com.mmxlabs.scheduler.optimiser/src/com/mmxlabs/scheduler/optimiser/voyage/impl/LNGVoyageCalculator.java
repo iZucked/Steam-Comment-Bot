@@ -473,15 +473,16 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, final Object... sequence) {
 		int cooldownM3Price = 0;
 
+		int arrivalTimeIndex = -1;
 		for (int i = 0; i < sequence.length; ++i) {
-			if ((i & 1) == 1) {
-				assert sequence[i] instanceof VoyageDetails;
+			if (sequence[i] instanceof VoyageDetails) {
 
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 				if (details.getOptions().shouldBeCold() && (details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0)) {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
 
-					final int cooldownTime = arrivalTimes.get(i / 2);
+					// Look up arrival of next port
+					final int cooldownTime = arrivalTimes.get(arrivalTimeIndex + 1);
 
 					// TODO is this how cooldown gas ought to be priced?
 					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {
@@ -498,6 +499,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				}
 			} else {
 				assert sequence[i] instanceof PortDetails;
+				arrivalTimeIndex++;
 			}
 		}
 
