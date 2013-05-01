@@ -46,7 +46,9 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator.MinimalScenarioSetup;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scheduler.optimiser.TradingConstants;
 
 
 public class ShippingCalculationsTest {
@@ -112,6 +114,19 @@ public class ShippingCalculationsTest {
 			Assert.assertEquals("Hire cost for " + event, costs[i], event.getHireCost());
 		}
 		
+	}
+	
+	public void checkPnlValues(List<? extends SlotVisit> events, int[] pnls) {
+		for (int i = 0; i < pnls.length; i++) {
+			SlotVisit event = events.get(i);
+			CargoAllocation ca = event.getSlotAllocation().getCargoAllocation();
+			ExtraData data = ca.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+			if (data != null) {
+				int pnl = data.getValueAs(Integer.class);
+			
+				Assert.assertEquals("PnL for " + event, pnls[i], pnl);
+			}
+		}		
 	}
 	
 	public void checkLoadDischargeVolumes(List<? extends SlotVisit> events, int[] volumes) {
@@ -182,10 +197,15 @@ public class ShippingCalculationsTest {
 	
 		// expected NBO consumptions of journeys
 		// 0 (no start heel)
-		// 20 = 
+		// 20 = 2 { duration in hours } * 10 { NBO rate }
+		// 0 (vessel empty)
 		final int [] expectedNboJourneyConsumptions = { 0, 20, 0 };
 		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
 	
+		// expected base consumptions
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
 		final int [] expectedBaseFuelJourneyConsumptions = { 15, 10, 15 };
 		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
 	
@@ -200,17 +220,33 @@ public class ShippingCalculationsTest {
 		final int [] expectedIdleDurations = { 0, 2, 0 };
 		checker.setExpectedDurations(Idle.class, expectedIdleDurations);
 		
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		final int [] expectedBfIdleConsumptions = { 0, 0, 0 };
+		checker.setExpectedBaseFuelConsumptions(Idle.class, expectedBfIdleConsumptions);
+		
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		final int [] expectedNboIdleConsumptions = { 0, 10, 0 };
+		checker.setExpectedNboConsumptions(Idle.class, expectedNboIdleConsumptions);
+
+		// idle costs
+		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }  
 		final int [] expectedIdleCosts = { 0, 210, 0 }; 
 		checker.setExpectedFuelCosts(Idle.class, expectedIdleCosts);
 
-		final int [] expectedBfIdleConsumptions = { 0, 0, 0 };
-		checker.setExpectedBaseFuelConsumptions(Idle.class, expectedBfIdleConsumptions);
-		final int [] expectedNboIdleConsumptions = { 0, 10, 0 };
-		checker.setExpectedNboConsumptions(Idle.class, expectedNboIdleConsumptions);
-		
+		// expected load / discharge volumes
+		// 10000 (load) = vessel capacity
+		// 9970 (discharge) = 10000 - 20 { NBO journey consumption } - 10 { NBO idle consumption }
 		final int [] expectedLoadDischargeVolumes = { 10000, -9970 };
 		checker.setExpectedLoadDischargeVolumes(expectedLoadDischargeVolumes);
 		
+		// idle uses 15 NBO, journey uses 10
+		int [] expectedPnlValues = { 10000, -9975 };
+		checker.setExpectedPnlValues(expectedPnlValues);
+
 		return checker;
 	}
 
@@ -221,6 +257,7 @@ public class ShippingCalculationsTest {
 		Map<Fuel, Map<Class<? extends FuelUsage>, int []>> expectedFuelConsumptions = new HashMap<Fuel, Map<Class<? extends FuelUsage>, int []>>();
 		Map<Class<? extends Event>, int []> expectedHireCosts = new HashMap<Class<? extends Event>, int []>();
 		int [] expectedLoadDischargeVolumes = null;
+		int [] expectedPnlValues = null;
 		
 		Class<?> [] classes;
 		
@@ -326,6 +363,10 @@ public class ShippingCalculationsTest {
 			expectedLoadDischargeVolumes = volumes;
 		}
 		
+		public void setExpectedPnlValues(int [] values) {
+			expectedPnlValues = values;
+		}
+		
 		public void additionalChecks() {
 		}
 		
@@ -361,6 +402,10 @@ public class ShippingCalculationsTest {
 				
 				if (clazz.equals(SlotVisit.class) && expectedLoadDischargeVolumes != null) {
 					checkLoadDischargeVolumes((List<? extends SlotVisit>) objects, expectedLoadDischargeVolumes);
+				}
+
+				if (clazz.equals(SlotVisit.class) && expectedPnlValues != null) {
+					checkPnlValues((List<? extends SlotVisit>) objects, expectedPnlValues );
 				}
 
 			}
@@ -813,13 +858,15 @@ public class ShippingCalculationsTest {
 		final SequenceTester checker = getDefaultTester();
 		
 		// change from default scenario
-		// second and third journeys now use LNG only
+		// second and third journeys now use LNG only (no start heel means that first journey has to be on base fuel only)
 		final int [] expectedFboJourneyConsumptions = { 0, 10, 5 };
 		checker.setExpectedFboConsumptions(Journey.class, expectedFboJourneyConsumptions);
 	
+		// second and third journeys now use LNG only
 		final int [] expectedNboJourneyConsumptions = { 0, 20, 10 };
 		checker.setExpectedNboConsumptions(Journey.class, expectedNboJourneyConsumptions);
 	
+		// second and third journeys now use LNG only
 		final int [] expectedBaseFuelJourneyConsumptions = { 15, 0, 0 };
 		checker.setExpectedBaseFuelConsumptions(Journey.class, expectedBaseFuelJourneyConsumptions);
 	
@@ -851,6 +898,9 @@ public class ShippingCalculationsTest {
 	
 		final SequenceTester checker = getDefaultTester();
 		
+		// expected load / discharge volumes:
+		// 500 (load) = { new maximum load value }
+		// 470 (discharge) = 500 { load } - 30 { consumption }
 		int [] expectedloadDischargeVolumes = { 500, -470 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 	
@@ -876,6 +926,9 @@ public class ShippingCalculationsTest {
 	
 		final SequenceTester checker = getDefaultTester();
 		
+		// expected load / discharge volumes
+		// 530 (load) = 500 { discharge } + 30 { consumption }
+		// 500 (discharge) = 
 		int [] expectedloadDischargeVolumes = { 530, -500 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 	
