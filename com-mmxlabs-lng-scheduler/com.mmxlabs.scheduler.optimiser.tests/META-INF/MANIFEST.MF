@@ -230,8 +230,7 @@ Export-Package: com.mmxlabs.scheduler.optimiser.providers.impl.indexed;u
  .optimiser,com.mmxlabs.optimiser.core.scenario.common";version="4.0.3"
 Tool: Bnd-1.50.0
 Require-Bundle: org.junit;bundle-version="4.8.2",
- org.jmock;bundle-version="1.2.0",
- org.mockito;bundle-version="1.8.4"
+ org.mockito.mockito-all;bundle-version="1.9.5"
 Import-Package: com.mmxlabs.optimiser.core.constraints.impl;version="1.1.1",
  com.mmxlabs.optimiser.core.evaluation;version="1.1.1",
  com.mmxlabs.optimiser.core.evaluation.impl;version="1.1.1",
