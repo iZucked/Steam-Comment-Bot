@@ -36,12 +36,11 @@ public class IndexNameConstraint extends AbstractModelConstraint {
 				final EReference containmentReference = extraValidationContext.getContainment(index);
 				if (containmentReference != PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()) {
 					return ctx.createSuccessStatus();
-
 				}
 			}
 
 			if ((index.getName() == null) || !pattern.matcher(index.getName()).matches()) {
-				final String message = "Index '" + index.getName() + "': Name can only contain letters, numbers and underscores.";
+				final String message = "Index '" + index.getName() + "': Name can only contain letters, numbers and underscores for use with pricing expressions.";
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(index, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
 				return dcsd;
