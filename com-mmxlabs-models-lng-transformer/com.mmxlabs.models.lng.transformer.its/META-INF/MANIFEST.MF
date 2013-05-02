@@ -26,8 +26,7 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.scenario.service.manifest;bundle-version="1.0.0",
  com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
  com.mmxlabs.models.util;bundle-version="3.0.0",
- com.google.guava;bundle-version="11.0.1",
- org.eclipse.emf.compare.edit;bundle-version="2.0.0",
+ com.google.guava;bundle-version="13.0.1",
  com.mmxlabs.scheduler.optimiser;bundle-version="4.0.0",
  com.mmxlabs.models.lng.spotmarkets.editor;bundle-version="3.0.0"
 Bundle-ClassPath: .
