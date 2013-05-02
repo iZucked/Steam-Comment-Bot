@@ -161,7 +161,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 		}
 
 		// check entity tax rates
-		if (!curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
+		if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
 			String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
 			final String failureMessage = String.format(format, entity.getName(), sdf.format(date), slot.getName());
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
@@ -192,7 +192,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 		final LegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
 
 		// check entity tax rates
-		if (!curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
+		if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
 			String format = "[Entity|'%s'] No tax data for '%s', the load date for cargo '%s'.";
 			final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
