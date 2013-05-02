@@ -1,0 +1,24 @@
+syntax: regexp
+^.*.orig$
+
+.*~
+syntax: regexp
+^.*/bin$
+
+syntax: regexp
+^target$
+
+syntax: regexp
+^.*/target$
+
+syntax: regexp
+^.*/\.settings$
+
+
+syntax: regexp
+^\.settings$
+syntax: regexp
+^\.project$
+
+syntax: regexp
+^plugin_customization\.ini$

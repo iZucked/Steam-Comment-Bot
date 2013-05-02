@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.product.product" application="com.mmxlabs.lingo.app.application" version="2.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+
+   <aboutInfo>
+      <image path="/com.mmxlabs.lingo.product/icons/alt_window_16.gif"/>
+      <text>
+         Lingo Platform
+      </text>
+   </aboutInfo>
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <vmArgs>-ea -server -Xmx768m</vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+   </launcherArgs>
+
+   <windowImages i16="/com.mmxlabs.lingo.product/icons/alt_window_16.gif"/>
+
+   <splash
+      location="com.mmxlabs.lingo.app"
+      startupProgressRect="20,210,440,15"
+      startupMessageRect="20,220,440,20"
+      startupForegroundColor="000000" />
+   <launcher name="LiNGO">
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <intro introId="com.mmxlabs.shiplingo.platform.app.intro"/>
+
+   <vm>
+      <linux include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</linux>
+      <macos include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</macos>
+      <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</solaris>
+      <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</windows>
+   </vm>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="com.mmxlabs.lingo.feature"/>
+   </features>
+
+   <configurations>
+      <plugin id="com.mmxlabs.datasources.atobviac" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.lingo.extensions" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.lng.analytics.editor" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.lng.liveevaluator" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.lng.transformer" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.lng.transformer.ui" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.migration" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.migration.scenario" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="false" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <plugin id="org.ops4j.peaberry.activation" autoStart="true" startLevel="1" />
+   </configurations>
+
+</product>

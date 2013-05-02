@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.mmxlabs.lingo.feature"
+      label="Lingo"
+      version="2.0.0.qualifier"
+      provider-name="Minimax Labs Ltd.">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <includes
+         id="jre.win32.win32.x86"
+         version="0.0.0"
+         optional="true"
+         os="win32"
+         ws="win32"
+         arch="x86"/>
+
+   <includes
+         id="jre.win32.win32.x86_64"
+         version="0.0.0"
+         optional="true"
+         os="win32"
+         ws="win32"
+         arch="x86_64"/>
+
+      <includes id="com.mmxlabs.datasources.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.jobmanager.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.lingo.platform.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.models.lng.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.models.lng.transformer.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.models.lng.types.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.models.lng.ui.runtime.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.models.migration.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.models.mmxcore.runtime.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.models.ui.runtime.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.rcp.common.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.scenario.service.feature" version="0.0.0"/>
+      <includes id="com.mmxlabs.shiplingo.platform.feature" version="0.0.0" />
+
+   <plugin
+         id="com.mmxlabs.optimiser.optimiser-common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.optimiser.optimiser-core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.optimiser.optimiser-ga"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.optimiser.optimiser-lso"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.common.common-util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lingo.app"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lingo.extensions"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lingo.models.migration"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lingo.product"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lingo.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

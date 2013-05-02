@@ -1,0 +1,11 @@
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<project name="Build specific targets and properties" default="post.build.jars">
+    <target name="post.build.jars">
+        <help.buildHelpIndex manifest="plugin.xml" destination="."/>
+    </target>
+</project>
