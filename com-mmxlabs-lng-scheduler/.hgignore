@@ -16,3 +16,5 @@ syntax: regexp
 ^com\.mmxlabs\.scheduler\.optimiser\.tests/\.settings$
 syntax: regexp
 ^target-definition/\.settings$
+syntax: regexp
+^com\.mmxlabs\.scheduler\.optimiser\.feature/\.settings$
