@@ -50,9 +50,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		}
 	}
 
-	private List<Integer> loadIndicesStorage = new ArrayList<Integer>();
-	private List<Integer> dischargeIndicesStorage = new ArrayList<Integer>();
-
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
 	 * 
@@ -751,30 +748,44 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// was not a Cargo sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 			if (lngCommitmentInM3 > availableHeelinM3) {
-				final PortDetails portDetails = (PortDetails) sequence[2];
+				final PortDetails portDetails = (PortDetails) sequence[0];
 				portDetails.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngCommitmentInM3 - availableHeelinM3);
 				++violationsCount;
 			}
 		}
-
-		final List<Integer> loadIndices = findLoadIndices(sequence);
-		final List<Integer> dischargeIndices = findDischargeIndices(sequence);
 
 		// Process details, filling in LNG prices
 		// TODO: I don't really like altering the details at this stage of
 		// processing, but this is where the information is being processed.
 		// Can this be moved into the scheduler? If so, we need to ensure the
 		// same price is used in all valid voyage legs.
-		final int[] prices = getLngEffectivePrices(loadIndices, dischargeIndices, arrivalTimes, sequence);
 
-		// set the LNG values for the voyages
-		if (prices != null) {
-			final int numVoyages = sequence.length / 2;
-			for (int i = 0; i < numVoyages; i++) {
-				final int index = i * 2 + 1;
-				final VoyageDetails details = (VoyageDetails) sequence[index];
-				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
-					details.setFuelUnitPrice(fc, prices[index]);
+		final boolean setLNGPrice;
+		if (dischargeIdx != -1) {
+			setLNGPrice = true;
+		} else {
+			if (((PortDetails) sequence[0]).getOptions().getPortSlot() instanceof IHeelOptionsPortSlot) {
+				final IHeelOptions options = ((IHeelOptionsPortSlot) ((PortDetails) sequence[0]).getOptions().getPortSlot()).getHeelOptions();
+				if (options.getHeelLimit() > 0) {
+					setLNGPrice = true;
+					dischargeM3Price = Calculator.costPerM3FromMMBTu(options.getHeelUnitPrice(), options.getHeelCVValue());
+				} else {
+					setLNGPrice = false;
+				}
+			} else {
+				setLNGPrice = false;
+			}
+		}
+		
+		for (int i = 0; i < sequence.length; ++i) {
+			if ((i & 1) == 1) {
+				assert sequence[i] instanceof VoyageDetails;
+
+				final VoyageDetails details = (VoyageDetails) sequence[i];
+				if (setLNGPrice || (dischargeIdx != -1)) {
+					details.setFuelUnitPrice(FuelComponent.NBO, dischargeM3Price);
+					details.setFuelUnitPrice(FuelComponent.FBO, dischargeM3Price);
+					details.setFuelUnitPrice(FuelComponent.IdleNBO, dischargeM3Price);
 				}
 			}
 		}
