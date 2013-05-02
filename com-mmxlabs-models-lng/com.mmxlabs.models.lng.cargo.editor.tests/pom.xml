@@ -62,6 +62,10 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<configuration>
 					<failIfNoTests>false</failIfNoTests>
+
+					<useUIThread>true</useUIThread>
+					<useUIHarness>true</useUIHarness>
+
 					<!-- Include non-standard test suffix -->
 					<includes>
 						<include>**/*Tests.*</include>
@@ -90,7 +94,7 @@
 							<artifactId>ch.qos.logback.slf4j</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-							<dependency>
+						<dependency>
 							<type>eclipse-plugin</type>
 							<artifactId>com.mmxlabs.models.lng.ui</artifactId>
 							<version>0.0.0</version>
