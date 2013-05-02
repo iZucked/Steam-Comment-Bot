@@ -1,7 +1,4 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1367421148751
-Build-Jdk: 1.7.0_13
-Built-By: sg
 Bundle-Description: LNG Scheduler
 Bundle-DocURL: http://www.minimaxlabs.com/
 Bundle-ManifestVersion: 2
@@ -12,7 +9,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 4.0.3.qualifier
-Created-By: Apache Maven Bundle Plugin
 Export-Package: com.mmxlabs.scheduler.optimiser.providers.impl.indexed;u
  ses:="com.mmxlabs.common.indexedobjects.impl,com.mmxlabs.common.impl,co
  m.mmxlabs.scheduler.optimiser.components,com.mmxlabs.scheduler.optimise
@@ -254,4 +250,3 @@ Import-Package: com.google.common.base;version="[13.0,14)",com.google.co
  j.peaberry;version="[1.1,2)",org.ops4j.peaberry.activation.util;version
  ="[1.0,2)",org.ops4j.peaberry.builders;version="[1.1,2)",org.ops4j.peab
  erry.util;version="[1.1,2)",org.slf4j;version="[1.5,2)"
-Tool: Bnd-1.50.0
