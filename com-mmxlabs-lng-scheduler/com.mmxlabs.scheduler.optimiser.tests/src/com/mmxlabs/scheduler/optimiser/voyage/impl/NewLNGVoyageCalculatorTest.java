@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 
 import org.junit.Assert;
@@ -1029,9 +1027,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		arrivalTimes.add(1);
-		arrivalTimes.add(2);
+		final int[] arrivalTimes = new int[] { 1, 2 };
 
 		final IPort toPort = Mockito.mock(IPort.class);
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
@@ -1101,10 +1097,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		arrivalTimes.add(1);
-		arrivalTimes.add(2);
-		arrivalTimes.add(3);
+		final int[] arrivalTimes = new int[] { 1, 2 };
 
 		final IPort toPort = Mockito.mock(IPort.class);
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
