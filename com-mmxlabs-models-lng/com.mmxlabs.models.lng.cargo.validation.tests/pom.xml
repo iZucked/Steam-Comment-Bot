@@ -96,13 +96,6 @@
 							<version>0.0.0</version>
 						</dependency>
 
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>org.hamcrest</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-
-
 					</dependencies>
 
 				</configuration>
