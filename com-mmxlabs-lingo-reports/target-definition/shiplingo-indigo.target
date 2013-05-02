@@ -91,6 +91,7 @@
 <unit id="org.ops4j.peaberry.activation" version="1.3.0"/>
 <unit id="org.ops4j.peaberry" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
+<unit id="org.mockito.mockito-all" version="1.9.5"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
