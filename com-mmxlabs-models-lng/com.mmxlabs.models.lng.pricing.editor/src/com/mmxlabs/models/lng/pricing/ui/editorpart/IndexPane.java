@@ -329,14 +329,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 							}
 						}
 
-						final IndexPoint<T> p = PricingFactory.eINSTANCE.createIndexPoint();
-						p.setDate(colDate);
-						p.setValue(value);
-						final Command cmd = AddCommand.create(getEditingDomain(), di, PricingPackage.eINSTANCE.getDataIndex_Points(), p);
-						if (!cmd.canExecute()) {
-							throw new RuntimeException("Unable to execute index add command");
+						if (value != null) {
+							final IndexPoint<T> p = PricingFactory.eINSTANCE.createIndexPoint();
+							p.setDate(colDate);
+							p.setValue(value);
+							final Command cmd = AddCommand.create(getEditingDomain(), di, PricingPackage.eINSTANCE.getDataIndex_Points(), p);
+							if (!cmd.canExecute()) {
+								throw new RuntimeException("Unable to execute index add command");
+							}
+							getEditingDomain().getCommandStack().execute(cmd);
 						}
-						getEditingDomain().getCommandStack().execute(cmd);
 					}
 
 					@Override
