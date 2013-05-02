@@ -29,7 +29,7 @@ public class BaseFuelEquivalenceConstraint extends AbstractModelConstraint {
 			final BaseFuel baseFuel = (BaseFuel) target;
 
 			if (baseFuel.getEquivalenceFactor() < 0.000001) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'"+baseFuel.getName()+"'"));
 				dcsd.addEObjectAndFeature(baseFuel, FleetPackage.eINSTANCE.getBaseFuel_EquivalenceFactor());
 				return dcsd;
 			}

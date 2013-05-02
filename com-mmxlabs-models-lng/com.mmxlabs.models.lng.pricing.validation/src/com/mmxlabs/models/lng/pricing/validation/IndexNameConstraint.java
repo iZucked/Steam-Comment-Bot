@@ -27,7 +27,7 @@ public class IndexNameConstraint extends AbstractModelConstraint {
 			Index<?> index = (Index<?>) target;
 			
 			if ((index.getName() == null) || !pattern.matcher(index.getName()).matches()) {
-				String message = "The name of an index can only contain letters, numbers and underscores.";
+				String message = "Index '"+index.getName()+"': Name can only contain letters, numbers and underscores.";
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(index, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
 				return dcsd;				
