@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.scheduler.optimiser.feature"
       label="LNG Scheduler Optimiser Feature"
-      version="4.0.3.RELEASE"
+      version="4.0.4.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
