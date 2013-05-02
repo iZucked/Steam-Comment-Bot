@@ -40,8 +40,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  * @since 2.0
  * 
  */
-public class SimpleContractTransformer implements IContractTransformer {
 
+public class SimpleContractTransformer implements IContractTransformer {
 	private ModelEntityMap map;
 
 	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceParameters(), CommercialPackage.eINSTANCE.getIndexPriceParameters(),

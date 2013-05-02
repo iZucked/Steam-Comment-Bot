@@ -7,24 +7,9 @@
 <repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.objenesis" version="1.0.0.v201105211943"/>
-<unit id="org.objenesis.source" version="1.0.0.v201105211943"/>
 <unit id="org.aopalliance" version="1.0.0.v201105210816"/>
 <unit id="com.google.inject.source" version="3.0.0.v201203062045"/>
 <unit id="com.google.inject" version="3.0.0.v201203062045"/>
-<unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.core.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.integration.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.generator" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.generator.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.integration" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.library" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.library.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
-<unit id="org.mockito" version="1.8.4.v201102171835"/>
-<unit id="org.mockito.source" version="1.8.4.v201102171835"/>
 <unit id="javax.inject" version="1.0.0.v20091030"/>
 <unit id="javax.inject.source" version="1.0.0.v20091030"/>
 <unit id="javax.xml.ws" version="2.1.0.v200902101523"/>
@@ -70,6 +55,7 @@
 <unit id="org.ops4j.peaberry.activation" version="1.3.0"/>
 <unit id="org.ops4j.peaberry" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
+<unit id="org.mockito.mockito-all" version="1.9.5"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">

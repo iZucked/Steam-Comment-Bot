@@ -1,6 +1,6 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  */
 package com.mmxlabs.models.lng.transformer.extensions.tradingexporter;
 
