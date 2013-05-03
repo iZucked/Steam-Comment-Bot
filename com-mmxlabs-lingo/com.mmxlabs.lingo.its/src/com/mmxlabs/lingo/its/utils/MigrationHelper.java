@@ -21,6 +21,7 @@ import com.google.common.io.ByteStreams;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.models.migration.LingoMigrationConstants;
 import com.mmxlabs.lingo.models.migration.units.LingoMigrateToV1;
 import com.mmxlabs.model.service.impl.ModelService;
@@ -165,8 +166,8 @@ public class MigrationHelper {
 		final List<DefaultMigrationContextExtensionPoint> defaultMigrationContexts = new ArrayList<DefaultMigrationContextExtensionPoint>();
 
 		// Populate!
-		migrationContexts.add(new TestMigrationContextExtensionPoint(ModelsLNGMigrationConstants.Context, -2));
-		migrationContexts.add(new TestMigrationContextExtensionPoint(LingoMigrationConstants.Context, -2));
+		migrationContexts.add(new TestMigrationContextExtensionPoint(ModelsLNGMigrationConstants.Context, 2));
+		migrationContexts.add(new TestMigrationContextExtensionPoint(LingoMigrationConstants.Context, -1));
 
 		migrationUnits.add(new TestMigrationUnitExtensionPoint(new MigrateToV1()));
 		migrationUnits.add(new TestMigrationUnitExtensionPoint(new MigrateToV2()));
@@ -180,7 +181,7 @@ public class MigrationHelper {
 	}
 
 	public static void migrateAndLoad(final ScenarioInstance instance) throws IOException {
-		final MigrationRegistry migrationRegistry = createMigrationRegistry();
+		final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 
 		final ScenarioMigrationService migrationService = new ScenarioMigrationService();
 		migrationService.setMigrationRegistry(migrationRegistry);
