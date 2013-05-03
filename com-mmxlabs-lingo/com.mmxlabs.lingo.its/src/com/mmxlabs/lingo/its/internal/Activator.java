@@ -10,6 +10,7 @@ import org.osgi.framework.BundleContext;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -25,7 +26,9 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	@Inject
-	IImporterRegistry importerRegistry;
+	private IImporterRegistry importerRegistry;
+	@Inject
+	private IMigrationRegistry migrationRegistry;
 
 	/**
 	 * The constructor
@@ -70,4 +73,9 @@ public class Activator extends AbstractUIPlugin {
 	public IImporterRegistry getImporterRegistry() {
 		return importerRegistry;
 	}
+
+	public IMigrationRegistry getMigrationRegistry() {
+		return migrationRegistry;
+	}
+
 }
