@@ -21,7 +21,6 @@
 		<module>com.mmxlabs.lingo.app</module>
 		<module>com.mmxlabs.lingo.ui</module>
 		<module>com.mmxlabs.lingo.extensions</module>
-		<module>com.mmxlabs.lingo.extensions.tests</module>
 
 		<module>com.mmxlabs.lingo.models.migration</module>
 
@@ -31,7 +30,7 @@
 
 		<module>com.mmxlabs.lingo.feature</module>
 		<module>com.mmxlabs.lingo.product-definition</module>
-		
+
 		<module>com.mmxlabs.lingo.its</module>
 	</modules>
 	<build>
