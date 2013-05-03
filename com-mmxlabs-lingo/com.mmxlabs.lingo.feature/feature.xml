@@ -33,19 +33,61 @@
          ws="win32"
          arch="x86_64"/>
 
-      <includes id="com.mmxlabs.datasources.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.jobmanager.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.lingo.platform.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.models.lng.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.models.lng.transformer.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.models.lng.types.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.models.lng.ui.runtime.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.models.migration.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.models.mmxcore.runtime.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.models.ui.runtime.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.rcp.common.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.scenario.service.feature" version="0.0.0"/>
-      <includes id="com.mmxlabs.shiplingo.platform.feature" version="0.0.0" />
+   <includes
+         id="com.mmxlabs.datasources.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.jobmanager.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.lingo.platform.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.models.lng.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.models.lng.transformer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.models.lng.types.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.models.lng.ui.runtime.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.models.migration.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.models.mmxcore.runtime.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.models.ui.runtime.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.rcp.common.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.scenario.service.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.shiplingo.platform.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.scheduler.optimiser.feature"
+         version="0.0.0"/>
 
    <plugin
          id="com.mmxlabs.optimiser.optimiser-common"
