@@ -97,8 +97,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			portVisit = sv;
 
 			// Output allocation info.
-			final IAllocationAnnotation allocation = (IAllocationAnnotation)annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
-						
+			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
+
 			eAllocation = allocations.get(slot);
 
 			if (eAllocation == null) {
@@ -188,21 +188,20 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
 
 		if (slot.getPortType() == PortType.Start) {
-			portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime() - 1));
+			portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime()));
 		} else {
 			portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime()));
 		}
 		if (slot.getPortType() == PortType.End) {
-			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime() + 1));
+			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
 		} else {
 			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
 		}
-		
-		
+
 		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
 		if (capacityViolationAnnotation != null) {
 			Collection<ICapacityEntry> capacityViolations = capacityViolationAnnotation.getEntries();
-			for (ICapacityEntry violation: capacityViolations) {
+			for (ICapacityEntry violation : capacityViolations) {
 				com.mmxlabs.models.lng.schedule.CapacityViolationType type = null;
 				CapacityViolationType x = violation.getType();
 				switch (x) {
@@ -214,13 +213,13 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 					break;
 				case MIN_DISCHARGE:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MIN_DISCHARGE;
-					break;					
+					break;
 				case MAX_LOAD:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MAX_LOAD;
 					break;
 				case MIN_LOAD:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MIN_LOAD;
-					break;					
+					break;
 				case MAX_HEEL:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MAX_HEEL;
 					break;
