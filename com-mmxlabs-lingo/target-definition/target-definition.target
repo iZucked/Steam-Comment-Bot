@@ -23,6 +23,8 @@
 <unit id="javax.wsdl.source" version="1.6.2.v201012040545"/>
 <unit id="javax.xml.bind" version="2.2.0.v201105210648"/>
 <unit id="org.aopalliance" version="1.0.0.v201105210816"/>
+<unit id="com.google.inject.source" version="3.0.0.v201203062045"/>
+<unit id="com.google.inject" version="3.0.0.v201203062045"/>
 <unit id="javax.inject" version="1.0.0.v20091030"/>
 <unit id="javax.inject.source" version="1.0.0.v20091030"/>
 <unit id="javax.xml.ws" version="2.1.0.v200902101523"/>
