@@ -175,18 +175,43 @@ public class TradingExporterExtension implements IExporterExtension {
 				} else {
 					if (slot instanceof StartPortSlot) {
 						final StartEvent startEvent = findStartEvent(vesselProvider, element);
-
-						// Look forward in sequence for a charter event
-						Event nextEvent = startEvent.getNextEvent();
-						while (nextEvent != null && !(nextEvent instanceof GeneratedCharterOut)) {
-							nextEvent = nextEvent.getNextEvent();
-						}
-						if (nextEvent instanceof GeneratedCharterOut) {
-							setPandLentries(generatedCharterOutProfitAndLoss, (ExtraDataContainer) nextEvent);
+						if (startEvent != null) {
+							// Look forward in sequence for a charter event
+							Event nextEvent = startEvent.getNextEvent();
+							while (nextEvent != null && !(nextEvent instanceof GeneratedCharterOut)) {
+								nextEvent = nextEvent.getNextEvent();
+							}
+							if (nextEvent instanceof GeneratedCharterOut) {
+								setPandLentries(generatedCharterOutProfitAndLoss, (ExtraDataContainer) nextEvent);
+							}
 						}
 					} else if (slot instanceof EndPortSlot) {
 						// ? Unexpected state!
+					} else if (slot instanceof IVesselEventPortSlot) {
+						final com.mmxlabs.models.lng.fleet.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.fleet.VesselEvent.class);
+						VesselEventVisit visit = null;
+						//
+						for (final Sequence sequence : outputSchedule.getSequences()) {
+							for (final Event event : sequence.getEvents()) {
+								if (event instanceof VesselEventVisit) {
+									if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
+										visit = (VesselEventVisit) event;
+									}
+								}
+							}
+						}
+						if (visit != null) {
+							// Look forward in sequence for a charter event
+							Event nextEvent = visit.getNextEvent();
+							while (nextEvent != null && !(nextEvent instanceof GeneratedCharterOut)) {
+								nextEvent = nextEvent.getNextEvent();
+							}
+							if (nextEvent instanceof GeneratedCharterOut) {
+								setPandLentries(generatedCharterOutProfitAndLoss, (ExtraDataContainer) nextEvent);
+							}
+						}
 					}
+
 				}
 			}
 		}
