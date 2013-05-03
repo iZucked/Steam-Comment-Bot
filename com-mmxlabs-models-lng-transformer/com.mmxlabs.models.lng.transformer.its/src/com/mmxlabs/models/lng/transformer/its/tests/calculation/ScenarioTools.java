@@ -85,6 +85,8 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
+import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
+import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -892,6 +894,7 @@ public class ScenarioTools {
 
 		int index = 0;
 		// long l = System.currentTimeMillis();
+		
 		//
 		for (final MMXSubModel sub : instance.getSubModels()) {
 			final EObject top = sub.getSubModelInstance();
@@ -900,7 +903,9 @@ public class ScenarioTools {
 			final URI resolved = relativeURI.resolve(manifestURI);
 			final Resource r2 = resourceSet.createResource(resolved);
 			r2.getContents().add(top);
+			MMXCoreHandlerUtil.preSave(r2);
 			r2.save(null);
+			MMXCoreHandlerUtil.postSave(r2);
 		}
 
 		// for (final String partURI : partURIs) {
