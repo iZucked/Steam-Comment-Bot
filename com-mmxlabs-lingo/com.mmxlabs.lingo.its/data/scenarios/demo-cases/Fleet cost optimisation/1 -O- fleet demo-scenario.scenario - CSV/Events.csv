@@ -1,0 +1,3 @@
+uuid,name,otherNames,durationInDays,startAfter,startBy,allowedVessels,port,kind
+_8Spy0MdpEeGuqs3xZRZ2jA,RO drydock,,60,2011-06-01 22:00,2011-06-06 23:00,LNG River Orashi,Senboku,DryDockEvent
+_lsq9EMdsEeGuqs3xZRZ2jA,Lagos,,25,2011-05-01 16:00,2011-05-10 16:00,LNG Lagos,Montoir,DryDockEvent

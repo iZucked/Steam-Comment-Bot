@@ -1,0 +1,5 @@
+uuid,name,otherNames,minQuantity,maxQuantity,priceInfo.uuid,priceInfo.pricePerMMBTU,entity,allowedPorts,priceInfo.kind,kind
+_g2QRkG3kEeGoB9CX9jdaHQ,HH Sales,,0,0,_ngJo4XnREeKJe_KFGcd0PA,7.0,US,,FixedPriceParameters,SalesContract
+_g2QRkW3kEeGoB9CX9jdaHQ,NBP Sales,,0,0,_ngJo4XnREeKJe_KFGcd1PA,7.0,Europe,,FixedPriceParameters,SalesContract
+_g2QRkm3kEeGoB9CX9jdaHQ,TTF Sales,,0,0,_ngJo4XnREeKJe_KFGcd2PA,7.0,Europe,,FixedPriceParameters,SalesContract
+_g2QRk23kEeGoB9CX9jdaHQ,JCC Sales,,0,0,_ngJo4XnREeKJe_KFGcd3PA,7.0,Asia,,FixedPriceParameters,SalesContract
