@@ -70,61 +70,57 @@
 						<include>**/*Test.*</include>
 					</includes>
 
-					<product>org.eclipse.sdk.ide</product>
-					<application>org.eclipse.ui.ide.workbench</application>
+					<product>com.mmxlabs.lingo.product.product</product>
+					<application>com.mmxlabs.lingo.app.application</application>
 
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>true</useUIThread>
 
 					<dependencies>
 						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>org.eclipse.equinox.ds</artifactId>
+							<type>eclipse-feature</type>
+							<artifactId>com.mmxlabs.lingo.feature</artifactId>
 							<version>0.0.0</version>
 						</dependency>
 						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>org.eclipse.sdk</artifactId>
+							<type>eclipse-feature</type>
+							<artifactId>com.mmxlabs.lingo.platform.feature</artifactId>
 							<version>0.0.0</version>
 						</dependency>
 						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>org.ops4j.peaberry.activation</artifactId>
+							<type>eclipse-feature</type>
+							<artifactId>com.mmxlabs.models.lng.transformer.its.feature</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-						<!-- Logging plug-ins -->
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.core</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.classic</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.slf4j</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>com.google.guava</artifactId>
-							<version>10.0.1.v201203051515</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>com.google.guava</artifactId>
-							<version>13.0.1</version>
-						</dependency>
+<!-- 						<dependency> -->
+<!-- 							<type>eclipse-plugin</type> -->
+<!-- 							<artifactId>org.eclipse.equinox.ds</artifactId> -->
+<!-- 							<version>0.0.0</version> -->
+<!-- 						</dependency> -->
+<!-- 						<dependency> -->
+<!-- 							<type>eclipse-plugin</type> -->
+<!-- 							<artifactId>org.eclipse.sdk</artifactId> -->
+<!-- 							<version>0.0.0</version> -->
+<!-- 						</dependency> -->
+<!-- 						<dependency> -->
+<!-- 							<type>eclipse-plugin</type> -->
+<!-- 							<artifactId>org.ops4j.peaberry.activation</artifactId> -->
+<!-- 							<version>0.0.0</version> -->
+<!-- 						</dependency> -->
+<!-- 						Logging plug-ins -->
+<!-- 						<dependency> -->
+<!-- 							<type>eclipse-plugin</type> -->
+<!-- 							<artifactId>com.mmxlabs.rcp.logger</artifactId> -->
+<!-- 							<version>0.0.0</version> -->
+<!-- 						</dependency> -->
 					</dependencies>
 
 					<!-- Automatically start these bundles at specified run level. These 
 						contain the services required for test execution -->
 					<bundleStartLevel>
+
 						<bundle>
-							<id>org.eclipse.equinox.ds</id>
+							<id>org.eclipse.core.runtime</id>
 							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>
@@ -134,10 +130,12 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
-							<id>org.eclipse.core.runtime</id>
-							<level>3</level>
+							<id>org.eclipse.equinox.ds</id>
+							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>
+
+
 						<bundle>
 							<id>org.ops4j.peaberry.activation</id>
 							<level>1</level>
@@ -160,7 +158,32 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
+							<id>com.mmxlabs.models.migration</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.migration.scenario</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.lng.analytics.editor</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.lng.liveevaluator</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
 							<id>com.mmxlabs.models.lng.transformer</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.lng.transformer.ui</id>
 							<level>4</level>
 							<autoStart>true</autoStart>
 						</bundle>
@@ -212,7 +235,7 @@
 			<repositories>
 				<repository>
 					<id>mmxlabs-p2-snapshots</id>
-					<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.shiplingo.platform.vanilla/nightly/</url>
+					<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.lingo/nightly/</url>
 					<layout>p2</layout>
 				</repository>
 			</repositories>
