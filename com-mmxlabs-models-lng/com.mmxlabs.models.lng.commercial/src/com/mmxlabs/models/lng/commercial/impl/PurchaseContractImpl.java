@@ -5,6 +5,9 @@
 package com.mmxlabs.models.lng.commercial.impl;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
 import org.eclipse.emf.ecore.EClass;
 

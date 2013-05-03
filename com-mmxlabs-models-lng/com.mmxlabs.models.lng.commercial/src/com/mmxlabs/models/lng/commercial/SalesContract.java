@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.lng.types.ASalesContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import com.mmxlabs.models.lng.types.ASalesContract;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
  * <!-- begin-user-doc -->
