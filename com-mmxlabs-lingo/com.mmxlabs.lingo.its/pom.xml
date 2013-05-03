@@ -92,27 +92,27 @@
 							<artifactId>com.mmxlabs.models.lng.transformer.its.feature</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-<!-- 						<dependency> -->
-<!-- 							<type>eclipse-plugin</type> -->
-<!-- 							<artifactId>org.eclipse.equinox.ds</artifactId> -->
-<!-- 							<version>0.0.0</version> -->
-<!-- 						</dependency> -->
-<!-- 						<dependency> -->
-<!-- 							<type>eclipse-plugin</type> -->
-<!-- 							<artifactId>org.eclipse.sdk</artifactId> -->
-<!-- 							<version>0.0.0</version> -->
-<!-- 						</dependency> -->
-<!-- 						<dependency> -->
-<!-- 							<type>eclipse-plugin</type> -->
-<!-- 							<artifactId>org.ops4j.peaberry.activation</artifactId> -->
-<!-- 							<version>0.0.0</version> -->
-<!-- 						</dependency> -->
-<!-- 						Logging plug-ins -->
-<!-- 						<dependency> -->
-<!-- 							<type>eclipse-plugin</type> -->
-<!-- 							<artifactId>com.mmxlabs.rcp.logger</artifactId> -->
-<!-- 							<version>0.0.0</version> -->
-<!-- 						</dependency> -->
+						<!-- <dependency> -->
+						<!-- <type>eclipse-plugin</type> -->
+						<!-- <artifactId>org.eclipse.equinox.ds</artifactId> -->
+						<!-- <version>0.0.0</version> -->
+						<!-- </dependency> -->
+						<!-- <dependency> -->
+						<!-- <type>eclipse-plugin</type> -->
+						<!-- <artifactId>org.eclipse.sdk</artifactId> -->
+						<!-- <version>0.0.0</version> -->
+						<!-- </dependency> -->
+						<!-- <dependency> -->
+						<!-- <type>eclipse-plugin</type> -->
+						<!-- <artifactId>org.ops4j.peaberry.activation</artifactId> -->
+						<!-- <version>0.0.0</version> -->
+						<!-- </dependency> -->
+						<!-- Logging plug-ins -->
+						<!-- <dependency> -->
+						<!-- <type>eclipse-plugin</type> -->
+						<!-- <artifactId>com.mmxlabs.rcp.logger</artifactId> -->
+						<!-- <version>0.0.0</version> -->
+						<!-- </dependency> -->
 					</dependencies>
 
 					<!-- Automatically start these bundles at specified run level. These 
@@ -134,8 +134,6 @@
 							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>
-
-
 						<bundle>
 							<id>org.ops4j.peaberry.activation</id>
 							<level>1</level>
@@ -168,11 +166,6 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
-							<id>com.mmxlabs.models.lng.analytics.editor</id>
-							<level>4</level>
-							<autoStart>true</autoStart>
-						</bundle>
-						<bundle>
 							<id>com.mmxlabs.models.lng.liveevaluator</id>
 							<level>4</level>
 							<autoStart>true</autoStart>
@@ -194,6 +187,11 @@
 						</bundle>
 						<bundle>
 							<id>com.mmxlabs.lingo.extensions</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.lingo.its</id>
 							<level>4</level>
 							<autoStart>true</autoStart>
 						</bundle>
