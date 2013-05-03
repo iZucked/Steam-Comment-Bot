@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,6 +34,8 @@ import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -43,6 +46,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -416,6 +420,7 @@ public class ShippingCalculationsTest {
 				result -= routeCost;
 
 				final Integer loadDischargeVolume = expectedArrays.get(Expectations.LOAD_DISCHARGE)[i];
+				// Oops! test fails if there is a capacity violation causing a negative load or discharge volume....
 				// discharge
 				if (loadDischargeVolume < 0) {
 					result -= loadDischargeVolume * salesPricePerM3;
@@ -646,6 +651,7 @@ public class ShippingCalculationsTest {
 		// change from default scenario
 		// first journey should use NBO and base fuel (not just base fuel)
 		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
+		checker.setExpectedValue(0, Expectations.FBO_USAGE, Journey.class, 0);
 		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
 
 		// cost of first journey should be changed accordingly
@@ -735,27 +741,28 @@ public class ShippingCalculationsTest {
 	}
 
 	@Test
-	public void testMinHeelForcesBfJourney() {
-		System.err.println("\n\nMinimum Heel Forces BF only journey");
+	public void testMinHeelForcesBfSupplementAndHeelout() {
+		System.err.println("\n\nMinimum Heel Forces BF supplement and heel out");
 		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
 		final MMXRootObject scenario = dsc.buildScenario();
 		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
 
-		// change from default scenario: make the minimum heel unattainable
+		// change from default scenario: make the minimum heel unattainable - thus causing a capacity violation
+		// Cause a heel out and BF supplement to be used
 		mss.vc.setMinHeel(10000);
 
 		final SequenceTester checker = getDefaultTester();
 
-		// change from default: no NBO consumption (min heel forces BF travel)
-		final Integer[] expectedNboJourneyConsumptions = { 0, 0, 0 };
+		// change from default: no NBO consumption (min heel forces BF travel except on laden leg where it is required)
+		final Integer[] expectedNboJourneyConsumptions = { 0, 20, 0 };
 		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, expectedNboJourneyConsumptions);
 
-		// change from default: all BF consumption (min heel forces BF travel)
-		final Integer[] expectedBaseFuelJourneyConsumptions = { 15, 30, 15 };
+		// change from default: mostly BF consumption (min heel forces BF travel)
+		final Integer[] expectedBaseFuelJourneyConsumptions = { 15, 10, 15 };
 		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, expectedBaseFuelJourneyConsumptions);
 
 		// expected costs of journeys
-		final Integer[] expectedJourneyCosts = { 150, 300, 150 };
+		final Integer[] expectedJourneyCosts = { 150, 520, 150 };
 		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -764,6 +771,14 @@ public class ShippingCalculationsTest {
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
+
+		// Check that a violation has been recorded
+		int violationCount = 0;
+
+		for (final SlotVisit visit : extractObjectsOfClass(sequence.getEvents(), SlotVisit.class)) {
+			violationCount += visit.getViolations().size();
+		}
+		Assert.assertTrue(violationCount > 0);
 	}
 
 	@Test
@@ -986,7 +1001,23 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester();
 
-		final Integer[] expectedloadDischargeVolumes = { 20, 0 };
+		// change from default: no NBO consumption (min heel forces BF travel except on laden leg where it is required)
+		final Integer[] expectedNboJourneyConsumptions = { 0, 20, 0 };
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, expectedNboJourneyConsumptions);
+
+		// change from default: mostly BF consumption (min heel forces BF travel)
+		final Integer[] expectedBaseFuelJourneyConsumptions = { 15, 10, 15 };
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, expectedBaseFuelJourneyConsumptions);
+
+		final Integer[] expectedNboIdleConsumptions = { 0, 10, 0 };
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, expectedNboIdleConsumptions);
+
+		// expected costs of journeys
+		final Integer[] expectedJourneyCosts = { 150, 520, 150 };
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
+
+		// Expect -10 on discharge (negated for test API)
+		final Integer[] expectedloadDischargeVolumes = { 20, 10 };
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -1010,7 +1041,7 @@ public class ShippingCalculationsTest {
 		final Date endDischarge = mss.cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
 
 		// return 3 hrs after discharge window ends
-		final Date returnDate = new Date(endDischarge.getTime() + 3 * 3600 * 1000);
+		final Date returnDate = new Date(endDischarge.getTime() + 2l * 3600l * 1000l);
 		av.setEndAfter(returnDate);
 		System.err.println("Vessel to return after: " + returnDate);
 
@@ -1018,11 +1049,14 @@ public class ShippingCalculationsTest {
 
 		// change from default: BF idle consumption at base port after return
 		// (idle at discharge port is NBO)
-		checker.setExpectedValue(10, Expectations.BF_USAGE, Idle.class, 2);
+		checker.setExpectedValue(5, Expectations.BF_USAGE, Idle.class, 2);
 		// change from default: idle at base port after return
-		checker.setExpectedValue(2, Expectations.DURATIONS, Idle.class, 2);
+		checker.setExpectedValue(1, Expectations.DURATIONS, Journey.class, 2);
+
+		checker.setExpectedValue(1, Expectations.DURATIONS, Idle.class, 2);
 		// change from default: idle cost at base port
-		checker.setExpectedValue(100, Expectations.FUEL_COSTS, Idle.class, 2);
+		// 50 = 10 { base fuel unit cost } * 5 { base fuel consumption }
+		checker.setExpectedValue(50, Expectations.FUEL_COSTS, Idle.class, 2);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1192,10 +1226,11 @@ public class ShippingCalculationsTest {
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
+		checker.check(sequence);
+
 		final Cooldown cooldown = extractObjectsOfClass(sequence.getEvents(), Cooldown.class).get(0);
 		Assert.assertEquals("Cooldown cost", 2100, cooldown.getCost());
 
-		checker.check(sequence);
 	}
 
 	@Test
@@ -1391,16 +1426,19 @@ public class ShippingCalculationsTest {
 
 		mss.vessel.getAvailability().getStartAt().clear();
 
-		final SequenceTester checker = getDefaultTester();
-
 		// change from default scenario: vessel makes only two journeys
 		final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
 
-		checker.setClasses(expectedClasses);
+		final SequenceTester checker = getDefaultTester(expectedClasses);
+		// Missing the journey so shift default indices by one
+		checker.setCargoIndices(new CargoIndexData[] { new CargoIndexData(2, 7) });
 
 		// expected durations of journeys
 		final Integer[] expectedJourneyDurations = { 2, 1 };
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, expectedJourneyDurations);
+
+		final Integer[] expectedIdleDurations = { 0, 2, 0 };
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, expectedIdleDurations);
 
 		// expected FBO consumptions of journeys
 		// none (not economical in default)
@@ -1417,7 +1455,6 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, expectedBaseFuelJourneyConsumptions);
 
 		// expected costs of journeys
-		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
 		final Integer[] expectedJourneyCosts = { 520, 150 };
@@ -1460,8 +1497,8 @@ public class ShippingCalculationsTest {
 	}
 
 	@Test
-	public void testLimitedStartHeelForcesBfIdle() {
-		System.err.println("\n\nLimited Start Heel, should NBO travel and BF on idle");
+	public void testLimitedStartHeelIsCapacityViolation() {
+		System.err.println("\n\nLimited Start Heel, should still NBO travel and idle - Capacity Violation");
 		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
 		final MMXRootObject scenario = dsc.buildScenario();
 
@@ -1492,9 +1529,9 @@ public class ShippingCalculationsTest {
 
 		// change from default: BF idle consumption at load port after arrival
 		// (idle at discharge port is NBO)
-		checker.setExpectedValue(10, Expectations.BF_USAGE, Idle.class, 0);
+		checker.setExpectedValue(10, Expectations.NBO_USAGE, Idle.class, 0);
 		checker.setExpectedValue(2, Expectations.DURATIONS, Idle.class, 0);
-		checker.setExpectedValue(100, Expectations.FUEL_COSTS, Idle.class, 0);
+		checker.setExpectedValue(210, Expectations.FUEL_COSTS, Idle.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1502,6 +1539,11 @@ public class ShippingCalculationsTest {
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
+
+		// Check that a violation has been recorded
+		final StartEvent firstVisit = extractObjectsOfClass(sequence.getEvents(), StartEvent.class).get(0);
+		final EMap<CapacityViolationType, Long> violations = firstVisit.getViolations();
+		Assert.assertFalse(violations.isEmpty());
 	}
 
 }
