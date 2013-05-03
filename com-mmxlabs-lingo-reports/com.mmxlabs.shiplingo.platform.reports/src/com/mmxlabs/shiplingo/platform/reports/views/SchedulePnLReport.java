@@ -264,9 +264,16 @@ public class SchedulePnLReport extends EMFReportView {
 		// supplying null for the entity name indicates that the total group P&L should be returned
 		if (entity == null) {
 			data = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+			if (data == null) {
+				return null;
+			}
+
+			return data.getValueAs(Integer.class);
 		}
 		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
 		else {
+			int groupTotal = 0;
+			boolean foundValue = false;
 			final String[] options = { TradingConstants.ExtraData_upstream, TradingConstants.ExtraData_shipped, TradingConstants.ExtraData_downstream };
 			for (final String option : options) {
 				final ExtraData possibleData = container.getDataWithKey(option);
@@ -274,17 +281,20 @@ public class SchedulePnLReport extends EMFReportView {
 					final ExtraData entityData = possibleData.getDataWithKey(entity);
 					if (entityData != null) {
 						data = entityData.getDataWithKey(TradingConstants.ExtraData_pnl);
+						if (data != null) {
+							groupTotal += data.getValueAs(Integer.class);
+							foundValue = true;
+						}
+
 					}
 				}
-
+			}
+			if (foundValue) {
+				return groupTotal;
 			}
 		}
 
-		if (data == null) {
-			return null;
-		}
-
-		return data.getValueAs(Integer.class);
+		return null;
 	}
 
 	private void addPNLColumn() {
