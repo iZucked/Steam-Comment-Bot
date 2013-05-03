@@ -21,6 +21,8 @@ import com.google.common.io.ByteStreams;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.lingo.models.migration.LingoMigrationConstants;
+import com.mmxlabs.lingo.models.migration.units.LingoMigrateToV1;
 import com.mmxlabs.model.service.impl.ModelService;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.lng.migration.units.MigrateToV1;
@@ -36,9 +38,6 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
-import com.mmxlabs.shiplingo.platform.vanilla.models.migration.VanillaMigrationConstants;
-import com.mmxlabs.shiplingo.platform.vanilla.models.migration.units.VanillaMigrateToV1;
-import com.mmxlabs.shiplingo.platform.vanilla.models.migration.units.VanillaMigrateToV2;
 
 public class MigrationHelper {
 	private static class TestScenarioService extends AbstractScenarioService {
@@ -167,15 +166,14 @@ public class MigrationHelper {
 
 		// Populate!
 		migrationContexts.add(new TestMigrationContextExtensionPoint(ModelsLNGMigrationConstants.Context, -2));
-		migrationContexts.add(new TestMigrationContextExtensionPoint(VanillaMigrationConstants.Context, -2));
+		migrationContexts.add(new TestMigrationContextExtensionPoint(LingoMigrationConstants.Context, -2));
 
 		migrationUnits.add(new TestMigrationUnitExtensionPoint(new MigrateToV1()));
 		migrationUnits.add(new TestMigrationUnitExtensionPoint(new MigrateToV2()));
 		// These need the migration registry injected
-		migrationUnits.add(new TestMigrationUnitExtensionPoint(injector.getInstance(VanillaMigrateToV1.class)));
-		migrationUnits.add(new TestMigrationUnitExtensionPoint(injector.getInstance(VanillaMigrateToV2.class)));
+		migrationUnits.add(new TestMigrationUnitExtensionPoint(injector.getInstance(LingoMigrateToV1.class)));
 
-		defaultMigrationContexts.add(new TestDefaultMigrationContextExtensionPoint(VanillaMigrationConstants.Context));
+		defaultMigrationContexts.add(new TestDefaultMigrationContextExtensionPoint(LingoMigrationConstants.Context));
 
 		migrationRegistry.init(migrationContexts, migrationUnits, defaultMigrationContexts);
 		return migrationRegistry;
