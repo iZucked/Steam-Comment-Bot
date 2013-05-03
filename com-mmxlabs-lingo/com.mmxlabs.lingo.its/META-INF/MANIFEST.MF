@@ -41,3 +41,5 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
 Bundle-ClassPath: data/,
  .
 Import-Package: org.slf4j;version="1.6.4"
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.mmxlabs.lingo.its.internal.Activator
