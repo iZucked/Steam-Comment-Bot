@@ -51,6 +51,7 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * LNG is available but BF is used as LNG is slightly more expensive
 	 */
+	@Ignore("Test cannot distinguish between base and base supplemental")
 	@Test
 	public void heelFBOAvailableLNGExpensiveUsed() {
 
@@ -164,6 +165,7 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * Check that for varying heel limits LNG usage never exceeds (but may equal) the amount of heel).
 	 */
+	@Ignore("Heel may not be exceeded with a capacity violation")
 	@Test
 	public void heelNotExceeded() {
 
