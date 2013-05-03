@@ -113,18 +113,8 @@
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/jre"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.common.common-util.source" version="2.1.0.201211271403"/>
-<unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
-<unit id="com.mmxlabs.optimiser.optimiser-common.source" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core.source" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga.source" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso.source" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.scheduler.optimiser" version="4.0.2.201304241103"/>
-<unit id="com.mmxlabs.scheduler.optimiser.source" version="4.0.2.201304241103"/>
+<unit id="com.mmxlabs.scheduler.optimiser.feature.feature.group" version="4.0.3.RELEASE"/>
+<unit id="com.mmxlabs.scheduler.optimiser.feature.source.feature.group" version="4.0.3.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.1.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.1.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="3.1.0.RELEASE"/>
@@ -143,12 +133,14 @@
 <unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="3.1.0.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="3.1.0.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.source.feature.group" version="3.1.0.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.feature.feature.group" version="3.0.2.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="3.0.2.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.feature.feature.group" version="3.0.4.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="3.0.4.RELEASE"/>
 <unit id="com.mmxlabs.datasources.feature.feature.group" version="1.1.2.RELEASE"/>
 <unit id="com.mmxlabs.datasources.feature.source.feature.group" version="1.1.2.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.transformer.feature.source.feature.group" version="3.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.transformer.its.feature.feature.group" version="3.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.transformer.its.feature.source.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.platform.feature.feature.group" version="3.0.1.RELEASE"/>
 <unit id="com.mmxlabs.shiplingo.platform.feature.feature.group" version="3.0.1.RELEASE"/>
 <unit id="com.mmxlabs.shiplingo.platform.feature.source.feature.group" version="3.0.1.RELEASE"/>
