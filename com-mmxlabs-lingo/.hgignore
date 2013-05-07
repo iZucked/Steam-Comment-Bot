@@ -22,3 +22,5 @@ syntax: regexp
 
 syntax: regexp
 ^plugin_customization\.ini$
+syntax: regexp
+^com\.mmxlabs\.lingo\.doc/index$
