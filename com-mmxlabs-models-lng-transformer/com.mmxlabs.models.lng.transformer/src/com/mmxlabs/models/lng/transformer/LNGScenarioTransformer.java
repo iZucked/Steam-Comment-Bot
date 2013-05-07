@@ -370,12 +370,18 @@ public class LNGScenarioTransformer {
 		// services. Ensure their bundles have been started!
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
+			if (transformer == null) {
+				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
+			}
 			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c.getPriceInfo());
 			entities.addModelObject(c, calculator);
 		}
 
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
+			if (transformer == null) {
+				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
+			}
 			final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(c.getPriceInfo());
 			if (calculator == null) {
 				throw new IllegalStateException("Unable to transform contract");

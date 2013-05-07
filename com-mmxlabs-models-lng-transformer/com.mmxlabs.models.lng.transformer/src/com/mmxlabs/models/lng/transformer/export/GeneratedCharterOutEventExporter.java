@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.events.IGeneratedCharterOutEvent;
 
@@ -50,8 +51,9 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 		// have an EMF representation, but we do want idle time for it
 		// so we assume if we hit a dubious port it's ANYWHERE and that
 		// we are really where we used to be.
-		if (ePort == null)
+		if (ePort == null) {
 			ePort = visitExporter.getLastPortVisited();
+		}
 		// if (ePort == null)
 		// return null;
 
@@ -59,6 +61,7 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 		generatedCharterOutEvent.setPort(ePort);
 		generatedCharterOutEvent.setStart(entities.getDateFromHours(event.getStartTime()));
 		generatedCharterOutEvent.setEnd(entities.getDateFromHours(event.getEndTime()));
+		generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterOutRevenue()));
 
 		return generatedCharterOutEvent;
 	}
