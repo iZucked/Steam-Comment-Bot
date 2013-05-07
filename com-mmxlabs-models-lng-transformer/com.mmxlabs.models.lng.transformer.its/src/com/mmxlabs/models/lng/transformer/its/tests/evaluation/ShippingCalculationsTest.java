@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
-import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -46,7 +45,6 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -78,7 +76,7 @@ public class ShippingCalculationsTest {
 	}
 
 	public enum Expectations {
-		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, ROUTE_COSTS
+		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, CANAL_COSTS
 	}
 
 	public void checkClasses(final EList<? extends Object> objects, final Class<?>[] classes) {
@@ -116,6 +114,12 @@ public class ShippingCalculationsTest {
 			return getFuelConsumption(event, Fuel.NBO);
 		case PILOT_USAGE:
 			return getFuelConsumption(event, Fuel.PILOT_LIGHT);
+		case CANAL_COSTS: {
+			if (event instanceof Journey) 
+				return ((Journey) event).getToll();
+			else
+				return null;
+		}			
 		default:
 			return null;
 		}
@@ -416,7 +420,7 @@ public class ShippingCalculationsTest {
 				final Integer hireCost = expectedArrays.get(Expectations.HIRE_COSTS)[i];
 				result -= hireCost;
 
-				final Integer routeCost = expectedArrays.get(Expectations.ROUTE_COSTS)[i];
+				final Integer routeCost = expectedArrays.get(Expectations.CANAL_COSTS)[i];
 				result -= routeCost;
 
 				final Integer loadDischargeVolume = expectedArrays.get(Expectations.LOAD_DISCHARGE)[i];
@@ -434,6 +438,14 @@ public class ShippingCalculationsTest {
 
 		}
 
+		/**
+		 * Sets up the expected P&L for all cargoes, based on the purchase price, sales price, base fuel price, fuel costs and 
+		 * load / discharge volumes for those cargoes.
+		 * 
+		 * @param purchasePricePerM3
+		 * @param salesPricePerM3
+		 * @param bfPrice
+		 */
 		public void setupExpectedPnl(final double purchasePricePerM3, final double salesPricePerM3, final double bfPrice) {
 			final Integer[] pnl = new Integer[cargoIndices.length];
 
@@ -480,7 +492,7 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(260, Expectations.FUEL_COSTS, Journey.class, 1);
 
 		// second journey faces additional canal cost
-		checker.setExpectedValue(1, Expectations.ROUTE_COSTS, Journey.class, 1);
+		checker.setExpectedValue(1, Expectations.CANAL_COSTS, Journey.class, 1);
 
 		// second journey takes half as long (as default)
 		checker.setExpectedValue(1, Expectations.DURATIONS, Journey.class, 1);
@@ -504,9 +516,6 @@ public class ShippingCalculationsTest {
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
-
-		final Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
-		Assert.assertEquals("Toll for laden leg via canal", 1, ladenJourney.getToll());
 
 	}
 
@@ -532,10 +541,10 @@ public class ShippingCalculationsTest {
 
 		final Sequence sequence = schedule.getSequences().get(0);
 
+		checker.setExpectedValue(0, Expectations.CANAL_COSTS, Journey.class, 1);
+		
 		checker.check(sequence);
 
-		final Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
-		Assert.assertEquals("Toll for laden leg via canal", 0, ladenJourney.getToll());
 	}
 
 	@Test
@@ -564,10 +573,10 @@ public class ShippingCalculationsTest {
 
 		final Sequence sequence = schedule.getSequences().get(0);
 
+		checker.setExpectedValue(0, Expectations.CANAL_COSTS, Journey.class, 1);
+
 		checker.check(sequence);
 
-		final Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
-		Assert.assertEquals("Toll for laden leg via canal", 0, ladenJourney.getToll());
 	}
 
 	@Test
@@ -601,10 +610,11 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(7, Expectations.BF_USAGE, Journey.class, 1);
 
 		// second journey cost is different
+		// 322 = 7 { BF usage } * 10 { BF price } + 12 { NBO usage } * 21 { NBO price }
 		checker.setExpectedValue(322, Expectations.FUEL_COSTS, Journey.class, 1);
 
 		// second journey faces additional canal cost
-		checker.setExpectedValue(1, Expectations.ROUTE_COSTS, Journey.class, 1);
+		checker.setExpectedValue(1, Expectations.CANAL_COSTS, Journey.class, 1);
 
 		// second journey takes 3hrs (instead of 2)
 		checker.setExpectedValue(3, Expectations.DURATIONS, Journey.class, 1);
@@ -629,8 +639,6 @@ public class ShippingCalculationsTest {
 
 		checker.check(sequence);
 
-		final Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
-		Assert.assertEquals("Toll for laden leg via canal", 1, ladenJourney.getToll());
 	}
 
 	@Test
