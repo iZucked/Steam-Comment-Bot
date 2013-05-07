@@ -21,7 +21,7 @@ import com.mmxlabs.common.Pair;
  * You can specify a list of name/value pairs at construction time and the editor will display a combo with the names which sets the values.
  * 
  * @author hinton
- * @since 3.0
+ * @since 3.1
  * 
  */
 public class ValueListAttributeManipulator extends BasicAttributeManipulator {

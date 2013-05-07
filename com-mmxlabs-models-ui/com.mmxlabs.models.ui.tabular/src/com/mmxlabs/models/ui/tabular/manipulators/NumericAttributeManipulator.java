@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * @author hinton
- * @since 3.0
+ * @since 3.1
  * 
  */
 public class NumericAttributeManipulator extends BasicAttributeManipulator {
