@@ -11,10 +11,7 @@ import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreValidator;
 import org.eclipse.emf.query.conditions.eobjects.structuralfeatures.EObjectReferencerCondition;
-import org.eclipse.emf.query.conditions.strings.StringValue;
 import org.eclipse.emf.query.statements.FROM;
 import org.eclipse.emf.query.statements.IQueryResult;
 import org.eclipse.emf.query.statements.SELECT;
@@ -22,7 +19,6 @@ import org.eclipse.emf.query.statements.WHERE;
 
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselType;

@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 

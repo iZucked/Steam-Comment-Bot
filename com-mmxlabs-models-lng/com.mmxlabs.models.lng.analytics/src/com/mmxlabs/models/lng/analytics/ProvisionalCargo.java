@@ -3,9 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics;
+import org.eclipse.emf.ecore.EObject;
+
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.MMXObject;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -17,6 +16,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;

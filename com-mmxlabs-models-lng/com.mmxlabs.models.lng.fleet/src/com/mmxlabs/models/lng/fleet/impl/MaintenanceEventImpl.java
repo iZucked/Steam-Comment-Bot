@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;

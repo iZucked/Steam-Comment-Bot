@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.commercial;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 
 /**
  * <!-- begin-user-doc -->

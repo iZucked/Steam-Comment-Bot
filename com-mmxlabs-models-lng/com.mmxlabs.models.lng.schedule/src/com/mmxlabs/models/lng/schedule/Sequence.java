@@ -3,10 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import org.eclipse.emf.common.util.EList;
 
-import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
