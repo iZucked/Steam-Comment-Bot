@@ -86,7 +86,6 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		for (final Sequence seq : schedule.getSequences()) {
 
 			for (final Event evt : seq.getEvents()) {
-				totalCost += evt.getHireCost();
 				if (evt instanceof FuelUsage) {
 					final FuelUsage mix = (FuelUsage) evt;
 					// add up fuel components from mixture
