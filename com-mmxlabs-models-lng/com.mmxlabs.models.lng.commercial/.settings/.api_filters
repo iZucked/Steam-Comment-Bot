@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.mmxlabs.models.lng.commercial" version="2">
+    <resource path="src/com/mmxlabs/models/lng/commercial/Contract.java" type="com.mmxlabs.models.lng.commercial.Contract">
+        <filter comment="Ignore problem as it does not affect used API" id="405901410">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.models.lng.commercial.Contract"/>
+                <message_argument value="isSetPriceInfo()"/>
+            </message_arguments>
+        </filter>
+        <filter comment="Ignore problem as it does not affect used API" id="405901410">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.models.lng.commercial.Contract"/>
+                <message_argument value="unsetPriceInfo()"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/com/mmxlabs/models/lng/commercial/impl/ContractImpl.java" type="com.mmxlabs.models.lng.commercial.impl.ContractImpl">
+        <filter comment="Ignore problem as it does not affect used API" id="338755678">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.models.lng.commercial.impl.ContractImpl"/>
+                <message_argument value="priceInfoESet"/>
+            </message_arguments>
+        </filter>
+        <filter comment="Ignore problem as it does no affect used API" id="338792546">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.models.lng.commercial.impl.ContractImpl"/>
+                <message_argument value="basicUnsetPriceInfo(NotificationChain)"/>
+            </message_arguments>
+        </filter>
+        <filter comment="Ignore problem as it does not affect used API" id="338792546">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.models.lng.commercial.impl.ContractImpl"/>
+                <message_argument value="isSetPriceInfo()"/>
+            </message_arguments>
+        </filter>
+        <filter comment="Ignore problem as it does not affect used API" id="338792546">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.models.lng.commercial.impl.ContractImpl"/>
+                <message_argument value="unsetPriceInfo()"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>
