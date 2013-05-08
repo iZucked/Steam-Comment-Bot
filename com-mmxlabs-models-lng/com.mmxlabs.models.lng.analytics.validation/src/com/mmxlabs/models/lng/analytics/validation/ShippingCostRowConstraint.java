@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -80,8 +81,9 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 
 							final ShippingCostPlan shippingCostPlan = (ShippingCostPlan) container;
 							if (shippingCostPlan.getVessel() != null) {
+								final Vessel vessel = shippingCostPlan.getVessel();
 								final VesselClass vesselClass = shippingCostPlan.getVessel().getVesselClass();
-								final double capacity = (double) vesselClass.getCapacity() * vesselClass.getFillCapacity();
+								final double capacity = (double) vessel.getVesselOrVesselClassCapacity() * vessel.getVesselOrVesselClassFillCapacity();
 								if (shippingCostRow.getHeelVolume() > capacity) {
 									final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
 											"Heel volume is greater than vessel capacity of %.0f (%d) ", capacity, vesselClass.getCapacity())));
