@@ -24,12 +24,6 @@ All rights reserved.
       [Enter License Description here.]
    </license>
 
-   <requires>
-      <import feature="com.mmxlabs.models.lng.feature" version="3.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.scheduler.optimiser.feature" version="4.0.4" match="compatible"/>
-   </requires>
-
    <plugin
          id="com.mmxlabs.models.lng.transformer"
          download-size="0"
