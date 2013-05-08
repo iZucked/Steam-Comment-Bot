@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
@@ -75,10 +74,12 @@ public class ShippingCalculationsTest {
 	public class PnlChunkIndexData {
 		int startIndex;
 		int endIndex;
+		boolean isCargo;
 
-		public PnlChunkIndexData(final int start, final int end) {
+		public PnlChunkIndexData(final int start, final int end, boolean cargo) {
 			startIndex = start;
 			endIndex = end;
+			isCargo = cargo;
 		}
 	}
 
@@ -124,7 +125,9 @@ public class ShippingCalculationsTest {
 		case OVERHEAD_COSTS: {
 			if (event instanceof Journey) 
 				return ((Journey) event).getToll();
-			else // TODO: extract the overhead costs for port visits such as drydock events
+			else if (event instanceof Cooldown)
+				return ((Cooldown) event).getCost();
+			else // TODO: extract the overhead costs or revenue for drydock events, charter outs etc.
 				return null;
 		}			
 		default:
@@ -248,7 +251,7 @@ public class ShippingCalculationsTest {
 
 	public SequenceTester getDefaultTester(final Class<?>[] expectedClasses) {
 
-		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2), new PnlChunkIndexData(3, 8) };
+		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 8, true) };
 		final SequenceTester checker = new SequenceTester(expectedClasses, chunkIndices);
 
 		// set default expected values to zero
@@ -308,13 +311,6 @@ public class ShippingCalculationsTest {
 		// 10000 (load) = vessel capacity
 		// 9970 (discharge) = 10000 - 20 { NBO journey consumption } - 10 { NBO idle consumption }
 		checker.setExpectedValuesIfMatching(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9970 });
-
-		// profit / loss
-		// 9970 { sales volume } * 1 { price per MMBTU } * 21 { CV } - 10000 { purchase volume } * 0.5 { price per MMBTU } * 21 { CV } - 250 { base fuel cost }
-		// int [] expectedPnlValues = { 104120, 104120 };
-		// int [] expectedPnlValues = { 209120 };
-		// Integer [] expectedPnlValues = { null };
-		// checker.setExpectedPnlValues(expectedPnlValues);
 
 		return checker;
 	}
@@ -470,12 +466,29 @@ public class ShippingCalculationsTest {
 			}
 
 		}
+		
+		public void setupOrdinaryFuelCosts() {
+			final Integer [] bfUsage = getStorageArray(Expectations.BF_USAGE);
+			final Integer [] nboUsage = getStorageArray(Expectations.NBO_USAGE);
+			final Integer [] fboUsage = getStorageArray(Expectations.FBO_USAGE);
+			final Integer [] fuelCosts = getStorageArray(Expectations.FUEL_COSTS);
+			
+			for (int i = 0; i < fuelCosts.length; i++) {
+				fuelCosts[i] = (int) (bfUsage[i] * baseFuelPricePerM3 + (fboUsage[i] + nboUsage[i]) * salesPricePerM3); 
+			}
+		}
 
 		private Integer computeExpectedCargoPnl(final PnlChunkIndexData index, final double purchasePricePerM3, final double salesPricePerM3, final double bfPrice) {
+			final boolean chargeForLngFuel = !index.isCargo;
 			int result = 0;
 			for (int i = index.startIndex; i <= index.endIndex; i++) {
 				final Integer bfUsage = expectedArrays.get(Expectations.BF_USAGE)[i];
 				result -= bfUsage * bfPrice;
+				
+				if (chargeForLngFuel) {
+					final Integer lngUsage = expectedArrays.get(Expectations.NBO_USAGE)[i] + expectedArrays.get(Expectations.FBO_USAGE)[i];
+					result -= lngUsage * salesPricePerM3;
+				}
 
 				final Integer hireCost = expectedArrays.get(Expectations.HIRE_COSTS)[i];
 				result -= hireCost;
@@ -1232,7 +1245,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 
-		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(4, 9) });
+		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(0, 3, false), new PnlChunkIndexData(4, 9, true) });
 
 		// change from default: cooldown time
 		final Integer[] expectedCooldownTimes = { 1 };
@@ -1291,11 +1304,14 @@ public class ShippingCalculationsTest {
 				EndEvent.class };
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
-		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(4, 9) });
+		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(0, 3, false), new PnlChunkIndexData(4, 9, true) });
 
 		// change from default: cooldown time
 		final Integer[] expectedCooldownTimes = { 0 };
 		checker.setExpectedValues(Expectations.DURATIONS, Cooldown.class, expectedCooldownTimes);
+		
+		// cooldown cost
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, Cooldown.class, new Integer[] { 2100 });
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1392,7 +1408,7 @@ public class ShippingCalculationsTest {
 	 */
 	public SequenceTester getTestCharterCost_SpotCharterInTester(final Class<?>[] expectedClasses) {
 
-		final PnlChunkIndexData[] cargoIndices = { new PnlChunkIndexData(0, 4) };
+		final PnlChunkIndexData[] cargoIndices = { new PnlChunkIndexData(0, 4, true) };
 		final SequenceTester checker = new SequenceTester(expectedClasses, cargoIndices);
 
 		// set default expected values to zero
@@ -1496,7 +1512,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 		// Missing the journey so shift default indices by one
-		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(2, 7) });
+		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(0, 1, false), new PnlChunkIndexData(2, 7, true) });
 
 		// expected durations of journeys
 		final Integer[] expectedJourneyDurations = { 2, 1 };
@@ -1615,7 +1631,7 @@ public class ShippingCalculationsTest {
 		Class<?> [] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, EndEvent.class };
 		final SequenceTester checker = getDefaultTester( classes );
 
-		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2), new PnlChunkIndexData(3, 8), new PnlChunkIndexData(9, 11) };
+		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 8, true), new PnlChunkIndexData(9, 11, false) };
 		checker.setCargoIndices(chunkIndices);
 		
 		// expected durations of journeys
@@ -1749,7 +1765,7 @@ public class ShippingCalculationsTest {
 		System.err.println("Vessel to return after: " + returnDate);
 
 		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, GeneratedCharterOut.class, EndEvent.class };
-		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2), new PnlChunkIndexData(3, 7), new PnlChunkIndexData(8,9) };
+		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 7, true), new PnlChunkIndexData(8, 9, false) };
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 		checker.setCargoIndices(chunkIndices);
 
@@ -1907,6 +1923,8 @@ public class ShippingCalculationsTest {
 		
 		// final journey should use less base fuel
 		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 3);
+
+		checker.setupOrdinaryFuelCosts();
 		
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
