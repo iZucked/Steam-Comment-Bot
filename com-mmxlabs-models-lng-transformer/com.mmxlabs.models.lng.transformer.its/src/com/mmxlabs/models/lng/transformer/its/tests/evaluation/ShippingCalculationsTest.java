@@ -23,10 +23,13 @@ import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -43,12 +46,14 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -56,27 +61,29 @@ import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator.MinimalScenarioSetup;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.TradingConstants;
 
 public class ShippingCalculationsTest {
 
 	/**
-	 * Data holder class to store the expected range of indices in a sequence which defines a Cargo
+	 * Data holder class to store the expected range of indices in a sequence which defines a single P&L item (e.g. a Cargo)
 	 * 
 	 */
-	public class CargoIndexData {
+	public class PnlChunkIndexData {
 		int startIndex;
 		int endIndex;
 
-		public CargoIndexData(final int start, final int end) {
+		public PnlChunkIndexData(final int start, final int end) {
 			startIndex = start;
 			endIndex = end;
 		}
 	}
 
 	public enum Expectations {
-		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, CANAL_COSTS
+		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, OVERHEAD_COSTS
 	}
 
 	public void checkClasses(final EList<? extends Object> objects, final Class<?>[] classes) {
@@ -114,10 +121,10 @@ public class ShippingCalculationsTest {
 			return getFuelConsumption(event, Fuel.NBO);
 		case PILOT_USAGE:
 			return getFuelConsumption(event, Fuel.PILOT_LIGHT);
-		case CANAL_COSTS: {
+		case OVERHEAD_COSTS: {
 			if (event instanceof Journey) 
 				return ((Journey) event).getToll();
-			else
+			else // TODO: extract the overhead costs for port visits such as drydock events
 				return null;
 		}			
 		default:
@@ -153,25 +160,47 @@ public class ShippingCalculationsTest {
 		}
 		return 0;
 	}
+	
+	public Integer getEventPnl(Event event) {
+		ExtraDataContainer container = null;
+		if (event instanceof SlotVisit) {
+			// and find the cargo associated with it
+			container = ((SlotVisit) event).getSlotAllocation().getCargoAllocation();
+		}
+		
+		if (event instanceof StartEvent) {
+			container = (ExtraDataContainer) event;
+		}
+		
+		if (event instanceof VesselEventVisit) {
+			container = (ExtraDataContainer) event;
+		}
+		
+		if (event instanceof GeneratedCharterOut) {
+			container = (ExtraDataContainer) event;
+		}
+		
+		if (container != null) {
+			final ExtraData data = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+			if (data != null) {
+				return data.getValueAs(Integer.class);
+			}			
+		}
+		
+		return null;
+	}
 
-	public void checkPnlValues(final List<? extends Event> events, final CargoIndexData[] indices, final Integer[] pnls) {
+	public void checkPnlValues(final List<? extends Event> events, final PnlChunkIndexData[] indices, final Integer[] pnls) {
 		if (pnls != null) {
 			Assert.assertEquals(indices.length, pnls.length);
 			// each pnl value corresponds to a particular cargo
 			for (int i = 0; i < pnls.length; i++) {
 				if (pnls[i] != null) {
 					for (int j = indices[i].startIndex; j <= indices[i].endIndex; j++) {
-						// find the first SlotVisit in the cargo range
-						if (events.get(j) instanceof SlotVisit) {
-							final SlotVisit event = (SlotVisit) events.get(j);
-							// and find the cargo associated with it
-							final CargoAllocation ca = event.getSlotAllocation().getCargoAllocation();
-							final ExtraData data = ca.getDataWithKey(TradingConstants.ExtraData_GroupValue);
-							if (data != null) {
-								final int pnl = data.getValueAs(Integer.class);
-
-								Assert.assertEquals("PnL for " + event, (int) pnls[i], pnl);
-							}
+						Event event = events.get(j);
+						Integer pnl = getEventPnl(event);
+						if (pnl != null && pnls[i] != null) {
+							Assert.assertEquals("PnL for " + event, (int) pnls[i], (int) pnl);
 							continue;
 						}
 					}
@@ -206,21 +235,21 @@ public class ShippingCalculationsTest {
 		}
 		return result;
 	}
-
+	
 	public SequenceTester getDefaultTester() {
 		// expected classes of the sequence elements
 		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
 		return getDefaultTester(expectedClasses);
-	}
-
+	}	
+	
 	/*
 	 * We need to create a barebones scenario with a single vessel schedule. Then the scenario needs to be evaluated to test correct calculation of: - Fuel costs - Port costs - Route costs - NBO rates
 	 */
 
 	public SequenceTester getDefaultTester(final Class<?>[] expectedClasses) {
 
-		final CargoIndexData[] cargoIndices = { new CargoIndexData(3, 8) };
-		final SequenceTester checker = new SequenceTester(expectedClasses, cargoIndices);
+		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2), new PnlChunkIndexData(3, 8) };
+		final SequenceTester checker = new SequenceTester(expectedClasses, chunkIndices);
 
 		// set default expected values to zero
 		for (final Expectations field : Expectations.values()) {
@@ -228,57 +257,57 @@ public class ShippingCalculationsTest {
 		}
 
 		// expected durations of journeys
-		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 1 });
+		checker.setExpectedValuesIfMatching(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 1 });
 
 		// don't care what the duration of the end event is
-		checker.setExpectedValues(Expectations.DURATIONS, EndEvent.class, new Integer[] { null });
+		checker.setExpectedValuesIfMatching(Expectations.DURATIONS, EndEvent.class, new Integer[] { null });
 
 		// don't care what the duration of the start event is
-		checker.setExpectedValues(Expectations.DURATIONS, StartEvent.class, new Integer[] { null });
+		checker.setExpectedValuesIfMatching(Expectations.DURATIONS, StartEvent.class, new Integer[] { null });
 
 		// expected FBO consumptions of journeys
 		// none (not economical in default)
-		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer[] { 0, 0, 0 });
+		checker.setExpectedValuesIfMatching(Expectations.FBO_USAGE, Journey.class, new Integer[] { 0, 0, 0 });
 
 		// expected NBO consumptions of journeys
 		// 0 (no start heel)
 		// 20 = 2 { duration in hours } * 10 { NBO rate }
 		// 0 (vessel empty)
-		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 0 });
+		checker.setExpectedValuesIfMatching(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 0 });
 
 		// expected base consumptions
 		// 15 = 1 { journey duration } * 15 { base fuel consumption }
 		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
 		// 15 = 1 { journey duration } * 15 { base fuel consumption }
-		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 10, 15 });
+		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 10, 15 });
 
 		// expected costs of journeys
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 150 });
+		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 150 });
 
 		// expected durations of idles
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0 });
+		checker.setExpectedValuesIfMatching(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0 });
 
 		// expected base idle consumptions
 		// 0 = no idle (start)
 		// 0 = no idle (idle on NBO)
 		// 0 = no idle (end)
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0 });
+		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0 });
 
 		// expected NBO idle consumptions
 		// 10 = 2 { idle duration } * 5 { idle NBO rate }
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0 });
+		checker.setExpectedValuesIfMatching(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0 });
 
 		// idle costs
 		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0 });
+		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0 });
 
 		// expected load / discharge volumes
 		// 10000 (load) = vessel capacity
 		// 9970 (discharge) = 10000 - 20 { NBO journey consumption } - 10 { NBO idle consumption }
-		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9970 });
+		checker.setExpectedValuesIfMatching(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9970 });
 
 		// profit / loss
 		// 9970 { sales volume } * 1 { price per MMBTU } * 21 { CV } - 10000 { purchase volume } * 0.5 { price per MMBTU } * 21 { CV } - 250 { base fuel cost }
@@ -294,18 +323,20 @@ public class ShippingCalculationsTest {
 		private final Map<Expectations, Integer[]> expectedArrays = new HashMap<Expectations, Integer[]>();
 		private Integer[] expectedPnlValues = null;
 		private Class<?>[] classes;
-		private CargoIndexData[] cargoIndices;
+		private PnlChunkIndexData[] cargoIndices;
 
 		public float baseFuelPricePerM3 = 10;
 		public float purchasePricePerM3 = 21 * 0.5f;
 		public float salesPricePerM3 = 21;
+		
+		public int hireCostPerHour = 0;
 
-		public SequenceTester(final Class<?>[] classes, final CargoIndexData[] cargoIndices) {
+		public SequenceTester(final Class<?>[] classes, final PnlChunkIndexData[] cargoIndices) {
 			setClasses(classes);
 			setCargoIndices(cargoIndices);
 		}
 
-		public void setCargoIndices(final CargoIndexData[] cargoIndices) {
+		public void setCargoIndices(final PnlChunkIndexData[] cargoIndices) {
 			this.cargoIndices = cargoIndices;
 		}
 
@@ -331,6 +362,30 @@ public class ShippingCalculationsTest {
 				}
 			}
 			return result;
+		}
+
+		/**
+		 * Set the expected values for a field, for the appropriate class of vessel event. Do nothing if the
+		 * length of the provided values does not match the number of expected elements of the specified class.  
+		 * @param field
+		 * @param clazz
+		 * @param values
+		 */
+		public void setExpectedValuesIfMatching(Expectations field, Class<?> clazz, Integer [] values) {
+			int count = 0;
+			
+			for (int i = 0; i < classes.length; i++) {
+				if (classes[i] == clazz) {
+					count += 1;
+				}
+			}
+			
+			if (count == values.length) {
+				setExpectedValues(field, clazz, values);
+			}
+			else {
+				System.err.println(String.format("Attempt to set values for %s (%s) failed", field.name(), clazz.getName())); 
+			}
 		}
 
 		public void setExpectedValues(final Expectations field, final Class<?> clazz, final Integer[] values) {
@@ -362,7 +417,7 @@ public class ShippingCalculationsTest {
 			array[indices.get(index)] = value;
 
 		}
-
+		
 		public void setAllExpectedValues(final Expectations field, final Integer value) {
 			final Integer[] array = getStorageArray(field);
 			for (int i = 0; i < array.length; i++) {
@@ -381,7 +436,9 @@ public class ShippingCalculationsTest {
 		public void check(final Sequence sequence) {
 			final EList<Event> events = sequence.getEvents();
 			checkClasses(events, classes);
-
+			
+			setupExpectedHireCosts(hireCostPerHour);
+			
 			for (final Class<?> clazz : new HashSet<Class<?>>(Arrays.asList(classes))) {
 				final List<?> objects = extractObjectsOfClass(events, clazz);
 
@@ -396,12 +453,15 @@ public class ShippingCalculationsTest {
 			checkPnlValues(events, cargoIndices, expectedPnlValues);
 		}
 
-		public void setupExpectedHireCosts(final int hireRatePerHour) {
+		private void setupExpectedHireCosts(final int hireRatePerHour) {
 			final Integer[] durations = getStorageArray(Expectations.DURATIONS);
 			final Integer[] hireCosts = getStorageArray(Expectations.HIRE_COSTS);
 
 			for (int i = 0; i < durations.length; i++) {
-				if (durations[i] != null) {
+				if (hireRatePerHour == 0) {
+					hireCosts[i] = 0;
+				}
+				else if (durations[i] != null) {
 					hireCosts[i] = durations[i] * hireRatePerHour;
 				} else {
 					hireCosts[i] = null;
@@ -411,7 +471,7 @@ public class ShippingCalculationsTest {
 
 		}
 
-		private Integer computeExpectedPnl(final CargoIndexData index, final double purchasePricePerM3, final double salesPricePerM3, final double bfPrice) {
+		private Integer computeExpectedCargoPnl(final PnlChunkIndexData index, final double purchasePricePerM3, final double salesPricePerM3, final double bfPrice) {
 			int result = 0;
 			for (int i = index.startIndex; i <= index.endIndex; i++) {
 				final Integer bfUsage = expectedArrays.get(Expectations.BF_USAGE)[i];
@@ -420,7 +480,7 @@ public class ShippingCalculationsTest {
 				final Integer hireCost = expectedArrays.get(Expectations.HIRE_COSTS)[i];
 				result -= hireCost;
 
-				final Integer routeCost = expectedArrays.get(Expectations.CANAL_COSTS)[i];
+				final Integer routeCost = expectedArrays.get(Expectations.OVERHEAD_COSTS)[i];
 				result -= routeCost;
 
 				final Integer loadDischargeVolume = expectedArrays.get(Expectations.LOAD_DISCHARGE)[i];
@@ -437,7 +497,7 @@ public class ShippingCalculationsTest {
 			return result;
 
 		}
-
+		
 		/**
 		 * Sets up the expected P&L for all cargoes, based on the purchase price, sales price, base fuel price, fuel costs and 
 		 * load / discharge volumes for those cargoes.
@@ -446,16 +506,18 @@ public class ShippingCalculationsTest {
 		 * @param salesPricePerM3
 		 * @param bfPrice
 		 */
-		public void setupExpectedPnl(final double purchasePricePerM3, final double salesPricePerM3, final double bfPrice) {
+		private void setupExpectedPnl(final double purchasePricePerM3, final double salesPricePerM3, final double bfPrice) {
 			final Integer[] pnl = new Integer[cargoIndices.length];
 
 			for (int i = 0; i < cargoIndices.length; i++) {
-				pnl[i] = computeExpectedPnl(cargoIndices[i], purchasePricePerM3, salesPricePerM3, bfPrice);
+				pnl[i] = computeExpectedCargoPnl(cargoIndices[i], purchasePricePerM3, salesPricePerM3, bfPrice);
 			}
 
 			setExpectedPnlValues(pnl);
 
 		}
+		
+		
 
 	}
 
@@ -492,7 +554,7 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(260, Expectations.FUEL_COSTS, Journey.class, 1);
 
 		// second journey faces additional canal cost
-		checker.setExpectedValue(1, Expectations.CANAL_COSTS, Journey.class, 1);
+		checker.setExpectedValue(1, Expectations.OVERHEAD_COSTS, Journey.class, 1);
 
 		// second journey takes half as long (as default)
 		checker.setExpectedValue(1, Expectations.DURATIONS, Journey.class, 1);
@@ -541,7 +603,7 @@ public class ShippingCalculationsTest {
 
 		final Sequence sequence = schedule.getSequences().get(0);
 
-		checker.setExpectedValue(0, Expectations.CANAL_COSTS, Journey.class, 1);
+		checker.setExpectedValue(0, Expectations.OVERHEAD_COSTS, Journey.class, 1);
 		
 		checker.check(sequence);
 
@@ -573,7 +635,7 @@ public class ShippingCalculationsTest {
 
 		final Sequence sequence = schedule.getSequences().get(0);
 
-		checker.setExpectedValue(0, Expectations.CANAL_COSTS, Journey.class, 1);
+		checker.setExpectedValue(0, Expectations.OVERHEAD_COSTS, Journey.class, 1);
 
 		checker.check(sequence);
 
@@ -614,7 +676,7 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(322, Expectations.FUEL_COSTS, Journey.class, 1);
 
 		// second journey faces additional canal cost
-		checker.setExpectedValue(1, Expectations.CANAL_COSTS, Journey.class, 1);
+		checker.setExpectedValue(1, Expectations.OVERHEAD_COSTS, Journey.class, 1);
 
 		// second journey takes 3hrs (instead of 2)
 		checker.setExpectedValue(3, Expectations.DURATIONS, Journey.class, 1);
@@ -997,6 +1059,12 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);
 	}
 
+	/*
+	 * Discussion needed about whether this test is meaningful and what the behaviour should be 
+	 * if it is. The case is: maximum load quantity provides enough LNG fuel to reach the discharge port
+	 * on NBO but *not* enough to idle on NBO while there. 
+	 */
+	@Ignore("Discuss desired behaviour before re-enabling this test")
 	@Test
 	public void testMaxLoadVolumeForcesBfIdle() {
 		System.err.println("\n\nMaximum Load Volume Forces BF Idle");
@@ -1017,6 +1085,7 @@ public class ShippingCalculationsTest {
 		final Integer[] expectedBaseFuelJourneyConsumptions = { 15, 10, 15 };
 		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, expectedBaseFuelJourneyConsumptions);
 
+		// DISCUSS: 
 		final Integer[] expectedNboIdleConsumptions = { 0, 10, 0 };
 		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, expectedNboIdleConsumptions);
 
@@ -1049,22 +1118,20 @@ public class ShippingCalculationsTest {
 		final Date endDischarge = mss.cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
 
 		// return 3 hrs after discharge window ends
-		final Date returnDate = new Date(endDischarge.getTime() + 2l * 3600l * 1000l);
+		final Date returnDate = new Date(endDischarge.getTime() + 3 * 3600 * 1000);
 		av.setEndAfter(returnDate);
+		av.unsetEndBy();
 		System.err.println("Vessel to return after: " + returnDate);
 
 		final SequenceTester checker = getDefaultTester();
 
 		// change from default: BF idle consumption at base port after return
 		// (idle at discharge port is NBO)
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Idle.class, 2);
+		checker.setExpectedValue(10, Expectations.BF_USAGE, Idle.class, 2);
 		// change from default: idle at base port after return
-		checker.setExpectedValue(1, Expectations.DURATIONS, Journey.class, 2);
-
-		checker.setExpectedValue(1, Expectations.DURATIONS, Idle.class, 2);
+		checker.setExpectedValue(2, Expectations.DURATIONS, Idle.class, 2);
 		// change from default: idle cost at base port
-		// 50 = 10 { base fuel unit cost } * 5 { base fuel consumption }
-		checker.setExpectedValue(50, Expectations.FUEL_COSTS, Idle.class, 2);
+		checker.setExpectedValue(100, Expectations.FUEL_COSTS, Idle.class, 2);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1073,7 +1140,7 @@ public class ShippingCalculationsTest {
 
 		checker.check(sequence);
 	}
-
+	
 	@Test
 	public void testIdleAfterVesselStart() {
 		System.err.println("\n\nSpecified date for vessel start causes idling.");
@@ -1165,7 +1232,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 
-		checker.setCargoIndices(new CargoIndexData[] { new CargoIndexData(4, 9) });
+		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(4, 9) });
 
 		// change from default: cooldown time
 		final Integer[] expectedCooldownTimes = { 1 };
@@ -1224,7 +1291,7 @@ public class ShippingCalculationsTest {
 				EndEvent.class };
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
-		checker.setCargoIndices(new CargoIndexData[] { new CargoIndexData(4, 9) });
+		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(4, 9) });
 
 		// change from default: cooldown time
 		final Integer[] expectedCooldownTimes = { 0 };
@@ -1253,8 +1320,7 @@ public class ShippingCalculationsTest {
 		mss.vessel.setTimeCharterRate(charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
-
-		checker.setupExpectedHireCosts(charterRatePerDay);
+		checker.hireCostPerHour = charterRatePerDay / 24;
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1304,8 +1370,7 @@ public class ShippingCalculationsTest {
 			checker = getTestCharterCost_SpotCharterInTester(expectedClasses);
 		}
 
-		final int hireCostPerHour = charterRatePerDay / 24;
-		checker.setupExpectedHireCosts(hireCostPerHour);
+		checker.hireCostPerHour = charterRatePerDay / 24;
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1327,7 +1392,7 @@ public class ShippingCalculationsTest {
 	 */
 	public SequenceTester getTestCharterCost_SpotCharterInTester(final Class<?>[] expectedClasses) {
 
-		final CargoIndexData[] cargoIndices = { new CargoIndexData(0, 4) };
+		final PnlChunkIndexData[] cargoIndices = { new PnlChunkIndexData(0, 4) };
 		final SequenceTester checker = new SequenceTester(expectedClasses, cargoIndices);
 
 		// set default expected values to zero
@@ -1388,13 +1453,6 @@ public class ShippingCalculationsTest {
 		// 9970 (discharge) = 10000 - 20 { NBO journey consumption } - 10 { NBO idle consumption }
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9970 });
 
-		// profit / loss
-		// 9970 { sales volume } * 1 { price per MMBTU } * 21 { CV } - 10000 { purchase volume } * 0.5 { price per MMBTU } * 21 { CV } - 250 { base fuel cost }
-		// int [] expectedPnlValues = { 104120, 104120 };
-		// int [] expectedPnlValues = { 209120 };
-		// Integer [] expectedPnlValues = { null };
-		// checker.setExpectedPnlValues(expectedPnlValues);
-
 		return checker;
 	}
 
@@ -1411,9 +1469,8 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester();
 
-		final int hireCostPerHour = charterRatePerDay / 24;
-		checker.setupExpectedHireCosts(hireCostPerHour);
-
+		checker.hireCostPerHour = charterRatePerDay / 24;
+		
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
@@ -1439,7 +1496,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 		// Missing the journey so shift default indices by one
-		checker.setCargoIndices(new CargoIndexData[] { new CargoIndexData(2, 7) });
+		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(2, 7) });
 
 		// expected durations of journeys
 		final Integer[] expectedJourneyDurations = { 2, 1 };
@@ -1552,6 +1609,313 @@ public class ShippingCalculationsTest {
 		final StartEvent firstVisit = extractObjectsOfClass(sequence.getEvents(), StartEvent.class).get(0);
 		final EMap<CapacityViolationType, Long> violations = firstVisit.getViolations();
 		Assert.assertFalse(violations.isEmpty());
+	}	
+
+	private SequenceTester getTesterForVesselEventPostDischarge() {
+		Class<?> [] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, EndEvent.class };
+		final SequenceTester checker = getDefaultTester( classes );
+
+		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2), new PnlChunkIndexData(3, 8), new PnlChunkIndexData(9, 11) };
+		checker.setCargoIndices(chunkIndices);
+		
+		// expected durations of journeys
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 1 });
+
+		// expected NBO consumptions of journeys
+		// 0 (no start heel)
+		// 20 = 2 { duration in hours } * 10 { NBO rate }
+		// 0 (vessel empty)
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 0, 0 });
+
+		// expected base consumptions
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
+		// 30 = 2 { journey duration } * 15 { base fuel consumption } - 0 { LNG consumption }
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 10, 30, 15 });
+
+		// expected costs of journeys
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
+		// 300 = 10 { base fuel unit cost } * 30 { base fuel consumption } 
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 300, 150 });
+
+		// expected durations of idles
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0 });
+
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0 });
+
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0 });
+
+		// idle costs
+		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0 });
+
+		return checker;
+		
 	}
+	
+	@Test
+	public void testDryDock() {
+		System.err.println("\n\nDry dock event inserted correctly.");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+
+		// change to default: add a dry dock event 2-3 hrs after discharge window ends
+		final Date endLoad = mss.cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
+		final Date dryDockStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
+		final Date dryDockStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		dsc.vesselEventCreator.createDryDockEvent("DryDock", mss.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+		
+		// set up a drydock pricing of 6
+		dsc.portCreator.setPortCost(mss.loadPort, PortCapability.DRYDOCK, 6);				
+		
+		SequenceTester checker = getTesterForVesselEventPostDischarge();
+		
+		// expected dry dock duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+		
+		// expected dry dock port cost
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { 6 });		
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+
+	}
+
+	@Test
+	public void testMaintenance() {
+		System.err.println("\n\nMaintenance event inserted correctly.");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+
+		// change to default: add a dry dock event 2-3 hrs after discharge window ends
+		final Date endLoad = mss.cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
+		final Date maintenanceDockStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
+		final Date maintenanceDockStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		dsc.vesselEventCreator.createMaintenanceEvent("Maintenance", mss.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
+		
+		// set up a drydock pricing of 6
+		dsc.portCreator.setPortCost(mss.loadPort, PortCapability.MAINTENANCE, 3);				
+		
+		SequenceTester checker = getTesterForVesselEventPostDischarge();
+		
+		// expected dry dock duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+		
+		// expected dry dock port cost
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { 3 });				
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+
+	}
+	
+	@Test
+	public void testGeneratedCharterOut() {
+		System.err.println("\n\nIdle at end should permit generated charter out event.");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		
+		dsc.pricingCreator.createDefaultCharterCostModel(mss.vc, 1, 96);
+
+		// change from default scenario: set a "return after" date
+		// somewhat later than the end of the discharge window
+		final VesselAvailability av = mss.vessel.getAvailability();
+		final Date endDischarge = mss.cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
+
+		// return 37 hrs after discharge window ends
+		final Date returnDate = new Date(endDischarge.getTime() + 37l * 3600l * 1000l);
+		av.setEndAfter(returnDate);
+		av.unsetEndBy();
+		System.err.println("Vessel to return after: " + returnDate);
+
+		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, GeneratedCharterOut.class, EndEvent.class };
+		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2), new PnlChunkIndexData(3, 7), new PnlChunkIndexData(8,9) };
+		final SequenceTester checker = getDefaultTester(expectedClasses);
+		checker.setCargoIndices(chunkIndices);
+
+		
+		
+		// change from default: one fewer idle 
+		
+		// expected durations of idles
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2 });
+
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0 });
+		
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10 });
+
+		// expected fuel costs
+		// 0  = no idle
+		// 30 = 21 { LNG cost } * 10 { LNG consumption } 
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210 } );
+
+		// change from default: generated charter out 
+		checker.setExpectedValues(Expectations.DURATIONS, GeneratedCharterOut.class, new Integer[] { 36 });
+
+		// expected charter out overhead
+		// -144 = 1.5 { days } * 96 { rate }
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, GeneratedCharterOut.class, new Integer[] { -144 });		
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+
+	}
+	
+	@Test
+	public void testNotGeneratedCharterOut() {
+		System.err.println("\n\nIdle at end should not permit generated charter out event.");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		
+		dsc.pricingCreator.createDefaultCharterCostModel(mss.vc, 1, 96);
+
+		SequenceTester checker = getDefaultTester();
+		
+		// no changes should occur from default
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+
+	}
+
+	public CharterOutEvent makeCharterOut(DefaultScenarioCreator dsc, MinimalScenarioSetup mss, MMXRootObject scenario, Port startPort, Port endPort) {
+		// change to default: add a charter out event 2-3 hrs after discharge window ends
+		final Date endLoad = mss.cargo.getDischargeSlot().getWindowEndWithSlotOrPortTime();
+		final Date charterStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
+		final Date charterStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		int charterOutRate = 24;
+		CharterOutEvent event = dsc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
+		event.getHeelOptions().setVolumeAvailable(0);
+		event.getHeelOptions().setCvValue(21);
+		event.getHeelOptions().setPricePerMMBTU(1);
+		
+		return event;
+	}
+
+	@Test
+	public void testRegularCharterOutLoadToOrigin() {
+		System.err.println("\n\nTest regular charter out from load port to origin port.");
+		
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		CharterOutEvent event = makeCharterOut(dsc, mss, scenario, mss.loadPort, mss.originPort);
+
+		SequenceTester checker = getTesterForVesselEventPostDischarge();
+		//SequenceTester checker = getDefaultTester();
+		
+		// expected charter out duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+		
+		// expected charter out revenue
+		// 24 { revenue per day } * 1 { days } 
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });		
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+	}
+	
+	@Test
+	public void testRegularCharterOutLoadToLoadNoHeel() {
+		System.err.println("\n\nTest regular charter out from load port to load port.");
+		
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		CharterOutEvent event = makeCharterOut(dsc, mss, scenario, mss.loadPort, mss.loadPort);
+
+		SequenceTester checker = getTesterForVesselEventPostDischarge();
+		//SequenceTester checker = getDefaultTester();
+		
+		// expected charter out duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+		
+		// expected charter out revenue
+		// 24 { revenue per day } * 1 { days } 
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });		
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+	}
+	
+	@Test
+	public void testRegularCharterOutLoadToLoadWithHeel() {
+		System.err.println("\n\nTest regular charter out from load port to load port. LNG heel should be used for return journey");
+		
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final MMXRootObject scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		CharterOutEvent event = makeCharterOut(dsc, mss, scenario, mss.loadPort, mss.loadPort);
+		
+		event.getHeelOptions().setVolumeAvailable(20);
+
+		SequenceTester checker = getTesterForVesselEventPostDischarge();
+		//SequenceTester checker = getDefaultTester();
+		
+		// expected charter out duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+		
+		// expected charter out revenue
+		// 24 { revenue per day } * 1 { days } 
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
+		
+		// final journey should use NBO
+		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 3);
+		
+		// final journey should use less base fuel
+		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 3);
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+	}
+	
+
 
 }
