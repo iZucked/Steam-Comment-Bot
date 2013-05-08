@@ -11,6 +11,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.mmxcore;bundle-version="[4.0.0,5.0.0)",
  com.mmxlabs.models.ui.validation;bundle-version="[4.0.0,5.0.0)",
  org.mockito.mockito-all;bundle-version="1.9.5"
+ org.mockito.mockito-all;bundle-version="1.9.5"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.common;version="1.0.0"
