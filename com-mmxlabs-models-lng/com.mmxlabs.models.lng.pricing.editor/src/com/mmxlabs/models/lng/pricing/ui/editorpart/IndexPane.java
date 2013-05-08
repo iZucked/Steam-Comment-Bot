@@ -329,7 +329,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 							}
 						}
 						if (value != null) {
-						if (value != null) {
 							final IndexPoint<T> p = PricingFactory.eINSTANCE.createIndexPoint();
 							p.setDate(colDate);
 							p.setValue(value);
