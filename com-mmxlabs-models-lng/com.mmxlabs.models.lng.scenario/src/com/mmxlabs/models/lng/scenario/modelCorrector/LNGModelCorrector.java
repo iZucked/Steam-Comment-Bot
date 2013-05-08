@@ -82,8 +82,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * class can be invoked to correct such references. Much of this should now be ported to the model migration.
  * 
  * @author Simon Goodall
- * @since 3.0
- * 
  */
 public class LNGModelCorrector {
 
