@@ -254,14 +254,14 @@ public class CustomScenarioCreator {
 			vessel.setVesselClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
 
-			if (isTimeChartered) {
-				vessel.setTimeCharterRate(10);
-			}
 
 			final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 
 			fleetModel.getVessels().add(vessel);
 			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
+			if (isTimeChartered) {
+				availability.setTimeCharterRate(10);
+			}
 			availability.setVessel(vessel);
 			availability.setStartHeel(heelOptions);
 			scenarioFleetModel.getVesselAvailabilities().add(availability);

@@ -1113,7 +1113,7 @@ public class ShippingCalculationsTest {
 
 		final int charterRatePerDay = 240;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		mss.vessel.setTimeCharterRate(charterRatePerDay);
+		mss.vesselAvailability.setTimeCharterRate(charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1140,7 +1140,7 @@ public class ShippingCalculationsTest {
 
 		final int charterRatePerDay = 0;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		mss.vessel.setTimeCharterRate(charterRatePerDay);
+		mss.vesselAvailability.setTimeCharterRate(charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
 

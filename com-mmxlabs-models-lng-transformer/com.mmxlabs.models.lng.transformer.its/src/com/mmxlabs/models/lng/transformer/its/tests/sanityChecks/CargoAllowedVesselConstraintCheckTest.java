@@ -82,7 +82,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 			if (c.equals(constrainedCargo)) {
 				// found the constrained cargo
 				// now get the name of the vessel and see it it matches the one class four vessel.
-				final Vessel av = ca.getSequence().getVessel();
+				final Vessel av = ca.getSequence().getVesselAvailability().getVessel();
 
 				final boolean namesMatch = av.getName().equals(vesselsClassFour.get(0).getName());
 				Assert.assertTrue("Only vessel class four used", namesMatch);
@@ -141,7 +141,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 		// check that the vessel that carries every cargo matches the name of one in the allowed vessels list.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			final Vessel av = ca.getSequence().getVessel();
+			final Vessel av = ca.getSequence().getVesselAvailability().getVessel();
 
 			boolean inAllowedVessels = false;
 			for (final Vessel v : allowedVessels) {

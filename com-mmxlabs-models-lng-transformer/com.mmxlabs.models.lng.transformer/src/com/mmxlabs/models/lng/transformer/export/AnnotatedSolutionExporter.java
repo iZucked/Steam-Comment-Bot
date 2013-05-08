@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -154,7 +154,7 @@ public class AnnotatedSolutionExporter {
 			case TIME_CHARTER:
 			case FLEET:
 				eSequence.setSequenceType(SequenceType.VESSEL);
-				eSequence.setVessel(entities.getModelObject(vessel, Vessel.class));
+				eSequence.setVesselAvailability(entities.getModelObject(vessel, VesselAvailability.class));
 				eSequence.unsetVesselClass();
 				break;
 			case FOB_SALE:
@@ -183,7 +183,7 @@ public class AnnotatedSolutionExporter {
 					continue;
 
 				eSequence.setVesselClass(entities.getModelObject(vessel.getVesselClass(), VesselClass.class));
-				eSequence.unsetVessel();
+				eSequence.unsetVesselAvailability();
 				final AtomicInteger ai = counter.get(vessel.getVesselClass());
 				int ix = 0;
 
@@ -201,14 +201,14 @@ public class AnnotatedSolutionExporter {
 					continue;
 				}
 
-				eSequence.unsetVessel();
+				eSequence.unsetVesselAvailability();
 				break;
 			default:
 				break;
 			}
 
 			if (vessel.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vessel.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
-				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVessel() == null && eSequence.getVesselClass() == null)) {
+				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVesselAvailability() == null && eSequence.getVesselClass() == null)) {
 					log.error("No vessel set on sequence!?");
 				}
 			}

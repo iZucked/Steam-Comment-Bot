@@ -121,7 +121,7 @@ public class VesselExistenceCheckTest {
 		int numOfVesselsInOutput = 0;
 		for (final Sequence sequence : result.getSequences()) {
 			if (sequence.isFleetVessel()) {
-				final Vessel fv = sequence.getVessel();
+				final Vessel fv = sequence.getVesselAvailability().getVessel();
 
 				Assert.assertTrue("Input vessel exists in output", inputVessels.contains(fv));
 				// remove the vessel - it should only exist once.

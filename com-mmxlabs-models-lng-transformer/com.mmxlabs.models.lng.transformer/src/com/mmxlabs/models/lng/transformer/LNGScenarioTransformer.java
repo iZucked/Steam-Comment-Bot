@@ -1679,7 +1679,7 @@ public class LNGScenarioTransformer {
 					vesselAvailability.isSetEndBy() ? vesselAvailability.getEndBy() : null, SetUtils.getObjects(vesselAvailability.getEndAt()));
 
 			// TODO: Hook up once charter out opt implemented
-			final int dailyCharterInPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
+			final int dailyCharterInPrice = vesselAvailability.isSetTimeCharterRate() ? vesselAvailability.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
 
 			final long heelLimit = vesselAvailability.getStartHeel().isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(vesselAvailability.getStartHeel().getVolumeAvailable())
 					: 0;
@@ -1688,12 +1688,12 @@ public class LNGScenarioTransformer {
 			final ICurve hourlyCharterInCurve = new ConstantValueCurve(hourlyCharterInRate);
 
 			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), hourlyCharterInCurve,
-					eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
+					vesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(vesselAvailability.getStartHeel().getCvValue()),
 					OptimiserUnitConvertor.convertToInternalPrice(vesselAvailability.getStartHeel().getPricePerMMBTU()));
 			vesselAssociation.add(eV, vessel);
 
-			entities.addModelObject(eV, vessel);
+			entities.addModelObject(vesselAvailability, vessel);
 			allVessels.add(vessel);
 		}
 

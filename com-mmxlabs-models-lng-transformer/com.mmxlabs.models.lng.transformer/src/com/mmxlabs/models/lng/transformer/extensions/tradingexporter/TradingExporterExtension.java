@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
@@ -126,13 +126,13 @@ public class TradingExporterExtension implements IExporterExtension {
 								// Found the sequence, so no find the matching EMF sequence
 								for (final Sequence sequence : outputSchedule.getSequences()) {
 									// Get the EMF Vessel
-									final Vessel vessel = sequence.getVessel();
-									if (vessel == null) {
+									final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+									if (vesselAvailability == null) {
 										continue;
 									}
 									// Find the matching
 									final IResource res = annotatedSolution.getSequences().getResources().get(i);
-									final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+									final IVessel iVessel = entities.getOptimiserObject(vesselAvailability.getVessel(), IVessel.class);
 
 									// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
 									if (iVessel == vesselProvider.getVessel(res)) {
@@ -161,12 +161,12 @@ public class TradingExporterExtension implements IExporterExtension {
 							final IResource res = annotatedSolution.getSequences().getResources().get(i);
 							if (seq.get(0) == element) {
 								for (final Sequence sequence : outputSchedule.getSequences()) {
-									final Vessel vessel = sequence.getVessel();
-									if (vessel == null) {
+									final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+									if (vesselAvailability == null) {
 										continue;
 									}
 
-									final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+									final IVessel iVessel = entities.getOptimiserObject(vesselAvailability.getVessel(), IVessel.class);
 									if (iVessel == res) {
 										if (sequence.getEvents().size() > 0) {
 											final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);

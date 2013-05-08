@@ -226,7 +226,7 @@ public class VesselEventConstraintCheckTest {
 					final VesselEventVisit vev = (VesselEventVisit) e;
 					final VesselEvent ve = vev.getVesselEvent();
 
-					final Vessel usedVessel = seq.getVessel();
+					final Vessel usedVessel = seq.getVesselAvailability().getVessel();
 
 					if (ve instanceof CharterOutEvent) {
 						assertTrue("Drydock uses allowed vessel or vessel of allowed VesselClass", isUsedVesselValid(usedVessel, allowedCharterOutVessel, allowedCharterOutVesselClass));
