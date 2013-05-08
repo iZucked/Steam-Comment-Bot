@@ -89,8 +89,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModu
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
-import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -921,10 +919,7 @@ public class ScenarioTools {
 		final URI resolved = relativeURI.resolve(manifestURI);
 		final Resource r2 = resourceSet.createResource(resolved);
 		r2.getContents().add(instance);
-			MMXCoreHandlerUtil.preSave(r2);
 		r2.save(null);
-			MMXCoreHandlerUtil.postSave(r2);
-
 		manifestResource.save(null);
 	}
 
