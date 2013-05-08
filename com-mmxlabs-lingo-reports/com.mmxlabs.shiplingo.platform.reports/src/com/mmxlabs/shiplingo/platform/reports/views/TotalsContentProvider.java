@@ -88,7 +88,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			int vesselCapacity = Integer.MAX_VALUE;
 			final Vessel vessel = seq.getVessel();
 			if (vessel != null) {
-				vesselCapacity = vessel.getVesselClass().getCapacity();
+				vesselCapacity = vessel.getVesselOrVesselClassCapacity();
 			} else {
 				final VesselClass vesselClass = seq.getVesselClass();
 				if (vesselClass != null) {
