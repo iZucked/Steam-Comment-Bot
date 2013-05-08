@@ -65,7 +65,7 @@ public class SequenceComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_eventsEditor(detailComposite, topClass);
-		add_vesselEditor(detailComposite, topClass);
+		add_vesselAvailabilityEditor(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_fitnessesEditor(detailComposite, topClass);
 		add_dailyHireRateEditor(detailComposite, topClass);
@@ -81,13 +81,14 @@ public class SequenceComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__EVENTS));
 	}
 	/**
-	 * Create the editor for the vessel feature on Sequence
+	 * Create the editor for the vesselAvailability feature on Sequence
 	 *
 	 * @generated
 	 */
-	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__VESSEL));
+	protected void add_vesselAvailabilityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__VESSEL_AVAILABILITY));
 	}
+
 	/**
 	 * Create the editor for the vesselClass feature on Sequence
 	 *

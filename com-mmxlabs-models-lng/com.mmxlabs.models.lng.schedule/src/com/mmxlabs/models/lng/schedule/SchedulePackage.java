@@ -768,13 +768,13 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int SEQUENCE__VESSEL_AVAILABILITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
@@ -3416,9 +3416,6 @@ public interface SchedulePackage extends EPackage {
 	int ENTITY_PROFIT_AND_LOSS_OPERATION_COUNT = 0;
 
 	/**
-	 * @since 4.0
-	 * @since 4.0
-	 * @since 4.0
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3614,15 +3611,15 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_Events();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVessel <em>Vessel</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVessel()
+	 * @return the meta object for the reference '<em>Vessel Availability</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability()
 	 * @see #getSequence()
 	 * @generated
 	 */
-	EReference getSequence_Vessel();
+	EReference getSequence_VesselAvailability();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}'.
@@ -4588,7 +4585,6 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getEntityProfitAndLoss_ProfitAndLoss();
 
 	/**
-	 * @since 4.0
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4781,12 +4777,12 @@ public interface SchedulePackage extends EPackage {
 		EReference SEQUENCE__EVENTS = eINSTANCE.getSequence_Events();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel Availability</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SEQUENCE__VESSEL = eINSTANCE.getSequence_Vessel();
+		EReference SEQUENCE__VESSEL_AVAILABILITY = eINSTANCE.getSequence_VesselAvailability();
 
 		/**
 		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
@@ -5562,7 +5558,6 @@ public interface SchedulePackage extends EPackage {
 		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getEntityProfitAndLoss_ProfitAndLoss();
 
 		/**
-		 * @since 4.0
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
