@@ -30,32 +30,37 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  * @author Simon McGregor
  * 
- * Utility class to provide methods for help when validating contract constraints. 
+ *         Utility class to provide methods for help when validating contract constraints.
  * @since 3.0
- *
+ * 
  */
 public class PriceExpressionUtils {
 	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*()])");
 
-	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression,
-			final List<IStatus> failures) {
+	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final List<IStatus> failures) {
 		validatePriceExpression(ctx, object, feature, priceExpression, getParser(), failures);
 	}
-		
+
 	/**
 	 * @author Simon McGregor
 	 * 
-	 * Validates a price expression for a given EMF object
+	 *         Validates a price expression for a given EMF object
 	 * 
-	 * @param ctx A validation context.
-	 * @param object The EMF object to associate validation failures with.
-	 * @param feature The structural feature to attach validation failures to.
-	 * @param priceExpression The price expression to validate.
-	 * @param parser A parser for price expressions.
-	 * @param failures The list of validation failures to append to.
+	 * @param ctx
+	 *            A validation context.
+	 * @param object
+	 *            The EMF object to associate validation failures with.
+	 * @param feature
+	 *            The structural feature to attach validation failures to.
+	 * @param priceExpression
+	 *            The price expression to validate.
+	 * @param parser
+	 *            A parser for price expressions.
+	 * @param failures
+	 *            The list of validation failures to append to.
 	 */
-	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression,
-			final SeriesParser parser, final List<IStatus> failures) {
+	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final SeriesParser parser,
+			final List<IStatus> failures) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Price Expression is missing."));
@@ -65,15 +70,15 @@ public class PriceExpressionUtils {
 		}
 
 		Matcher matcher = pattern.matcher(priceExpression);
-		
+
 		if (matcher.find()) {
-			String message = String.format("[Price expression|'"+priceExpression+"'] Contains unexpected character '%s'.", matcher.group(1));
+			String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 			dsd.addEObjectAndFeature(object, feature);
 			failures.add(dsd);
 			return;
 		}
-		
+
 		if (parser != null) {
 			ISeries parsed = null;
 			String hints = "";
@@ -85,7 +90,8 @@ public class PriceExpressionUtils {
 				hints = e.getMessage();
 			}
 			if (parsed == null) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Price expression|"+priceExpression+"] Unable to parse: " + hints));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Price expression|" + priceExpression
+						+ "] Unable to parse: " + hints));
 				dsd.addEObjectAndFeature(object, feature);
 				failures.add(dsd);
 			}

@@ -6,8 +6,6 @@ syntax: regexp
 ^.*/bin$
 syntax: regexp
 ^.*/target$
-syntax: regexp
-^.*/.settings$
 
 syntax: regexp
 ^com\.mmxlabs\.models\.lng\.p2/\.project$

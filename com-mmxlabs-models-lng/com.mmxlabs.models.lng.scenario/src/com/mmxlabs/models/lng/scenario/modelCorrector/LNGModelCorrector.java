@@ -83,7 +83,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * 
  * @author Simon Goodall
  * @since 3.0
- * 
  */
 public class LNGModelCorrector {
 
