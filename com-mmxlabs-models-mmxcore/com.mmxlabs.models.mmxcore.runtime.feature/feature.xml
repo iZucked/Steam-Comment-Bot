@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.models.mmxcore.runtime.feature"
       label="Models: MMXCore Runtime Feature"
-      version="3.1.1.qualifier"
+      version="3.1.2.qualifier"
       provider-name="Minimax Labs">
 
    <description>
