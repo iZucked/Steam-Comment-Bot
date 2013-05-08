@@ -22,6 +22,13 @@
 				<!-- this is actually present in any 0.14+ version -->
 				<version>${tycho.version}</version>
 				<configuration>
+					<repositories>
+						<repository>
+							<id>juno</id>
+							<layout>p2</layout>
+							<url>http://download.eclipse.org/releases/juno</url>
+						</repository>
+					</repositories>
 					<!-- this is to fix some lucene 3.x compatibility issue -->
 					<argLine>-Dhelp.lucene.tokenizer=standard</argLine>
 					<!-- actual indexer call  - - do not wrap -->
