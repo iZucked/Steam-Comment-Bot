@@ -8,11 +8,9 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -21,11 +19,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -38,8 +33,6 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 
 public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
-
-	private static final Logger log = LoggerFactory.getLogger(VesselViewerPane_Editor.class);
 
 	// TODO: Make these colours a preference so they can be consistently used across various UI parts
 	private final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
@@ -60,8 +53,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain),
 				FleetPackage.eINSTANCE.getVesselAvailability_Vessel());
 
-		addTypicalColumn("Time Charter", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeCharterRate(), jointModelEditor.getEditingDomain()),
-				FleetPackage.eINSTANCE.getVesselAvailability_Vessel());
+		addTypicalColumn("Time Charter", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselAvailability_Vessel(), jointModelEditor.getEditingDomain()));
 
 		addTypicalColumn("Start Port",
 				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
@@ -83,16 +75,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		final ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
-			@Override
-			public EObject getElementForNotificationTarget(final EObject source) {
-				if (source instanceof VesselAvailability) {
-					return source.eContainer();
-				}
-
-				return super.getElementForNotificationTarget(source);
-			}
-		};
+		final ScenarioTableViewer scenarioTableViewer = super.constructViewer(parent);
 		scenarioTableViewer.setColourProvider(new IColorProvider() {
 
 			@Override
@@ -103,10 +86,10 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 			@Override
 			public Color getBackground(final Object element) {
 
-				if (element instanceof Vessel) {
+				if (element instanceof VesselAvailability) {
 
-					final Vessel vessel = (Vessel) element;
-					if (vessel.isSetTimeCharterRate()) {
+					final VesselAvailability vesselAvailability = (VesselAvailability) element;
+					if (vesselAvailability.isSetTimeCharterRate()) {
 						return tcVessel;
 					}
 				}

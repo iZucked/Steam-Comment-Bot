@@ -289,7 +289,7 @@
                   A time charter vessel should have a daily hire rate
                </description>
                <target
-                     class="Vessel">
+                     class="VesselAvailability">
                </target>
             </constraint>
             <constraint

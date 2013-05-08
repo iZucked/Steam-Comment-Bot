@@ -295,15 +295,6 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -311,7 +302,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
+	int VESSEL__CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
@@ -321,7 +312,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
+	int VESSEL__FILL_CAPACITY = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -330,7 +321,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 5;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1065,13 +1056,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_AVAILABILITY__START_HEEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__TIME_CHARTER_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1516,17 +1516,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVessel_InaccessiblePorts();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Time Charter Rate</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EAttribute getVessel_TimeCharterRate();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}'.
@@ -2130,6 +2119,17 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselAvailability_StartHeel();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time Charter Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_TimeCharterRate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelConsumption <em>Fuel Consumption</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2384,14 +2384,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL__INACCESSIBLE_PORTS = eINSTANCE.getVessel_InaccessiblePorts();
-
-		/**
-		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL__TIME_CHARTER_RATE = eINSTANCE.getVessel_TimeCharterRate();
 
 		/**
 		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.
@@ -2855,6 +2847,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_AVAILABILITY__START_HEEL = eINSTANCE.getVesselAvailability_StartHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__TIME_CHARTER_RATE = eINSTANCE.getVesselAvailability_TimeCharterRate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl <em>Fuel Consumption</em>}' class.

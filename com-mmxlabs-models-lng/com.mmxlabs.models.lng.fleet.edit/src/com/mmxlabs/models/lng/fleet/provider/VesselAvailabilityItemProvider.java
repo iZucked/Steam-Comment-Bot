@@ -69,6 +69,7 @@ public class VesselAvailabilityItemProvider
 			addEndAfterPropertyDescriptor(object);
 			addEndByPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
+			addTimeCharterRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -229,6 +230,28 @@ public class VesselAvailabilityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Time Charter Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTimeCharterRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_timeCharterRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_timeCharterRate_feature", "_UI_VesselAvailability_type"),
+				 FleetPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -300,6 +323,7 @@ public class VesselAvailabilityItemProvider
 			case FleetPackage.VESSEL_AVAILABILITY__START_BY:
 			case FleetPackage.VESSEL_AVAILABILITY__END_AFTER:
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:

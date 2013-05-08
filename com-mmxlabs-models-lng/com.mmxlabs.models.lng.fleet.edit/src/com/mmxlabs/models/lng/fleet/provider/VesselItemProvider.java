@@ -61,7 +61,6 @@ public class VesselItemProvider
 
 			addVesselClassPropertyDescriptor(object);
 			addInaccessiblePortsPropertyDescriptor(object);
-			addTimeCharterRatePropertyDescriptor(object);
 			addCapacityPropertyDescriptor(object);
 			addFillCapacityPropertyDescriptor(object);
 		}
@@ -108,28 +107,6 @@ public class VesselItemProvider
 				 false,
 				 true,
 				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Time Charter Rate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addTimeCharterRatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_timeCharterRate_feature"),
-				 getString("_UI_Vessel_timeCharterRate_description"),
-				 FleetPackage.Literals.VESSEL__TIME_CHARTER_RATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -217,7 +194,6 @@ public class VesselItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Vessel.class)) {
-			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 			case FleetPackage.VESSEL__CAPACITY:
 			case FleetPackage.VESSEL__FILL_CAPACITY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

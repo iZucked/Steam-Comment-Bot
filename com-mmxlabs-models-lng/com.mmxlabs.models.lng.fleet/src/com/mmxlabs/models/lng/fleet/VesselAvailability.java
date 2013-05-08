@@ -27,6 +27,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel <em>Start Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  * </ul>
  * </p>
  *
@@ -334,6 +335,59 @@ public interface VesselAvailability extends MMXObject {
 	 * @generated
 	 */
 	void setStartHeel(HeelOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Time Charter Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Time Charter Rate</em>' attribute.
+	 * @see #isSetTimeCharterRate()
+	 * @see #unsetTimeCharterRate()
+	 * @see #setTimeCharterRate(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_TimeCharterRate()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	int getTimeCharterRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Time Charter Rate</em>' attribute.
+	 * @see #isSetTimeCharterRate()
+	 * @see #unsetTimeCharterRate()
+	 * @see #getTimeCharterRate()
+	 * @generated
+	 */
+	void setTimeCharterRate(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetTimeCharterRate()
+	 * @see #getTimeCharterRate()
+	 * @see #setTimeCharterRate(int)
+	 * @generated
+	 */
+	void unsetTimeCharterRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Time Charter Rate</em>' attribute is set.
+	 * @see #unsetTimeCharterRate()
+	 * @see #getTimeCharterRate()
+	 * @see #setTimeCharterRate(int)
+	 * @generated
+	 */
+	boolean isSetTimeCharterRate();
 
 } // end of  VesselAvailability
 

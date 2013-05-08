@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
  * </ul>
@@ -71,59 +70,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	EList<APortSet<Port>> getInaccessiblePorts();
-
-	/**
-	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Time Charter Rate</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Time Charter Rate</em>' attribute.
-	 * @see #isSetTimeCharterRate()
-	 * @see #unsetTimeCharterRate()
-	 * @see #setTimeCharterRate(int)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_TimeCharterRate()
-	 * @model unsettable="true" required="true"
-	 * @generated
-	 */
-	int getTimeCharterRate();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Time Charter Rate</em>' attribute.
-	 * @see #isSetTimeCharterRate()
-	 * @see #unsetTimeCharterRate()
-	 * @see #getTimeCharterRate()
-	 * @generated
-	 */
-	void setTimeCharterRate(int value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetTimeCharterRate()
-	 * @see #getTimeCharterRate()
-	 * @see #setTimeCharterRate(int)
-	 * @generated
-	 */
-	void unsetTimeCharterRate();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Time Charter Rate</em>' attribute is set.
-	 * @see #unsetTimeCharterRate()
-	 * @see #getTimeCharterRate()
-	 * @see #setTimeCharterRate(int)
-	 * @generated
-	 */
-	boolean isSetTimeCharterRate();
 
 	/**
 	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.

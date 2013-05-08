@@ -31,7 +31,6 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getCapacity <em>Capacity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getFillCapacity <em>Fill Capacity</em>}</li>
  * </ul>
@@ -57,32 +56,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected EList<APortSet<Port>> inaccessiblePorts;
-
-	/**
-	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getTimeCharterRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int TIME_CHARTER_RATE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getTimeCharterRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected int timeCharterRate = TIME_CHARTER_RATE_EDEFAULT;
-
-	/**
-	 * This is true if the Time Charter Rate attribute has been set.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean timeCharterRateESet;
 
 	/**
 	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
@@ -209,48 +182,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			inaccessiblePorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, FleetPackage.VESSEL__INACCESSIBLE_PORTS);
 		}
 		return inaccessiblePorts;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getTimeCharterRate() {
-		return timeCharterRate;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setTimeCharterRate(int newTimeCharterRate) {
-		int oldTimeCharterRate = timeCharterRate;
-		timeCharterRate = newTimeCharterRate;
-		boolean oldTimeCharterRateESet = timeCharterRateESet;
-		timeCharterRateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__TIME_CHARTER_RATE, oldTimeCharterRate, timeCharterRate, !oldTimeCharterRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetTimeCharterRate() {
-		int oldTimeCharterRate = timeCharterRate;
-		boolean oldTimeCharterRateESet = timeCharterRateESet;
-		timeCharterRate = TIME_CHARTER_RATE_EDEFAULT;
-		timeCharterRateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__TIME_CHARTER_RATE, oldTimeCharterRate, TIME_CHARTER_RATE_EDEFAULT, oldTimeCharterRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetTimeCharterRate() {
-		return timeCharterRateESet;
 	}
 
 	/**
@@ -401,8 +332,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return basicGetVesselClass();
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
-			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
-				return getTimeCharterRate();
 			case FleetPackage.VESSEL__CAPACITY:
 				return getCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
@@ -425,9 +354,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				getInaccessiblePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
-				return;
-			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
-				setTimeCharterRate((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL__CAPACITY:
 				setCapacity((Integer)newValue);
@@ -452,9 +378,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				return;
-			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
-				unsetTimeCharterRate();
-				return;
 			case FleetPackage.VESSEL__CAPACITY:
 				unsetCapacity();
 				return;
@@ -476,8 +399,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return vesselClass != null;
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
-			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
-				return isSetTimeCharterRate();
 			case FleetPackage.VESSEL__CAPACITY:
 				return isSetCapacity();
 			case FleetPackage.VESSEL__FILL_CAPACITY:
@@ -495,9 +416,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (timeCharterRate: ");
-		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
-		result.append(", capacity: ");
+		result.append(" (capacity: ");
 		if (capacityESet) result.append(capacity); else result.append("<unset>");
 		result.append(", fillCapacity: ");
 		if (fillCapacityESet) result.append(fillCapacity); else result.append("<unset>");

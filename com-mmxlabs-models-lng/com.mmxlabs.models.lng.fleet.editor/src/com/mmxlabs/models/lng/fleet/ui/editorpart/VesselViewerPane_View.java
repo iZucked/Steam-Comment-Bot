@@ -17,30 +17,21 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
-import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -48,17 +39,11 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class VesselViewerPane_View extends ScenarioTableViewerPane {
-
-	private static final Logger log = LoggerFactory.getLogger(VesselViewerPane_View.class);
-
-	// TODO: Make these colours a preference so they can be consistently used across various UI parts
-	private final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
 
 	private final IScenarioEditingLocation jointModelEditor;
 
@@ -74,8 +59,6 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
 
 		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain));
-
-		addTypicalColumn("Time Charter", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_TimeCharterRate(), jointModelEditor.getEditingDomain()));
 
 		getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
 		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {
@@ -190,50 +173,5 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		final ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
-			@Override
-			public EObject getElementForNotificationTarget(final EObject source) {
-				if (source instanceof VesselAvailability) {
-					return source.eContainer();
-				}
-
-				return super.getElementForNotificationTarget(source);
-			}
-		};
-		scenarioTableViewer.setColourProvider(new IColorProvider() {
-
-			@Override
-			public Color getForeground(final Object element) {
-				return null;
-			}
-
-			@Override
-			public Color getBackground(final Object element) {
-
-				if (element instanceof Vessel) {
-
-					final Vessel vessel = (Vessel) element;
-					if (vessel.isSetTimeCharterRate()) {
-						return tcVessel;
-					}
-				}
-				return null;
-			}
-
-		});
-		return scenarioTableViewer;
-
-	}
-
-	@Override
-	public void dispose() {
-
-		tcVessel.dispose();
-
-		super.dispose();
 	}
 }

@@ -66,7 +66,6 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_inaccessiblePortsEditor(detailComposite, topClass);
-		add_timeCharterRateEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
 	}
@@ -86,15 +85,6 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	protected void add_inaccessiblePortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS));
 	}
-	/**
-	 * Create the editor for the timeCharterRate feature on Vessel
-	 *
-	 * @generated
-	 */
-	protected void add_timeCharterRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__TIME_CHARTER_RATE));
-	}
-
 	/**
 	 * Create the editor for the capacity feature on Vessel
 	 *

@@ -37,6 +37,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndBy <em>End By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartHeel <em>Start Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  * </ul>
  * </p>
  *
@@ -200,6 +201,35 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * @ordered
 	 */
 	protected HeelOptions startHeel;
+
+	/**
+	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTimeCharterRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int TIME_CHARTER_RATE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTimeCharterRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected int timeCharterRate = TIME_CHARTER_RATE_EDEFAULT;
+
+	/**
+	 * This is true if the Time Charter Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean timeCharterRateESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -520,6 +550,52 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getTimeCharterRate() {
+		return timeCharterRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTimeCharterRate(int newTimeCharterRate) {
+		int oldTimeCharterRate = timeCharterRate;
+		timeCharterRate = newTimeCharterRate;
+		boolean oldTimeCharterRateESet = timeCharterRateESet;
+		timeCharterRateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE, oldTimeCharterRate, timeCharterRate, !oldTimeCharterRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetTimeCharterRate() {
+		int oldTimeCharterRate = timeCharterRate;
+		boolean oldTimeCharterRateESet = timeCharterRateESet;
+		timeCharterRate = TIME_CHARTER_RATE_EDEFAULT;
+		timeCharterRateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE, oldTimeCharterRate, TIME_CHARTER_RATE_EDEFAULT, oldTimeCharterRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetTimeCharterRate() {
+		return timeCharterRateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -554,6 +630,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 				return basicGetVessel();
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
 				return getStartHeel();
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
+				return getTimeCharterRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -593,6 +671,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
 				setStartHeel((HeelOptions)newValue);
 				return;
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
+				setTimeCharterRate((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -629,6 +710,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
 				setStartHeel((HeelOptions)null);
 				return;
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
+				unsetTimeCharterRate();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -657,6 +741,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 				return vessel != null;
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
 				return startHeel != null;
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
+				return isSetTimeCharterRate();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -679,6 +765,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 		if (endAfterESet) result.append(endAfter); else result.append("<unset>");
 		result.append(", endBy: ");
 		if (endByESet) result.append(endBy); else result.append("<unset>");
+		result.append(", timeCharterRate: ");
+		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

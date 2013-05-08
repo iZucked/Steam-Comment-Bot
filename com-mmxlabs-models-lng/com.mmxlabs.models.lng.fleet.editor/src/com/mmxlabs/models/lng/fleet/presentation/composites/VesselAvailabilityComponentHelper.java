@@ -72,6 +72,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_endByEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
 		add_startHeelEditor(detailComposite, topClass);
+		add_timeCharterRateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the startAt feature on VesselAvailability
@@ -138,5 +139,14 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_startHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__START_HEEL));
+	}
+
+	/**
+	 * Create the editor for the timeCharterRate feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_timeCharterRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE));
 	}
 }
