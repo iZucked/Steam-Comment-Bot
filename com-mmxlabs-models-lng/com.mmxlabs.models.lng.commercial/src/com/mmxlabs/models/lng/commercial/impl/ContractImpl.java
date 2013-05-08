@@ -3,6 +3,21 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.impl.AContractImpl;
+import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -204,16 +219,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected LNGPriceCalculatorParameters priceInfo;
-
-	/**
-	 * This is true if the Price Info containment reference has been set.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean priceInfoESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -468,10 +473,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	public NotificationChain basicSetPriceInfo(LNGPriceCalculatorParameters newPriceInfo, NotificationChain msgs) {
 		LNGPriceCalculatorParameters oldPriceInfo = priceInfo;
 		priceInfo = newPriceInfo;
-		boolean oldPriceInfoESet = priceInfoESet;
-		priceInfoESet = true;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PRICE_INFO, oldPriceInfo, newPriceInfo, !oldPriceInfoESet);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PRICE_INFO, oldPriceInfo, newPriceInfo);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -493,61 +496,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			msgs = basicSetPriceInfo(newPriceInfo, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
-		else {
-			boolean oldPriceInfoESet = priceInfoESet;
-			priceInfoESet = true;
-			if (eNotificationRequired())
-				eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PRICE_INFO, newPriceInfo, newPriceInfo, !oldPriceInfoESet));
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicUnsetPriceInfo(NotificationChain msgs) {
-		LNGPriceCalculatorParameters oldPriceInfo = priceInfo;
-		priceInfo = null;
-		boolean oldPriceInfoESet = priceInfoESet;
-		priceInfoESet = false;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, CommercialPackage.CONTRACT__PRICE_INFO, oldPriceInfo, null, oldPriceInfoESet);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetPriceInfo() {
-		if (priceInfo != null) {
-			NotificationChain msgs = null;
-			msgs = ((InternalEObject)priceInfo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.CONTRACT__PRICE_INFO, null, msgs);
-			msgs = basicUnsetPriceInfo(msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else {
-			boolean oldPriceInfoESet = priceInfoESet;
-			priceInfoESet = false;
-			if (eNotificationRequired())
-				eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.CONTRACT__PRICE_INFO, null, null, oldPriceInfoESet));
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetPriceInfo() {
-		return priceInfoESet;
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PRICE_INFO, newPriceInfo, newPriceInfo));
 	}
 
 	/**
@@ -559,7 +509,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CommercialPackage.CONTRACT__PRICE_INFO:
-				return basicUnsetPriceInfo(msgs);
+				return basicSetPriceInfo(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -689,7 +639,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				getRestrictedPorts().clear();
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:
-				unsetPriceInfo();
+				setPriceInfo((LNGPriceCalculatorParameters)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -724,7 +674,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
 				return restrictedPorts != null && !restrictedPorts.isEmpty();
 			case CommercialPackage.CONTRACT__PRICE_INFO:
-				return isSetPriceInfo();
+				return priceInfo != null;
 		}
 		return super.eIsSet(featureID);
 	}

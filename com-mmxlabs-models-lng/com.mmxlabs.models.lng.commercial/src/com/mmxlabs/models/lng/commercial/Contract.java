@@ -3,6 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
+import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.port.Port;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
@@ -227,11 +232,9 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Price Info</em>' containment reference.
-	 * @see #isSetPriceInfo()
-	 * @see #unsetPriceInfo()
 	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PriceInfo()
-	 * @model containment="true" unsettable="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	LNGPriceCalculatorParameters getPriceInfo();
@@ -242,37 +245,10 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Price Info</em>' containment reference.
-	 * @see #isSetPriceInfo()
-	 * @see #unsetPriceInfo()
 	 * @see #getPriceInfo()
 	 * @generated
 	 */
 	void setPriceInfo(LNGPriceCalculatorParameters value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @see #isSetPriceInfo()
-	 * @see #getPriceInfo()
-	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
-	 * @generated
-	 */
-	void unsetPriceInfo();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}' containment reference is set.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Price Info</em>' containment reference is set.
-	 * @see #unsetPriceInfo()
-	 * @see #getPriceInfo()
-	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
-	 * @generated
-	 */
-	boolean isSetPriceInfo();
 
 } // end of  Contract
 

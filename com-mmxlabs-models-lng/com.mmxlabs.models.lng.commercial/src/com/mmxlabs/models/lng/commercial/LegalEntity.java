@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.commercial;
 import org.eclipse.emf.common.util.EList;
+import com.mmxlabs.models.lng.types.ALegalEntity;
+import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;

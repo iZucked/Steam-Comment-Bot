@@ -62,6 +62,10 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<configuration>
 					<failIfNoTests>false</failIfNoTests>
+
+					<useUIThread>true</useUIThread>
+					<useUIHarness>true</useUIHarness>
+
 					<!-- Include non-standard test suffix -->
 					<includes>
 						<include>**/*Tests.*</include>
@@ -95,13 +99,6 @@
 							<artifactId>com.mmxlabs.models.lng.cargo.editor</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>org.hamcrest</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-
 
 					</dependencies>
 

@@ -285,6 +285,14 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 	public String name() {
 		return "Charter Out";
 	}
+
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String type() {
+		return "Charter Out";
+	}
 	
 } // end of GeneratedCharterOutImpl
 

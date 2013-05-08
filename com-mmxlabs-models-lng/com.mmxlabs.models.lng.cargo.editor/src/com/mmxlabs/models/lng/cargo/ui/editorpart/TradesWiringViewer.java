@@ -434,6 +434,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (aSet == null || bSet == null) {
 					return false;
 				}
+				
 				aSet.retainAll(bSet);
 				if (!aSet.isEmpty()) {
 					return true;

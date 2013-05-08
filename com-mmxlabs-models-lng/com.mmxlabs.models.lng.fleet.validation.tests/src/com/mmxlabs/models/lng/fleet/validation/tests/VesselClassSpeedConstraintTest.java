@@ -13,10 +13,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.regex.Matcher;
+
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.hamcrest.core.AnyOf;
 import org.junit.Test;
+import org.mockito.AdditionalMatchers;
+import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -187,7 +193,7 @@ public class VesselClassSpeedConstraintTest {
 		verify(vesselClass, times(2)).getMaxSpeed();
 		verify(validationContext).getTarget();
 		verify(validationContext).getCurrentConstraintId();
-		verify(validationContext).createFailureStatus("vc", minSpeed, maxSpeed);
+		verify(validationContext).createFailureStatus(Matchers.anyString(), AdditionalMatchers.eq(minSpeed, 1.0), AdditionalMatchers.eq(maxSpeed, 1.0));
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(vesselClass);
 		verifyNoMoreInteractions(validationContext);
@@ -395,7 +401,7 @@ public class VesselClassSpeedConstraintTest {
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
 		} else {
-			when(validationContext.createFailureStatus(anyFloat(), anyFloat(), anyFloat())).thenReturn(resultStatus);
+			when(validationContext.createFailureStatus(Matchers.<Object>anyVararg())).thenReturn(resultStatus);
 		}
 
 		constraint.validate(validationContext);
@@ -420,7 +426,7 @@ public class VesselClassSpeedConstraintTest {
 		if (expectSuccess) {
 			verify(validationContext).createSuccessStatus();
 		} else {
-			verify(validationContext).createFailureStatus(failureSpeed, minFCLSpeed, maxFCLSpeed);
+			verify(validationContext).createFailureStatus(Matchers.<Object>anyVararg());
 		}
 	}
 
