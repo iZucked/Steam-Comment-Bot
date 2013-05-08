@@ -7,6 +7,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.ui.provider.PropertyDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
@@ -37,7 +38,7 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 	 */
 	private Optional<String> category = Optional.absent();
 	private Optional<String> displayName = Optional.absent();
-	private Optional<Object> id = Optional.absent();
+	private final Optional<Object> id = Optional.absent();
 
 	/**
 	 * Editing disabled by default.
@@ -78,7 +79,10 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 		if (object2 != null) {
 			final IItemPropertySource ps = (IItemPropertySource) adapterFactory.adapt(object2, IItemPropertySource.class);
 			if (ps != null) {
-				return new EMFPathPropertyDescriptor(new PropertyDescriptor(object2, ps.getPropertyDescriptor(object2, feature)), path2);
+				final IItemPropertyDescriptor pd = ps.getPropertyDescriptor(object2, feature);
+				if (pd != null) {
+					return new EMFPathPropertyDescriptor(new PropertyDescriptor(object2, pd), path2);
+				}
 			}
 		}
 		return null;
@@ -87,6 +91,9 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 	public EMFPathPropertyDescriptor(final PropertyDescriptor propertyDescriptor, final EMFPath path) {
 		this.path = path;
 		this.propertyDescriptor = propertyDescriptor;
+		if (propertyDescriptor == null) {
+			throw new NullPointerException("property desriptor is null");
+		}
 	}
 
 	@Override
@@ -135,11 +142,11 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 
 	@Override
 	public Object getId() {
-		
+
 		if (id.isPresent()) {
 			return id.get();
 		}
-		
+
 		// It is intended that the containing property source will check this instance
 		return path;// propertyDescriptor.getId();
 	}
@@ -173,7 +180,7 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 		this.editable = editable;
 	}
 
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(final String displayName) {
 		this.displayName = Optional.fromNullable(displayName);
 	}
 }
