@@ -452,23 +452,23 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return fuelConsumptions;
 	}
 
-	// public void sanityCheckVesselState(int loadIdx, int dischargeIdx, Object... sequence) {
-	// // If load or discharge has been set, then the other must be too.
-	// assert (loadIdx < 0 && dischargeIdx < 0) || (loadIdx >= 0 && dischargeIdx >= 0);
-	//
-	// for (int i = 0; i < sequence.length; ++i) {
-	// if ((i % 2) == 1) {
-	// // Voyage
-	// final VoyageDetails details = (VoyageDetails) sequence[i];
-	//
-	// // if (loadIdx <= i && i < dischargeIdx)
-	// // assert(details.getOptions().getVesselState() == VesselState.Laden);
-	// // else
-	// // assert(details.getOptions().getVesselState() == VesselState.Ballast);
-	// }
-	// }
-	//
-	// }
+	public void sanityCheckVesselState(int loadIdx, int dischargeIdx, Object... sequence) {
+		// If load or discharge has been set, then the other must be too.
+		assert (loadIdx < 0 && dischargeIdx < 0) || (loadIdx >= 0 && dischargeIdx >= 0);
+
+		for (int i = 0; i < sequence.length; ++i) {
+			if ((i % 2) == 1) {
+				// Voyage
+				final VoyageDetails details = (VoyageDetails) sequence[i];
+
+				if (loadIdx <= i && i < dischargeIdx)
+					assert (details.getOptions().getVesselState() == VesselState.Laden);
+				else
+					assert (details.getOptions().getVesselState() == VesselState.Ballast);
+			}
+		}
+
+	}
 
 	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, final Object... sequence) {
 		int cooldownM3Price = 0;
@@ -581,6 +581,42 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return result;
 	}
 
+	final public int calculateCooldownPrices(final IVesselClass vesselClass, final int[] arrivalTimes, final Object... sequence) {
+		int cooldownM3Price = 0;
+
+		int arrivalTimeIndex = -1;
+		for (int i = 0; i < sequence.length; ++i) {
+			if (sequence[i] instanceof VoyageDetails) {
+
+				final VoyageDetails details = (VoyageDetails) sequence[i];
+				if (details.getOptions().shouldBeCold() && (details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0)) {
+					final IPort port = details.getOptions().getToPortSlot().getPort();
+
+					// Look up arrival of next port
+					final int cooldownTime = arrivalTimes[arrivalTimeIndex + 1];
+
+					// TODO is this how cooldown gas ought to be priced?
+					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {
+						// TODO double check how/if this affects caching
+						// decisions
+						final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice((ILoadSlot) details.getOptions().getToPortSlot(), cooldownTime);
+						cooldownM3Price = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue());
+					} else {
+						final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice(cooldownTime);
+						cooldownM3Price = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, portCVProvider.getPortCV(port));
+					}
+
+					details.setFuelUnitPrice(FuelComponent.Cooldown, cooldownM3Price);
+				}
+			} else {
+				assert sequence[i] instanceof PortDetails;
+				arrivalTimeIndex++;
+			}
+		}
+
+		return cooldownM3Price;
+	}
+
 	/**
 	 * Given a sequence of {@link IPortDetails} interleaved with {@link VoyageDetails}, compute the total base fuel and LNG requirements, taking into account initial conditions, load and discharge
 	 * commitments etc. It is assumed that the first and last {@link IPortDetails} will be a Loading slot or other slot where the vessel state is set to a known state. Intermediate slots are any other
@@ -630,7 +666,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 
-		// The index of the last sequence element that used some kind of boil-off
+		// The last sequence element that used some kind of boil-off
 		VoyageDetails lastBoiloffElement = null;
 
 		// add up route cost and find the last boiloff element
@@ -763,6 +799,23 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
 					details.setFuelUnitPrice(fc, prices[index]);
 				}
+			}
+		}
+
+		final boolean setLNGPrice;
+		if (dischargeIdx != -1) {
+			setLNGPrice = true;
+		} else {
+			if (((PortDetails) sequence[0]).getOptions().getPortSlot() instanceof IHeelOptionsPortSlot) {
+				final IHeelOptions options = ((IHeelOptionsPortSlot) ((PortDetails) sequence[0]).getOptions().getPortSlot()).getHeelOptions();
+				if (options.getHeelLimit() > 0) {
+					setLNGPrice = true;
+					dischargeM3Price = Calculator.costPerM3FromMMBTu(options.getHeelUnitPrice(), options.getHeelCVValue());
+				} else {
+					setLNGPrice = false;
+				}
+			} else {
+				setLNGPrice = false;
 			}
 		}
 

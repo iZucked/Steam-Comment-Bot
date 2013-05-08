@@ -255,26 +255,40 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			revenue = 0;
 		}
 
-		final long value = shippingEntity.getTaxedProfit(revenue - shippingCost, planStartTime);
+		final long charterRevenue = getCharterRevenue(plan, vessel);
+
+		final long value = shippingEntity.getTaxedProfit(revenue + charterRevenue - shippingCost, planStartTime);
 		if (annotatedSolution != null) {
 			final ISequenceElement element = slotProvider.getElement(((PortDetails) plan.getSequence()[0]).getOptions().getPortSlot());
-			final DetailTree details = new DetailTree();
+			{
+				final DetailTree details = new DetailTree();
 
-			if (revenue > 0) {
-				// TODO take out strings.
-				details.addChild(new DetailTree("Revenue", new TotalCostDetailElement(revenue)));
+				if (revenue > 0) {
+					// TODO take out strings.
+					details.addChild(new DetailTree("Revenue", new TotalCostDetailElement(revenue)));
+				}
+
+				final IDetailTree[] detailsRef = new IDetailTree[1];
+				// final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
+				// annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost, new ShippingCostAnnotation(planStartTime, costNoBoiloff, detailsRef[0]));
+				final long costIncBoiloff = getShippingCosts(plan, vessel, true, vesselStartTime, detailsRef);
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
+						new ShippingCostAnnotation(planStartTime, costIncBoiloff, detailsRef[0]));
+
+				final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, value, details);
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(planStartTime, Collections.singleton(entry));
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
 			}
+			// Add in charter out revenue
+			if (charterRevenue != 0) {
+				final DetailTree details = new DetailTree();
 
-			final IDetailTree[] detailsRef = new IDetailTree[1];
-			// final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
-			// annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost, new ShippingCostAnnotation(planStartTime, costNoBoiloff, detailsRef[0]));
-			final long costIncBoiloff = getShippingCosts(plan, vessel, true, vesselStartTime, detailsRef);
-			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff, new ShippingCostAnnotation(planStartTime, costIncBoiloff, detailsRef[0]));
+				details.addChild(new DetailTree("Charter Out", new TotalCostDetailElement(charterRevenue)));
 
-			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, value, details);
-			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(planStartTime, Collections.singleton(entry));
-			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
-
+				final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, shippingEntity.getTaxedProfit(charterRevenue, planStartTime), details);
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(planStartTime, Collections.singleton(entry));
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss, annotation);
+			}
 		}
 
 		return value;
@@ -344,7 +358,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (detailsRef.length == 2) {
 				//
 				details.addChild("Duration", new DurationDetailElement(planDuration));
- 				details.addChild("Route Cost", new TotalCostDetailElement(plan.getTotalRouteCost()));
+				details.addChild("Route Cost", new TotalCostDetailElement(plan.getTotalRouteCost()));
 				details.addChild("Base Fuel", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
 				details.addChild("Base Fuel Supplement", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Base_Supplemental)));
 				details.addChild("Cooldown", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Cooldown)));

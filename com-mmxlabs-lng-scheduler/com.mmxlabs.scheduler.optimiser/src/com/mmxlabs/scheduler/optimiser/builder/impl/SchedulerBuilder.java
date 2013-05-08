@@ -599,6 +599,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ITimeWindow createTimeWindow(final int start, final int end) {
 
+		if (start > end) {
+			throw new IllegalArgumentException("Start time is greater than end time!");
+		}
+		
 		final TimeWindow window = new TimeWindow(start, end);
 
 		if (end > endOfLatestWindow) {

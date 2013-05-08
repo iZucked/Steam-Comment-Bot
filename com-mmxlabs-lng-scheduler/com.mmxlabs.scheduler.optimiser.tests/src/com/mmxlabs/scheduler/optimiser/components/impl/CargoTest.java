@@ -10,12 +10,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+
 import com.google.common.collect.Lists;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 public class CargoTest {
-
 
 	@Test
 	public void testGetSlots() {
