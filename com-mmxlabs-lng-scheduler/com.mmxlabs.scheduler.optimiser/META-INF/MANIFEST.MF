@@ -8,7 +8,7 @@ Bundle-Name: Scheduler - Optimiser
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.0.5.RELEASE
+Bundle-Version: 4.0.6.qualifier
 Export-Package: com.mmxlabs.scheduler.optimiser.providers.impl.indexed;u
  ses:="com.mmxlabs.common.indexedobjects.impl,com.mmxlabs.common.impl,co
  m.mmxlabs.scheduler.optimiser.components,com.mmxlabs.scheduler.optimise
