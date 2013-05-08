@@ -288,7 +288,8 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 					{
 						final IVesselClass vesselClass = vessel.getVesselClass();
-						final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
+						//final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
+						final long vesselCapacityInM3 = vessel.getCargoCapacity();
 						loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
 						dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
 
@@ -424,7 +425,8 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			final int loadTime, final int dischargeTime, final long requiredFuelVolumeInM3, final IVessel vessel) {
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
-		final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
+		//final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
+		final long vesselCapacityInM3 = vessel.getCargoCapacity();
 		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
 		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
 
@@ -567,7 +569,8 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	public void addComplexCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3, final IVessel vessel) {
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
-		final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
+		//final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
+		final long vesselCapacityInM3 = vessel.getCargoCapacity();
 		// final ArrayList<IPortSlot> slots = new ArrayList<IPortSlot>();
 		final IPortSlot[] slots = new IPortSlot[portDetails.length];
 

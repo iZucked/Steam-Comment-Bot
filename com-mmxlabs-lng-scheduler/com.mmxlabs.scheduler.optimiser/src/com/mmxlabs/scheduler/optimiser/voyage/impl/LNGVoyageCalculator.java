@@ -720,7 +720,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			}
 
-			final long cargoCapacityInM3 = vesselClass.getCargoCapacity();
+			//final long cargoCapacityInM3 = vesselClass.getCargoCapacity();
+			final long cargoCapacityInM3 = vessel.getCargoCapacity();
 
 			if (lngCommitmentInM3 > cargoCapacityInM3) {
 				// This is a real issue - hit physical constraints - reject

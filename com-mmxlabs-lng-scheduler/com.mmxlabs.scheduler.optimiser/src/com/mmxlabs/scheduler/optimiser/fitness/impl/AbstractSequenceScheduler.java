@@ -192,10 +192,12 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		}
 
 		if (prevPortSlot instanceof IHeelOptionsPortSlot) {
-			options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), ((IHeelOptionsPortSlot) prevPortSlot).getHeelOptions().getHeelLimit()));
+			//options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), ((IHeelOptionsPortSlot) prevPortSlot).getHeelOptions().getHeelLimit()));
+			options.setAvailableLNG(Math.min(vessel.getCargoCapacity(), ((IHeelOptionsPortSlot) prevPortSlot).getHeelOptions().getHeelLimit()));
 			useNBO = true;
 		} else if (useNBO) {
-			options.setAvailableLNG(vessel.getVesselClass().getCargoCapacity());
+			//options.setAvailableLNG(vessel.getVesselClass().getCargoCapacity());
+			options.setAvailableLNG(vessel.getCargoCapacity());
 		} else {
 			options.setAvailableLNG(0);
 		}
