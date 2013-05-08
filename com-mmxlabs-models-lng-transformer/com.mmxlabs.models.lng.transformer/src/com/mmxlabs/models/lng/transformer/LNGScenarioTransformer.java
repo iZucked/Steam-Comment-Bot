@@ -1690,7 +1690,8 @@ public class LNGScenarioTransformer {
 			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), hourlyCharterInCurve,
 					eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(vesselAvailability.getStartHeel().getCvValue()),
-					OptimiserUnitConvertor.convertToInternalPrice(vesselAvailability.getStartHeel().getPricePerMMBTU()));
+					OptimiserUnitConvertor.convertToInternalPrice(vesselAvailability.getStartHeel().getPricePerMMBTU()),
+					OptimiserUnitConvertor.convertToInternalVolume((int) (eV.getVesselOrVesselClassCapacity() * eV.getVesselOrVesselClassFillCapacity())));
 			vesselAssociation.add(eV, vessel);
 
 			entities.addModelObject(eV, vessel);
