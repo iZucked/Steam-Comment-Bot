@@ -8,12 +8,8 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.compare.Comparison;
-import org.eclipse.emf.compare.Diff;
-import org.eclipse.emf.compare.EMFCompare;
-import org.eclipse.emf.compare.scope.IComparisonScope;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.change.ChangeDescription;
+import org.eclipse.emf.ecore.change.util.ChangeRecorder;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.port.Port;
@@ -26,9 +22,9 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * <a href="https://mmxlabs.fogbugz.com/default.asp?254">Case 254: Check input attributes have not unexpectedly changed</a>
  * 
  * 1. Create scenario<br>
- * 2. Copy scenario (easiest way is with copy = ECoreUtil.copy(foo))<br>
+ * 2. Hook up a {@link ChangeRecorder}<br>
  * 3. evaluate original scenario<br>
- * 4. Check that copy = original.<br>
+ * 4. Check the {@link ChangeDescription} is empty<br>
  * 
  * @author Adam
  */
@@ -73,35 +69,11 @@ public class InputAttributesCheckTest {
 		SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue);
 
 		final LNGScenarioModel scenario = csc.buildScenario();
-		final LNGScenarioModel copiedScenario = EcoreUtil.copy(scenario);
+		final ChangeRecorder changeRecorder = new ChangeRecorder(scenario);
 
-		assertScenariosEqual("Copy has been made correctly", copiedScenario, scenario);
 		ScenarioTools.evaluate(scenario);
-		assertScenariosEqual("Evaluated scenario is the same", copiedScenario, scenario);
-	}
 
-	/**
-	 * Check that there are no differences between the two given scenarios.
-	 * 
-	 * @param assertionMessage
-	 *            A message for the assertion ({@link Assert#assertTrue(String, boolean)}).
-	 * @param originalScenario
-	 *            The original scenario
-	 * @param otherScenario
-	 *            Another scenario
-	 * @throws InterruptedException
-	 */
-	private void assertScenariosEqual(final String assertionMessage, final MMXRootObject originalScenario, final MMXRootObject otherScenario) throws InterruptedException {
-
-		final IComparisonScope scope = EMFCompare.createDefaultScope(originalScenario, otherScenario);
-		final Comparison comparison = EMFCompare.newComparator(scope).compare();
-
-		final EList<Diff> differences = comparison.getDifferences();
-		// Dump any differences to std.err before asserting
-		for (final Diff d : differences) {
-			System.err.println(d.toString());
-		}
-
-		Assert.assertTrue(assertionMessage, differences.isEmpty());
+		final ChangeDescription changeDescription = changeRecorder.endRecording();
+		Assert.assertTrue(changeDescription.getObjectChanges().isEmpty());
 	}
 }

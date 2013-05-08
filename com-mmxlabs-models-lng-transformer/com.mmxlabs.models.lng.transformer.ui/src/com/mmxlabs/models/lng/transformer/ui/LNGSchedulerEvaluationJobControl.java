@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * A simple {@link IJobControl} to evaluate a schedule.
@@ -54,7 +55,8 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
-		scenarioInstance.getLock(jobDescriptor.getLockKey()).awaitClaim();
+		final ScenarioLock lock = scenarioInstance.getLock(jobDescriptor.getLockKey());
+		lock.awaitClaim();
 		try {
 			final LNGScenarioModel scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
@@ -73,11 +75,10 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			setJobState(EJobState.CANCELLED);
 			throw new RuntimeException(e);
 		} finally {
-			scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
+			lock.release();
 		}
 	}
 
-	
 	@Override
 	public void cancel() {
 	}

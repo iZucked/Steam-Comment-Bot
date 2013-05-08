@@ -87,6 +87,7 @@ public class DefaultScenarioCreator {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultScenarioCreator.class);
 	public float dischargePrice = 1f;
+	public float purchasePrice = 0.5f;
 
 	// will need at least one sales contract and purchase contract for any completed transactions
 	SalesContract salesContract;
@@ -934,11 +935,11 @@ public class DefaultScenarioCreator {
 	 * 
 	 * @author Simon McGregor
 	 * @param name
-	 * @param dischargePrice
+	 * @param purchasePrice 
 	 * @return
 	 * @since 3.0
 	 */
-	public PurchaseContract addPurchaseContract(String name) {
+	public PurchaseContract addPurchaseContract(String name, double purchasePrice) {
 		final CommercialModel commercialModel = scenario.getCommercialModel();
 		PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
 		FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
@@ -946,6 +947,8 @@ public class DefaultScenarioCreator {
 		result.setName(name);
 
 		result.setEntity(contractEntity);
+		params.setPricePerMMBTU(purchasePrice);
+
 		result.setPriceInfo(params);
 		commercialModel.getPurchaseContracts().add(result);
 

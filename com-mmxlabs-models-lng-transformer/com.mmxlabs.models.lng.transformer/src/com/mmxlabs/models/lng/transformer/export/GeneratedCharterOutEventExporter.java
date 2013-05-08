@@ -51,8 +51,9 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 		// have an EMF representation, but we do want idle time for it
 		// so we assume if we hit a dubious port it's ANYWHERE and that
 		// we are really where we used to be.
-		if (ePort == null)
+		if (ePort == null) {
 			ePort = visitExporter.getLastPortVisited();
+		}
 		// if (ePort == null)
 		// return null;
 
