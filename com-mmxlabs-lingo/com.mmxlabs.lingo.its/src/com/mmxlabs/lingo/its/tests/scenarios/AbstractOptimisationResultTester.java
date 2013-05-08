@@ -22,14 +22,10 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import com.mmxlabs.lingo.its.tests.ScenarioRunner;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
@@ -41,7 +37,6 @@ import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.scenario.modelCorrector.LNGModelCorrector;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -136,10 +131,6 @@ public class AbstractOptimisationResultTester {
 	 * @throws InterruptedException
 	 */
 	public void runScenario(final MMXRootObject originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
-
-		LNGModelCorrector modelCorrector = new LNGModelCorrector();
-		AdapterFactoryEditingDomain ed = new AdapterFactoryEditingDomain(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE), new BasicCommandStack());
-		modelCorrector.correctModel(originalScenario, ed);
 
 		final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
 
