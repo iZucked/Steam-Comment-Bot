@@ -100,7 +100,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					} else if (obj instanceof VoyageDetails) {
 						final VoyageDetails details = (VoyageDetails) obj;
 						currentTime += details.getOptions().getAvailableTime();
-						arrivalTimes[++idx] = currentTime;
+//						arrivalTimes[++idx] = currentTime;
+						++idx;
 
 						// record last ballast leg
 						if (details.getOptions().getVesselState() == VesselState.Ballast) {
