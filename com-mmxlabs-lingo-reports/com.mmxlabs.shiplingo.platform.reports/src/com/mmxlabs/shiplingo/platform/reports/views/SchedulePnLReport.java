@@ -261,17 +261,24 @@ public class SchedulePnLReport extends EMFReportView {
 		// supplying null for the entity name indicates that the total group P&L should be returned
 		if (entity == null) {
 			return (int) groupProfitAndLoss.getProfitAndLoss();
+			if (data == null) {
+				return null;
+			}
+
+			return data.getValueAs(Integer.class);
 		}
 		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
 		else {
+			int groupTotal = 0;
+			boolean foundValue = false;
 			for (EntityProfitAndLoss ePnl : groupProfitAndLoss.getEntityProfitAndLosses()) {
 				if (ePnl.getEntity().getName().equals(entity)) {
-					return (int) ePnl.getProfitAndLoss();
+
+					groupTotal +=  ePnl.getProfitAndLoss();
+					foundValue = true;
 				}
 			}
-
 		}
-
 		return null;
 	}
 
