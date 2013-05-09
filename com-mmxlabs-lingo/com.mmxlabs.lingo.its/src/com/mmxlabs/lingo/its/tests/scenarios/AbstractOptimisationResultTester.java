@@ -22,26 +22,21 @@ import java.util.TreeSet;
 import junit.framework.Assert;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import com.mmxlabs.lingo.its.tests.ScenarioRunner;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.input.InputPackage;
-import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.scenario.modelCorrector.LNGModelCorrector;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -50,9 +45,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -87,8 +80,8 @@ public class AbstractOptimisationResultTester {
 		instance = CargoPackage.eINSTANCE;
 		instance = CommercialPackage.eINSTANCE;
 		instance = FleetPackage.eINSTANCE;
-		instance = InputPackage.eINSTANCE;
-		instance = OptimiserPackage.eINSTANCE;
+		instance = AssignmentPackage.eINSTANCE;
+		instance = ParametersPackage.eINSTANCE;
 		instance = PortPackage.eINSTANCE;
 		instance = PricingPackage.eINSTANCE;
 		instance = SchedulePackage.eINSTANCE;
@@ -136,10 +129,6 @@ public class AbstractOptimisationResultTester {
 	 * @throws InterruptedException
 	 */
 	public void runScenario(final MMXRootObject originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
-
-		LNGModelCorrector modelCorrector = new LNGModelCorrector();
-		AdapterFactoryEditingDomain ed = new AdapterFactoryEditingDomain(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE), new BasicCommandStack());
-		modelCorrector.correctModel(originalScenario, ed);
 
 		final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
 
