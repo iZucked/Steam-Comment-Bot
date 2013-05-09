@@ -234,7 +234,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 					loadTime = arrivalTimes[0];
 				} else if (slot instanceof IDischargeOption) {
 					dischargeDetails = pd;
-					dischargeTime = arrivalTimes[3];
+					dischargeTime = arrivalTimes[2];
 				}
 			} else if (object instanceof VoyageDetails) {
 				if ((dischargeDetails == null) && (loadDetails != null)) {

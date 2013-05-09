@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -79,18 +80,20 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				boolean isCargoPlan = false;
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
-				final int[] arrivalTimes = new int[5];
-				int idx = -1;
-				arrivalTimes[++idx] = currentTime;
+				final List<Integer> arrivalTimes = new ArrayList<Integer>(5);
+				int idx = 0;
+				arrivalTimes.add(currentTime);
 				final Object[] currentSequence = vp.getSequence();
 				int ladenIdx = -1;
 				int ballastIdx = -1;
+				int ballastStartTime = -1;
 				for (final Object obj : currentSequence) {
 					if (obj instanceof PortDetails) {
 						final PortDetails details = (PortDetails) obj;
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
-							arrivalTimes[++idx] = currentTime;
+							arrivalTimes.add(currentTime);
+							++idx;
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
@@ -99,20 +102,20 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 						}
 					} else if (obj instanceof VoyageDetails) {
 						final VoyageDetails details = (VoyageDetails) obj;
-						currentTime += details.getOptions().getAvailableTime();
-//						arrivalTimes[++idx] = currentTime;
 						++idx;
 
 						// record last ballast leg
 						if (details.getOptions().getVesselState() == VesselState.Ballast) {
 							ballastIdx = idx - 1;
+							ballastStartTime = currentTime;
 						} else {
 							ladenIdx = idx - 1;
 						}
+						currentTime += details.getOptions().getAvailableTime();
 					}
 				}
 
-				if (ballastIdx == -1) {
+				if (ballastIdx == -1 || ballastStartTime == -1) {
 					// no ballast leg?
 					continue;
 				}
@@ -123,7 +126,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				boolean foundMarketPrice = false;
 				int bestPrice = 0;
-				final int time = arrivalTimes[ballastIdx] + ballastDetails.getTravelTime();
+				final int time = ballastStartTime + ballastDetails.getTravelTime();
 
 				final int availableTime = ballastDetails.getOptions().getAvailableTime();
 				final int distance = ballastDetails.getOptions().getDistance();
@@ -179,10 +182,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				vpo.setBasicSequence(newRawSequence);
 
 				// Rebuilt the arrival times list
-				final List<Integer> currentTimes = new ArrayList<Integer>(3);
-				for (final int t : arrivalTimes) {
-					currentTimes.add(t);
-				}
+				final List<Integer> currentTimes = new ArrayList<Integer>(arrivalTimes);
 				vpo.setArrivalTimes(currentTimes);
 
 				// Add in the route choice
@@ -207,20 +207,21 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// Calculate our new plan
 				final VoyagePlan newVoyagePlan = vpo.optimise();
 
-				// Calculate the P&L of both the original and the new option 
+				// Calculate the P&L of both the original and the new option
 				final long originalOption;
 				final long newOption;
+				int[] arrivalTimesArray = CollectionsUtil.integersToIntArray(arrivalTimes);
 				if (isCargoPlan) {
 					// Get the new cargo allocation.
-					final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
-					final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
+					final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimesArray);
+					final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimesArray);
 
 					originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, seq.getStartTime(), null);
 					newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
 
 				} else {
-					originalOption = entityValueCalculator.evaluate(vp, vessel, arrivalTimes[0], seq.getStartTime(), null);
-					newOption = entityValueCalculator.evaluate(newVoyagePlan, vessel, arrivalTimes[0], seq.getStartTime(), null);
+					originalOption = entityValueCalculator.evaluate(vp, vessel, arrivalTimes.get(0), seq.getStartTime(), null);
+					newOption = entityValueCalculator.evaluate(newVoyagePlan, vessel, arrivalTimes.get(0), seq.getStartTime(), null);
 
 				}
 				// TODO: This should be recorded based on market availability groups and then processed.
@@ -228,7 +229,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					// Keep
 				} else {
 					// Overwrite details
-					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newVoyagePlan.getSequence());
+					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimesArray, newVoyagePlan.getSequence());
 				}
 			}
 		}
