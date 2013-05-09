@@ -27,6 +27,9 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -204,6 +207,12 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			vesselsOfClass.add(vessel);
 		}
 
+		final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
+		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
+		for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+			vesselAvailabilityMap.put(va.getVessel(), va);
+		}
+
 		// Process initial vessel assignments list
 		if (!assignmentModel.getElementAssignments().isEmpty()) {
 			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, rootObject.getFleetModel());
@@ -223,9 +232,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						vessel = vesselsOfClass.get(idx);
 					}
 				} else {
-//					ARG THIS IS A PROBLEM FOR API CHANGE
-					
-					vessel = mem.getOptimiserObject(seq.getVesselOrClass(), IVessel.class);
+					final Vessel seqVessel = (Vessel) seq.getVesselOrClass();
+					vessel = mem.getOptimiserObject(vesselAvailabilityMap.get(seqVessel), IVessel.class);
 				}
 				if (vessel != null) {
 					final IResource resource = vp.getResource(vessel);
