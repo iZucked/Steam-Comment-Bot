@@ -593,6 +593,8 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setBaseFuelUnitPrice(OptimiserUnitConvertor.convertToInternalPrice(2));
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
+
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
@@ -673,6 +675,7 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 
 		final PortDetails loadDetails = new PortDetails();
@@ -726,6 +729,8 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setBaseFuelUnitPrice(OptimiserUnitConvertor.convertToInternalPrice(2));
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
+
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
