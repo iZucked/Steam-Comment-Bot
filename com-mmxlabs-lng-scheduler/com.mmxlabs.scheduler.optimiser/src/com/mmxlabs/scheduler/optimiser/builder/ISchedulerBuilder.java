@@ -217,7 +217,7 @@ public interface ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint, final long heelLimit,
-			final int heelCVValue, final int heelUnitPrice);
+			final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
 
 	/**
 	 * Create a fleet vessel with the given name, class and instance type.
@@ -231,7 +231,7 @@ public interface ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
-			final long heelLimit, final int heelCVValue, final int heelUnitPrice);
+			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
 
 	/**
 	 * Create a start/end requirement which constrains nothing

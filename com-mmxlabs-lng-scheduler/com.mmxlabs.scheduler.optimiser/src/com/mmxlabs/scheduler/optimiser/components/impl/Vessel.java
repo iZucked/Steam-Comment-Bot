@@ -30,6 +30,8 @@ public final class Vessel extends IndexedObject implements IVessel {
 	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
 
 	private ICurve hourlyCharterInPrice;
+	
+	private long cargoCapacity;
 
 	@Override
 	public String getName() {
@@ -76,5 +78,15 @@ public final class Vessel extends IndexedObject implements IVessel {
 	 */
 	public void setHourlyCharterInPrice(final ICurve hourlyCharterInPrice) {
 		this.hourlyCharterInPrice = hourlyCharterInPrice;
+	}
+
+	@Override
+	public long getCargoCapacity() {
+		// TODO Auto-generated method stub
+		return cargoCapacity;
+	}
+	
+	public void setCargoCapacity(long value) {
+		cargoCapacity = value;
 	}
 }

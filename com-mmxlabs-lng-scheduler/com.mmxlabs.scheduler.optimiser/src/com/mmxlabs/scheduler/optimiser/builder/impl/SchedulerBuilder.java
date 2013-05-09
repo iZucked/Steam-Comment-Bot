@@ -618,8 +618,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public IVessel createVessel(final String name, final IVesselClass vesselClass, final ICurve hourlyCharterInRate, final IStartEndRequirement start, final IStartEndRequirement end,
-			final long heelLimit, final int heelCVValue, final int heelUnitPrice) {
-		return this.createVessel(name, vesselClass, hourlyCharterInRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice);
+			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity) {
+		return this.createVessel(name, vesselClass, hourlyCharterInRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice, cargoCapacity);
 	}
 
 	/**
@@ -653,7 +653,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final IStartEndRequirement start = createStartEndRequirement();
 		final IStartEndRequirement end = createStartEndRequirement();
 
-		return createVessel(name, vesselClass, hourlyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0);
+		return createVessel(name, vesselClass, hourlyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0, vesselClass.getCargoCapacity());
 	}
 
 	/**
@@ -661,7 +661,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public IVessel createVessel(final String name, final IVesselClass vesselClass, final ICurve hourlyCharterInRate, final VesselInstanceType vesselInstanceType, final IStartEndRequirement start,
-			final IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice) {
+			final IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -684,6 +684,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vessel.setVesselInstanceType(vesselInstanceType);
 
 		vessel.setHourlyCharterInPrice(hourlyCharterInRate);
+		
+		vessel.setCargoCapacity(cargoCapacity);
 
 		vessels.add(vessel);
 		if (vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) {
@@ -852,7 +854,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// // TODO: Look up appropriate definition
 			final IVesselClass cargoShortsClass = vesselClasses.get(1);// createVesselClass("short-class", OptimiserUnitConvertor.convertToInternalSpeed(18.0),
 			shortCargoVessel = createVessel("short-vessel", cargoShortsClass, new ConstantValueCurve(200000), VesselInstanceType.CARGO_SHORTS, createStartEndRequirement(),
-					createStartEndRequirement(), 0, 0, 0);
+					createStartEndRequirement(), 0, 0, 0, cargoShortsClass.getCargoCapacity());
 		}
 		// create return elements before fixing time windows,
 		// because the next bit will have to patch up their time windows
@@ -1025,7 +1027,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private IVessel createVirtualVessel(final ISequenceElement element, final VesselInstanceType type) {
 		assert type == VesselInstanceType.DES_PURCHASE || type == VesselInstanceType.FOB_SALE;
 		// create a new resource for each of these guys, and bind them to their resources
-		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, ZeroCurve.getInstance(), type, createStartEndRequirement(), createStartEndRequirement(), 0l, 0, 0);
+		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, ZeroCurve.getInstance(), type, createStartEndRequirement(), createStartEndRequirement(), 0l, 0, 0, virtualClass.getCargoCapacity());
 		// Bind every slot to its vessel
 		constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
 

@@ -203,7 +203,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				forceNBO = true;
 			}
 		} else if (useNBO) {
-			options.setAvailableLNG(vessel.getVesselClass().getCargoCapacity());
+			options.setAvailableLNG(vessel.getCargoCapacity());
 		} else {
 			options.setAvailableLNG(0);
 		}

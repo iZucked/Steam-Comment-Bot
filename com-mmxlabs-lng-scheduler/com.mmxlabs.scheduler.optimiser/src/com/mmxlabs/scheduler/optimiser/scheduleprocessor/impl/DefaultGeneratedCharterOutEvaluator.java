@@ -83,7 +83,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				final Object[] currentSequence = vp.getSequence();
 				int ladenIdx = -1;
 				int ballastIdx = -1;
-
+			    int ballastStartTime = -1;
+			    
 				for (int idx = 0; idx < currentSequence.length; ++idx) {
 					final Object obj = currentSequence[idx];
 					if (obj instanceof PortDetails) {
@@ -97,16 +98,20 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 							}
 						}
 					} else if (obj instanceof VoyageDetails) {
-						final VoyageDetails details = (VoyageDetails) obj;
-						currentTime += details.getOptions().getAvailableTime();
-						// record last ballast leg
-						if (details.getOptions().getVesselState() == VesselState.Ballast) {
-							ballastIdx = idx;
-						} else {
-							ladenIdx = idx;
-						}
+					      final VoyageDetails details = (VoyageDetails) obj;
+
+					      // record last ballast leg
+					      if (details.getOptions().getVesselState() == VesselState.Ballast) {
+					       ballastIdx = idx;
+					       ballastStartTime = currentTime;
+					      } else {
+					       ladenIdx = idx;
+					      }
+					      currentTime += details.getOptions().getAvailableTime();
 					}
 				}
+				
+				assert((ballastIdx < 0) == (ballastStartTime < 0));
 
 				if (ballastIdx == -1) {
 					// no ballast leg?
@@ -119,7 +124,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				boolean foundMarketPrice = false;
 				int bestPrice = 0;
-				final int time = arrivalTimes.get(ballastIdx) + ballastDetails.getTravelTime();
+				final int time = ballastStartTime + ballastDetails.getTravelTime();
 
 				final int availableTime = ballastDetails.getOptions().getAvailableTime();
 				final int distance = ballastDetails.getOptions().getDistance();
