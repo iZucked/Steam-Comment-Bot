@@ -43,7 +43,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.LddScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioSetup;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
@@ -376,7 +376,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCanalRouteShorter() {
 		System.err.println("\n\nUse canal which is cheaper than default route");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -432,7 +432,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCanalRouteLonger() {
 		System.err.println("\n\nDon't use canal which is longer than default route");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -460,7 +460,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCanalRouteTooExpensive() {
 		System.err.println("\n\nDon't use canal which is has a high cost associated with it");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -492,7 +492,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCanalRouteShorterWithDelay() {
 		System.err.println("\n\nUse canal which is cheaper than default route but has a delay");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -552,7 +552,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testPlentyStartHeel() {
 		System.err.println("\n\nGenerous Start Heel Means NBO on First Voyage");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -586,7 +586,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testLimitedStartHeel() {
 		System.err.println("\n\nLimited Start Heel");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -615,7 +615,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testFBOLimitedByMinHeel() {
 		System.err.println("\n\nUse FBO for one trip after loading");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -654,7 +654,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMinHeelForcesBfJourney() {
 		System.err.println("\n\nMinimum Heel Forces BF only journey");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -686,7 +686,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testHeelMeansNoCooldownRequired() {
 		System.err.println("\n\nStart heel is sufficient to avoid cooldown at load port.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -800,7 +800,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMaxLoadVolume() {
 		System.err.println("\n\nMaximum Load Volume Limits Load & Discharge");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -824,7 +824,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMaxDischargeVolume() {
 		System.err.println("\n\nMaximum Discharge Volume Limits Load & Discharge");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -848,7 +848,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMinDischargeVolume() {
 		System.err.println("\n\nMinimum Discharge Volume Prevents FBO");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -885,7 +885,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMaxLoadVolumeForcesBfIdle() {
 		System.err.println("\n\nMaximum Load Volume Forces BF Idle");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -908,7 +908,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testIdleAfterVesselReturn() {
 		System.err.println("\n\nSpecified date for vessel return causes idling.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -943,7 +943,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testIdleAfterVesselStart() {
 		System.err.println("\n\nSpecified date for vessel start causes idling.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -978,7 +978,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testIgnoreStartAfterAndEndBy() {
 		System.err.println("\n\nNo effects of in-bounds values for vessel start-after and end-by");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -1012,7 +1012,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testExtraTimeScheduledForCooldown() {
 		System.err.println("\n\nExtra time should be scheduled after leaving start port for cooldown at load port.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -1047,7 +1047,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testLongWarmupMeansNoCooldownRequired() {
 		System.err.println("\n\nStart heel is sufficient to avoid cooldown at load port.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -1072,7 +1072,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCooldownAdded() {
 		System.err.println("\n\nCooldown event should be scheduled at load port.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -1109,7 +1109,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCharterCostSet() {
 		System.err.println("\n\nNon-zero vessel charter cost added correctly.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -1136,7 +1136,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCharterCostUnset() {
 		System.err.println("\n\nZero vessel charter cost added correctly.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -1163,7 +1163,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testVesselStartsAnywhere() {
 		System.err.println("\n\nVessel starts anywhere.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -1213,7 +1213,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testVesselEndsAnywhere() {
 		System.err.println("\n\nVessel ends anywhere - travels back to load port for end.");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
@@ -1240,7 +1240,7 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testLimitedStartHeelForcesBfIdle() {
 		System.err.println("\n\nLimited Start Heel, should NBO travel and BF on idle");
-		final MinimalScenarioCreator mss = new MinimalScenarioCreator();
+		final MinimalScenarioSetup mss = new MinimalScenarioSetup();
 		final DefaultScenarioCreator dsc = mss;
 		final LNGScenarioModel scenario = dsc.buildScenario();
 
