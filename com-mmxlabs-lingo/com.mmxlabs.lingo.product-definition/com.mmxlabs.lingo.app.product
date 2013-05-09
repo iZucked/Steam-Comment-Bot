@@ -6,7 +6,9 @@
    <aboutInfo>
       <image path="/com.mmxlabs.lingo.product/icons/alt_window_16.gif"/>
       <text>
-         Lingo Platform
+         LiNGO Platform
+
+Version: 3.0.0
       </text>
    </aboutInfo>
 
