@@ -121,7 +121,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
@@ -548,7 +548,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
@@ -975,7 +975,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2);
