@@ -11,8 +11,8 @@ import java.net.URL;
 import org.junit.Test;
 
 import com.mmxlabs.lingo.its.tests.scenarios.AbstractOptimisationResultTester;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 public class TestOptimisationResult1 extends AbstractOptimisationResultTester {
 
@@ -22,7 +22,7 @@ public class TestOptimisationResult1 extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/csv-import/sample-data/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 	}

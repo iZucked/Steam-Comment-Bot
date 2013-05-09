@@ -9,12 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -24,10 +21,8 @@ import junit.framework.Assert;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import com.mmxlabs.lingo.its.tests.ScenarioRunner;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
@@ -37,15 +32,14 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -114,7 +108,7 @@ public class AbstractOptimisationResultTester {
 
 		MigrationHelper.migrateAndLoad(instance);
 
-		final MMXRootObject originalScenario = (MMXRootObject) instance.getInstance();
+		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
 
 		runScenario(originalScenario, url);
 	}
@@ -128,13 +122,13 @@ public class AbstractOptimisationResultTester {
 	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
-	public void runScenario(final MMXRootObject originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
+	public void runScenario(final LNGScenarioModel originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
 
 		final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
 
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
-		final MMXRootObject copy = duplicate(originalScenario);
-		ScenarioTools.storeToFile(originalScenario, new File("c:/temp/test1.scenario"));
+		final LNGScenarioModel copy = duplicate(originalScenario);
+
 		// Create two scenario runners.
 		// TODO are two necessary?
 		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
@@ -272,23 +266,9 @@ public class AbstractOptimisationResultTester {
 		}
 	}
 
-	MMXRootObject duplicate(final MMXRootObject original) {
-		final List<EObject> originalSubModels = new ArrayList<EObject>();
-		for (final MMXSubModel subModel : original.getSubModels()) {
-			originalSubModels.add(subModel.getSubModelInstance());
-		}
+	LNGScenarioModel duplicate(final LNGScenarioModel original) {
 
-		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
-
-		final MMXRootObject duplicate = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		for (final EObject eObject : duppedSubModels) {
-			duplicate.addSubModel((UUIDObject) eObject);
-		}
-
-		MMXCoreHandlerUtil.restoreProxiesForEObjects(duppedSubModels);
-
-		return duplicate;
-
+		return EcoreUtil.copy(original);
 	}
 
 }

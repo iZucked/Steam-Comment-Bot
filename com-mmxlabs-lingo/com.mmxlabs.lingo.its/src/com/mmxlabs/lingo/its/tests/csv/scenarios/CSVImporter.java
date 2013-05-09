@@ -20,40 +20,54 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.internal.Activator;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
+import com.mmxlabs.models.lng.assignment.importers.AssignmentModelImporter;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
 import com.mmxlabs.models.lng.cargo.importer.CargoModelImporter;
 import com.mmxlabs.models.lng.cargo.importer.DischargeSlotImporter;
 import com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
+import com.mmxlabs.models.lng.fleet.importer.ScenarioFleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselClassImporter;
-import com.mmxlabs.models.lng.input.InputPackage;
-import com.mmxlabs.models.lng.input.importers.InputModelImporter;
-import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
-import com.mmxlabs.models.lng.optimiser.importers.OptimiserModelImporter;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.importers.ParametersModelImporter;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.importer.PortModelImporter;
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.importers.DataIndexImporter;
 import com.mmxlabs.models.lng.pricing.importers.PortCostImporter;
 import com.mmxlabs.models.lng.pricing.importers.PricingModelImporter;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.importers.ScheduleModelImporter;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketImporter;
 import com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter;
-import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
-import com.mmxlabs.models.mmxcore.MMXCoreFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
@@ -64,7 +78,7 @@ import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
 
 public class CSVImporter {
 
-	public static MMXRootObject importCSVScenario(final String baseFileName) {
+	public static LNGScenarioModel importCSVScenario(final String baseFileName) {
 
 		final Map<String, String> dataMap = new HashMap<String, String>();
 
@@ -82,9 +96,10 @@ public class CSVImporter {
 		dataMap.put(FleetModelImporter.GROUPS_KEY, baseFileName + "/" + "Vessel Groups.csv");
 		dataMap.put(FleetModelImporter.VESSEL_CLASSES_KEY, baseFileName + "/" + "Vessel Classes.csv");
 		dataMap.put(FleetModelImporter.VESSELS_KEY, baseFileName + "/" + "Vessels.csv");
-		dataMap.put(FleetModelImporter.EVENTS_KEY, baseFileName + "/" + "Vessel Events.csv");
+		dataMap.put(ScenarioFleetModelImporter.EVENTS_KEY, baseFileName + "/" + "Vessel Events.csv");
+		dataMap.put(ScenarioFleetModelImporter.VESSEL_AVAILABILITY_KEY, baseFileName + "/" + "Vessel Availability.csv");
 
-		dataMap.put(InputModelImporter.ASSIGNMENTS, baseFileName + "/" + "Assignments.csv");
+		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, baseFileName + "/" + "Assignments.csv");
 
 		// No optimiser model importers
 
@@ -104,46 +119,29 @@ public class CSVImporter {
 
 		final DefaultImportContext context = new DefaultImportContext();
 
-		final MMXRootObject root = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+		final LNGScenarioModel scenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 		final IImporterRegistry importerRegistry = getImporterRegistry();
-		for (final EClass subModelClass : ManifestJointModel.getSubmodelClasses()) {
-			final ISubmodelImporter importer = importerRegistry.getSubmodelImporter(subModelClass);
-			if (importer == null)
-				continue;
-			final Map<String, String> parts = importer.getRequiredInputs();
-			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
-			try {
-				for (final String key : parts.keySet()) {
-					try {
-						@SuppressWarnings("resource")
-						final CSVReader r = new CSVReader(baseFileName, dataMap.get(key));
-						readers.put(key, r);
-					} catch (final IOException e) {
-						// Assert.fail(e.getMessage());
-					}
-				}
-				try {
-					final UUIDObject subModel = importer.importModel(readers, context);
-					root.addSubModel(subModel);
-				} catch (final Throwable th) {
-					Assert.fail(th.getMessage());
-				}
-			} finally {
-				for (final CSVReader r : readers.values()) {
-					try {
-						r.close();
-					} catch (final IOException e) {
 
-					}
-				}
-			}
+		scenarioModel.setPortModel((PortModel) importSubModel(importerRegistry, context, baseFileName, dataMap, PortPackage.eINSTANCE.getPortModel()));
+		scenarioModel.setFleetModel((FleetModel) importSubModel(importerRegistry, context, baseFileName, dataMap, FleetPackage.eINSTANCE.getFleetModel()));
+		scenarioModel.setPricingModel((PricingModel) importSubModel(importerRegistry, context, baseFileName, dataMap, PricingPackage.eINSTANCE.getPricingModel()));
+		scenarioModel.setCommercialModel((CommercialModel) importSubModel(importerRegistry, context, baseFileName, dataMap, CommercialPackage.eINSTANCE.getCommercialModel()));
+		scenarioModel.setSpotMarketsModel((SpotMarketsModel) importSubModel(importerRegistry, context, baseFileName, dataMap, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel()));
+		scenarioModel.setParametersModel((ParametersModel) importSubModel(importerRegistry, context, baseFileName, dataMap, ParametersPackage.eINSTANCE.getParametersModel()));
+		scenarioModel.setAnalyticsModel(((AnalyticsModel) importSubModel(importerRegistry, context, baseFileName, dataMap, AnalyticsPackage.eINSTANCE.getAnalyticsModel())));
 
-		}
+		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+		scenarioModel.setPortfolioModel(portfolioModel);
 
-		context.setRootObject(root);
+		portfolioModel.setScenarioFleetModel((ScenarioFleetModel) importSubModel(importerRegistry, context, baseFileName, dataMap, FleetPackage.eINSTANCE.getScenarioFleetModel()));
+		portfolioModel.setCargoModel((CargoModel) importSubModel(importerRegistry, context, baseFileName, dataMap, CargoPackage.eINSTANCE.getCargoModel()));
+		portfolioModel.setAssignmentModel((AssignmentModel) importSubModel(importerRegistry, context, baseFileName, dataMap, AssignmentPackage.eINSTANCE.getAssignmentModel()));
+		portfolioModel.setScheduleModel((ScheduleModel) importSubModel(importerRegistry, context, baseFileName, dataMap, SchedulePackage.eINSTANCE.getScheduleModel()));
+
+		context.setRootObject(scenarioModel);
 
 		context.run();
-		return root;
+		return scenarioModel;
 	}
 
 	private static IImporterRegistry getImporterRegistry() {
@@ -167,8 +165,8 @@ public class CSVImporter {
 					subModelImporters.put(CargoPackage.eINSTANCE.getCargoModel(), new CargoModelImporter());
 					subModelImporters.put(CommercialPackage.eINSTANCE.getCommercialModel(), new CommercialModelImporter());
 					subModelImporters.put(FleetPackage.eINSTANCE.getFleetModel(), new FleetModelImporter());
-					subModelImporters.put(InputPackage.eINSTANCE.getInputModel(), new InputModelImporter());
-					subModelImporters.put(OptimiserPackage.eINSTANCE.getOptimiserModel(), new OptimiserModelImporter());
+					subModelImporters.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), new AssignmentModelImporter());
+					subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
 					subModelImporters.put(PortPackage.eINSTANCE.getPortModel(), new PortModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getPricingModel(), new PricingModelImporter());
 					subModelImporters.put(SchedulePackage.eINSTANCE.getScheduleModel(), new ScheduleModelImporter());
@@ -243,5 +241,40 @@ public class CSVImporter {
 		}
 
 		return importerRegistry;
+	}
+
+	private static UUIDObject importSubModel(final IImporterRegistry importerRegistry, final IImportContext context, final String baseFileName, final Map<String, String> dataMap,
+			final EClass subModelClass) {
+		final ISubmodelImporter importer = importerRegistry.getSubmodelImporter(subModelClass);
+		if (importer == null) {
+			return null;
+		}
+		final Map<String, String> parts = importer.getRequiredInputs();
+		final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
+		try {
+			for (final String key : parts.keySet()) {
+				try {
+					@SuppressWarnings("resource")
+					final CSVReader r = new CSVReader(baseFileName, dataMap.get(key));
+					readers.put(key, r);
+				} catch (final IOException e) {
+					// Assert.fail(e.getMessage());
+				}
+			}
+			try {
+				return importer.importModel(readers, context);
+			} catch (final Throwable th) {
+				Assert.fail(th.getMessage());
+			}
+		} finally {
+			for (final CSVReader r : readers.values()) {
+				try {
+					r.close();
+				} catch (final IOException e) {
+
+				}
+			}
+		}
+		return null;
 	}
 }

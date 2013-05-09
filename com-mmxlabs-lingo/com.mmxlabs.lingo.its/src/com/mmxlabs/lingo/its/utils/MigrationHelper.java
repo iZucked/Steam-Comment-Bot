@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -24,7 +22,6 @@ import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.models.migration.LingoMigrationConstants;
 import com.mmxlabs.lingo.models.migration.units.LingoMigrateToV1;
-import com.mmxlabs.model.service.impl.ModelService;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.lng.migration.units.MigrateToV1;
 import com.mmxlabs.models.lng.migration.units.MigrateToV2;
@@ -45,11 +42,10 @@ public class MigrationHelper {
 
 		public TestScenarioService(final String name) {
 			super(name);
-			setModelService(new ModelService());
 		}
 
 		@Override
-		public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException {
+		public ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -200,36 +196,27 @@ public class MigrationHelper {
 
 		{
 
-			final EList<String> subModelURIs = instance.getSubModelURIs();
+			final String subModelURI = instance.getRootObjectURI();
 
 			final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
 			// Get original URI's as a list
-			final List<URI> uris = new ArrayList<URI>();
-			for (final String uriStr : subModelURIs) {
-				final URI uri = scenarioService.resolveURI(uriStr);
-				uris.add(uri);
-			}
-			instance.getSubModelURIs().clear();
+			final URI uri = scenarioService.resolveURI(subModelURI);
 			// Copy data files for manipulation
-			final List<URI> tmpURIs = new ArrayList<URI>();
-			for (final URI uri : uris) {
-				assert uri != null;
-				final File f = File.createTempFile("migration", ".xmi");
-				// Create a temp file and generate a URI to it to pass into migration code.
-				final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
-				assert tmpURI != null;
-				copyURIData(uc, uri, tmpURI);
+			assert uri != null;
+			final File f = File.createTempFile("migration", ".xmi");
+			// Create a temp file and generate a URI to it to pass into migration code.
+			final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
+			assert tmpURI != null;
+			copyURIData(uc, uri, tmpURI);
 
-				// Store the URI
-				tmpURIs.add(tmpURI);
-				// Add a mapping between the original URI and the temp URI. This should permit internal references to resolve to the new data file.
-				// TODO: Check to see whether or not the URI is the original URI or the "resolved" uri.
-				uc.getURIMap().put(uri, tmpURI);
+			// Store the URI
+			// Add a mapping between the original URI and the temp URI. This should permit internal references to resolve to the new data file.
+			// TODO: Check to see whether or not the URI is the original URI or the "resolved" uri.
+			uc.getURIMap().put(uri, tmpURI);
 
-				instance.getSubModelURIs().add(tmpURI.toString());
+			instance.setRootObjectURI(tmpURI.toString());
 
-			}
 		}
 
 		scenarioService.load(instance);

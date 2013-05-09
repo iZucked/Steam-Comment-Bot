@@ -10,8 +10,8 @@ import java.net.URL;
 import org.junit.Test;
 
 import com.mmxlabs.lingo.its.tests.scenarios.AbstractOptimisationResultTester;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 
@@ -21,7 +21,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Bonny problems/0 Bonny.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
@@ -32,7 +32,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Bonny problems/1 late and lost-DES backfill -F- Bonny.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
@@ -43,7 +43,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Bonny problems/2 -O- late and lost-DES backfill -F- Bonny.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
@@ -54,7 +54,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Dry dock issues/0 base.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
@@ -65,7 +65,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Dry dock issues/3 -O- dry dock 55 -F- lateness removed -F- base.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
@@ -76,7 +76,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Dry dock issues/4 dry dock 70 -O- -F- -F- base.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
@@ -87,7 +87,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Dry dock issues/5 charter-in generated - rewire for shorter one -O- -F- -F- base.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
@@ -98,7 +98,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Fleet cost optimisation/0 fleet demo-scenario.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
@@ -109,7 +109,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Fleet cost optimisation/1 -O- fleet demo-scenario.scenario - CSV/");
 
-		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 
 	}
