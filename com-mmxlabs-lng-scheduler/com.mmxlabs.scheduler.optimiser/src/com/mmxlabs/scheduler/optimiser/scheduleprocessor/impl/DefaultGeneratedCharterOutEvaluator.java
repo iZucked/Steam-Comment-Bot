@@ -81,35 +81,34 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
 				final List<Integer> arrivalTimes = new ArrayList<Integer>(5);
-				int idx = 0;
-				arrivalTimes.add(currentTime);
+			
 				final Object[] currentSequence = vp.getSequence();
 				int ladenIdx = -1;
 				int ballastIdx = -1;
 				int ballastStartTime = -1;
-				for (final Object obj : currentSequence) {
+
+				for (int idx = 0; idx < currentSequence.length; ++idx) {
+					final Object obj = currentSequence[idx];
 					if (obj instanceof PortDetails) {
 						final PortDetails details = (PortDetails) obj;
+						arrivalTimes.add(currentTime);
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
-							arrivalTimes.add(currentTime);
-							++idx;
+						
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
 							}
-
 						}
 					} else if (obj instanceof VoyageDetails) {
 						final VoyageDetails details = (VoyageDetails) obj;
-						++idx;
 
 						// record last ballast leg
 						if (details.getOptions().getVesselState() == VesselState.Ballast) {
-							ballastIdx = idx - 1;
+							ballastIdx = idx;
 							ballastStartTime = currentTime;
 						} else {
-							ladenIdx = idx - 1;
+							ladenIdx = idx;
 						}
 						currentTime += details.getOptions().getAvailableTime();
 					}
