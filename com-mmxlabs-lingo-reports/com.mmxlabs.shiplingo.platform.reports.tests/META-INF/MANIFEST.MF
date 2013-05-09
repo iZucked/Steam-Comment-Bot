@@ -7,10 +7,9 @@ Bundle-Version: 4.0.0.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit;bundle-version="4.8.1",
- org.hamcrest;bundle-version="1.1.0",
  com.mmxlabs.models.lng.types;bundle-version="2.0.0",
- org.mockito;bundle-version="1.8.4",
  com.mmxlabs.models.lng.cargo;bundle-version="2.0.0",
  com.mmxlabs.models.lng.commercial;bundle-version="2.0.0",
- com.mmxlabs.models.lng.pricing;bundle-version="2.0.0"
+ com.mmxlabs.models.lng.pricing;bundle-version="2.0.0",
+ org.mockito.mockito-all;bundle-version="1.9.5"
 Bundle-ClassPath: .
