@@ -4,8 +4,11 @@
  */
 package com.mmxlabs.models.lng.scenario.importWizards;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -13,6 +16,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -27,6 +31,8 @@ import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
+import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -160,21 +166,54 @@ public class BulkImportCSVHandler extends AbstractHandler {
 	}
 
 	void bulkImport(int importTarget, Shell shell, List<ScenarioInstance> instances, String filename, char separator) {
-		try {
+		final List<ScenarioInstance> badInstances = new LinkedList<ScenarioInstance>();
+		
 			for (ScenarioInstance instance : instances) {
-				if (instance.getInstance() == null) {
+			if (instance.getInstance() == null) {
+				try {
 					instance.getScenarioService().load(instance);
 				}
+				catch (Exception e) {
+					e.printStackTrace();
+					badInstances.add(instance);
+				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
-		for (ScenarioInstance instance : instances) {
+		if (!badInstances.isEmpty()) {
+			StringBuilder sb = new StringBuilder("The following scenario(s) have problems and cannot have data imported into them:\n");
+			for (ScenarioInstance instance: badInstances) {
+				sb.append("\n"); sb.append(instance.getName());
+			}
+			MessageDialog.openWarning(shell, "Import Problems", sb.toString());			
+		}
+		
+		final Set<String> uniqueProblems = new HashSet<String>();
+		final List<String> allProblems = new ArrayList<String>();
+		final Set<ScenarioInstance> goodInstances = new HashSet<ScenarioInstance>(instances);
+		goodInstances.removeAll(badInstances);
+		
+		for (ScenarioInstance instance: goodInstances) {
 			ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, shell, filename, separator);
 			ImportAction action = getImportAction(importTarget, ihp);
 
-			action.safelyImport();
+			DefaultImportContext context = action.safelyImport();
+			for (IImportProblem problem: context.getProblems()) {
+				String description = problem.getProblemDescription();
+				if (!uniqueProblems.contains(description)) {
+					uniqueProblems.add(description);
+					allProblems.add(description);
+				}
+			}
+		}
+		
+		if (!allProblems.isEmpty()) {
+			// pop up a dialog showing the problems
+			StringBuilder sb = new StringBuilder("There were problems with the import (perhaps the wrong delimeter character was used): \n");
+			for (String problem: allProblems) {
+				sb.append("\n"); sb.append(problem);
+			}
+			MessageDialog.openWarning(shell, "Import Problems", sb.toString());
 		}
 
 	}
