@@ -91,7 +91,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 						arrivalTimes.add(currentTime);
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
-							arrivalTimes.add(currentTime);
+						
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
