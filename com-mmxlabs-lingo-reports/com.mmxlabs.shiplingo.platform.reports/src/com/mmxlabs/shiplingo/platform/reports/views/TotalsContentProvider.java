@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -86,8 +87,9 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		for (final Sequence seq : schedule.getSequences()) {
 
 			int vesselCapacity = Integer.MAX_VALUE;
-			final Vessel vessel = seq.getVessel();
-			if (vessel != null) {
+			VesselAvailability vesselAvailability = seq.getVesselAvailability();
+			if (vesselAvailability != null) {
+				final Vessel vessel = vesselAvailability.getVessel();
 				vesselCapacity = vessel.getVesselOrVesselClassCapacity();
 			} else {
 				final VesselClass vesselClass = seq.getVesselClass();

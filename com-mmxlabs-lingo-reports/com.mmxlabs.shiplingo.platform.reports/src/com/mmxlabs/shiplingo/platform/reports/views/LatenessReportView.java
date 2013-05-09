@@ -15,7 +15,6 @@ import org.eclipse.jface.viewers.Viewer;
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -144,23 +143,19 @@ public class LatenessReportView extends EMFReportView {
 		} else if (object instanceof PortVisit) {
 			final PortVisit visit = (PortVisit) object;
 			final Sequence seq = visit.getSequence();
-			final Vessel vessel = seq.getVessel();
-			if (vessel == null) {
-				return null;
-			}
-			final VesselAvailability availability = null;//vessel.getAvailability();
-			if (availability == null) {
+			final VesselAvailability vesselAvailability = seq.getVesselAvailability();
+			if (vesselAvailability == null) {
 				return null;
 			}
 			if (seq.getEvents().indexOf(visit) == 0) {
-				final Date startBy = availability.getStartBy();
+				final Date startBy = vesselAvailability.getStartBy();
 				if (startBy != null) {
 					final Calendar c = Calendar.getInstance();
 					c.setTime(startBy);
 					return c;
 				}
 			} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-				final Date endBy = availability.getEndBy();
+				final Date endBy = vesselAvailability.getEndBy();
 				if (endBy != null) {
 					final Calendar c = Calendar.getInstance();
 					c.setTime(endBy);
@@ -236,11 +231,7 @@ public class LatenessReportView extends EMFReportView {
 				} else if (e instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) e;
 					final Sequence seq = visit.getSequence();
-					final Vessel vessel = seq.getVessel();
-					if (vessel == null) {
-						return false;
-					}
-					final VesselAvailability availability = null;//vessel.getAvailability();
+					final VesselAvailability availability = seq.getVesselAvailability();
 					if (availability == null) {
 						return false;
 					}

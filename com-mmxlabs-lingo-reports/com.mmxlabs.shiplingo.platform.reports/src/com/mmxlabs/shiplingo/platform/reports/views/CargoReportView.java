@@ -56,10 +56,10 @@ public class CargoReportView extends EMFReportView {
 
 				if (object instanceof Sequence) {
 					final Sequence sequence = (Sequence) object;
-					if (sequence.getVessel() == null) {
+					if (sequence.getVesselAvailability() == null) {
 						return "Chartered";
 					} else {
-						return sequence.getVessel().getName();
+						return sequence.getVesselAvailability().getVessel().getName();
 					}
 				}
 

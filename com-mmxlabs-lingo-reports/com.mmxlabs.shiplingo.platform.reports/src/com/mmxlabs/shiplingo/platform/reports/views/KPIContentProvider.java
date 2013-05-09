@@ -6,19 +6,13 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -81,107 +75,92 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 	private void createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance, final List<RowData> output) {
 
-		final EObject rootObject = scenarioInstance.getInstance();
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		long totalCost = 0l;
+		long lateness = 0l;
+		long totalPNL = 0l;
+		long totalIdleHours = 0l;
 
-			final ScenarioFleetModel scenarioFleetModel = lngScenarioModel.getPortfolioModel().getScenarioFleetModel();
-			final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
-			for (final VesselAvailability vesselAvailability : scenarioFleetModel.getVesselAvailabilities()) {
-				vesselAvailabilityMap.put(vesselAvailability.getVessel(), vesselAvailability);
-			}
+		for (final Sequence seq : schedule.getSequences()) {
 
-			long totalCost = 0l;
-			long lateness = 0l;
-			long totalPNL = 0l;
-			long totalIdleHours = 0l;
-
-			for (final Sequence seq : schedule.getSequences()) {
-
-				for (final Event evt : seq.getEvents()) {
-					totalCost += evt.getHireCost();
-					if (evt instanceof FuelUsage) {
-						final FuelUsage mix = (FuelUsage) evt;
-						// add up fuel components from mixture
-						for (final FuelQuantity fq : mix.getFuels()) {
-							totalCost += fq.getCost();
-						}
-					}
-					if (evt instanceof Journey) {
-						final Journey journey = (Journey) evt;
-						totalCost += journey.getToll();
-					}
-					if (evt instanceof Idle) {
-						final Idle idle = (Idle) evt;
-						totalIdleHours += idle.getDuration();
-					}
-					if (evt instanceof PortVisit) {
-						final int cost = ((PortVisit) evt).getPortCost();
-						totalCost += cost;
-					}
-
-					if (evt instanceof SlotVisit) {
-						final SlotVisit visit = (SlotVisit) evt;
-
-						if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-
-							final long late = visit.getStart().getTime() - visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
-							lateness += (late / 1000 / 60 / 60);
-						}
-
-					} else if (evt instanceof VesselEventVisit) {
-						final VesselEventVisit vev = (VesselEventVisit) evt;
-						if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-							final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
-							lateness += (late / 1000 / 60 / 60);
-						}
-					} else if (evt instanceof PortVisit) {
-						final PortVisit visit = (PortVisit) evt;
-						final Vessel vessel = seq.getVessel();
-						if (vessel == null) {
-							continue;
-						}
-						final VesselAvailability availability = vesselAvailabilityMap.get(vessel);
-						if (availability == null) {
-							continue;
-						}
-						if (seq.getEvents().indexOf(visit) == 0) {
-
-							final Date startBy = availability.getStartBy();
-							if (startBy != null && visit.getStart().after(startBy)) {
-								final long late = visit.getStart().getTime() - startBy.getTime();
-								lateness += (late / 1000 / 60 / 60);
-							}
-						} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-							final Date endBy = availability.getEndBy();
-							if (endBy != null && visit.getStart().after(endBy)) {
-								final long late = visit.getStart().getTime() - endBy.getTime();
-								lateness += (late / 1000 / 60 / 60);
-							}
-						}
-					}
-
-					if (evt instanceof SlotVisit) {
-						final SlotVisit visit = (SlotVisit) evt;
-
-						if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-							totalPNL += getElementPNL(cargoAllocation);
-						}
-
-					} else if (evt instanceof ProfitAndLossContainer) {
-						totalPNL += getElementPNL((ProfitAndLossContainer) evt);
+			for (final Event evt : seq.getEvents()) {
+				totalCost += evt.getHireCost();
+				if (evt instanceof FuelUsage) {
+					final FuelUsage mix = (FuelUsage) evt;
+					// add up fuel components from mixture
+					for (final FuelQuantity fq : mix.getFuels()) {
+						totalCost += fq.getCost();
 					}
 				}
-			}
+				if (evt instanceof Journey) {
+					final Journey journey = (Journey) evt;
+					totalCost += journey.getToll();
+				}
+				if (evt instanceof Idle) {
+					final Idle idle = (Idle) evt;
+					totalIdleHours += idle.getDuration();
+				}
+				if (evt instanceof PortVisit) {
+					final int cost = ((PortVisit) evt).getPortCost();
+					totalCost += cost;
+				}
 
-			if (totalPNL != 0) {
-				output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID, false));
+				if (evt instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) evt;
+
+					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
+
+						final long late = visit.getStart().getTime() - visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
+						lateness += (late / 1000 / 60 / 60);
+					}
+
+				} else if (evt instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) evt;
+					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
+						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
+						lateness += (late / 1000 / 60 / 60);
+					}
+				} else if (evt instanceof PortVisit) {
+					final PortVisit visit = (PortVisit) evt;
+					final VesselAvailability availability = seq.getVesselAvailability();
+					if (availability == null) {
+						continue;
+					}
+					if (seq.getEvents().indexOf(visit) == 0) {
+
+						final Date startBy = availability.getStartBy();
+						if (startBy != null && visit.getStart().after(startBy)) {
+							final long late = visit.getStart().getTime() - startBy.getTime();
+							lateness += (late / 1000 / 60 / 60);
+						}
+					} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
+						final Date endBy = availability.getEndBy();
+						if (endBy != null && visit.getStart().after(endBy)) {
+							final long late = visit.getStart().getTime() - endBy.getTime();
+							lateness += (late / 1000 / 60 / 60);
+						}
+					}
+				}
+
+				if (evt instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) evt;
+
+					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+						totalPNL += getElementPNL(cargoAllocation);
+					}
+
+				} else if (evt instanceof ProfitAndLossContainer) {
+					totalPNL += getElementPNL((ProfitAndLossContainer) evt);
+				}
 			}
-			output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
-			output.add(new RowData(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true));
-			output.add(new RowData(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true));
 		}
+
+		if (totalPNL != 0) {
+			output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID, false));
+		}
+		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
+		output.add(new RowData(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true));
+		output.add(new RowData(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true));
 	}
 
 	private long getElementPNL(final ProfitAndLossContainer container) {
