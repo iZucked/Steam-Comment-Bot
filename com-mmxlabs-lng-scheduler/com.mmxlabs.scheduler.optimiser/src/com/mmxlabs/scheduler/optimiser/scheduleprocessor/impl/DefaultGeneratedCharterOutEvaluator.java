@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -79,11 +80,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				boolean isCargoPlan = false;
 				// Grab the current list of arrival times and update the rolling currentTime
-				final List<Integer> arrivalTimes = new ArrayList<Integer>(3);
+				final List<Integer> arrivalTimes = new ArrayList<Integer>(3);			
 				final Object[] currentSequence = vp.getSequence();
 				int ladenIdx = -1;
 				int ballastIdx = -1;
-			    int ballastStartTime = -1;
+				int ballastStartTime = -1;
 			    
 				for (int idx = 0; idx < currentSequence.length; ++idx) {
 					final Object obj = currentSequence[idx];
@@ -92,6 +93,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 						arrivalTimes.add(currentTime);
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
+							arrivalTimes.add(currentTime);
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
@@ -112,8 +114,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				}
 				
 				assert((ballastIdx < 0) == (ballastStartTime < 0));
+				if (ballastIdx == -1 || ballastStartTime == -1) {
 
-				if (ballastIdx == -1) {
 					// no ballast leg?
 					continue;
 				}
@@ -181,9 +183,6 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				// Rebuilt the arrival times list
 				final List<Integer> currentTimes = new ArrayList<Integer>(arrivalTimes);
-				// for (final int t : arrivalTimes) {
-				// currentTimes.add(t);
-				// }
 				vpo.setArrivalTimes(currentTimes);
 
 				// Add in the route choice
@@ -211,10 +210,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// Calculate the P&L of both the original and the new option
 				final long originalOption;
 				final long newOption;
+				int[] arrivalTimesArray = CollectionsUtil.integersToIntArray(arrivalTimes);
 				if (isCargoPlan) {
 					// Get the new cargo allocation.
-					final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
-					final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
+					final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimesArray);
+					final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimesArray);
 
 					originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, seq.getStartTime(), null);
 					newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
@@ -229,7 +229,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					// Keep
 				} else {
 					// Overwrite details
-					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newVoyagePlan.getSequence());
+					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimesArray, newVoyagePlan.getSequence());
 				}
 			}
 		}

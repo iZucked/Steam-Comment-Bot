@@ -9,6 +9,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: com.mmxlabs.scheduler.optimiser
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.0.5.qualifier
+Bundle-Version: 4.0.7.qualifier
 Require-Bundle: org.junit;bundle-version="4.8.2",
  org.mockito.mockito-all;bundle-version="1.9.5"
