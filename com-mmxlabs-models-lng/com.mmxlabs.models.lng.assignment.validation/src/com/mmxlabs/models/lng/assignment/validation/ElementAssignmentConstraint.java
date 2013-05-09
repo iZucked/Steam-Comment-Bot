@@ -28,7 +28,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-
 public class ElementAssignmentConstraint extends AbstractModelConstraint {
 	/*
 	 * (non-Javadoc)
@@ -38,8 +37,7 @@ public class ElementAssignmentConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
-		IExtraValidationContext evc = Activator.getDefault().getExtraValidationContext();
-		
+		final IExtraValidationContext evc = Activator.getDefault().getExtraValidationContext();
 
 		final List<IStatus> failures = new LinkedList<IStatus>();
 
@@ -64,31 +62,31 @@ public class ElementAssignmentConstraint extends AbstractModelConstraint {
 				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
 						"Element Assignment has unexpected assigned object of type %s. Expected Cargo or VesselEvent object type.", assignedObject.eClass().getName())));
 				failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_AssignedObject());
-	
+
 				failures.add(failure);
 			}
-			
+
 			final AVesselSet<Vessel> vessel = elementAssignment.getAssignment();
-			
-			boolean found = false; 
-			
+
+			boolean found = false;
+
 			if (vessel instanceof Vessel) {
-				LNGScenarioModel root = (LNGScenarioModel) evc.getRootObject();
-				
-				ScenarioFleetModel fleet = root.getPortfolioModel().getScenarioFleetModel();
-				for (VesselAvailability availability: fleet.getVesselAvailabilities()) {
+				final LNGScenarioModel root = (LNGScenarioModel) evc.getRootObject();
+
+				final ScenarioFleetModel fleet = root.getPortfolioModel().getScenarioFleetModel();
+				for (final VesselAvailability availability : fleet.getVesselAvailabilities()) {
 					if (availability.getVessel().equals(vessel)) {
 						found = true;
 						break;
 					}
 				}
-				
+
 				if (!found) {
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
 							"Element Assignment assigns an element for an unavailable vessel %s.", vessel.getName())));
 					failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
-		
-					failures.add(failure);					
+
+					failures.add(failure);
 				}
 			}
 		}
