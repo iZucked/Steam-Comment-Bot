@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Label;
 
 /**
  * @author hinton
- * @since 3.0
+ * @since 3.1
  */
 public abstract class DialogFeatureManipulator extends BasicAttributeManipulator {
 

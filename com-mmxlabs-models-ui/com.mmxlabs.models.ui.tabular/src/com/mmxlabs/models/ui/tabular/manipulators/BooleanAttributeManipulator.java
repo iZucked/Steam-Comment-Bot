@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
  * An implementation of {@link BasicAttributeManipulator} to handle boolean objects. By default this will show a Y/N choice, but this can changed using the alternative constructor,
  * 
  * @author Simon Goodall
- * @since 3.0
+ * @since 3.1
  */
 public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 
