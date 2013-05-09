@@ -269,7 +269,7 @@ public class SchedulePnLReport extends EMFReportView {
 			for (EntityProfitAndLoss ePnl : groupProfitAndLoss.getEntityProfitAndLosses()) {
 				if (ePnl.getEntity().getName().equals(entity)) {
 
-					groupTotal +=  ePnl.getProfitAndLoss();
+					groupTotal += ePnl.getProfitAndLoss();
 					foundValue = true;
 				}
 			}
