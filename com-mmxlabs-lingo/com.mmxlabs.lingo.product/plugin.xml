@@ -16,7 +16,7 @@
             name="LiNGO">
          <property
                name="windowImages"
-               value="icons/alt_window_16.gif">
+               value="platform:/plugin/com.mmxlabs.shiplingo.platform.vanilla.product/icons/alt_window_16.gif">
          </property>
          <property
                name="appName"
@@ -40,11 +40,11 @@
          </property>
          <property
                name="aboutImage"
-               value="icons/alt_window_16.gif">
+               value="/com.mmxlabs.shiplingo.platform.app/aboutImage.gif">
          </property>
 	 <property
         name="aboutText"
-        value="LiNGO Platform&#x0D;&#x0A;&#x0D;&#x0A;Version: 3.0.0">
+        value="Ship Lingo Platform&#x0A;Version {0}">
        </property>
       </product>
    </extension>
