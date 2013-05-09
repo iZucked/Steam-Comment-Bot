@@ -47,8 +47,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -69,8 +69,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -91,8 +91,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -113,8 +113,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -136,8 +136,8 @@ public class CanalLatenessBoundaryTest {
 
 		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
