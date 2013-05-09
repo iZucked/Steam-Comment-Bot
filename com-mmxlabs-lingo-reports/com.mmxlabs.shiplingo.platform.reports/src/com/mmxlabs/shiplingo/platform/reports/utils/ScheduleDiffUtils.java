@@ -39,11 +39,11 @@ public class ScheduleDiffUtils {
 			ca = (CargoAllocation) otherObject;
 
 			// Check vessel
-			if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+			if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
 				return true;
 			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
 				return true;
-			} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+			} else if (ca.getSequence().getVesselAvailability() != null && (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
 				return true;
 			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
 				return true;
@@ -82,11 +82,11 @@ public class ScheduleDiffUtils {
 
 			ca = (SlotVisit) otherObject;
 
-			if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+			if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
 				return true;
 			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
 				return true;
-			} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+			} else if (ca.getSequence().getVesselAvailability() != null && (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
 				return true;
 			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
 				return true;
