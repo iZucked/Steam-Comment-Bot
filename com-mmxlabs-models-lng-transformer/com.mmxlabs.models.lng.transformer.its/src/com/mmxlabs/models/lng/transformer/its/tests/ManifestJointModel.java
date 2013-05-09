@@ -91,6 +91,7 @@ public class ManifestJointModel {
 		rootObject.setPortModel(PortFactory.eINSTANCE.createPortModel());
 		rootObject.setFleetModel(FleetFactory.eINSTANCE.createFleetModel());
 		rootObject.setPricingModel(PricingFactory.eINSTANCE.createPricingModel());
+		rootObject.getPricingModel().setFleetCost(PricingFactory.eINSTANCE.createFleetCostModel());
 		rootObject.setCommercialModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		rootObject.setParametersModel(ParametersFactory.eINSTANCE.createParametersModel());
 		rootObject.setSpotMarketsModel(SpotMarketsFactory.eINSTANCE.createSpotMarketsModel());
