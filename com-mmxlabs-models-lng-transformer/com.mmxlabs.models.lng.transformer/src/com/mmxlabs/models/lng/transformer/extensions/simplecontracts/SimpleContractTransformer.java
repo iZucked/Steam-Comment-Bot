@@ -40,6 +40,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  * @since 2.0
  * 
  */
+public class SimpleContractTransformer implements IContractTransformer {
 
 	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceParameters(), CommercialPackage.eINSTANCE.getExpressionPriceParameters(),
 			CommercialPackage.eINSTANCE.getSalesContract(), CommercialPackage.eINSTANCE.getPurchaseContract());

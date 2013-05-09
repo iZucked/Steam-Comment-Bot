@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -51,40 +53,40 @@ public class ShippingCalculationsTest {
 		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE
 	}
 
-	public void checkClasses(EList<? extends Object> objects, Class<?>[] classes) {
+	public void checkClasses(final EList<? extends Object> objects, final Class<?>[] classes) {
 		Assert.assertEquals("Unexpected number of events in sequence", classes.length, objects.size());
 		for (int i = 0; i < classes.length; i++) {
 			if (i >= objects.size()) {
 				return;
 			}
-			Object object = objects.get(i);
-			Class<?> clazz = classes[i];
-			String format = "Event #%d of schedule should be instance of %s not %s.";
+			final Object object = objects.get(i);
+			final Class<?> clazz = classes[i];
+			final String format = "Event #%d of schedule should be instance of %s not %s.";
 			Assert.assertTrue(String.format(format, i, clazz.toString(), object.getClass().toString()), clazz.isInstance(object));
 		}
 	}
 
-	public void checkDurations(List<? extends Event> events, int[] durations) {
+	public void checkDurations(final List<? extends Event> events, final int[] durations) {
 		Assert.assertEquals(durations.length, events.size());
 		for (int i = 0; i < durations.length; i++) {
-			Event event = events.get(i);
+			final Event event = events.get(i);
 			Assert.assertEquals("Event duration for " + event, durations[i], event.getDuration());
 		}
 	}
 
-	public void checkFuelCosts(List<? extends FuelUsage> events, int[] costs) {
+	public void checkFuelCosts(final List<? extends FuelUsage> events, final int[] costs) {
 		Assert.assertEquals(costs.length, events.size());
 		for (int i = 0; i < costs.length; i++) {
-			FuelUsage event = events.get(i);
+			final FuelUsage event = events.get(i);
 			Assert.assertEquals("Event cost for " + event, costs[i], event.getFuelCost());
 		}
 	}
 
-	public int getFuelConsumption(FuelUsage event, Fuel fuel) {
+	public int getFuelConsumption(final FuelUsage event, final Fuel fuel) {
 		int result = 0;
-		for (FuelQuantity quantity : event.getFuels()) {
+		for (final FuelQuantity quantity : event.getFuels()) {
 			if (quantity.getFuel() == fuel) {
-				for (FuelAmount a : quantity.getAmounts()) {
+				for (final FuelAmount a : quantity.getAmounts()) {
 					result += a.getQuantity();
 				}
 			}
@@ -93,27 +95,27 @@ public class ShippingCalculationsTest {
 
 	}
 
-	public void checkFuelConsumptions(List<? extends FuelUsage> events, Fuel fuel, int[] consumptions) {
+	public void checkFuelConsumptions(final List<? extends FuelUsage> events, final Fuel fuel, final int[] consumptions) {
 		for (int i = 0; i < consumptions.length; i++) {
-			FuelUsage event = events.get(i);
+			final FuelUsage event = events.get(i);
 			Assert.assertEquals(fuel.getName() + " consumption for " + event, consumptions[i], getFuelConsumption(event, fuel));
 		}
 
 	}
 
-	public void checkHireCosts(List<? extends Event> events, int[] costs) {
+	public void checkHireCosts(final List<? extends Event> events, final int[] costs) {
 		for (int i = 0; i < costs.length; i++) {
-			Event event = events.get(i);
+			final Event event = events.get(i);
 			Assert.assertEquals("Hire cost for " + event, costs[i], event.getHireCost());
 		}
 
 	}
 
-	public void checkLoadDischargeVolumes(List<? extends SlotVisit> events, int[] volumes) {
+	public void checkLoadDischargeVolumes(final List<? extends SlotVisit> events, final int[] volumes) {
 		for (int i = 0; i < volumes.length; i++) {
-			SlotVisit event = events.get(i);
-			SimpleCargoAllocation ca = new SimpleCargoAllocation(event.getSlotAllocation().getCargoAllocation());
-			Slot slot = event.getSlotAllocation().getSlot();
+			final SlotVisit event = events.get(i);
+			final SimpleCargoAllocation ca = new SimpleCargoAllocation(event.getSlotAllocation().getCargoAllocation());
+			final Slot slot = event.getSlotAllocation().getSlot();
 
 			int volume = 0;
 			int expectedVolume = volumes[i];
@@ -134,9 +136,9 @@ public class ShippingCalculationsTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> List<T> extractObjectsOfClass(EList<? extends Object> objects, Class<T> clazz) {
-		LinkedList<T> result = new LinkedList<T>();
-		for (Object object : objects) {
+	public <T> List<T> extractObjectsOfClass(final EList<? extends Object> objects, final Class<T> clazz) {
+		final LinkedList<T> result = new LinkedList<T>();
+		for (final Object object : objects) {
 			if (clazz.isInstance(object)) {
 				result.add((T) object);
 			}
@@ -150,7 +152,7 @@ public class ShippingCalculationsTest {
 
 	public SequenceTester getDefaultTester() {
 		// expected classes of the sequence elements
-		Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
+		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
 
 		final SequenceTester checker = new SequenceTester(expectedClasses);
 
@@ -207,16 +209,16 @@ public class ShippingCalculationsTest {
 
 		Class<?>[] classes;
 
-		public SequenceTester(Class<?>[] classes) {
+		public SequenceTester(final Class<?>[] classes) {
 			setClasses(classes);
 		}
 
-		public void setClasses(Class<?>[] classes) {
+		public void setClasses(final Class<?>[] classes) {
 			this.classes = classes;
 		}
 
 		@SuppressWarnings("unchecked")
-		public <T> Map<Class<?>, int[]> getLookup(Expectations field) {
+		public <T> Map<Class<?>, int[]> getLookup(final Expectations field) {
 			Map<T, int[]> lookup = null;
 			Fuel component = null;
 
@@ -255,35 +257,35 @@ public class ShippingCalculationsTest {
 			return (Map<Class<?>, int[]>) lookup;
 		}
 
-		public void setExpectedValues(Expectations field, Class<?> clazz, int[] values) {
+		public void setExpectedValues(final Expectations field, final Class<?> clazz, final int[] values) {
 			getLookup(field).put(clazz, values);
 		}
 
-		public int[] getExpectedValues(Expectations field, Class<?> clazz) {
+		public int[] getExpectedValues(final Expectations field, final Class<?> clazz) {
 			return getLookup(field).get(clazz);
 		}
 
-		public void setExpectedValue(int value, Expectations field, Class<?> clazz, int index) {
+		public void setExpectedValue(final int value, final Expectations field, final Class<?> clazz, final int index) {
 			getExpectedValues(field, clazz)[index] = value;
 		}
 
-		public void setExpectedDurations(Class<? extends Event> clazz, int[] durations) {
+		public void setExpectedDurations(final Class<? extends Event> clazz, final int[] durations) {
 			expectedDurations.put(clazz, durations);
 		}
 
-		public void setExpectedDuration(Class<? extends Event> clazz, int index, int duration) {
+		public void setExpectedDuration(final Class<? extends Event> clazz, final int index, final int duration) {
 			expectedDurations.get(clazz)[index] = duration;
 		}
 
-		public void setExpectedHireCosts(Class<? extends Event> clazz, int[] costs) {
+		public void setExpectedHireCosts(final Class<? extends Event> clazz, final int[] costs) {
 			expectedHireCosts.put(clazz, costs);
 		}
 
-		public void setExpectedFuelCosts(Class<? extends FuelUsage> clazz, int[] costs) {
+		public void setExpectedFuelCosts(final Class<? extends FuelUsage> clazz, final int[] costs) {
 			expectedFuelCosts.put(clazz, costs);
 		}
 
-		public void setExpectedFuelConsumptions(Class<? extends FuelUsage> clazz, Fuel component, int[] consumptions) {
+		public void setExpectedFuelConsumptions(final Class<? extends FuelUsage> clazz, final Fuel component, final int[] consumptions) {
 			Map<Class<? extends FuelUsage>, int[]> lookup = expectedFuelConsumptions.get(component);
 			if (lookup == null) {
 				lookup = new HashMap<Class<? extends FuelUsage>, int[]>();
@@ -293,19 +295,19 @@ public class ShippingCalculationsTest {
 			lookup.put(clazz, consumptions);
 		}
 
-		public void setExpectedBaseFuelConsumptions(Class<? extends FuelUsage> clazz, int[] consumptions) {
+		public void setExpectedBaseFuelConsumptions(final Class<? extends FuelUsage> clazz, final int[] consumptions) {
 			setExpectedFuelConsumptions(clazz, Fuel.BASE_FUEL, consumptions);
 		}
 
-		public void setExpectedFboConsumptions(Class<? extends FuelUsage> clazz, int[] consumptions) {
+		public void setExpectedFboConsumptions(final Class<? extends FuelUsage> clazz, final int[] consumptions) {
 			setExpectedFuelConsumptions(clazz, Fuel.FBO, consumptions);
 		}
 
-		public void setExpectedNboConsumptions(Class<? extends FuelUsage> clazz, int[] consumptions) {
+		public void setExpectedNboConsumptions(final Class<? extends FuelUsage> clazz, final int[] consumptions) {
 			setExpectedFuelConsumptions(clazz, Fuel.NBO, consumptions);
 		}
 
-		public void setExpectedLoadDischargeVolumes(int[] volumes) {
+		public void setExpectedLoadDischargeVolumes(final int[] volumes) {
 			expectedLoadDischargeVolumes = volumes;
 		}
 
@@ -313,31 +315,31 @@ public class ShippingCalculationsTest {
 		}
 
 		@SuppressWarnings("unchecked")
-		public void check(Sequence sequence) {
-			EList<Event> events = sequence.getEvents();
+		public void check(final Sequence sequence) {
+			final EList<Event> events = sequence.getEvents();
 			checkClasses(events, classes);
 
-			for (Class<?> clazz : new HashSet<Class<?>>(Arrays.asList(classes))) {
-				List<?> objects = extractObjectsOfClass(events, clazz);
+			for (final Class<?> clazz : new HashSet<Class<?>>(Arrays.asList(classes))) {
+				final List<?> objects = extractObjectsOfClass(events, clazz);
 
-				int[] expectedClassDurations = expectedDurations.get(clazz);
+				final int[] expectedClassDurations = expectedDurations.get(clazz);
 				if (expectedClassDurations != null) {
 					checkDurations((List<? extends Event>) objects, expectedClassDurations);
 				}
 
-				int[] expectedClassHireCosts = expectedHireCosts.get(clazz);
+				final int[] expectedClassHireCosts = expectedHireCosts.get(clazz);
 				if (expectedClassHireCosts != null) {
 					checkHireCosts((List<? extends Event>) objects, expectedClassHireCosts);
 				}
 
-				for (Entry<Fuel, Map<Class<? extends FuelUsage>, int[]>> entry : expectedFuelConsumptions.entrySet()) {
-					int[] expectedFuelUsages = entry.getValue().get(clazz);
+				for (final Entry<Fuel, Map<Class<? extends FuelUsage>, int[]>> entry : expectedFuelConsumptions.entrySet()) {
+					final int[] expectedFuelUsages = entry.getValue().get(clazz);
 					if (expectedFuelUsages != null) {
 						checkFuelConsumptions((List<? extends FuelUsage>) objects, entry.getKey(), expectedFuelUsages);
 					}
 				}
 
-				int[] expectedClassCosts = expectedFuelCosts.get(clazz);
+				final int[] expectedClassCosts = expectedFuelCosts.get(clazz);
 				if (expectedClassCosts != null) {
 					checkFuelCosts((List<? extends FuelUsage>) objects, expectedClassCosts);
 				}
@@ -349,13 +351,13 @@ public class ShippingCalculationsTest {
 			}
 		}
 
-		public void setupExpectedHireCosts(int hireRatePerHour) {
+		public void setupExpectedHireCosts(final int hireRatePerHour) {
 			// change from default scenario: all events should have time charter costs
-			for (Class<?> clazz : classes) {
-				int[] classDurations = expectedDurations.get(clazz);
+			for (final Class<?> clazz : classes) {
+				final int[] classDurations = expectedDurations.get(clazz);
 				if (classDurations != null) {
-					int n = classDurations.length;
-					int[] classHireCosts = new int[n];
+					final int n = classDurations.length;
+					final int[] classHireCosts = new int[n];
 					for (int i = 0; i < n; i++) {
 						classHireCosts[i] = classDurations[i] * hireRatePerHour;
 					}
@@ -384,7 +386,7 @@ public class ShippingCalculationsTest {
 		dsc.portCreator.setDistance(mss.loadPort, mss.dischargePort, 10, canal);
 		dsc.fleetCreator.assignDefaultCanalData(mss.vc, canal);
 
-		SequenceTester checker = getDefaultTester();
+		final SequenceTester checker = getDefaultTester();
 
 		// change from default scenario
 		// second journey is now half as long due to canal usage
@@ -412,17 +414,17 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(15, Expectations.NBO_USAGE, Idle.class, 1);
 
 		// idle uses 15 NBO, journey uses 10
-		int[] expectedloadDischargeVolumes = { 10000, -9975 };
+		final int[] expectedloadDischargeVolumes = { 10000, -9975 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
-		Sequence sequence = schedule.getSequences().get(0);
+		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
 
-		Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
+		final Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
 		Assert.assertEquals("Toll for laden leg via canal", 1, ladenJourney.getToll());
 
 	}
@@ -440,18 +442,18 @@ public class ShippingCalculationsTest {
 		dsc.portCreator.setDistance(mss.loadPort, mss.dischargePort, 30, canal);
 		dsc.fleetCreator.assignDefaultCanalData(mss.vc, canal);
 
-		SequenceTester checker = getDefaultTester();
+		final SequenceTester checker = getDefaultTester();
 
 		// no change from default scenario: canal route should be ignored
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
-		Sequence sequence = schedule.getSequences().get(0);
+		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
 
-		Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
+		final Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
 		Assert.assertEquals("Toll for laden leg via canal", 0, ladenJourney.getToll());
 	}
 
@@ -469,21 +471,21 @@ public class ShippingCalculationsTest {
 		final Route canal = dsc.portCreator.addCanal("canal");
 		dsc.portCreator.setDistance(mss.loadPort, mss.dischargePort, 10, canal);
 		dsc.fleetCreator.assignDefaultCanalData(mss.vc, canal);
-		RouteCost cost = dsc.getRouteCost(mss.vc, canal);
+		final RouteCost cost = dsc.getRouteCost(mss.vc, canal);
 		cost.setLadenCost(500);
 
-		SequenceTester checker = getDefaultTester();
+		final SequenceTester checker = getDefaultTester();
 
 		// no change from default scenario: canal route should be ignored
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
-		Sequence sequence = schedule.getSequences().get(0);
+		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
 
-		Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
+		final Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
 		Assert.assertEquals("Toll for laden leg via canal", 0, ladenJourney.getToll());
 	}
 
@@ -499,13 +501,13 @@ public class ShippingCalculationsTest {
 		final Route canal = dsc.portCreator.addCanal("canal");
 		dsc.portCreator.setDistance(mss.loadPort, mss.dischargePort, 10, canal);
 		dsc.fleetCreator.assignDefaultCanalData(mss.vc, canal);
-		VesselClassRouteParameters routeParameters = dsc.getRouteParameters(mss.vc, canal);
+		final VesselClassRouteParameters routeParameters = dsc.getRouteParameters(mss.vc, canal);
 
 		routeParameters.setExtraTransitTime(2);
 		routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
 		routeParameters.setLadenConsumptionRate(TimeUnitConvert.convertPerHourToPerDay(2));
 
-		SequenceTester checker = getDefaultTester();
+		final SequenceTester checker = getDefaultTester();
 
 		// change from default scenario
 		// second journey is now 1 hr longer due to canal usage (but 10 units shorter distance)
@@ -533,17 +535,17 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(5, Expectations.NBO_USAGE, Idle.class, 1);
 
 		// idle NBO consumption is 5, plus 12 for journey
-		int[] expectedloadDischargeVolumes = { 10000, -9983 };
+		final int[] expectedloadDischargeVolumes = { 10000, -9983 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
-		Sequence sequence = schedule.getSequences().get(0);
+		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
 
-		Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
+		final Journey ladenJourney = extractObjectsOfClass(sequence.getEvents(), Journey.class).get(1);
 		Assert.assertEquals("Toll for laden leg via canal", 1, ladenJourney.getToll());
 	}
 
@@ -784,7 +786,7 @@ public class ShippingCalculationsTest {
 		checker.setExpectedFuelCosts(Journey.class, expectedJourneyCosts);
 
 		// idle LNG consumption is 10, plus 30 + 15 for journeys and 500 min heel
-		int[] expectedloadDischargeVolumes = { 10000, -9445 };
+		final int[] expectedloadDischargeVolumes = { 10000, -9445 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -807,7 +809,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester();
 
-		int[] expectedloadDischargeVolumes = { 500, -470 };
+		final int[] expectedloadDischargeVolumes = { 500, -470 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -831,7 +833,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester();
 
-		int[] expectedloadDischargeVolumes = { 530, -500 };
+		final int[] expectedloadDischargeVolumes = { 530, -500 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -865,7 +867,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester();
 
-		int[] expectedloadDischargeVolumes = { 10000, -9970 };
+		final int[] expectedloadDischargeVolumes = { 10000, -9970 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 
 		// first & last journeys cost 10x as much
@@ -892,7 +894,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester();
 
-		int[] expectedloadDischargeVolumes = { 20, 0 };
+		final int[] expectedloadDischargeVolumes = { 20, 0 };
 		checker.setExpectedLoadDischargeVolumes(expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -912,11 +914,11 @@ public class ShippingCalculationsTest {
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		VesselAvailability av = mss.vesselAvailability;
-		Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final VesselAvailability av = mss.vesselAvailability;
+		final Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 		// return 3 hrs after discharge window ends
-		Date returnDate = new Date(endDischarge.getTime() + 3 * 3600 * 1000);
+		final Date returnDate = new Date(endDischarge.getTime() + 3 * 3600 * 1000);
 		av.setEndAfter(returnDate);
 		System.err.println("Vessel to return after: " + returnDate);
 
@@ -947,11 +949,11 @@ public class ShippingCalculationsTest {
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		VesselAvailability av = mss.vesselAvailability;
-		Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final VesselAvailability av = mss.vesselAvailability;
+		final Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 
 		// start 3 hrs before load window begins
-		Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
+		final Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
 		av.setStartBy(startDate);
 		System.err.println("Vessel to start before: " + startDate);
 
@@ -982,17 +984,17 @@ public class ShippingCalculationsTest {
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		VesselAvailability av = mss.vesselAvailability;
-		Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-		Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final VesselAvailability av = mss.vesselAvailability;
+		final Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 		// start within 5 hrs before load window starts
-		Date startDate = new Date(startLoad.getTime() - 5 * 3600 * 1000);
+		final Date startDate = new Date(startLoad.getTime() - 5 * 3600 * 1000);
 		av.setStartAfter(startDate);
 		System.err.println("Vessel to start after: " + startDate);
 
 		// return within 5 hrs after discharge window ends
-		Date returnDate = new Date(endDischarge.getTime() + 5 * 3600 * 1000);
+		final Date returnDate = new Date(endDischarge.getTime() + 5 * 3600 * 1000);
 		av.setEndBy(returnDate);
 		System.err.println("Vessel to return by: " + returnDate);
 
@@ -1025,7 +1027,7 @@ public class ShippingCalculationsTest {
 		final SequenceTester checker = getDefaultTester();
 
 		// change from default scenario: should insert a cooldown event
-		Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class,
+		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class,
 				EndEvent.class };
 
 		checker.setClasses(expectedClasses);
@@ -1085,7 +1087,7 @@ public class ShippingCalculationsTest {
 		final SequenceTester checker = getDefaultTester();
 
 		// change from default scenario: should insert a cooldown event
-		Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class,
+		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class,
 				EndEvent.class };
 
 		checker.setClasses(expectedClasses);
@@ -1098,7 +1100,7 @@ public class ShippingCalculationsTest {
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
-		Cooldown cooldown = extractObjectsOfClass(sequence.getEvents(), Cooldown.class).get(0);
+		final Cooldown cooldown = extractObjectsOfClass(sequence.getEvents(), Cooldown.class).get(0);
 		Assert.assertEquals("Cooldown cost", 2100, cooldown.getCost());
 
 		checker.check(sequence);
@@ -1117,7 +1119,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester();
 
-		int hireCostPerHour = charterRatePerDay / 24;
+		final int hireCostPerHour = charterRatePerDay / 24;
 		checker.setupExpectedHireCosts(hireCostPerHour);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -1144,7 +1146,7 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester();
 
-		int hireCostPerHour = charterRatePerDay / 24;
+		final int hireCostPerHour = charterRatePerDay / 24;
 		checker.setupExpectedHireCosts(hireCostPerHour);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -1170,7 +1172,7 @@ public class ShippingCalculationsTest {
 		final SequenceTester checker = getDefaultTester();
 
 		// change from default scenario: vessel makes only two journeys
-		Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
+		final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
 
 		checker.setClasses(expectedClasses);
 
@@ -1247,10 +1249,10 @@ public class ShippingCalculationsTest {
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 
 		// start 3 hrs before load window begins
-		Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
+		final Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
 		vesselAvailability.setStartBy(startDate);
 		System.err.println("Vessel to start before: " + startDate);
 
@@ -1264,9 +1266,9 @@ public class ShippingCalculationsTest {
 
 		// change from default: BF idle consumption at load port after arrival
 		// (idle at discharge port is NBO)
-		checker.setExpectedValue(10, Expectations.BF_USAGE, Idle.class, 0);
+		checker.setExpectedValue(10, Expectations.NBO_USAGE, Idle.class, 0);
 		checker.setExpectedValue(2, Expectations.DURATIONS, Idle.class, 0);
-		checker.setExpectedValue(100, Expectations.FUEL_COSTS, Idle.class, 0);
+		checker.setExpectedValue(210, Expectations.FUEL_COSTS, Idle.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1274,6 +1276,11 @@ public class ShippingCalculationsTest {
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
+
+		// Check that a violation has been recorded
+		final StartEvent firstVisit = extractObjectsOfClass(sequence.getEvents(), StartEvent.class).get(0);
+		final EMap<CapacityViolationType, Long> violations = firstVisit.getViolations();
+		Assert.assertFalse(violations.isEmpty());
 	}
 
 	/**

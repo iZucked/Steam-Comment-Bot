@@ -223,6 +223,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						vessel = vesselsOfClass.get(idx);
 					}
 				} else {
+//					ARG THIS IS A PROBLEM FOR API CHANGE
+					
 					vessel = mem.getOptimiserObject(seq.getVesselOrClass(), IVessel.class);
 				}
 				if (vessel != null) {

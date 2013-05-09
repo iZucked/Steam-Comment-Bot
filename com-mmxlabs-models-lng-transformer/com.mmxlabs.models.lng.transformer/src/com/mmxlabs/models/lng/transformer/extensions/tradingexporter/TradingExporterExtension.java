@@ -116,35 +116,7 @@ public class TradingExporterExtension implements IExporterExtension {
 						}
 						// }
 					} else if (slot instanceof StartPortSlot) {
-						StartEvent startEvent = null;
-						//
-						LOOP_OUTER: for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
-							// Find the optimiser sequence for the start element
-							final ISequence seq = annotatedSolution.getSequences().getSequence(i);
-							if (seq.get(0) == element) {
-								// Found the sequence, so no find the matching EMF sequence
-								for (final Sequence sequence : outputSchedule.getSequences()) {
-									// Get the EMF Vessel
-									final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-									if (vesselAvailability == null) {
-										continue;
-									}
-									// Find the matching
-									final IResource res = annotatedSolution.getSequences().getResources().get(i);
-									final IVessel iVessel = entities.getOptimiserObject(vesselAvailability.getVessel(), IVessel.class);
-									// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
-									if (iVessel == vesselProvider.getVessel(res)) {
-										if (sequence.getEvents().size() > 0) {
-											final Event evt = sequence.getEvents().get(0);
-											if (evt instanceof StartEvent) {
-												startEvent = (StartEvent) evt;
-												break LOOP_OUTER;
-											}
-										}
-									}
-								}
-							}
-						}
+						final StartEvent startEvent = findStartEvent(vesselProvider, element);
 
 						if (startEvent != null) {
 							setPandLentries(profitAndLoss, startEvent);
@@ -152,30 +124,7 @@ public class TradingExporterExtension implements IExporterExtension {
 							setShippingCosts(shippingCostWithBoilOff, startEvent, true);
 						}
 					} else if (slot instanceof EndPortSlot) {
-						EndEvent endEvent = null;
-						//
-						for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
-							final ISequence seq = annotatedSolution.getSequences().getSequence(i);
-							final IResource res = annotatedSolution.getSequences().getResources().get(i);
-							if (seq.get(0) == element) {
-								for (final Sequence sequence : outputSchedule.getSequences()) {
-									final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-									if (vesselAvailability == null) {
-										continue;
-									}
-									final IVessel iVessel = entities.getOptimiserObject(vesselAvailability.getVessel(), IVessel.class);
-									if (iVessel == res) {
-										if (sequence.getEvents().size() > 0) {
-											final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
-											if (evt instanceof EndEvent) {
-												endEvent = (EndEvent) evt;
-												break;
-											}
-										}
-									}
-								}
-							}
-						}
+						final EndEvent endEvent = findEndEvent(element);
 
 						if (endEvent != null) {
 							setPandLentries(profitAndLoss, endEvent);
@@ -202,52 +151,31 @@ public class TradingExporterExtension implements IExporterExtension {
 				// emit p&l entry - depends on the type of slot associated with the element.
 				final IPortSlot slot = slotProvider.getPortSlot(element);
 
-				Event slotVisit = null;
-				final Slot modelSlot = entities.getModelObject(slot, Slot.class);
-				// if (slot instanceof ILoadOption) {
-				// // Find the slot visit linked to this load.
-				// LOOP_SEARCH:
-				// for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-				// for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-				// if (slotAllocation.getSlot() == modelSlot) {
-				// slotVisit = slotAllocation.getSlotVisit();
-				// break LOOP_SEARCH;
-				// }
-				// }
-				// }
-				// } else
-				{
-					// Slower lookup
-					LOOP_SEARCH: for (final Sequence sequence : outputSchedule.getSequences()) {
-						for (final Event event : sequence.getEvents()) {
-							// if (event instanceof StartEvent) {
-							// StartEvent startEvent = (StartEvent) event;
-							// if (startEvent.getSlotAllocation().getSlot() == modelSlot) {
-							// slotVisit = startEvent;
-							// }
-							// FIXME: no allocation etc linked up?
-							// } else
-							if (event instanceof SlotVisit) {
-								final SlotVisit sv = (SlotVisit) event;
-								if (sv.getSlotAllocation().getSlot() == modelSlot) {
-									slotVisit = sv;
-									break LOOP_SEARCH;
-								}
+				if (slot instanceof ILoadOption) {
+					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+					// CargoAllocation cargoAllocation = null;
+					SlotVisit slotVisit = null;
+					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
+						for (SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+							if (slotAllocation.getSlot() == modelSlot) {
+								slotVisit = slotAllocation.getSlotVisit();
+								break;
+
 							}
 						}
 					}
-				}
+					if (slotVisit != null) {
 
-				if (slotVisit != null) {
-					// Loop forward until we find the event;
-					Event evt = slotVisit;
-					while (evt != null) {
-						if (evt instanceof GeneratedCharterOut) {
-							setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) evt);
-							break;
-							setPandLentries(generatedCharterOutProfitAndLoss, (ExtraDataContainer) nextEvent);
+						// TODO: Quick hack to find the charter event. Should do better search in case it is not here!
+						Event nextEvent = slotVisit.getNextEvent();
+						while (nextEvent != null && !(nextEvent instanceof GeneratedCharterOut)) {
+							nextEvent = nextEvent.getNextEvent();
+						}
+						if (nextEvent instanceof GeneratedCharterOut) {
+							setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
 						}
 					}
+
 				} else {
 					if (slot instanceof StartPortSlot) {
 						final StartEvent startEvent = findStartEvent(vesselProvider, element);
@@ -258,7 +186,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								nextEvent = nextEvent.getNextEvent();
 							}
 							if (nextEvent instanceof GeneratedCharterOut) {
-								setPandLentries(generatedCharterOutProfitAndLoss, (ExtraDataContainer) nextEvent);
+								setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
 							}
 						}
 					} else if (slot instanceof EndPortSlot) {
@@ -282,8 +210,9 @@ public class TradingExporterExtension implements IExporterExtension {
 							while (nextEvent != null && !(nextEvent instanceof GeneratedCharterOut)) {
 								nextEvent = nextEvent.getNextEvent();
 							}
+							if (nextEvent instanceof GeneratedCharterOut) {
+								setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
 							}
-						evt = evt.getNextEvent();
 						}
 					}
 
@@ -305,12 +234,12 @@ public class TradingExporterExtension implements IExporterExtension {
 			final IResource res = annotatedSolution.getSequences().getResources().get(i);
 			if (seq.get(0) == element) {
 				for (final Sequence sequence : outputSchedule.getSequences()) {
-					final Vessel vessel = sequence.getVessel();
-					if (vessel == null) {
+					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+					if (vesselAvailability == null) {
 						continue;
 					}
 
-					final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+					final IVessel iVessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
 					if (iVessel == res) {
 						if (sequence.getEvents().size() > 0) {
 							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
@@ -337,13 +266,13 @@ public class TradingExporterExtension implements IExporterExtension {
 				// Found the sequence, so no find the matching EMF sequence
 				for (final Sequence sequence : outputSchedule.getSequences()) {
 					// Get the EMF Vessel
-					final Vessel vessel = sequence.getVessel();
-					if (vessel == null) {
+					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+					if (vesselAvailability == null) {
 						continue;
 					}
 					// Find the matching
 					final IResource res = annotatedSolution.getSequences().getResources().get(i);
-					final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+					final IVessel iVessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
 
 					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
 					if (iVessel == vesselProvider.getVessel(res)) {
