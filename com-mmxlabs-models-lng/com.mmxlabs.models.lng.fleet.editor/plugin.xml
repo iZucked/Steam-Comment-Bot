@@ -110,6 +110,12 @@
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.baseFuelProvider"
+          ownerEClass="com.mmxlabs.models.lng.fleet.VesselAvailability"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider"
           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
