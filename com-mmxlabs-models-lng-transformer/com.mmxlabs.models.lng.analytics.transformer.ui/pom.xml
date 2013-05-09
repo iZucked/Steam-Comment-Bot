@@ -9,7 +9,6 @@
 		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.analytics.transformer.ui</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
 	<version>4.0.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>

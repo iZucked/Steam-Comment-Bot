@@ -40,11 +40,13 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -56,6 +58,8 @@ import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PortCost;
+import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -65,7 +69,9 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -101,6 +107,7 @@ public class DefaultScenarioCreator {
 	public final DefaultPortCreator portCreator = new DefaultPortCreator();
 	public final DefaultCargoCreator cargoCreator = new DefaultCargoCreator();
 	public final DefaultPricingCreator pricingCreator = new DefaultPricingCreator();
+	public final DefaultVesselEventCreator vesselEventCreator = new DefaultVesselEventCreator();
 
 	public MinimalScenarioSetup minimalScenarioSetup;
 
@@ -197,7 +204,7 @@ public class DefaultScenarioCreator {
 			final PricingModel pricingModel = scenario.getPricingModel();
 			final PortModel portModel = scenario.getPortModel();
 
-			final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultIndex("cooldown", value);
+			final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultCommodityIndex("cooldown", value);
 
 			final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
 			price.setIndex(cooldownIndex);
@@ -602,6 +609,19 @@ public class DefaultScenarioCreator {
 			}
 			return result;
 		}
+		
+		public void setPortCost(Port port, PortCapability capability, int cost) {
+			final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
+
+			PortCost portCost = PricingFactory.eINSTANCE.createPortCost();
+			PortCostEntry portCostEntry = PricingFactory.eINSTANCE.createPortCostEntry();
+			portCostEntry.setActivity(capability);
+			portCostEntry.setCost(cost);
+			portCost.getEntries().add(portCostEntry);
+			portCost.getPorts().add(port);
+
+			pricingModel.getPortCosts().add(portCost);
+		}
 	}
 
 	public class DefaultCargoCreator {
@@ -721,11 +741,18 @@ public class DefaultScenarioCreator {
 	}
 
 	public class DefaultPricingCreator {
-		public DataIndex<Double> createDefaultIndex(String name, double value) {
+		public DataIndex<Double> createDefaultCommodityIndex(String name, Double value) {
+			DataIndex<Double> result = createIndex(name, value);
 			final PricingModel pricingModel = scenario.getPricingModel();
 
-			IndexPoint<Double> startPoint = PricingFactory.eINSTANCE.createIndexPoint();
-			IndexPoint<Double> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
+			pricingModel.getCommodityIndices().add(result);
+			
+			return result;
+		}
+		
+		private <T> DataIndex<T> createIndex(String name, T value) {
+			final IndexPoint<T> startPoint = PricingFactory.eINSTANCE.createIndexPoint(); 
+			final IndexPoint<T> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
 
 			startPoint.setDate(new Date(0));
 			startPoint.setValue(value);
@@ -733,31 +760,64 @@ public class DefaultScenarioCreator {
 			endPoint.setDate(new Date(Long.MAX_VALUE));
 			endPoint.setValue(value);
 
-			DataIndex<Double> result = PricingFactory.eINSTANCE.createDataIndex();
+			final DataIndex<T> result = PricingFactory.eINSTANCE.createDataIndex();
 
 			result.getPoints().add(startPoint);
 			result.getPoints().add(endPoint);
 
-			pricingModel.getCommodityIndices().add(result);
-
 			return result;
+		}
+		
+		public CharterCostModel createDefaultCharterCostModel(VesselClass vc, Integer minDuration, Integer price) {
+			final CharterCostModel result = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
+			result.getVesselClasses().add(vc);
+			result.setMinCharterOutDuration(minDuration);
+			String indexName = String.format("Charter-out cost for vessel class %s", vc.getName());
+			result.setCharterOutPrice(createIndex(indexName, price));
+			
+			final SpotMarketsModel marketModel = scenario.getSubModel(SpotMarketsModel.class);
+			marketModel.getCharteringSpotMarkets().add(result);
+
+			return result;			
 		}
 	}
 
-	// /**
-	// * Add a canal to all vessel classes.
-	// */
-	// public void addCanal(final VesselClassCost canalCost) {
-	//
-	// canalCostsForAllVesselClasses.add(canalCost);
-	// }
+	
+	public class DefaultVesselEventCreator {
+		int defaultDurationInDays = 1;
+		
+		public void addEventToModel(VesselEvent event, String name, Port port, Date startByDate, Date startAfterDate) {
+			event.setName(name);
+			event.setPort(port);
+			event.setDurationInDays(defaultDurationInDays);
+			event.setStartBy(startByDate);
+			event.setStartAfter(startAfterDate);
+			final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+			fleetModel.getVesselEvents().add(event);			
+		}
+		
+		public DryDockEvent createDryDockEvent(String name, Port port, Date startByDate, Date startAfterDate) {
+			DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
+			addEventToModel(event, name, port, startAfterDate, startAfterDate);
+			return event;
+		}
 
-	// /**
-	// * Add a canal to specific vessel class.
-	// */
-	// public void addCanal(final VesselClass vc, final VesselClassCost canalCost) {
-	// vc.getCanalCosts().add(canalCost);
-	// }
+		public MaintenanceEvent createMaintenanceEvent(String name, Port port, Date startByDate, Date startAfterDate) {
+			MaintenanceEvent event = FleetFactory.eINSTANCE.createMaintenanceEvent();
+			addEventToModel(event, name, port, startAfterDate, startAfterDate);
+			return event;
+		}
+	
+		public CharterOutEvent createCharterOutEvent(String name, Port startPort, Port endPort, Date startByDate, Date startAfterDate, int hireRate) {
+			CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
+			addEventToModel(event, name, startPort, startAfterDate, startAfterDate);
+			event.setHireRate(hireRate);
+			HeelOptions options = FleetFactory.eINSTANCE.createHeelOptions();
+			event.setHeelOptions(options);
+			event.setRelocateTo(endPort);
+			return event;
+		}
+	}
 
 	public Integer getTravelTime(Port p1, Port p2, Route r, int speed) {
 		return getDistance(p1, p2, r) / speed;
@@ -802,6 +862,142 @@ public class DefaultScenarioCreator {
 		return dryDock;
 	}
 
+	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays,
+			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
+
+		final CharterOutEvent charterOut = FleetFactory.eINSTANCE.createCharterOutEvent();
+		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
+
+		// the start and end of the charter out starting-window is 0, for simplicity.
+		charterOut.setStartAfter(startCharterOut);
+		charterOut.setStartBy(startCharterOut);
+
+		charterOut.setPort(startPort);
+		// don't set the end port if both ports are the same - this is equivalent to setting the end port to unset and is a good place to test it works
+		if (!startPort.equals(endPort)) {
+			charterOut.setRelocateTo(endPort);
+		}
+
+		charterOut.setName(id);
+		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
+		heelOptions.setVolumeAvailable(heelLimit);
+		heelOptions.setCvValue(cvValue);
+		heelOptions.setPricePerMMBTU(dischargePrice);
+		charterOut.setHeelOptions(heelOptions);
+
+		charterOut.setDurationInDays(charterOutDurationDays);
+
+		charterOut.setHireRate(dailyCharterOutPrice);
+		charterOut.setRepositioningFee(repositioningFee);
+		// add to the scenario's fleet model
+		scenarioFleetModel.getVesselEvents().add(charterOut);
+
+		return charterOut;
+	}
+
+	/**
+	 * Finish making the scenario by adding the canals to the vessel classes.
+	 * 
+	 * @return The finished scenario.
+	 */
+	public LNGScenarioModel buildScenario() {
+
+		// Add every canal to every vessel class.
+		// for (final VesselClassCost canalCost : this.canalCostsForAllVesselClasses) {
+		// for (final VesselClass vc : fleetModel.getVesselClasses()) {
+		// addCanal(vc, canalCost);
+		// }
+		// }
+
+		fixUUIDMisMatches(scenario);
+
+		return scenario;
+	}
+
+	/**
+	 * When copying a scenario the UUIDs are not copied correctly unless the getter method is called. The method checks whether there is a value and makes a new one if there isn't
+	 * 
+	 * @param scenario
+	 *            The scenario to fix.
+	 */
+	private static void fixUUIDMisMatches(final MMXRootObject scenario) {
+
+		final TreeIterator<EObject> iterator = scenario.eAllContents();
+		while (iterator.hasNext()) {
+			final EObject obj = iterator.next();
+
+			if (obj instanceof UUIDObject) {
+				((UUIDObject) obj).getUuid();
+			}
+		}
+	}
+
+	/**
+	 * Creates a canal and costs. Although this only returns a VesselClassCost for the canal costs, the canal can be retrieved by using {@link VesselClassCost#getCanal()}.
+	 * 
+	 * @param canalName
+	 *            The name of the canal
+	 * @param distanceAToB
+	 *            Distance along the canal from port A to port B
+	 * @param distanceBToA
+	 *            Distance along the canal from port B to port A
+	 * @param canalLadenCost
+	 *            Cost in dollars for a laden vessel
+	 * @param canalUnladenCost
+	 *            Cost in dollars for a ballast vessel
+	 * @param canalTransitFuelDays
+	 *            MT of base fuel per day used when in transit
+	 * @param canalTransitTime
+	 *            Transit time in hours
+	 * @return
+	 */
+	public static void createCanalAndCost(LNGScenarioModel scenario, final String canalName, Port A, Port B, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
+			final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
+
+		final Route canal = PortFactory.eINSTANCE.createRoute();
+		canal.setCanal(true);
+		scenario.getPortModel().getRoutes().add(canal);
+		canal.setName(canalName);
+		// add distance lines, as for the main distance model:
+		final RouteLine atob = PortFactory.eINSTANCE.createRouteLine();
+		atob.setFrom(A);
+		atob.setTo(B);
+		atob.setDistance(distanceAToB);
+
+		final RouteLine btoa = PortFactory.eINSTANCE.createRouteLine();
+		btoa.setFrom(B);
+		btoa.setTo(A);
+		btoa.setDistance(distanceBToA);
+
+		canal.getLines().add(atob);
+		canal.getLines().add(btoa);
+
+		// next do canal costs
+		final RouteCost canalCost = PricingFactory.eINSTANCE.createRouteCost();
+		canalCost.setRoute(canal);
+		canalCost.setLadenCost(canalLadenCost); // cost in dollars for a laden vessel
+		canalCost.setBallastCost(canalUnladenCost); // cost in dollars for a ballast vessel
+
+		FleetModel fleetModel = scenario.getFleetModel();
+
+		VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+
+		params.setRoute(canal);
+		params.setLadenConsumptionRate(canalTransitFuelDays);
+		params.setBallastConsumptionRate(canalTransitFuelDays);
+		params.setLadenNBORate(canalNBORateDays);
+		params.setBallastNBORate(canalNBORateDays);
+		params.setExtraTransitTime(canalTransitTime);
+
+		for (VesselClass vc : fleetModel.getVesselClasses()) {
+			vc.getRouteParameters().add(EcoreUtil.copy(params));
+			final RouteCost rc2 = EcoreUtil.copy(canalCost);
+			rc2.setVesselClass(vc);
+			scenario.getPricingModel().getRouteCosts().add(rc2);
+		}
+	}
+
+	
 	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays,
 			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 

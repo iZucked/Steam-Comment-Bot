@@ -50,6 +50,8 @@ import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculato
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerComponentsInjectorService;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.DefaultGeneratedCharterOutEvaluator;
 
 public class TransformerExtensionTestModule extends AbstractModule {
 
@@ -163,6 +165,7 @@ public class TransformerExtensionTestModule extends AbstractModule {
 					@Override
 					protected void configure() {
 						bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
+						bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 					}
 				};
 			}
