@@ -132,6 +132,22 @@
                      class="ElementAssignment">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.InaccessiblePortsConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.InaccessiblePortsConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Inaccessible Ports Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ElementAssignment">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
