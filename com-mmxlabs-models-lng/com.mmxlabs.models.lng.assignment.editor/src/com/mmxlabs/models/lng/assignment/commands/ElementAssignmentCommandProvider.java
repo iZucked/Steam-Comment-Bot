@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
@@ -72,7 +73,7 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 	protected Command objectAdded(final EditingDomain domain, final MMXRootObject rootObject, final Object added, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (rootObject instanceof LNGScenarioModel) {
 
-			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
 			ea.setAssignedObject((UUIDObject) added);
 			return AddCommand.create(domain, lngScenarioModel.getPortfolioModel().getAssignmentModel(), AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), ea);
@@ -84,12 +85,20 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (rootObject instanceof LNGScenarioModel) {
 			final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
-			
+
 			// if a vessel availability was deleted, unassign any associated element assignment
 			if (deleted instanceof VesselAvailability) {
 				final Vessel vessel = ((VesselAvailability) deleted).getVessel();
-				final ElementAssignment ea = AssignmentEditorHelper.getElementAssignment(assignmentModel, vessel);
-				return AssignmentEditorHelper.unassignElement(domain, ea);
+				final CompoundCommand cmd = new CompoundCommand("Remove element assignents for " + vessel.getName());
+				for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
+					if (ea.getAssignment() == vessel) {
+						cmd.append(AssignmentEditorHelper.unassignElement(domain, ea));
+					}
+				}
+
+				if (!cmd.isEmpty()) {
+					return cmd;
+				}
 			}
 			// if a cargo or vessel event was deleted, delete any associated element assignment
 			else if (deleted instanceof Cargo || deleted instanceof VesselEvent) {
@@ -98,7 +107,7 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 					return DeleteCommand.create(domain, ea);
 				}
 			}
-			
+
 		}
 		return null;
 	}
