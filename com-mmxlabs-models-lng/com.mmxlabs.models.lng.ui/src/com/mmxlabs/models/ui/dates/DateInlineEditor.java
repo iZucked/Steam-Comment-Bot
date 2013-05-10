@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.dates;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -42,7 +43,12 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Object getInitialUnsetValue() {
-		return new Date();
+		final Calendar cal = Calendar.getInstance(LocalDateUtil.getTimeZone(input, (EAttribute) this.feature));
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR, 0);
+		return cal.getTime();
 	}
 
 	@Override
@@ -64,7 +70,7 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
-		Text control = formattedText.getControl();
+		final Text control = formattedText.getControl();
 		if (control == null || control.isDisposed()) {
 			return;
 		}
