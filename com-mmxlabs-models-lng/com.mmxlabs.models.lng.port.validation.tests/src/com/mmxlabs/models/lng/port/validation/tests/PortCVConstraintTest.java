@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Assert;
@@ -25,21 +26,7 @@ public class PortCVConstraintTest {
 		port.getCapabilities().add(PortCapability.LOAD);
 		port.setCvValue(20.0);
 
-		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
-		when(successStatus.isOK()).thenReturn(Boolean.TRUE);
-
-		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
-		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
-
-		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
-		Mockito.when(ctx.getTarget()).thenReturn(port);
-		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
-
-		final PortCVConstraint constraint = new PortCVConstraint();
-		final IStatus status = constraint.validate(ctx);
-
-		Assert.assertTrue(status.isOK());
+		checkConstraint(port, true);
 	}
 
 	@Test
@@ -49,21 +36,7 @@ public class PortCVConstraintTest {
 		port.getCapabilities().add(PortCapability.LOAD);
 		port.setCvValue(0.001);
 
-		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
-		when(successStatus.isOK()).thenReturn(Boolean.TRUE);
-
-		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
-		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
-
-		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
-		Mockito.when(ctx.getTarget()).thenReturn(port);
-		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
-
-		final PortCVConstraint constraint = new PortCVConstraint();
-		final IStatus status = constraint.validate(ctx);
-
-		Assert.assertFalse(status.isOK());
+		checkConstraint(port, false);
 	}
 
 	@Test
@@ -73,21 +46,7 @@ public class PortCVConstraintTest {
 		port.getCapabilities().add(PortCapability.LOAD);
 		port.setCvValue(41.0);
 
-		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
-		when(successStatus.isOK()).thenReturn(Boolean.TRUE);
-
-		final IConstraintStatus failureStatus = mock(IConstraintStatus.class);
-		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
-
-		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
-		Mockito.when(ctx.getTarget()).thenReturn(port);
-		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
-		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
-
-		final PortCVConstraint constraint = new PortCVConstraint();
-		final IStatus status = constraint.validate(ctx);
-
-		Assert.assertFalse(status.isOK());
+		checkConstraint(port, false);
 	}
 
 	@Test
@@ -96,6 +55,10 @@ public class PortCVConstraintTest {
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setCvValue(50.0);
 
+		checkConstraint(port, true);
+	}
+
+	private void checkConstraint(final EObject target, boolean expectSuccess) {
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 		when(successStatus.isOK()).thenReturn(Boolean.TRUE);
 
@@ -103,14 +66,18 @@ public class PortCVConstraintTest {
 		when(failureStatus.getSeverity()).thenReturn(IStatus.ERROR);
 
 		final IValidationContext ctx = Mockito.mock(IValidationContext.class);
-		Mockito.when(ctx.getTarget()).thenReturn(port);
+		Mockito.when(ctx.getTarget()).thenReturn(target);
 		Mockito.when(ctx.createSuccessStatus()).thenReturn(successStatus);
 		Mockito.when(ctx.createFailureStatus(Matchers.anyString())).thenReturn(failureStatus);
 
 		final PortCVConstraint constraint = new PortCVConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertTrue(status.isOK());
-	}
+		if (expectSuccess) {
+			Assert.assertTrue("Sucess expected", status.isOK());
+		} else {
+			Assert.assertFalse("Failure expected", status.isOK());
 
+		}
+	}
 }
