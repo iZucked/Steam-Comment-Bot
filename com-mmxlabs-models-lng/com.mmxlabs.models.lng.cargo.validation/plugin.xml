@@ -322,6 +322,22 @@
                      class="Cargo">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.LoadSlotCVConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.LoadSlotCVConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Load Slot CV Constaint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="LoadSlot">
+               </target>
+            </constraint>
         </constraints>
       </constraintProvider>
    </extension>
