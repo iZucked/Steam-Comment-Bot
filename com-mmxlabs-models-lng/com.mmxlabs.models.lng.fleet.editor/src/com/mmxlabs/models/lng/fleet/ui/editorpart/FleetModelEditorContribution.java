@@ -11,6 +11,8 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -66,6 +68,11 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 				return true;
 			} else if (dcsd.getTarget() instanceof VesselEvent) {
 				return true;
+			} else if (dcsd.getTarget() instanceof ElementAssignment) {
+				final ElementAssignment elementAssignment = (ElementAssignment) dcsd.getTarget();
+				if (elementAssignment.getAssignedObject() instanceof VesselEvent) {
+					return true;
+				}
 			}
 		}
 
@@ -83,6 +90,11 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 			} else if (dcsd.getTarget() instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) dcsd.getTarget();
 				eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselEvent), true);
+			} else if (dcsd.getTarget() instanceof ElementAssignment) {
+				final ElementAssignment elementAssignment = (ElementAssignment) dcsd.getTarget();
+				if (elementAssignment.getAssignedObject() instanceof VesselEvent) {
+					eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(elementAssignment.getAssignedObject()), true);
+				}
 			}
 		}
 	}
