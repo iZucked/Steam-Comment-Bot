@@ -55,12 +55,6 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 
 				checkSpotMarketGroup(ctx, failures, spotMarket, SpotType.DES_PURCHASE);
 
-				if (desPurchaseMarket.getCv() < 0.001) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A positive CV value should be set"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_Cv());
-					failures.add(dsd);
-				}
-
 				final Set<Port> ports = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
 				if (ports.isEmpty()) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("One or more discharge ports must be set"));
@@ -99,12 +93,6 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				if (notionalPort == null || notionalPort.getCapabilities().contains(PortCapability.LOAD) == false) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A notional load port must be set"));
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_NotionalPort());
-					failures.add(dsd);
-				}
-
-				if (fobPurchasesMarket.getCv() < 0.001) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A positive CV value should be set"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_Cv());
 					failures.add(dsd);
 				}
 			}
