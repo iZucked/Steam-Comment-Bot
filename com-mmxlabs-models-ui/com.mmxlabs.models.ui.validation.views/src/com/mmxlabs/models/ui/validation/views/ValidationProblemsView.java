@@ -5,7 +5,6 @@
 package com.mmxlabs.models.ui.validation.views;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +13,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -29,19 +26,17 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorRegistry;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceEvent;
-import org.osgi.framework.ServiceListener;
-import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +45,7 @@ import com.mmxlabs.models.ui.validation.gui.ValidationStatusColumnLabelProvider;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusComparator;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusContentProvider;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusLabelProvider;
-import com.mmxlabs.models.ui.validation.views.internal.Activator;
-import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.IScenarioServiceListener;
-import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
@@ -67,11 +57,81 @@ public class ValidationProblemsView extends ViewPart {
 
 	private TreeViewer viewer;
 
-	private BundleContext context;
-
 	private final Map<ScenarioInstance, IStatus> statusMap = new HashMap<ScenarioInstance, IStatus>();
+	private ScenarioInstance currentInstance = null;
+	private IEditorPart editorPart;
+	private final IPartListener partListener = new IPartListener() {
+
+		@Override
+		public void partOpened(IWorkbenchPart part) {
+
+		}
+
+		@Override
+		public void partDeactivated(IWorkbenchPart part) {
+
+		}
+
+		@Override
+		public void partClosed(IWorkbenchPart part) {
+			if (part == editorPart) {
+				if (currentInstance != null) {
+					releaseScenarioInstance(currentInstance);
+					currentInstance = null;
+				}
+			}
+		}
+
+		@Override
+		public void partBroughtToTop(IWorkbenchPart part) {
+			// If the selection tracks editor, then get the scenario instance and make it the only selection.
+			if (part instanceof IEditorPart) {
+				editorPart = (IEditorPart) part;
+				final IEditorInput editorInput = editorPart.getEditorInput();
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+				if (scenarioInstance != currentInstance) {
+					if (currentInstance != null) {
+						releaseScenarioInstance(currentInstance);
+						currentInstance = null;
+					}
+
+					if (scenarioInstance != null) {
+						currentInstance = scenarioInstance;
+						hookScenarioInstance(scenarioInstance);
+
+					}
+				}
+				viewer.refresh();
+			}
+		}
+
+		@Override
+		public void partActivated(IWorkbenchPart part) {
+
+			// If the selection tracks editor, then get the scenario instance and make it the only selection.
+			if (part instanceof IEditorPart) {
+				editorPart = (IEditorPart) part;
+				final IEditorInput editorInput = editorPart.getEditorInput();
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+				if (scenarioInstance != currentInstance) {
+					if (currentInstance != null) {
+						releaseScenarioInstance(currentInstance);
+						currentInstance = null;
+					}
+
+					if (scenarioInstance != null) {
+						currentInstance = scenarioInstance;
+						hookScenarioInstance(scenarioInstance);
+
+					}
+				}
+				viewer.refresh();
+			}
+		}
+	};
 
 	private final EContentAdapter scenarioInstanceChangedListener = new EContentAdapter() {
+		@Override
 		public void notifyChanged(final Notification notification) {
 
 			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
@@ -83,40 +143,6 @@ public class ValidationProblemsView extends ViewPart {
 				}
 				viewer.refresh();
 			}
-		}
-	};
-
-	private final ServiceListener serviceListener = new ServiceListener() {
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public void serviceChanged(final ServiceEvent event) {
-			if (event.getType() == ServiceEvent.REGISTERED) {
-				final ServiceReference<IScenarioService> ref = (ServiceReference<IScenarioService>) event.getServiceReference();
-				final IScenarioService service = context.getService(ref);
-				addContentAdapters(service);
-				service.addScenarioServiceListener(scenarioServiceListener);
-			} else if (event.getType() == ServiceEvent.UNREGISTERING) {
-				final ServiceReference<IScenarioService> ref = (ServiceReference<IScenarioService>) event.getServiceReference();
-				final IScenarioService service = context.getService(ref);
-				removeContentAdapters(service);
-				service.removeScenarioServiceListener(scenarioServiceListener);
-			}
-
-		}
-	};
-
-	private final IScenarioServiceListener scenarioServiceListener = new ScenarioServiceListener() {
-		public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			hookScenarioInstance(scenarioInstance);
-		}
-
-		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			releaseScenarioInstance(scenarioInstance);
-		}
-
-		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			releaseScenarioInstance(scenarioInstance);
 		}
 	};
 
@@ -139,26 +165,9 @@ public class ValidationProblemsView extends ViewPart {
 			col.getColumn().setResizable(true);
 		}
 
-		context = Activator.getDefault().getBundle().getBundleContext();
+		getSite().getPage().addPartListener(partListener);
+		partListener.partActivated(getSite().getPage().getActiveEditor());
 
-		try {
-			context.addServiceListener(serviceListener, "(objectClass=" + IScenarioService.class + ")");
-		} catch (final InvalidSyntaxException e) {
-			log.error(e.getMessage(), e);
-		}
-
-		Collection<ServiceReference<IScenarioService>> serviceReferences;
-		try {
-			serviceReferences = context.getServiceReferences(IScenarioService.class, null);
-			for (final ServiceReference<IScenarioService> ref : serviceReferences) {
-				final IScenarioService service = context.getService(ref);
-				addContentAdapters(service);
-				service.addScenarioServiceListener(scenarioServiceListener);
-			}
-		} catch (final InvalidSyntaxException e) {
-			log.error(e.getMessage(), e);
-
-		}
 		viewer.setInput(statusMap);
 		viewer.expandAll();
 
@@ -201,21 +210,7 @@ public class ValidationProblemsView extends ViewPart {
 
 	@Override
 	public void dispose() {
-		context.removeServiceListener(serviceListener);
-
-		Collection<ServiceReference<IScenarioService>> serviceReferences;
-		try {
-			serviceReferences = context.getServiceReferences(IScenarioService.class, null);
-			for (final ServiceReference<IScenarioService> ref : serviceReferences) {
-				final IScenarioService service = context.getService(ref);
-				service.removeScenarioServiceListener(scenarioServiceListener);
-				removeContentAdapters(service);
-
-			}
-		} catch (final InvalidSyntaxException e) {
-			log.error(e.getMessage(), e);
-
-		}
+		getSite().getPage().removePartListener(partListener);
 
 		super.dispose();
 	}
@@ -225,40 +220,18 @@ public class ValidationProblemsView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	private void addContentAdapters(final IScenarioService service) {
-		final ScenarioService model = service.getServiceModel();
-		final TreeIterator<EObject> itr = model.eAllContents();
-		while (itr.hasNext()) {
-			final EObject eObj = itr.next();
-			hookScenarioInstance(eObj);
-		}
-	}
-
-	private void hookScenarioInstance(final EObject eObj) {
-		if (eObj instanceof ScenarioInstance) {
-			final ScenarioInstance instance = (ScenarioInstance) eObj;
-			instance.eAdapters().add(scenarioInstanceChangedListener);
-			if (instance.getValidationStatusCode() != IStatus.OK) {
-				final Map<Class<?>, Object> adapters = instance.getAdapters();
-				if (adapters != null) {
-					statusMap.put(instance, (IStatus) adapters.get(IStatus.class));
-				}
+	private void hookScenarioInstance(final ScenarioInstance instance) {
+		instance.eAdapters().add(scenarioInstanceChangedListener);
+		if (instance.getValidationStatusCode() != IStatus.OK) {
+			final Map<Class<?>, Object> adapters = instance.getAdapters();
+			if (adapters != null) {
+				statusMap.put(instance, (IStatus) adapters.get(IStatus.class));
 			}
 		}
 	}
 
-	private void removeContentAdapters(final IScenarioService service) {
-		final ScenarioService model = service.getServiceModel();
-		final TreeIterator<EObject> itr = model.eAllContents();
-		while (itr.hasNext()) {
-			final EObject eObj = itr.next();
-			releaseScenarioInstance(eObj);
-		}
-	}
-
-	private void releaseScenarioInstance(final EObject eObj) {
-		if (eObj instanceof ScenarioInstance) {
-			final ScenarioInstance instance = (ScenarioInstance) eObj;
+	private void releaseScenarioInstance(final ScenarioInstance instance) {
+		if (instance != null) {
 			instance.eAdapters().remove(scenarioInstanceChangedListener);
 			statusMap.remove(instance);
 		}
@@ -269,7 +242,6 @@ public class ValidationProblemsView extends ViewPart {
 		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
 
 		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		final IEditorPart editorPart = activePage.findEditor(editorInput);
 		if (editorPart != null) {
 			activePage.activate(editorPart);
 
@@ -297,6 +269,7 @@ public class ValidationProblemsView extends ViewPart {
 				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 				try {
 					dialog.run(false, false, new IRunnableWithProgress() {
+						@Override
 						public void run(final IProgressMonitor monitor) {
 							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
 							try {
