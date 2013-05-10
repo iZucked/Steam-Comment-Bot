@@ -61,13 +61,21 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
 					failures.add(dsd);
 				}
+				boolean foundDischarge = false;
 				for (final Port port : ports) {
 					if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Port " + port.getName()
 								+ " is not a discharge port"), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
 						failures.add(dsd);
+					} else {
+						foundDischarge = true;
 					}
+				}
+				if (!foundDischarge) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("At least one discharge port must be specified."));
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
+					failures.add(dsd);
 				}
 			}
 
