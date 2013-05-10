@@ -83,7 +83,7 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the cvValue feature on HeelOptions
 	 * 
-	 * @generated NO
+	 * @generated NOT
 	 */
 	protected void add_cvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__CV_VALUE);
@@ -93,7 +93,7 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the pricePerMMBTU feature on HeelOptions
 	 * 
-	 * @generated No
+	 * @generated NOT
 	 */
 	protected void add_pricePerMMBTUEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__PRICE_PER_MMBTU);
