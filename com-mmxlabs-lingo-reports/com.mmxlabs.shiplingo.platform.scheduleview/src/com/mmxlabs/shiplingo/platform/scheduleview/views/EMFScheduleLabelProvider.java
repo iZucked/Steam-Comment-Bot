@@ -293,14 +293,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return port + " -- " + journey.getDestination().getName() + (journey.isLaden() ? " (Laden)" : " (Ballast)");
 		} else if (element instanceof Idle) {
 			final Idle idle = (Idle) element;
-			return "At " + port + (idle.isLaden() ? " (Laden" : " (Ballast") + " idle)";
+			return (port == null) ? "" : ("At " + port) + (idle.isLaden() ? " (Laden" : " (Ballast") + " idle)";
 		} else if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof Event) {
-			return "At " + port + (element instanceof Cooldown ? " (Cooldown)" : ""); // + displayTypeName;
+			return (port == null) ? "" : ("At " + port) + (element instanceof Cooldown ? " (Cooldown)" : ""); // + displayTypeName;
 		} else if (element instanceof SlotVisit) {
 			final SlotVisit sv = (SlotVisit) element;
-			return "At " + port + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? " (Load)" : "(Discharge)"); // + displayTypeName;
+			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)"); // + displayTypeName;
 		}
 
 		return null;
