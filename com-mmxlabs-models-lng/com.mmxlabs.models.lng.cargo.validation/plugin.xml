@@ -338,6 +338,22 @@
                      class="LoadSlot">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.SlotPricingConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.SlotPricingConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Slot Pricing Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Slot">
+               </target>
+            </constraint>
         </constraints>
       </constraintProvider>
    </extension>
