@@ -45,6 +45,21 @@ public class HeelOptionsConstraint extends AbstractModelConstraint {
 					dsd.addEObjectAndFeature(heelOptions, FleetPackage.eINSTANCE.getHeelOptions_CvValue());
 					failures.add(dsd);
 				}
+				if (heelOptions.getCvValue() > 40.0) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("CV value is too high"));
+					dsd.addEObjectAndFeature(heelOptions, FleetPackage.eINSTANCE.getHeelOptions_CvValue());
+					failures.add(dsd);
+				}
+				if (heelOptions.getPricePerMMBTU() < 0.0001) {
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No gas price specified -  must be non-zero"));
+					deco.addEObjectAndFeature(heelOptions, FleetPackage.eINSTANCE.getHeelOptions_PricePerMMBTU());
+					failures.add(deco);
+				}
+				if (heelOptions.getPricePerMMBTU() > 70.0) {
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Gas price is too high."));
+					deco.addEObjectAndFeature(heelOptions, FleetPackage.eINSTANCE.getHeelOptions_PricePerMMBTU());
+					failures.add(deco);
+				}
 			}
 		}
 		if (failures.isEmpty()) {
