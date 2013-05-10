@@ -52,6 +52,25 @@
                <target
                      class="CharterCostModel">
                </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.spotmarkets.validation.PurchaseMarketCVConstraint"
+                  id="com.mmxlabs.models.lng.spotmarkets.validation.PurchaseMarketCVConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Purchase Market CV Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="DESPurchaseMarket">
+               </target>
+               <target
+                     class="FOBPurchasesMarket">
+               </target>
             </constraint>       
             </constraints>
       </constraintProvider>
