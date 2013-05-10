@@ -363,7 +363,10 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 						final EObject vessel = valueList.get(index);
 						// Uh oh.....
 						if (elementAssignment != null) {
-							if (vessel instanceof VesselClass) {
+							if (vessel == null) {
+								handler.handleCommand(AssignmentEditorHelper.unassignElement(handler.getEditingDomain(), elementAssignment), elementAssignment,
+										AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+							} else if (vessel instanceof VesselClass) {
 								// assign to a new spot
 								if (rootObject instanceof LNGScenarioModel) {
 									final AssignmentModel im = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
