@@ -383,6 +383,38 @@
                      class="VesselClass">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Class Min Heel Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselMinHeelConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselMinHeelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Min Heel Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Vessel">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
