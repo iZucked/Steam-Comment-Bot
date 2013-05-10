@@ -111,7 +111,7 @@
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
-          id="com.mmxlabs.models.lng.fleet.editor.baseFuelProvider"
+          id="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.fleet.VesselAvailability"
           referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
     </valueProvider>
