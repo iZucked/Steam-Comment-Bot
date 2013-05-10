@@ -160,7 +160,7 @@
                   The end requirement of the vessel should be after the start requirement.
                </description>
                <target
-                     class="Vessel">
+                     class="VesselAvailability">
                </target>
             </constraint>
             <constraint
