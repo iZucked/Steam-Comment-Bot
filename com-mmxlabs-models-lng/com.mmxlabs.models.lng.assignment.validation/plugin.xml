@@ -113,7 +113,7 @@
                   description body text
                </description>
                <target
-                     class="InputModel">
+                     class="AssignmentModel">
                </target>
             </constraint>
             <constraint
