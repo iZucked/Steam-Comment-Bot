@@ -123,10 +123,12 @@ public class PortRotationReportView extends EMFReportView {
 					if (object instanceof FuelUsage) {
 						for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
 							if (q.getFuel().equals(fuelName)) {
-								if (q.getCost() == 0)
+								if (q.getCost() == 0) {
 									return 0;
-								if (q.getAmounts().get(0).getQuantity() == 0)
+								}
+								if (q.getAmounts().get(0).getQuantity() == 0) {
 									return null;
+								}
 								return q.getCost() / q.getAmounts().get(0).getQuantity();
 							}
 						}
