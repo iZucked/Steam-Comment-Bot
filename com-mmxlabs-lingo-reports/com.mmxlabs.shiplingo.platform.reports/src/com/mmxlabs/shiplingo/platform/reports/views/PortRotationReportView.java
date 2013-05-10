@@ -82,7 +82,7 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("From Port", objectFormatter, sp.getEvent_Port(), name);
 		addColumn("To Port", objectFormatter, sp.getJourney_Destination(), name);
 		addColumn("At Port", objectFormatter, sp.getEvent_Port(), name);
-		addColumn("Route", objectFormatter, sp.getJourney_Route());
+		addColumn("Route", objectFormatter, sp.getJourney_Route(), name);
 
 		addColumn("Transfer Volume", new IntegerFormatter() {
 			@Override
