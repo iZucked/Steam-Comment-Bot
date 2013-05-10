@@ -10,17 +10,17 @@
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category
-            id="com.mmxlabs.models.lng.input.validation.base"
+            id="com.mmxlabs.models.lng.assignment.validation.base"
             mandatory="true"
-            name="Input Validation">
+            name="Assignment Validation">
       </category>
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/input/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/assignment/1/">
          </package>
          <constraints
-               categories=" com.mmxlabs.models.lng.input.validation.base">
+               categories=" com.mmxlabs.models.lng.assignment.validation.base">
             <constraint
                   class="com.mmxlabs.models.lng.assignment.validation.VesselAssignmentConstraint"
                   id="com.mmxlabs.models.lng.input.validation.VesselAssignmentConstraint"

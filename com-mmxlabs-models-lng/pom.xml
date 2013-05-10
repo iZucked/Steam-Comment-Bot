@@ -78,6 +78,7 @@
 		<module>com.mmxlabs.models.lng.analytics.validation</module>
 		<module>com.mmxlabs.models.lng.analytics.navigator</module>
 
+		<module>com.mmxlabs.models.lng.assignmnent.validation.tests</module>
 		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
 		<module>com.mmxlabs.models.lng.fleet.validation.tests</module>
 		<module>com.mmxlabs.models.lng.port.validation.tests</module>
