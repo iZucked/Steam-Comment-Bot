@@ -46,7 +46,25 @@ public class ScenarioServicePartListener implements IPartListener {
 
 	@Override
 	public void partBroughtToTop(final IWorkbenchPart part) {
-
+		// If the selection tracks editor, then get the scenario instance and make it the only selection.
+		if (part instanceof IEditorPart) {
+			final IEditorPart editorPart = (IEditorPart) part;
+			final IEditorInput editorInput = editorPart.getEditorInput();
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+			if (scenarioInstance != null) {
+				ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+				if (lastAutoSelection != null && lastAutoSelection != scenarioInstance) {
+					if (selectionProvider.isSelected(lastAutoSelection) && selectionProvider.getPinnedInstance() != lastAutoSelection) {
+						selectionProvider.deselect(lastAutoSelection);
+					}
+					lastAutoSelection = null;
+				}
+				if (!selectionProvider.isSelected(scenarioInstance)) {
+					lastAutoSelection = scenarioInstance;
+					selectionProvider.select(scenarioInstance);
+				}
+			}
+		}
 	}
 
 	@Override
