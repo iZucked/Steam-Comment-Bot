@@ -982,13 +982,32 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_AVAILABILITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__TIME_CHARTER_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Start At</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__START_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int VESSEL_AVAILABILITY__START_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Start After</b></em>' attribute.
@@ -997,7 +1016,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__START_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int VESSEL_AVAILABILITY__START_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Start By</b></em>' attribute.
@@ -1006,7 +1025,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__START_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int VESSEL_AVAILABILITY__START_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>End At</b></em>' reference list.
@@ -1015,7 +1034,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__END_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int VESSEL_AVAILABILITY__END_AT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>End After</b></em>' attribute.
@@ -1024,7 +1043,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__END_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int VESSEL_AVAILABILITY__END_AFTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>End By</b></em>' attribute.
@@ -1033,17 +1052,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__END_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Vessel</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_AVAILABILITY__END_BY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
@@ -1053,16 +1062,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__START_HEEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__TIME_CHARTER_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int VESSEL_AVAILABILITY__START_HEEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.

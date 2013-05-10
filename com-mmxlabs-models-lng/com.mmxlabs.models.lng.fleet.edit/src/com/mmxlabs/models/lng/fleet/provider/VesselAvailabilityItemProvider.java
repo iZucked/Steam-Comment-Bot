@@ -62,14 +62,14 @@ public class VesselAvailabilityItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addVesselPropertyDescriptor(object);
+			addTimeCharterRatePropertyDescriptor(object);
 			addStartAtPropertyDescriptor(object);
 			addStartAfterPropertyDescriptor(object);
 			addStartByPropertyDescriptor(object);
 			addEndAtPropertyDescriptor(object);
 			addEndAfterPropertyDescriptor(object);
 			addEndByPropertyDescriptor(object);
-			addVesselPropertyDescriptor(object);
-			addTimeCharterRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -300,11 +300,8 @@ public class VesselAvailabilityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((VesselAvailability)object).getStartAfter();
-		String label = labelValue == null ? null : labelValue.toString();
-		return label == null || label.length() == 0 ?
-			getString("_UI_VesselAvailability_type") :
-			getString("_UI_VesselAvailability_type") + " " + label;
+		VesselAvailability vesselAvailability = (VesselAvailability)object;
+		return getString("_UI_VesselAvailability_type") + " " + vesselAvailability.getTimeCharterRate();
 	}
 
 	/**
@@ -319,11 +316,11 @@ public class VesselAvailabilityItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselAvailability.class)) {
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
 			case FleetPackage.VESSEL_AVAILABILITY__START_BY:
 			case FleetPackage.VESSEL_AVAILABILITY__END_AFTER:
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
-			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:

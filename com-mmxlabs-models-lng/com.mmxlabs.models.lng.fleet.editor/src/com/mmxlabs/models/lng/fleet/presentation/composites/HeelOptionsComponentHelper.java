@@ -42,7 +42,7 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 	 * 
 	 * @generated
 	 */
-	public HeelOptionsComponentHelper(final IAdapterManager adapterManager) {
+	public HeelOptionsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
 	}
@@ -54,7 +54,7 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, FleetPackage.Literals.HEEL_OPTIONS);
+		addEditorsToComposite(detailComposite, FleetPackage.Literals.HEEL_OPTIONS);	
 	}
 
 	/**
@@ -64,8 +64,7 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_volumeAvailableEditor(detailComposite, topClass);
 		add_cvValueEditor(detailComposite, topClass);
 		add_pricePerMMBTUEditor(detailComposite, topClass);

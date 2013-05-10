@@ -29,21 +29,61 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartAfter <em>Start After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartBy <em>Start By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndAt <em>End At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getEndBy <em>End By</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getStartHeel <em>Start Heel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvailability {
+	/**
+	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected Vessel vessel;
+
+	/**
+	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTimeCharterRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int TIME_CHARTER_RATE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTimeCharterRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected int timeCharterRate = TIME_CHARTER_RATE_EDEFAULT;
+
+	/**
+	 * This is true if the Time Charter Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean timeCharterRateESet;
+
 	/**
 	 * The cached value of the '{@link #getStartAt() <em>Start At</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -181,17 +221,6 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	protected boolean endByESet;
 
 	/**
-	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getVessel()
-	 * @generated
-	 * @ordered
-	 */
-	protected Vessel vessel;
-
-	/**
 	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -201,35 +230,6 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	 * @ordered
 	 */
 	protected HeelOptions startHeel;
-
-	/**
-	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTimeCharterRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int TIME_CHARTER_RATE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTimeCharterRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected int timeCharterRate = TIME_CHARTER_RATE_EDEFAULT;
-
-	/**
-	 * This is true if the Time Charter Rate attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean timeCharterRateESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -613,6 +613,11 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
+				if (resolve) return getVessel();
+				return basicGetVessel();
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
+				return getTimeCharterRate();
 			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				return getStartAt();
 			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
@@ -625,13 +630,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 				return getEndAfter();
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				return getEndBy();
-			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
-				if (resolve) return getVessel();
-				return basicGetVessel();
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
 				return getStartHeel();
-			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
-				return getTimeCharterRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -645,6 +645,12 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
+				setVessel((Vessel)newValue);
+				return;
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
+				setTimeCharterRate((Integer)newValue);
+				return;
 			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				getStartAt().clear();
 				getStartAt().addAll((Collection<? extends APortSet<Port>>)newValue);
@@ -665,14 +671,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				setEndBy((Date)newValue);
 				return;
-			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
-				setVessel((Vessel)newValue);
-				return;
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
 				setStartHeel((HeelOptions)newValue);
-				return;
-			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
-				setTimeCharterRate((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -686,6 +686,12 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
+				setVessel((Vessel)null);
+				return;
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
+				unsetTimeCharterRate();
+				return;
 			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				getStartAt().clear();
 				return;
@@ -704,14 +710,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				unsetEndBy();
 				return;
-			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
-				setVessel((Vessel)null);
-				return;
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
 				setStartHeel((HeelOptions)null);
-				return;
-			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
-				unsetTimeCharterRate();
 				return;
 		}
 		super.eUnset(featureID);
@@ -725,6 +725,10 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
+				return vessel != null;
+			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
+				return isSetTimeCharterRate();
 			case FleetPackage.VESSEL_AVAILABILITY__START_AT:
 				return startAt != null && !startAt.isEmpty();
 			case FleetPackage.VESSEL_AVAILABILITY__START_AFTER:
@@ -737,12 +741,8 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 				return isSetEndAfter();
 			case FleetPackage.VESSEL_AVAILABILITY__END_BY:
 				return isSetEndBy();
-			case FleetPackage.VESSEL_AVAILABILITY__VESSEL:
-				return vessel != null;
 			case FleetPackage.VESSEL_AVAILABILITY__START_HEEL:
 				return startHeel != null;
-			case FleetPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
-				return isSetTimeCharterRate();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -757,7 +757,9 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (startAfter: ");
+		result.append(" (timeCharterRate: ");
+		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
+		result.append(", startAfter: ");
 		if (startAfterESet) result.append(startAfter); else result.append("<unset>");
 		result.append(", startBy: ");
 		if (startByESet) result.append(startBy); else result.append("<unset>");
@@ -765,8 +767,6 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 		if (endAfterESet) result.append(endAfter); else result.append("<unset>");
 		result.append(", endBy: ");
 		if (endByESet) result.append(endBy); else result.append("<unset>");
-		result.append(", timeCharterRate: ");
-		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

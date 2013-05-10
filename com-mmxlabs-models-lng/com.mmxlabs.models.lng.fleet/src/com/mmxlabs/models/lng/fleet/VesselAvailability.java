@@ -19,15 +19,15 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAfter <em>Start After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartBy <em>Start By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAt <em>End At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel <em>Start Heel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  * </ul>
  * </p>
  *
