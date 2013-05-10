@@ -44,7 +44,12 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 			protected Object doGetValue() {
 				final Object superValue = super.doGetValue();
 				if (superValue == null) {
-					return new Date();
+					final Calendar cal = Calendar.getInstance(LocalDateUtil.getTimeZone(object, (EAttribute) field));
+					cal.set(Calendar.MILLISECOND, 0);
+					cal.set(Calendar.SECOND, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.HOUR, 0);
+					return cal.getTime();
 				}
 				return superValue;
 			}
@@ -75,7 +80,7 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 		}
 		return str;
 	}
-	
+
 	@Override
 	public Comparable getComparable(final Object object) {
 		final Object o = getValue(object);
