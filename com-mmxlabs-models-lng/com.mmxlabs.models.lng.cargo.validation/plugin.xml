@@ -306,6 +306,22 @@
                      class="Cargo">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CargoSlotOrderConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CargoSlotOrderConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Cargo Slot Order Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Cargo">
+               </target>
+            </constraint>
         </constraints>
       </constraintProvider>
    </extension>
