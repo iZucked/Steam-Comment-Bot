@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fleet Validation Tests
+Bundle-Name: Port Validation Tests
 Fragment-Host: com.mmxlabs.models.lng.port.validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.port.validation.tests
 Bundle-Version: 4.0.0.qualifier
