@@ -50,15 +50,7 @@ public class ElementAssignmentConstraint extends AbstractModelConstraint {
 				return ctx.createSuccessStatus();
 			}
 
-			if (assignedObject instanceof Cargo) {
-				return ctx.createSuccessStatus();
-			}
-
-			if (assignedObject instanceof VesselEvent) {
-				return ctx.createSuccessStatus();
-			}
-
-			{
+			if (!(assignedObject instanceof Cargo || assignedObject instanceof VesselEvent)) {
 				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
 						"Element Assignment has unexpected assigned object of type %s. Expected Cargo or VesselEvent object type.", assignedObject.eClass().getName())));
 				failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_AssignedObject());
