@@ -331,7 +331,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		scenarioViewer.init(adapterFactory, commandStack, path.toArray(new EReference[path.size()]));

@@ -54,7 +54,7 @@ public abstract class ImportAction extends LockableAction {
 	 * pulled from elsewhere, e.g. in a bulk import. 
 	 * 
 	 * @author Simon McGregor
-	 * @since 3.0
+	 * @since 3.1
 	 *
 	 */
 	public interface ImportHooksProvider {
@@ -68,12 +68,12 @@ public abstract class ImportAction extends LockableAction {
 	}
 	
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	protected final ImportHooksProvider importHooksProvider;
 	
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public ImportAction(final ImportHooksProvider ihp) {
 		super("Import", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
@@ -141,7 +141,7 @@ public abstract class ImportAction extends LockableAction {
 	}
 	
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public DefaultImportContext safelyImport() {
 		DefaultImportContext context = null;
