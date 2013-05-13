@@ -14,7 +14,7 @@ import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
 
 /**
  * @author hinton
- * @since 3.0
+ * @since 3.1
  * 
  */
 public class NumericSpinnerAttributeManipulator extends BasicAttributeManipulator {
