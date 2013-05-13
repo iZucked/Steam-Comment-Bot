@@ -215,7 +215,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		// Process initial vessel assignments list
 		if (!assignmentModel.getElementAssignments().isEmpty()) {
-			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, rootObject.getFleetModel());
+			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, scenarioFleetModel);
 			for (final CollectedAssignment seq : assignments) {
 				IVessel vessel = null;
 				log.debug("Processing assignment " + seq.getVesselOrClass().getName());
