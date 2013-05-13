@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.pricing.ui.editorpart;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -96,9 +98,10 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
-			final Object target = dcsd.getTarget();
+			final EObject target = dcsd.getTarget();
 			if (target instanceof Index) {
-				return true;
+				final EStructuralFeature containingFeature = target.eContainingFeature();
+				return (containingFeature == PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES || containingFeature == PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
 			}
 			if (target instanceof IndexPoint) {
 				return true;
@@ -133,13 +136,15 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			if (target instanceof Index<?>) {
 				final Index<?> index = (Index<?>) target;
 				// get container reference
+				
+				final EStructuralFeature containingFeature = index.eContainingFeature();
 
-				if (index.eContainingFeature() == PricingPackage.eINSTANCE.getPricingModel_CharterIndices()) {
+				if (containingFeature == PricingPackage.eINSTANCE.getPricingModel_CharterIndices()) {
 					editorPart.setActivePage(indexPage);
 					charterIndicesPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 					return;
 				}
-				if (index.eContainingFeature() == PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()) {
+				if (containingFeature == PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()) {
 					editorPart.setActivePage(indexPage);
 					commodityPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 					return;
