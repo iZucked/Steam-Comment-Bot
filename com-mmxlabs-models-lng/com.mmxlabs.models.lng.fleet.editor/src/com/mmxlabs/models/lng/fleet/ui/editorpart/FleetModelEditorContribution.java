@@ -104,13 +104,13 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 			}
 			
 			if (target instanceof Vessel) {
-				final Vessel vessel = (Vessel) dcsd.getTarget();
+				final Vessel vessel = (Vessel) target;
 				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vessel), true);
 			} else if (target instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) dcsd.getTarget();
+				final VesselEvent vesselEvent = (VesselEvent) target;
 				eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselEvent), true);
 			} else if (target instanceof ElementAssignment) {
-				final ElementAssignment elementAssignment = (ElementAssignment) dcsd.getTarget();
+				final ElementAssignment elementAssignment = (ElementAssignment) target;
 				if (elementAssignment.getAssignedObject() instanceof VesselEvent) {
 					eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(elementAssignment.getAssignedObject()), true);
 				}
