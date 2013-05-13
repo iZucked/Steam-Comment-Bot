@@ -85,7 +85,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.editor.editors.ldd.LDDEditor;
+import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
@@ -1206,7 +1206,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				scenarioEditingLocation.getEditorLock().claim();
 				scenarioEditingLocation.setDisableUpdates(true);
 
-				final LDDEditor editor = new LDDEditor(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation);
+				final ComplexCargoEditor editor = new ComplexCargoEditor(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation);
 				// editor.setBlockOnOpen(true);
 
 				final Cargo cargo = CargoFactory.eINSTANCE.createCargo();

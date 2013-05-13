@@ -64,7 +64,13 @@ import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
-public class LDDEditor extends Dialog {
+/**
+ * Custom dialog editor for complex cargoes, focussing on LDD cargoes.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public class ComplexCargoEditor extends Dialog {
 
 	private Text cargoName;
 
@@ -82,12 +88,12 @@ public class LDDEditor extends Dialog {
 
 	private final List<Command> executedCommands = new LinkedList<Command>();
 
-	public LDDEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
+	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
 		this.scenarioEditingLocation = scenarioEditingLocation;
 	}
 
-	public LDDEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
+	public ComplexCargoEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
 		this.scenarioEditingLocation = scenarioEditingLocation;
 	}
