@@ -13,6 +13,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.assignment.AssignmentFactory;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -54,9 +55,8 @@ public class AssignmentModelImporter implements ISubmodelImporter {
 
 		if (root instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
-			final AssignmentModel assignmentModel = scenarioModel.getPortfolioModel().getAssignmentModel();
-			// output.put(ASSIGNMENTS, importer.exportObjects(((AssignmentModel) model).getAssignments(), root));
-			output.put(ASSIGNMENTS, importer.exportAssignments(assignmentModel, scenarioModel.getFleetModel()));
+			final LNGPortfolioModel portfolioModel = scenarioModel.getPortfolioModel();
+			output.put(ASSIGNMENTS, importer.exportAssignments(portfolioModel.getAssignmentModel(), portfolioModel.getScenarioFleetModel()));
 		}
 	}
 

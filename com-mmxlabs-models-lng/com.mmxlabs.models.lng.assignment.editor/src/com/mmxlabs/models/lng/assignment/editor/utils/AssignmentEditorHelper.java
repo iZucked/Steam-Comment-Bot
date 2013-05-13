@@ -27,7 +27,9 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -219,7 +221,7 @@ public class AssignmentEditorHelper {
 		return SetCommand.create(ed, ea, AssignmentPackage.eINSTANCE.getElementAssignment_Locked(), false);
 	}
 
-	public static List<CollectedAssignment> collectAssignments(final AssignmentModel im, final FleetModel fm) {
+	public static List<CollectedAssignment> collectAssignments(final AssignmentModel im, ScenarioFleetModel scenarioFleetModel) {
 		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
 		// Enforce consistent order
 		final Map<Triple<AVesselSet<Vessel>, Integer, Integer>, List<ElementAssignment>> grouping = new TreeMap<Triple<AVesselSet<Vessel>, Integer, Integer>, List<ElementAssignment>>(
@@ -239,7 +241,8 @@ public class AssignmentEditorHelper {
 
 		int index = 0;
 		final List<Vessel> vesselOrder = new ArrayList<Vessel>();
-		for (final Vessel v : fm.getVessels()) {
+		for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+			Vessel v = va.getVessel();
 			vesselOrder.add(v);
 			grouping.put(new Triple<AVesselSet<Vessel>, Integer, Integer>(v, 0, index++), new ArrayList<ElementAssignment>());
 		}

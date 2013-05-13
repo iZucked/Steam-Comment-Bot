@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
@@ -98,7 +98,7 @@ public class AssignmentImporter {
 		}
 	}
 
-	public List<Map<String, String>> exportAssignments(final AssignmentModel im, final FleetModel fm) {
+	public List<Map<String, String>> exportAssignments(final AssignmentModel im, final ScenarioFleetModel fm) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 
 		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(im, fm);
