@@ -148,15 +148,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		voyagePlans.clear();
 	}
 
-	public final void addCargoAndClearLists(final VoyagePlan plan, final IVessel vessel, final ArrayList<PortDetails> ports, final ArrayList<VoyageDetails> voyages, final ArrayList<Integer> slotTimes) {
+	public final void addCargo(final VoyagePlan plan, final IVessel vessel, final ArrayList<PortDetails> ports, final ArrayList<VoyageDetails> voyages, final ArrayList<Integer> slotTimes) {
 		final PortDetails[] portDetails = ports.toArray(new PortDetails[ports.size()]);
 		final VoyageDetails[] voyageDetails = voyages.toArray(new VoyageDetails[voyages.size()]);
 		final Integer[] times = slotTimes.toArray(new Integer[slotTimes.size()]);
-
-		slotTimes.clear();
-		ports.clear();
-		voyages.clear();
-
 		addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
 
 		voyagePlans.add(plan);
@@ -179,7 +174,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			final ArrayList<Integer> slotTimes = new ArrayList<Integer>();
 			final ArrayList<VoyageDetails> voyages = new ArrayList<VoyageDetails>();
 			IPortSlot lastSlot = null;
-
+			plan = planIterator.getCurrentPlan();
 
 			while (planIterator.hasNextObject()) {
 				final Object object;
@@ -190,8 +185,13 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 					// Ensure voyages size is greater than zero - otherwise this is really a special/virtual cargo - such as FOB/DES which is handled separately
 					if (plan != null && cargoPortDetails.size() >= 2 && voyages.size() > 0) {
-						addCargoAndClearLists(plan, vessel, cargoPortDetails, voyages, slotTimes);//
+						addCargo(plan, vessel, cargoPortDetails, voyages, slotTimes);//
 					}
+					// Clear the lists
+					slotTimes.clear();
+					cargoPortDetails.clear();
+					voyages.clear();
+
 					object = planIterator.nextObject();
 					plan = planIterator.getCurrentPlan();
 				} else {
@@ -232,8 +232,8 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			}
 
 			// Handle any left over bits
-			if (cargoPortDetails.size() >= 2) {
-				addCargoAndClearLists(plan, vessel, cargoPortDetails, voyages, slotTimes);
+			if (plan != null && cargoPortDetails.size() >= 2 && voyages.size() > 0) {
+				addCargo(plan, vessel, cargoPortDetails, voyages, slotTimes);
 			}
 
 		}
@@ -246,9 +246,10 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		return result;
 	}
 
-//	TODO REVIEW THIS METHOD IN LIGHT OF COMPLEX CARGOES
+	// TODO REVIEW THIS METHOD IN LIGHT OF COMPLEX CARGOES
 	/**
 	 * Allocate method designed for a SIMPLE cargo
+	 * 
 	 * @since 2.0
 	 */
 	@Override
@@ -288,7 +289,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 					{
 						final IVesselClass vesselClass = vessel.getVesselClass();
-						//final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
+						// final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
 						final long vesselCapacityInM3 = vessel.getCargoCapacity();
 						loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
 						dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
@@ -424,8 +425,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	public void addLoadDischargeCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg, final PortDetails dischargeDetails, final VoyageDetails ballastLeg,
 			final int loadTime, final int dischargeTime, final long requiredFuelVolumeInM3, final IVessel vessel) {
 
-		final IVesselClass vesselClass = vessel.getVesselClass();
-		//final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
 		final long vesselCapacityInM3 = vessel.getCargoCapacity();
 		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
 		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
@@ -569,7 +568,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	public void addComplexCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3, final IVessel vessel) {
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
-		//final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
+		// final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
 		final long vesselCapacityInM3 = vessel.getCargoCapacity();
 		// final ArrayList<IPortSlot> slots = new ArrayList<IPortSlot>();
 		final IPortSlot[] slots = new IPortSlot[portDetails.length];
