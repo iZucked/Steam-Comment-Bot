@@ -785,7 +785,7 @@ public class ScenarioTools {
 			// FIXME: Update for API changes
 
 			for (final FuelAmount fa : fq.getAmounts()) {
-				System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost());
+				System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost()  + " (unit price: " + fa.getUnitPrice() + ")");
 			}
 			// System.err.println("\t" + fq.getFuel() + " " + fq.getAmounts(). + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 		}

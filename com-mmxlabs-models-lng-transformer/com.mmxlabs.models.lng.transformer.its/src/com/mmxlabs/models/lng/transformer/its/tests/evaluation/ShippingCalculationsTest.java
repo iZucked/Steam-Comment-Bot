@@ -45,9 +45,10 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
-import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -66,7 +67,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.LddScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scheduler.optimiser.TradingConstants;
 
 public class ShippingCalculationsTest {
 
@@ -156,10 +156,14 @@ public class ShippingCalculationsTest {
 	public int getFuelConsumption(final Event event, final Fuel fuel) {
 		if (event instanceof FuelUsage) {
 			int result = 0;
+			FuelUnit unit = (fuel == Fuel.NBO || fuel == Fuel.FBO) ? FuelUnit.M3 : FuelUnit.MT;
+
 			for (final FuelQuantity quantity : ((FuelUsage) event).getFuels()) {
 				if (quantity.getFuel() == fuel) {
 					for (final FuelAmount a : quantity.getAmounts()) {
-						result += a.getQuantity();
+						if (a.getUnit() == unit) {
+							result += a.getQuantity();
+						}
 					}
 				}
 			}
@@ -739,6 +743,8 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
 
 		// cost of first journey should be changed accordingly
+		// 10m3 * 21 (CV) * 1 (price) = 210
+		// 5mt * 10 (price) = 50
 		checker.setExpectedValue(260, Expectations.FUEL_COSTS, Journey.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);

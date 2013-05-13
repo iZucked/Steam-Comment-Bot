@@ -9,6 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.RowFilter.ComparisonType;
+
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -88,25 +91,41 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 			final FuelQuantity quantity = ScheduleFactory.eINSTANCE.createFuelQuantity();
 			quantity.setFuel(entry.getKey());
 			quantity.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(totalCost));
-			if (totalCost > 0)
+			if (totalCost > 0) {
 				matters = true;
+			}
 
+			// Could be e.g. M3 + MMBTU for NBO
 			for (final FuelUnit unit : displayFuelUnits.get(entry.getKey())) {
 				long totalUsage = 0;
+				long totalUnitPrice = 0;
+				int count = 0;
 				for (final FuelComponent component : entry.getValue()) {
 					totalUsage += event.getFuelConsumption(component, unit);
+					if (unit == component.getPricingFuelUnit()) {
+						int unitPrice = event.getFuelUnitPrice(component);
+						if (unitPrice != 0) {
+							totalUnitPrice += unitPrice;
+							count++;
+						}
+					}
 				}
 				if (totalUsage > 0) {
 					final FuelAmount amount = ScheduleFactory.eINSTANCE.createFuelAmount();
 					amount.setQuantity(OptimiserUnitConvertor.convertToExternalVolume(totalUsage));
 					amount.setUnit(modelUnits.get(unit));
+					// Average price
+					if (count != 0) {
+						amount.setUnitPrice(OptimiserUnitConvertor.convertToExternalPrice((int) (totalUnitPrice / count)));
+					}
 					quantity.getAmounts().add(amount);
 					matters = true;
 				}
 			}
 
-			if (matters)
+			if (matters) {
 				result.add(quantity);
+			}
 		}
 
 		return result;
