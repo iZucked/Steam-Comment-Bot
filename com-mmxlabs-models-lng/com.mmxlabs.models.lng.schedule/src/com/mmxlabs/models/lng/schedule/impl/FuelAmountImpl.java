@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl#getUnit <em>Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl#getQuantity <em>Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl#getUnitPrice <em>Unit Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -67,6 +68,26 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * @ordered
 	 */
 	protected int quantity = QUANTITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnitPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double UNIT_PRICE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnitPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double unitPrice = UNIT_PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -134,6 +155,27 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUnitPrice(double newUnitPrice) {
+		double oldUnitPrice = unitPrice;
+		unitPrice = newUnitPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.FUEL_AMOUNT__UNIT_PRICE, oldUnitPrice, unitPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -141,6 +183,8 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 				return getUnit();
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
 				return getQuantity();
+			case SchedulePackage.FUEL_AMOUNT__UNIT_PRICE:
+				return getUnitPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -158,6 +202,9 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 				return;
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
 				setQuantity((Integer)newValue);
+				return;
+			case SchedulePackage.FUEL_AMOUNT__UNIT_PRICE:
+				setUnitPrice((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -177,6 +224,9 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
 				setQuantity(QUANTITY_EDEFAULT);
 				return;
+			case SchedulePackage.FUEL_AMOUNT__UNIT_PRICE:
+				setUnitPrice(UNIT_PRICE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -193,6 +243,8 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 				return unit != UNIT_EDEFAULT;
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
 				return quantity != QUANTITY_EDEFAULT;
+			case SchedulePackage.FUEL_AMOUNT__UNIT_PRICE:
+				return unitPrice != UNIT_PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -211,6 +263,8 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 		result.append(unit);
 		result.append(", quantity: ");
 		result.append(quantity);
+		result.append(", unitPrice: ");
+		result.append(unitPrice);
 		result.append(')');
 		return result.toString();
 	}

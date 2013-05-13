@@ -3123,13 +3123,22 @@ public interface SchedulePackage extends EPackage {
 	int FUEL_AMOUNT__QUANTITY = 1;
 
 	/**
+	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_AMOUNT__UNIT_PRICE = 2;
+
+	/**
 	 * The number of structural features of the '<em>Fuel Amount</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FUEL_AMOUNT_FEATURE_COUNT = 2;
+	int FUEL_AMOUNT_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Fuel Amount</em>' class.
@@ -4348,6 +4357,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getFuelAmount_Quantity();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice <em>Unit Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unit Price</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice()
+	 * @see #getFuelAmount()
+	 * @generated
+	 */
+	EAttribute getFuelAmount_UnitPrice();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Fitness <em>Fitness</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5357,6 +5377,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FUEL_AMOUNT__QUANTITY = eINSTANCE.getFuelAmount_Quantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_AMOUNT__UNIT_PRICE = eINSTANCE.getFuelAmount_UnitPrice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl <em>Fitness</em>}' class.

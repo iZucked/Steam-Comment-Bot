@@ -64,6 +64,7 @@ public class FuelAmountItemProvider
 
 			addUnitPropertyDescriptor(object);
 			addQuantityPropertyDescriptor(object);
+			addUnitPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -113,6 +114,28 @@ public class FuelAmountItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Unit Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUnitPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FuelAmount_unitPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FuelAmount_unitPrice_feature", "_UI_FuelAmount_type"),
+				 SchedulePackage.Literals.FUEL_AMOUNT__UNIT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns FuelAmount.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -152,6 +175,7 @@ public class FuelAmountItemProvider
 		switch (notification.getFeatureID(FuelAmount.class)) {
 			case SchedulePackage.FUEL_AMOUNT__UNIT:
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
+			case SchedulePackage.FUEL_AMOUNT__UNIT_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
