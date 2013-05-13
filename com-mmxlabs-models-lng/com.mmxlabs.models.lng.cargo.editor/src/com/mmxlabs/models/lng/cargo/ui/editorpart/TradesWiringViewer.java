@@ -434,7 +434,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (aSet == null || bSet == null) {
 					return false;
 				}
-				
+
 				aSet.retainAll(bSet);
 				if (!aSet.isEmpty()) {
 					return true;
@@ -528,10 +528,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final Action addAction = new AddAction("Add");
 		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
-
-		final Action lddAction = new LDDAction("New LDD");
-		lddAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-		toolbar.appendToGroup(ADD_REMOVE_GROUP, lddAction);
 
 		// add extension points to toolbar
 		{
@@ -1107,16 +1103,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			{
 				final Action newLoad = new Action("FOB purchase") {
 					public void run() {
-						
+
 						final CompoundCommand cmd = new CompoundCommand("FOB purchase");
-						
+
 						final LoadSlot newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 						newLoad.setDESPurchase(false);
 						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newLoad.setOptional(true);
 						newLoad.setName("");
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-						
+
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1176,7 +1172,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 				};
 				addActionToMenu(newFOBSale, menu);
-
+			}
+			{
+				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo");
+				addActionToMenu(newComplexCargo, menu);
 			}
 		}
 
@@ -1194,9 +1193,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	}
 
-	private final class LDDAction extends Action {
+	private final class ComplexCargoAction extends Action {
 
-		private LDDAction(final String text) {
+		private ComplexCargoAction(final String text) {
 			super(text);
 		}
 
