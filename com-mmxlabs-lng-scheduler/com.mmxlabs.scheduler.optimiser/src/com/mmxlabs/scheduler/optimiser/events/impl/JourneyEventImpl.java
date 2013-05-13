@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * @author Simon Goodall
  * 
  */
-public final class JourneyEventImpl extends AbstractScheduledEventImpl implements IJourneyEvent {
+public final class JourneyEventImpl extends AbstractFuelUsingEventImpl implements IJourneyEvent {
 
 	private int distance;
 
@@ -29,10 +29,6 @@ public final class JourneyEventImpl extends AbstractScheduledEventImpl implement
 	private VesselState vesselState;
 
 	private int speed;
-
-	private final EnumMap<FuelComponent, EnumMap<FuelUnit, Long>> fuelConsumption = new EnumMap<FuelComponent, EnumMap<FuelUnit, Long>>(FuelComponent.class);
-
-	private final EnumMap<FuelComponent, Long> fuelCost = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 
 	private String route;
 
@@ -72,44 +68,6 @@ public final class JourneyEventImpl extends AbstractScheduledEventImpl implement
 
 	public void setVesselState(final VesselState vesselState) {
 		this.vesselState = vesselState;
-	}
-
-	@Override
-	public long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
-
-		if (fuelConsumption.containsKey(fuel)) {
-
-			final EnumMap<FuelUnit, Long> map = fuelConsumption.get(fuel);
-			if (map.containsKey(fuelUnit)) {
-				return map.get(fuelUnit);
-			}
-		}
-		return 0l;
-	}
-
-	public void setFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit, final long consumption) {
-		final EnumMap<FuelUnit, Long> map;
-		if (fuelConsumption.containsKey(fuel)) {
-			map = fuelConsumption.get(fuel);
-		} else {
-			map = new EnumMap<FuelUnit, Long>(FuelUnit.class);
-			fuelConsumption.put(fuel, map);
-		}
-		map.put(fuelUnit, consumption);
-	}
-
-	@Override
-	public long getFuelCost(final FuelComponent fuel) {
-
-		if (fuelCost.containsKey(fuel)) {
-			return fuelCost.get(fuel);
-		} else {
-			return 0l;
-		}
-	}
-
-	public void setFuelCost(final FuelComponent fuel, final long cost) {
-		fuelCost.put(fuel, cost);
 	}
 
 	@Override

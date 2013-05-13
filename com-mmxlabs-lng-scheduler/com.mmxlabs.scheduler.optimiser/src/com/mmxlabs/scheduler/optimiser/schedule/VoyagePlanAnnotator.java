@@ -182,7 +182,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				visit.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, consumption);
 				final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(FuelComponent.Base));
 				visit.setFuelCost(FuelComponent.Base, cost);
-
+				visit.setFuelPriceUnit(FuelComponent.Base, FuelComponent.Base.getPricingFuelUnit());
+				visit.setFuelUnitPrice(FuelComponent.Base, details.getFuelUnitPrice(FuelComponent.Base));
 				visit.setName("visit");
 				visit.setSequenceElement(element);
 				visit.setPortSlot(currentPortSlot);
@@ -229,10 +230,14 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					for (final FuelUnit unit : FuelUnit.values()) {
 						final long consumption = details.getFuelConsumption(fuel, unit) + details.getRouteAdditionalConsumption(fuel, unit);
 						journey.setFuelConsumption(fuel, unit, consumption);
-						if (unit == fuel.getDefaultFuelUnit()) {
-							final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(fuel));
+						if (unit == fuel.getPricingFuelUnit()) {
+							int fuelUnitPrice = details.getFuelUnitPrice(fuel);
+							final long cost = Calculator.costFromConsumption(consumption, fuelUnitPrice);
 
 							journey.setFuelCost(fuel, cost);
+
+							journey.setFuelPriceUnit(fuel, unit);
+							journey.setFuelUnitPrice(fuel, fuelUnitPrice);
 						}
 					}
 				}
@@ -276,9 +281,12 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 							idle.setFuelConsumption(fuel, unit, consumption);
 							// Calculate cost on default unit
-							if (unit == fuel.getDefaultFuelUnit()) {
+							if (unit == fuel.getPricingFuelUnit()) {
 								final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(fuel));
 								idle.setFuelCost(fuel, cost);
+								
+								idle.setFuelPriceUnit(fuel, unit);
+								idle.setFuelUnitPrice(fuel, details.getFuelUnitPrice(fuel));
 							}
 						}
 					}

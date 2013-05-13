@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1221,6 +1223,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void addVesselEventVessel(final IVesselEventPortSlot charterOut, final IVessel vessel) {
+		checkNotNull(charterOut);
+		checkNotNull(vessel);
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
 		}
@@ -1232,6 +1236,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void addVesselEventVesselClass(final IVesselEventPortSlot charterOut, final IVesselClass vesselClass) {
+		checkNotNull(charterOut);
+		checkNotNull(vesselClass);
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
 		}
