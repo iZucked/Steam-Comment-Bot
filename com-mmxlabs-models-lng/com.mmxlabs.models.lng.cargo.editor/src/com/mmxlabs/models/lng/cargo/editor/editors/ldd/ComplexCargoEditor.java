@@ -13,12 +13,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
@@ -88,6 +90,9 @@ public class ComplexCargoEditor extends Dialog {
 
 	private final List<Command> executedCommands = new LinkedList<Command>();
 
+	// For LDD we need to link min.max discharge volumes
+	private final boolean linkDischargeVolumes = true;
+
 	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
 		this.scenarioEditingLocation = scenarioEditingLocation;
@@ -101,7 +106,7 @@ public class ComplexCargoEditor extends Dialog {
 	@Override
 	protected void configureShell(final Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Edit Complex Cargo");
+		newShell.setText("Edit Complex Cargo (LDD)");
 	}
 
 	@Override
@@ -118,8 +123,8 @@ public class ComplexCargoEditor extends Dialog {
 			g.setLayout(new GridLayout(2, false));
 
 			final Label l = new Label(g, SWT.NONE);
-			l.setText("ID");
-			l.setLayoutData(new GridData(20, -1));
+			l.setText("Name");
+			l.setLayoutData(new GridData(40, -1));
 			cargoName = new Text(g, SWT.BORDER);
 			cargoName.setLayoutData(new GridData(80, -1));
 		}
@@ -159,8 +164,8 @@ public class ComplexCargoEditor extends Dialog {
 
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-				column.getColumn().setText("ID");
-				column.getColumn().setWidth(150);
+				column.getColumn().setText("Name");
+				column.getColumn().setWidth(60);
 
 				final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), scenarioEditingLocation.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
@@ -184,7 +189,7 @@ public class ComplexCargoEditor extends Dialog {
 
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("Port");
-				column.getColumn().setWidth(150);
+				column.getColumn().setWidth(100);
 
 				final SingleReferenceManipulator manipulator = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), scenarioEditingLocation.getReferenceValueProviderCache(),
 						scenarioEditingLocation.getEditingDomain());
@@ -197,7 +202,7 @@ public class ComplexCargoEditor extends Dialog {
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("Date");
-				column.getColumn().setWidth(150);
+				column.getColumn().setWidth(100);
 				// column.setLabelProvider(new GenericMapCellLabelProvider("{0}", attributeMap));
 
 				final DateAttributeManipulator manipulator = new DateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), scenarioEditingLocation.getEditingDomain());
@@ -209,23 +214,57 @@ public class ComplexCargoEditor extends Dialog {
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("Volume (Min)");
-				column.getColumn().setWidth(150);
+				column.getColumn().setWidth(100);
 
 				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), scenarioEditingLocation.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
-				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
+				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false)) {
+					@Override
+					protected void setValue(final Object element, final Object value) {
+						if (linkDischargeVolumes && element instanceof DischargeSlot) {
+							final DischargeSlot dischargeSlot = (DischargeSlot) element;
+
+							final CompoundCommand cmd = new CompoundCommand("Set discharge volumes");
+
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity(), value));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity(), value));
+							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+
+						} else {
+							super.setValue(element, value);
+						}
+
+					}
+				};
 				column.setEditingSupport(es);
 			}
 			{
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("Volume (Max)");
-				column.getColumn().setWidth(150);
+				column.getColumn().setWidth(100);
 
 				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
-				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
+				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false)) {
+					@Override
+					protected void setValue(final Object element, final Object value) {
+						if (linkDischargeVolumes && element instanceof DischargeSlot) {
+							final DischargeSlot dischargeSlot = (DischargeSlot) element;
+
+							final CompoundCommand cmd = new CompoundCommand("Set discharge volumes");
+
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity(), value));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity(), value));
+							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+
+						} else {
+							super.setValue(element, value);
+						}
+
+					}
+				};
 				column.setEditingSupport(es);
 			}
 
@@ -286,7 +325,6 @@ public class ComplexCargoEditor extends Dialog {
 					final IObservableValue modelObservableValue = property.observe(cargo);
 					final ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(cargoName);
 					dbc.bindValue(targetObservableValue, modelObservableValue);
-
 				}
 
 				final IEMFEditListProperty prop = EMFEditProperties.list(editingDomain, CargoPackage.eINSTANCE.getCargo_Slots());
