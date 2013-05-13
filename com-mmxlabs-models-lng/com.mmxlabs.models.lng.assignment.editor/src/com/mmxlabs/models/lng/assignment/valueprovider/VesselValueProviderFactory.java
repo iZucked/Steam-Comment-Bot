@@ -25,7 +25,9 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.impl.CargoImpl;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -48,6 +50,7 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 
 		final FleetModel fleetModel = scenarioModel.getFleetModel();
+		final ScenarioFleetModel scenarioFleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
 		final EClass referenceClass = reference.getEReferenceType();
 		final TypesPackage types = TypesPackage.eINSTANCE;
 		final FleetPackage fleet = FleetPackage.eINSTANCE;
@@ -59,8 +62,13 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 					// get a list of globally permissible values
 					final List<Pair<String, EObject>> baseResult = super.getAllowedValues(target, field);
 
+					Set<Vessel> scenarioVessels = new HashSet<Vessel>();
+					for (VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+						scenarioVessels.add(va.getVessel());
+					}
+
 					// determine the current value for the target object
-					final AVesselSet currentValue;
+					final AVesselSet<Vessel> currentValue;
 					{
 						final ElementAssignment assignment;
 
@@ -98,11 +106,11 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 						allowedVessels = null;
 					}
 
+					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
 					// filter the global list by the object's allowed values
 					if (allowedVessels != null) {
 
 						// Expand out VesselGroups
-						final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
 						for (final AVesselSet<Vessel> s : allowedVessels) {
 							if (s instanceof Vessel) {
 								expandedVessels.add(s);
@@ -112,38 +120,53 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 								expandedVessels.addAll(SetUtils.getObjects(s));
 							}
 						}
+					}
 
-						// create list to populate
-						final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
+					// create list to populate
+					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
 
-						// filter the globally permissible values by the settings for this cargo
-						for (final Pair<String, EObject> pair : baseResult) {
-							final EObject vessel = pair.getSecond();
+					// filter the globally permissible values by the settings for this cargo
+					for (final Pair<String, EObject> pair : baseResult) {
+						final EObject vessel = pair.getSecond();
 
-							// determine the vessel class (if any) for this option
-							VesselClass vc = null;
+						// determine the vessel class (if any) for this option
+						VesselClass vc = null;
+						if (vessel instanceof Vessel) {
+							vc = ((Vessel) vessel).getVesselClass();
+						}
+
+						if (currentValue instanceof Vessel) {
+
+						}
+
+						boolean display =
+						// show the option if the cargo allows this vessel-set
+						// (an empty list of allowed vessels means "all vessels")
+						expandedVessels.isEmpty() || expandedVessels.contains(vessel)
+						// show the option if the cargo allows vessels of this class
+								|| (vc != null && expandedVessels.contains(vc));
+
+						// Filter out non-scenario vessels
+						if (display) {
 							if (vessel instanceof Vessel) {
-								vc = ((Vessel) vessel).getVesselClass();
-							}
-
-							final boolean display =
-							// show the option if the cargo allows this vessel-set
-							// (an empty list of allowed vessels means "all vessels")
-							expandedVessels.isEmpty() || expandedVessels.contains(vessel)
-							// show the option if the cargo allows vessels of this class
-									|| (vc != null && expandedVessels.contains(vc))
-									// show the option if the option is the null option
-									// or the current value for the cargo is set to this vessel-set
-									|| Equality.isEqual(vessel, currentValue) || vessel == null;
-
-							if (display) {
-								result.add(pair);
+								if (!scenarioVessels.contains(vessel)) {
+									display = false;
+								}
 							}
 						}
 
-						return result;
-					} else
-						return baseResult;
+						// Always show the option if the option is the null option
+						// or the current value for the cargo is set to this vessel-set
+						if (Equality.isEqual(vessel, currentValue) || vessel == null) {
+							display = true;
+						}
+
+						if (display) {
+							result.add(pair);
+						}
+					}
+
+					return result;
 				}
 
 				@Override
