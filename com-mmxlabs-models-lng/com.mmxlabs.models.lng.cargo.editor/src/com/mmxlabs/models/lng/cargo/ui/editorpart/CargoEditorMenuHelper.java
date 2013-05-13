@@ -44,7 +44,9 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.LDDEditor;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -263,8 +265,7 @@ public class CargoEditorMenuHelper {
 			final MenuManager reassignMenuManager = new MenuManager("Assign to...", null);
 			menuManager.add(reassignMenuManager);
 
-			final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-			final FleetModel fleetModel = scenarioModel.getFleetModel();
+			final ScenarioFleetModel fleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
 			class AssignAction extends Action {
 				private final Vessel vessel;
 
@@ -278,7 +279,8 @@ public class CargoEditorMenuHelper {
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 				}
 			}
-			for (final Vessel vessel : fleetModel.getVessels()) {
+			for (final VesselAvailability vesselAvailability : fleetModel.getVesselAvailabilities()) {
+				final Vessel vessel = vesselAvailability.getVessel();
 				if (vessel != elementAssignment.getAssignment()) {
 					reassignMenuManager.add(new AssignAction(vessel));
 				}
