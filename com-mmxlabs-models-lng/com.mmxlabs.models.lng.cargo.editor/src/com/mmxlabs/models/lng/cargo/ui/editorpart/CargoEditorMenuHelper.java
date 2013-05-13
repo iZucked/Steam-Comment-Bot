@@ -41,7 +41,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.editor.editors.ldd.LDDEditor;
+import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
@@ -825,7 +825,7 @@ public class CargoEditorMenuHelper {
 			scenarioEditingLocation.getEditorLock().claim();
 			scenarioEditingLocation.setDisableUpdates(true);
 
-			final LDDEditor editor = new LDDEditor(shell, scenarioEditingLocation);
+			final ComplexCargoEditor editor = new ComplexCargoEditor(shell, scenarioEditingLocation);
 			// editor.setBlockOnOpen(true);
 
 			final int ret = editor.open(cargo);

@@ -133,6 +133,8 @@ public class CargoModelRowTransformer {
 				group.getRows().add(row);
 				root.getRows().add(row);
 
+				row.primaryRecord = i == 0;
+
 				row.cargo = cargo;
 				// Add slot if possible
 				if (i < loadSlots.size()) {
@@ -239,6 +241,9 @@ public class CargoModelRowTransformer {
 
 		ElementAssignment elementAssignment;
 
+		// This is the RowData with the cargo defining load slot
+		boolean primaryRecord;
+
 		// GUI STATE
 		Color loadTerminalColour;
 		Color dischargeTerminalColour;
@@ -302,6 +307,14 @@ public class CargoModelRowTransformer {
 
 		public void setGroup(final GroupData group) {
 			this.group = group;
+		}
+
+		public boolean isPrimaryRecord() {
+			return primaryRecord;
+		}
+
+		public void setPrimaryRecord(boolean primaryRecord) {
+			this.primaryRecord = primaryRecord;
 		}
 
 	}
@@ -390,35 +403,44 @@ public class CargoModelRowTransformer {
 
 		private final Type type;
 
-		public RowDataEMFPath(final Type type, final boolean failSilently, final Iterable<?> path) {
-			super(failSilently, path);
+		/**
+		 * Indicate that we want only the "primary record" - i.e. the row with the cargo defining load.
+		 */
+		private boolean primaryRecordOnly;
+
+		public RowDataEMFPath(boolean primaryRecordOnly, final Type type, final Iterable<?> path) {
+			super(true, path);
 			this.type = type;
+			this.primaryRecordOnly = primaryRecordOnly;
 		}
 
-		public RowDataEMFPath(final Type type, final boolean failSilently, final Object... path) {
-			super(failSilently, path);
+		public RowDataEMFPath(boolean primaryRecordOnly, final Type type, final Object... path) {
+			super(true, path);
 			this.type = type;
+			this.primaryRecordOnly = primaryRecordOnly;
 		}
 
 		@Override
 		public Object get(final EObject root, final int depth) {
 
 			if (root instanceof RowData) {
+				final RowData rowData = (RowData) root;
+				boolean showRecord = primaryRecordOnly ? rowData.primaryRecord : true;
 				switch (type) {
 				case ASSIGNMENT:
-					return super.get(((RowData) root).elementAssignment, depth);
+					return showRecord ? super.get(rowData.elementAssignment, depth) : null;
 				case CARGO:
-					return super.get(((RowData) root).cargo, depth);
+					return showRecord ? super.get(rowData.cargo, depth) : null;
 				case DISCHARGE:
-					return super.get(((RowData) root).dischargeSlot, depth);
+					return super.get(rowData.dischargeSlot, depth);
 				case LOAD:
-					return super.get(((RowData) root).loadSlot, depth);
+					return super.get(rowData.loadSlot, depth);
 				case CARGO_ALLOCATION:
-					return super.get(((RowData) root).cargoAllocation, depth);
+					return showRecord ? super.get(rowData.cargoAllocation, depth) : null;
 				case DISCHARGE_ALLOCATION:
-					return super.get(((RowData) root).dischargeAllocation, depth);
+					return super.get(rowData.dischargeAllocation, depth);
 				case LOAD_ALLOCATION:
-					return super.get(((RowData) root).loadAllocation, depth);
+					return super.get(rowData.loadAllocation, depth);
 				}
 			}
 			return super.get(root, depth);
