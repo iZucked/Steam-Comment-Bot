@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
@@ -37,7 +38,7 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		// Check for correct owner. For example we do not want to trigger this for cargoes being added to cargo groups.
-		if (parameter.getOwner() == null || parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel) {
+		if (parameter.getOwner() == null || parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel|| parameter.getOwner() instanceof ScenarioFleetModel) {
 			return super.provideAdditionalCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
 		}
 
