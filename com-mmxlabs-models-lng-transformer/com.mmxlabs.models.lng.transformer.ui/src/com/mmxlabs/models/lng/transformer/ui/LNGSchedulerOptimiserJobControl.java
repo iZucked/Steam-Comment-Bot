@@ -136,7 +136,10 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			optimiser.dispose();
 			optimiser = null;
 		}
-		scenarioInstance.getLock(lockKey).release();
+		if (lockKey != null) {
+			scenarioInstance.getLock(lockKey).release();
+			lockKey = null;
+		}
 	}
 
 	@Override

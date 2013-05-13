@@ -127,8 +127,17 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	@Override
 	public void dispose() {
+
+		if (jobDescriptor != null) {
+			// Release the lock should it still be claimed at this point
+			final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
+			final ScenarioLock lock = scenarioInstance.getLock(jobDescriptor.getLockKey());
+			lock.release();
+		}
+
 		jobDescriptor = null;
 		this.currentState = EJobState.UNKNOWN;
+
 	}
 
 	private synchronized void setJobState(final EJobState newState) {
