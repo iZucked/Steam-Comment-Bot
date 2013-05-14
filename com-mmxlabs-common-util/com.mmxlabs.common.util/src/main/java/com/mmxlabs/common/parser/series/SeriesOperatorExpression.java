@@ -33,6 +33,9 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 		case '-':
 			opImpl = IOp.SUB;
 			break;
+		case '%':
+			opImpl = IOp.PERCENT;
+			break;
 		default:
 			throw new RuntimeException("Unknown operator " + op);
 		}
@@ -92,6 +95,13 @@ public class SeriesOperatorExpression implements IExpression<ISeries> {
 			@Override
 			public Number evaluate(Number a, Number b) {
 				return a.doubleValue() * b.doubleValue();
+			}
+		};
+
+		public static final IOp PERCENT = new IOp() {
+			@Override
+			public Number evaluate(Number a, Number b) {
+				return a.doubleValue() * b.doubleValue() / 100.0;
 			}
 		};
 	}

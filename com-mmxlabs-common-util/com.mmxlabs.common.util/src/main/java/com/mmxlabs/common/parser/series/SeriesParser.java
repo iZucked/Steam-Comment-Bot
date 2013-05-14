@@ -67,8 +67,10 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 				if (a == b)
 					return false;
 				switch (a) {
-				case '*':
+				case '%':
 					return true;
+				case '*':
+					return b != '%';
 				case '/':
 					return b == '+' || b == '-';
 				case '+':
@@ -81,7 +83,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 
 			@Override
 			public boolean isInfixOperator(char operator) {
-				return operator == '*' || operator == '/' || operator == '+' || operator == '-';
+				return operator == '*' || operator == '/' || operator == '+' || operator == '-' || operator == '%';
 			}
 
 			@Override
