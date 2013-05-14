@@ -136,7 +136,8 @@ public class ScenarioInstanceMigrator {
 	}
 
 	/**
-	 * Returns latest version number to store scenario against. This will be the value of the latestVersion param unless this is "-1" (snapshot) in which case the previous version numebr is returned.
+	 * Returns latest version number to store scenario against. This will be the value of the latestVersion param unless this is negative (snapshot) in which case the previous version number is
+	 * returned.
 	 * 
 	 * @param context
 	 * @param scenarioVersion
@@ -156,9 +157,8 @@ public class ScenarioInstanceMigrator {
 
 			unit.migrate(tmpURIs, uc, Collections.<String, URI> emptyMap());
 
-			if (unit.getDestinationVersion() == -1) {
-				version = unit.getSourceVersion();
-			} else {
+			// Only return real version numbers - ignore snapshot versions
+			if (unit.getDestinationVersion() >= 0) {
 				version = unit.getDestinationVersion();
 			}
 		}
