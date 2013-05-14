@@ -202,12 +202,14 @@ public class DefaultClassImporter implements IClassImporter {
 						final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
 						final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), subKeys, context);
 						final Iterator<EObject> iterator = values.iterator();
-						instance.eSet(reference, iterator.next());
-						if (reference.isContainment() == false) {
-							results.add((EObject) instance.eGet(reference));
-						}
-						while (iterator.hasNext()) {
-							results.add(iterator.next());
+						if (iterator.hasNext()) {
+							instance.eSet(reference, iterator.next());
+							if (reference.isContainment() == false) {
+								results.add((EObject) instance.eGet(reference));
+							}
+							while (iterator.hasNext()) {
+								results.add(iterator.next());
+							}
 						}
 					}
 				}
