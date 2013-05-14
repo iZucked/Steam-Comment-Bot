@@ -35,7 +35,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class PriceExpressionUtils {
-	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*()])");
+	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
 
 	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final List<IStatus> failures) {
 		validatePriceExpression(ctx, object, feature, priceExpression, getParser(), failures);
