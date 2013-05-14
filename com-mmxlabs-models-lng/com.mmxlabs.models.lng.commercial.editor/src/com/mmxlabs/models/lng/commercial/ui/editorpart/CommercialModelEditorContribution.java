@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.commercial.ui.editorpart;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -14,6 +15,8 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -73,6 +76,12 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 				return true;
 			} else if (dcsd.getTarget() instanceof SalesContract) {
 				return true;
+			} else if (dcsd.getTarget() instanceof ExpressionPriceParameters) {
+				final ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters) dcsd.getTarget();
+				if (expressionPriceParameters.eContainer() instanceof Contract) {
+					return true;
+				}
+
 			}
 		}
 
@@ -84,12 +93,21 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 			editorPart.setActivePage(pageNumber);
-			if (dcsd.getTarget() instanceof LegalEntity) {
-				entityEditorPane.getScenarioViewer().setSelection(new StructuredSelection(dcsd.getTarget()), true);
-			} else if (dcsd.getTarget() instanceof PurchaseContract) {
-				purchaseContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(dcsd.getTarget()), true);
-			} else if (dcsd.getTarget() instanceof SalesContract) {
-				salesContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(dcsd.getTarget()), true);
+
+			EObject target = dcsd.getTarget();
+			if (target instanceof ExpressionPriceParameters) {
+				final ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters) target;
+				if (expressionPriceParameters.eContainer() instanceof Contract) {
+					target = expressionPriceParameters.eContainer();
+				}
+			}
+
+			if (target instanceof LegalEntity) {
+				entityEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
+			} else if (target instanceof PurchaseContract) {
+				purchaseContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
+			} else if (target instanceof SalesContract) {
+				salesContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 			}
 		}
 	}
