@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.validation.utils;
 
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,10 +70,10 @@ public class PriceExpressionUtils {
 			return;
 		}
 
-		Matcher matcher = pattern.matcher(priceExpression);
+		final Matcher matcher = pattern.matcher(priceExpression);
 
 		if (matcher.find()) {
-			String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
+			final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 			dsd.addEObjectAndFeature(object, feature);
 			failures.add(dsd);
@@ -86,6 +87,15 @@ public class PriceExpressionUtils {
 				final IExpression<ISeries> expression = parser.parse(priceExpression);
 				parsed = expression.evaluate();
 
+			} catch (final EmptyStackException e) {
+				final String operatorPattern = "([+-/*%][+-/*%]+)";
+				final Pattern p = Pattern.compile(operatorPattern);
+				final Matcher m = p.matcher(priceExpression);
+				if (m.find()) {
+					hints = "Consequetive operators: " + m.group(0);
+				} else {
+					hints = "Unknown problem";
+				}
 			} catch (final Exception e) {
 				hints = e.getMessage();
 			}
