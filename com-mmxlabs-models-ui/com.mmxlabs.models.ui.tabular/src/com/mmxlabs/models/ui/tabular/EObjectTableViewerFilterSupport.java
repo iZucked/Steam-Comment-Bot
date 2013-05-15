@@ -80,28 +80,6 @@ public class EObjectTableViewerFilterSupport {
 		return ms;
 	}
 
-	public void addColumnMnemonics(final String columnName, final GridColumn tColumn) {
-		{
-			final List<String> mnems = new LinkedList<String>();
-			tColumn.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnems);
-			mnems.add(columnName.toLowerCase().replace(" ", ""));
-			String initials = "";
-			boolean ws = true;
-			for (int i = 0; i < columnName.length(); i++) {
-				final char c = columnName.charAt(i);
-				if (Character.isWhitespace(c)) {
-					ws = true;
-				} else {
-					if (ws) {
-						initials += c;
-					}
-					ws = false;
-				}
-			}
-			mnems.add(initials.toLowerCase());
-		}
-	}
-
 	public ViewerFilter createViewerFilter() {
 		return new ViewerFilter() {
 			@Override
@@ -126,7 +104,14 @@ public class EObjectTableViewerFilterSupport {
 
 					final List<String> mnemonics = (List<String>) column.getData(EObjectTableViewer.COLUMN_MNEMONICS);
 					for (final String m : mnemonics) {
-						attributes.put(m, new Pair<Object, Object>(filterValue, renderValue));
+						// make sure we add the attribute with a unique key
+						String key = m;
+						int suffix = 2; 
+						while (attributes.containsKey(key)) {
+							key = m + suffix;
+							suffix += 1;
+						}
+						attributes.put(key, new Pair<Object, Object>(filterValue, renderValue));
 					}
 				}
 

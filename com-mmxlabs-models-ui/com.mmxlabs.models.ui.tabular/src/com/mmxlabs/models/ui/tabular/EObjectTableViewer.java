@@ -7,6 +7,8 @@ package com.mmxlabs.models.ui.tabular;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -77,6 +79,8 @@ public class EObjectTableViewer extends GridTableViewer {
 	};
 
 	protected IColorProvider delegateColourProvider;
+	
+	protected final Set<String> allMnemonics = new HashSet<String>();
 
 	private final EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
 
@@ -186,7 +190,45 @@ public class EObjectTableViewer extends GridTableViewer {
 		// final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
 	}
-
+	
+	public void setColumnMnemonics(final GridColumn column, final List<String> mnemonics) {
+		column.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnemonics);		
+		for (String string: mnemonics) {
+			allMnemonics.add(string);
+		}
+	}
+	
+	protected String uniqueMnemonic(final String mnemonic) {
+		String result = mnemonic;
+		int suffix = 2;
+		while (allMnemonics.contains(result)) {
+			result = mnemonic + suffix++;
+		}
+		return result;
+	}
+	
+	protected List<String> makeMnemonics(final String columnName) {
+		LinkedList<String> result = new LinkedList<String>();
+		
+		result.add(uniqueMnemonic(columnName.toLowerCase().replace(" ", "")));
+		String initials = "";
+		boolean ws = true;
+		for (int i = 0; i < columnName.length(); i++) {
+			final char c = columnName.charAt(i);
+			if (Character.isWhitespace(c)) {
+				ws = true;
+			} else {
+				if (ws) {
+					initials += c;
+				}
+				ws = false;
+			}
+		}
+		result.add(uniqueMnemonic(initials.toLowerCase()));
+		
+		return result;
+	}
+	
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
 
 		// create a column
@@ -210,7 +252,8 @@ public class EObjectTableViewer extends GridTableViewer {
 		tColumn.setData(COLUMN_RENDERER, renderer);
 		tColumn.setData(COLUMN_PATH, path);
 		tColumn.setData(COLUMN_MANIPULATOR, manipulator);
-		filterSupport.addColumnMnemonics(columnName, tColumn);
+		
+		setColumnMnemonics(tColumn, makeMnemonics(columnName));
 
 		column.setLabelProvider(new EObjectTableViewerColumnProvider(this, renderer, path));
 
@@ -267,7 +310,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		tColumn.setText(columnName);
 		tColumn.pack();
 
-		filterSupport.addColumnMnemonics(columnName, tColumn);
+		setColumnMnemonics(tColumn, makeMnemonics(columnName));
 
 		if (sortable) {
 			sortingSupport.addSortableColumn(viewer, column, tColumn);
