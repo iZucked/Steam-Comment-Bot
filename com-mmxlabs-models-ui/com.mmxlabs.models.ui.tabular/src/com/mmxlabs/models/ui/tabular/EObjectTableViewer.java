@@ -905,9 +905,12 @@ public class EObjectTableViewer extends GridTableViewer {
 	public Map<String, List<String>> getColumnMnemonics() {
 		final Map<String, List<String>> ms = new TreeMap<String, List<String>>();
 
-		for (final GridColumn column : getGrid().getColumns()) {
+		final GridColumn[] columns = getGrid().getColumns();
+		int[] columnOrder = getGrid().getColumnOrder();
+		for (int i = 0; i < columns.length; ++i) {
+			final GridColumn column = columns[i];
 			final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
-			ms.put(column.getText(), mnemonics);
+			ms.put(column.getText() + " (col no.  " + (1 + columnOrder[i]) + ")", mnemonics);
 		}
 
 		return ms;
