@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -58,7 +59,26 @@ public class CargoImporter extends DefaultClassImporter {
 	// List of column names to filter out of export. UUID is confusing to the user, othernames is not used by cargo or slots. Fixed Price is deprecated.
 	private static final Set<String> filteredColumns = Sets.newHashSet("uuid", "otherNames", "loadSlot.uuid", "loadSlot.fixedPrice", "loadSlot.otherNames", "dischargeSlot.uuid",
 			"dischargeSlot.fixedPrice", "dischargeSlot.otherNames");
+	
+	private static final Map<String, String> fieldNamesToCsvNames = getFieldNamesToCsvNames();
+	private static final Map<String, String> csvNamesToFieldNames = reverseLookup(fieldNamesToCsvNames);
 
+	/**
+	 * Returns a map mapping field names to their CSV aliases.
+	 * @return
+	 */
+	private static Map<String, String> getFieldNamesToCsvNames() {
+		Map<String, String> result = new HashMap<String, String>();
+		
+		result.put("minQuantity", "min");
+		result.put("maxQuantity", "max");
+		result.put("windowStart", "date");
+		result.put("windowStartTime", "time");
+		result.put("priceExpression", "price");		
+		
+		return result;
+	}
+	
 	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
@@ -76,6 +96,17 @@ public class CargoImporter extends DefaultClassImporter {
 
 		return result;
 	}
+
+
+	private static Map<String, String> reverseLookup(Map<String, String> map) {
+		Map<String, String> result = new HashMap<String, String>();
+		for (Entry<String, String> entry: map.entrySet()) {
+			result.put(entry.getValue(), entry.getKey());
+		}
+		return result;
+	}
+
+
 
 	@Override
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
@@ -168,11 +199,25 @@ public class CargoImporter extends DefaultClassImporter {
 		if (importer != null) {
 			final Map<String, String> subMap = importer.exportObjects(Collections.singleton(slot), rootObject).iterator().next();
 			for (final Map.Entry<String, String> e : subMap.entrySet()) {
-				result.put(referenceName + DOT + e.getKey(), e.getValue());
+				result.put(referenceName + DOT + csvNameFromFieldName(e.getKey(), slot), e.getValue());
 			}
 		}
 	}
 
+	private String csvNameFromFieldName(String fieldName, Slot slot) {
+		// special cases
+		if (slot instanceof LoadSlot && fieldName.equals("DESPurchase")) {
+			return "DES";
+		}
+		if (slot instanceof DischargeSlot && fieldName.equals("FOBSale")) {
+			return "FOB";
+		}
+
+		String result = fieldNamesToCsvNames.get(fieldName);
+		if (result == null) return fieldName;
+		return result;
+	}
+	
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
 		final LinkedList<EObject> results = new LinkedList<EObject>();
@@ -314,7 +359,33 @@ public class CargoImporter extends DefaultClassImporter {
 		}
 		return results;
 	}
-
+	
+	private String fieldNameFromCsvName(String csvName) {
+		// special cases
+		
+		if (csvName.equalsIgnoreCase("FOB")) {
+			return "fobsale";
+		}
+		if (csvName.equalsIgnoreCase("DES")) {
+			return "despurchase";
+		}
+		String result = csvNamesToFieldNames.get(csvName);
+		if (result == null) {
+			result = csvName;
+		}
+		return result.toLowerCase();
+		
+	}
+	
+	private IFieldMap renameCsvMapWithFieldNames(FieldMap map) {
+		final Map<String, String> resultMap = new HashMap<String, String>();
+		for (Entry<String, String> entry: map.entrySet()) {
+			resultMap.put(fieldNameFromCsvName(entry.getKey()), entry.getValue());
+		}
+		
+		return new FieldMap(resultMap, map.getPrefix(), map.getSuperMap());
+	}
+	
 	@Override
 	public Collection<EObject> importObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
@@ -324,7 +395,8 @@ public class CargoImporter extends DefaultClassImporter {
 		final IFieldMap fieldMap = new FieldMap(row);
 		{
 			final String lcrn = KEY_LOADSLOT;
-			final IFieldMap subKeys = fieldMap.getSubMap(lcrn + DOT);
+			final IFieldMap subMap = fieldMap.getSubMap(lcrn + DOT);
+			final IFieldMap subKeys = renameCsvMapWithFieldNames((FieldMap) subMap);
 
 			final EClass referenceType = CargoPackage.eINSTANCE.getLoadSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
@@ -333,7 +405,7 @@ public class CargoImporter extends DefaultClassImporter {
 		}
 		{
 			final String lcrn = KEY_DISCHARGESLOT;
-			final IFieldMap subKeys = fieldMap.getSubMap(lcrn + DOT);
+			final IFieldMap subKeys = renameCsvMapWithFieldNames((FieldMap) fieldMap.getSubMap(lcrn + DOT));
 
 			final EClass referenceType = CargoPackage.eINSTANCE.getDischargeSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
