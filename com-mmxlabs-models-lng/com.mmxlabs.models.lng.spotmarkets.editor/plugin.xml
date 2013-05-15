@@ -115,13 +115,6 @@
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
-           <factory
-          ID="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory"
-          factory="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory"
-          label="Fixed Price Spot Market"
-          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
-    </factory>
     <factory
           ID="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory"
           factory="com.mmxlabs.models.lng.spotmarkets.editor.modelfactories.SpotMarketFactory"
