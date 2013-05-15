@@ -49,9 +49,9 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  * @since 2.0
  */
 public class CargoImporter extends DefaultClassImporter {
-	private static final String KEY_LOADSLOT = "loadslot";
+	private static final String KEY_LOADSLOT = "buy";
 
-	private static final String KEY_DISCHARGESLOT = "dischargeslot";
+	private static final String KEY_DISCHARGESLOT = "sell";
 
 	private static final String ASSIGNMENT = "assignment";
 
