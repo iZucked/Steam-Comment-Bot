@@ -31,10 +31,8 @@
 		<module>target-definition</module>
 
 		<module>com.mmxlabs.models.lng.transformer</module>
-		<module>com.mmxlabs.models.lng.analytics.transformer</module>
 
 		<module>com.mmxlabs.models.lng.transformer.ui</module>
-		<module>com.mmxlabs.models.lng.analytics.transformer.ui</module>
 
 		<module>com.mmxlabs.models.lng.liveevaluator</module>
 
