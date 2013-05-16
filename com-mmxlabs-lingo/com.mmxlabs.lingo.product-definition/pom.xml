@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
@@ -9,6 +10,7 @@
 	</parent>
 	<artifactId>com.mmxlabs.lingo.product-definition</artifactId>
 	<packaging>eclipse-repository</packaging>
+	<version>3.0.0-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -43,6 +45,7 @@
 							<id>com.mmxlabs.lingo.app.product.id</id>
 							<attachId>com.mmxlabs.lingo.app.product</attachId>
 							<rootFolder>LiNGO</rootFolder>
+							<archiveFileName>LiNGO</archiveFileName>
 						</product>
 					</products>
 				</configuration>
@@ -51,5 +54,4 @@
 
 		</plugins>
 	</build>
-	<version>3.0.0-SNAPSHOT</version>
 </project>
