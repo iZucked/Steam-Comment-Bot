@@ -183,8 +183,10 @@ public class CargoEditorMenuHelper {
 	}
 
 	private void createEditContractMenu(final IMenuManager newMenuManager, final Slot slot, final Contract contract) {
-		newMenuManager.add(new Separator());
-		newMenuManager.add(new EditAction("Edit Contract", contract));
+		if (contract != null) {
+			newMenuManager.add(new Separator());
+			newMenuManager.add(new EditAction("Edit Contract", contract));
+		}
 	}
 
 	private void createEditMenu(final IMenuManager newMenuManager, final Slot slot, final Cargo cargo) {
