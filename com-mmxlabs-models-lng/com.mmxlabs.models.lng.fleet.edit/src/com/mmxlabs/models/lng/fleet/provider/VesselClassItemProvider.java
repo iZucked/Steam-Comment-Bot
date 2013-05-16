@@ -393,14 +393,14 @@ public class VesselClassItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((VesselClass)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_VesselClass_type") :
-			getString("_UI_VesselClass_type") + " " + label;
+			label;
 	}
 
 	/**
