@@ -56,6 +56,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private Injector injector = null;
 
+	private String lockKey;
+
 	public LNGSchedulerOptimiserJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY,
 				(jobDescriptor.isOptimising() ? imgOpti : imgEval)));
@@ -67,7 +69,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-		scenarioInstance.getLock(jobDescriptor.getLockKey()).awaitClaim();
+		lockKey = jobDescriptor.getLockKey();
+		scenarioInstance.getLock(lockKey).awaitClaim();
 		startTimeMillis = System.currentTimeMillis();
 
 		final LNGTransformer transformer = new LNGTransformer(scenario, LNGTransformer.HINT_OPTIMISE_LSO);
@@ -99,38 +102,23 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	protected boolean step() {
 		// final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		if (jobDescriptor.isOptimising() == false) {
-			// scheduleModel.setDirty(false);
-			// log.debug("Cleared dirty bit on " + scheduleModel);
 			// clear lock
-			scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
+			scenarioInstance.getLock(lockKey).release();
 			return false; // if we are not optimising, finish.
 		}
 		optimiser.step(REPORT_PERCENTAGE);
 		currentProgress += REPORT_PERCENTAGE;
 
-		// if ((currentProgress % 5) == 0) {
-		// Disable intermediate solution exporting. This is to avoid various concurrency issues caused by UI updating at the same time as a new solution is exported.
-		// See e.g. FogBugz: 830, 838, 847, 848
-
-		// saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
-		// }
-
-		// System.err.println("current fitness " +
-		// optimiser.getFitnessEvaluator().getCurrentFitness() + ", best " +
-		// optimiser.getFitnessEvaluator().getBestFitness());
-
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
 
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(editingDomain, jobDescriptor.getLockKey(), 100);
+			LNGSchedulerJobUtils.undoPreviousOptimsationStep(editingDomain, lockKey, 100);
 			LNGSchedulerJobUtils.exportSolution(injector, scenario, editingDomain, entities, optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
-			// scheduleModel.setDirty(false);
-			// log.debug("Cleared dirty bit on " + scheduleModel);
 			super.setProgress(100);
-			scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
+			scenarioInstance.getLock(lockKey).release();
 			return false;
 		} else {
 			return true;
@@ -148,7 +136,10 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			optimiser.dispose();
 			optimiser = null;
 		}
-		scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
+		if (lockKey != null) {
+			scenarioInstance.getLock(lockKey).release();
+			lockKey = null;
+		}
 	}
 
 	@Override

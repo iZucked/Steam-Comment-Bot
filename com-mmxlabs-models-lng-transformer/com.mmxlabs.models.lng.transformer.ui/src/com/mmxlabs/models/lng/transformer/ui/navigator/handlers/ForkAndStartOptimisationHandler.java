@@ -78,7 +78,7 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 							}
 						}
 
-						final String namePrefix = "[O] " + instance.getName();
+						final String namePrefix = "O~" + instance.getName();
 						String newName = namePrefix;
 						int counter = 1;
 						while (existingNames.contains(newName)) {

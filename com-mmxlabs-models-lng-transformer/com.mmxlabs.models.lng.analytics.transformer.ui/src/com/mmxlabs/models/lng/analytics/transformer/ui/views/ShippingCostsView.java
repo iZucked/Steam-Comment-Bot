@@ -284,7 +284,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 								if (lines != null && !lines.isEmpty()) {
 									// TODO: Handle multiple cases
 									final UnitCostLine line = lines.get(0);
-									return new UnitCostLinePropertySource(line);
+//									return new UnitCostLinePropertySource(line);
 								}
 							} catch (final Throwable th) {
 								return null;

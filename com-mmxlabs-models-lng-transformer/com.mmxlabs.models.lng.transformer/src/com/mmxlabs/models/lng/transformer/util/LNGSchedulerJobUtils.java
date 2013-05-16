@@ -432,7 +432,7 @@ public class LNGSchedulerJobUtils {
 				thisIndex = spotIndex++;
 			}
 
-			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
+			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
 				UUIDObject object = null;

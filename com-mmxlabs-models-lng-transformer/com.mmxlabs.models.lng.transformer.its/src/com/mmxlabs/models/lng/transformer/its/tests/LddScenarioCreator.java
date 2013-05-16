@@ -60,7 +60,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
-		purchaseContract = addPurchaseContract("Purchase Contract");
+		purchaseContract = addPurchaseContract("Purchase Contract", purchasePrice);
 
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);

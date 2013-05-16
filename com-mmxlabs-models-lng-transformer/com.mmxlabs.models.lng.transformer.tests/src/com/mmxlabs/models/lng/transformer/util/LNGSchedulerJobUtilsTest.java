@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -69,9 +70,13 @@ public class LNGSchedulerJobUtilsTest {
 
 			schedule = ScheduleFactory.eINSTANCE.createSchedule();
 
+			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
+			availability.setVessel(vessel2);
+
 			final Sequence sequence = ScheduleFactory.eINSTANCE.createSequence();
-			sequence.setVessel(vessel2);
+			sequence.setVesselAvailability(availability);
 			sequence.setSequenceType(SequenceType.VESSEL);
+			schedule.getSequences().add(sequence);
 
 			final CargoAllocation cargoAllocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
 			cargoAllocation.setInputCargo(cargo);

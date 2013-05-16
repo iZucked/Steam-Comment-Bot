@@ -373,12 +373,18 @@ public class LNGScenarioTransformer {
 		// services. Ensure their bundles have been started!
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
+			if (transformer == null) {
+				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
+			}
 			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c.getPriceInfo());
 			entities.addModelObject(c, calculator);
 		}
 
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
+			if (transformer == null) {
+				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
+			}
 			final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(c.getPriceInfo());
 			if (calculator == null) {
 				throw new IllegalStateException("Unable to transform contract");
@@ -508,9 +514,9 @@ public class LNGScenarioTransformer {
 				}
 
 				if (o instanceof Cargo) {
-					Cargo cargo = (Cargo) o;
+					final Cargo cargo = (Cargo) o;
 					IPortSlot prevSlot = null;
-					for (Slot slot : cargo.getSortedSlots()) {
+					for (final Slot slot : cargo.getSortedSlots()) {
 						final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
 						if (cargo != null) {
 							// bind slots to vessel
@@ -663,7 +669,10 @@ public class LNGScenarioTransformer {
 			}
 
 			for (final Vessel v : SetUtils.getObjects(event.getAllowedVessels())) {
-				builder.addVesselEventVessel(builderSlot, vessels.lookup((Vessel) v));
+				final IVessel optimiserVessel = vessels.lookup((Vessel) v);
+				if (optimiserVessel != null) {
+					builder.addVesselEventVessel(builderSlot, optimiserVessel);
+				}
 			}
 
 			entities.addModelObject(event, builderSlot);
@@ -779,7 +788,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			ICargo cargo = builder.createCargo(slots, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
+			final ICargo cargo = builder.createCargo(slots, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
 			entities.addModelObject(eCargo, cargo);
 			if (eCargo.getCargoType() == CargoType.FLEET) {
@@ -1620,7 +1629,7 @@ public class LNGScenarioTransformer {
 
 		final FleetModel fleetModel = rootObject.getFleetModel();
 		final PricingModel pricingModel = rootObject.getPricingModel();
-		
+
 		// look up prices
 
 		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
@@ -1651,10 +1660,10 @@ public class LNGScenarioTransformer {
 			entities.addModelObject(eVc, vc);
 		}
 
-		List<VesselAvailability> sortedAvailabilities = new ArrayList<VesselAvailability>();
+		final List<VesselAvailability> sortedAvailabilities = new ArrayList<VesselAvailability>();
 		{
-			ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
-			for (Vessel vessel : fleetModel.getVessels()) {
+			final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
+			for (final Vessel vessel : fleetModel.getVessels()) {
 
 				for (final VesselAvailability vesselAvailability : scenarioFleetModel.getVesselAvailabilities()) {
 					if (vesselAvailability.getVessel() == vessel) {
@@ -1670,7 +1679,7 @@ public class LNGScenarioTransformer {
 		 */
 		// for (final VesselAvailability vesselAvailability : fleetModel.getScenarioFleetModel().getVesselAvailabilities()) {
 		for (final VesselAvailability vesselAvailability : sortedAvailabilities) {
-			Vessel eV = vesselAvailability.getVessel();
+			final Vessel eV = vesselAvailability.getVessel();
 
 			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, vesselAvailability.isSetStartAfter() ? vesselAvailability.getStartAfter() : null,
 					vesselAvailability.isSetStartBy() ? vesselAvailability.getStartBy() : null, SetUtils.getObjects(vesselAvailability.getStartAt()));
@@ -1679,7 +1688,7 @@ public class LNGScenarioTransformer {
 					vesselAvailability.isSetEndBy() ? vesselAvailability.getEndBy() : null, SetUtils.getObjects(vesselAvailability.getEndAt()));
 
 			// TODO: Hook up once charter out opt implemented
-			final int dailyCharterInPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
+			final int dailyCharterInPrice = vesselAvailability.isSetTimeCharterRate() ? vesselAvailability.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
 
 			final long heelLimit = vesselAvailability.getStartHeel().isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(vesselAvailability.getStartHeel().getVolumeAvailable())
 					: 0;
@@ -1688,16 +1697,16 @@ public class LNGScenarioTransformer {
 			final ICurve hourlyCharterInCurve = new ConstantValueCurve(hourlyCharterInRate);
 
 			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), hourlyCharterInCurve,
-					eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
+					vesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(vesselAvailability.getStartHeel().getCvValue()),
-					OptimiserUnitConvertor.convertToInternalPrice(vesselAvailability.getStartHeel().getPricePerMMBTU()));
+					OptimiserUnitConvertor.convertToInternalPrice(vesselAvailability.getStartHeel().getPricePerMMBTU()),
+					OptimiserUnitConvertor.convertToInternalVolume((int) (eV.getVesselOrVesselClassCapacity() * eV.getVesselOrVesselClassFillCapacity())));
 			vesselAssociation.add(eV, vessel);
 
-			entities.addModelObject(eV, vessel);
+			entities.addModelObject(vesselAvailability, vessel);
 			allVessels.add(vessel);
 		}
 
-		
 		{
 			final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
 			int charterCount = 0;

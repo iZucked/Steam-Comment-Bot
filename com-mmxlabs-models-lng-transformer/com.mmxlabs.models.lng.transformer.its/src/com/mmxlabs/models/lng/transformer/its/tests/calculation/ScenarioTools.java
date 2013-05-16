@@ -753,7 +753,7 @@ public class ScenarioTools {
 	private static void printJourney(final String journeyName, final Journey journey) {
 
 		System.err.println(journeyName + ":");
-		System.err.println("\tRoute: " + journey.getRoute() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getDuration() + ", Speed: " + journey.getSpeed());
+		System.err.println("\tRoute: " + journey.getRoute().getName() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getDuration() + ", Speed: " + journey.getSpeed());
 		printFuel(journey.getFuels());
 		// FIXME: Update for API changes
 		System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getHireCost()));
@@ -785,7 +785,7 @@ public class ScenarioTools {
 			// FIXME: Update for API changes
 
 			for (final FuelAmount fa : fq.getAmounts()) {
-				System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost());
+				System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost()  + " (unit price: " + fa.getUnitPrice() + ")");
 			}
 			// System.err.println("\t" + fq.getFuel() + " " + fq.getAmounts(). + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 		}
@@ -914,12 +914,12 @@ public class ScenarioTools {
 		manifestResource.getContents().add(manifest);
 
 		final URI relativeURI = URI.createURI("/rootObject.xmi");
+		
 		manifest.getModelURIs().add(relativeURI.toString());
 		final URI resolved = relativeURI.resolve(manifestURI);
 		final Resource r2 = resourceSet.createResource(resolved);
 		r2.getContents().add(instance);
 		r2.save(null);
-
 		manifestResource.save(null);
 	}
 

@@ -264,8 +264,8 @@ public class MultipleCargoFuelConsumptionTest {
 		// add assertions on results
 		for (final CargoAllocation cargoAllocation : result.getCargoAllocations()) {
 			final SimpleCargoAllocation ca = new SimpleCargoAllocation(cargoAllocation);
-			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRoute());
-			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRoute());
+			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRoute().getName());
+			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRoute().getName());
 
 			// expect only NBO to be used always
 

@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
@@ -50,8 +51,9 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * LNG is available but BF is used as LNG is slightly more expensive
 	 */
+	@Ignore("Test cannot distinguish between base and base supplemental")
 	@Test
-	public void heelFBOAvailableLNGExpensiveNotUsed() {
+	public void heelFBOAvailableLNGExpensiveUsed() {
 
 		final int heelLimit = 1000;
 		testHeelWithExpensiveLNG(heelLimit);
@@ -60,8 +62,9 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * LNG is not available for FBO but not used for NBO as LNG is slightly more expensive
 	 */
+	@Ignore("Test cannot distinguish between base and base supplemental")
 	@Test
-	public void heelNBOAvailableLNGExpensiveNotUsed() {
+	public void heelNBOAvailableLNGExpensiveUsed() {
 
 		final int heelLimit = 500;
 		testHeelWithExpensiveLNG(heelLimit);
@@ -78,7 +81,7 @@ public class HeelOutOfCharterOutTest {
 	}
 
 	/**
-	 * Test that the heel is never used regardless of quantity as LNG is slightly more expensive than base fuel
+	 * Test that the heel is always used even though LNG is slightly more expensive than base fuel
 	 * 
 	 * @param heelLimit
 	 */
@@ -96,8 +99,13 @@ public class HeelOutOfCharterOutTest {
 
 		final Journey j = getJourneyAfterCharterOut(result);
 
-		// expect LNG to never be used as the discharge price of the LNG makes it more expensive than base fuel.
-		FuelUsageAssertions.assertLNGNotUsed(j);
+		if (heelLimit == 0) {
+			// expect LNG to never be used as there is none
+			FuelUsageAssertions.assertLNGNotUsed(j);
+		} else {
+			// expect LNG to used as any heel is automatically used.
+			FuelUsageAssertions.assertBaseFuelNotUsed(j);
+		}
 	}
 
 	/**
@@ -157,6 +165,7 @@ public class HeelOutOfCharterOutTest {
 	/**
 	 * Check that for varying heel limits LNG usage never exceeds (but may equal) the amount of heel).
 	 */
+	@Ignore("Heel may not be exceeded with a capacity violation")
 	@Test
 	public void heelNotExceeded() {
 
@@ -233,9 +242,9 @@ public class HeelOutOfCharterOutTest {
 		final int ladenNBORate = NBORatePerDay;
 		final int pilotLightRate = 0;
 
-		final LNGScenarioModel scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
-				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
-				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, charterOutTimeDays, heelLimit);
+		final LNGScenarioModel scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed,
+				capacity, ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed,
+				ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, charterOutTimeDays, heelLimit);
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);

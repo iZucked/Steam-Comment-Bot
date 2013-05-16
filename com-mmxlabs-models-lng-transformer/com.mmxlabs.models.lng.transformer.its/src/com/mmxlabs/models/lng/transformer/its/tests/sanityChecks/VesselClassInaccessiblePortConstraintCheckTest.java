@@ -92,7 +92,7 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 		for (final Sequence sequence : result.getSequences()) {
 
 			// Vessel vessel = sequence.getVessel();
-			VesselClass vesselClass = sequence.isSetVessel() ? sequence.getVessel().getVesselClass() : sequence.getVesselClass();
+			VesselClass vesselClass = sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel().getVesselClass() : sequence.getVesselClass();
 
 			Port bannedPort = null;
 			if (vesselClass.equals(vesselClassOne)) {

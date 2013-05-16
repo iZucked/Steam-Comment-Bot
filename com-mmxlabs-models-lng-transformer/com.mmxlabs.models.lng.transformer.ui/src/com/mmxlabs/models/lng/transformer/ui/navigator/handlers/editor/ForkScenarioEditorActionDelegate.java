@@ -59,7 +59,7 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 						}
 					}
 
-					final String namePrefix = "[F] " + instance.getName();
+					final String namePrefix = "~" + instance.getName();
 					String newName = namePrefix;
 					int counter = 1;
 					while (existingNames.contains(newName)) {
