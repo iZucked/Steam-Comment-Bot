@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.common.Pair;
 
@@ -35,5 +38,12 @@ public class TimezoneInlineEditor extends ValueListInlineEditor {
 		});
 
 		return values;
+	}
+
+	@Override
+	protected Control createValueControl(final Composite parent) {
+		final Composite composite = new Composite(parent, parent.getStyle());
+		composite.setLayout(new GridLayout(2, false));
+		return super.createValueControl(composite);
 	}
 }
