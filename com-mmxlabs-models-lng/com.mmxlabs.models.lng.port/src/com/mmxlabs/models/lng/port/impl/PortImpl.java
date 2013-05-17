@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.types.impl.APortSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSize <em>Default Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLocation <em>Location</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getUnlocode <em>Unlocode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getAtobviacCode <em>Atobviac Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDataloyCode <em>Dataloy Code</em>}</li>
  * </ul>
@@ -196,26 +195,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected Location location;
-
-	/**
-	 * The default value of the '{@link #getUnlocode() <em>Unlocode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUnlocode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String UNLOCODE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getUnlocode() <em>Unlocode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUnlocode()
-	 * @generated
-	 * @ordered
-	 */
-	protected String unlocode = UNLOCODE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
@@ -483,27 +462,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getUnlocode() {
-		return unlocode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setUnlocode(String newUnlocode) {
-		String oldUnlocode = unlocode;
-		unlocode = newUnlocode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__UNLOCODE, oldUnlocode, unlocode));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public String getAtobviacCode() {
 		return atobviacCode;
 	}
@@ -581,8 +539,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getDefaultWindowSize();
 			case PortPackage.PORT__LOCATION:
 				return getLocation();
-			case PortPackage.PORT__UNLOCODE:
-				return getUnlocode();
 			case PortPackage.PORT__ATOBVIAC_CODE:
 				return getAtobviacCode();
 			case PortPackage.PORT__DATALOY_CODE:
@@ -627,9 +583,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return;
 			case PortPackage.PORT__LOCATION:
 				setLocation((Location)newValue);
-				return;
-			case PortPackage.PORT__UNLOCODE:
-				setUnlocode((String)newValue);
 				return;
 			case PortPackage.PORT__ATOBVIAC_CODE:
 				setAtobviacCode((String)newValue);
@@ -676,9 +629,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__LOCATION:
 				setLocation((Location)null);
 				return;
-			case PortPackage.PORT__UNLOCODE:
-				setUnlocode(UNLOCODE_EDEFAULT);
-				return;
 			case PortPackage.PORT__ATOBVIAC_CODE:
 				setAtobviacCode(ATOBVIAC_CODE_EDEFAULT);
 				return;
@@ -715,8 +665,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return defaultWindowSize != DEFAULT_WINDOW_SIZE_EDEFAULT;
 			case PortPackage.PORT__LOCATION:
 				return location != null;
-			case PortPackage.PORT__UNLOCODE:
-				return UNLOCODE_EDEFAULT == null ? unlocode != null : !UNLOCODE_EDEFAULT.equals(unlocode);
 			case PortPackage.PORT__ATOBVIAC_CODE:
 				return ATOBVIAC_CODE_EDEFAULT == null ? atobviacCode != null : !ATOBVIAC_CODE_EDEFAULT.equals(atobviacCode);
 			case PortPackage.PORT__DATALOY_CODE:
@@ -751,8 +699,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		result.append(allowCooldown);
 		result.append(", defaultWindowSize: ");
 		result.append(defaultWindowSize);
-		result.append(", unlocode: ");
-		result.append(unlocode);
 		result.append(", atobviacCode: ");
 		result.append(atobviacCode);
 		result.append(", dataloyCode: ");

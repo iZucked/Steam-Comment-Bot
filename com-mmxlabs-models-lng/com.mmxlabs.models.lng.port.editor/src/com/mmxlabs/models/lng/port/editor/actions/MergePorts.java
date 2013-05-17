@@ -152,12 +152,10 @@ public class MergePorts extends LockableAction {
 		}
 
 		String timeZone = retained.getTimeZone();
-		String unlocode = retained.getUnlocode();
 		String atobviacCode = retained.getAtobviacCode();
 		String dataloyCode = retained.getDataloyCode();
 
 		boolean updatedTimeZone = timeZone != null && !timeZone.isEmpty();
-		boolean updatedUNLOCODE = unlocode != null && !unlocode.isEmpty();
 		boolean updatedAToBViaCCode = atobviacCode != null && !atobviacCode.isEmpty();
 		boolean updatedDataloyCode = dataloyCode != null && !dataloyCode.isEmpty();
 
@@ -181,12 +179,6 @@ public class MergePorts extends LockableAction {
 				if (p.getTimeZone() != null && !p.getTimeZone().isEmpty()) {
 					timeZone = p.getTimeZone();
 					updatedTimeZone = true;
-				}
-			}
-			if (!updatedUNLOCODE) {
-				if (p.getUnlocode() != null && !p.getUnlocode().isEmpty()) {
-					unlocode = p.getUnlocode();
-					updatedUNLOCODE = true;
 				}
 			}
 			if (!updatedAToBViaCCode) {
@@ -216,9 +208,6 @@ public class MergePorts extends LockableAction {
 		}
 		if (updatedDataloyCode) {
 			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_DataloyCode(), dataloyCode));
-		}
-		if (updatedUNLOCODE) {
-			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_Unlocode(), unlocode));
 		}
 		if (updatedTimeZone) {
 			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_TimeZone(), timeZone));

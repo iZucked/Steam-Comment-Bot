@@ -238,7 +238,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_Unlocode() {
+	public EAttribute getPort_AtobviacCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -247,17 +247,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_AtobviacCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getPort_DataloyCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(11);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -487,7 +478,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__ALLOW_COOLDOWN);
 		createEAttribute(portEClass, PORT__DEFAULT_WINDOW_SIZE);
 		createEReference(portEClass, PORT__LOCATION);
-		createEAttribute(portEClass, PORT__UNLOCODE);
 		createEAttribute(portEClass, PORT__ATOBVIAC_CODE);
 		createEAttribute(portEClass, PORT__DATALOY_CODE);
 
@@ -579,7 +569,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_AllowCooldown(), ecorePackage.getEBoolean(), "allowCooldown", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultWindowSize(), ecorePackage.getEInt(), "defaultWindowSize", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPort_Location(), this.getLocation(), null, "location", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPort_Unlocode(), ecorePackage.getEString(), "unlocode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_AtobviacCode(), ecorePackage.getEString(), "atobviacCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DataloyCode(), ecorePackage.getEString(), "dataloyCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

@@ -65,7 +65,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 * 
 	 * @generated
 	 */
-	public PortComponentHelper(final IAdapterManager adapterManager) {
+	public PortComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.APORT_SET));
 	}
@@ -77,7 +77,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PortPackage.Literals.PORT);
+		addEditorsToComposite(detailComposite, PortPackage.Literals.PORT);	
 	}
 
 	/**
@@ -87,8 +87,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_capabilitiesEditor(detailComposite, topClass);
 		add_timeZoneEditor(detailComposite, topClass);
 		add_loadDurationEditor(detailComposite, topClass);
@@ -98,7 +97,6 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_allowCooldownEditor(detailComposite, topClass);
 		add_defaultWindowSizeEditor(detailComposite, topClass);
 		add_locationEditor(detailComposite, topClass);
-		add_unlocodeEditor(detailComposite, topClass);
 		add_atobviacCodeEditor(detailComposite, topClass);
 		add_dataloyCodeEditor(detailComposite, topClass);
 	}
@@ -233,15 +231,6 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_locationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LOCATION));
-	}
-
-	/**
-	 * Create the editor for the unlocode feature on Port
-	 * 
-	 * @generated
-	 */
-	protected void add_unlocodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__UNLOCODE));
 	}
 
 	/**

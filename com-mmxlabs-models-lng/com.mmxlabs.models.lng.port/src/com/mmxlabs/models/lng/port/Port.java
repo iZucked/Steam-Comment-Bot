@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.types.PortCapability;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSize <em>Default Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getUnlocode <em>Unlocode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}</li>
  * </ul>
@@ -263,32 +262,6 @@ public interface Port extends APortSet<Port> {
 	 * @generated
 	 */
 	void setLocation(Location value);
-
-	/**
-	 * Returns the value of the '<em><b>Unlocode</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Unlocode</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Unlocode</em>' attribute.
-	 * @see #setUnlocode(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_Unlocode()
-	 * @model
-	 * @generated
-	 */
-	String getUnlocode();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getUnlocode <em>Unlocode</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Unlocode</em>' attribute.
-	 * @see #getUnlocode()
-	 * @generated
-	 */
-	void setUnlocode(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Atobviac Code</b></em>' attribute.
