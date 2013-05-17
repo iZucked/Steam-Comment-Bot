@@ -38,8 +38,10 @@ import com.mmxlabs.models.lng.types.impl.APortSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultWindowSize <em>Default Window Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getPortCode <em>Port Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLocation <em>Location</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getUnlocode <em>Unlocode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getAtobviacCode <em>Atobviac Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDataloyCode <em>Dataloy Code</em>}</li>
  * </ul>
  * </p>
  *
@@ -186,26 +188,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	protected int defaultWindowSize = DEFAULT_WINDOW_SIZE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getPortCode() <em>Port Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String PORT_CODE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPortCode() <em>Port Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected String portCode = PORT_CODE_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getLocation() <em>Location</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -214,6 +196,66 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected Location location;
+
+	/**
+	 * The default value of the '{@link #getUnlocode() <em>Unlocode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnlocode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String UNLOCODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getUnlocode() <em>Unlocode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnlocode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String unlocode = UNLOCODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAtobviacCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ATOBVIAC_CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAtobviacCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String atobviacCode = ATOBVIAC_CODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDataloyCode() <em>Dataloy Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDataloyCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DATALOY_CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDataloyCode() <em>Dataloy Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDataloyCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String dataloyCode = DATALOY_CODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -398,27 +440,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getPortCode() {
-		return portCode;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPortCode(String newPortCode) {
-		String oldPortCode = portCode;
-		portCode = newPortCode;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__PORT_CODE, oldPortCode, portCode));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Location getLocation() {
 		return location;
 	}
@@ -462,6 +483,69 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getUnlocode() {
+		return unlocode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUnlocode(String newUnlocode) {
+		String oldUnlocode = unlocode;
+		unlocode = newUnlocode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__UNLOCODE, oldUnlocode, unlocode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getAtobviacCode() {
+		return atobviacCode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAtobviacCode(String newAtobviacCode) {
+		String oldAtobviacCode = atobviacCode;
+		atobviacCode = newAtobviacCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__ATOBVIAC_CODE, oldAtobviacCode, atobviacCode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getDataloyCode() {
+		return dataloyCode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDataloyCode(String newDataloyCode) {
+		String oldDataloyCode = dataloyCode;
+		dataloyCode = newDataloyCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__DATALOY_CODE, oldDataloyCode, dataloyCode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -495,10 +579,14 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return isAllowCooldown();
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				return getDefaultWindowSize();
-			case PortPackage.PORT__PORT_CODE:
-				return getPortCode();
 			case PortPackage.PORT__LOCATION:
 				return getLocation();
+			case PortPackage.PORT__UNLOCODE:
+				return getUnlocode();
+			case PortPackage.PORT__ATOBVIAC_CODE:
+				return getAtobviacCode();
+			case PortPackage.PORT__DATALOY_CODE:
+				return getDataloyCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -537,11 +625,17 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				setDefaultWindowSize((Integer)newValue);
 				return;
-			case PortPackage.PORT__PORT_CODE:
-				setPortCode((String)newValue);
-				return;
 			case PortPackage.PORT__LOCATION:
 				setLocation((Location)newValue);
+				return;
+			case PortPackage.PORT__UNLOCODE:
+				setUnlocode((String)newValue);
+				return;
+			case PortPackage.PORT__ATOBVIAC_CODE:
+				setAtobviacCode((String)newValue);
+				return;
+			case PortPackage.PORT__DATALOY_CODE:
+				setDataloyCode((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -579,11 +673,17 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				setDefaultWindowSize(DEFAULT_WINDOW_SIZE_EDEFAULT);
 				return;
-			case PortPackage.PORT__PORT_CODE:
-				setPortCode(PORT_CODE_EDEFAULT);
-				return;
 			case PortPackage.PORT__LOCATION:
 				setLocation((Location)null);
+				return;
+			case PortPackage.PORT__UNLOCODE:
+				setUnlocode(UNLOCODE_EDEFAULT);
+				return;
+			case PortPackage.PORT__ATOBVIAC_CODE:
+				setAtobviacCode(ATOBVIAC_CODE_EDEFAULT);
+				return;
+			case PortPackage.PORT__DATALOY_CODE:
+				setDataloyCode(DATALOY_CODE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -613,10 +713,14 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return allowCooldown != ALLOW_COOLDOWN_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 				return defaultWindowSize != DEFAULT_WINDOW_SIZE_EDEFAULT;
-			case PortPackage.PORT__PORT_CODE:
-				return PORT_CODE_EDEFAULT == null ? portCode != null : !PORT_CODE_EDEFAULT.equals(portCode);
 			case PortPackage.PORT__LOCATION:
 				return location != null;
+			case PortPackage.PORT__UNLOCODE:
+				return UNLOCODE_EDEFAULT == null ? unlocode != null : !UNLOCODE_EDEFAULT.equals(unlocode);
+			case PortPackage.PORT__ATOBVIAC_CODE:
+				return ATOBVIAC_CODE_EDEFAULT == null ? atobviacCode != null : !ATOBVIAC_CODE_EDEFAULT.equals(atobviacCode);
+			case PortPackage.PORT__DATALOY_CODE:
+				return DATALOY_CODE_EDEFAULT == null ? dataloyCode != null : !DATALOY_CODE_EDEFAULT.equals(dataloyCode);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -647,8 +751,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		result.append(allowCooldown);
 		result.append(", defaultWindowSize: ");
 		result.append(defaultWindowSize);
-		result.append(", portCode: ");
-		result.append(portCode);
+		result.append(", unlocode: ");
+		result.append(unlocode);
+		result.append(", atobviacCode: ");
+		result.append(atobviacCode);
+		result.append(", dataloyCode: ");
+		result.append(dataloyCode);
 		result.append(')');
 		return result.toString();
 	}

@@ -179,22 +179,40 @@ public interface PortPackage extends EPackage {
 	int PORT__DEFAULT_WINDOW_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Port Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__PORT_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 8;
-
-	/**
 	 * The feature id for the '<em><b>Location</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 9;
+	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Unlocode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__UNLOCODE = TypesPackage.APORT_SET_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Atobviac Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Dataloy Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -203,7 +221,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -689,17 +707,6 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_DefaultWindowSize();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getPortCode <em>Port Code</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Port Code</em>'.
-	 * @see com.mmxlabs.models.lng.port.Port#getPortCode()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EAttribute getPort_PortCode();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -709,6 +716,39 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPort_Location();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getUnlocode <em>Unlocode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unlocode</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getUnlocode()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_Unlocode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Atobviac Code</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getAtobviacCode()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_AtobviacCode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dataloy Code</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getDataloyCode()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_DataloyCode();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Route <em>Route</em>}'.
@@ -1032,20 +1072,36 @@ public interface PortPackage extends EPackage {
 		EAttribute PORT__DEFAULT_WINDOW_SIZE = eINSTANCE.getPort_DefaultWindowSize();
 
 		/**
-		 * The meta object literal for the '<em><b>Port Code</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PORT__PORT_CODE = eINSTANCE.getPort_PortCode();
-
-		/**
 		 * The meta object literal for the '<em><b>Location</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PORT__LOCATION = eINSTANCE.getPort_Location();
+
+		/**
+		 * The meta object literal for the '<em><b>Unlocode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__UNLOCODE = eINSTANCE.getPort_Unlocode();
+
+		/**
+		 * The meta object literal for the '<em><b>Atobviac Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__ATOBVIAC_CODE = eINSTANCE.getPort_AtobviacCode();
+
+		/**
+		 * The meta object literal for the '<em><b>Dataloy Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__DATALOY_CODE = eINSTANCE.getPort_DataloyCode();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.

@@ -152,10 +152,14 @@ public class MergePorts extends LockableAction {
 		}
 
 		String timeZone = retained.getTimeZone();
-		String portCode = retained.getPortCode();
+		String unlocode = retained.getUnlocode();
+		String atobviacCode = retained.getAtobviacCode();
+		String dataloyCode = retained.getDataloyCode();
 
 		boolean updatedTimeZone = timeZone != null && !timeZone.isEmpty();
-		boolean updatedPortCode = portCode != null && !portCode.isEmpty();
+		boolean updatedUNLOCODE = unlocode != null && !unlocode.isEmpty();
+		boolean updatedAToBViaCCode = atobviacCode != null && !atobviacCode.isEmpty();
+		boolean updatedDataloyCode = dataloyCode != null && !dataloyCode.isEmpty();
 
 		for (final Port p : merges) {
 			// Copy in names
@@ -179,10 +183,22 @@ public class MergePorts extends LockableAction {
 					updatedTimeZone = true;
 				}
 			}
-			if (!updatedPortCode) {
-				if (p.getPortCode() != null && !p.getPortCode().isEmpty()) {
-					portCode = p.getPortCode();
-					updatedPortCode = true;
+			if (!updatedUNLOCODE) {
+				if (p.getUnlocode() != null && !p.getUnlocode().isEmpty()) {
+					unlocode = p.getUnlocode();
+					updatedUNLOCODE = true;
+				}
+			}
+			if (!updatedAToBViaCCode) {
+				if (p.getAtobviacCode() != null && !p.getAtobviacCode().isEmpty()) {
+					atobviacCode = p.getAtobviacCode();
+					updatedAToBViaCCode = true;
+				}
+			}
+			if (!updatedDataloyCode) {
+				if (p.getDataloyCode() != null && !p.getDataloyCode().isEmpty()) {
+					dataloyCode = p.getDataloyCode();
+					updatedDataloyCode = true;
 				}
 			}
 		}
@@ -195,8 +211,14 @@ public class MergePorts extends LockableAction {
 		cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_Location(), loc));
 		// Update capabilities
 		cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_Capabilities(), portCapabilities));
-		if (updatedPortCode) {
-			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_PortCode(), portCode));
+		if (updatedAToBViaCCode) {
+			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_AtobviacCode(), atobviacCode));
+		}
+		if (updatedDataloyCode) {
+			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_DataloyCode(), dataloyCode));
+		}
+		if (updatedUNLOCODE) {
+			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_Unlocode(), unlocode));
 		}
 		if (updatedTimeZone) {
 			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_TimeZone(), timeZone));

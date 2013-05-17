@@ -79,8 +79,10 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_defaultStartTimeEditor(detailComposite, topClass);
 		add_allowCooldownEditor(detailComposite, topClass);
 		add_defaultWindowSizeEditor(detailComposite, topClass);
-		add_portCodeEditor(detailComposite, topClass);
 		add_locationEditor(detailComposite, topClass);
+		add_unlocodeEditor(detailComposite, topClass);
+		add_atobviacCodeEditor(detailComposite, topClass);
+		add_dataloyCodeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the capabilities feature on Port
@@ -159,15 +161,6 @@ public class PortComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the portCode feature on Port
-	 *
-	 * @generated
-	 */
-	protected void add_portCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__PORT_CODE));
-	}
-
-	/**
 	 * Create the editor for the location feature on Port
 	 *
 	 * @generated
@@ -176,6 +169,33 @@ public class PortComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LOCATION));
 	}
 	
+	/**
+	 * Create the editor for the unlocode feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_unlocodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__UNLOCODE));
+	}
+
+	/**
+	 * Create the editor for the atobviacCode feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_atobviacCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__ATOBVIAC_CODE));
+	}
+
+	/**
+	 * Create the editor for the dataloyCode feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_dataloyCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DATALOY_CODE));
+	}
+
 	/**
 	 * Simple class to enable an editor field only when a port has a particular capability.
 	 * 
