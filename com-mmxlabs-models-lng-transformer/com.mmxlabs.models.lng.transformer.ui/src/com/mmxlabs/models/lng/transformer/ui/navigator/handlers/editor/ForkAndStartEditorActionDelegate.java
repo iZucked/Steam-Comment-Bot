@@ -32,11 +32,11 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
-public class ForkAndStartOptimisationActionHandler extends StartOptimisationEditorActionDelegate {
+public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorActionDelegate {
 
-	private static final Logger log = LoggerFactory.getLogger(ForkAndStartOptimisationActionHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ForkAndStartEditorActionDelegate.class);
 
-	public ForkAndStartOptimisationActionHandler() {
+	public ForkAndStartEditorActionDelegate() {
 		super(true);
 	}
 

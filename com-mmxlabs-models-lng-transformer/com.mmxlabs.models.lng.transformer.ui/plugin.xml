@@ -389,7 +389,7 @@
                   tooltip="Start or Resume optimisation">
             </action>
             <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartOptimisationActionHandler"
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.forkandplay"
                   icon="icons/forkandoptimise.gif"
                   id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
