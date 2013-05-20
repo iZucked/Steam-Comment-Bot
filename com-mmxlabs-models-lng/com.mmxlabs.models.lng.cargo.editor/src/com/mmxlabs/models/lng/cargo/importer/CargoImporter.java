@@ -171,7 +171,7 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public Collection<EObject> importRawObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
@@ -348,7 +348,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 	
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	protected void exportSlot(final MMXRootObject rootObject, final Map<String, String> result, final Slot slot, final String referenceName) {
 		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(slot.eClass());
