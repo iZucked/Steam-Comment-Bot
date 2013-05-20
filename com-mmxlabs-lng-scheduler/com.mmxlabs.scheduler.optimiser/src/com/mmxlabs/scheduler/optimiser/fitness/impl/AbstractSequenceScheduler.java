@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -95,7 +96,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 	@Inject
 	private IReturnElementProvider returnElementProvider;
-
+	
 	public IRouteCostProvider getRouteCostProvider() {
 		return routeCostProvider;
 	}

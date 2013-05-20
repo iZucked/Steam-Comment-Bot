@@ -5,9 +5,13 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -19,6 +23,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
@@ -27,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -112,6 +118,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	// private IMultiMatrixProvider<T, Integer> distanceProvider;
 	//
 
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
+
 	/**
 	 * Resize one of the integer buffers above
 	 */
@@ -179,6 +188,8 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Contains the last valid value calculated by evaluate(). TODO this is ugly.
 	 */
 	private long lastValue;
+
+	private final TimeWindow defaultStartWindow = new TimeWindow(0, Integer.MAX_VALUE);
 
 	public EnumeratingSequenceScheduler() {
 		super();
@@ -327,8 +338,35 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
-			final List<ITimeWindow> windows = timeWindowProvider.getTimeWindows(element);
-
+			final List<ITimeWindow> windows;
+			// Take element start window into account
+			if (portTypeProvider.getPortType(element) == PortType.Start) {
+				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
+				if (startRequirement != null) {
+					final ITimeWindow timeWindow = startRequirement.getTimeWindow();
+					if (timeWindow != null) {
+						windows = Collections.singletonList(timeWindow);
+					} else {
+						windows = Collections.<ITimeWindow> singletonList(defaultStartWindow);
+					}
+				} else {
+					windows = Collections.<ITimeWindow> singletonList(defaultStartWindow);
+				}
+			} else if (portTypeProvider.getPortType(element) == PortType.End) {
+				final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+				if (endRequirement != null) {
+					final ITimeWindow timeWindow = endRequirement.getTimeWindow();
+					if (timeWindow != null) {
+						windows = Collections.singletonList(timeWindow);
+					} else {
+						windows = Collections.<ITimeWindow> emptyList();
+					}
+				} else {
+					windows = Collections.<ITimeWindow> emptyList();
+				}
+			} else {
+				windows = timeWindowProvider.getTimeWindows(element);
+			}
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
 			useTimeWindow[index] = lastElement == null ? false : portTypeProvider.getPortType(lastElement) == PortType.Short_Cargo_End;
 
@@ -343,11 +381,13 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 				int maxTravelTime = 0;
 				for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(lastPort, port)) {
 					final int distance = entry.getValue();
-					final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vessel.getVesselClass());
-					final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
-					final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
-					minTravelTime = Math.min(minTravelTime, minByRoute);
-					maxTravelTime = Math.max(maxTravelTime, maxByRoute);
+					if (distance != Integer.MAX_VALUE) {
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vessel.getVesselClass());
+						final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
+						final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
+						minTravelTime = Math.min(minTravelTime, minByRoute);
+						maxTravelTime = Math.max(maxTravelTime, maxByRoute);
+					}
 				}
 
 				minTimeToNextElement[index - 1] += minTravelTime;
