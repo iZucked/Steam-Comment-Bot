@@ -142,26 +142,6 @@ public class ScheduleCalculator {
 		calculateProfitAndLoss(scheduledSequences, allocations, annotatedSolution);
 	}
 
-	private boolean detailsMatchAllocation(IAllocationAnnotation allocation, List<PortDetails> portDetails) {
-		if (allocation == null) {
-			return false;
-		}
-
-		if (allocation.getSlots().size() == portDetails.size() - 1) {
-			for (int i = 0; i < portDetails.size() - 1; ++i) {
-				if (portDetails.get(i).getOptions().getPortSlot() != allocation.getSlots().get(i)) {
-					return false;
-				}
-			}
-		} else {
-			return false;
-		}
-		return true;
-		// for now, only handle single load/discharge case
-		// assert(allocation.getSlots().size() == 2);
-		// return (firstDetails.getOptions().getPortSlot() == allocation.getSlots().get(0)) && (lastDetails.getOptions().getPortSlot() == allocation.getSlots().get(1));
-	}
-
 	// TODO: Push into entity value calculator?
 	private void calculateProfitAndLoss(final ScheduledSequences scheduledSequences, final Map<VoyagePlan, IAllocationAnnotation> allocations, final IAnnotatedSolution annotatedSolution) {
 
@@ -174,46 +154,41 @@ public class ScheduleCalculator {
 
 			int time = sequence.getStartTime();
 
-			// FIXME : This is messy, what if iterator order is out of sync!
-			// TODO Turn into a map! -- volume allocator should perform the hook up
-
 			for (final VoyagePlan plan : sequence.getVoyagePlans()) {
 				boolean cargo = false;
 				if (plan.getSequence().length >= 3) {
 
-					List<PortDetails> portDetails = new LinkedList<PortDetails>();
-					for (Object obj : plan.getSequence()) {
+					// Extract list of all the PortDetails encountered
+					final List<PortDetails> portDetails = new LinkedList<PortDetails>();
+					for (final Object obj : plan.getSequence()) {
 						if (obj instanceof PortDetails) {
 							portDetails.add((PortDetails) obj);
 						}
 					}
-					PortDetails firstDetails = portDetails.get(0);
-					PortDetails lastDetails = portDetails.get(portDetails.size() - 1);
 
-					// TODO: this logic looks decidedly shaky
-					boolean isDesFobCase = ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 4);
+					// TODO: this logic looks decidedly shaky - plan sequence length could change with logic changes
+					final boolean isDesFobCase = ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan
+							.getSequence().length == 4);
 
 					final IAllocationAnnotation currentAllocation = allocations.get(plan);
+					if (currentAllocation != null) {
+						if (isDesFobCase) {
+							final PortDetails firstDetails = portDetails.get(1);
 
-					if (detailsMatchAllocation(currentAllocation, portDetails)) {
-						cargo = true;
-						final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
-						firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
-					} else if (isDesFobCase) {
-						firstDetails = portDetails.get(1);
-						lastDetails = portDetails.get(2);
-
-						// firstDetails = (PortDetails) plan.getSequence()[1];
-						// lastDetails = (PortDetails) plan.getSequence()[2];
-						if (detailsMatchAllocation(currentAllocation, portDetails)) {
 							cargo = true;
 
 							// for now, only handle single load/discharge case
 							assert (currentAllocation.getSlots().size() == 2);
-							ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
+							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
 							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
+							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
+
+						} else {
+							final PortDetails firstDetails = portDetails.get(0);
+							cargo = true;
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
 							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
 						}
 					}
