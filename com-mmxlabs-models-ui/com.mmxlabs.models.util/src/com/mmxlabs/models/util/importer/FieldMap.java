@@ -21,7 +21,10 @@ public class FieldMap implements IFieldMap {
 		missedKeys.addAll(delegate.keySet());
 	}
 
-	protected FieldMap(final Map<String, String> delegate, final String prefix, final FieldMap owner) {
+	/**
+	 * @since 3.1
+	 */
+	public FieldMap(final Map<String, String> delegate, final String prefix, final FieldMap owner) {
 		this(delegate);
 		this.prefix = prefix;
 		this.superMap = owner;
@@ -154,5 +157,19 @@ public class FieldMap implements IFieldMap {
 		if (superMap != null) {
 			superMap.notifyAccess(prefix + key);
 		}
+	}
+
+	/**
+	 * @since 3.1
+	 */
+	public String getPrefix() {
+		return prefix;
+	}
+
+	/**
+	 * @since 3.1
+	 */
+	public FieldMap getSuperMap() {
+		return superMap;
 	}
 }
