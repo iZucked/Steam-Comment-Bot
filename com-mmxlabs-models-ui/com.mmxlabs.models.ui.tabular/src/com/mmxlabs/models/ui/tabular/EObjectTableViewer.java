@@ -95,6 +95,8 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	protected IColorProvider delegateColourProvider;
 
+	private final Set<String> allMnemonics = new HashSet<String>();
+
 	protected IStatusProvider statusProvider;
 
 	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
@@ -320,6 +322,54 @@ public class EObjectTableViewer extends GridTableViewer {
 		refresh(false);
 	}
 
+	private void setColumnMnemonics(final GridColumn column, final List<String> mnemonics) {
+
+		column.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnemonics);
+		for (final String string : mnemonics) {
+			allMnemonics.add(string);
+		}
+	}
+
+	private String uniqueMnemonic(final String mnemonic) {
+		String result = mnemonic;
+		int suffix = 2;
+		while (allMnemonics.contains(result)) {
+			result = mnemonic + suffix++;
+		}
+		return result;
+	}
+
+	private List<String> makeMnemonics(final String columnName) {
+		final LinkedList<String> result = new LinkedList<String>();
+		{
+			final String uniqueMnemonic = uniqueMnemonic(columnName.toLowerCase().replace(" ", ""));
+			if (uniqueMnemonic != null && !uniqueMnemonic.isEmpty()) {
+				result.add(uniqueMnemonic);
+			}
+		}
+		String initials = "";
+		boolean ws = true;
+		for (int i = 0; i < columnName.length(); i++) {
+			final char c = columnName.charAt(i);
+			if (Character.isWhitespace(c)) {
+				ws = true;
+			} else {
+				if (ws) {
+					initials += c;
+				}
+				ws = false;
+			}
+		}
+		{
+			final String uniqueMnemonic = uniqueMnemonic(initials.toLowerCase());
+			if (uniqueMnemonic != null && !uniqueMnemonic.isEmpty()) {
+				result.add(uniqueMnemonic);
+			}
+		}
+
+		return result;
+	}
+
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
 		// final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
@@ -347,26 +397,8 @@ public class EObjectTableViewer extends GridTableViewer {
 		// store the renderer here, so that we can use it in sorting later.
 		tColumn.setData(COLUMN_RENDERER, renderer);
 		tColumn.setData(COLUMN_PATH, path);
-		tColumn.setData(COLUMN_MANIPULATOR, manipulator);
-		{
-			final List<String> mnems = new LinkedList<String>();
-			tColumn.setData(COLUMN_MNEMONICS, mnems);
-			mnems.add(columnName.toLowerCase().replace(" ", ""));
-			String initials = "";
-			boolean ws = true;
-			for (int i = 0; i < columnName.length(); i++) {
-				final char c = columnName.charAt(i);
-				if (Character.isWhitespace(c)) {
-					ws = true;
-				} else {
-					if (ws) {
-						initials += c;
-					}
-					ws = false;
-				}
-			}
-			mnems.add(initials.toLowerCase());
-		}
+
+		setColumnMnemonics(tColumn, makeMnemonics(columnName));
 
 		// GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
 		// long timer = 0;
@@ -469,25 +501,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		tColumn.pack();
 		// tColumn.setResizable(true);
 
-		{
-			final List<String> mnems = new LinkedList<String>();
-			tColumn.setData(COLUMN_MNEMONICS, mnems);
-			mnems.add(columnName.toLowerCase().replace(" ", ""));
-			String initials = "";
-			boolean ws = true;
-			for (int i = 0; i < columnName.length(); i++) {
-				final char c = columnName.charAt(i);
-				if (Character.isWhitespace(c)) {
-					ws = true;
-				} else {
-					if (ws) {
-						initials += c;
-					}
-					ws = false;
-				}
-			}
-			mnems.add(initials.toLowerCase());
-		}
+		setColumnMnemonics(tColumn, makeMnemonics(columnName));
 
 		// GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
 		// long timer = 0;
@@ -732,7 +746,14 @@ public class EObjectTableViewer extends GridTableViewer {
 
 					final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
 					for (final String m : mnemonics) {
-						attributes.put(m, new Pair<Object, Object>(filterValue, renderValue));
+						// make sure we add the attribute with a unique key
+						String key = m;
+						int suffix = 2;
+						while (attributes.containsKey(key)) {
+							key = m + suffix;
+							suffix += 1;
+						}
+						attributes.put(key, new Pair<Object, Object>(filterValue, renderValue));
 					}
 				}
 
@@ -884,9 +905,12 @@ public class EObjectTableViewer extends GridTableViewer {
 	public Map<String, List<String>> getColumnMnemonics() {
 		final Map<String, List<String>> ms = new TreeMap<String, List<String>>();
 
-		for (final GridColumn column : getGrid().getColumns()) {
+		final GridColumn[] columns = getGrid().getColumns();
+		int[] columnOrder = getGrid().getColumnOrder();
+		for (int i = 0; i < columns.length; ++i) {
+			final GridColumn column = columns[i];
 			final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
-			ms.put(column.getText(), mnemonics);
+			ms.put(column.getText() + " (col no.  " + (1 + columnOrder[i]) + ")", mnemonics);
 		}
 
 		return ms;
