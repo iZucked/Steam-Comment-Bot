@@ -22,7 +22,7 @@ public class FieldMap implements IFieldMap {
 	}
 
 	/**
-	 * @since 3.1
+	 * @since 3.2
 	 */
 	public FieldMap(final Map<String, String> delegate, final String prefix, final FieldMap owner) {
 		this(delegate);
@@ -160,14 +160,14 @@ public class FieldMap implements IFieldMap {
 	}
 
 	/**
-	 * @since 3.1
+	 * @since 3.2
 	 */
 	public String getPrefix() {
 		return prefix;
 	}
 
 	/**
-	 * @since 3.1
+	 * @since 3.2
 	 */
 	public FieldMap getSuperMap() {
 		return superMap;
