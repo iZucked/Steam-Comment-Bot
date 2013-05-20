@@ -162,10 +162,13 @@ public class CargoImporter extends DefaultClassImporter {
 			for (final LoadSlot slot : loadSlots) {
 				if (slot.getCargo() == null) {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
+					exportSlot(root, result, slot, KEY_LOADSLOT);
+					/*
 					final Map<String, String> subMap = super.exportObjects(Collections.singleton(slot), root).iterator().next();
 					for (final Map.Entry<String, String> e : subMap.entrySet()) {
-						result.put("LoadSlot" + DefaultClassImporter.DOT + e.getKey(), e.getValue());
+						result.put(KEY_LOADSLOT + DefaultClassImporter.DOT + e.getKey(), e.getValue());
 					}
+					*/
 					data.add(result);
 				}
 			}
@@ -174,10 +177,13 @@ public class CargoImporter extends DefaultClassImporter {
 			for (final DischargeSlot slot : dischargeSlots) {
 				if (slot.getCargo() == null) {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
+					exportSlot(root, result, slot, KEY_DISCHARGESLOT);
+					/*
 					final Map<String, String> subMap = super.exportObjects(Collections.singleton(slot), root).iterator().next();
 					for (final Map.Entry<String, String> e : subMap.entrySet()) {
-						result.put("DischargeSlot" + DefaultClassImporter.DOT + e.getKey(), e.getValue());
+						result.put(KEY_DISCHARGESLOT + DefaultClassImporter.DOT + e.getKey(), e.getValue());
 					}
+					*/
 					data.add(result);
 				}
 			}
