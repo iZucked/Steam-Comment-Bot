@@ -144,10 +144,7 @@ public class CargoImporter extends DefaultClassImporter {
 			for (final LoadSlot slot : loadSlots) {
 				if (slot.getCargo() == null) {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
-					final Map<String, String> subMap = super.exportObjects(Collections.singleton(slot), root).iterator().next();
-					for (final Map.Entry<String, String> e : subMap.entrySet()) {
-						result.put(CargoPackage.eINSTANCE.getCargo_LoadSlot().getName() + DefaultClassImporter.DOT + e.getKey(), e.getValue());
-					}
+					exportSlot(root, result, slot, KEY_LOADSLOT);
 					data.add(result);
 				}
 			}
@@ -156,10 +153,7 @@ public class CargoImporter extends DefaultClassImporter {
 			for (final DischargeSlot slot : dischargeSlots) {
 				if (slot.getCargo() == null) {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
-					final Map<String, String> subMap = super.exportObjects(Collections.singleton(slot), root).iterator().next();
-					for (final Map.Entry<String, String> e : subMap.entrySet()) {
-						result.put(CargoPackage.eINSTANCE.getCargo_DischargeSlot().getName() + DefaultClassImporter.DOT + e.getKey(), e.getValue());
-					}
+					exportSlot(root, result, slot, KEY_DISCHARGESLOT);
 					data.add(result);
 				}
 			}
