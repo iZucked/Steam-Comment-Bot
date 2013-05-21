@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -21,7 +22,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?186">Case 186: Heel out of charter out</a>
@@ -242,7 +242,7 @@ public class HeelOutOfCharterOutTest {
 		final int ladenNBORate = NBORatePerDay;
 		final int pilotLightRate = 0;
 
-		final MMXRootObject scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed,
+		final LNGScenarioModel scenario = ScenarioTools.createCharterOutScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed,
 				capacity, ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed,
 				ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, pilotLightRate, charterOutTimeDays, heelLimit);
 

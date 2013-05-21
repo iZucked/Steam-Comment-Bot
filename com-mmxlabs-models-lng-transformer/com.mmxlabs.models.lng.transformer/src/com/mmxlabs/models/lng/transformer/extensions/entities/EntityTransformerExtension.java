@@ -12,11 +12,11 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.EntityTransformerUtils;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -33,7 +33,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEdito
  */
 public class EntityTransformerExtension implements ITransformerExtension {
 
-	private MMXRootObject rootObject;
+	private LNGScenarioModel rootObject;
 
 	private ModelEntityMap entities;
 
@@ -44,11 +44,11 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	private DateAndCurveHelper dateAndCurveHelper;
 
 	@Override
-	public void startTransforming(final MMXRootObject rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
+	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
 		this.entities = map;
 
-		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+		final CommercialModel commercialModel = rootObject.getCommercialModel();
 
 		for (final LegalEntity e : commercialModel.getEntities()) {
 			final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(e, dateAndCurveHelper, map.getEarliestDate());
@@ -62,7 +62,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	@Override
 	public void finishTransforming() {
 
-		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+		final CommercialModel commercialModel = rootObject.getCommercialModel();
 		final LegalEntity shipping = commercialModel.getShippingEntity();
 
 		setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));

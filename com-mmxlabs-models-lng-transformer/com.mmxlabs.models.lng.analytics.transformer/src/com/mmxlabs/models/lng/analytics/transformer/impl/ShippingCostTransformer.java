@@ -52,8 +52,6 @@ import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.TransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -444,17 +442,25 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 						// }
 						if (portDetails.getOptions().getPortSlot() instanceof ILoadOption) {
 							currentAllocationAnnotation = allocationIterator.next();
+							assert(currentAllocationAnnotation.getSlots().size() == 2);
+							IPortSlot loadSlot = currentAllocationAnnotation.getSlots().get(0);
 							// Add in LOAD VOLUME
-							final int loadVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getLoadVolumeInM3());
+							final int loadVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getSlotVolumeInM3(loadSlot));
 							extraData.addExtraData("volume", "Load Volume", loadVolume, ExtraDataFormatType.INTEGER);
 						} else if (portDetails.getOptions().getPortSlot() instanceof IDischargeOption) {
 							// Add in DISCHARGE VOLUME
 							if (currentAllocationAnnotation != null) {
-								final int dischargeVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getDischargeVolumeInM3());
+								assert(currentAllocationAnnotation.getSlots().size() == 2);
+								IPortSlot dischargeSlot = currentAllocationAnnotation.getSlots().get(1);
+								final int dischargeVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getSlotVolumeInM3(dischargeSlot));
 								extraData.addExtraData("volume", "Discharge Volume", dischargeVolume, ExtraDataFormatType.INTEGER);
 
-								final int cargoCVValue = currentAllocationAnnotation.getLoadOption().getCargoCVValue();
-								final long dischargeVolumeInMMBTu = OptimiserUnitConvertor.convertToExternalVolume(Calculator.convertM3ToMMBTu(currentAllocationAnnotation.getDischargeVolumeInM3(),
+								
+								// for now, only handle single load/discharge case
+								assert(currentAllocationAnnotation.getSlots().size() == 2);
+								final ILoadOption loadOption = (ILoadOption) currentAllocationAnnotation.getSlots().get(0);
+								final int cargoCVValue = loadOption.getCargoCVValue();
+								final long dischargeVolumeInMMBTu = OptimiserUnitConvertor.convertToExternalVolume(Calculator.convertM3ToMMBTu(currentAllocationAnnotation.getSlotVolumeInM3(dischargeSlot),
 										cargoCVValue));
 								totalDischargeVolumeInMMBTu += dischargeVolumeInMMBTu;
 								currentAllocationAnnotation = null;
@@ -649,7 +655,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 		int total = 0;
 		if (row.isIncludePortCosts()) {
 			for (final PortCost cost : pricing.getPortCosts()) {
-				if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
+				if (SetUtils.getObjects(cost.getPorts()).contains(port)) {
 					// this is the cost for the given port
 					// FIXME: This does not take into account START/END/OTHER COSTS
 					total += cost.getPortCost(plan.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);

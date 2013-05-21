@@ -39,6 +39,8 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.transformer.ICargoSandboxTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.CargoSandboxTransformer;
 import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -275,32 +277,34 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 			@Override
 			public void run() {
 				final MMXRootObject rootObject = location.getRootObject();
-				final AnalyticsModel analyticsModel = rootObject.getSubModel(AnalyticsModel.class);
+				if (rootObject instanceof LNGScenarioModel) {
+					final AnalyticsModel analyticsModel = ((LNGScenarioModel)rootObject).getAnalyticsModel();
 
-				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_CargoSandboxes(), null);
-				if (settings.isEmpty()) {
-					return;
-				}
-
-				final ScenarioLock editorLock = location.getEditorLock();
-				try {
-					editorLock.claim();
-					location.setDisableUpdates(true);
-
-					// now create an add command, which will include adding any
-					// other relevant objects
-					final CompoundCommand add = new CompoundCommand();
-					for (final ISetting setting : settings) {
-						// final DetailCompositeDialog dialog = new DetailCompositeDialog(location.getShell(), location.getDefaultCommandHandler());
-						// if (dialog.open(CargoSandboxesViewerPane.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
-						add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
-						// }
+					final Collection<? extends ISetting> settings = factory.createInstance(rootObject, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_CargoSandboxes(), null);
+					if (settings.isEmpty()) {
+						return;
 					}
-					getEditingDomain().getCommandStack().execute(add);
-					viewer.refresh();
-				} finally {
-					location.setDisableUpdates(false);
-					editorLock.release();
+
+					final ScenarioLock editorLock = location.getEditorLock();
+					try {
+						editorLock.claim();
+						location.setDisableUpdates(true);
+
+						// now create an add command, which will include adding any
+						// other relevant objects
+						final CompoundCommand add = new CompoundCommand();
+						for (final ISetting setting : settings) {
+							// final DetailCompositeDialog dialog = new DetailCompositeDialog(location.getShell(), location.getDefaultCommandHandler());
+							// if (dialog.open(CargoSandboxesViewerPane.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
+							add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+							// }
+						}
+						getEditingDomain().getCommandStack().execute(add);
+						viewer.refresh();
+					} finally {
+						location.setDisableUpdates(false);
+						editorLock.release();
+					}
 				}
 			}
 		};
@@ -340,18 +344,18 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 			if (object instanceof ProvisionalCargo) {
 
 				final ProvisionalCargo provisionalCargo = (ProvisionalCargo) object;
-				UnitCostLine costLine = provisionalCargo.getCostLine();
+				LNGPortfolioModel portfolioModel = null;//provisionalCargo.getPortfolioModel();
 				// if (costLine == null) {
 				try {
-					costLine = transformer.createCostLine(location.getRootObject(), (ProvisionalCargo) object);
-					((ProvisionalCargo) object).setCostLine(costLine);
+					portfolioModel = transformer.createCostLine((LNGScenarioModel) location.getRootObject(), (ProvisionalCargo) object);
+					((ProvisionalCargo) object).setPortfolioModel(portfolioModel);
 				} catch (final Exception e) {
 					// Log it!
 					e.printStackTrace();
 				}
 				// }
-				if (costLine != null) {
-					return new UnitCostLinePropertySource(costLine);
+				if (portfolioModel != null) {
+//					return new UnitCostLinePropertySource(costLine);
 				}
 			} else if (object instanceof IPropertySource) {
 				return (IPropertySource) object;
@@ -363,6 +367,6 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		return new LocalScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
+		return new LocalScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation);
 	}
 }

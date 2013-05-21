@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,21 +14,24 @@ import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
+import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
-import com.mmxlabs.models.lng.input.editor.utils.CollectedAssignment;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -58,7 +62,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 
 	@Inject
-	private MMXRootObject rootObject;
+	private LNGScenarioModel rootObject;
 
 	@Inject
 	private IInitialSequenceBuilder builder;
@@ -85,7 +89,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.
 		 */
 		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
-		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
+		final AssignmentModel assignmentModel = rootObject.getPortfolioModel().getAssignmentModel();
 
 		final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
@@ -106,16 +110,18 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				final Cargo cargo = loadSlot.getCargo();
 				if (cargo != null) {
-					final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-					if (dischargeSlot != null) {
-
-						final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
-						final ISequenceElement loadElement = psp.getElement(loadObject);
-
-						final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
-						final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
-
-						cargoSlotPairing.put(loadElement, dischargeElement);
+					final EList<Slot> slots = cargo.getSortedSlots();
+					// Only process this loop if slot is first in the list
+					if (slots.get(0) == loadSlot) {
+						ISequenceElement prevElement = null;
+						for (final Slot currentSlot : slots) {
+							final IPortSlot slotObject = mem.getOptimiserObject(currentSlot, IPortSlot.class);
+							final ISequenceElement slotElement = psp.getElement(slotObject);
+							if (prevElement != null) {
+								cargoSlotPairing.put(prevElement, slotElement);
+							}
+							prevElement = slotElement;
+						}
 					}
 				}
 			}
@@ -125,50 +131,50 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		for (final Slot slot : modelSlots) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
+				// Note: We assume a DES Purchase is at most two slots to the cargo
 				if (loadSlot.isDESPurchase()) {
 
 					final Cargo cargo = loadSlot.getCargo();
 					if (cargo != null) {
 
-						final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-						if (dischargeSlot != null) {
+						final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
+						final ISequenceElement loadElement = psp.getElement(loadObject);
+						final IVessel vessel = virtualVesselSlotProvider.getVesselForElement(loadElement);
+						final IResource res = vp.getResource(vessel);
+						assert (res != null);
 
-							final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
-							final ISequenceElement loadElement = psp.getElement(loadObject);
-							final IVessel vessel = virtualVesselSlotProvider.getVesselForElement(loadElement);
-							final IResource res = vp.getResource(vessel);
-							assert (res != null);
+						final IResource resource = vp.getResource(vessel);
 
-							final IResource resource = vp.getResource(vessel);
-
-							final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
-							final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
-							advice.getModifiableSequence(resource).add(loadElement);
-							advice.getModifiableSequence(resource).add(dischargeElement);
+						final EList<Slot> slots = cargo.getSortedSlots();
+						for (final Slot currentSlot : slots) {
+							final IPortSlot slotObject = mem.getOptimiserObject(currentSlot, IPortSlot.class);
+							final ISequenceElement slotElement = psp.getElement(slotObject);
+							advice.getModifiableSequence(resource).add(slotElement);
 						}
 					}
 				}
 			} else if (slot instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				// Note: We assume a FOB Sale is at most two slots to the cargo
 				if (dischargeSlot.isFOBSale()) {
 
 					final Cargo cargo = dischargeSlot.getCargo();
+
 					if (cargo != null) {
-						final LoadSlot loadSlot = cargo.getLoadSlot();
-						if (loadSlot != null) {
 
-							final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
-							final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
-							final IVessel vessel = virtualVesselSlotProvider.getVesselForElement(dischargeElement);
-							final IResource res = vp.getResource(vessel);
-							assert (res != null);
+						final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
+						final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
+						final IVessel vessel = virtualVesselSlotProvider.getVesselForElement(dischargeElement);
+						final IResource res = vp.getResource(vessel);
+						assert (res != null);
 
-							final IResource resource = vp.getResource(vessel);
+						final IResource resource = vp.getResource(vessel);
 
-							final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
-							final ISequenceElement loadElement = psp.getElement(loadObject);
-							advice.getModifiableSequence(resource).add(loadElement);
-							advice.getModifiableSequence(resource).add(dischargeElement);
+						final EList<Slot> slots = cargo.getSortedSlots();
+						for (final Slot currentSlot : slots) {
+							final IPortSlot slotObject = mem.getOptimiserObject(currentSlot, IPortSlot.class);
+							final ISequenceElement slotElement = psp.getElement(slotObject);
+							advice.getModifiableSequence(resource).add(slotElement);
 						}
 					}
 				}
@@ -201,9 +207,15 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			vesselsOfClass.add(vessel);
 		}
 
+		final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
+		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
+		for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+			vesselAvailabilityMap.put(va.getVessel(), va);
+		}
+
 		// Process initial vessel assignments list
-		if (!inputModel.getElementAssignments().isEmpty()) {
-			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(inputModel, rootObject.getSubModel(FleetModel.class));
+		if (!assignmentModel.getElementAssignments().isEmpty()) {
+			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, scenarioFleetModel);
 			for (final CollectedAssignment seq : assignments) {
 				IVessel vessel = null;
 				log.debug("Processing assignment " + seq.getVesselOrClass().getName());
@@ -220,7 +232,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						vessel = vesselsOfClass.get(idx);
 					}
 				} else {
-					vessel = mem.getOptimiserObject(seq.getVesselOrClass(), IVessel.class);
+					final Vessel seqVessel = (Vessel) seq.getVesselOrClass();
+					vessel = mem.getOptimiserObject(vesselAvailabilityMap.get(seqVessel), IVessel.class);
 				}
 				if (vessel != null) {
 					final IResource resource = vp.getResource(vessel);
@@ -242,7 +255,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			if (shortCargoVessel != null) {
 				final IResource resource = vp.getResource(shortCargoVessel);
 				final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-				for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+				for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 					if (ea.getAssignment() == null) {
 
 						final UUIDObject assignedObject = ea.getAssignedObject();
@@ -276,13 +289,14 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			}
 		} else if (modelObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) modelObject;
-			final Slot loadSlot = cargo.getLoadSlot();
-			final Slot dischargeSlot = cargo.getDischargeSlot();
-			final IPortSlot loadPortSlot = mem.getOptimiserObject(loadSlot, IPortSlot.class);
-			final IPortSlot dischargePortSlot = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
-			if (loadPortSlot != null && dischargePortSlot != null) {
-				return new ISequenceElement[] { psp.getElement(loadPortSlot), psp.getElement(dischargePortSlot) };
+
+			final List<ISequenceElement> elements = new ArrayList<ISequenceElement>(cargo.getSortedSlots().size());
+			for (final Slot slot : cargo.getSortedSlots()) {
+				final IPortSlot portSlot = mem.getOptimiserObject(slot, IPortSlot.class);
+				assert portSlot != null;
+				elements.add(psp.getElement(portSlot));
 			}
+			return elements.toArray(new ISequenceElement[elements.size()]);
 		} else if (modelObject instanceof Slot) {
 			final Slot slot = (Slot) modelObject;
 			final IPortSlot portSlot = mem.getOptimiserObject(slot, IPortSlot.class);

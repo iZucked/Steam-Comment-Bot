@@ -37,10 +37,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
 /**
  * Exporter for getting out the details of {@link IPortVisitEvent}
@@ -96,32 +96,50 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			slotAllocation.setSlot(optSlot);
 			portVisit = sv;
 
-			// Output allocation info.
+			// Output allocation info
+			// TODO: Break up IAllocationAnnotation in separate instances for the load and discahrtge.
+			// TODO: Break up IAllocatiobAnnotation to pull out fuel use as a separate chunk.
 			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
 
 			eAllocation = allocations.get(slot);
 
 			if (eAllocation == null) {
 				eAllocation = scheduleFactory.createCargoAllocation();
-				allocations.put(allocation.getLoadOption(), eAllocation);
-				allocations.put(allocation.getDischargeOption(), eAllocation);
+				for (IPortSlot allocationSlot: allocation.getSlots()) {
+					allocations.put(allocationSlot, eAllocation);
+				}
 				// eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
 				// eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
 				// eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
-				eAllocation.setDischargeVolume(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolumeInM3()));
-				eAllocation.setLoadVolume(OptimiserUnitConvertor.convertToExternalVolume(allocation.getLoadVolumeInM3()));
 				// eAllocation.setSequence();
 
 				output.getCargoAllocations().add(eAllocation);
 			}
+			eAllocation.getSlotAllocations().add(slotAllocation);
+			
+			// for now, only handle single load/discharge case
+//			assert(allocation.getSlots().size() == 2);
+//			final ILoadOption loadSlot = (ILoadOption) allocation.getSlots().get(0);
+//			final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
 			if (slot instanceof ILoadOption) {
-				eAllocation.setLoadAllocation(slotAllocation);
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				eAllocation.getLoadAllocation().setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
+				//final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
+				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), ((ILoadOption) slot).getCargoCVValue());
+				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			} else {
-				eAllocation.setDischargeAllocation(slotAllocation);
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				eAllocation.getDischargeAllocation().setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
+				int cargoCV = -1;
+				for (IPortSlot sSlot : allocation.getSlots()) {
+					if (sSlot instanceof ILoadOption) {
+						cargoCV  = ((ILoadOption) sSlot).getCargoCVValue();
+					}
+				}
+				if (cargoCV == -1) {
+					throw new IllegalStateException("Discharge Slot without a Load Slot");
+				}
+				//final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
+				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), cargoCV);
+				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			}
 
 			sv.setSlotAllocation(slotAllocation);
@@ -237,9 +255,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		// Handle FOB/DES stuff
 		if (eAllocation != null) {
-			if (eAllocation.getLoadAllocation() != null && eAllocation.getDischargeAllocation() != null) {
-				final SlotAllocation loadAllocation = eAllocation.getLoadAllocation();
-				final SlotAllocation dischargeAllocation = eAllocation.getDischargeAllocation();
+			// FOB/DES can only be a two element pairing
+			if (eAllocation.getSlotAllocations().size() == 2) {
+
+				// Two elements - must be load then discharge
+				final SlotAllocation loadAllocation = eAllocation.getSlotAllocations().get(0);
+				final SlotAllocation dischargeAllocation = eAllocation.getSlotAllocations().get(1);
 
 				if (((LoadSlot) loadAllocation.getSlot()).isDESPurchase()) {
 					loadAllocation.getSlotVisit().setPort(dischargeAllocation.getSlotVisit().getPort());

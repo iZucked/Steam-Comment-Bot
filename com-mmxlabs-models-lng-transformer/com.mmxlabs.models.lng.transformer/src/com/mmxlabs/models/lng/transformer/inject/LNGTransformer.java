@@ -19,6 +19,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -48,7 +49,7 @@ public class LNGTransformer {
 	 */
 	public static final String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
 
-	private final MMXRootObject scenario;
+	private final LNGScenarioModel scenario;
 
 	private final Injector injector;
 
@@ -57,16 +58,16 @@ public class LNGTransformer {
 	/**
 	 * @param scenario
 	 * @param hints
-	 * @since 3.0
+	 * @since 4.0
 	 */
-	public LNGTransformer(final MMXRootObject scenario, String... hints) {
+	public LNGTransformer(final LNGScenarioModel scenario, String... hints) {
 		this(scenario, null, null, hints);
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
-	public LNGTransformer(final MMXRootObject scenario, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
+	public LNGTransformer(final LNGScenarioModel scenario, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
 		this(scenario, null, localOverrides, hints);
 	}
 
@@ -75,16 +76,16 @@ public class LNGTransformer {
 	 * @param scenario
 	 * @param module
 	 * @param hints
-	 * @since 3.0
+	 * @since 4.0
 	 */
-	public LNGTransformer(final MMXRootObject scenario, final Module module, String... hints) {
+	public LNGTransformer(final LNGScenarioModel scenario, final Module module, String... hints) {
 		this(scenario, module, null, hints);
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
-	public LNGTransformer(final MMXRootObject scenario, final Module module, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
+	public LNGTransformer(final LNGScenarioModel scenario, final Module module, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
 		this.scenario = scenario;
 
 		boolean performOptimisation = false;

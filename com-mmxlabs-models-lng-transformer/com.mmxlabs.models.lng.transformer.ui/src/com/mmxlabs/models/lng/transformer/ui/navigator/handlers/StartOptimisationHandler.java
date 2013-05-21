@@ -5,9 +5,8 @@
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -37,7 +36,6 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
@@ -243,12 +241,8 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 		final ValidationHelper helper = new ValidationHelper();
 		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root);
-		final Collection<EObject> modelRoots = new LinkedList<EObject>();
-		for (final MMXSubModel subModel : root.getSubModels()) {
-			modelRoots.add(subModel.getSubModelInstance());
-		}
 
-		final IStatus status = helper.runValidation(validator, extraContext, modelRoots);
+		final IStatus status = helper.runValidation(validator, extraContext, Collections.singleton(root));
 
 		if (status == null) {
 			return false;

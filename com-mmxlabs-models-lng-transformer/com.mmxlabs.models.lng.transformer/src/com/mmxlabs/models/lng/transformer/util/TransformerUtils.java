@@ -33,7 +33,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 
 /**
  * Utility class for doing things to scenarios.
@@ -142,24 +141,22 @@ public class TransformerUtils {
 	public static Pair<Date, Date> findEarliestAndLatestEvents(final MMXRootObject rootObject) {
 		final Pair<Date, Date> result = new Pair<Date, Date>(null, null);
 
-		for (MMXSubModel subModel : rootObject.getSubModels()) {
-			final TreeIterator<EObject> iterator = subModel.eAllContents();
-			while (iterator.hasNext()) {
-				final EObject o = iterator.next();
-				if (o instanceof VesselAvailability) {
-					final VesselAvailability pat = (VesselAvailability) o;
-					updateMinMax(result, pat.getStartAfter());
-					updateMinMax(result, pat.getStartBy());
-					updateMinMax(result, pat.getEndAfter());
-					updateMinMax(result, pat.getEndBy());
-				} else if (o instanceof Slot) {
-					final Slot slot = (Slot) o;
-					updateMinMax(result, slot.getWindowStartWithSlotOrPortTime());
-					updateMinMax(result, slot.getWindowEndWithSlotOrPortTime());
-				} else if (o instanceof VesselEvent) {
-					updateMinMax(result, ((VesselEvent) o).getStartAfter());
-					updateMinMax(result, ((VesselEvent) o).getStartBy());
-				}
+		final TreeIterator<EObject> iterator = rootObject.eAllContents();
+		while (iterator.hasNext()) {
+			final EObject o = iterator.next();
+			if (o instanceof VesselAvailability) {
+				final VesselAvailability pat = (VesselAvailability) o;
+				updateMinMax(result, pat.getStartAfter());
+				updateMinMax(result, pat.getStartBy());
+				updateMinMax(result, pat.getEndAfter());
+				updateMinMax(result, pat.getEndBy());
+			} else if (o instanceof Slot) {
+				final Slot slot = (Slot) o;
+				updateMinMax(result, slot.getWindowStartWithSlotOrPortTime());
+				updateMinMax(result, slot.getWindowEndWithSlotOrPortTime());
+			} else if (o instanceof VesselEvent) {
+				updateMinMax(result, ((VesselEvent) o).getStartAfter());
+				updateMinMax(result, ((VesselEvent) o).getStartBy());
 			}
 		}
 		return result;

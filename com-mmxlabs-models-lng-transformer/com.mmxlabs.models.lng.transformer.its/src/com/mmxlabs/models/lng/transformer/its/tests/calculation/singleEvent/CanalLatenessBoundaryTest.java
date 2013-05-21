@@ -8,11 +8,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * Tests for <a href="https://mmxlabs.fogbugz.com/default.asp?184">FogBugz: Case 184</a>
@@ -44,10 +45,10 @@ public class CanalLatenessBoundaryTest {
 		final int canalDistance = 980;
 		final int oceanRouteDistance = 1010;
 
-		final CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -66,10 +67,10 @@ public class CanalLatenessBoundaryTest {
 		final int canalDistance = 1040;
 		final int oceanRouteDistance = 1060;
 
-		final CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -88,10 +89,10 @@ public class CanalLatenessBoundaryTest {
 		final int canalDistance = 1040;
 		final int oceanRouteDistance = 1050;
 
-		final CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -110,10 +111,10 @@ public class CanalLatenessBoundaryTest {
 		final int canalDistance = 980;
 		final int oceanRouteDistance = 1000;
 
-		final CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on ocean", ScenarioTools.defaultRouteName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -133,10 +134,10 @@ public class CanalLatenessBoundaryTest {
 		final int canalDistance = 980;
 		final int oceanRouteDistance = 1000;
 
-		final CargoAllocation a = testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testRouteWhenLate(testName, canalCost, canalDistance, oceanRouteDistance, travelTime, canalTransitTimeHours));
 
-		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute()));
-		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute()));
+		Assert.assertTrue("Laden leg travels on canal", canalName.equals(a.getLadenLeg().getRoute().getName()));
+		Assert.assertTrue("Ballast leg travels on canal", canalName.equals(a.getBallastLeg().getRoute().getName()));
 	}
 
 	/**
@@ -193,7 +194,7 @@ public class CanalLatenessBoundaryTest {
 		final int minHeelVolume = 0;
 
 
-		final MMXRootObject canalScenario = ScenarioTools.createScenarioWithCanal(oceanRouteDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
+		final LNGScenarioModel canalScenario = ScenarioTools.createScenarioWithCanal(oceanRouteDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
 				speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed, fuelTravelConsumptionPerDay, speed,
 				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		

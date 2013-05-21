@@ -8,13 +8,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * This class contains some whole-system tests which check the fuel choices on a single cargo.
@@ -47,13 +48,14 @@ public class SimpleCalculationTest {
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
-		final MMXRootObject scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final LNGScenarioModel scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
-		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printCargoAllocation("testLNGSelection", a);
+		CargoAllocation cargoAllocation = result.getCargoAllocations().get(0);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(cargoAllocation);
+		ScenarioTools.printCargoAllocation("testLNGSelection", cargoAllocation);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
@@ -74,13 +76,14 @@ public class SimpleCalculationTest {
 		final float cvValue = 22.8f;
 		final int travelTime = (int) TimeUnit.DAYS.toHours(3);
 
-		final MMXRootObject scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
+		final LNGScenarioModel scenario = createSimpleScenario(baseFuelPrice, dischargePrice, cvValue, travelTime);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 		// check result is how we expect it to be
 		// there will be a single cargo allocation for this cargo
-		final CargoAllocation a = result.getCargoAllocations().get(0);
-		ScenarioTools.printCargoAllocation("testBaseSelection", a);
+		CargoAllocation cargoAllocation = result.getCargoAllocations().get(0);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(cargoAllocation);
+		ScenarioTools.printCargoAllocation("testBaseSelection", cargoAllocation);
 
 		// on the laden leg we always use NBO; decision time is on the ballast leg
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.NBO);
@@ -100,7 +103,7 @@ public class SimpleCalculationTest {
 	 * 
 	 * @return
 	 */
-	private MMXRootObject createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
+	private LNGScenarioModel createSimpleScenario(final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime) {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class

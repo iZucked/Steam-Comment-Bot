@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.lng.transformer.feature"
       label="Models: LNG Types - Transformer Feature"
-      version="3.0.3.qualifier"
+      version="4.0.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -24,6 +24,7 @@ All rights reserved.
       [Enter License Description here.]
    </license>
 
+      <import feature="com.mmxlabs.scenario.service.feature" version="4.0.0" match="compatible"/>
    <plugin
          id="com.mmxlabs.models.lng.transformer"
          download-size="0"
@@ -40,20 +41,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.liveevaluator"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.analytics.transformer"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.analytics.transformer.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"

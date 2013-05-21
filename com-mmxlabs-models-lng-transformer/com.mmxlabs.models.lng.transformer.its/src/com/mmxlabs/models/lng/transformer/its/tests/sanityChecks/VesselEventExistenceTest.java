@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -20,7 +21,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?261">Check that all vesselevents in input exist in output.</a>
@@ -87,7 +87,7 @@ public class VesselEventExistenceTest {
 			}
 		}
 
-		final MMXRootObject scenario = csc.buildScenario();
+		final LNGScenarioModel scenario = csc.buildScenario();
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
 

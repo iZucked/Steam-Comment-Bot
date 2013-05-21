@@ -4,14 +4,20 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import com.google.inject.Injector;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
@@ -25,7 +31,7 @@ import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
  */
 public class ScenarioRunner {
 
-	private final MMXRootObject scenario;
+	private final LNGScenarioModel scenario;
 
 	private IOptimisationContext context;
 	private ModelEntityMap entities;
@@ -37,7 +43,10 @@ public class ScenarioRunner {
 
 	private Injector injector;
 
-	public ScenarioRunner(final MMXRootObject scenario) {
+	/**
+	 * @since 3.0
+	 */
+	public ScenarioRunner(final LNGScenarioModel scenario) {
 		this.scenario = scenario;
 	}
 
@@ -49,7 +58,10 @@ public class ScenarioRunner {
 		return intialSchedule;
 	}
 
-	protected final MMXRootObject getScenario() {
+	/**
+	 * @since 3.0
+	 */
+	public final LNGScenarioModel getScenario() {
 		return scenario;
 	}
 
@@ -98,4 +110,19 @@ public class ScenarioRunner {
 
 		return schedule;
 	}
+
+	/**
+	 * Update the Scenario with the best solution. Note: This {@link ScenarioRunner} should not be used again.
+	 */
+	public void updateScenario() {
+
+		// Construct internal command stack to generate correct output schedule
+		final BasicCommandStack commandStack = new BasicCommandStack();
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+
+		LNGSchedulerJobUtils.exportSolution(injector, scenario, ed, entities, optimiser.getBestSolution(true), 0);
+	}
+
 }

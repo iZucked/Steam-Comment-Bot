@@ -125,13 +125,13 @@ public class ShippingCostRowViewerPane extends ScenarioTableViewerPane {
 					@Override
 					public void run() {
 
-						final ScenarioLock editorLock = jointModelEditorPart.getEditorLock();
+						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 						editorLock.awaitClaim();
 						getJointModelEditorPart().setDisableUpdates(true);
 						try {
 							final ISelection sel = getLastSelection();
 							if (sel instanceof IStructuredSelection) {
-								final EditingDomain ed = jointModelEditorPart.getEditingDomain();
+								final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 								// Copy selection
 								@SuppressWarnings("unchecked")
 								final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());

@@ -8,13 +8,14 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * From <a href="https://mmxlabs.fogbugz.com/default.asp?179">case 179</a>:
@@ -41,7 +42,7 @@ public class FuelChoiceBoundaryTest {
 		final int fuelConsumptionPerHour = 11;
 		final int NBORatePerHour = 10;
 
-		final CargoAllocation a = testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour));
 
 		// need to check that FBO is never used on any leg or idle.
 		FuelUsageAssertions.assertFuelNotUsed(a.getLadenLeg().getFuels(), Fuel.FBO);
@@ -63,7 +64,7 @@ public class FuelChoiceBoundaryTest {
 		final int fuelConsumptionPerHour = 11;
 		final int NBORatePerHour = 10;
 
-		final CargoAllocation a = testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour));
 
 		// need to check that base fuel is never used on any leg or idle.
 		FuelUsageAssertions.assertFuelNotUsed(a.getLadenLeg().getFuels(), Fuel.BASE_FUEL);
@@ -99,7 +100,7 @@ public class FuelChoiceBoundaryTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		final MMXRootObject scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
+		final LNGScenarioModel scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, speed, fuelTravelConsumptionPerDay, speed,
 				fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBORatePerDay, NBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule
@@ -120,7 +121,7 @@ public class FuelChoiceBoundaryTest {
 
 		final int pilotLightRate = 0;
 
-		final CargoAllocation a = testPilotLight("Test ballast cheaper on NBO, ballast idle cheaper on base", pilotLightRate);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPilotLight("Test ballast cheaper on NBO, ballast idle cheaper on base", pilotLightRate));
 
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.FBO);
@@ -137,7 +138,7 @@ public class FuelChoiceBoundaryTest {
 
 		final int pilotLightRate = 3;
 
-		final CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate));
 
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.NBO);
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.FBO);
@@ -152,7 +153,7 @@ public class FuelChoiceBoundaryTest {
 
 		final int pilotLightRate = 2;
 
-		final CargoAllocation a = testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPilotLight("Test ballast cheaper on base because of pilot light", pilotLightRate));
 
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.FBO);
 		FuelUsageAssertions.assertFuelUsed(a.getBallastLeg().getFuels(), Fuel.NBO, FuelUnit.M3);
@@ -205,7 +206,7 @@ public class FuelChoiceBoundaryTest {
 		final int minHeelVolume = 0;
 		final boolean useDryDock = true;
 
-		final MMXRootObject scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
+		final LNGScenarioModel scenario = ScenarioTools.createScenario(portDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity, speed,
 				travelFuelConsumptionPerDay, speed, travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, speed, travelFuelConsumptionPerDay, speed,
 				travelFuelConsumptionPerDay, idleFuelConsumptionPerDay, idleNBORatePerDay, travelNBORatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 		// evaluate and get a schedule

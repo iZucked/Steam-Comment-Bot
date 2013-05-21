@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.change.util.ChangeRecorder;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -67,7 +68,7 @@ public class InputAttributesCheckTest {
 		// create some cargoes.
 		SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue);
 
-		final MMXRootObject scenario = csc.buildScenario();
+		final LNGScenarioModel scenario = csc.buildScenario();
 		final ChangeRecorder changeRecorder = new ChangeRecorder(scenario);
 
 		ScenarioTools.evaluate(scenario);

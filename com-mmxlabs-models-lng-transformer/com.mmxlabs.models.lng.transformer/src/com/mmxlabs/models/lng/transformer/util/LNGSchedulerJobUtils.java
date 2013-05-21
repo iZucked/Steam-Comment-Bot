@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -26,6 +27,11 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.assignment.AssignmentFactory;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -34,17 +40,16 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputFactory;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.InputPackage;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
@@ -83,7 +88,7 @@ public class LNGSchedulerJobUtils {
 	private static final String LABEL_PREFIX = "Optimised: ";
 
 	/**
-	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link InputModel})
+	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link AssignmentModel})
 	 * 
 	 * @param injector
 	 * @param scenario
@@ -94,19 +99,22 @@ public class LNGSchedulerJobUtils {
 	 * @param solutionCurrentProgress
 	 * @param LABEL_PREFIX
 	 * @return
+	 * @since 4.0
 	 */
-	public static Schedule exportSolution(final Injector injector, final MMXRootObject scenario, final EditingDomain editingDomain, final ModelEntityMap entities, final IAnnotatedSolution solution,
-			final int solutionCurrentProgress) {
+	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, final ModelEntityMap entities,
+			final IAnnotatedSolution solution, final int solutionCurrentProgress) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		{
 			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 			childInjector.injectMembers(exporter);
 		}
+		LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
+
 		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
-		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-		final InputModel inputModel = scenario.getSubModel(InputModel.class);
-		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
+		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
+		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
+		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
 		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");
 		final CompoundCommand command = new CompoundCommand(label);
@@ -131,7 +139,7 @@ public class LNGSchedulerJobUtils {
 				postExportProcessors = null;
 			}
 
-			command.append(derive(editingDomain, scenario, schedule, inputModel, cargoModel, postExportProcessors));
+			command.append(derive(editingDomain, scenario, schedule, assignmentModel, cargoModel, postExportProcessors));
 			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 		} finally {
 			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -179,17 +187,18 @@ public class LNGSchedulerJobUtils {
 	}
 
 	/**
-	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the {@link InputModel} for assignment changes. Back link the {@link CargoModel} to the {@link Schedule}
+	 * Given a {@link Schedule}, update the {@link CargoModel} for rewirings and the {@link AssignmentModel} for assignment changes. Back link the {@link CargoModel} to the {@link Schedule}
 	 * 
 	 * @param domain
 	 * @param scenario
 	 * @param schedule
-	 * @param inputModel
+	 * @param assignmentModel
 	 * @param cargoModel
 	 * @param postExportProcessors
 	 * @return
+	 * @since 4.0
 	 */
-	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel,
+	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final AssignmentModel assignmentModel, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
@@ -201,93 +210,182 @@ public class LNGSchedulerJobUtils {
 		// back to slot.getCargo() is there is no mapping.
 		final Map<LoadSlot, Cargo> slotToCargoMap = new HashMap<LoadSlot, Cargo>();
 
-		// rewire any cargos which require it
-		// TODO handle spot market cases, and free slots
-		final List<Command> nullCommands = new LinkedList<Command>();
+		// Maintain a two lists of commands. The null commands are the commands which unset (or set to null) references between cargoes and lots.. The set commands are the commands which then re-set
+		// the new slot/cargo references. They are kept separate to avoid issues where opposite references changes can lead to unexpected results.
+		// final List<Command> nullCommands = new LinkedList<Command>();
 		final List<Command> setCommands = new LinkedList<Command>();
 
-		// Maintain the set of cargoes which we a) remove the discharge slot and b) and one to.
-		// If the subtract b from a what is left should be the cargoes removed from the solution .. hopefully optional..
-		final Set<Cargo> nullCargoes = new HashSet<Cargo>();
-		final Set<Cargo> setCargoes = new HashSet<Cargo>();
+		// Set of slots which may not be linked to a cargo 
+		final Set<Slot> unsetCargoSlots = new HashSet<Slot>();
+		// Set of slots which really are linked to a cargo. This will later be taken out of the unsetCargoSlots
+		final Set<Slot> setCargoSlots = new HashSet<Slot>();
 
+		// First pass - add in generated slots to the slot containers
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
-			if (allocation.getInputCargo() == null) {
-				// this does not correspond directly to an input cargo;
-				// get the slots, find their cargos, and adjust them?
-				final LoadSlot load = (LoadSlot) allocation.getLoadAllocation().getSlot();
-				final DischargeSlot discharge = (DischargeSlot) allocation.getDischargeAllocation().getSlot();
 
-				// Spot market options
+			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 
+				final Slot slot = slotAllocation.getSlot();
 				// Slots created in the builder have no container so add it the container now as it is used.
-				if (load.eContainer() == null) {
-					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), load));
-				}
-				if (discharge.eContainer() == null) {
-					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), discharge));
-				}
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					if (slot.eContainer() == null) {
+						cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
+					}
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					if (dischargeSlot.eContainer() == null) {
+						cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
+					}
 
-				// Optional loads may not have an original cargo, so create one now.
-				final Cargo loadCargo;
-				if (load.getCargo() == null) {
-					final Cargo c = CargoFactory.eINSTANCE.createCargo();
-					c.setAllowRewiring(true);
-					c.setName(load.getName());
-					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), c));
-					cmd.append(SetCommand.create(domain, c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), load));
-					loadCargo = c;
-					slotToCargoMap.put(load, c);
 				} else {
-					loadCargo = load.getCargo();
+					throw new IllegalStateException("Unsupported slot type");
 				}
-				// "Load port" is the discharge port for DES purchases
-				if (load.isDESPurchase()) {
-					cmd.append(SetCommand.create(domain, load, CargoPackage.eINSTANCE.getSlot_Port(), discharge.getPort()));
-				}
-				// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
-				if (discharge.isFOBSale()) {
-					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, loadCargo));
-				}
-
-				final Cargo dischargeCargo = discharge.getCargo();
-
-				// the cargo "belongs" to the load slot
-				// loadCargo.setDischargeSlot(discharge);
-				setCommands.add(SetCommand.create(domain, loadCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), discharge));
-				setCargoes.add(loadCargo);
-
-				if (dischargeCargo != null) {
-					nullCommands.add(SetCommand.create(domain, dischargeCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
-					nullCargoes.add(dischargeCargo);
-				}
-
-				cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
 			}
 		}
 
-		// Add the null commands first so they do not overwrite the set commands
-		for (final Command c : nullCommands) {
-			cmd.append(c);
+		// Next step: Find the first load in the allocation sequence and use it as the Cargo definition slot.
+		// We may reuse the existing slot, or create a new one. For non-first load slots, remove the cargo definition
+
+		// Maintain a list of used cargo objects.
+		final Set<Cargo> usedCargoes = new HashSet<Cargo>();
+		// Maintain a list of potentially unused cargoes - once this next step is complete, we need to remove the used cargoes to get the real list
+		final Set<Cargo> possibleUnusedCargoes = new HashSet<Cargo>();
+
+		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
+
+			// Keep reference to a des or fob slot if found during scan
+			LoadSlot desPurchaseSlot = null;
+			DischargeSlot fobSaleSlot = null;
+			Cargo loadCargo = null;
+
+			// The list of slots this cargo now uses
+			final List<Slot> cargoSlots = new ArrayList<Slot>(allocation.getSlotAllocations().size());
+
+			// Treat the first load slot as the cargo defining slot
+			boolean firstLoad = true;
+			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+
+				final Slot slot = slotAllocation.getSlot();
+				cargoSlots.add(slot);
+
+				// Slots created in the builder have no container so add it the container now as it is used.
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+
+					if (firstLoad) {
+						// Found our first load slot to define the cargo
+						if (loadSlot.getCargo() == null) {
+							// Slot has no existing cargo, so create a new one
+							final Cargo c = CargoFactory.eINSTANCE.createCargo();
+							c.setAllowRewiring(true);
+							c.setName(slot.getName());
+							cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), c));
+							cmd.append(AddCommand.create(domain, c, CargoPackage.eINSTANCE.getCargo_Slots(), loadSlot));
+							loadCargo = c;
+							slotToCargoMap.put(loadSlot, c);
+						} else {
+							// use existing cargo ref
+							loadCargo = loadSlot.getCargo();
+						}
+
+						firstLoad = false;
+					} else {
+						// Record different cargoes as possibly unused cargoes and remove the reference
+						if (slot.getCargo() != loadCargo) {
+							possibleUnusedCargoes.add(slot.getCargo());
+							unsetCargoSlots.add(slot);
+							// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+						}
+
+					}
+					if (loadSlot.isDESPurchase()) {
+						desPurchaseSlot = loadSlot;
+					}
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					// Record different cargoes as possibly unused cargoes and remove the reference
+					if (dischargeSlot.getCargo() != loadCargo) {
+						possibleUnusedCargoes.add(dischargeSlot.getCargo());
+						unsetCargoSlots.add(slot);
+						// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+
+					}
+					if (dischargeSlot.isFOBSale()) {
+						fobSaleSlot = dischargeSlot;
+					}
+				} else {
+					throw new IllegalStateException("Unsupported slot type");
+				}
+			}
+			// Record the cargo defining cargo as a definitly used cargo
+			usedCargoes.add(loadCargo);
+			// Sanity check the FOB/DES cargoes
+			if (desPurchaseSlot != null || fobSaleSlot != null) {
+				if (allocation.getSlotAllocations().size() > 2) {
+					throw new IllegalStateException("Multiple Load/Discharges for a DES Purchase or FOB Sale is not permitted");
+				}
+			}
+
+			// "Load port" is the discharge port for DES purchases
+			if (desPurchaseSlot != null) {
+				// if (load.isDESPurchase()) {
+				final Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
+				cmd.append(SetCommand.create(domain, desPurchaseSlot, CargoPackage.eINSTANCE.getSlot_Port(), discharge.getPort()));
+			}
+			// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
+			if (fobSaleSlot != null) {
+				// Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
+				cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, loadCargo));
+			}
+
+			// Remove references to slots no longer in the cargo
+			final Set<Slot> oldSlots = new HashSet<Slot>();
+			oldSlots.addAll(loadCargo.getSlots());
+			oldSlots.removeAll(cargoSlots);
+			for (final Slot slot : oldSlots) {
+				unsetCargoSlots.add(slot);
+				// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+			}
+
+			// Add in the slots which are currently not in the cargo
+			cargoSlots.removeAll(loadCargo.getSlots());
+			for (final Slot slot : cargoSlots) {
+				setCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), loadCargo));
+				setCargoSlots.add(slot);
+			}
+			// Finally match the CargoAllocation to the Cargo object
+			cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
 		}
+
+		// Add the unset commands first so they do not overwrite the set commands
+		unsetCargoSlots.removeAll(setCargoSlots);
+		for (Slot slot : unsetCargoSlots) {
+			cmd.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+		}
+		// Then add in the set commands
 		for (final Command c : setCommands) {
 			cmd.append(c);
 		}
 
-		nullCargoes.removeAll(setCargoes);
+		// Remove any used cargoes from the possibly unused list
+		possibleUnusedCargoes.removeAll(usedCargoes);
+		// Make sure there is no null reference4
+		possibleUnusedCargoes.remove(null);
+
 		// For slots which are no longer used, remove the cargo
 		for (final EObject eObj : schedule.getUnusedElements()) {
 			if (eObj instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) eObj;
 				if (loadSlot.getCargo() != null) {
 					final Cargo c = loadSlot.getCargo();
-					nullCargoes.remove(c);
+					possibleUnusedCargoes.remove(c);
 					// Sanity check
 					// Unused non-optional slots now handled by optimiser
 					// if (!loadSlot.isOptional()) {
 					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 					// }
-					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
+					cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
 					cmd.append(DeleteCommand.create(domain, c));
 				}
 			}
@@ -307,19 +405,19 @@ public class LNGSchedulerJobUtils {
 		}
 
 		// TODO: We do not expect to get here!
-		if (!nullCargoes.isEmpty()) {
-			for (final Cargo c : nullCargoes) {
+		if (!possibleUnusedCargoes.isEmpty()) {
+			for (final Cargo c : possibleUnusedCargoes) {
 				// Sanity check
 				// Unused non-optional slots now handled by optimiser
 				// if (!c.getLoadSlot().isOptional()) {
 				// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 				// }
-				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
+				cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
 				cmd.append(DeleteCommand.create(domain, c));
 			}
 		}
 
-		for (final ElementAssignment ai : inputModel.getElementAssignments()) {
+		for (final ElementAssignment ai : assignmentModel.getElementAssignments()) {
 			if (ai.isLocked()) {
 				previouslyLocked.add(ai.getAssignedObject());
 			}
@@ -334,7 +432,7 @@ public class LNGSchedulerJobUtils {
 				thisIndex = spotIndex++;
 			}
 
-			final AVesselSet assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
+			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
 				UUIDObject object = null;
@@ -354,7 +452,7 @@ public class LNGSchedulerJobUtils {
 				}
 
 				if (object != null) {
-					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
+					final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
 					ea.setAssignedObject(object);
 					ea.setAssignment(assignment);
 					ea.setSequence(index++);
@@ -368,17 +466,17 @@ public class LNGSchedulerJobUtils {
 
 		// copy through assignments which were not present in the schedule
 		// TODO this will probably need some thought around optional elements
-		for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+		for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 			if (ea.getAssignedObject() != null && !reassigned.contains(ea.getAssignedObject())) {
 				newElementAssignments.add(ea);
 			}
 		}
 
-		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
+		cmd.append(SetCommand.create(domain, assignmentModel, AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), newElementAssignments));
 
 		if (postExportProcessors != null) {
 			for (final IPostExportProcessor processor : postExportProcessors) {
-				processor.postProcess(domain, scenario, schedule, inputModel, cmd);
+				processor.postProcess(domain, scenario, schedule, assignmentModel, cmd);
 			}
 		}
 		return cmd;

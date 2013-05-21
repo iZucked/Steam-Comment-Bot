@@ -20,17 +20,17 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
-import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
 /**
@@ -40,12 +40,10 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  * @since 2.0
  * 
  */
-
 public class SimpleContractTransformer implements IContractTransformer {
-	private ModelEntityMap map;
 
-	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceParameters(), CommercialPackage.eINSTANCE.getIndexPriceParameters(),
-			CommercialPackage.eINSTANCE.getExpressionPriceParameters(), CommercialPackage.eINSTANCE.getSalesContract(), CommercialPackage.eINSTANCE.getPurchaseContract());
+	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceParameters(), CommercialPackage.eINSTANCE.getExpressionPriceParameters(),
+			CommercialPackage.eINSTANCE.getSalesContract(), CommercialPackage.eINSTANCE.getPurchaseContract());
 
 	@Inject
 	private SeriesParser indices;
@@ -54,41 +52,19 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public void startTransforming(final MMXRootObject rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
-		this.map = map;
+	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 	}
 
 	@Override
 	public void finishTransforming() {
-		this.map = null;
 	}
 
 	private SimpleContract instantiate(final LNGPriceCalculatorParameters priceInfo) {
-		// if (c instanceof FixedPriceContract) {
-		// FixedPriceContract contract = (FixedPriceContract) c;
-		// return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getPricePerMMBTU()));
-		// } else if (c instanceof IndexPriceContract) {
-		// IndexPriceContract contract = (IndexPriceContract) c;
-		// return createMarketPriceContract(map.getOptimiserObject(contract.getIndex(), ICurve.class), OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getConstant()),
-		// OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getMultiplier()));
-		// } else if (c instanceof PriceExpressionContract) {
-		// PriceExpressionContract contract = (PriceExpressionContract) c;
-		// return createPriceExpressionContract(contract.getPriceExpression());
-		// }
-
-		// ALNGPriceCalculatorParameters priceInfo = c.getPriceInfo();
 		if (priceInfo instanceof FixedPriceParameters) {
-			FixedPriceParameters fixedPriceInfo = (FixedPriceParameters) priceInfo;
+			final FixedPriceParameters fixedPriceInfo = (FixedPriceParameters) priceInfo;
 			return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(fixedPriceInfo.getPricePerMMBTU()));
-		}
-		if (priceInfo instanceof IndexPriceParameters) {
-			IndexPriceParameters indexPriceInfo = (IndexPriceParameters) priceInfo;
-			return createMarketPriceContract(map.getOptimiserObject(indexPriceInfo.getIndex(), ICurve.class), OptimiserUnitConvertor.convertToInternalConversionFactor(indexPriceInfo.getConstant()),
-					OptimiserUnitConvertor.convertToInternalConversionFactor(indexPriceInfo.getMultiplier()));
-
-		}
-		if (priceInfo instanceof ExpressionPriceParameters) {
-			ExpressionPriceParameters expressionPriceInfo = (ExpressionPriceParameters) priceInfo;
+		} else if (priceInfo instanceof ExpressionPriceParameters) {
+			final ExpressionPriceParameters expressionPriceInfo = (ExpressionPriceParameters) priceInfo;
 			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression());
 
 		}
@@ -125,12 +101,8 @@ public class SimpleContractTransformer implements IContractTransformer {
 		return handledClasses;
 	}
 
-	com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract createFixedPriceContract(final int pricePerMMBTU) {
-		return new com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract(pricePerMMBTU);
-	}
-
-	MarketPriceContract createMarketPriceContract(final ICurve index, final int offset, final int multiplier) {
-		return new MarketPriceContract(index, offset, multiplier);
+	private FixedPriceContract createFixedPriceContract(final int pricePerMMBTU) {
+		return new FixedPriceContract(pricePerMMBTU);
 	}
 
 	/**
@@ -140,9 +112,9 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 *            A string containing a valid price expression interpretable by a {@link SeriesParser}
 	 * @return An internal representation of a price expression contract for use by the optimiser
 	 */
-	com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract createPriceExpressionContract(String priceExpression) {
+	private PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
 		final ICurve curve = generateExpressionCurve(priceExpression);
-		return new com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract(curve);
+		return new PriceExpressionContract(curve);
 	}
 
 	private StepwiseIntegerCurve generateExpressionCurve(final String priceExpression) {

@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 
@@ -22,9 +22,9 @@ public interface ITransformerExtension {
 	 * @param scenario
 	 * @param map
 	 * @param builder
-	 * @since 3.0
+	 * @since 4.0
 	 */
-	public void startTransforming(MMXRootObject rootObject, ModelEntityMap map, ISchedulerBuilder builder);
+	public void startTransforming(LNGScenarioModel rootObject, ModelEntityMap map, ISchedulerBuilder builder);
 
 	/**
 	 * This method will be called just before the transformation is completed and the builder's {@link ISchedulerBuilder#getOptimisationData()} method is called.

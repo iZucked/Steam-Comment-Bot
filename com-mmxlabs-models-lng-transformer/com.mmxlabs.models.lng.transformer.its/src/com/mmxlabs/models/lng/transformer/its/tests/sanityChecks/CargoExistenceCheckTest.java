@@ -12,11 +12,11 @@ import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?253">BugzID: 253 Check all cargoes in input exist in output (unless spot/optional)</a><br>
@@ -66,7 +66,7 @@ public class CargoExistenceCheckTest {
 		// create some cargoes.
 		inputCargoes.addAll(Arrays.asList(SanityCheckTools.addCargoes(csc, ports, loadPrice, dischargePrice, cvValue)));
 
-		final MMXRootObject scenario = csc.buildScenario();
+		final LNGScenarioModel scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);

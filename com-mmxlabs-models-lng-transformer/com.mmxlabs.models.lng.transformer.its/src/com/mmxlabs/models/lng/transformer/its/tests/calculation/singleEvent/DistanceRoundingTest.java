@@ -8,10 +8,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * 
@@ -33,7 +34,7 @@ public class DistanceRoundingTest {
 		final int travelTime = 1;
 		final int speed = 10;
 
-		final CargoAllocation a = test(testName, distanceBetweenPorts, travelTime, speed);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(test(testName, distanceBetweenPorts, travelTime, speed));
 
 		// The expected duration, if an int, will be rounded to zero.
 		final int expectedDuration = distanceBetweenPorts / speed;
@@ -95,7 +96,7 @@ public class DistanceRoundingTest {
 		final int pilotLightRate = 0;
 		final int minHeelVolume = 0;
 
-		final MMXRootObject scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
+		final LNGScenarioModel scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
 				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
 

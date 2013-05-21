@@ -36,12 +36,13 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -52,6 +53,8 @@ import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -74,16 +77,18 @@ public class CustomScenarioCreator {
 	private final CargoModel cargoModel;
 	private final PortModel portModel;
 	private final FleetModel fleetModel;
+	private final ScenarioFleetModel scenarioFleetModel;
 	private final PricingModel pricingModel;
-	private final OptimiserModel optimiserModel;
+	private final ParametersModel parametersModel;
 	private final SpotMarketsModel spotMarketsModel;
+	private final LNGPortfolioModel portfolioModel;
 
 	final SalesContract sc;
 	final PurchaseContract pc;
 	final LegalEntity contractEntity;
 	final LegalEntity shippingEntity;
 
-	MMXRootObject scenario;
+	LNGScenarioModel scenario;
 
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
@@ -93,13 +98,16 @@ public class CustomScenarioCreator {
 	public CustomScenarioCreator(final float dischargePrice) {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 
-		commercialModel = scenario.getSubModel(CommercialModel.class);
-		cargoModel = scenario.getSubModel(CargoModel.class);
-		portModel = scenario.getSubModel(PortModel.class);
-		fleetModel = scenario.getSubModel(FleetModel.class);
-		pricingModel = scenario.getSubModel(PricingModel.class);
-		optimiserModel = scenario.getSubModel(OptimiserModel.class);
-		spotMarketsModel = scenario.getSubModel(SpotMarketsModel.class);
+		portModel = scenario.getPortModel();
+		fleetModel = scenario.getFleetModel();
+		pricingModel = scenario.getPricingModel();
+		commercialModel = scenario.getCommercialModel();
+		spotMarketsModel = scenario.getSpotMarketsModel();
+		parametersModel = scenario.getParametersModel();
+		
+		portfolioModel = scenario.getPortfolioModel();
+		cargoModel = portfolioModel.getCargoModel();
+		scenarioFleetModel = portfolioModel.getScenarioFleetModel();
 
 		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();
 		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
@@ -113,7 +121,7 @@ public class CustomScenarioCreator {
 		sc = addSalesContract("Sales Contract", dischargePrice);
 		pc = addPurchaseContract("Purchase Contract");
 
-		Route r = PortFactory.eINSTANCE.createRoute();
+		final Route r = PortFactory.eINSTANCE.createRoute();
 		r.setName(ScenarioTools.defaultRouteName);
 		portModel.getRoutes().add(r);
 
@@ -160,11 +168,10 @@ public class CustomScenarioCreator {
 			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
 			final boolean isTimeChartered) {
 
-		FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
-		final int cooldownTime = 0;
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		// final int minHeelVolume = 0;
@@ -176,7 +183,7 @@ public class CustomScenarioCreator {
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
 		fleetModel.getBaseFuels().add(baseFuel);
 
-		BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
+		final BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
 		bfc.setFuel(baseFuel);
 		bfc.setPrice(baseFuelUnitPrice);
 		fleetCostModel.getBaseFuelPrices().add(bfc);
@@ -196,13 +203,12 @@ public class CustomScenarioCreator {
 		vc.setMaxSpeed(maxSpeed);
 		vc.setCapacity(capacity);
 		vc.setPilotLightRate(pilotLightRate);
-		vc.setCoolingTime(cooldownTime);
 		vc.setWarmingTime(warmupTime);
 		vc.setCoolingVolume(cooldownVolume);
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
+		final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
 		charterCostModel.setSpotCharterCount(spotCharterCount);
 		// Costs
 		charterCostModel.getVesselClasses().add(vc);
@@ -248,18 +254,17 @@ public class CustomScenarioCreator {
 			vessel.setVesselClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
 
-			if (isTimeChartered) {
-				vessel.setTimeCharterRate(10);
-			}
 
-			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
-
-			vessel.setAvailability(availability);
-
-			HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
-			vessel.setStartHeel(heelOptions);
+			final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 
 			fleetModel.getVessels().add(vessel);
+			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
+			if (isTimeChartered) {
+				availability.setTimeCharterRate(10);
+			}
+			availability.setVessel(vessel);
+			availability.setStartHeel(heelOptions);
+			scenarioFleetModel.getVesselAvailabilities().add(availability);
 			created[i] = vessel;
 		}
 
@@ -334,7 +339,7 @@ public class CustomScenarioCreator {
 		}
 
 		// Assuming we've created the default rout
-		Route r = portModel.getRoutes().get(0);
+		final Route r = portModel.getRoutes().get(0);
 
 		for (final int distance : AtoBDistances) {
 			final RouteLine distanceLine = PortFactory.eINSTANCE.createRouteLine();
@@ -377,8 +382,8 @@ public class CustomScenarioCreator {
 		final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
 		final DischargeSlot dis = CargoFactory.eINSTANCE.createDischargeSlot();
 
-		cargo.setLoadSlot(load);
-		cargo.setDischargeSlot(dis);
+		cargo.getSlots().add(load);
+		cargo.getSlots().add(dis);
 
 		load.setPort(loadPort);
 		dis.setPort(dischargePort);
@@ -445,7 +450,7 @@ public class CustomScenarioCreator {
 		dryDock.setDurationInDays(durationDays);
 		dryDock.setPort(startPort);
 		// add to scenario's fleet model
-		fleetModel.getVesselEvents().add(dryDock);
+		scenarioFleetModel.getVesselEvents().add(dryDock);
 
 		// define the start and end time
 		dryDock.setStartAfter(start);
@@ -481,7 +486,7 @@ public class CustomScenarioCreator {
 		charterOut.setHireRate(dailyCharterOutPrice);
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
-		fleetModel.getVesselEvents().add(charterOut);
+		scenarioFleetModel.getVesselEvents().add(charterOut);
 
 		return charterOut;
 	}
@@ -490,8 +495,9 @@ public class CustomScenarioCreator {
 	 * Finish making the scenario by adding the canals to the vessel classes.
 	 * 
 	 * @return The finished scenario.
+	 * @since 3.0
 	 */
-	public MMXRootObject buildScenario() {
+	public LNGScenarioModel buildScenario() {
 
 		// Add every canal to every vessel class.
 		// for (final VesselClassCost canalCost : this.canalCostsForAllVesselClasses) {
@@ -541,13 +547,14 @@ public class CustomScenarioCreator {
 	 * @param canalTransitTime
 	 *            Transit time in hours
 	 * @return
+	 * @since 3.0
 	 */
-	public static void createCanalAndCost(MMXRootObject scenario, final String canalName, Port A, Port B, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
+	public static void createCanalAndCost(final LNGScenarioModel scenario, final String canalName, final Port A, final Port B, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
 			final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
 		canal.setCanal(true);
-		scenario.getSubModel(PortModel.class).getRoutes().add(canal);
+		scenario.getPortModel().getRoutes().add(canal);
 		canal.setName(canalName);
 		// add distance lines, as for the main distance model:
 		final RouteLine atob = PortFactory.eINSTANCE.createRouteLine();
@@ -569,9 +576,9 @@ public class CustomScenarioCreator {
 		canalCost.setLadenCost(canalLadenCost); // cost in dollars for a laden vessel
 		canalCost.setBallastCost(canalUnladenCost); // cost in dollars for a ballast vessel
 
-		FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
+		final FleetModel fleetModel = scenario.getFleetModel();
 
-		VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+		final VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 
 		params.setRoute(canal);
 		params.setLadenConsumptionRate(canalTransitFuelDays);
@@ -580,11 +587,11 @@ public class CustomScenarioCreator {
 		params.setBallastNBORate(canalNBORateDays);
 		params.setExtraTransitTime(canalTransitTime);
 
-		for (VesselClass vc : fleetModel.getVesselClasses()) {
+		for (final VesselClass vc : fleetModel.getVesselClasses()) {
 			vc.getRouteParameters().add(EcoreUtil.copy(params));
 			final RouteCost rc2 = EcoreUtil.copy(canalCost);
 			rc2.setVesselClass(vc);
-			scenario.getSubModel(PricingModel.class).getRouteCosts().add(rc2);
+			scenario.getPricingModel().getRouteCosts().add(rc2);
 		}
 	}
 
@@ -658,9 +665,9 @@ public class CustomScenarioCreator {
 	 * @param dischargePrice
 	 * @return
 	 */
-	public SalesContract addSalesContract(String name, float dischargePrice) {
-		SalesContract result = CommercialFactory.eINSTANCE.createSalesContract();
-		FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+	public SalesContract addSalesContract(final String name, final float dischargePrice) {
+		final SalesContract result = CommercialFactory.eINSTANCE.createSalesContract();
+		final FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
 		result.setName(name);
 
 		result.setEntity(contractEntity);
@@ -681,9 +688,9 @@ public class CustomScenarioCreator {
 	 * @return
 	 * @since 3.0
 	 */
-	public PurchaseContract addPurchaseContract(String name) {
-		PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
-		FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+	public PurchaseContract addPurchaseContract(final String name) {
+		final PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
 
 		result.setName(name);
 

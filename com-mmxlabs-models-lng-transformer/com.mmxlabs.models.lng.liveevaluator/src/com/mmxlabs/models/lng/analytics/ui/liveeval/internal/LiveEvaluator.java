@@ -15,9 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -139,8 +139,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 										if (instance.getValidationStatusCode() == IStatus.ERROR) {
 											return null;
 										}
-										final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
-										final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
+										final LNGScenarioModel root = (LNGScenarioModel) instance.getScenarioService().load(instance);
+										final ScheduleModel subModel = root.getPortfolioModel().getScheduleModel();
 										if (!subModel.isDirty()) {
 											return null;
 										}
@@ -181,12 +181,10 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		this.enabled = enabled;
 		if (enabled) {
 			// We we re-enable check the dirty status and queue an evaluation if it is dirty
-			final MMXRootObject root = (MMXRootObject) instance.getInstance();
+			final LNGScenarioModel root = (LNGScenarioModel) instance.getInstance();
 			if (root != null) {
-				final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
+				final ScheduleModel subModel = root.getPortfolioModel().getScheduleModel();
 				if (subModel.isDirty()) {
-					log.debug("Queue");
-
 					queueEvaluate();
 				}
 			}

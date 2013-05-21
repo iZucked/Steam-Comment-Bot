@@ -14,11 +14,11 @@ import org.junit.Test;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?255">Case 255: Check constraints have not be violated</a><br>
@@ -71,7 +71,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 		Assert.assertTrue("Allowed vessels added to cargo successfully", csc.addAllowedVesselsOnCargo(constrainedCargo, vesselsClassFour));
 
 		// build and run the scenario.
-		final MMXRootObject scenario = csc.buildScenario();
+		final LNGScenarioModel scenario = csc.buildScenario();
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// get the cargo that was constrained out of the results.
@@ -82,7 +82,7 @@ public class CargoAllowedVesselConstraintCheckTest {
 			if (c.equals(constrainedCargo)) {
 				// found the constrained cargo
 				// now get the name of the vessel and see it it matches the one class four vessel.
-				final Vessel av = ca.getSequence().getVessel();
+				final Vessel av = ca.getSequence().getVesselAvailability().getVessel();
 
 				final boolean namesMatch = av.getName().equals(vesselsClassFour.get(0).getName());
 				Assert.assertTrue("Only vessel class four used", namesMatch);
@@ -135,13 +135,13 @@ public class CargoAllowedVesselConstraintCheckTest {
 		}
 
 		// build and run the scenario
-		final MMXRootObject scenario = csc.buildScenario();
+		final LNGScenarioModel scenario = csc.buildScenario();
 		final Schedule result = ScenarioTools.evaluate(scenario);
 
 		// check that the vessel that carries every cargo matches the name of one in the allowed vessels list.
 		for (final CargoAllocation ca : result.getCargoAllocations()) {
 
-			final Vessel av = ca.getSequence().getVessel();
+			final Vessel av = ca.getSequence().getVesselAvailability().getVessel();
 
 			boolean inAllowedVessels = false;
 			for (final Vessel v : allowedVessels) {

@@ -44,9 +44,6 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.transformer.TransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -67,6 +64,7 @@ import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -177,16 +175,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			final List<Port> loadPorts = new ArrayList<Port>();
 			final List<Port> dischargePorts = new ArrayList<Port>();
 
-			for (final APort port : SetUtils.getPorts(spec.getFromPorts())) {
-				if (port instanceof Port) {
-					loadPorts.add((Port) port);
-				}
+			for (final Port port : SetUtils.getObjects(spec.getFromPorts())) {
+				loadPorts.add(port);
 			}
 
-			for (final APort port : SetUtils.getPorts(spec.getToPorts())) {
-				if (port instanceof Port) {
-					dischargePorts.add((Port) port);
-				}
+			for (final Port port : SetUtils.getObjects(spec.getToPorts())) {
+				dischargePorts.add(port);
 			}
 
 			if (loadPorts.isEmpty()) {
@@ -291,7 +285,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 					int counter = 0;
 					for (final int minTimeLD : minTimesLD) {
-						final int ladenAllowance = (int) Math.round((double) minTimeLD * spec.getLadenTimeAllowance());
+						final int ladenAllowance = (int) Math.round(minTimeLD * spec.getLadenTimeAllowance());
 						for (final int minTimeDL : minTimesDL) {
 							// create round trip cargo
 							final String id = (counter++) + "-" + loadPort.getName() + "-to-" + dischargePort.getName();
@@ -300,7 +294,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 									OptimiserUnitConvertor.convertToInternalConversionFactor(spec.isSetCvValue() ? spec.getCvValue() : loadPort.getCvValue()), loadPort.getLoadDuration(), false,
 									false, false);
 
-							final int ballastAllowance = (int) Math.round((double) minTimeDL * spec.getBallastTimeAllowance());
+							final int ballastAllowance = (int) Math.round(minTimeDL * spec.getBallastTimeAllowance());
 
 							final int timeAtDischarge = loadPort.getLoadDuration() + minTimeLD + ladenAllowance;
 							final ITimeWindow dischargeWindow = builder.createTimeWindow(timeAtDischarge, timeAtDischarge);
@@ -312,7 +306,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 									OptimiserUnitConvertor.convertToInternalVolume(spec.getMinimumDischarge()), OptimiserUnitConvertor.convertToInternalVolume(spec.getMaximumDischarge()), minCv,
 									maxCv, dischargeCalculator, dischargePort.getDischargeDuration(), false);
 
-							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
+							final ICargo cargo = builder.createCargo(false, loadSlot, dischargeSlot);
 							cargoes.add(cargo);
 
 							// create vessel
@@ -345,14 +339,15 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
 					// set up sequence and arrival times
 					sequence.add(startEndProvider.getStartElement(resource));
-					sequence.add(slotProvider.getElement(cargo.getLoadOption()));
-					sequence.add(slotProvider.getElement(cargo.getDischargeOption()));
-					sequence.add(startEndProvider.getEndElement(resource));
-
+					int tIndex = 0;
 					final int[] times = arrivalTimes[index++];
-					times[0] = 0;
-					times[1] = cargo.getDischargeOption().getTimeWindow().getStart();
-					times[2] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
+					times[tIndex++] = 0;
+					for (IPortSlot slot : cargo.getPortSlots()) {
+						sequence.add(slotProvider.getElement(slot));
+						times[tIndex++] = slot.getTimeWindow().getStart();
+					}
+					sequence.add(startEndProvider.getEndElement(resource));
+					times[tIndex++] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
 				}
 				/*
 				 * Create a fitness core and evaluate+annotate the sequences
@@ -477,8 +472,11 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					line.setHireCost((spec.getNotionalDayRate() * totalDuration) / 24);
 					line.setPortCost(totalPortCost);
 
-					line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getLoadVolumeInM3()));
-					line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolumeInM3()) - spec.getRetainHeel());
+					assert (allocation.getSlots().size() == 2);
+					IPortSlot loadSlot = allocation.getSlots().get(0);
+					IPortSlot dischargeSlot = allocation.getSlots().get(1);
+					line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(loadSlot)));
+					line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(dischargeSlot)) - spec.getRetainHeel());
 
 					final double cv = spec.isSetCvValue() ? spec.getCvValue() : line.getFrom().getCvValue();
 
@@ -605,7 +603,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 		result.addExtraData("location", "Location", port.getName(), ExtraDataFormatType.AUTO);
 		int total = 0;
 		for (final PortCost cost : pricing.getPortCosts()) {
-			if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
+			if (SetUtils.getObjects(cost.getPorts()).contains(port)) {
 				// this is the cost for the given port
 				total += cost.getPortCost(spec.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
 				result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);

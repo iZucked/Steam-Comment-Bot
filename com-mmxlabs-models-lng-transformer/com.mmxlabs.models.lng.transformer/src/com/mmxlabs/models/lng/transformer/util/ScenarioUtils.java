@@ -6,16 +6,15 @@ package com.mmxlabs.models.lng.transformer.util;
 
 import org.eclipse.emf.common.util.EList;
 
-import com.mmxlabs.models.lng.optimiser.AnnealingSettings;
-import com.mmxlabs.models.lng.optimiser.Constraint;
-import com.mmxlabs.models.lng.optimiser.Objective;
-import com.mmxlabs.models.lng.optimiser.OptimisationRange;
-import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
-import com.mmxlabs.models.lng.optimiser.OptimiserModel;
-import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
-import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.AnnealingSettings;
+import com.mmxlabs.models.lng.parameters.Constraint;
+import com.mmxlabs.models.lng.parameters.Objective;
+import com.mmxlabs.models.lng.parameters.OptimisationRange;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
@@ -44,22 +43,23 @@ public class ScenarioUtils {
 	 * TODO check these are reasonable settings (num. iters etc)
 	 * 
 	 * @param scenario
+	 * @since 4.0
 	 */
-	public static void addDefaultSettings(MMXRootObject scenario) {
-		OptimiserModel om = scenario.getSubModel(OptimiserModel.class);
+	public static void addDefaultSettings(LNGScenarioModel scenario) {
+		ParametersModel om = scenario.getParametersModel();
 		OptimiserSettings settings = createDefaultSettings();
 		om.getSettings().add(settings);
 		om.setActiveSetting(settings);
 	}
 
-	private static Constraint createConstraint(OptimiserFactory of, String name, boolean enabled) {
-		Constraint c = of.createConstraint();
+	private static Constraint createConstraint(ParametersFactory parametersFactory, String name, boolean enabled) {
+		Constraint c = parametersFactory.createConstraint();
 		c.setName(name);
 		c.setEnabled(enabled);
 		return c;
 	}
 
-	private static Objective createObjective(OptimiserFactory of, String name, double weight) {
+	private static Objective createObjective(ParametersFactory of, String name, double weight) {
 		Objective o = of.createObjective();
 		o.setName(name);
 		o.setWeight(weight);
@@ -69,28 +69,29 @@ public class ScenarioUtils {
 
 	/**
 	 * @return
+	 * @since 4.0
 	 */
 	public static OptimiserSettings createDefaultSettings() {
-		final OptimiserFactory of = OptimiserPackage.eINSTANCE.getOptimiserFactory();
+		final ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;
 		
 		
-		OptimiserSettings settings = of.createOptimiserSettings();
+		OptimiserSettings settings = parametersFactory.createOptimiserSettings();
 
 		settings.setName("Default LSO Settings");
 
 		// create constraints
 		{
 			final EList<Constraint> constraints = settings.getConstraints();
-			constraints.add(createConstraint(of, ResourceAllocationConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, PortTypeConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, TravelTimeConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, PortExclusionConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, VirtualVesselConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, TimeSortConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, SlotGroupCountConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, RestrictedElementsConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(of, ContractCvConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, ResourceAllocationConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, OrderedSequenceElementsConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, PortTypeConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, TravelTimeConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, PortExclusionConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, VirtualVesselConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, TimeSortConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, SlotGroupCountConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, RestrictedElementsConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, ContractCvConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives
@@ -105,14 +106,14 @@ public class ScenarioUtils {
 //
 //			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, 1));
 
-			objectives.add(createObjective(of,"cargo-scheduler-group-profit", 1));
+			objectives.add(createObjective(parametersFactory,"cargo-scheduler-group-profit", 1));
 			
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1000000));
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 1000000));
-			objectives.add(createObjective(of, NonOptionalSlotFitnessCoreFactory.NAME, 3000000));
+			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1000000));
+			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 1000000));
+			objectives.add(createObjective(parametersFactory, NonOptionalSlotFitnessCoreFactory.NAME, 3000000));
 		}
 
-		final AnnealingSettings annealingSettings = of.createAnnealingSettings();
+		final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();
 //		annealingSettings.setIterations(200000);
 		annealingSettings.setIterations(80000);
 		annealingSettings.setCooling(0.85);
@@ -121,7 +122,7 @@ public class ScenarioUtils {
 		
 		settings.setAnnealingSettings(annealingSettings);
 		
-		final OptimisationRange range = of.createOptimisationRange();
+		final OptimisationRange range = parametersFactory.createOptimisationRange();
 		settings.setRange(range);
 		return settings;
 	}

@@ -15,9 +15,9 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -58,7 +58,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		final ScenarioLock lock = scenarioInstance.getLock(jobDescriptor.getLockKey());
 		lock.awaitClaim();
 		try {
-			final MMXRootObject scenario = (MMXRootObject) scenarioInstance.getInstance();
+			final LNGScenarioModel scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
 			// Create the transformer and object reference to the data objects
@@ -127,8 +127,17 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	@Override
 	public void dispose() {
+
+		if (jobDescriptor != null) {
+			// Release the lock should it still be claimed at this point
+			final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
+			final ScenarioLock lock = scenarioInstance.getLock(jobDescriptor.getLockKey());
+			lock.release();
+		}
+
 		jobDescriptor = null;
 		this.currentState = EJobState.UNKNOWN;
+
 	}
 
 	private synchronized void setJobState(final EJobState newState) {

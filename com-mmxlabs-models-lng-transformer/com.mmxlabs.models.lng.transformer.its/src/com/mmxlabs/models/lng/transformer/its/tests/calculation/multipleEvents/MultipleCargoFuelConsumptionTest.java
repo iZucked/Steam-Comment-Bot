@@ -15,6 +15,7 @@ import org.junit.Test;
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -22,8 +23,8 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?259">Case 259: Scenario with several cargoes</a>
@@ -79,7 +80,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final Date dryDockStart = new Date(cargoBStart.getTime() + (2 * legDuration));
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
-		final MMXRootObject scenario = csc.buildScenario();
+		final LNGScenarioModel scenario = csc.buildScenario();
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
@@ -95,7 +96,8 @@ public class MultipleCargoFuelConsumptionTest {
 		final int expectedIdleNBO = 10;
 
 		// add assertions on results
-		for (final CargoAllocation ca : result.getCargoAllocations()) {
+		for (final CargoAllocation cargoAllocation : result.getCargoAllocations()) {
+			final SimpleCargoAllocation ca = new SimpleCargoAllocation(cargoAllocation);
 			// expect only NBO to be used always
 
 			// check the laden journey
@@ -242,7 +244,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final Date dryDockStart = new Date(cargoBStart.getTime() + (2 * legDuration));
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
-		final MMXRootObject scenario = csc.buildScenario();
+		final LNGScenarioModel scenario = csc.buildScenario();
 		CustomScenarioCreator
 				.createCanalAndCost(scenario, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0, 0, 0);
 
@@ -260,10 +262,10 @@ public class MultipleCargoFuelConsumptionTest {
 		final int expectedIdleNBO = 10;
 
 		// add assertions on results
-		for (final CargoAllocation ca : result.getCargoAllocations()) {
-
-			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRoute());
-			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRoute());
+		for (final CargoAllocation cargoAllocation : result.getCargoAllocations()) {
+			final SimpleCargoAllocation ca = new SimpleCargoAllocation(cargoAllocation);
+			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRoute().getName());
+			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRoute().getName());
 
 			// expect only NBO to be used always
 

@@ -7,13 +7,14 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?187">Case 187: Min travel heel is used</a>
@@ -39,7 +40,7 @@ public class MinTravelHeelTest {
 		final String testName = "Test zero min heel";
 		final int minHeelVolume = 0;
 
-		final CargoAllocation a = testMinHeel(testName, minHeelVolume);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testMinHeel(testName, minHeelVolume));
 
 		// ballast travel is cheaper on NBO
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
@@ -62,7 +63,7 @@ public class MinTravelHeelTest {
 		// travel uses 1000 MT of LNG, so give 90 MT extra for idle (9 MT/hour * 10 hours = 90 MT)
 		final int minHeelVolume = 100;
 
-		final CargoAllocation a = testMinHeel(testName, minHeelVolume);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testMinHeel(testName, minHeelVolume));
 
 		// ballast travel is cheaper on NBO
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
@@ -132,7 +133,7 @@ public class MinTravelHeelTest {
 		final int ladenNBORate = TimeUnitConvert.convertPerHourToPerDay(NBOTravelRatePerHour);
 		final int pilotLightRate = 0;
 
-		final MMXRootObject scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
+		final LNGScenarioModel scenario = ScenarioTools.createScenario(distanceBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed, capacity,
 				ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed, ladenMinConsumption,
 				ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, true, pilotLightRate, minHeelVolume);
 

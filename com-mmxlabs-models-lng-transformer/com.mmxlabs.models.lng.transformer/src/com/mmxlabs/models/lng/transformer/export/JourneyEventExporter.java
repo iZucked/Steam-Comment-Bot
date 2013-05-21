@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.export;
 import java.util.Map;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -50,7 +51,7 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 		journey.setDestination(eToPort);
 
 		journey.setDistance(event.getDistance());
-		journey.setRoute(event.getRoute());
+		journey.setRoute(entities.getModelObject(event.getRoute(), Route.class));
 		journey.setToll(OptimiserUnitConvertor.convertToExternalFixedCost(event.getRouteCost()));
 
 		journey.setLaden(VesselState.Laden.equals(event.getVesselState()));
