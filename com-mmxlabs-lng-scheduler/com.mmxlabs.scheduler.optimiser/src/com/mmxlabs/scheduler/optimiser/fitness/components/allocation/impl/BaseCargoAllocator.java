@@ -21,7 +21,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
@@ -68,33 +67,16 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	 * Contains the capacity of the vessel carrying the cargo, by cargo index.
 	 */
 	final ArrayList<Long> vesselCapacityInM3 = new ArrayList<Long>();
-	/**
-	 * Contains the unit price (difference between sales price and purchase price) for each cargo, by cargo index.
-	 */
-	// final ArrayList<Integer> unitPricesPerM3 = new ArrayList<Integer>();
-
-	/**
-	 * The load slot for each cargo
-	 */
-	// final ArrayList<ILoadOption> loadSlots = new ArrayList<ILoadOption>();
-	/**
-	 * The discharge slot for each cargo.
-	 */
-	// final ArrayList<IDischargeOption> dischargeSlots = new ArrayList<IDischargeOption>();
 
 	final ArrayList<IPortSlot[]> listedSlots = new ArrayList<IPortSlot[]>();
 
 	final ArrayList<VoyagePlan> voyagePlans = new ArrayList<VoyagePlan>();
 
 	final ArrayList<int[]> slotPricesPerM3 = new ArrayList<int[]>();
-	// final ArrayList<Integer> loadPricesPerM3 = new ArrayList<Integer>();
-	// final ArrayList<Integer> dischargePricesPerM3 = new ArrayList<Integer>();
 
 	int cargoCount;
 
 	private long[] allocation;
-
-	// private long profit;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -134,16 +116,11 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 		variableTable.clear();
 		slotTimes.clear();
-		// unitPricesPerM3.clear();
-		// loadSlots.clear();
-		// dischargeSlots.clear();
 		listedSlots.clear();
 		vesselCapacityInM3.clear();
 		forcedLoadVolumeInM3.clear();
 		remainingHeelVolumeInM3.clear();
 
-		// loadPricesPerM3.clear();
-		// dischargePricesPerM3.clear();
 		slotPricesPerM3.clear();
 		voyagePlans.clear();
 	}
@@ -291,8 +268,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 					assert plan != null;
 
 					{
-						final IVesselClass vesselClass = vessel.getVesselClass();
-						// final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
 						final long vesselCapacityInM3 = vessel.getCargoCapacity();
 						loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
 						dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
@@ -328,7 +303,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 					Integer[] times = { loadTime, dischargeTime };
 
 					addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
-					// addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
 					loadDetails = null;
 					dischargeDetails = null;
 
@@ -387,20 +361,13 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		annotation.getSlots().clear();
 		annotation.getSlots().add(loadSlot);
 		annotation.getSlots().add(dischargeSlot);
-		// annotation.setLoadSlot(loadSlot);
-		// annotation.setDischargeSlot(dischargeSlot);
 		annotation.setFuelVolumeInM3(forcedLoadVolumeInM3);
 
 		// TODO recompute load price here; this is not necessarily right
 		annotation.setSlotPricePerM3(loadSlot, loadPricePerM3);
 		annotation.setSlotPricePerM3(dischargeSlot, dischargePricePerM3);
-		// annotation.setLoadPricePerM3(loadPricePerM3);
-		// annotation.setDischargePricePerM3(dischargePricePerM3);
 		annotation.setSlotTime(loadSlot, loadTime);
 		annotation.setSlotTime(dischargeSlot, dischargeTime);
-		// annotation.setLoadTime(loadTime);
-		// annotation.setDischargeTime(dischargeTime);
-		// annotation.setDischargeVolumeInM3(maximumDischargeVolumeInM3);
 		annotation.setSlotVolumeInM3(dischargeSlot, maximumDischargeVolumeInM3);
 
 		return annotation;
@@ -443,8 +410,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 		final IPortSlot[] slots = { loadSlot, dischargeSlot };
 		listedSlots.add(slots);
-		// loadSlots.add(loadSlot);
-		// dischargeSlots.add(dischargeSlot);
 
 		// store the current cargo index (variable index in the LP) so that we
 		// can reverse-lookup from slots to LP variables
@@ -491,10 +456,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
 		slotPricesPerM3.add(prices);
-		// loadPricesPerM3.add(loadPricePerM3);
-		// dischargePricesPerM3.add(dischargePricePerM3);
-
-		// this.unitPricesPerM3.add(dischargePricePerM3 - loadPricePerM3);
 
 		cargoCount++;
 	}
@@ -534,8 +495,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 		final IPortSlot[] slots = { loadSlot, dischargeSlot };
 		listedSlots.add(slots);
-		// loadSlots.add(loadSlot);
-		// dischargeSlots.add(dischargeSlot);
 
 		// store the current cargo index (variable index in the LP) so that we
 		// can reverse-lookup from slots to LP variables
@@ -566,10 +525,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
 		slotPricesPerM3.add(prices);
-		// loadPricesPerM3.add(loadPricePerM3);
-		// dischargePricesPerM3.add(dischargePricePerM3);
-
-		// this.unitPricesPerM3.add(dischargePricePerM3 - loadPricePerM3);
 
 		cargoCount++;
 	}
@@ -579,26 +534,15 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	 */
 	public void addComplexCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3, final IVessel vessel) {
 
-		final IVesselClass vesselClass = vessel.getVesselClass();
-		// final long vesselCapacityInM3 = vesselClass.getCargoCapacity();
 		final long vesselCapacityInM3 = vessel.getCargoCapacity();
-		// final ArrayList<IPortSlot> slots = new ArrayList<IPortSlot>();
 		final IPortSlot[] slots = new IPortSlot[portDetails.length];
-
-		// final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
-		// final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
 
 		for (int i = 0; i < slots.length; i++) {
 			slots[i] = portDetails[i].getOptions().getPortSlot();
 			slotTimes.put(slots[i], times[i]);
 		}
 
-		// slotTimes.put(loadSlot, loadTime);
-		// slotTimes.put(dischargeSlot, dischargeTime);
-
 		listedSlots.add(slots);
-		// loadSlots.add(loadSlot);
-		// dischargeSlots.add(dischargeSlot);
 
 		// store the current cargo index (variable index in the LP) so that we
 		// can reverse-lookup from slots to LP variables
@@ -606,8 +550,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		for (final IPortSlot slot : slots) {
 			variableTable.put(slot, ci);
 		}
-		// variableTable.put(loadSlot, ci);
-		// variableTable.put(dischargeSlot, ci);
 
 		// We have to load this much LNG no matter what
 		forcedLoadVolumeInM3.add(requiredFuelVolumeInM3);
@@ -630,8 +572,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		final long[] volumesInM3 = new long[slots.length];
 
 		slotPricesPerM3.add(pricesPerM3);
-		// slotVolumesInM3.add(volumesInM3);
-		// assert(false);
 
 		{
 			long totalDischargeVolume = 0;
@@ -669,32 +609,6 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 			pricesPerM3[0] = loadPricePerM3;
 		}
 
-		// compute purchase price from contract
-		// this is not ideal.
-		// final int dischargePricePerMMBtu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, dischargeTime);
-		// long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
-		// if (maxLoadVolumeInM3 == 0) {
-		// maxLoadVolumeInM3 = vesselCapacityInM3;
-		// }
-		// final long maximumDischargeVolumeInM3 = Math.min(vesselCapacityInM3 - requiredFuelVolumeInM3, maxLoadVolumeInM3 - requiredFuelVolumeInM3);
-
-		// TODO this value is incorrect for netback and profit sharing cases
-		// the load CV price is the notional maximum price
-		// if we load less, it might actually be worth less
-
-		// FIXME: Why do we pass in max discharge value?
-		// final long loadVolumeInM3 = maximumDischargeVolumeInM3 + requiredFuelVolumeInM3;
-		// final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBtu, loadVolumeInM3,
-		// maximumDischargeVolumeInM3, vessel, plan, null);
-
-		// final int dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBtu, cargoCVValue);
-		// final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
-
-		// loadPricesPerM3.add(loadPricePerM3);
-		// dischargePricesPerM3.add(dischargePricePerM3);
-
-		// this.unitPricesPerM3.add(dischargePricePerM3 - loadPricePerM3);
-
 		cargoCount++;
 	}
 
@@ -713,17 +627,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 	public void solve() {
 		this.allocation = allocateSpareVolume();
-		// convolve for p&l
-
-		// this.profit = 0;
-		// for (int i = 0; i < allocation.length; i++) {
-		// profit += Calculator.convertM3ToM3Price(allocation[i], unitPrices.get(i));
-		// }
 	}
-
-	// public long getProfit() {
-	// return profit / Calculator.ScaleFactor; // why?
-	// }
 
 	public long getAllocation(final IPortSlot slot) {
 		final int index = variableForSlot(slot);
