@@ -21,28 +21,7 @@ public interface TypesFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesFactory eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesFactoryImpl
-			.init();
-
-	/**
-	 * Returns a new object of class '<em>Extra Data</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Extra Data</em>'.
-	 * @generated
-	 */
-	ExtraData createExtraData();
-
-	/**
-	 * Returns a new object of class '<em>Extra Data Container</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Extra Data Container</em>'.
-	 * @generated
-	 */
-	ExtraDataContainer createExtraDataContainer();
+	TypesFactory eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesFactoryImpl.init();
 
 	/**
 	 * Returns the package supported by this factory.

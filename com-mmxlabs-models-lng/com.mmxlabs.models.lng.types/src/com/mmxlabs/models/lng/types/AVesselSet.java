@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.models.lng.types;
 
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-import org.eclipse.emf.common.util.EList;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>AVessel Set</b></em>'.
@@ -18,13 +14,5 @@ import org.eclipse.emf.common.util.EList;
  * @model abstract="true"
  * @generated
  */
-public interface AVesselSet extends UUIDObject, NamedObject {
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model markedMany="true"
-	 * @generated
-	 */
-	EList<AVessel> collect(EList<AVesselSet> marked);
+public interface AVesselSet<U> extends ObjectSet<AVesselSet<U>, U> {
 } // AVesselSet

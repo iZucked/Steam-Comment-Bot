@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.models.lng.types.provider;
 
-import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-
 import org.eclipse.emf.common.EMFPlugin;
-
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
 /**
  * This is the central singleton for the LNGTypes edit plugin.

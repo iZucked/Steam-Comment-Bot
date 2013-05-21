@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.models.lng.types;
 
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-import org.eclipse.emf.common.util.EList;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>APort Set</b></em>'.
@@ -18,13 +14,5 @@ import org.eclipse.emf.common.util.EList;
  * @model abstract="true"
  * @generated
  */
-public interface APortSet extends UUIDObject, NamedObject {
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model markedMany="true"
-	 * @generated
-	 */
-	EList<APort> collect(EList<APortSet> marked);
+public interface APortSet<U> extends ObjectSet<APortSet<U>, U> {
 } // APortSet

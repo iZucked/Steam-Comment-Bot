@@ -42,14 +42,15 @@ public enum CargoDeliveryType implements Enumerator {
 	SHIPPED(1, "Shipped", "Shipped"),
 
 	/**
-	 * The '<em><b>Delivered</b></em>' literal object.
+	 * The '<em><b>Not Shipped</b></em>' literal object.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
-	 * @see #DELIVERED_VALUE
+	 * @see #NOT_SHIPPED_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	DELIVERED(2, "Delivered", "Delivered");
+	NOT_SHIPPED(2, "NotShipped", "NotShipped");
 
 	/**
 	 * The '<em><b>Any</b></em>' literal value.
@@ -80,18 +81,19 @@ public enum CargoDeliveryType implements Enumerator {
 	public static final int SHIPPED_VALUE = 1;
 
 	/**
-	 * The '<em><b>Delivered</b></em>' literal value.
+	 * The '<em><b>Not Shipped</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * The cargo must be delivered by a third party.
+	 * @since 5.0
 	 * <!-- end-model-doc -->
-	 * @see #DELIVERED
-	 * @model name="Delivered"
+	 * @see #NOT_SHIPPED
+	 * @model name="NotShipped"
 	 * @generated
 	 * @ordered
 	 */
-	public static final int DELIVERED_VALUE = 2;
+	public static final int NOT_SHIPPED_VALUE = 2;
 
 	/**
 	 * An array of all the '<em><b>Cargo Delivery Type</b></em>' enumerators.
@@ -99,8 +101,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final CargoDeliveryType[] VALUES_ARRAY = new CargoDeliveryType[] {
-			ANY, SHIPPED, DELIVERED, };
+	private static final CargoDeliveryType[] VALUES_ARRAY = new CargoDeliveryType[] { ANY, SHIPPED, NOT_SHIPPED, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Cargo Delivery Type</b></em>' enumerators.
@@ -108,8 +109,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<CargoDeliveryType> VALUES = Collections
-			.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<CargoDeliveryType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
 	 * Returns the '<em><b>Cargo Delivery Type</b></em>' literal with the specified literal value.
@@ -155,8 +155,8 @@ public enum CargoDeliveryType implements Enumerator {
 			return ANY;
 		case SHIPPED_VALUE:
 			return SHIPPED;
-		case DELIVERED_VALUE:
-			return DELIVERED;
+		case NOT_SHIPPED_VALUE:
+			return NOT_SHIPPED;
 		}
 		return null;
 	}

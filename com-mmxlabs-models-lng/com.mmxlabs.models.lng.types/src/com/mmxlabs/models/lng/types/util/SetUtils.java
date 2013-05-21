@@ -11,113 +11,80 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ObjectSet;
 
 /**
  * Utility class to expand vessel sets and port sets.
+ * 
  * @author hinton
- *
+ * 
  */
 public class SetUtils {
-	
+
 	/**
-	 * Return true if any of the port sets in the given iterable expand to contain
-	 * the given port
-	 * @param portSets
-	 * @param port
-	 * @return
-	 */
-	public boolean contains(final Iterable<APortSet> portSets, final APort port) {
-		return getPorts(portSets).contains(port);
-	}
-	
-	/**
-	 * True iff the given vessel sets expand to contain the given vessel
+	 * True iff the given objects sets expand to contain the given object
+	 * 
 	 * @param vesselSets
 	 * @param vessel
+	 * @since 5.0
 	 * @return
 	 */
-	public boolean contains(final Iterable<AVesselSet> vesselSets, final AVessel vessel) {
-		return getVessels(vesselSets).contains(vessel);
+	public <T extends ObjectSet<T, U>, U> boolean contains(final Iterable<T> vesselSets, final U vessel) {
+		return getObjects(vesselSets).contains(vessel);
 	}
-	
-	/**
-	 * Return a set containing each port in the given port sets
-	 * @param portSets
-	 * @return
-	 */
-	public static Set<APort> getPorts(final Iterable<APortSet> portSets) {
-		final HashSet<APort> result = new HashSet<APort>();
-		addPorts(portSets,result);
-		return result;
-	}
-	
-	/**
-	 * Return a set containing each port in the given port set.
-	 * @param portSet
-	 * @return
-	 */
-	public static Set<APort> getPorts(final APortSet portSet) {
-		final HashSet<APort> result = new HashSet<APort>();
-		addPorts(portSet,result);
-		return result;
-	}
-	
-	public static void addPorts(final Iterable<APortSet> portSets, Collection<APort> output) {
-		addPorts(portSets, output, new UniqueEList<APortSet>());
-	}
-	
-	public static void addPorts(final Iterable<APortSet> portSets, Collection<APort> output, EList<APortSet> marks) {
-		for (final APortSet set : portSets) addPorts(set, output, marks);
-	}
-	
-	public static void addPorts(final APortSet portSet, Collection<APort> output, EList<APortSet> marks) {
-		output.addAll(portSet.collect(marks));
-	}
-	
-	public static void addPorts(final APortSet portSet, Collection<APort> output) {
-		addPorts(portSet, output, new UniqueEList<APortSet>());
-	}
-	
+
 	/**
 	 * Return a set containing each vessel in the given vessel sets
 	 * 
 	 * @param portSets
+	 * @since 5.0
 	 * @return
 	 */
-	public static Set<AVessel> getVessels(final Iterable<AVesselSet> portSets) {
-		final HashSet<AVessel> result = new HashSet<AVessel>();
-		addVessels(portSets,result);
+	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final Iterable<T> portSets) {
+		final HashSet<U> result = new HashSet<U>();
+		addObjects(portSets, result);
 		return result;
 	}
-	
+
 	/**
 	 * return a set containing each vessel in the given vessel set.
+	 * 
 	 * @param portSet
 	 * @return
+	 * @since 5.0
 	 */
-	public static Set<AVessel> getVessels(final AVesselSet portSet) {
-		final HashSet<AVessel> result = new HashSet<AVessel>();
-		addVessels(portSet,result);
+	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final T portSet) {
+		final HashSet<U> result = new HashSet<U>();
+		addObjects(portSet, result);
 		return result;
 	}
-	
-	public static void addVessels(final Iterable<AVesselSet> portSets, Collection<AVessel> output) {
-		addVessels(portSets, output, new UniqueEList<AVesselSet>());
+
+	/**
+	 * @since 5.0
+	 */
+	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> portSets, Collection<U> output) {
+		addObjects(portSets, output, new UniqueEList<T>());
 	}
-	
-	public static void addVessels(final Iterable<AVesselSet> portSets, Collection<AVessel> output, EList<AVesselSet> marks) {
-		for (final AVesselSet set : portSets) addVessels(set, output, marks);
+
+	/**
+	 * @since 5.0
+	 */
+	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> portSets, Collection<U> output, EList<T> marks) {
+		for (final T set : portSets)
+			addObjects(set, output, marks);
 	}
-	
-	public static void addVessels(final AVesselSet portSet, Collection<AVessel> output, EList<AVesselSet> marks) {
+
+	/**
+	 * @since 5.0
+	 */
+	public static <T extends ObjectSet<T, U>, U> void addObjects(final T portSet, Collection<U> output, EList<T> marks) {
 		output.addAll(portSet.collect(marks));
 	}
-	
-	public static void addVessels(final AVesselSet portSet, Collection<AVessel> output) {
-		addVessels(portSet, output, new UniqueEList<AVesselSet>());
+
+	/**
+	 * @since 5.0
+	 */
+	public static <T extends ObjectSet<T, U>, U> void addObjects(final T portSet, Collection<U> output) {
+		addObjects(portSet, output, new UniqueEList<T>());
 	}
 }

@@ -4,17 +4,6 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
-import com.mmxlabs.models.lng.types.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-import java.lang.Iterable;
-import javax.xml.bind.DatatypeConverter;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -22,10 +11,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import com.mmxlabs.models.lng.types.ABaseFuel;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -45,8 +31,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 */
 	public static TypesFactory init() {
 		try {
-			TypesFactory theTypesFactory = (TypesFactory) EPackage.Registry.INSTANCE
-					.getEFactory("http://www.mmxlabs.com/models/lng/types/1/");
+			TypesFactory theTypesFactory = (TypesFactory) EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/types/1/");
 			if (theTypesFactory != null) {
 				return theTypesFactory;
 			}
@@ -74,13 +59,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case TypesPackage.EXTRA_DATA:
-			return createExtraData();
-		case TypesPackage.EXTRA_DATA_CONTAINER:
-			return createExtraDataContainer();
 		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName()
-					+ "' is not a valid classifier");
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -94,17 +74,12 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 		switch (eDataType.getClassifierID()) {
 		case TypesPackage.PORT_CAPABILITY:
 			return createPortCapabilityFromString(eDataType, initialValue);
-		case TypesPackage.EXTRA_DATA_FORMAT_TYPE:
-			return createExtraDataFormatTypeFromString(eDataType, initialValue);
 		case TypesPackage.CARGO_DELIVERY_TYPE:
 			return createCargoDeliveryTypeFromString(eDataType, initialValue);
-		case TypesPackage.SERIALIZABLE_OBJECT:
-			return createSerializableObjectFromString(eDataType, initialValue);
 		case TypesPackage.ITERABLE:
 			return createIterableFromString(eDataType, initialValue);
 		default:
-			throw new IllegalArgumentException("The datatype '"
-					+ eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -118,54 +93,24 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 		switch (eDataType.getClassifierID()) {
 		case TypesPackage.PORT_CAPABILITY:
 			return convertPortCapabilityToString(eDataType, instanceValue);
-		case TypesPackage.EXTRA_DATA_FORMAT_TYPE:
-			return convertExtraDataFormatTypeToString(eDataType, instanceValue);
 		case TypesPackage.CARGO_DELIVERY_TYPE:
 			return convertCargoDeliveryTypeToString(eDataType, instanceValue);
-		case TypesPackage.SERIALIZABLE_OBJECT:
-			return convertSerializableObjectToString(eDataType, instanceValue);
 		case TypesPackage.ITERABLE:
 			return convertIterableToString(eDataType, instanceValue);
 		default:
-			throw new IllegalArgumentException("The datatype '"
-					+ eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExtraData createExtraData() {
-		ExtraDataImpl extraData = new ExtraDataImpl();
-		return extraData;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraDataContainer createExtraDataContainer() {
-		ExtraDataContainerImpl extraDataContainer = new ExtraDataContainerImpl();
-		return extraDataContainer;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PortCapability createPortCapabilityFromString(EDataType eDataType,
-			String initialValue) {
+	public PortCapability createPortCapabilityFromString(EDataType eDataType, String initialValue) {
 		PortCapability result = PortCapability.get(initialValue);
 		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue
-					+ "' is not a valid enumerator of '" + eDataType.getName()
-					+ "'");
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
 		return result;
 	}
 
@@ -174,35 +119,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertPortCapabilityToString(EDataType eDataType,
-			Object instanceValue) {
-		return instanceValue == null ? null : instanceValue.toString();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraDataFormatType createExtraDataFormatTypeFromString(
-			EDataType eDataType, String initialValue) {
-		ExtraDataFormatType result = ExtraDataFormatType.get(initialValue);
-		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue
-					+ "' is not a valid enumerator of '" + eDataType.getName()
-					+ "'");
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertExtraDataFormatTypeToString(EDataType eDataType,
-			Object instanceValue) {
+	public String convertPortCapabilityToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -212,13 +129,10 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoDeliveryType createCargoDeliveryTypeFromString(
-			EDataType eDataType, String initialValue) {
+	public CargoDeliveryType createCargoDeliveryTypeFromString(EDataType eDataType, String initialValue) {
 		CargoDeliveryType result = CargoDeliveryType.get(initialValue);
 		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue
-					+ "' is not a valid enumerator of '" + eDataType.getName()
-					+ "'");
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
 		return result;
 	}
 
@@ -228,55 +142,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertCargoDeliveryTypeToString(EDataType eDataType,
-			Object instanceValue) {
+	public String convertCargoDeliveryTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public Serializable createSerializableObjectFromString(EDataType eDataType,
-			String initialValue) {
-		try {
-			final ByteArrayInputStream bais = new ByteArrayInputStream(
-					DatatypeConverter.parseBase64Binary(initialValue));
-			final ObjectInputStream ois = new ObjectInputStream(bais);
-			return (Serializable) ois.readObject();
-		} catch (Exception e) {
-			return null;
-		} finally {
-
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public String convertSerializableObjectToString(EDataType eDataType,
-			Object instanceValue) {
-		if (instanceValue instanceof Serializable) {
-			final Serializable s = (Serializable) instanceValue;
-			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			try {
-				final ObjectOutputStream oos = new ObjectOutputStream(baos);
-				oos.writeObject(s);
-				oos.flush();
-				oos.close();
-				final String b64 = DatatypeConverter.printBase64Binary(baos
-						.toByteArray());
-				return b64;
-			} catch (IOException e) {
-			}
-
-		}
-		return "";
 	}
 
 	/**
@@ -285,8 +152,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Iterable<?> createIterableFromString(EDataType eDataType,
-			String initialValue) {
+	public Iterable<?> createIterableFromString(EDataType eDataType, String initialValue) {
 		return (Iterable<?>) super.createFromString(initialValue);
 	}
 
@@ -296,8 +162,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertIterableToString(EDataType eDataType,
-			Object instanceValue) {
+	public String convertIterableToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
 	}
 
