@@ -24,12 +24,6 @@ All rights reserved.
       [Enter License Description here.]
    </license>
 
-   <requires>
-      <import feature="com.mmxlabs.jobmanager.feature" version="1.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="3.1.0" match="compatible"/>
-      <import feature="com.mmxlabs.rcp.common.feature" version="2.0.0" match="compatible"/>
-   </requires>
-
    <plugin
          id="com.mmxlabs.scenario.service.file"
          download-size="0"
