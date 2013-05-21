@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * Extended implementation of {@link AbstractScheduledEventImpl} implementing {@link IFuelUsingEvent}
  * 
  * @author Simon Goodall
+ * @since 5.0
  * 
  */
 public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventImpl implements IFuelUsingEvent {

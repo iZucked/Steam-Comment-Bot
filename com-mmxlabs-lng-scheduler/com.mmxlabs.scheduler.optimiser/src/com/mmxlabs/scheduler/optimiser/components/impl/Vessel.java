@@ -80,12 +80,18 @@ public final class Vessel extends IndexedObject implements IVessel {
 		this.hourlyCharterInPrice = hourlyCharterInPrice;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
 	public long getCargoCapacity() {
 		// TODO Auto-generated method stub
 		return cargoCapacity;
 	}
 	
+	/**
+	 * @since 5.0
+	 */
 	public void setCargoCapacity(long value) {
 		cargoCapacity = value;
 	}

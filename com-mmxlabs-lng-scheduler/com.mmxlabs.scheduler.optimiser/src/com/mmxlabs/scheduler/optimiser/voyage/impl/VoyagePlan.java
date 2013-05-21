@@ -101,10 +101,16 @@ public final class VoyagePlan implements Cloneable {
 		fuelCosts.put(fuel, cost);
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public final int getViolationsCount() {
 		return violationsCount;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public final void setViolationsCount(final int violationsCount) {
 		this.violationsCount = violationsCount;
 	}

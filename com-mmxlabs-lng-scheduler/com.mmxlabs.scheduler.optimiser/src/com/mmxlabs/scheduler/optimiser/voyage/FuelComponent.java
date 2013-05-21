@@ -127,6 +127,9 @@ public enum FuelComponent {
 		return false;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public FuelUnit getPricingFuelUnit() {
 		return pricingFuelUnit;
 	}

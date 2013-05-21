@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
  * Implementation of {@link ILNGVoyageCalculator}.
  * 
  * @author Simon Goodall
+ * @since 5.0
  * 
  */
 public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
@@ -477,6 +478,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param arrivalTimes
 	 * @param sequence
 	 * @return
+	 * @since 5.0
 	 */
 	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, final Object... sequence) {
 		int cooldownM3Price = 0;
@@ -534,6 +536,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param arrivalTimes
 	 * @param sequence
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
+	 * @since 5.0
 	 */
 	final public int[] getLngEffectivePrices(final List<Integer> loadIndices, final List<Integer> dischargeIndices, final List<Integer> arrivalTimes, final Object... sequence) {
 		// TODO: does not need to be this long
@@ -603,6 +606,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @param dischargeTime
 	 * @param loadTime
+	 * @since 5.0
 	 */
 	@Override
 	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final List<Integer> arrivalTimes, final Object... sequence) {
@@ -1008,6 +1012,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		this.portCVProvider = portCVProvider;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	final public int findFirstLoadIndex(final Object... sequence) {
 		// ignore the last element in the sequence, to avoid double-counting (it will be included in the next sequence)
 		for (int i = 0; i < sequence.length - 1; ++i) {
@@ -1024,6 +1031,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return -1;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	final public int findFirstDischargeIndex(final Object... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
 			if (sequence[i] instanceof PortDetails) {
@@ -1039,6 +1049,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return -1;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	final public List<Integer> findLoadIndices(final Object... sequence) {
 		final List<Integer> storage = new ArrayList<Integer>();
 
@@ -1056,6 +1069,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return storage;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	final public List<Integer> findDischargeIndices(final Object... sequence) {
 		final List<Integer> storage = new ArrayList<Integer>();
 

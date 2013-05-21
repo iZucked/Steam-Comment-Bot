@@ -41,6 +41,7 @@ public interface IVessel extends IResource {
 	/**
 	 * Returns the capacity of this vessel 
 	 * @return
+	 * @since 5.0
 	 */
 	long getCargoCapacity();
 	

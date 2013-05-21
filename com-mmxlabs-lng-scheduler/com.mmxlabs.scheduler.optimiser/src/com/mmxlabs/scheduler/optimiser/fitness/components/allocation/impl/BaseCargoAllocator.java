@@ -148,6 +148,9 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		voyagePlans.clear();
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public final void addCargo(final VoyagePlan plan, final IVessel vessel, final ArrayList<PortDetails> ports, final ArrayList<VoyageDetails> voyages, final ArrayList<Integer> slotTimes) {
 		final PortDetails[] portDetails = ports.toArray(new PortDetails[ports.size()]);
 		final VoyageDetails[] voyageDetails = voyages.toArray(new VoyageDetails[voyages.size()]);
@@ -250,7 +253,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	/**
 	 * Allocate method designed for a SIMPLE cargo
 	 * 
-	 * @since 2.0
+	 * @since 5.0
 	 */
 	@Override
 	public IAllocationAnnotation allocate(final IVessel vessel, final VoyagePlan plan, final List<Integer> arrivalTimes) {
@@ -408,6 +411,9 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		reset();
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public void addCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3, final IVessel vessel) {
 		// TODO: REMOVE HACK!
 		if (portDetails.length == 2) {
@@ -422,6 +428,9 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		}
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public void addLoadDischargeCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg, final PortDetails dischargeDetails, final VoyageDetails ballastLeg,
 			final int loadTime, final int dischargeTime, final long requiredFuelVolumeInM3, final IVessel vessel) {
 
@@ -565,6 +574,9 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		cargoCount++;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public void addComplexCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3, final IVessel vessel) {
 
 		final IVesselClass vesselClass = vessel.getVesselClass();

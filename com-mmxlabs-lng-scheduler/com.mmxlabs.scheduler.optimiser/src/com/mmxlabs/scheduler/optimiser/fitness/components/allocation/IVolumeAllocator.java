@@ -43,7 +43,7 @@ public interface IVolumeAllocator {
 	 * 
 	 * @param voyagePlan
 	 * @return
-	 * @since 2.0
+	 * @since 5.0
 	 */
 	public IAllocationAnnotation allocate(IVessel vessel, VoyagePlan plan, List<Integer> arrivalTimes);
 

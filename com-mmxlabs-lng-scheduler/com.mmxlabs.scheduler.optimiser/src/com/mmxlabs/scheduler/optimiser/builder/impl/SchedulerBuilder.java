@@ -480,11 +480,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return slot;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
 	public ICargo createCargo(final boolean allowRewiring, final IPortSlot... slots) {
 		return createCargo(Lists.newArrayList(slots), allowRewiring);
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
 	public ICargo createCargo(final Collection<IPortSlot> slots, final boolean allowRewiring) {
 
@@ -616,7 +622,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 5.0
 	 */
 	@Override
 	public IVessel createVessel(final String name, final IVesselClass vesselClass, final ICurve hourlyCharterInRate, final IStartEndRequirement start, final IStartEndRequirement end,
@@ -659,7 +665,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 5.0
 	 */
 	@Override
 	public IVessel createVessel(final String name, final IVesselClass vesselClass, final ICurve hourlyCharterInRate, final VesselInstanceType vesselInstanceType, final IStartEndRequirement start,
@@ -1078,7 +1084,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 5.0
 	 */
 	@Override
 	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long minHeelInM3, final int baseFuelUnitPricePerMT,
@@ -1376,6 +1382,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
 	public void setCargoVesselRestriction(final Collection<IPortSlot> cargoSlots, final Set<IVessel> vessels) {
 

@@ -17,21 +17,10 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * 
  */
 public interface IAllocationAnnotation {
-	/*
-	@Deprecated
-	ILoadOption getLoadOption();
-
-	@Deprecated
-	IDischargeOption getDischargeOption();
-	*/
-	
-	List<IPortSlot> getSlots();
-
 	/**
-	 * Returns the total load volume in M3. This is the sum of the discharge volume, fuel volume and the remaining heel.
-	 * 
+	 * @since 5.0
 	 */
-	//long getLoadVolumeInM3();
+	List<IPortSlot> getSlots();
 
 	/**
 	 * Returns the total LNG in m3 used as fuel during this cargo.
@@ -51,14 +40,15 @@ public interface IAllocationAnnotation {
 	 * Returns the quantity of LNG in m3 that has been discharged.
 	 * 
 	 * @return
+	 * @since 5.0
 	 */
-	//long getDischargeVolumeInM3();
 	long getSlotVolumeInM3(IPortSlot slot);
 
 	/**
 	 * Returns the time a load or discharge began
 	 * 
 	 * @return
+	 * @since 5.0
 	 */
 	int getSlotTime(IPortSlot slot);
 
@@ -67,6 +57,7 @@ public interface IAllocationAnnotation {
 	 * 
 	 * @param slot
 	 * @return
+	 * @since 5.0
 	 */
 	int getSlotPricePerM3(IPortSlot slot);
 }

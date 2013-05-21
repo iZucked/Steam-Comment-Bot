@@ -81,7 +81,7 @@ public interface ISchedulerBuilder {
 	 * @param baseFuelEquivalenceInM3TOMT
 	 *            Scaled Conversion factor to convert M3 LNG to equivalent MT base fuel
 	 * @return
-	 * @since 2.0
+	 * @since 5.0
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
 			int warmupTimeInHours, long cooldownVolumeInM3);
@@ -214,7 +214,7 @@ public interface ISchedulerBuilder {
 	 * @param name
 	 * @param vesselClass
 	 * @return
-	 * @since 2.0
+	 * @since 5.0
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint, final long heelLimit,
 			final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
@@ -228,7 +228,7 @@ public interface ISchedulerBuilder {
 	 * @param start
 	 * @param end
 	 * @return
-	 * @since 2.0
+	 * @since 5.0
 	 */
 	IVessel createVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
 			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
@@ -306,9 +306,13 @@ public interface ISchedulerBuilder {
 	 * @param slots
 	 *            A {@link Collection} of {@link ILoadOption}s and {@link IDischargeOption}s
 	 * @return
+	 * @since 5.0
 	 */
 	ICargo createCargo(final Collection<IPortSlot> slots, final boolean allowRewiring);
 
+	/**
+	 * @since 5.0
+	 */
 	ICargo createCargo(final boolean allowRewiring, final IPortSlot... slots);
 
 	/**
@@ -320,6 +324,7 @@ public interface ISchedulerBuilder {
 	 *            a cargo created by {@link #createCargo()}
 	 * @param vessels
 	 *            a set of vessels on which this cargo may be carried
+	 * @since 5.0
 	 */
 	void setCargoVesselRestriction(Collection<IPortSlot> cargoSlots, Set<IVessel> vessels);
 
