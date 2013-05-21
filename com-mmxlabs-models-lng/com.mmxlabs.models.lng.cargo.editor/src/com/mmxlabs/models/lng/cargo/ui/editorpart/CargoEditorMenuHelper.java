@@ -375,7 +375,14 @@ public class CargoEditorMenuHelper {
 						// createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 					} else {
 						// createNewSlotMenu(newMenuManager, loadSlot, true);
-						createSwapWithMenus(manager, loadSlot, cargoModel.getLoadSlots(), true);
+						final List<Slot> filteredSlots = new LinkedList<Slot>();
+						for (final LoadSlot s : cargoModel.getLoadSlots()) {
+							if (!s.isDESPurchase()) {
+								filteredSlots.add(s);
+							}
+						}
+
+						createSwapWithMenus(manager, loadSlot, filteredSlots, true);
 						// createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 						// createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 					}
@@ -386,8 +393,14 @@ public class CargoEditorMenuHelper {
 						// createNewSlotMenu(newMenuManager, dischargeSlot, false);
 						// createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 					} else {
+						final List<Slot> filteredSlots = new LinkedList<Slot>();
+						for (final DischargeSlot s : cargoModel.getDischargeSlots()) {
+							if (!s.isFOBSale()) {
+								filteredSlots.add(s);
+							}
+						}
 						// createNewSlotMenu(newMenuManager, dischargeSlot, false);
-						createSwapWithMenus(manager, dischargeSlot, cargoModel.getDischargeSlots(), false);
+						createSwapWithMenus(manager, dischargeSlot, filteredSlots, false);
 						// createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
 						// createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 					}
