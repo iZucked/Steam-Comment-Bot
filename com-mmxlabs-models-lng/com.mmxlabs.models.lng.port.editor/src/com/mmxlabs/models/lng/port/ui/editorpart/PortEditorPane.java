@@ -155,8 +155,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				super.run();
 			}
 		};
-		getToolBarManager().getContextMenuManager().add(tzAction);
-		getToolBarManager().getContextMenuManager().update(true);
+//		getMenuManager().add(tzAction);
+//		getMenuManager().update(true);
 
 		defaultSetTitle("Ports");
 	}
