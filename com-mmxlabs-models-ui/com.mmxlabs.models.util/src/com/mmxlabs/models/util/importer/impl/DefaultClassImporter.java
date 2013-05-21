@@ -317,7 +317,7 @@ public class DefaultClassImporter implements IClassImporter {
 			} else {
 				boolean shouldWarn = shouldExportFeature(attribute);
 				if (shouldWarn) {
-					if (attribute == MMXCorePackage.eINSTANCE.getNamedObject_OtherNames()) {
+					if (attribute == MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames()) {
 						// Annotation is not on the feature itself, but rather the sub-class
 						final EAnnotation annotation = instance.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/annotations/namedobject");
 						boolean exportOtherNames = false;
@@ -379,7 +379,7 @@ public class DefaultClassImporter implements IClassImporter {
 		if (ai != null) {
 
 			// Determine whether or not to export the othernames feature
-			if (attribute == MMXCorePackage.eINSTANCE.getNamedObject_OtherNames()) {
+			if (attribute == MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames()) {
 				// Annotation is not on the feature itself, but rather the sub-class
 				final EAnnotation annotation = object.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/annotations/namedobject");
 				boolean exportOtherNames = false;

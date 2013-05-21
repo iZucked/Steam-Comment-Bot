@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -82,8 +83,11 @@ public class DefaultImportContext implements IImportContext {
 	public void registerNamedObject(final NamedObject object) {
 		registerObjectWithName(object, object.getName());
 
-		for (final String otherName : object.getOtherNames()) {
-			registerObjectWithName(object, otherName);
+		if (object instanceof OtherNamesObject) {
+			final OtherNamesObject otherNamesObject = (OtherNamesObject) object;
+			for (final String otherName : otherNamesObject.getOtherNames()) {
+				registerObjectWithName(object, otherName);
+			}
 		}
 	}
 
