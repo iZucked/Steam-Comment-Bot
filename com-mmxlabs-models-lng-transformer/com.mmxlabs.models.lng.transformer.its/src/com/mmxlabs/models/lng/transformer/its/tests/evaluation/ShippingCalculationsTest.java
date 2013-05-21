@@ -1863,8 +1863,9 @@ public class ShippingCalculationsTest {
 		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
 		CharterOutEvent event = makeCharterOut(dsc, mss, scenario, mss.loadPort, mss.originPort);
 
-		Class<?> [] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Idle.class, EndEvent.class };
-		// SequenceTester checker = getDefaultTester();
+		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Idle.class,
+				EndEvent.class };
+		SequenceTester checker = getDefaultTester();
 
 		// expected durations of journeys
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2 });
@@ -1885,7 +1886,7 @@ public class ShippingCalculationsTest {
 		// expected costs of journeys
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
 		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
-		// 300 = 10 { base fuel unit cost } * 30 { base fuel consumption } 
+		// 300 = 10 { base fuel unit cost } * 30 { base fuel consumption }
 		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
 		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 300 });
 
