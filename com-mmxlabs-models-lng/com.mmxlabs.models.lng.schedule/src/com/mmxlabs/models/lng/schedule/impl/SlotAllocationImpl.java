@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -21,9 +23,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
@@ -38,6 +37,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlotVisit <em>Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getVolumeTransferred <em>Volume Transferred</em>}</li>
  * </ul>
  * </p>
  *
@@ -71,7 +71,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @generated
 	 * @ordered
 	 */
-	protected ASpotMarket spotMarket;
+	protected SpotMarket spotMarket;
 
 	/**
 	 * This is true if the Spot Market reference has been set.
@@ -130,6 +130,28 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected double price = PRICE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeTransferred() <em>Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VOLUME_TRANSFERRED_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVolumeTransferred() <em>Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected int volumeTransferred = VOLUME_TRANSFERRED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -215,13 +237,14 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ASpotMarket getSpotMarket() {
+	public SpotMarket getSpotMarket() {
 		if (spotMarket != null && spotMarket.eIsProxy()) {
 			InternalEObject oldSpotMarket = (InternalEObject)spotMarket;
-			spotMarket = (ASpotMarket)eResolveProxy(oldSpotMarket);
+			spotMarket = (SpotMarket)eResolveProxy(oldSpotMarket);
 			if (spotMarket != oldSpotMarket) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SLOT_ALLOCATION__SPOT_MARKET, oldSpotMarket, spotMarket));
@@ -232,20 +255,22 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ASpotMarket basicGetSpotMarket() {
+	public SpotMarket basicGetSpotMarket() {
 		return spotMarket;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setSpotMarket(ASpotMarket newSpotMarket) {
-		ASpotMarket oldSpotMarket = spotMarket;
+	public void setSpotMarket(SpotMarket newSpotMarket) {
+		SpotMarket oldSpotMarket = spotMarket;
 		spotMarket = newSpotMarket;
 		boolean oldSpotMarketESet = spotMarketESet;
 		spotMarketESet = true;
@@ -259,7 +284,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @generated
 	 */
 	public void unsetSpotMarket() {
-		ASpotMarket oldSpotMarket = spotMarket;
+		SpotMarket oldSpotMarket = spotMarket;
 		boolean oldSpotMarketESet = spotMarketESet;
 		spotMarket = null;
 		spotMarketESet = false;
@@ -304,14 +329,37 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCargoAllocation(CargoAllocation newCargoAllocation, NotificationChain msgs) {
+		CargoAllocation oldCargoAllocation = cargoAllocation;
+		cargoAllocation = newCargoAllocation;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION, oldCargoAllocation, newCargoAllocation);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
-		CargoAllocation oldCargoAllocation = cargoAllocation;
-		cargoAllocation = newCargoAllocation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION, oldCargoAllocation, cargoAllocation));
+		if (newCargoAllocation != cargoAllocation) {
+			NotificationChain msgs = null;
+			if (cargoAllocation != null)
+				msgs = ((InternalEObject)cargoAllocation).eInverseRemove(this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, CargoAllocation.class, msgs);
+			if (newCargoAllocation != null)
+				msgs = ((InternalEObject)newCargoAllocation).eInverseAdd(this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, CargoAllocation.class, msgs);
+			msgs = basicSetCargoAllocation(newCargoAllocation, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION, newCargoAllocation, newCargoAllocation));
 	}
 
 	/**
@@ -449,16 +497,40 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getVolumeTransferred() {
+		return volumeTransferred;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeTransferred(int newVolumeTransferred) {
+		int oldVolumeTransferred = volumeTransferred;
+		volumeTransferred = newVolumeTransferred;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED, oldVolumeTransferred, volumeTransferred));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public APort getPort() {
+	public Port getPort() {
 		if (isSetSlot()) {
 			return getSlot().getPort();
 		} else if (isSetSlotVisit()) {
 			return getSlotVisit().getPort();
 		} else if (isSetSpotMarket()) {
-			final ASpotMarket market = getSpotMarket();
+			final SpotMarket market = getSpotMarket();
 			if (market instanceof FOBSalesMarket) {
 				return ((FOBSalesMarket) market).getLoadPort();
 			} else if (market instanceof FOBPurchasesMarket) {
@@ -495,10 +567,11 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public AContract getContract() {
+	public Contract getContract() {
 		if (isSetSlot()) {
 			return slot.getContract();
 //		} else if (isSetSpotMarket()) {
@@ -530,6 +603,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
+				if (cargoAllocation != null)
+					msgs = ((InternalEObject)cargoAllocation).eInverseRemove(this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, CargoAllocation.class, msgs);
+				return basicSetCargoAllocation((CargoAllocation)otherEnd, msgs);
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				if (slotVisit != null)
 					msgs = ((InternalEObject)slotVisit).eInverseRemove(this, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, SlotVisit.class, msgs);
@@ -546,6 +623,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
+				return basicSetCargoAllocation(null, msgs);
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				return basicUnsetSlotVisit(msgs);
 		}
@@ -574,6 +653,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return basicGetSlotVisit();
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 				return getPrice();
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+				return getVolumeTransferred();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -590,7 +671,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				setSlot((Slot)newValue);
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__SPOT_MARKET:
-				setSpotMarket((ASpotMarket)newValue);
+				setSpotMarket((SpotMarket)newValue);
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)newValue);
@@ -600,6 +681,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 				setPrice((Double)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+				setVolumeTransferred((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -628,6 +712,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 				setPrice(PRICE_EDEFAULT);
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+				setVolumeTransferred(VOLUME_TRANSFERRED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -650,6 +737,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return isSetSlotVisit();
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 				return price != PRICE_EDEFAULT;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+				return volumeTransferred != VOLUME_TRANSFERRED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -688,6 +777,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (price: ");
 		result.append(price);
+		result.append(", volumeTransferred: ");
+		result.append(volumeTransferred);
 		result.append(')');
 		return result.toString();
 	}

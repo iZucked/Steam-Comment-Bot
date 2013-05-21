@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
-import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -56,28 +55,27 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 
 				checkSpotMarketGroup(ctx, failures, spotMarket, SpotType.DES_PURCHASE);
 
-				if (desPurchaseMarket.getCv() < 0.001) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A positive CV value should be set"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_Cv());
-					failures.add(dsd);
-				}
-
-				final Set<APort> ports = SetUtils.getPorts(desPurchaseMarket.getDestinationPorts());
+				final Set<Port> ports = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
 				if (ports.isEmpty()) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("One or more discharge ports must be set"));
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
 					failures.add(dsd);
 				}
-				for (final APort p : ports) {
-					if (p instanceof Port) {
-						final Port port = (Port) p;
-						if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Port " + port.getName()
-									+ " is not a discharge port"), IStatus.WARNING);
-							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
-							failures.add(dsd);
-						}
+				boolean foundDischarge = false;
+				for (final Port port : ports) {
+					if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Port " + port.getName()
+								+ " is not a discharge port"), IStatus.WARNING);
+						dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
+						failures.add(dsd);
+					} else {
+						foundDischarge = true;
 					}
+				}
+				if (!foundDischarge) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("At least one discharge port must be specified."));
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
+					failures.add(dsd);
 				}
 			}
 
@@ -103,12 +101,6 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				if (notionalPort == null || notionalPort.getCapabilities().contains(PortCapability.LOAD) == false) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A notional load port must be set"));
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_NotionalPort());
-					failures.add(dsd);
-				}
-
-				if (fobPurchasesMarket.getCv() < 0.001) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A positive CV value should be set"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_Cv());
 					failures.add(dsd);
 				}
 			}

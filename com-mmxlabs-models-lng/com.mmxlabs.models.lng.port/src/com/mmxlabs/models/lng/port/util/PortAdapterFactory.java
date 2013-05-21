@@ -5,21 +5,24 @@
 package com.mmxlabs.models.lng.port.util;
 
 import com.mmxlabs.models.lng.port.*;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortGroup;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.ARoute;
-
+import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notifier;
-
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -118,16 +121,12 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 				return createNamedObjectAdapter();
 			}
 			@Override
-			public Adapter caseAPortSet(APortSet object) {
+			public <T extends ObjectSet<T, U>, U> Adapter caseObjectSet(ObjectSet<T, U> object) {
+				return createObjectSetAdapter();
+			}
+			@Override
+			public <U> Adapter caseAPortSet(APortSet<U> object) {
 				return createAPortSetAdapter();
-			}
-			@Override
-			public Adapter caseAPort(APort object) {
-				return createAPortAdapter();
-			}
-			@Override
-			public Adapter caseARoute(ARoute object) {
-				return createARouteAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -290,6 +289,21 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ObjectSet <em>Object Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ObjectSet
+	 * @generated
+	 */
+	public Adapter createObjectSetAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -300,34 +314,6 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAPortSetAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.APort
-	 * @generated
-	 */
-	public Adapter createAPortAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ARoute <em>ARoute</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ARoute
-	 * @generated
-	 */
-	public Adapter createARouteAdapter() {
 		return null;
 	}
 

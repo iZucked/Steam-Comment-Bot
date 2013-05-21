@@ -3,15 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.port.impl;
-import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.PortPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.PortPackage;
 
 /**
  * <!-- begin-user-doc -->

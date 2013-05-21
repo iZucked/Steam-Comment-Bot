@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -48,7 +49,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>From Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>From Ports</em>' reference list isn't clear,
@@ -60,11 +61,11 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getFromPorts();
+	EList<APortSet<Port>> getFromPorts();
 
 	/**
 	 * Returns the value of the '<em><b>To Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>To Ports</em>' reference list isn't clear,
@@ -76,7 +77,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getToPorts();
+	EList<APortSet<Port>> getToPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
@@ -471,7 +472,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Routes</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.Route}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.Route}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allowed Routes</em>' reference list isn't clear,

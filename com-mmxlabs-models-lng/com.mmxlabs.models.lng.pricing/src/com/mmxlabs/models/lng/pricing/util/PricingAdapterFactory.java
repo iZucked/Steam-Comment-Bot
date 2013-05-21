@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.types.AIndex;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -137,10 +136,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
-			}
-			@Override
-			public Adapter caseAIndex(AIndex object) {
-				return createAIndexAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -317,10 +312,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * @since 3.0
-	 * @since 3.0
-	 * @since 3.0
-	 * @since 3.0
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -363,22 +354,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AIndex <em>AIndex</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AIndex
-	 * @generated
-	 */
-	public Adapter createAIndexAdapter() {
-		return null;
-	}
-
-	/**
-	 * @since 3.0
-	 * @since 3.0
 	 * Creates a new adapter for the default case.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null.

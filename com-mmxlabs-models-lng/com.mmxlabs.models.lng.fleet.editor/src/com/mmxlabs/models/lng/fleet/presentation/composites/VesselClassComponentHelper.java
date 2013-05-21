@@ -43,7 +43,7 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	 */
 	public VesselClassComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.AVESSEL_CLASS));
+		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.AVESSEL_SET));
 	}
 	
 	/**
@@ -74,7 +74,6 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 		add_maxSpeedEditor(detailComposite, topClass);
 		add_minHeelEditor(detailComposite, topClass);
 		add_warmingTimeEditor(detailComposite, topClass);
-		add_coolingTimeEditor(detailComposite, topClass);
 		add_coolingVolumeEditor(detailComposite, topClass);
 		add_routeParametersEditor(detailComposite, topClass);
 		add_pilotLightRateEditor(detailComposite, topClass);
@@ -158,14 +157,6 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_warmingTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__WARMING_TIME));
-	}
-	/**
-	 * Create the editor for the coolingTime feature on VesselClass
-	 * Disabled cooling time editor until implementation is corrected.
-	 * @generated NOT
-	 */
-	protected void add_coolingTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__COOLING_TIME));
 	}
 	/**
 	 * Create the editor for the coolingVolume feature on VesselClass

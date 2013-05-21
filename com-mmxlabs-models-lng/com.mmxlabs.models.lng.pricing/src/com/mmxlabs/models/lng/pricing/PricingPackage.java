@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
@@ -78,15 +77,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int PRICING_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -177,16 +167,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX__EXTENSIONS = TypesPackage.AINDEX__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX__PROXIES = TypesPackage.AINDEX__PROXIES;
+	int INDEX__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -195,7 +176,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX__UUID = TypesPackage.AINDEX__UUID;
+	int INDEX__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -204,7 +185,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX__NAME = TypesPackage.AINDEX__NAME;
+	int INDEX__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -213,7 +194,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX__OTHER_NAMES = TypesPackage.AINDEX__OTHER_NAMES;
+	int INDEX__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Index</em>' class.
@@ -222,7 +203,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_FEATURE_COUNT = TypesPackage.AINDEX_FEATURE_COUNT + 0;
+	int INDEX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -242,15 +223,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int DATA_INDEX__EXTENSIONS = INDEX__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATA_INDEX__PROXIES = INDEX__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -315,15 +287,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int DERIVED_INDEX__EXTENSIONS = INDEX__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DERIVED_INDEX__PROXIES = INDEX__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -427,15 +390,6 @@ public interface PricingPackage extends EPackage {
 	int FLEET_COST_MODEL__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_COST_MODEL__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Base Fuel Prices</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -471,15 +425,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int ROUTE_COST__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROUTE_COST__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Route</b></em>' reference.
@@ -546,15 +491,6 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_COST__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_COST__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Fuel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -599,15 +535,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_COST__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_COST__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Ports</b></em>' reference list.
@@ -700,15 +627,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int COOLDOWN_PRICE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_PRICE__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Ports</b></em>' reference list.

@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: com.mmxlabs.models.lng.assignment;singleton:=true
+Bundle-Version: 4.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.mmxlabs.models.lng.assignment,
+ com.mmxlabs.models.lng.assignment.impl,
+ com.mmxlabs.models.lng.assignment.util
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
+ org.eclipse.emf.ecore;bundle-version="2.7.0";visibility:=reexport,
+ com.mmxlabs.models.lng.types;bundle-version="[5.0.0,6.0.0)",
+ com.mmxlabs.models.lng.fleet;bundle-version="[4.0.0,5.0.0)"
+Bundle-ActivationPolicy: lazy

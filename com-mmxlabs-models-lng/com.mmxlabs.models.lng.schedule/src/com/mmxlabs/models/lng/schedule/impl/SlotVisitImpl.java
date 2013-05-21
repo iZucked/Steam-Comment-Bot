@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.schedule.CapacityViolationType;
-import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -24,6 +22,8 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -454,7 +454,6 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		}
 		return super.eInvoke(operationID, arguments);
 	}
-
 
 	/**
 	 * <!-- begin-user-doc -->

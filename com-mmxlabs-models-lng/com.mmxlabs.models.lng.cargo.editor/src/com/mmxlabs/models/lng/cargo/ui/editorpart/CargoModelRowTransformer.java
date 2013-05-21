@@ -18,14 +18,14 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -50,22 +50,26 @@ public class CargoModelRowTransformer {
 	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
-	public RootData transform(final InputModel inputModel, final CargoModel cargoModel, final ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo) {
-		return transform(inputModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo);
+	/**
+	 * @since 4.0
+	 */
+	public RootData transform(final AssignmentModel assignmentModel, final CargoModel cargoModel, ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo) {
+		return transform(assignmentModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo);
 
 	}
 
 	/**
 	 * Perform the List to {@link RootData} transformation.
 	 * 
-	 * @param inputModel
+	 * @param assignmentModel
 	 * @param cargoes
 	 * @param allLoadSlots
 	 * @param allDischargeSlots
 	 * @param validationInfo
 	 * @return
+	 * @since 4.0
 	 */
-	public RootData transform(final InputModel inputModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, final Schedule schedule,
+	public RootData transform(final AssignmentModel assignmentModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, Schedule schedule,
 			final Map<Object, IStatus> validationInfo) {
 
 		final RootData root = new RootData();
@@ -90,22 +94,35 @@ public class CargoModelRowTransformer {
 			// Build up list of slots assigned to cargo, sorting into loads and discharges
 			final List<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
 			final List<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
-			if (cargo.getLoadSlot() != null) {
-				loadSlots.add(cargo.getLoadSlot());
-			}
-			if (cargo.getDischargeSlot() != null) {
-				dischargeSlots.add(cargo.getDischargeSlot());
-			}
-
-			// Generate the wiring
-			if (cargo.getLoadSlot() != null && cargo.getDischargeSlot() != null) {
-				final WireData wire = new WireData();
-				wire.loadSlot = cargo.getLoadSlot();
-				wire.dischargeSlot = cargo.getDischargeSlot();
-				group.getWires().add(wire);
+			for (final Object slot : cargo.getSortedSlots()) {
+				if (slot instanceof LoadSlot) {
+					loadSlots.add((LoadSlot) slot);
+				} else if (slot instanceof DischargeSlot) {
+					dischargeSlots.add((DischargeSlot) slot);
+				} else {
+					// Assume some kind of discharge?
+					// dischargeSlots.add((Slot) slot);
+				}
 
 			}
 
+			// Generate the wiring - currently this is the full many-many mapping between loads and discharges.
+			// In future this should be better (in some way...)
+			for (final Object slot : cargo.getSlots()) {
+
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					for (final Object slot2 : cargo.getSlots()) {
+						if (slot2 instanceof DischargeSlot) {
+							final DischargeSlot dischargeSlot = (DischargeSlot) slot2;
+							final WireData wire = new WireData();
+							wire.loadSlot = loadSlot;
+							wire.dischargeSlot = dischargeSlot;
+							group.getWires().add(wire);
+						}
+					}
+				}
+			}
 			// Set the colour for all cargo wires.
 			setWiringColour(validationInfo, group);
 
@@ -116,6 +133,8 @@ public class CargoModelRowTransformer {
 				group.getRows().add(row);
 				root.getRows().add(row);
 
+				row.primaryRecord = i == 0;
+
 				row.cargo = cargo;
 				// Add slot if possible
 				if (i < loadSlots.size()) {
@@ -125,7 +144,7 @@ public class CargoModelRowTransformer {
 					row.dischargeSlot = dischargeSlots.get(i);
 				}
 				// Add element assignment to all rows (TODO: just add it once?)
-				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
+				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
 				if (elementAssignment != null) {
 					row.elementAssignment = elementAssignment;
 				}
@@ -222,6 +241,9 @@ public class CargoModelRowTransformer {
 
 		ElementAssignment elementAssignment;
 
+		// This is the RowData with the cargo defining load slot
+		boolean primaryRecord;
+
 		// GUI STATE
 		Color loadTerminalColour;
 		Color dischargeTerminalColour;
@@ -253,6 +275,9 @@ public class CargoModelRowTransformer {
 			this.dischargeSlot = dischargeSlot;
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public void setElementAssignment(final ElementAssignment elementAssignment) {
 			this.elementAssignment = elementAssignment;
 		}
@@ -273,12 +298,23 @@ public class CargoModelRowTransformer {
 			return dischargeSlot;
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public ElementAssignment getElementAssignment() {
 			return elementAssignment;
 		}
 
 		public void setGroup(final GroupData group) {
 			this.group = group;
+		}
+
+		public boolean isPrimaryRecord() {
+			return primaryRecord;
+		}
+
+		public void setPrimaryRecord(boolean primaryRecord) {
+			this.primaryRecord = primaryRecord;
 		}
 
 	}
@@ -367,35 +403,44 @@ public class CargoModelRowTransformer {
 
 		private final Type type;
 
-		public RowDataEMFPath(final Type type, final boolean failSilently, final Iterable<?> path) {
-			super(failSilently, path);
+		/**
+		 * Indicate that we want only the "primary record" - i.e. the row with the cargo defining load.
+		 */
+		private boolean primaryRecordOnly;
+
+		public RowDataEMFPath(boolean primaryRecordOnly, final Type type, final Iterable<?> path) {
+			super(true, path);
 			this.type = type;
+			this.primaryRecordOnly = primaryRecordOnly;
 		}
 
-		public RowDataEMFPath(final Type type, final boolean failSilently, final Object... path) {
-			super(failSilently, path);
+		public RowDataEMFPath(boolean primaryRecordOnly, final Type type, final Object... path) {
+			super(true, path);
 			this.type = type;
+			this.primaryRecordOnly = primaryRecordOnly;
 		}
 
 		@Override
 		public Object get(final EObject root, final int depth) {
 
 			if (root instanceof RowData) {
+				final RowData rowData = (RowData) root;
+				boolean showRecord = primaryRecordOnly ? rowData.primaryRecord : true;
 				switch (type) {
 				case ASSIGNMENT:
-					return super.get(((RowData) root).elementAssignment, depth);
+					return showRecord ? super.get(rowData.elementAssignment, depth) : null;
 				case CARGO:
-					return super.get(((RowData) root).cargo, depth);
+					return showRecord ? super.get(rowData.cargo, depth) : null;
 				case DISCHARGE:
-					return super.get(((RowData) root).dischargeSlot, depth);
+					return super.get(rowData.dischargeSlot, depth);
 				case LOAD:
-					return super.get(((RowData) root).loadSlot, depth);
+					return super.get(rowData.loadSlot, depth);
 				case CARGO_ALLOCATION:
-					return super.get(((RowData) root).cargoAllocation, depth);
+					return showRecord ? super.get(rowData.cargoAllocation, depth) : null;
 				case DISCHARGE_ALLOCATION:
-					return super.get(((RowData) root).dischargeAllocation, depth);
+					return super.get(rowData.dischargeAllocation, depth);
 				case LOAD_ALLOCATION:
-					return super.get(((RowData) root).loadAllocation, depth);
+					return super.get(rowData.loadAllocation, depth);
 				}
 			}
 			return super.get(root, depth);

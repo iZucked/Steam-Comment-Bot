@@ -4,20 +4,24 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import com.mmxlabs.models.lng.cargo.*;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Switch;
 
-import com.mmxlabs.models.lng.types.ACargo;
-import com.mmxlabs.models.lng.types.ASlot;
-
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoGroup;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -79,7 +83,6 @@ public class CargoSwitch<T> extends Switch<T> {
 			case CargoPackage.CARGO: {
 				Cargo cargo = (Cargo)theEObject;
 				T result = caseCargo(cargo);
-				if (result == null) result = caseACargo(cargo);
 				if (result == null) result = caseUUIDObject(cargo);
 				if (result == null) result = caseNamedObject(cargo);
 				if (result == null) result = caseMMXObject(cargo);
@@ -89,10 +92,9 @@ public class CargoSwitch<T> extends Switch<T> {
 			case CargoPackage.SLOT: {
 				Slot slot = (Slot)theEObject;
 				T result = caseSlot(slot);
-				if (result == null) result = caseASlot(slot);
-				if (result == null) result = caseITimezoneProvider(slot);
 				if (result == null) result = caseUUIDObject(slot);
 				if (result == null) result = caseNamedObject(slot);
+				if (result == null) result = caseITimezoneProvider(slot);
 				if (result == null) result = caseMMXObject(slot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -101,10 +103,9 @@ public class CargoSwitch<T> extends Switch<T> {
 				LoadSlot loadSlot = (LoadSlot)theEObject;
 				T result = caseLoadSlot(loadSlot);
 				if (result == null) result = caseSlot(loadSlot);
-				if (result == null) result = caseASlot(loadSlot);
-				if (result == null) result = caseITimezoneProvider(loadSlot);
 				if (result == null) result = caseUUIDObject(loadSlot);
 				if (result == null) result = caseNamedObject(loadSlot);
+				if (result == null) result = caseITimezoneProvider(loadSlot);
 				if (result == null) result = caseMMXObject(loadSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -113,10 +114,9 @@ public class CargoSwitch<T> extends Switch<T> {
 				DischargeSlot dischargeSlot = (DischargeSlot)theEObject;
 				T result = caseDischargeSlot(dischargeSlot);
 				if (result == null) result = caseSlot(dischargeSlot);
-				if (result == null) result = caseASlot(dischargeSlot);
-				if (result == null) result = caseITimezoneProvider(dischargeSlot);
 				if (result == null) result = caseUUIDObject(dischargeSlot);
 				if (result == null) result = caseNamedObject(dischargeSlot);
+				if (result == null) result = caseITimezoneProvider(dischargeSlot);
 				if (result == null) result = caseMMXObject(dischargeSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -142,10 +142,9 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLoadSlot(spotLoadSlot);
 				if (result == null) result = caseSpotSlot(spotLoadSlot);
 				if (result == null) result = caseSlot(spotLoadSlot);
-				if (result == null) result = caseASlot(spotLoadSlot);
-				if (result == null) result = caseITimezoneProvider(spotLoadSlot);
 				if (result == null) result = caseUUIDObject(spotLoadSlot);
 				if (result == null) result = caseNamedObject(spotLoadSlot);
+				if (result == null) result = caseITimezoneProvider(spotLoadSlot);
 				if (result == null) result = caseMMXObject(spotLoadSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -156,10 +155,9 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseDischargeSlot(spotDischargeSlot);
 				if (result == null) result = caseSpotSlot(spotDischargeSlot);
 				if (result == null) result = caseSlot(spotDischargeSlot);
-				if (result == null) result = caseASlot(spotDischargeSlot);
-				if (result == null) result = caseITimezoneProvider(spotDischargeSlot);
 				if (result == null) result = caseUUIDObject(spotDischargeSlot);
 				if (result == null) result = caseNamedObject(spotDischargeSlot);
+				if (result == null) result = caseITimezoneProvider(spotDischargeSlot);
 				if (result == null) result = caseMMXObject(spotDischargeSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -353,36 +351,6 @@ public class CargoSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ACargo</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ACargo</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseACargo(ACargo object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ASlot</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ASlot</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseASlot(ASlot object) {
 		return null;
 	}
 

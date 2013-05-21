@@ -4,17 +4,22 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
-import com.mmxlabs.models.lng.commercial.*;
-
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.TaxRate;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,7 +72,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case CommercialPackage.TAX_RATE: return createTaxRate();
 			case CommercialPackage.FIXED_PRICE_PARAMETERS: return createFixedPriceParameters();
-			case CommercialPackage.INDEX_PRICE_PARAMETERS: return createIndexPriceParameters();
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -146,17 +150,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public FixedPriceParameters createFixedPriceParameters() {
 		FixedPriceParametersImpl fixedPriceParameters = new FixedPriceParametersImpl();
 		return fixedPriceParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public IndexPriceParameters createIndexPriceParameters() {
-		IndexPriceParametersImpl indexPriceParameters = new IndexPriceParametersImpl();
-		return indexPriceParameters;
 	}
 
 	/**

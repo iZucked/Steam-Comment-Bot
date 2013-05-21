@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
@@ -43,7 +44,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
  */
 public class CanalCostsDialog extends Dialog {
 	private EObjectTableViewer tableViewer;
-	
+
 	private EObject container;
 	private EReference containment;
 
@@ -82,7 +83,7 @@ public class CanalCostsDialog extends Dialog {
 		tableViewer.addTypicalColumn("Ballast Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate(), editingDomain));
 		tableViewer.addTypicalColumn("Laden NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenNBORate(), editingDomain));
 		tableViewer.addTypicalColumn("Ballast NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastNBORate(), editingDomain));
-		
+
 		tableViewer.setInput(container);
 
 		tableViewer.refresh();
@@ -95,26 +96,27 @@ public class CanalCostsDialog extends Dialog {
 	public int open(final AdapterFactory adapterFactory, final EditingDomain editingDomain, final MMXRootObject rootObject, final EObject container, final EReference containment) {
 		this.container = EcoreUtil.copy(container);
 		this.containment = containment;
-		
+
 		final List<VesselClassRouteParameters> l = (List<VesselClassRouteParameters>) this.container.eGet(containment);
-		
-		final PortModel pm = rootObject.getSubModel(PortModel.class);
-		if (pm != null) {
-			route_loop:
-			for (final Route r : pm.getRoutes()) {
-				if (r.isCanal() == false) continue route_loop;
-				for (final VesselClassRouteParameters vcrp : l) {
-					if (vcrp.getRoute() == r) {
+		if (rootObject instanceof LNGScenarioModel) {
+			final PortModel pm = ((LNGScenarioModel)rootObject).getPortModel();
+			if (pm != null) {
+				route_loop: for (final Route r : pm.getRoutes()) {
+					if (r.isCanal() == false)
 						continue route_loop;
+					for (final VesselClassRouteParameters vcrp : l) {
+						if (vcrp.getRoute() == r) {
+							continue route_loop;
+						}
 					}
+
+					final VesselClassRouteParameters vcrp = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+					vcrp.setRoute(r);
+					l.add(vcrp);
 				}
-				
-				final VesselClassRouteParameters vcrp = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
-				vcrp.setRoute(r);
-				l.add(vcrp);
 			}
 		}
-		
+
 		this.editingDomain = editingDomain;
 		this.adapterFactory = adapterFactory;
 

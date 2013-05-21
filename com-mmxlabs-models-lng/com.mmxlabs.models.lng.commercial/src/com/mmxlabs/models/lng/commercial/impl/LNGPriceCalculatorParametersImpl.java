@@ -3,16 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl;
-import org.eclipse.emf.ecore.EClass;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-
-import com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl;
-
-import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +19,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public abstract class LNGPriceCalculatorParametersImpl extends ALNGPriceCalculatorParametersImpl implements LNGPriceCalculatorParameters {
+public abstract class LNGPriceCalculatorParametersImpl extends UUIDObjectImpl implements LNGPriceCalculatorParameters {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -3,12 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.types.ASpotMarket;
-import com.mmxlabs.models.mmxcore.MMXObject;
 import java.util.Calendar;
+
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,6 +24,7 @@ import java.util.Calendar;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotVisit <em>Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}</li>
  * </ul>
  * </p>
  *
@@ -91,20 +93,22 @@ public interface SlotAllocation extends MMXObject {
 	 * If the meaning of the '<em>Spot Market</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Spot Market</em>' reference.
 	 * @see #isSetSpotMarket()
 	 * @see #unsetSpotMarket()
-	 * @see #setSpotMarket(ASpotMarket)
+	 * @see #setSpotMarket(SpotMarket)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_SpotMarket()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	ASpotMarket getSpotMarket();
+	SpotMarket getSpotMarket();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSpotMarket <em>Spot Market</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Spot Market</em>' reference.
 	 * @see #isSetSpotMarket()
@@ -112,7 +116,7 @@ public interface SlotAllocation extends MMXObject {
 	 * @see #getSpotMarket()
 	 * @generated
 	 */
-	void setSpotMarket(ASpotMarket value);
+	void setSpotMarket(SpotMarket value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSpotMarket <em>Spot Market</em>}' reference.
@@ -120,7 +124,7 @@ public interface SlotAllocation extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetSpotMarket()
 	 * @see #getSpotMarket()
-	 * @see #setSpotMarket(ASpotMarket)
+	 * @see #setSpotMarket(SpotMarket)
 	 * @generated
 	 */
 	void unsetSpotMarket();
@@ -132,13 +136,14 @@ public interface SlotAllocation extends MMXObject {
 	 * @return whether the value of the '<em>Spot Market</em>' reference is set.
 	 * @see #unsetSpotMarket()
 	 * @see #getSpotMarket()
-	 * @see #setSpotMarket(ASpotMarket)
+	 * @see #setSpotMarket(SpotMarket)
 	 * @generated
 	 */
 	boolean isSetSpotMarket();
 
 	/**
 	 * Returns the value of the '<em><b>Cargo Allocation</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Cargo Allocation</em>' reference isn't clear,
@@ -148,7 +153,8 @@ public interface SlotAllocation extends MMXObject {
 	 * @return the value of the '<em>Cargo Allocation</em>' reference.
 	 * @see #setCargoAllocation(CargoAllocation)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_CargoAllocation()
-	 * @model required="true"
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations
+	 * @model opposite="slotAllocations" required="true"
 	 * @generated
 	 */
 	CargoAllocation getCargoAllocation();
@@ -245,12 +251,42 @@ public interface SlotAllocation extends MMXObject {
 	void setPrice(double value);
 
 	/**
+	 * Returns the value of the '<em><b>Volume Transferred</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Transferred</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Transferred</em>' attribute.
+	 * @see #setVolumeTransferred(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_VolumeTransferred()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getVolumeTransferred();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Transferred</em>' attribute.
+	 * @see #getVolumeTransferred()
+	 * @generated
+	 */
+	void setVolumeTransferred(int value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @generated
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	APort getPort();
+	Port getPort();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -270,11 +306,12 @@ public interface SlotAllocation extends MMXObject {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	AContract getContract();
+	Contract getContract();
 
 	/**
 	 * <!-- begin-user-doc -->

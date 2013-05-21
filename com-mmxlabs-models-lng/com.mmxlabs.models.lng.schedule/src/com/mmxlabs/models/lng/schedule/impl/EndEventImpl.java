@@ -3,10 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.schedule.CapacityViolationType;
-import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
-import java.io.Serializable;
-import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -22,17 +18,16 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.ExtraDataFormatType;
-import com.mmxlabs.models.lng.types.TypesFactory;
-import com.mmxlabs.models.lng.types.TypesPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,7 +39,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getPortCost <em>Port Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getExtraData <em>Extra Data</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  * </p>
@@ -94,14 +89,15 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	protected int portCost = PORT_COST_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getExtraData() <em>Extra Data</em>}' containment reference list.
+	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @see #getExtraData()
+	 * @see #getGroupProfitAndLoss()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ExtraData> extraData;
+	protected GroupProfitAndLoss groupProfitAndLoss;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocation() <em>Slot Allocation</em>}' reference.
@@ -180,14 +176,48 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<ExtraData> getExtraData() {
-		if (extraData == null) {
-			extraData = new EObjectContainmentEList<ExtraData>(ExtraData.class, this, SchedulePackage.END_EVENT__EXTRA_DATA);
+	public GroupProfitAndLoss getGroupProfitAndLoss() {
+		return groupProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetGroupProfitAndLoss(GroupProfitAndLoss newGroupProfitAndLoss, NotificationChain msgs) {
+		GroupProfitAndLoss oldGroupProfitAndLoss = groupProfitAndLoss;
+		groupProfitAndLoss = newGroupProfitAndLoss;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS, oldGroupProfitAndLoss, newGroupProfitAndLoss);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return extraData;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGroupProfitAndLoss(GroupProfitAndLoss newGroupProfitAndLoss) {
+		if (newGroupProfitAndLoss != groupProfitAndLoss) {
+			NotificationChain msgs = null;
+			if (groupProfitAndLoss != null)
+				msgs = ((InternalEObject)groupProfitAndLoss).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS, null, msgs);
+			if (newGroupProfitAndLoss != null)
+				msgs = ((InternalEObject)newGroupProfitAndLoss).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS, null, msgs);
+			msgs = basicSetGroupProfitAndLoss(newGroupProfitAndLoss, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS, newGroupProfitAndLoss, newGroupProfitAndLoss));
 	}
 
 	/**
@@ -233,71 +263,6 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExtraData getDataWithPath(Iterable<String> keys) {
-		java.util.Iterator<String> iterator = keys.iterator();
-				if (iterator.hasNext() == false) return null;
-				ExtraData edc = getDataWithKey(iterator.next());
-				while (edc != null && iterator.hasNext()) {
-					edc = edc.getDataWithKey(iterator.next());
-				}
-				return edc;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraData getDataWithKey(String key) {
-		for (final ExtraData e : getExtraData()) {
-			if (e.getKey().equals(key)) return e;
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraData addExtraData(String key, String name) {
-		final ExtraData result = TypesFactory.eINSTANCE.createExtraData();
-		result.setKey(key);
-		result.setName(name);
-		getExtraData().add(result);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraData addExtraData(String key, String name, Serializable value, ExtraDataFormatType format) {
-		final ExtraData result = addExtraData(key, name);
-		result.setValue(value);
-		result.setFormatType(format);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz, T defaultValue) {
-		final ExtraData ed = getDataWithPath(path);
-		if (ed == null) return defaultValue;
-		final T value = ed.getValueAs(clazz);
-		if (value == null) return defaultValue;
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {
@@ -318,8 +283,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.END_EVENT__VIOLATIONS:
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
-			case SchedulePackage.END_EVENT__EXTRA_DATA:
-				return ((InternalEList<?>)getExtraData()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
+				return basicSetGroupProfitAndLoss(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -339,8 +304,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				else return getViolations().map();
 			case SchedulePackage.END_EVENT__PORT_COST:
 				return getPortCost();
-			case SchedulePackage.END_EVENT__EXTRA_DATA:
-				return getExtraData();
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
+				return getGroupProfitAndLoss();
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
@@ -367,9 +332,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__PORT_COST:
 				setPortCost((Integer)newValue);
 				return;
-			case SchedulePackage.END_EVENT__EXTRA_DATA:
-				getExtraData().clear();
-				getExtraData().addAll((Collection<? extends ExtraData>)newValue);
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
+				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
 				return;
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
@@ -395,8 +359,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
-			case SchedulePackage.END_EVENT__EXTRA_DATA:
-				getExtraData().clear();
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
+				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
@@ -419,8 +383,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return violations != null && !violations.isEmpty();
 			case SchedulePackage.END_EVENT__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
-			case SchedulePackage.END_EVENT__EXTRA_DATA:
-				return extraData != null && !extraData.isEmpty();
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
+				return groupProfitAndLoss != null;
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				return slotAllocation != null;
 		}
@@ -452,9 +416,9 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				default: return -1;
 			}
 		}
-		if (baseClass == ExtraDataContainer.class) {
+		if (baseClass == ProfitAndLossContainer.class) {
 			switch (derivedFeatureID) {
-				case SchedulePackage.END_EVENT__EXTRA_DATA: return TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA;
+				case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
 				default: return -1;
 			}
 		}
@@ -486,9 +450,9 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				default: return -1;
 			}
 		}
-		if (baseClass == ExtraDataContainer.class) {
+		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseFeatureID) {
-				case TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA: return SchedulePackage.END_EVENT__EXTRA_DATA;
+				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS;
 				default: return -1;
 			}
 		}
@@ -518,13 +482,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				default: return -1;
 			}
 		}
-		if (baseClass == ExtraDataContainer.class) {
+		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseOperationID) {
-				case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE: return SchedulePackage.END_EVENT___GET_DATA_WITH_PATH__ITERABLE;
-				case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING: return SchedulePackage.END_EVENT___GET_DATA_WITH_KEY__STRING;
-				case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING: return SchedulePackage.END_EVENT___ADD_EXTRA_DATA__STRING_STRING;
-				case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE: return SchedulePackage.END_EVENT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE;
-				case TypesPackage.EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT: return SchedulePackage.END_EVENT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT;
 				default: return -1;
 			}
 		}
@@ -540,16 +499,6 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case SchedulePackage.END_EVENT___GET_DATA_WITH_PATH__ITERABLE:
-				return getDataWithPath((Iterable<String>)arguments.get(0));
-			case SchedulePackage.END_EVENT___GET_DATA_WITH_KEY__STRING:
-				return getDataWithKey((String)arguments.get(0));
-			case SchedulePackage.END_EVENT___ADD_EXTRA_DATA__STRING_STRING:
-				return addExtraData((String)arguments.get(0), (String)arguments.get(1));
-			case SchedulePackage.END_EVENT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE:
-				return addExtraData((String)arguments.get(0), (String)arguments.get(1), (Serializable)arguments.get(2), (ExtraDataFormatType)arguments.get(3));
-			case SchedulePackage.END_EVENT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT:
-				return getValueWithPathAs((Iterable<String>)arguments.get(0), (Class)arguments.get(1), arguments.get(2));
 			case SchedulePackage.END_EVENT___GET_FUEL_COST:
 				return getFuelCost();
 		}

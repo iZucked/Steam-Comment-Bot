@@ -12,9 +12,11 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -51,14 +53,17 @@ public class VesselEventVesselsInlineEditor extends MultiReferenceInlineEditor {
 		}
 		// .. otherwise lookup the assignment
 		if (elementAssignment == null) {
-			final InputModel inputModel = location.getRootObject().getSubModel(InputModel.class);
-			elementAssignment = AssignmentEditorHelper.getElementAssignment(inputModel, (UUIDObject) input);
+			MMXRootObject rootObject = location.getRootObject();
+			if (rootObject instanceof LNGScenarioModel) {
+				final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
+				elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, (UUIDObject) input);
+			}
 		}
 		final List<?> list = (List<?>) value;
 		if (elementAssignment != null) {
 			if (list.size() == 1) {
 				final Object newAssignment = list.get(0);
-				cmd.append(AssignmentEditorHelper.reassignElement(this.commandHandler.getEditingDomain(), (AVesselSet) newAssignment, elementAssignment));
+				cmd.append(AssignmentEditorHelper.reassignElement(this.commandHandler.getEditingDomain(), (AVesselSet<Vessel>) newAssignment, elementAssignment));
 			} else {
 				if (!list.contains(elementAssignment.getAssignment())) {
 					cmd.append(AssignmentEditorHelper.unassignElement(this.commandHandler.getEditingDomain(), elementAssignment));

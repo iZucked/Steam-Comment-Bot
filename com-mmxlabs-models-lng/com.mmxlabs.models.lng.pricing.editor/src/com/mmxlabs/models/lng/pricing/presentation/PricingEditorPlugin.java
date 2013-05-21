@@ -11,6 +11,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
 import com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider;
 import com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
@@ -48,8 +50,10 @@ public final class PricingEditorPlugin extends EMFPlugin {
 	public PricingEditorPlugin() {
 		super
 			(new ResourceLocator [] {
+				FleetEditPlugin.INSTANCE,
 				LNGTypesEditPlugin.INSTANCE,
 				MmxcoreEditPlugin.INSTANCE,
+				PortEditPlugin.INSTANCE,
 			});
 	}
 

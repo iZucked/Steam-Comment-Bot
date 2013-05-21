@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -78,9 +77,9 @@ public class FleetModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSELS);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES);
-			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__BASE_FUELS);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS);
+			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__SPECIAL_VESSEL_GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -137,9 +136,9 @@ public class FleetModelItemProvider
 		switch (notification.getFeatureID(FleetModel.class)) {
 			case FleetPackage.FLEET_MODEL__VESSELS:
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
+			case FleetPackage.FLEET_MODEL__SPECIAL_VESSEL_GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -169,21 +168,6 @@ public class FleetModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS,
-				 FleetFactory.eINSTANCE.createDryDockEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS,
-				 FleetFactory.eINSTANCE.createCharterOutEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__VESSEL_EVENTS,
-				 FleetFactory.eINSTANCE.createMaintenanceEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(FleetPackage.Literals.FLEET_MODEL__BASE_FUELS,
 				 FleetFactory.eINSTANCE.createBaseFuel()));
 
@@ -191,17 +175,11 @@ public class FleetModelItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS,
 				 FleetFactory.eINSTANCE.createVesselGroup()));
-	}
 
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return FleetEditPlugin.INSTANCE;
+		newChildDescriptors.add
+			(createChildParameter
+				(FleetPackage.Literals.FLEET_MODEL__SPECIAL_VESSEL_GROUPS,
+				 FleetFactory.eINSTANCE.createVesselTypeGroup()));
 	}
 
 }

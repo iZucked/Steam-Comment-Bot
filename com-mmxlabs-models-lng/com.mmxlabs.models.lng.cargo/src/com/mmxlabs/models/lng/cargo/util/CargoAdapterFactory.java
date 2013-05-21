@@ -4,22 +4,25 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import com.mmxlabs.models.lng.cargo.*;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.types.ACargo;
-import com.mmxlabs.models.lng.types.ASlot;
-
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoGroup;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notifier;
-
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -124,14 +127,6 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
-			}
-			@Override
-			public Adapter caseACargo(ACargo object) {
-				return createACargoAdapter();
-			}
-			@Override
-			public Adapter caseASlot(ASlot object) {
-				return createASlotAdapter();
 			}
 			@Override
 			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
@@ -322,34 +317,6 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ACargo <em>ACargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ACargo
-	 * @generated
-	 */
-	public Adapter createACargoAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ASlot <em>ASlot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ASlot
-	 * @generated
-	 */
-	public Adapter createASlotAdapter() {
 		return null;
 	}
 

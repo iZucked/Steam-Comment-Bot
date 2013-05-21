@@ -58,9 +58,6 @@ public class NullReferenceConstraintTest {
 	private Cargo initCargo() {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		// these are initially null, so create and set instances
-		cargo.setLoadSlot(CargoFactory.eINSTANCE.createLoadSlot());
-		cargo.setDischargeSlot(CargoFactory.eINSTANCE.createDischargeSlot());
 		return cargo;
 	}
 
@@ -94,43 +91,6 @@ public class NullReferenceConstraintTest {
 
 		// Test for success, neither are null.
 		testNullReferenceConstraint(true, cargo);
-	}
-
-	/**
-	 * Test {@link Cargo#getLoadSlot()} and {@link Cargo#getDischargeSlot()} are not null. If either are null expect a failure.
-	 */
-	@Test
-	public void testCargoLoadSlotNull() {
-		final Cargo cargo = initCargo();
-
-		// set load slot to null and expect a failure
-		cargo.setLoadSlot(null);
-		testNullReferenceConstraint(false, cargo);
-	}
-
-	/**
-	 * Test {@link Cargo#getLoadSlot()} and {@link Cargo#getDischargeSlot()} are not null. If either are null expect a failure.
-	 */
-	@Test
-	public void testCargoDischargeSlotNull() {
-		final Cargo cargo = initCargo();
-
-		// set discharge slot to null and expect a failure
-		cargo.setDischargeSlot(null);
-		testNullReferenceConstraint(false, cargo);
-	}
-
-	/**
-	 * Test {@link Cargo#getLoadSlot()} and {@link Cargo#getDischargeSlot()} are not null. If either are null expect a failure.
-	 */
-	@Test
-	public void testCargoDischargeAllNull() {
-		final Cargo cargo = initCargo();
-
-		// set discharge slot to null and expect a failure
-		cargo.setDischargeSlot(null);
-		cargo.setLoadSlot(null);
-		testNullReferenceConstraint(false, cargo);
 	}
 
 	/**

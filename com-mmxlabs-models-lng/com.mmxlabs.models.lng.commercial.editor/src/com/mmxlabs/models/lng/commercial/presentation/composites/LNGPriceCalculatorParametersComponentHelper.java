@@ -4,20 +4,19 @@
  */
 package com.mmxlabs.models.lng.commercial.presentation.composites;
 
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 
 /**
  * A component helper for LNGPriceCalculatorParameters instances
@@ -43,7 +42,7 @@ public class LNGPriceCalculatorParametersComponentHelper extends BaseComponentHe
 	 */
 	public LNGPriceCalculatorParametersComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ALNG_PRICE_CALCULATOR_PARAMETERS));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 	}
 	
 	/**

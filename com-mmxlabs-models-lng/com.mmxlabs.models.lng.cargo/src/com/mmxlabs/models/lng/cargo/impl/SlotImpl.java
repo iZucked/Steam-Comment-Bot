@@ -6,19 +6,23 @@ package com.mmxlabs.models.lng.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.TimeZone;
 
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -27,13 +31,17 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.lng.types.impl.ASlotImpl;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Slot</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
@@ -44,12 +52,46 @@ import com.mmxlabs.models.lng.types.impl.ASlotImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPriceExpression <em>Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public abstract class SlotImpl extends ASlotImpl implements Slot {
+public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
+
 	/**
 	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -279,6 +321,17 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	protected boolean priceExpressionESet;
 
 	/**
+	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getCargo()
+	 * @generated
+	 * @ordered
+	 */
+	protected Cargo cargo;
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -293,6 +346,42 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.SLOT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, CargoPackage.SLOT__OTHER_NAMES);
+		}
+		return otherNames;
 	}
 
 	/**
@@ -693,6 +782,70 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Cargo getCargo() {
+		if (cargo != null && cargo.eIsProxy()) {
+			InternalEObject oldCargo = (InternalEObject)cargo;
+			cargo = (Cargo)eResolveProxy(oldCargo);
+			if (cargo != oldCargo) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__CARGO, oldCargo, cargo));
+			}
+		}
+		return cargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Cargo basicGetCargo() {
+		return cargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCargo(Cargo newCargo, NotificationChain msgs) {
+		Cargo oldCargo = cargo;
+		cargo = newCargo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CARGO, oldCargo, newCargo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCargo(Cargo newCargo) {
+		if (newCargo != cargo) {
+			NotificationChain msgs = null;
+			if (cargo != null)
+				msgs = ((InternalEObject)cargo).eInverseRemove(this, CargoPackage.CARGO__SLOTS, Cargo.class, msgs);
+			if (newCargo != null)
+				msgs = ((InternalEObject)newCargo).eInverseAdd(this, CargoPackage.CARGO__SLOTS, Cargo.class, msgs);
+			msgs = basicSetCargo(newCargo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CARGO, newCargo, newCargo));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -772,12 +925,46 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.SLOT__CARGO:
+				if (cargo != null)
+					msgs = ((InternalEObject)cargo).eInverseRemove(this, CargoPackage.CARGO__SLOTS, Cargo.class, msgs);
+				return basicSetCargo((Cargo)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.SLOT__CARGO:
+				return basicSetCargo(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case CargoPackage.SLOT__NAME:
+				return getName();
+			case CargoPackage.SLOT__OTHER_NAMES:
+				return getOtherNames();
 			case CargoPackage.SLOT__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
@@ -800,6 +987,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return isOptional();
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 				return getPriceExpression();
+			case CargoPackage.SLOT__CARGO:
+				if (resolve) return getCargo();
+				return basicGetCargo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -808,9 +998,17 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case CargoPackage.SLOT__NAME:
+				setName((String)newValue);
+				return;
+			case CargoPackage.SLOT__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
+				return;
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)newValue);
 				return;
@@ -841,6 +1039,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 				setPriceExpression((String)newValue);
 				return;
+			case CargoPackage.SLOT__CARGO:
+				setCargo((Cargo)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -852,6 +1053,12 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case CargoPackage.SLOT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 			case CargoPackage.SLOT__CONTRACT:
 				unsetContract();
 				return;
@@ -882,6 +1089,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 				unsetPriceExpression();
 				return;
+			case CargoPackage.SLOT__CARGO:
+				setCargo((Cargo)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -893,6 +1103,10 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case CargoPackage.SLOT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case CargoPackage.SLOT__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case CargoPackage.SLOT__CONTRACT:
 				return isSetContract();
 			case CargoPackage.SLOT__PORT:
@@ -913,6 +1127,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 				return isSetPriceExpression();
+			case CargoPackage.SLOT__CARGO:
+				return cargo != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -923,7 +1139,56 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (derivedFeatureID) {
+				case CargoPackage.SLOT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case CargoPackage.SLOT__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		if (baseClass == ITimezoneProvider.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.NAMED_OBJECT__NAME: return CargoPackage.SLOT__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return CargoPackage.SLOT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		if (baseClass == ITimezoneProvider.class) {
+			switch (baseFeatureID) {
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (baseOperationID) {
+				default: return -1;
+			}
+		}
 		if (baseClass == ITimezoneProvider.class) {
 			switch (baseOperationID) {
 				case TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE: return CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE;
@@ -968,7 +1233,11 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (windowStart: ");
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
+		result.append(", windowStart: ");
 		result.append(windowStart);
 		result.append(", windowStartTime: ");
 		if (windowStartTimeESet) result.append(windowStartTime); else result.append("<unset>");

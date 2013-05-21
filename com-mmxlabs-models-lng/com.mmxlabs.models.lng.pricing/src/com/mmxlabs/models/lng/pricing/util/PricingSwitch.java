@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.types.AIndex;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -94,7 +93,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				DataIndex<?> dataIndex = (DataIndex<?>)theEObject;
 				T result = caseDataIndex(dataIndex);
 				if (result == null) result = caseIndex(dataIndex);
-				if (result == null) result = caseAIndex(dataIndex);
 				if (result == null) result = caseUUIDObject(dataIndex);
 				if (result == null) result = caseNamedObject(dataIndex);
 				if (result == null) result = caseMMXObject(dataIndex);
@@ -105,7 +103,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				DerivedIndex<?> derivedIndex = (DerivedIndex<?>)theEObject;
 				T result = caseDerivedIndex(derivedIndex);
 				if (result == null) result = caseIndex(derivedIndex);
-				if (result == null) result = caseAIndex(derivedIndex);
 				if (result == null) result = caseUUIDObject(derivedIndex);
 				if (result == null) result = caseNamedObject(derivedIndex);
 				if (result == null) result = caseMMXObject(derivedIndex);
@@ -121,7 +118,6 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.INDEX: {
 				Index<?> index = (Index<?>)theEObject;
 				T result = caseIndex(index);
-				if (result == null) result = caseAIndex(index);
 				if (result == null) result = caseUUIDObject(index);
 				if (result == null) result = caseNamedObject(index);
 				if (result == null) result = caseMMXObject(index);
@@ -380,21 +376,6 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>AIndex</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>AIndex</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAIndex(AIndex object) {
 		return null;
 	}
 

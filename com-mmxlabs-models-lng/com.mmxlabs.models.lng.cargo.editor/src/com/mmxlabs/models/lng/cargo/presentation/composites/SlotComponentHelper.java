@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -51,10 +50,11 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		{
 
-			for (final IComponentHelper helper : registry.getComponentHelpers(TypesPackage.Literals.ASLOT)) {
-				if (helper != null)
-					superClassesHelpers.add(helper);
-			}
+//			for (final IComponentHelper helper : registry.getComponentHelpers(CargoPackage.Literals.SLOT)) {
+//				if (helper != null) {
+//					superClassesHelpers.add(helper);
+//				}
+//			}
 		}
 		// {
 		// final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
@@ -206,6 +206,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_priceExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PRICE_EXPRESSION));
+	}
+
+	/**
+	 * Create the editor for the cargo feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_cargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CARGO));
 	}
 
 	/**

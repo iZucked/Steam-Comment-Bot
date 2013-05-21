@@ -144,13 +144,13 @@
           factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketPortValueProviderFactory"
           id="com.mmxlabs.models.lng..editorspotmarkets.valueproviders.SpotMarketPortValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
-          referenceEClass="com.mmxlabs.models.lng.types.APort">
+          referenceEClass="com.mmxlabs.models.lng.port.Port">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
           id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.CharterCostModel"
-          referenceEClass="com.mmxlabs.models.lng.types.AIndex">
+          referenceEClass="com.mmxlabs.models.lng.pricing.Index">
     </valueProvider>
  </extension>
  <extension

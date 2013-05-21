@@ -3,18 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.port.Port;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,7 +34,7 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
  * @model
  * @generated
  */
-public interface Contract extends AContract {
+public interface Contract extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -69,7 +63,7 @@ public interface Contract extends AContract {
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allowed Ports</em>' reference list isn't clear,
@@ -81,7 +75,7 @@ public interface Contract extends AContract {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getAllowedPorts();
+	EList<APortSet<Port>> getAllowedPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Preferred Port</b></em>' reference.
@@ -208,7 +202,7 @@ public interface Contract extends AContract {
 
 	/**
 	 * Returns the value of the '<em><b>Restricted Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Restricted Ports</em>' reference list isn't clear,
@@ -221,7 +215,7 @@ public interface Contract extends AContract {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getRestrictedPorts();
+	EList<APortSet<Port>> getRestrictedPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Price Info</b></em>' containment reference.

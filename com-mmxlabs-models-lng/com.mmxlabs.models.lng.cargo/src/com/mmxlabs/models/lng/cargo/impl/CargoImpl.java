@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -12,15 +13,23 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.impl.ACargoImpl;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,35 +38,49 @@ import com.mmxlabs.models.lng.types.impl.ACargoImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getLoadSlot <em>Load Slot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSlots <em>Slots</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class CargoImpl extends ACargoImpl implements Cargo {
+public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
-	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' reference.
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected LoadSlot loadSlot;
+	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getDischargeSlot() <em>Discharge Slot</em>}' reference.
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
-	 * @see #getDischargeSlot()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected DischargeSlot dischargeSlot;
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
 
 	/**
 	 * The default value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
@@ -96,7 +119,18 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AVesselSet> allowedVessels;
+	protected EList<AVesselSet<Vessel>> allowedVessels;
+
+	/**
+	 * The cached value of the '{@link #getSlots() <em>Slots</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getSlots()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Slot> slots;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -119,122 +153,38 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getLoadSlot() {
-		if (loadSlot != null && loadSlot.eIsProxy()) {
-			InternalEObject oldLoadSlot = (InternalEObject)loadSlot;
-			loadSlot = (LoadSlot)eResolveProxy(oldLoadSlot);
-			if (loadSlot != oldLoadSlot) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, loadSlot));
-			}
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, CargoPackage.CARGO__OTHER_NAMES);
 		}
-		return loadSlot;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LoadSlot basicGetLoadSlot() {
-		return loadSlot;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetLoadSlot(LoadSlot newLoadSlot, NotificationChain msgs) {
-		LoadSlot oldLoadSlot = loadSlot;
-		loadSlot = newLoadSlot;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, oldLoadSlot, newLoadSlot);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setLoadSlot(LoadSlot newLoadSlot) {
-		if (newLoadSlot != loadSlot) {
-			NotificationChain msgs = null;
-			if (loadSlot != null)
-				msgs = ((InternalEObject)loadSlot).eInverseRemove(this, CargoPackage.LOAD_SLOT__CARGO, LoadSlot.class, msgs);
-			if (newLoadSlot != null)
-				msgs = ((InternalEObject)newLoadSlot).eInverseAdd(this, CargoPackage.LOAD_SLOT__CARGO, LoadSlot.class, msgs);
-			msgs = basicSetLoadSlot(newLoadSlot, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOAD_SLOT, newLoadSlot, newLoadSlot));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DischargeSlot getDischargeSlot() {
-		if (dischargeSlot != null && dischargeSlot.eIsProxy()) {
-			InternalEObject oldDischargeSlot = (InternalEObject)dischargeSlot;
-			dischargeSlot = (DischargeSlot)eResolveProxy(oldDischargeSlot);
-			if (dischargeSlot != oldDischargeSlot) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, dischargeSlot));
-			}
-		}
-		return dischargeSlot;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DischargeSlot basicGetDischargeSlot() {
-		return dischargeSlot;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetDischargeSlot(DischargeSlot newDischargeSlot, NotificationChain msgs) {
-		DischargeSlot oldDischargeSlot = dischargeSlot;
-		dischargeSlot = newDischargeSlot;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, oldDischargeSlot, newDischargeSlot);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDischargeSlot(DischargeSlot newDischargeSlot) {
-		if (newDischargeSlot != dischargeSlot) {
-			NotificationChain msgs = null;
-			if (dischargeSlot != null)
-				msgs = ((InternalEObject)dischargeSlot).eInverseRemove(this, CargoPackage.DISCHARGE_SLOT__CARGO, DischargeSlot.class, msgs);
-			if (newDischargeSlot != null)
-				msgs = ((InternalEObject)newDischargeSlot).eInverseAdd(this, CargoPackage.DISCHARGE_SLOT__CARGO, DischargeSlot.class, msgs);
-			msgs = basicSetDischargeSlot(newDischargeSlot, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__DISCHARGE_SLOT, newDischargeSlot, newDischargeSlot));
+		return otherNames;
 	}
 
 	/**
@@ -288,11 +238,24 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AVesselSet> getAllowedVessels() {
+	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
-			allowedVessels = new EObjectResolvingEList<AVesselSet>(AVesselSet.class, this, CargoPackage.CARGO__ALLOWED_VESSELS);
+			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.CARGO__ALLOWED_VESSELS);
 		}
 		return allowedVessels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Slot> getSlots() {
+		if (slots == null) {
+			slots = new EObjectWithInverseResolvingEList<Slot>(Slot.class, this, CargoPackage.CARGO__SLOTS, CargoPackage.SLOT__CARGO);
+		}
+		return slots;
 	}
 
 	/**
@@ -302,13 +265,30 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 */
 	public CargoType getCargoType() {
 
-		if (getLoadSlot() == null || getLoadSlot().isDESPurchase()) {
-			return CargoType.DES;
+		for (final Slot slot : getSlots()) {
+			if (slot instanceof LoadSlot) {
+				if (((LoadSlot) slot).isDESPurchase()) {
+					return CargoType.DES;
+				}
+			} else if (slot instanceof DischargeSlot) {
+				if (((DischargeSlot) slot).isFOBSale()) {
+					return CargoType.FOB;
+				}
+			}
 		}
-		if (getDischargeSlot() == null || getDischargeSlot().isFOBSale()) {
-			return CargoType.FOB;
-		}
+		
 		return CargoType.FLEET;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Returns date sorted copy of the {@link #getSlots()} {@link List}.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EList<Slot> getSortedSlots() {
+		return CargoSlotSorter.sortedSlots(getSlots());
 	}
 
 	/**
@@ -316,17 +296,12 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case CargoPackage.CARGO__LOAD_SLOT:
-				if (loadSlot != null)
-					msgs = ((InternalEObject)loadSlot).eInverseRemove(this, CargoPackage.LOAD_SLOT__CARGO, LoadSlot.class, msgs);
-				return basicSetLoadSlot((LoadSlot)otherEnd, msgs);
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				if (dischargeSlot != null)
-					msgs = ((InternalEObject)dischargeSlot).eInverseRemove(this, CargoPackage.DISCHARGE_SLOT__CARGO, DischargeSlot.class, msgs);
-				return basicSetDischargeSlot((DischargeSlot)otherEnd, msgs);
+			case CargoPackage.CARGO__SLOTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getSlots()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -339,10 +314,8 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case CargoPackage.CARGO__LOAD_SLOT:
-				return basicSetLoadSlot(null, msgs);
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				return basicSetDischargeSlot(null, msgs);
+			case CargoPackage.CARGO__SLOTS:
+				return ((InternalEList<?>)getSlots()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -355,16 +328,16 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.CARGO__LOAD_SLOT:
-				if (resolve) return getLoadSlot();
-				return basicGetLoadSlot();
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				if (resolve) return getDischargeSlot();
-				return basicGetDischargeSlot();
+			case CargoPackage.CARGO__NAME:
+				return getName();
+			case CargoPackage.CARGO__OTHER_NAMES:
+				return getOtherNames();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return getAllowedVessels();
+			case CargoPackage.CARGO__SLOTS:
+				return getSlots();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -378,18 +351,23 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((LoadSlot)newValue);
+			case CargoPackage.CARGO__NAME:
+				setName((String)newValue);
 				return;
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				setDischargeSlot((DischargeSlot)newValue);
+			case CargoPackage.CARGO__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				setAllowRewiring((Boolean)newValue);
 				return;
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
-				getAllowedVessels().addAll((Collection<? extends AVesselSet>)newValue);
+				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
+				return;
+			case CargoPackage.CARGO__SLOTS:
+				getSlots().clear();
+				getSlots().addAll((Collection<? extends Slot>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -403,17 +381,20 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CARGO__LOAD_SLOT:
-				setLoadSlot((LoadSlot)null);
+			case CargoPackage.CARGO__NAME:
+				setName(NAME_EDEFAULT);
 				return;
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				setDischargeSlot((DischargeSlot)null);
+			case CargoPackage.CARGO__OTHER_NAMES:
+				getOtherNames().clear();
 				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				unsetAllowRewiring();
 				return;
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
+				return;
+			case CargoPackage.CARGO__SLOTS:
+				getSlots().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -427,16 +408,52 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CARGO__LOAD_SLOT:
-				return loadSlot != null;
-			case CargoPackage.CARGO__DISCHARGE_SLOT:
-				return dischargeSlot != null;
+			case CargoPackage.CARGO__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case CargoPackage.CARGO__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isSetAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
+			case CargoPackage.CARGO__SLOTS:
+				return slots != null && !slots.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (derivedFeatureID) {
+				case CargoPackage.CARGO__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case CargoPackage.CARGO__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.NAMED_OBJECT__NAME: return CargoPackage.CARGO__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return CargoPackage.CARGO__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**
@@ -449,6 +466,8 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 		switch (operationID) {
 			case CargoPackage.CARGO___GET_CARGO_TYPE:
 				return getCargoType();
+			case CargoPackage.CARGO___GET_SORTED_SLOTS:
+				return getSortedSlots();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -463,7 +482,11 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (allowRewiring: ");
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
+		result.append(", allowRewiring: ");
 		if (allowRewiringESet) result.append(allowRewiring); else result.append("<unset>");
 		result.append(')');
 		return result.toString();

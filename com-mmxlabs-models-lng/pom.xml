@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.lng</groupId>
 	<artifactId>com.mmxlabs.models.lng.parent</artifactId>
-	<version>3.1.1-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -31,36 +31,41 @@
 		<module>com.mmxlabs.models.lng.cargo</module>
 		<module>com.mmxlabs.models.lng.cargo.edit</module>
 		<module>com.mmxlabs.models.lng.cargo.editor</module>
-
-
 		<module>com.mmxlabs.models.lng.cargo.validation</module>
+
 		<module>com.mmxlabs.models.lng.commercial</module>
 		<module>com.mmxlabs.models.lng.commercial.edit</module>
 		<module>com.mmxlabs.models.lng.commercial.editor</module>
 		<module>com.mmxlabs.models.lng.commercial.validation</module>
+
 		<module>com.mmxlabs.models.lng.fleet</module>
 		<module>com.mmxlabs.models.lng.fleet.edit</module>
 		<module>com.mmxlabs.models.lng.fleet.editor</module>
 		<module>com.mmxlabs.models.lng.fleet.validation</module>
-		<module>com.mmxlabs.models.lng.input</module>
-		<module>com.mmxlabs.models.lng.input.edit</module>
-		<module>com.mmxlabs.models.lng.input.editor</module>
-		<module>com.mmxlabs.models.lng.input.validation</module>
+
+		<module>com.mmxlabs.models.lng.assignment</module>
+		<module>com.mmxlabs.models.lng.assignment.edit</module>
+		<module>com.mmxlabs.models.lng.assignment.editor</module>
+		<module>com.mmxlabs.models.lng.assignment.validation</module>
+
 		<module>com.mmxlabs.models.lng.port</module>
 		<module>com.mmxlabs.models.lng.port.edit</module>
 		<module>com.mmxlabs.models.lng.port.editor</module>
 		<module>com.mmxlabs.models.lng.port.validation</module>
+
 		<module>com.mmxlabs.models.lng.pricing</module>
 		<module>com.mmxlabs.models.lng.pricing.edit</module>
 		<module>com.mmxlabs.models.lng.pricing.editor</module>
 		<module>com.mmxlabs.models.lng.pricing.validation</module>
+
 		<module>com.mmxlabs.models.lng.schedule</module>
 		<module>com.mmxlabs.models.lng.schedule.edit</module>
 		<module>com.mmxlabs.models.lng.schedule.editor</module>
 		<module>com.mmxlabs.models.lng.schedule.validation</module>
-		<module>com.mmxlabs.models.lng.optimiser</module>
-		<module>com.mmxlabs.models.lng.optimiser.edit</module>
-		<module>com.mmxlabs.models.lng.optimiser.editor</module>
+
+		<module>com.mmxlabs.models.lng.parameters</module>
+		<module>com.mmxlabs.models.lng.parameters.edit</module>
+		<module>com.mmxlabs.models.lng.parameters.editor</module>
 
 		<module>com.mmxlabs.models.lng.spotmarkets</module>
 		<module>com.mmxlabs.models.lng.spotmarkets.edit</module>
@@ -73,10 +78,16 @@
 		<module>com.mmxlabs.models.lng.analytics.validation</module>
 		<module>com.mmxlabs.models.lng.analytics.navigator</module>
 
+		<module>com.mmxlabs.models.lng.assignmnent.validation.tests</module>
 		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
 		<module>com.mmxlabs.models.lng.fleet.validation.tests</module>
+		<module>com.mmxlabs.models.lng.port.validation.tests</module>
+		<module>com.mmxlabs.models.lng.spotmarkets.validation.tests</module>
 
-		<module>com.mmxlabs.models.lng.scenario</module>
+		<module>com.mmxlabs.models.lng.scenario.model</module>
+		<module>com.mmxlabs.models.lng.scenario.model.edit</module>
+		<module>com.mmxlabs.models.lng.scenario.ui</module>
+
 		<module>com.mmxlabs.models.lng.migration</module>
 		<!-- <module>com.mmxlabs.models.lng.migration.tests</module> -->
 

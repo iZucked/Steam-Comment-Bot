@@ -132,6 +132,16 @@ public interface FleetFactory extends EFactory {
 	VesselClassRouteParameters createVesselClassRouteParameters();
 
 	/**
+	 * Returns a new object of class '<em>Scenario Fleet Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Scenario Fleet Model</em>'.
+	 * @generated
+	 */
+	ScenarioFleetModel createScenarioFleetModel();
+
+	/**
 	 * Returns a new object of class '<em>Vessel Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

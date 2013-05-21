@@ -3,18 +3,26 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
+
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.query.conditions.eobjects.structuralfeatures.EObjectReferencerCondition;
+import org.eclipse.emf.query.statements.FROM;
+import org.eclipse.emf.query.statements.IQueryResult;
+import org.eclipse.emf.query.statements.SELECT;
+import org.eclipse.emf.query.statements.WHERE;
 
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselType;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
-import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 
@@ -32,7 +40,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *
  * @generated
  */
-public class VesselTypeGroupImpl extends AVesselSetImpl implements VesselTypeGroup {
+public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements VesselTypeGroup {
 	/**
 	 * The default value of the '{@link #getVesselType() <em>Vessel Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -168,25 +176,37 @@ public class VesselTypeGroupImpl extends AVesselSetImpl implements VesselTypeGro
 	}
 
 	/**
-	 * @generated NO
+	 * @generated NOT
 	 */
 	@Override
-	public EList<AVessel> collect(EList<AVesselSet> marked) {
-		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
-		final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
+	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Vessel> result = new UniqueEList<Vessel>();
 		marked.add(this);
+
 		final EObject parent = eContainer();
 		if (parent instanceof FleetModel) {
 			for (final Vessel v : ((FleetModel) parent).getVessels()) {
-				// NOTE: This works while there are only two VesselTypes
-				if (v.isSetTimeCharterRate() ^ getVesselType() == VesselType.OWNED) {
-					result.addAll(v.collect(marked));
+				// We query the resource as we cannot reference LNGScenarioModel and LNGPortfolioModel here directly without creating circular references.
+				// TODO: This could get slow as the size of the resource set increases. Look into EMF Query API to be able to make this faster. Currently we find *all* references to a single vessel at a time 
+				
+				final SELECT select = new SELECT(new FROM(this.eResource().getContents()), new WHERE(new EObjectReferencerCondition(v)));
+				final IQueryResult execute = select.execute();
+				for (final EObject eObj : execute) {
+					if (eObj instanceof VesselAvailability) {
+						final VesselAvailability va = (VesselAvailability) eObj;
+						if (va.isSetTimeCharterRate() ^ getVesselType() == VesselType.OWNED) {
+							result.addAll(va.getVessel().collect(marked));
+						}
+					}
 				}
+
 			}
 		}
 		return result;
 	}
-	
 } // end of VesselTypeGroupImpl
 
 // finish type fixing

@@ -11,7 +11,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -30,13 +30,13 @@ public class TimeCharterCostConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
-		if (object instanceof Vessel) {
-			final Vessel vessel = (Vessel) object;
+		if (object instanceof VesselAvailability) {
+			final VesselAvailability vesselAvailability = (VesselAvailability) object;
 
-			if (vessel.isSetTimeCharterRate()) {
-				if (vessel.getTimeCharterRate() == 0) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName()));
-					status.addEObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_TimeCharterRate());
+			if (vesselAvailability.isSetTimeCharterRate()) {
+				if (vesselAvailability.getTimeCharterRate() == 0) {
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselAvailability.getVessel().getName()));
+					status.addEObjectAndFeature(vesselAvailability, FleetPackage.eINSTANCE.getVesselAvailability_TimeCharterRate());
 					return status;
 				}
 			}

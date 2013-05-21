@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.models.lng.input.editor.elementAssignmentProvider">
+   <implementation class="com.mmxlabs.models.lng.assignment.commands.ElementAssignmentCommandProvider"/>
+   <service>
+      <provide interface="com.mmxlabs.models.common.commandservice.IModelCommandProvider"/>
+   </service>
+</scr:component>

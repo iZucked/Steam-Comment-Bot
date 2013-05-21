@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
@@ -30,19 +31,27 @@ import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 
 public class BaseFuelPriceInjector extends BaseComponentHelper {
 	@Override
-	public void addEditorsToComposite(IInlineEditorContainer detailComposite) {
+	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
 		addEditorsToComposite(detailComposite, null);
 	}
 
 	@Override
-	public List<EObject> getExternalEditingRange(MMXRootObject root, EObject value) {
-		final PricingModel pricingModel = root.getSubModel(PricingModel.class);
+	public List<EObject> getExternalEditingRange(final MMXRootObject rootObject, final EObject value) {
+		if (!(rootObject instanceof LNGScenarioModel)) {
+			return null;
+		}
+		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+
+		final PricingModel pricingModel = scenarioModel.getPricingModel();
+		if (pricingModel == null) {
+			return null;
+		}
 		for (final BaseFuelCost cost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 			if (cost.getFuel() == value) {
 				return Collections.singletonList((EObject) cost);
 			}
 		}
-		return super.getExternalEditingRange(root, value);
+		return super.getExternalEditingRange(rootObject, value);
 	}
 
 	@Override
@@ -95,7 +104,7 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			}
 
 			@Override
-			public void setEditorLocked(boolean locked) {
+			public void setEditorLocked(final boolean locked) {
 				numberEditor.setEditorLocked(locked);
 			}
 
@@ -105,7 +114,7 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			}
 
 			@Override
-			public void setEditorEnabled(boolean enabled) {
+			public void setEditorEnabled(final boolean enabled) {
 				numberEditor.setEditorEnabled(enabled);
 			}
 
@@ -115,7 +124,7 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			}
 
 			@Override
-			public void setEditorVisible(boolean visible) {
+			public void setEditorVisible(final boolean visible) {
 				numberEditor.setEditorVisible(visible);
 			}
 
@@ -125,15 +134,15 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			}
 
 			@Override
-			public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+			public void addNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
-			public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+			public void removeNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}

@@ -69,6 +69,7 @@ public class SlotAllocationComponentHelper extends BaseComponentHelper {
 		add_cargoAllocationEditor(detailComposite, topClass);
 		add_slotVisitEditor(detailComposite, topClass);
 		add_priceEditor(detailComposite, topClass);
+		add_volumeTransferredEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slot feature on SlotAllocation
@@ -112,5 +113,14 @@ public class SlotAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_priceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE));
+	}
+
+	/**
+	 * Create the editor for the volumeTransferred feature on SlotAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_volumeTransferredEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_TRANSFERRED));
 	}
 }

@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -13,7 +15,6 @@ import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.impl.APortSetImpl;
@@ -31,7 +32,7 @@ import com.mmxlabs.models.lng.types.impl.APortSetImpl;
  *
  * @generated
  */
-public class CapabilityGroupImpl extends APortSetImpl implements CapabilityGroup {
+public class CapabilityGroupImpl extends APortSetImpl<Port> implements CapabilityGroup {
 	/**
 	 * The default value of the '{@link #getCapability() <em>Capability</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -166,12 +167,14 @@ public class CapabilityGroupImpl extends APortSetImpl implements CapabilityGroup
 	}
 
 	/**
-	 * @generated NO
+	 * @generated NOT
 	 */
 	@Override
-	public EList<APort> collect(EList<APortSet> marked) {
-		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
-		final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.APort> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.APort>();
+	public EList<Port> collect(EList<APortSet<Port>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Port> result = new UniqueEList<Port>();
 		marked.add(this);
 		final EObject parent = eContainer();
 		if (parent instanceof PortModel) {

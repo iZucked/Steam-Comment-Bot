@@ -3,14 +3,15 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.AVesselEvent;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
-import com.mmxlabs.models.lng.port.Port;
-
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +33,7 @@ import org.eclipse.emf.common.util.EList;
  * @model abstract="true"
  * @generated
  */
-public interface VesselEvent extends AVesselEvent, ITimezoneProvider {
+public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Duration In Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -61,7 +62,7 @@ public interface VesselEvent extends AVesselEvent, ITimezoneProvider {
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}&lt;com.mmxlabs.models.lng.fleet.Vessel>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
@@ -73,7 +74,7 @@ public interface VesselEvent extends AVesselEvent, ITimezoneProvider {
 	 * @model
 	 * @generated
 	 */
-	EList<AVesselSet> getAllowedVessels();
+	EList<AVesselSet<Vessel>> getAllowedVessels();
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.

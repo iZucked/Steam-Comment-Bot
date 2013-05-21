@@ -6,9 +6,9 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 
@@ -40,7 +40,7 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 		if (editor.getFeature() == CargoPackage.eINSTANCE.getCargo_AllowedVessels()) {
 			topElement = false;
 		}
-		if (editor.getFeature() == InputPackage.eINSTANCE.getElementAssignment_Assignment()) {
+		if (editor.getFeature() == AssignmentPackage.eINSTANCE.getElementAssignment_Assignment()) {
 			topElement = false;
 		}
 		// Do not add elements if they are for the wrong section.

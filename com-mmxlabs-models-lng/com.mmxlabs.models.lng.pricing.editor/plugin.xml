@@ -87,7 +87,7 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.IndexReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.editor.indexProvider"
-          referenceEClass="com.mmxlabs.models.lng.types.AIndex">
+          referenceEClass="com.mmxlabs.models.lng.pricing.Index">
     </valueProvider>
  </extension>
  <extension

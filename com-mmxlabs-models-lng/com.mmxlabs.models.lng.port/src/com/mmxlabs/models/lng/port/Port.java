@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.models.lng.port;
 
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.PortCapability;
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.PortCapability;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,8 +25,9 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#isAllowCooldown <em>Allow Cooldown</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultWindowSize <em>Default Window Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.Port#getPortCode <em>Port Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}</li>
  * </ul>
  * </p>
  *
@@ -33,7 +35,7 @@ import org.eclipse.emf.common.util.EList;
  * @model annotation="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject showOtherNames='true'"
  * @generated
  */
-public interface Port extends APort {
+public interface Port extends APortSet<Port> {
 
 	/**
 	 * Returns the value of the '<em><b>Capabilities</b></em>' attribute list.
@@ -236,32 +238,6 @@ public interface Port extends APort {
 	void setDefaultWindowSize(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Port Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Port Code</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Port Code</em>' attribute.
-	 * @see #setPortCode(String)
-	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_PortCode()
-	 * @model required="true"
-	 * @generated
-	 */
-	String getPortCode();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getPortCode <em>Port Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Port Code</em>' attribute.
-	 * @see #getPortCode()
-	 * @generated
-	 */
-	void setPortCode(String value);
-
-	/**
 	 * Returns the value of the '<em><b>Location</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -286,4 +262,56 @@ public interface Port extends APort {
 	 * @generated
 	 */
 	void setLocation(Location value);
+
+	/**
+	 * Returns the value of the '<em><b>Atobviac Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Atobviac Code</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Atobviac Code</em>' attribute.
+	 * @see #setAtobviacCode(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_AtobviacCode()
+	 * @model
+	 * @generated
+	 */
+	String getAtobviacCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Atobviac Code</em>' attribute.
+	 * @see #getAtobviacCode()
+	 * @generated
+	 */
+	void setAtobviacCode(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Dataloy Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Dataloy Code</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dataloy Code</em>' attribute.
+	 * @see #setDataloyCode(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DataloyCode()
+	 * @model
+	 * @generated
+	 */
+	String getDataloyCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Dataloy Code</em>' attribute.
+	 * @see #getDataloyCode()
+	 * @generated
+	 */
+	void setDataloyCode(String value);
 } // Port

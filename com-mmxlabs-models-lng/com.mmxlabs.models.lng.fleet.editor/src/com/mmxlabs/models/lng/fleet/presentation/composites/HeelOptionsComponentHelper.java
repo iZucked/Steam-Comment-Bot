@@ -22,7 +22,7 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for HeelOptions instances
- *
+ * 
  * @generated
  */
 public class HeelOptionsComponentHelper extends BaseComponentHelper {
@@ -30,7 +30,7 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Construct a new instance, using the platform adapter manager
-	 *
+	 * 
 	 * @generated
 	 */
 	public HeelOptionsComponentHelper() {
@@ -39,27 +39,27 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Construct a new instance of this helper
-	 *
+	 * 
 	 * @generated
 	 */
 	public HeelOptionsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
 	}
-	
+
 	/**
 	 * add editors to a composite, using HeelOptions as the supertype
-	 *
+	 * 
 	 * @generated
 	 */
-	 @Override
+	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
 		addEditorsToComposite(detailComposite, FleetPackage.Literals.HEEL_OPTIONS);	
 	}
-	
+
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -69,26 +69,29 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 		add_cvValueEditor(detailComposite, topClass);
 		add_pricePerMMBTUEditor(detailComposite, topClass);
 	}
+
 	/**
 	 * Create the editor for the volumeAvailable feature on HeelOptions
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_volumeAvailableEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__VOLUME_AVAILABLE));
 	}
+
 	/**
 	 * Create the editor for the cvValue feature on HeelOptions
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_cvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__CV_VALUE);
 		detailComposite.addInlineEditor(new HeelOptionsInlineEditorWrapper(editor));
 	}
+
 	/**
 	 * Create the editor for the pricePerMMBTU feature on HeelOptions
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_pricePerMMBTUEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {

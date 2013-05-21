@@ -68,6 +68,7 @@ public class VisitImpl extends CostComponentImpl implements Visit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPortCost() {
 		return portCost;
 	}
@@ -77,6 +78,7 @@ public class VisitImpl extends CostComponentImpl implements Visit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortCost(int newPortCost) {
 		int oldPortCost = portCost;
 		portCost = newPortCost;

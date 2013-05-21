@@ -3,13 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.APortSet;
-
-import com.mmxlabs.models.mmxcore.MMXObject;
-
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,12 +19,15 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartAfter <em>Start After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartBy <em>Start By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAt <em>End At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getEndBy <em>End By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel <em>Start Heel</em>}</li>
  * </ul>
  * </p>
  *
@@ -35,7 +38,7 @@ import org.eclipse.emf.common.util.EList;
 public interface VesselAvailability extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Start At</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Start At</em>' reference list isn't clear,
@@ -47,7 +50,7 @@ public interface VesselAvailability extends MMXObject {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getStartAt();
+	EList<APortSet<Port>> getStartAt();
 
 	/**
 	 * Returns the value of the '<em><b>Start After</b></em>' attribute.
@@ -157,7 +160,7 @@ public interface VesselAvailability extends MMXObject {
 
 	/**
 	 * Returns the value of the '<em><b>End At</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>End At</em>' reference list isn't clear,
@@ -169,7 +172,7 @@ public interface VesselAvailability extends MMXObject {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getEndAt();
+	EList<APortSet<Port>> getEndAt();
 
 	/**
 	 * Returns the value of the '<em><b>End After</b></em>' attribute.
@@ -276,6 +279,115 @@ public interface VesselAvailability extends MMXObject {
 	 * @generated
 	 */
 	boolean isSetEndBy();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel</em>' reference.
+	 * @see #setVessel(Vessel)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_Vessel()
+	 * @model
+	 * @generated
+	 */
+	Vessel getVessel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getVessel <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel</em>' reference.
+	 * @see #getVessel()
+	 * @generated
+	 */
+	void setVessel(Vessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Start Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Start Heel</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Start Heel</em>' containment reference.
+	 * @see #setStartHeel(HeelOptions)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_StartHeel()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	HeelOptions getStartHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getStartHeel <em>Start Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start Heel</em>' containment reference.
+	 * @see #getStartHeel()
+	 * @generated
+	 */
+	void setStartHeel(HeelOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Time Charter Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Time Charter Rate</em>' attribute.
+	 * @see #isSetTimeCharterRate()
+	 * @see #unsetTimeCharterRate()
+	 * @see #setTimeCharterRate(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselAvailability_TimeCharterRate()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	int getTimeCharterRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Time Charter Rate</em>' attribute.
+	 * @see #isSetTimeCharterRate()
+	 * @see #unsetTimeCharterRate()
+	 * @see #getTimeCharterRate()
+	 * @generated
+	 */
+	void setTimeCharterRate(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetTimeCharterRate()
+	 * @see #getTimeCharterRate()
+	 * @see #setTimeCharterRate(int)
+	 * @generated
+	 */
+	void unsetTimeCharterRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Time Charter Rate</em>' attribute is set.
+	 * @see #unsetTimeCharterRate()
+	 * @see #getTimeCharterRate()
+	 * @see #setTimeCharterRate(int)
+	 * @generated
+	 */
+	boolean isSetTimeCharterRate();
 
 } // end of  VesselAvailability
 

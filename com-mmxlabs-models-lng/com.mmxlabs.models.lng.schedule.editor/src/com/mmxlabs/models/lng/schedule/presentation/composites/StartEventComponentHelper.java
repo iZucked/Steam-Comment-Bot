@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -46,7 +45,7 @@ public class StartEventComponentHelper extends BaseComponentHelper {
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.FUEL_USAGE));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PORT_VISIT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.EXTRA_DATA_CONTAINER));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER));
 	}
 	
 	/**

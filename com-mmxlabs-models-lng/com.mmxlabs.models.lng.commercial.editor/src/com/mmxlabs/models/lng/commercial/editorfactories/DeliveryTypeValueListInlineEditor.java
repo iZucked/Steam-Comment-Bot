@@ -46,7 +46,7 @@ public class DeliveryTypeValueListInlineEditor extends UnsettableInlineEditor {
 			case ANY:
 				name = "Any";
 				break;
-			case DELIVERED:
+			case NOT_SHIPPED:
 				name = "Not Shipped";
 				break;
 			case SHIPPED:

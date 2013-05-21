@@ -122,6 +122,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -148,6 +149,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -160,6 +162,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getNotionalDayRate() {
 		return notionalDayRate;
 	}
@@ -169,6 +172,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotionalDayRate(int newNotionalDayRate) {
 		int oldNotionalDayRate = notionalDayRate;
 		notionalDayRate = newNotionalDayRate;
@@ -181,6 +185,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getBaseFuelPrice() {
 		return baseFuelPrice;
 	}
@@ -190,6 +195,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseFuelPrice(double newBaseFuelPrice) {
 		double oldBaseFuelPrice = baseFuelPrice;
 		baseFuelPrice = newBaseFuelPrice;
@@ -202,6 +208,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ShippingCostRow> getRows() {
 		if (rows == null) {
 			rows = new EObjectContainmentEList<ShippingCostRow>(ShippingCostRow.class, this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS);

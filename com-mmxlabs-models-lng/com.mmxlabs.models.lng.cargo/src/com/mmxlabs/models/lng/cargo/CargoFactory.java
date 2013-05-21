@@ -60,15 +60,6 @@ public interface CargoFactory extends EFactory {
 	CargoModel createCargoModel();
 
 	/**
-	 * Returns a new object of class '<em>Spot Slot</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Spot Slot</em>'.
-	 * @generated
-	 */
-	SpotSlot createSpotSlot();
-
-	/**
 	 * Returns a new object of class '<em>Spot Load Slot</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

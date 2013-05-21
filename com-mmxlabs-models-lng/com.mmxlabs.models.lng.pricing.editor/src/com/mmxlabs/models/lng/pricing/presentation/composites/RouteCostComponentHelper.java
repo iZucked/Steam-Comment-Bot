@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;

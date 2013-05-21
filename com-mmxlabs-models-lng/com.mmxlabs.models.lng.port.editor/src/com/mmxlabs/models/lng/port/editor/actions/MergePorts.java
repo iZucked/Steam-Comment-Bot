@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.port.editor.actions;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -43,7 +42,6 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
@@ -154,10 +152,12 @@ public class MergePorts extends LockableAction {
 		}
 
 		String timeZone = retained.getTimeZone();
-		String portCode = retained.getPortCode();
+		String atobviacCode = retained.getAtobviacCode();
+		String dataloyCode = retained.getDataloyCode();
 
 		boolean updatedTimeZone = timeZone != null && !timeZone.isEmpty();
-		boolean updatedPortCode = portCode != null && !portCode.isEmpty();
+		boolean updatedAToBViaCCode = atobviacCode != null && !atobviacCode.isEmpty();
+		boolean updatedDataloyCode = dataloyCode != null && !dataloyCode.isEmpty();
 
 		for (final Port p : merges) {
 			// Copy in names
@@ -181,10 +181,16 @@ public class MergePorts extends LockableAction {
 					updatedTimeZone = true;
 				}
 			}
-			if (!updatedPortCode) {
-				if (p.getPortCode() != null && !p.getPortCode().isEmpty()) {
-					portCode = p.getPortCode();
-					updatedPortCode = true;
+			if (!updatedAToBViaCCode) {
+				if (p.getAtobviacCode() != null && !p.getAtobviacCode().isEmpty()) {
+					atobviacCode = p.getAtobviacCode();
+					updatedAToBViaCCode = true;
+				}
+			}
+			if (!updatedDataloyCode) {
+				if (p.getDataloyCode() != null && !p.getDataloyCode().isEmpty()) {
+					dataloyCode = p.getDataloyCode();
+					updatedDataloyCode = true;
 				}
 			}
 		}
@@ -197,8 +203,11 @@ public class MergePorts extends LockableAction {
 		cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_Location(), loc));
 		// Update capabilities
 		cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_Capabilities(), portCapabilities));
-		if (updatedPortCode) {
-			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_PortCode(), portCode));
+		if (updatedAToBViaCCode) {
+			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_AtobviacCode(), atobviacCode));
+		}
+		if (updatedDataloyCode) {
+			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_DataloyCode(), dataloyCode));
 		}
 		if (updatedTimeZone) {
 			cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_TimeZone(), timeZone));
@@ -236,11 +245,7 @@ public class MergePorts extends LockableAction {
 			return result;
 
 		// update old references
-		final List<EObject> subModels = new ArrayList<EObject>();
-		for (final MMXSubModel sub : rootObject.getSubModels()) {
-			subModels.add(sub.getSubModelInstance());
-		}
-		final Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, subModels);
+		final Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, rootObject);
 		for (final Setting setting : refsToOldObject) {
 			final EObject eObject = setting.getEObject();
 			if (setting.getEStructuralFeature().isMany()) {

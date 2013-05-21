@@ -16,10 +16,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
 
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.editors.CargoTypeInlineEditor;
-import com.mmxlabs.models.lng.input.InputPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -55,7 +55,8 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	public CargoComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ACARGO));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 
 	/**
@@ -136,7 +137,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 
 			@Override
 			public void notifyChanged(final Notification notification) {
-				if (notification.getFeature() == InputPackage.eINSTANCE.getElementAssignment_Locked()) {
+				if (notification.getFeature() == AssignmentPackage.eINSTANCE.getElementAssignment_Locked()) {
 					editor.setEditorEnabled(!notification.getNewBooleanValue());
 					if (notification.getNewBooleanValue()) {
 						final ICommandHandler handler = location.getDefaultCommandHandler();
@@ -160,5 +161,14 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS);
 		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
+	}
+
+	/**
+	 * Create the editor for the slots feature on Cargo
+	 *
+	 * @generated
+	 */
+	protected void add_slotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__SLOTS));
 	}
 }

@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -81,9 +80,8 @@ public class SpotLoadSlotComponentHelper extends BaseComponentHelper {
 			final Cargo cargo = loadSlot.getCargo();
 			if (cargo != null) {
 				external.add(cargo);
-				if (cargo.getDischargeSlot() != null) {
-					external.add(cargo.getDischargeSlot());
-				}
+				external.addAll(cargo.getSlots());
+				external.remove(value);
 			}
 		}
 		external.addAll(super.getExternalEditingRange(root, value));

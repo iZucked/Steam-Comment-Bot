@@ -20,7 +20,11 @@ import org.eclipse.swt.widgets.Group;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
@@ -60,7 +64,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		String groupName = EditorUtils.unmangle(eClass.getName());
 		if (object instanceof Cargo) {
-			CargoType cargoType = ((Cargo) object).getCargoType();
+			final CargoType cargoType = ((Cargo) object).getCargoType();
 			groupName += " Type: " + cargoType.getName();
 		}
 
@@ -74,10 +78,10 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Initialise middle composite
 		middle = new Composite(this, SWT.NONE);
-		// We know there is only the load and discharge slot, so two columns
-		middle.setLayout(new GridLayout(2, true));
 
 		createChildComposites(root, object, eClass, middle);
+		// We know there are n slots, so n columns
+		middle.setLayout(new GridLayout(childObjects.size(), true));
 
 		// Additional Group for the bottom section
 		final Group g2 = new Group(this, SWT.NONE);
@@ -92,11 +96,11 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.display(location, root, object, range);
 		bottomLevel.display(location, root, object, range);
 
-		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
+		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
-		while (refs.hasNext()) {
-			children.next().display(location, root, (EObject) object.eGet(refs.next()), range);
+		while (childObjectsItr.hasNext()) {
+			children.next().display(location, root, childObjectsItr.next(), range);
 		}
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
@@ -105,7 +109,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() || ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
+		return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_Slots();
 	}
 
 	@Override
@@ -121,4 +125,34 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		}
 		super.setEditorWrapper(wrapper);
 	}
+	
+	@Override
+	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+		if (value != null) {
+			final Group g2 = new Group(parent, SWT.NONE);
+			if (value instanceof Slot) {
+				if (value instanceof LoadSlot) {
+					g2.setText("Load");
+				} else if (value instanceof DischargeSlot) {
+					g2.setText("Discharge");
+				} else {
+					String groupName = EditorUtils.unmangle(value.eClass().getName());
+					g2.setText(groupName);
+				}
+			} else {
+				g2.setText(EditorUtils.unmangle(ref.getName()));
+			}
+			g2.setLayout(new FillLayout());
+			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
+
+			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(), location);
+
+			sub.setCommandHandler(commandHandler);
+			sub.setEditorWrapper(editorWrapper);
+			childReferences.add(ref);
+			childComposites.add(sub);
+			childObjects.add(value);
+		}
+	}
+
 }

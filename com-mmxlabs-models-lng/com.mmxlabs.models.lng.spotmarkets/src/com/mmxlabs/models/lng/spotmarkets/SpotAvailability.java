@@ -3,9 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.pricing.DataIndex;
 
 /**
  * <!-- begin-user-doc -->

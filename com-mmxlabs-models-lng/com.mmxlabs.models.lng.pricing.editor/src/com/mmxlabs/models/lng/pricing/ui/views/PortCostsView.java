@@ -11,9 +11,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.pricing.PortCost;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.PortCostPane;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -27,8 +27,9 @@ public class PortCostsView extends ScenarioTableViewerView<PortCostPane> {
 
 	@Override
 	protected void initViewerPane(final PortCostPane pane) {
-		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_PortCosts() }), getAdapterFactory(), getEditingDomain().getCommandStack());
-		pane.getViewer().setInput(getRootObject().getSubModel(PricingModel.class));
+		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(), PricingPackage.eINSTANCE.getPricingModel_PortCosts() }), getAdapterFactory(),
+				getEditingDomain().getCommandStack());
+		pane.getViewer().setInput(getRootObject());
 	}
 
 	@Override

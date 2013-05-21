@@ -4,16 +4,14 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
-import com.mmxlabs.models.lng.types.TypesPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -80,16 +78,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__EXTENSIONS = TypesPackage.ACARGO__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__PROXIES = TypesPackage.ACARGO__PROXIES;
+	int CARGO__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -98,7 +87,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__UUID = TypesPackage.ACARGO__UUID;
+	int CARGO__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -107,7 +96,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__NAME = TypesPackage.ACARGO__NAME;
+	int CARGO__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -116,25 +105,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__OTHER_NAMES = TypesPackage.ACARGO__OTHER_NAMES;
-
-	/**
-	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__LOAD_SLOT = TypesPackage.ACARGO_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__DISCHARGE_SLOT = TypesPackage.ACARGO_FEATURE_COUNT + 1;
+	int CARGO__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Allow Rewiring</b></em>' attribute.
@@ -143,7 +114,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOW_REWIRING = TypesPackage.ACARGO_FEATURE_COUNT + 2;
+	int CARGO__ALLOW_REWIRING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -152,7 +123,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = TypesPackage.ACARGO_FEATURE_COUNT + 3;
+	int CARGO__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -161,52 +142,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___MAKE_PROXIES = TypesPackage.ACARGO___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___RESOLVE_PROXIES__MAP = TypesPackage.ACARGO___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___RESTORE_PROXIES = TypesPackage.ACARGO___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___COLLECT_UUID_OBJECTS__MAP = TypesPackage.ACARGO___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO___COLLECT_UUID_OBJECTS = TypesPackage.ACARGO___COLLECT_UUID_OBJECTS;
+	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -215,7 +151,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO___GET_UNSET_VALUE__ESTRUCTURALFEATURE = TypesPackage.ACARGO___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int CARGO___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -224,7 +160,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = TypesPackage.ACARGO___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int CARGO___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -233,7 +169,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO___ECONTAINER_OP = TypesPackage.ACARGO___ECONTAINER_OP;
+	int CARGO___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Get Cargo Type</em>' operation.
@@ -242,7 +178,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO___GET_CARGO_TYPE = TypesPackage.ACARGO_OPERATION_COUNT + 0;
+	int CARGO___GET_CARGO_TYPE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Sorted Slots</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO___GET_SORTED_SLOTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Cargo</em>' class.
@@ -251,7 +197,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_OPERATION_COUNT = TypesPackage.ACARGO_OPERATION_COUNT + 1;
+	int CARGO_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -270,16 +216,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__EXTENSIONS = TypesPackage.ASLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__PROXIES = TypesPackage.ASLOT__PROXIES;
+	int SLOT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -288,7 +225,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__UUID = TypesPackage.ASLOT__UUID;
+	int SLOT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -297,7 +234,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NAME = TypesPackage.ASLOT__NAME;
+	int SLOT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
@@ -306,7 +243,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OTHER_NAMES = TypesPackage.ASLOT__OTHER_NAMES;
+	int SLOT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -315,7 +252,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CONTRACT = TypesPackage.ASLOT_FEATURE_COUNT + 0;
+	int SLOT__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -324,7 +261,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT = TypesPackage.ASLOT_FEATURE_COUNT + 1;
+	int SLOT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
@@ -333,7 +270,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START = TypesPackage.ASLOT_FEATURE_COUNT + 2;
+	int SLOT__WINDOW_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Window Start Time</b></em>' attribute.
@@ -342,7 +279,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START_TIME = TypesPackage.ASLOT_FEATURE_COUNT + 3;
+	int SLOT__WINDOW_START_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -351,7 +288,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_SIZE = TypesPackage.ASLOT_FEATURE_COUNT + 4;
+	int SLOT__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -360,7 +297,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__DURATION = TypesPackage.ASLOT_FEATURE_COUNT + 5;
+	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -369,7 +306,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MIN_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 6;
+	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -378,7 +315,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MAX_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 7;
+	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -387,7 +324,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OPTIONAL = TypesPackage.ASLOT_FEATURE_COUNT + 8;
+	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -397,7 +334,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICE_EXPRESSION = TypesPackage.ASLOT_FEATURE_COUNT + 9;
+	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -406,52 +353,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 10;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___MAKE_PROXIES = TypesPackage.ASLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___RESOLVE_PROXIES__MAP = TypesPackage.ASLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___RESTORE_PROXIES = TypesPackage.ASLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___COLLECT_UUID_OBJECTS__MAP = TypesPackage.ASLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT___COLLECT_UUID_OBJECTS = TypesPackage.ASLOT___COLLECT_UUID_OBJECTS;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -460,7 +362,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = TypesPackage.ASLOT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int SLOT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -469,7 +371,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = TypesPackage.ASLOT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int SLOT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -478,7 +380,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___ECONTAINER_OP = TypesPackage.ASLOT___ECONTAINER_OP;
+	int SLOT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -487,7 +389,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_TIME_ZONE__EATTRIBUTE = TypesPackage.ASLOT_OPERATION_COUNT + 0;
+	int SLOT___GET_TIME_ZONE__EATTRIBUTE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Port Duration</em>' operation.
@@ -496,7 +398,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_PORT_DURATION = TypesPackage.ASLOT_OPERATION_COUNT + 1;
+	int SLOT___GET_SLOT_OR_PORT_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Quantity</em>' operation.
@@ -505,7 +407,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY = TypesPackage.ASLOT_OPERATION_COUNT + 2;
+	int SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Max Quantity</em>' operation.
@@ -514,7 +416,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY = TypesPackage.ASLOT_OPERATION_COUNT + 3;
+	int SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Window End With Slot Or Port Time</em>' operation.
@@ -523,7 +425,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME = TypesPackage.ASLOT_OPERATION_COUNT + 4;
+	int SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Window Start With Slot Or Port Time</em>' operation.
@@ -532,7 +434,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME = TypesPackage.ASLOT_OPERATION_COUNT + 5;
+	int SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Port Window Size</em>' operation.
@@ -541,7 +443,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = TypesPackage.ASLOT_OPERATION_COUNT + 6;
+	int SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -550,7 +452,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = TypesPackage.ASLOT_OPERATION_COUNT + 7;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -570,15 +472,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__EXTENSIONS = SLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__PROXIES = SLOT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -699,6 +592,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__PRICE_EXPRESSION = SLOT__PRICE_EXPRESSION;
 
 	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CARGO = SLOT__CARGO;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -717,22 +619,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__ARRIVE_COLD = SLOT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__CARGO = SLOT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>DES Purchase</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__DES_PURCHASE = SLOT_FEATURE_COUNT + 3;
+	int LOAD_SLOT__DES_PURCHASE = SLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
@@ -741,52 +634,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___MAKE_PROXIES = SLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___RESOLVE_PROXIES__MAP = SLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___RESTORE_PROXIES = SLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___COLLECT_UUID_OBJECTS__MAP = SLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT___COLLECT_UUID_OBJECTS = SLOT___COLLECT_UUID_OBJECTS;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -916,15 +764,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__EXTENSIONS = SLOT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__PROXIES = SLOT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1049,7 +888,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT__CARGO = SLOT_FEATURE_COUNT + 0;
+	int DISCHARGE_SLOT__CARGO = SLOT__CARGO;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -1058,7 +897,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT__FOB_SALE = SLOT_FEATURE_COUNT + 1;
+	int DISCHARGE_SLOT__FOB_SALE = SLOT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
@@ -1068,7 +907,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 2;
+	int DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Discharge Slot</em>' class.
@@ -1077,52 +916,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___MAKE_PROXIES = SLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___RESOLVE_PROXIES__MAP = SLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___RESTORE_PROXIES = SLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___COLLECT_UUID_OBJECTS__MAP = SLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT___COLLECT_UUID_OBJECTS = SLOT___COLLECT_UUID_OBJECTS;
+	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1243,15 +1037,6 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1306,51 +1091,6 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
-
-	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1387,10 +1127,10 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotSlotImpl <em>Spot Slot</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.SpotSlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.SpotSlot
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotSlot()
 	 * @generated
 	 */
@@ -1404,15 +1144,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_SLOT__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -1431,51 +1162,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_SLOT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_SLOT___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1531,15 +1217,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__EXTENSIONS = LOAD_SLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__PROXIES = LOAD_SLOT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1660,6 +1337,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__PRICE_EXPRESSION = LOAD_SLOT__PRICE_EXPRESSION;
 
 	/**
+	 * The feature id for the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__CARGO = LOAD_SLOT__CARGO;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1676,15 +1362,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__ARRIVE_COLD = LOAD_SLOT__ARRIVE_COLD;
-
-	/**
-	 * The feature id for the '<em><b>Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__CARGO = LOAD_SLOT__CARGO;
 
 	/**
 	 * The feature id for the '<em><b>DES Purchase</b></em>' attribute.
@@ -1712,51 +1389,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT_FEATURE_COUNT = LOAD_SLOT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___MAKE_PROXIES = LOAD_SLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___RESOLVE_PROXIES__MAP = LOAD_SLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___RESTORE_PROXIES = LOAD_SLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___COLLECT_UUID_OBJECTS__MAP = LOAD_SLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT___COLLECT_UUID_OBJECTS = LOAD_SLOT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1884,15 +1516,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__EXTENSIONS = DISCHARGE_SLOT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__PROXIES = DISCHARGE_SLOT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -2060,51 +1683,6 @@ public interface CargoPackage extends EPackage {
 
 
 	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___MAKE_PROXIES = DISCHARGE_SLOT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___RESOLVE_PROXIES__MAP = DISCHARGE_SLOT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___RESTORE_PROXIES = DISCHARGE_SLOT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___COLLECT_UUID_OBJECTS__MAP = DISCHARGE_SLOT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT___COLLECT_UUID_OBJECTS = DISCHARGE_SLOT___COLLECT_UUID_OBJECTS;
-
-	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2223,15 +1801,6 @@ public interface CargoPackage extends EPackage {
 	int CARGO_GROUP__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2266,51 +1835,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_GROUP_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___MAKE_PROXIES = MMXCorePackage.NAMED_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___RESOLVE_PROXIES__MAP = MMXCorePackage.NAMED_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___RESTORE_PROXIES = MMXCorePackage.NAMED_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.NAMED_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP___COLLECT_UUID_OBJECTS = MMXCorePackage.NAMED_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2370,28 +1894,6 @@ public interface CargoPackage extends EPackage {
 	EClass getCargo();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Slot</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot()
-	 * @see #getCargo()
-	 * @generated
-	 */
-	EReference getCargo_LoadSlot();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Slot</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot()
-	 * @see #getCargo()
-	 * @generated
-	 */
-	EReference getCargo_DischargeSlot();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2414,6 +1916,18 @@ public interface CargoPackage extends EPackage {
 	EReference getCargo_AllowedVessels();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSlots()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EReference getCargo_Slots();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType() <em>Get Cargo Type</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2422,6 +1936,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getCargo__GetCargoType();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots() <em>Get Sorted Slots</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Sorted Slots</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots()
+	 * @generated
+	 */
+	EOperation getCargo__GetSortedSlots();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Slot <em>Slot</em>}'.
@@ -2556,6 +2081,18 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_PriceExpression();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Cargo</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getCargo()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_Cargo();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2648,17 +2185,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_ArriveCold();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cargo</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getCargo()
-	 * @see #getLoadSlot()
-	 * @generated
-	 */
-	EReference getLoadSlot_Cargo();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2688,17 +2214,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDischargeSlot();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cargo</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo()
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	EReference getDischargeSlot_Cargo();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isFOBSale <em>FOB Sale</em>}'.
@@ -2882,22 +2397,6 @@ public interface CargoPackage extends EPackage {
 		EClass CARGO = eINSTANCE.getCargo();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Slot</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO__LOAD_SLOT = eINSTANCE.getCargo_LoadSlot();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Slot</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO__DISCHARGE_SLOT = eINSTANCE.getCargo_DischargeSlot();
-
-		/**
 		 * The meta object literal for the '<em><b>Allow Rewiring</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2914,12 +2413,30 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO__ALLOWED_VESSELS = eINSTANCE.getCargo_AllowedVessels();
 
 		/**
+		 * The meta object literal for the '<em><b>Slots</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO__SLOTS = eINSTANCE.getCargo_Slots();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Cargo Type</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EOperation CARGO___GET_CARGO_TYPE = eINSTANCE.getCargo__GetCargoType();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Sorted Slots</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO___GET_SORTED_SLOTS = eINSTANCE.getCargo__GetSortedSlots();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
@@ -3013,6 +2530,15 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__PRICE_EXPRESSION = eINSTANCE.getSlot_PriceExpression();
 
 		/**
+		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__CARGO = eINSTANCE.getSlot_Cargo();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3087,14 +2613,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute LOAD_SLOT__ARRIVE_COLD = eINSTANCE.getLoadSlot_ArriveCold();
 
 		/**
-		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference LOAD_SLOT__CARGO = eINSTANCE.getLoadSlot_Cargo();
-
-		/**
 		 * The meta object literal for the '<em><b>DES Purchase</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3119,14 +2637,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DISCHARGE_SLOT = eINSTANCE.getDischargeSlot();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DISCHARGE_SLOT__CARGO = eINSTANCE.getDischargeSlot_Cargo();
 
 		/**
 		 * The meta object literal for the '<em><b>FOB Sale</b></em>' attribute feature.
@@ -3188,10 +2698,10 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_MODEL__CARGO_GROUPS = eINSTANCE.getCargoModel_CargoGroups();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotSlotImpl <em>Spot Slot</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.cargo.impl.SpotSlotImpl
+		 * @see com.mmxlabs.models.lng.cargo.SpotSlot
 		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotSlot()
 		 * @generated
 		 */

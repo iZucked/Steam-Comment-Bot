@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 
 /**
@@ -22,7 +21,7 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
  * @model
  * @generated
  */
-public interface VesselEventVisit extends Event, PortVisit, ExtraDataContainer {
+public interface VesselEventVisit extends Event, PortVisit, ProfitAndLossContainer {
 	/**
 	 * Returns the value of the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->

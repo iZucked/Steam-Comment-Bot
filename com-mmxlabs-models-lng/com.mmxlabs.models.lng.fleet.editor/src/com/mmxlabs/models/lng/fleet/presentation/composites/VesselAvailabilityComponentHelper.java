@@ -64,12 +64,15 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_vesselEditor(detailComposite, topClass);
+		add_timeCharterRateEditor(detailComposite, topClass);
 		add_startAtEditor(detailComposite, topClass);
 		add_startAfterEditor(detailComposite, topClass);
 		add_startByEditor(detailComposite, topClass);
 		add_endAtEditor(detailComposite, topClass);
 		add_endAfterEditor(detailComposite, topClass);
 		add_endByEditor(detailComposite, topClass);
+		add_startHeelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the startAt feature on VesselAvailability
@@ -118,5 +121,32 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_endByEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__END_BY));
+	}
+
+	/**
+	 * Create the editor for the vessel feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__VESSEL));
+	}
+
+	/**
+	 * Create the editor for the startHeel feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_startHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__START_HEEL));
+	}
+
+	/**
+	 * Create the editor for the timeCharterRate feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_timeCharterRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE));
 	}
 }

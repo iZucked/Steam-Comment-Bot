@@ -160,7 +160,7 @@
                   The end requirement of the vessel should be after the start requirement.
                </description>
                <target
-                     class="Vessel">
+                     class="VesselAvailability">
                </target>
             </constraint>
             <constraint
@@ -200,6 +200,42 @@
                </target>
                <target
                      class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityVesselConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityVesselConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Availability Attached To Vessel"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Vessel availability information for a portfolio must be attached to a particular vessel.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselUniqueAvailabilityConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselUniqueAvailabilityConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Availability Is Unique"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  A vessel cannot be given more than one availability for the same portfolio.
+               </description>
+               <target
+                     class="VesselAvailability">
                </target>
             </constraint>
             <constraint
@@ -253,7 +289,7 @@
                   A time charter vessel should have a daily hire rate
                </description>
                <target
-                     class="Vessel">
+                     class="VesselAvailability">
                </target>
             </constraint>
             <constraint
@@ -345,6 +381,38 @@
                </message>
                <target
                      class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Class Min Heel Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselMinHeelConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselMinHeelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Min Heel Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Vessel">
                </target>
             </constraint>
          </constraints>

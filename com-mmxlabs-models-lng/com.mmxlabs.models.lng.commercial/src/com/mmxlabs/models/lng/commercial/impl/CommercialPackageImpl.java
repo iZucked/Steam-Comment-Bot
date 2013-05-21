@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.commercial.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -16,12 +17,12 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
-import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.TaxRate;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -93,13 +94,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass indexPriceParametersEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass expressionPriceParametersEClass = null;
 
 	/**
@@ -149,7 +143,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		isInited = true;
 
 		// Initialize simple dependencies
-		TypesPackage.eINSTANCE.eClass();
+		PortPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theCommercialPackage.createPackageContents();
@@ -448,46 +442,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getIndexPriceParameters() {
-		return indexPriceParametersEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getIndexPriceParameters_Index() {
-		return (EReference)indexPriceParametersEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getIndexPriceParameters_Multiplier() {
-		return (EAttribute)indexPriceParametersEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getIndexPriceParameters_Constant() {
-		return (EAttribute)indexPriceParametersEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getExpressionPriceParameters() {
 		return expressionPriceParametersEClass;
 	}
@@ -568,11 +522,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		fixedPriceParametersEClass = createEClass(FIXED_PRICE_PARAMETERS);
 		createEAttribute(fixedPriceParametersEClass, FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU);
 
-		indexPriceParametersEClass = createEClass(INDEX_PRICE_PARAMETERS);
-		createEReference(indexPriceParametersEClass, INDEX_PRICE_PARAMETERS__INDEX);
-		createEAttribute(indexPriceParametersEClass, INDEX_PRICE_PARAMETERS__MULTIPLIER);
-		createEAttribute(indexPriceParametersEClass, INDEX_PRICE_PARAMETERS__CONSTANT);
-
 		expressionPriceParametersEClass = createEClass(EXPRESSION_PRICE_PARAMETERS);
 		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
 	}
@@ -603,6 +552,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
+		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -610,15 +560,14 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		// Add supertypes to classes
 		commercialModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		legalEntityEClass.getESuperTypes().add(theTypesPackage.getALegalEntity());
-		contractEClass.getESuperTypes().add(theTypesPackage.getAContract());
+		legalEntityEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		legalEntityEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		contractEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		contractEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		salesContractEClass.getESuperTypes().add(this.getContract());
-		salesContractEClass.getESuperTypes().add(theTypesPackage.getASalesContract());
 		purchaseContractEClass.getESuperTypes().add(this.getContract());
-		purchaseContractEClass.getESuperTypes().add(theTypesPackage.getAPurchaseContract());
-		lngPriceCalculatorParametersEClass.getESuperTypes().add(theTypesPackage.getALNGPriceCalculatorParameters());
+		lngPriceCalculatorParametersEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		fixedPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
-		indexPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 		expressionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 
 		// Initialize classes and features; add operations and parameters
@@ -634,14 +583,20 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(contractEClass, Contract.class, "Contract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContract_Entity(), this.getLegalEntity(), null, "entity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getContract_AllowedPorts(), theTypesPackage.getAPortSet(), null, "allowedPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getContract_PreferredPort(), theTypesPackage.getAPort(), null, "preferredPort", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		EGenericType g1 = createEGenericType(theTypesPackage.getAPortSet());
+		EGenericType g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getContract_AllowedPorts(), g1, null, "allowedPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContract_PreferredPort(), thePortPackage.getPort(), null, "preferredPort", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContract_RestrictedContracts(), this.getContract(), null, "restrictedContracts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getContract_RestrictedPorts(), theTypesPackage.getAPortSet(), null, "restrictedPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getContract_PriceInfo(), theTypesPackage.getALNGPriceCalculatorParameters(), null, "priceInfo", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getContract_RestrictedPorts(), g1, null, "restrictedPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContract_PriceInfo(), this.getLNGPriceCalculatorParameters(), null, "priceInfo", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSalesContract_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -658,11 +613,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(fixedPriceParametersEClass, FixedPriceParameters.class, "FixedPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFixedPriceParameters_PricePerMMBTU(), ecorePackage.getEDouble(), "pricePerMMBTU", "0", 1, 1, FixedPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(indexPriceParametersEClass, IndexPriceParameters.class, "IndexPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getIndexPriceParameters_Index(), theTypesPackage.getAIndex(), null, "index", null, 1, 1, IndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getIndexPriceParameters_Multiplier(), ecorePackage.getEDouble(), "multiplier", "1", 1, 1, IndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getIndexPriceParameters_Constant(), ecorePackage.getEDouble(), "constant", "0", 1, 1, IndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(expressionPriceParametersEClass, ExpressionPriceParameters.class, "ExpressionPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExpressionPriceParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

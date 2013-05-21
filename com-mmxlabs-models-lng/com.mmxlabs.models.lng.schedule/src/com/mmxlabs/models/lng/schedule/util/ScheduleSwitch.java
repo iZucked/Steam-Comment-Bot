@@ -5,22 +5,29 @@
 package com.mmxlabs.models.lng.schedule.util;
 
 import com.mmxlabs.models.lng.schedule.*;
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -29,12 +36,10 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -108,6 +113,29 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.FITNESS: {
+				Fitness fitness = (Fitness)theEObject;
+				T result = caseFitness(fitness);
+				if (result == null) result = caseNamedObject(fitness);
+				if (result == null) result = caseMMXObject(fitness);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.CARGO_ALLOCATION: {
+				CargoAllocation cargoAllocation = (CargoAllocation)theEObject;
+				T result = caseCargoAllocation(cargoAllocation);
+				if (result == null) result = caseMMXObject(cargoAllocation);
+				if (result == null) result = caseProfitAndLossContainer(cargoAllocation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.SLOT_ALLOCATION: {
+				SlotAllocation slotAllocation = (SlotAllocation)theEObject;
+				T result = caseSlotAllocation(slotAllocation);
+				if (result == null) result = caseMMXObject(slotAllocation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case SchedulePackage.SEQUENCE: {
 				Sequence sequence = (Sequence)theEObject;
 				T result = caseSequence(sequence);
@@ -123,27 +151,29 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.SLOT_VISIT: {
-				SlotVisit slotVisit = (SlotVisit)theEObject;
-				T result = caseSlotVisit(slotVisit);
-				if (result == null) result = caseFuelUsage(slotVisit);
-				if (result == null) result = casePortVisit(slotVisit);
-				if (result == null) result = caseEvent(slotVisit);
-				if (result == null) result = caseITimezoneProvider(slotVisit);
-				if (result == null) result = caseCapacityViolationsHolder(slotVisit);
-				if (result == null) result = caseMMXObject(slotVisit);
+			case SchedulePackage.START_EVENT: {
+				StartEvent startEvent = (StartEvent)theEObject;
+				T result = caseStartEvent(startEvent);
+				if (result == null) result = caseFuelUsage(startEvent);
+				if (result == null) result = casePortVisit(startEvent);
+				if (result == null) result = caseProfitAndLossContainer(startEvent);
+				if (result == null) result = caseEvent(startEvent);
+				if (result == null) result = caseITimezoneProvider(startEvent);
+				if (result == null) result = caseCapacityViolationsHolder(startEvent);
+				if (result == null) result = caseMMXObject(startEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.VESSEL_EVENT_VISIT: {
-				VesselEventVisit vesselEventVisit = (VesselEventVisit)theEObject;
-				T result = caseVesselEventVisit(vesselEventVisit);
-				if (result == null) result = casePortVisit(vesselEventVisit);
-				if (result == null) result = caseExtraDataContainer(vesselEventVisit);
-				if (result == null) result = caseEvent(vesselEventVisit);
-				if (result == null) result = caseITimezoneProvider(vesselEventVisit);
-				if (result == null) result = caseCapacityViolationsHolder(vesselEventVisit);
-				if (result == null) result = caseMMXObject(vesselEventVisit);
+			case SchedulePackage.END_EVENT: {
+				EndEvent endEvent = (EndEvent)theEObject;
+				T result = caseEndEvent(endEvent);
+				if (result == null) result = caseFuelUsage(endEvent);
+				if (result == null) result = casePortVisit(endEvent);
+				if (result == null) result = caseProfitAndLossContainer(endEvent);
+				if (result == null) result = caseEvent(endEvent);
+				if (result == null) result = caseITimezoneProvider(endEvent);
+				if (result == null) result = caseCapacityViolationsHolder(endEvent);
+				if (result == null) result = caseMMXObject(endEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -167,13 +197,57 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.PORT_VISIT: {
+				PortVisit portVisit = (PortVisit)theEObject;
+				T result = casePortVisit(portVisit);
+				if (result == null) result = caseEvent(portVisit);
+				if (result == null) result = caseCapacityViolationsHolder(portVisit);
+				if (result == null) result = caseMMXObject(portVisit);
+				if (result == null) result = caseITimezoneProvider(portVisit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.SLOT_VISIT: {
+				SlotVisit slotVisit = (SlotVisit)theEObject;
+				T result = caseSlotVisit(slotVisit);
+				if (result == null) result = caseFuelUsage(slotVisit);
+				if (result == null) result = casePortVisit(slotVisit);
+				if (result == null) result = caseEvent(slotVisit);
+				if (result == null) result = caseITimezoneProvider(slotVisit);
+				if (result == null) result = caseCapacityViolationsHolder(slotVisit);
+				if (result == null) result = caseMMXObject(slotVisit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.VESSEL_EVENT_VISIT: {
+				VesselEventVisit vesselEventVisit = (VesselEventVisit)theEObject;
+				T result = caseVesselEventVisit(vesselEventVisit);
+				if (result == null) result = casePortVisit(vesselEventVisit);
+				if (result == null) result = caseProfitAndLossContainer(vesselEventVisit);
+				if (result == null) result = caseEvent(vesselEventVisit);
+				if (result == null) result = caseITimezoneProvider(vesselEventVisit);
+				if (result == null) result = caseCapacityViolationsHolder(vesselEventVisit);
+				if (result == null) result = caseMMXObject(vesselEventVisit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case SchedulePackage.GENERATED_CHARTER_OUT: {
 				GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut)theEObject;
 				T result = caseGeneratedCharterOut(generatedCharterOut);
 				if (result == null) result = caseEvent(generatedCharterOut);
-				if (result == null) result = caseExtraDataContainer(generatedCharterOut);
+				if (result == null) result = caseProfitAndLossContainer(generatedCharterOut);
 				if (result == null) result = caseMMXObject(generatedCharterOut);
 				if (result == null) result = caseITimezoneProvider(generatedCharterOut);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.COOLDOWN: {
+				Cooldown cooldown = (Cooldown)theEObject;
+				T result = caseCooldown(cooldown);
+				if (result == null) result = caseEvent(cooldown);
+				if (result == null) result = caseFuelUsage(cooldown);
+				if (result == null) result = caseMMXObject(cooldown);
+				if (result == null) result = caseITimezoneProvider(cooldown);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -189,78 +263,9 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.COOLDOWN: {
-				Cooldown cooldown = (Cooldown)theEObject;
-				T result = caseCooldown(cooldown);
-				if (result == null) result = caseEvent(cooldown);
-				if (result == null) result = caseFuelUsage(cooldown);
-				if (result == null) result = caseMMXObject(cooldown);
-				if (result == null) result = caseITimezoneProvider(cooldown);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.CARGO_ALLOCATION: {
-				CargoAllocation cargoAllocation = (CargoAllocation)theEObject;
-				T result = caseCargoAllocation(cargoAllocation);
-				if (result == null) result = caseMMXObject(cargoAllocation);
-				if (result == null) result = caseExtraDataContainer(cargoAllocation);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.SLOT_ALLOCATION: {
-				SlotAllocation slotAllocation = (SlotAllocation)theEObject;
-				T result = caseSlotAllocation(slotAllocation);
-				if (result == null) result = caseMMXObject(slotAllocation);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case SchedulePackage.FUEL_AMOUNT: {
 				FuelAmount fuelAmount = (FuelAmount)theEObject;
 				T result = caseFuelAmount(fuelAmount);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.FITNESS: {
-				Fitness fitness = (Fitness)theEObject;
-				T result = caseFitness(fitness);
-				if (result == null) result = caseNamedObject(fitness);
-				if (result == null) result = caseMMXObject(fitness);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.PORT_VISIT: {
-				PortVisit portVisit = (PortVisit)theEObject;
-				T result = casePortVisit(portVisit);
-				if (result == null) result = caseEvent(portVisit);
-				if (result == null) result = caseCapacityViolationsHolder(portVisit);
-				if (result == null) result = caseMMXObject(portVisit);
-				if (result == null) result = caseITimezoneProvider(portVisit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.START_EVENT: {
-				StartEvent startEvent = (StartEvent)theEObject;
-				T result = caseStartEvent(startEvent);
-				if (result == null) result = caseFuelUsage(startEvent);
-				if (result == null) result = casePortVisit(startEvent);
-				if (result == null) result = caseExtraDataContainer(startEvent);
-				if (result == null) result = caseEvent(startEvent);
-				if (result == null) result = caseITimezoneProvider(startEvent);
-				if (result == null) result = caseCapacityViolationsHolder(startEvent);
-				if (result == null) result = caseMMXObject(startEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.END_EVENT: {
-				EndEvent endEvent = (EndEvent)theEObject;
-				T result = caseEndEvent(endEvent);
-				if (result == null) result = caseFuelUsage(endEvent);
-				if (result == null) result = casePortVisit(endEvent);
-				if (result == null) result = caseExtraDataContainer(endEvent);
-				if (result == null) result = caseEvent(endEvent);
-				if (result == null) result = caseITimezoneProvider(endEvent);
-				if (result == null) result = caseCapacityViolationsHolder(endEvent);
-				if (result == null) result = caseMMXObject(endEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -274,6 +279,24 @@ public class ScheduleSwitch<T> extends Switch<T> {
 			case SchedulePackage.CAPACITY_MAP_ENTRY: {
 				@SuppressWarnings("unchecked") Map.Entry<CapacityViolationType, Long> capacityMapEntry = (Map.Entry<CapacityViolationType, Long>)theEObject;
 				T result = caseCapacityMapEntry(capacityMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER: {
+				ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer)theEObject;
+				T result = caseProfitAndLossContainer(profitAndLossContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS: {
+				GroupProfitAndLoss groupProfitAndLoss = (GroupProfitAndLoss)theEObject;
+				T result = caseGroupProfitAndLoss(groupProfitAndLoss);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS: {
+				EntityProfitAndLoss entityProfitAndLoss = (EntityProfitAndLoss)theEObject;
+				T result = caseEntityProfitAndLoss(entityProfitAndLoss);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -600,6 +623,51 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Profit And Loss Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Profit And Loss Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseProfitAndLossContainer(ProfitAndLossContainer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Group Profit And Loss</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Group Profit And Loss</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGroupProfitAndLoss(GroupProfitAndLoss object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Entity Profit And Loss</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Entity Profit And Loss</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEntityProfitAndLoss(EntityProfitAndLoss object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>MMX Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -656,21 +724,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseITimezoneProvider(ITimezoneProvider object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseExtraDataContainer(ExtraDataContainer object) {
 		return null;
 	}
 

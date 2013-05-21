@@ -4,13 +4,16 @@
  */
 package com.mmxlabs.models.lng.cargo.provider;
 
-import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
-
-import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-
 import org.eclipse.emf.common.EMFPlugin;
-
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
+import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
+import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
+import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
+import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
 /**
  * This is the central singleton for the Cargo edit plugin.
@@ -44,8 +47,13 @@ public final class CargoEditPlugin extends EMFPlugin {
 	public CargoEditPlugin() {
 		super
 		  (new ResourceLocator [] {
+		     CommercialEditPlugin.INSTANCE,
+		     FleetEditPlugin.INSTANCE,
 		     LNGTypesEditPlugin.INSTANCE,
 		     MmxcoreEditPlugin.INSTANCE,
+		     PortEditPlugin.INSTANCE,
+		     PricingEditPlugin.INSTANCE,
+		     SpotMarketsEditPlugin.INSTANCE,
 		   });
 	}
 

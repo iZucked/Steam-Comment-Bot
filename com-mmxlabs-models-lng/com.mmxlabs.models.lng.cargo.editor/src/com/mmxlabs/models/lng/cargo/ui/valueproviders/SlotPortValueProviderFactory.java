@@ -5,11 +5,10 @@
 package com.mmxlabs.models.lng.cargo.ui.valueproviders;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -23,10 +22,9 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -42,7 +40,7 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 	private final IReferenceValueProviderFactory delegate;
 
 	public SlotPortValueProviderFactory() {
-		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), TypesPackage.eINSTANCE.getAPort());
+		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), PortPackage.eINSTANCE.getPort());
 	}
 
 	@Override
@@ -118,11 +116,9 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 						if (contract == null) {
 							return filterOne;
 						}
-						final UniqueEList<APortSet> marks = new UniqueEList<APortSet>();
-						final HashSet<APort> ports = new HashSet<APort>();
-						for (final APortSet set : contract.getAllowedPorts()) {
-							ports.addAll(set.collect(marks));
-						}
+						
+						Set<Port> ports = SetUtils.getObjects(contract.getAllowedPorts());
+						
 						if (ports != null && !ports.isEmpty()) {
 							for (final Pair<String, EObject> value : filterOne) {
 								if (ports.contains(value.getSecond())) {

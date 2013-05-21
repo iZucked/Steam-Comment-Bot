@@ -5,19 +5,23 @@
 package com.mmxlabs.models.lng.port.util;
 
 import com.mmxlabs.models.lng.port.*;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Switch;
 
-import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortGroup;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.ARoute;
-
+import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-
-import org.eclipse.emf.ecore.util.Switch;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +36,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * @see com.mmxlabs.models.lng.port.PortPackage
  * @generated
  */
-public class PortSwitch<T> extends Switch<T> {
+public class PortSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -74,13 +78,13 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(int classifierID, EObject theEObject) {
+	protected T1 doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
 			case PortPackage.PORT: {
 				Port port = (Port)theEObject;
-				T result = casePort(port);
-				if (result == null) result = caseAPort(port);
+				T1 result = casePort(port);
 				if (result == null) result = caseAPortSet(port);
+				if (result == null) result = caseObjectSet(port);
 				if (result == null) result = caseUUIDObject(port);
 				if (result == null) result = caseNamedObject(port);
 				if (result == null) result = caseMMXObject(port);
@@ -89,18 +93,18 @@ public class PortSwitch<T> extends Switch<T> {
 			}
 			case PortPackage.ROUTE: {
 				Route route = (Route)theEObject;
-				T result = caseRoute(route);
-				if (result == null) result = caseARoute(route);
-				if (result == null) result = caseUUIDObject(route);
+				T1 result = caseRoute(route);
 				if (result == null) result = caseNamedObject(route);
+				if (result == null) result = caseUUIDObject(route);
 				if (result == null) result = caseMMXObject(route);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case PortPackage.PORT_GROUP: {
 				PortGroup portGroup = (PortGroup)theEObject;
-				T result = casePortGroup(portGroup);
+				T1 result = casePortGroup(portGroup);
 				if (result == null) result = caseAPortSet(portGroup);
+				if (result == null) result = caseObjectSet(portGroup);
 				if (result == null) result = caseUUIDObject(portGroup);
 				if (result == null) result = caseNamedObject(portGroup);
 				if (result == null) result = caseMMXObject(portGroup);
@@ -109,14 +113,14 @@ public class PortSwitch<T> extends Switch<T> {
 			}
 			case PortPackage.ROUTE_LINE: {
 				RouteLine routeLine = (RouteLine)theEObject;
-				T result = caseRouteLine(routeLine);
+				T1 result = caseRouteLine(routeLine);
 				if (result == null) result = caseMMXObject(routeLine);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case PortPackage.PORT_MODEL: {
 				PortModel portModel = (PortModel)theEObject;
-				T result = casePortModel(portModel);
+				T1 result = casePortModel(portModel);
 				if (result == null) result = caseUUIDObject(portModel);
 				if (result == null) result = caseMMXObject(portModel);
 				if (result == null) result = defaultCase(theEObject);
@@ -124,8 +128,9 @@ public class PortSwitch<T> extends Switch<T> {
 			}
 			case PortPackage.CAPABILITY_GROUP: {
 				CapabilityGroup capabilityGroup = (CapabilityGroup)theEObject;
-				T result = caseCapabilityGroup(capabilityGroup);
+				T1 result = caseCapabilityGroup(capabilityGroup);
 				if (result == null) result = caseAPortSet(capabilityGroup);
+				if (result == null) result = caseObjectSet(capabilityGroup);
 				if (result == null) result = caseUUIDObject(capabilityGroup);
 				if (result == null) result = caseNamedObject(capabilityGroup);
 				if (result == null) result = caseMMXObject(capabilityGroup);
@@ -134,7 +139,7 @@ public class PortSwitch<T> extends Switch<T> {
 			}
 			case PortPackage.LOCATION: {
 				Location location = (Location)theEObject;
-				T result = caseLocation(location);
+				T1 result = caseLocation(location);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -153,7 +158,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePort(Port object) {
+	public T1 casePort(Port object) {
 		return null;
 	}
 
@@ -168,7 +173,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRoute(Route object) {
+	public T1 caseRoute(Route object) {
 		return null;
 	}
 
@@ -183,7 +188,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePortGroup(PortGroup object) {
+	public T1 casePortGroup(PortGroup object) {
 		return null;
 	}
 
@@ -198,7 +203,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRouteLine(RouteLine object) {
+	public T1 caseRouteLine(RouteLine object) {
 		return null;
 	}
 
@@ -213,7 +218,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePortModel(PortModel object) {
+	public T1 casePortModel(PortModel object) {
 		return null;
 	}
 
@@ -228,7 +233,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCapabilityGroup(CapabilityGroup object) {
+	public T1 caseCapabilityGroup(CapabilityGroup object) {
 		return null;
 	}
 
@@ -243,7 +248,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseLocation(Location object) {
+	public T1 caseLocation(Location object) {
 		return null;
 	}
 
@@ -258,7 +263,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMMXObject(MMXObject object) {
+	public T1 caseMMXObject(MMXObject object) {
 		return null;
 	}
 
@@ -273,7 +278,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseUUIDObject(UUIDObject object) {
+	public T1 caseUUIDObject(UUIDObject object) {
 		return null;
 	}
 
@@ -288,7 +293,23 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNamedObject(NamedObject object) {
+	public T1 caseNamedObject(NamedObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Object Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object Set</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T extends ObjectSet<T, U>, U> T1 caseObjectSet(ObjectSet<T, U> object) {
 		return null;
 	}
 
@@ -303,37 +324,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAPortSet(APortSet object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>APort</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>APort</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAPort(APort object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ARoute</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ARoute</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseARoute(ARoute object) {
+	public <U> T1 caseAPortSet(APortSet<U> object) {
 		return null;
 	}
 
@@ -349,7 +340,7 @@ public class PortSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(EObject object) {
+	public T1 defaultCase(EObject object) {
 		return null;
 	}
 

@@ -4,19 +4,23 @@
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
-import com.mmxlabs.models.lng.schedule.util.ScheduleAdapterFactory;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-
+import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ChangeNotifier;
+import org.eclipse.emf.edit.provider.ChildCreationExtenderManager;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IChangeNotifier;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -24,6 +28,13 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.util.CommercialSwitch;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.util.ScheduleAdapterFactory;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -34,7 +45,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable, IChildCreationExtender {
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -50,6 +61,15 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	 * @generated
 	 */
 	protected IChangeNotifier changeNotifier = new ChangeNotifier();
+
+	/**
+	 * This helps manage the child creation extenders.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ChildCreationExtenderManager childCreationExtenderManager = new ChildCreationExtenderManager(ScheduleEditPlugin.INSTANCE, SchedulePackage.eNS_URI);
 
 	/**
 	 * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
@@ -512,6 +532,126 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CapacityViolationsHolderItemProvider capacityViolationsHolderItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCapacityViolationsHolderAdapter() {
+		if (capacityViolationsHolderItemProvider == null) {
+			capacityViolationsHolderItemProvider = new CapacityViolationsHolderItemProvider(this);
+		}
+
+		return capacityViolationsHolderItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CapacityMapEntryItemProvider capacityMapEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link java.util.Map.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCapacityMapEntryAdapter() {
+		if (capacityMapEntryItemProvider == null) {
+			capacityMapEntryItemProvider = new CapacityMapEntryItemProvider(this);
+		}
+
+		return capacityMapEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProfitAndLossContainerItemProvider profitAndLossContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProfitAndLossContainerAdapter() {
+		if (profitAndLossContainerItemProvider == null) {
+			profitAndLossContainerItemProvider = new ProfitAndLossContainerItemProvider(this);
+		}
+
+		return profitAndLossContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GroupProfitAndLossItemProvider groupProfitAndLossItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGroupProfitAndLossAdapter() {
+		if (groupProfitAndLossItemProvider == null) {
+			groupProfitAndLossItemProvider = new GroupProfitAndLossItemProvider(this);
+		}
+
+		return groupProfitAndLossItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EntityProfitAndLossItemProvider entityProfitAndLossItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEntityProfitAndLossAdapter() {
+		if (entityProfitAndLossItemProvider == null) {
+			entityProfitAndLossItemProvider = new EntityProfitAndLossItemProvider(this);
+		}
+
+		return entityProfitAndLossItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -570,6 +710,36 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public List<IChildCreationExtender> getChildCreationExtenders() {
+		return childCreationExtenderManager.getChildCreationExtenders();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
+		return childCreationExtenderManager.getNewChildDescriptors(object, editingDomain);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ResourceLocator getResourceLocator() {
+		return childCreationExtenderManager;
+	}
+
+	/**
 	 * This adds a listener.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -612,23 +782,116 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	public void dispose() {
 		if (scheduleModelItemProvider != null) scheduleModelItemProvider.dispose();
 		if (scheduleItemProvider != null) scheduleItemProvider.dispose();
-		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
-		if (eventItemProvider != null) eventItemProvider.dispose();
-		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
-		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
-		if (journeyItemProvider != null) journeyItemProvider.dispose();
-		if (idleItemProvider != null) idleItemProvider.dispose();
-		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
-		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
-		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
-		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
+		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
 		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
 		if (slotAllocationItemProvider != null) slotAllocationItemProvider.dispose();
-		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();
-		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
-		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
+		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
+		if (eventItemProvider != null) eventItemProvider.dispose();
 		if (startEventItemProvider != null) startEventItemProvider.dispose();
 		if (endEventItemProvider != null) endEventItemProvider.dispose();
+		if (journeyItemProvider != null) journeyItemProvider.dispose();
+		if (idleItemProvider != null) idleItemProvider.dispose();
+		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
+		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
+		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
+		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
+		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
+		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
+		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
+		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();
+		if (capacityViolationsHolderItemProvider != null) capacityViolationsHolderItemProvider.dispose();
+		if (capacityMapEntryItemProvider != null) capacityMapEntryItemProvider.dispose();
+		if (profitAndLossContainerItemProvider != null) profitAndLossContainerItemProvider.dispose();
+		if (groupProfitAndLossItemProvider != null) groupProfitAndLossItemProvider.dispose();
+		if (entityProfitAndLossItemProvider != null) entityProfitAndLossItemProvider.dispose();
+	}
+
+	/**
+	 * A child creation extender for the {@link CommercialPackage}.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static class CommercialChildCreationExtender implements IChildCreationExtender {
+		/**
+		 * The switch for creating child descriptors specific to each extended class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		protected static class CreationSwitch extends CommercialSwitch<Object> {
+			/**
+			 * The child descriptors being populated.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected List<Object> newChildDescriptors;
+
+			/**
+			 * The domain in which to create the children.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected EditingDomain editingDomain;
+
+			/**
+			 * Creates the a switch for populating child descriptors in the given domain.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			CreationSwitch(List<Object> newChildDescriptors, EditingDomain editingDomain) {
+				this.newChildDescriptors = newChildDescriptors;
+				this.editingDomain = editingDomain;
+			}
+			/**
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			@Override
+			public Object caseCommercialModel(CommercialModel object) {
+				newChildDescriptors.add
+					(createChildParameter
+						(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+						 ScheduleFactory.eINSTANCE.createScheduleModel()));
+
+				return null;
+			}
+ 
+			/**
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected CommandParameter createChildParameter(Object feature, Object child) {
+				return new CommandParameter(null, feature, child);
+			}
+
+		}
+
+		/**
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
+			ArrayList<Object> result = new ArrayList<Object>();
+		   new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
+		   return result;
+		}
+
+		/**
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public ResourceLocator getResourceLocator() {
+			return ScheduleEditPlugin.INSTANCE;
+		}
 	}
 
 }

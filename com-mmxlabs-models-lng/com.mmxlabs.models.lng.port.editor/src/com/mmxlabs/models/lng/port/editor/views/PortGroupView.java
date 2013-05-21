@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.port.editor.views;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 
 import org.eclipse.core.runtime.IStatus;
@@ -34,10 +33,12 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupEditorPane;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
@@ -49,7 +50,7 @@ public class PortGroupView extends ScenarioInstanceView {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.models.lng.port.editor.views.PortGroupView";
-	
+
 	private SashForm sash;
 	private PortGroupEditorPane viewerPane;
 
@@ -59,7 +60,7 @@ public class PortGroupView extends ScenarioInstanceView {
 	public void createPartControl(final Composite parent) {
 		sash = new SashForm(parent, SWT.HORIZONTAL);
 		listenToScenarioSelection();
-		
+
 	}
 
 	@Override
@@ -83,26 +84,29 @@ public class PortGroupView extends ScenarioInstanceView {
 		private MMXContentAdapter contentAdapter = new MMXContentAdapter() {
 			@Override
 			public void reallyNotifyChanged(Notification notification) {
-				if (notification.isTouch() == false) refresh();
+				if (notification.isTouch() == false)
+					refresh();
 			}
 
 			private void refresh() {
 				if (viewer != null && viewer.getControl().isDisposed()) {
 					// remove myself
-					if (lastInput != null) lastInput.eAdapters().remove(this);
+					if (lastInput != null)
+						lastInput.eAdapters().remove(this);
 				} else {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							if (viewer != null && !viewer.getControl().isDisposed()) viewer.refresh();
+							if (viewer != null && !viewer.getControl().isDisposed())
+								viewer.refresh();
 						}
 					});
 				}
 			}
 		};
-		
+
 		EObject lastInput;
-		
+
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			if (oldInput instanceof EObject) {
@@ -114,10 +118,11 @@ public class PortGroupView extends ScenarioInstanceView {
 			} else {
 				lastInput = null;
 			}
-			
-			if (newInput != oldInput) viewer.refresh();
+
+			if (newInput != oldInput)
+				viewer.refresh();
 		}
-		
+
 		@Override
 		public void dispose() {
 			if (lastInput != null) {
@@ -125,7 +130,7 @@ public class PortGroupView extends ScenarioInstanceView {
 			}
 			lastInput = null;
 		}
-		
+
 		@Override
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof PortModel) {
@@ -141,7 +146,7 @@ public class PortGroupView extends ScenarioInstanceView {
 			return new Object[0];
 		}
 	};
-	
+
 	@Override
 	protected void displayScenarioInstance(ScenarioInstance instance) {
 		if (instance != getScenarioInstance()) {
@@ -150,24 +155,24 @@ public class PortGroupView extends ScenarioInstanceView {
 				viewerPane = null;
 				contentViewer = null;
 			}
-			
+
 			final Composite parent = sash.getParent();
 			sash.dispose();
 			sash = new SashForm(parent, SWT.HORIZONTAL);
-			
+
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
 				viewerPane = new PortGroupEditorPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(sash);
-				viewerPane.init(Collections.singletonList(PortPackage.eINSTANCE.getPortModel_PortGroups()),
-						getAdapterFactory(), getEditingDomain().getCommandStack());
-				viewerPane.getViewer().setInput(getRootObject().getSubModel(PortModel.class));
-				
-				contentViewer = CheckboxTableViewer.newCheckList(sash, SWT.SINGLE|SWT.V_SCROLL|SWT.BORDER);
+				viewerPane.init(Lists.newArrayList(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()), getAdapterFactory(),
+						getEditingDomain().getCommandStack());
+				viewerPane.getViewer().setInput(getRootObject());
+
+				contentViewer = CheckboxTableViewer.newCheckList(sash, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
 				contentViewer.setLabelProvider(nameLabelProvider);
 				contentViewer.setContentProvider(portProvider);
-				
+
 				viewerPane.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 					@Override
 					public void selectionChanged(SelectionChangedEvent event) {
@@ -179,42 +184,47 @@ public class PortGroupView extends ScenarioInstanceView {
 								return;
 							}
 						}
-						
+
 						contentViewer.setInput(null);
 					}
 				});
-				
+
 				contentViewer.setCheckStateProvider(new ICheckStateProvider() {
 					@Override
 					public boolean isGrayed(Object element) {
 						return false;
 					}
-					
+
 					@Override
 					public boolean isChecked(Object element) {
-						if (viewerPane == null) return false;
-						if (viewerPane.getViewer() == null) return false;
-						if (viewerPane.getViewer().getControl() == null) return false;
-						if (viewerPane.getViewer().getControl().isDisposed()) return false;
+						if (viewerPane == null)
+							return false;
+						if (viewerPane.getViewer() == null)
+							return false;
+						if (viewerPane.getViewer().getControl() == null)
+							return false;
+						if (viewerPane.getViewer().getControl().isDisposed())
+							return false;
 						final ISelection selection = viewerPane.getViewer().getSelection();
-						
+
 						if (selection instanceof IStructuredSelection) {
 							final Object e = ((IStructuredSelection) selection).getFirstElement();
 							if (e instanceof PortGroup) {
 								return ((PortGroup) e).getContents().contains(element);
 							}
 						}
-						
+
 						return false;
 					}
 				});
-				
+
 				contentViewer.addCheckStateListener(new ICheckStateListener() {
 					@Override
 					public void checkStateChanged(CheckStateChangedEvent event) {
-						if (viewerPane.getViewer().getControl().isDisposed()) return;
+						if (viewerPane.getViewer().getControl().isDisposed())
+							return;
 						final ISelection selection = viewerPane.getViewer().getSelection();
-						
+
 						if (selection instanceof IStructuredSelection) {
 							final Object e = ((IStructuredSelection) selection).getFirstElement();
 							if (e instanceof PortGroup) {
@@ -227,13 +237,13 @@ public class PortGroupView extends ScenarioInstanceView {
 						}
 					}
 				});
-				
-				sash.setWeights(new int[]{2,2});
+
+				sash.setWeights(new int[] { 2, 2 });
 			}
 			parent.layout(true);
 		}
 	}
-	
+
 	@Override
 	public void openStatus(final IStatus status) {
 		if (status.isMultiStatus()) {

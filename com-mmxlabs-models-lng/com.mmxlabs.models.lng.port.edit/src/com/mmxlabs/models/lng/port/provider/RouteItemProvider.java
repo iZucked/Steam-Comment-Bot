@@ -5,22 +5,12 @@
 package com.mmxlabs.models.lng.port.provider;
 
 
-import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.Route;
-
-import com.mmxlabs.models.lng.types.provider.ARouteItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -31,6 +21,12 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
+
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.port.Route} object.
  * <!-- begin-user-doc -->
@@ -38,7 +34,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class RouteItemProvider
-	extends ARouteItemProvider
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -66,10 +62,34 @@ public class RouteItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addUuidPropertyDescriptor(object);
 			addCanalPropertyDescriptor(object);
 			addRoutingOptionsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Uuid feature.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUuidPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UUIDObject_uuid_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UUIDObject_uuid_feature", "_UI_UUIDObject_type"),
+				 MMXCorePackage.Literals.UUID_OBJECT__UUID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -183,6 +203,7 @@ public class RouteItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Route.class)) {
+			case PortPackage.ROUTE__UUID:
 			case PortPackage.ROUTE__CANAL:
 			case PortPackage.ROUTE__ROUTING_OPTIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
@@ -209,17 +230,6 @@ public class RouteItemProvider
 			(createChildParameter
 				(PortPackage.Literals.ROUTE__LINES,
 				 PortFactory.eINSTANCE.createRouteLine()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return PortEditPlugin.INSTANCE;
 	}
 
 }

@@ -3,10 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
-import com.mmxlabs.models.lng.types.ALegalEntity;
 import org.eclipse.emf.common.util.EList;
-import com.mmxlabs.models.lng.types.ALegalEntity;
-import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface LegalEntity extends ALegalEntity {
+public interface LegalEntity extends UUIDObject, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Tax Rates</b></em>' containment reference list.

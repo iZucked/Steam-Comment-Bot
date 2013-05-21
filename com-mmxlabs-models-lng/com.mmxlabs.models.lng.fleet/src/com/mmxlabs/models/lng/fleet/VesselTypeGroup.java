@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * @model
  * @generated
  */
-public interface VesselTypeGroup extends AVesselSet {
+public interface VesselTypeGroup extends AVesselSet<Vessel> {
 	/**
 	 * Returns the value of the '<em><b>Vessel Type</b></em>' attribute.
 	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.fleet.VesselType}.

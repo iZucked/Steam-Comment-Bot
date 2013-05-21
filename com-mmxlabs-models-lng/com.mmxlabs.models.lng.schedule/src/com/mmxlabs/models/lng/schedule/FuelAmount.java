@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnit <em>Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelAmount#getQuantity <em>Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice <em>Unit Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -36,7 +37,7 @@ public interface FuelAmount extends EObject {
 	 * @see com.mmxlabs.models.lng.schedule.FuelUnit
 	 * @see #setUnit(FuelUnit)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelAmount_Unit()
-	 * @model dataType="com.mmxlabs.models.lng.schedule.FuelUnit" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
 	FuelUnit getUnit();
@@ -77,6 +78,32 @@ public interface FuelAmount extends EObject {
 	 * @generated
 	 */
 	void setQuantity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Unit Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Unit Price</em>' attribute.
+	 * @see #setUnitPrice(double)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelAmount_UnitPrice()
+	 * @model
+	 * @generated
+	 */
+	double getUnitPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice <em>Unit Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Unit Price</em>' attribute.
+	 * @see #getUnitPrice()
+	 * @generated
+	 */
+	void setUnitPrice(double value);
 
 } // end of  FuelAmount
 

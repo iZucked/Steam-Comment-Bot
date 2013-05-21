@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.FieldMap;
@@ -99,7 +100,10 @@ public class VesselClassImporter extends DefaultClassImporter {
 							@Override
 							public void run(final IImportContext context) {
 								if (cost.getRoute() != null && cost.getVesselClass() != null) {
-									context.getRootObject().getSubModel(PricingModel.class).getRouteCosts().add(cost);
+									MMXRootObject rootObject = context.getRootObject();
+									if (rootObject instanceof LNGScenarioModel) {
+										((LNGScenarioModel) rootObject).getPricingModel().getRouteCosts().add(cost);
+									}
 								}
 							}
 
@@ -167,18 +171,20 @@ public class VesselClassImporter extends DefaultClassImporter {
 				result.put(prefix + e.getKey(), e.getValue());
 			}
 		}
-
-		final PricingModel pm = root.getSubModel(PricingModel.class);
-		if (pm != null) {
-			for (final RouteCost rc : pm.getRouteCosts()) {
-				if (rc.getVesselClass() == vc) {
-					final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc), root).iterator().next();
-					exportedCost.remove("vesselclass");
-					final String route = exportedCost.get("route");
-					exportedCost.remove("route");
-					final String prefix = route + ".pricing.";
-					for (final Map.Entry<String, String> e : exportedCost.entrySet()) {
-						result.put(prefix + e.getKey(), e.getValue());
+		if (root instanceof LNGScenarioModel) {
+			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) root;
+			final PricingModel pm = lngScenarioModel.getPricingModel();
+			if (pm != null) {
+				for (final RouteCost rc : pm.getRouteCosts()) {
+					if (rc.getVesselClass() == vc) {
+						final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc), root).iterator().next();
+						exportedCost.remove("vesselclass");
+						final String route = exportedCost.get("route");
+						exportedCost.remove("route");
+						final String prefix = route + ".pricing.";
+						for (final Map.Entry<String, String> e : exportedCost.entrySet()) {
+							result.put(prefix + e.getKey(), e.getValue());
+						}
 					}
 				}
 			}

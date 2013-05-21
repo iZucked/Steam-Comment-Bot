@@ -3,28 +3,27 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
-
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.types.impl.AVesselEventImpl;
-
 import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,6 +32,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getDurationInDays <em>Duration In Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getPort <em>Port</em>}</li>
@@ -43,7 +44,40 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *
  * @generated
  */
-public abstract class VesselEventImpl extends AVesselEventImpl implements VesselEvent {
+public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEvent {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
+
 	/**
 	 * The default value of the '{@link #getDurationInDays() <em>Duration In Days</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -72,7 +106,7 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AVesselSet> allowedVessels;
+	protected EList<AVesselSet<Vessel>> allowedVessels;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -145,6 +179,42 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, FleetPackage.VESSEL_EVENT__OTHER_NAMES);
+		}
+		return otherNames;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -169,9 +239,9 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AVesselSet> getAllowedVessels() {
+	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
-			allowedVessels = new EObjectResolvingEList<AVesselSet>(AVesselSet.class, this, FleetPackage.VESSEL_EVENT__ALLOWED_VESSELS);
+			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, FleetPackage.VESSEL_EVENT__ALLOWED_VESSELS);
 		}
 		return allowedVessels;
 	}
@@ -274,6 +344,10 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_EVENT__NAME:
+				return getName();
+			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
+				return getOtherNames();
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 				return getDurationInDays();
 			case FleetPackage.VESSEL_EVENT__ALLOWED_VESSELS:
@@ -298,12 +372,19 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_EVENT__NAME:
+				setName((String)newValue);
+				return;
+			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
+				return;
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 				setDurationInDays((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL_EVENT__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
-				getAllowedVessels().addAll((Collection<? extends AVesselSet>)newValue);
+				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
 				return;
 			case FleetPackage.VESSEL_EVENT__PORT:
 				setPort((Port)newValue);
@@ -326,6 +407,12 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_EVENT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 				setDurationInDays(DURATION_IN_DAYS_EDEFAULT);
 				return;
@@ -353,6 +440,10 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case FleetPackage.VESSEL_EVENT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 				return durationInDays != DURATION_IN_DAYS_EDEFAULT;
 			case FleetPackage.VESSEL_EVENT__ALLOWED_VESSELS:
@@ -373,11 +464,59 @@ public abstract class VesselEventImpl extends AVesselEventImpl implements Vessel
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (derivedFeatureID) {
+				case FleetPackage.VESSEL_EVENT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case FleetPackage.VESSEL_EVENT__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		if (baseClass == ITimezoneProvider.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.NAMED_OBJECT__NAME: return FleetPackage.VESSEL_EVENT__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return FleetPackage.VESSEL_EVENT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		if (baseClass == ITimezoneProvider.class) {
+			switch (baseFeatureID) {
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (durationInDays: ");
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
+		result.append(", durationInDays: ");
 		result.append(durationInDays);
 		result.append(", startAfter: ");
 		result.append(startAfter);

@@ -3,12 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
-import com.mmxlabs.models.lng.types.ASlot;
-import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
-import com.mmxlabs.models.lng.port.Port;
-
 import java.util.Date;
+
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,6 +29,7 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
  * </ul>
  * </p>
  *
@@ -35,7 +37,7 @@ import java.util.Date;
  * @model abstract="true"
  * @generated
  */
-public interface Slot extends ASlot, ITimezoneProvider {
+public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -518,6 +520,36 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetPriceExpression();
+
+	/**
+	 * Returns the value of the '<em><b>Cargo</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo</em>' reference.
+	 * @see #setCargo(Cargo)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Cargo()
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSlots
+	 * @model opposite="slots"
+	 * @generated
+	 */
+	Cargo getCargo();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo</em>' reference.
+	 * @see #getCargo()
+	 * @generated
+	 */
+	void setCargo(Cargo value);
 
 	/**
 	 * <!-- begin-user-doc -->

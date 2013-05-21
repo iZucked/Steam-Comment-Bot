@@ -5,23 +5,30 @@
 package com.mmxlabs.models.lng.schedule.util;
 
 import com.mmxlabs.models.lng.schedule.*;
+import java.util.Map;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -30,12 +37,10 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import java.util.Map;
 
 /**
  * <!-- begin-user-doc -->
@@ -102,44 +107,8 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createScheduleAdapter();
 			}
 			@Override
-			public Adapter caseSequence(Sequence object) {
-				return createSequenceAdapter();
-			}
-			@Override
-			public Adapter caseEvent(Event object) {
-				return createEventAdapter();
-			}
-			@Override
-			public Adapter caseSlotVisit(SlotVisit object) {
-				return createSlotVisitAdapter();
-			}
-			@Override
-			public Adapter caseVesselEventVisit(VesselEventVisit object) {
-				return createVesselEventVisitAdapter();
-			}
-			@Override
-			public Adapter caseJourney(Journey object) {
-				return createJourneyAdapter();
-			}
-			@Override
-			public Adapter caseIdle(Idle object) {
-				return createIdleAdapter();
-			}
-			@Override
-			public Adapter caseGeneratedCharterOut(GeneratedCharterOut object) {
-				return createGeneratedCharterOutAdapter();
-			}
-			@Override
-			public Adapter caseFuelUsage(FuelUsage object) {
-				return createFuelUsageAdapter();
-			}
-			@Override
-			public Adapter caseFuelQuantity(FuelQuantity object) {
-				return createFuelQuantityAdapter();
-			}
-			@Override
-			public Adapter caseCooldown(Cooldown object) {
-				return createCooldownAdapter();
+			public Adapter caseFitness(Fitness object) {
+				return createFitnessAdapter();
 			}
 			@Override
 			public Adapter caseCargoAllocation(CargoAllocation object) {
@@ -150,16 +119,12 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createSlotAllocationAdapter();
 			}
 			@Override
-			public Adapter caseFuelAmount(FuelAmount object) {
-				return createFuelAmountAdapter();
+			public Adapter caseSequence(Sequence object) {
+				return createSequenceAdapter();
 			}
 			@Override
-			public Adapter caseFitness(Fitness object) {
-				return createFitnessAdapter();
-			}
-			@Override
-			public Adapter casePortVisit(PortVisit object) {
-				return createPortVisitAdapter();
+			public Adapter caseEvent(Event object) {
+				return createEventAdapter();
 			}
 			@Override
 			public Adapter caseStartEvent(StartEvent object) {
@@ -170,12 +135,64 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createEndEventAdapter();
 			}
 			@Override
+			public Adapter caseJourney(Journey object) {
+				return createJourneyAdapter();
+			}
+			@Override
+			public Adapter caseIdle(Idle object) {
+				return createIdleAdapter();
+			}
+			@Override
+			public Adapter casePortVisit(PortVisit object) {
+				return createPortVisitAdapter();
+			}
+			@Override
+			public Adapter caseSlotVisit(SlotVisit object) {
+				return createSlotVisitAdapter();
+			}
+			@Override
+			public Adapter caseVesselEventVisit(VesselEventVisit object) {
+				return createVesselEventVisitAdapter();
+			}
+			@Override
+			public Adapter caseGeneratedCharterOut(GeneratedCharterOut object) {
+				return createGeneratedCharterOutAdapter();
+			}
+			@Override
+			public Adapter caseCooldown(Cooldown object) {
+				return createCooldownAdapter();
+			}
+			@Override
+			public Adapter caseFuelUsage(FuelUsage object) {
+				return createFuelUsageAdapter();
+			}
+			@Override
+			public Adapter caseFuelQuantity(FuelQuantity object) {
+				return createFuelQuantityAdapter();
+			}
+			@Override
+			public Adapter caseFuelAmount(FuelAmount object) {
+				return createFuelAmountAdapter();
+			}
+			@Override
 			public Adapter caseCapacityViolationsHolder(CapacityViolationsHolder object) {
 				return createCapacityViolationsHolderAdapter();
 			}
 			@Override
 			public Adapter caseCapacityMapEntry(Map.Entry<CapacityViolationType, Long> object) {
 				return createCapacityMapEntryAdapter();
+			}
+			@Override
+			public Adapter caseProfitAndLossContainer(ProfitAndLossContainer object) {
+				return createProfitAndLossContainerAdapter();
+			}
+			@Override
+			public Adapter caseGroupProfitAndLoss(GroupProfitAndLoss object) {
+				return createGroupProfitAndLossAdapter();
+			}
+			@Override
+			public Adapter caseEntityProfitAndLoss(EntityProfitAndLoss object) {
+				return createEntityProfitAndLossAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -186,16 +203,12 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createUUIDObjectAdapter();
 			}
 			@Override
-			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
-				return createITimezoneProviderAdapter();
-			}
-			@Override
-			public Adapter caseExtraDataContainer(ExtraDataContainer object) {
-				return createExtraDataContainerAdapter();
-			}
-			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
+			}
+			@Override
+			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
+				return createITimezoneProviderAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -515,6 +528,48 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer <em>Profit And Loss Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer
+	 * @generated
+	 */
+	public Adapter createProfitAndLossContainerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss <em>Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss
+	 * @generated
+	 */
+	public Adapter createGroupProfitAndLossAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss <em>Entity Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss
+	 * @generated
+	 */
+	public Adapter createEntityProfitAndLossAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -567,20 +622,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createITimezoneProviderAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ExtraDataContainer <em>Extra Data Container</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer
-	 * @generated
-	 */
-	public Adapter createExtraDataContainerAdapter() {
 		return null;
 	}
 

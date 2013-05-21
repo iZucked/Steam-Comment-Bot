@@ -3,9 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
  * @model abstract="true"
  * @generated
  */
-public interface SpotMarket extends ASpotMarket {
+public interface SpotMarket extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Availability</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

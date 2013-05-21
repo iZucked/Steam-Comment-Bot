@@ -30,13 +30,12 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -54,8 +53,6 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class VesselClassViewerPane extends ScenarioTableViewerPane {
-
-	private static final Logger log = LoggerFactory.getLogger(VesselClassViewerPane.class);
 
 	private final IScenarioEditingLocation jointModelEditor;
 
@@ -86,6 +83,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 		setTitle("Vessel Classes", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
+					
 	class BaseFuelEditorAction extends AbstractMenuAction {
 		public BaseFuelEditorAction() {
 			super("Base Fuels");
@@ -97,70 +95,74 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 
 		@Override
 		protected void populate(final Menu menu) {
-			final FleetModel fleetModel = jointModelEditor.getRootObject().getSubModel(FleetModel.class);
-			boolean b = false;
-			for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
-				b = true;
-				final Action editBase = new AbstractMenuAction(baseFuel.getName()) {
+			final MMXRootObject rootObject = jointModelEditor.getRootObject();
+			if (rootObject instanceof LNGScenarioModel) {
+				final FleetModel fleetModel = ((LNGScenarioModel)rootObject).getFleetModel();
+				boolean b = false;
+				for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
+					b = true;
+					final Action editBase = new AbstractMenuAction(baseFuel.getName()) {
+						@Override
+						protected void populate(final Menu submenu) {
+							final LockableAction edit = new LockableAction("Edit...") {
+								public void run() {
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
+									dcd.open(jointModelEditor, rootObject, Collections.singletonList((EObject) baseFuel));
+								}
+							};
+							addActionToMenu(edit, submenu);
+
+							final Action delete = new LockableAction("Delete...") {
+								public void run() {
+									final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
+									handler.handleCommand(DeleteCommand.create(handler.getEditingDomain(), Collections.singleton(baseFuel)), fleetModel,
+											FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
+								}
+							};
+							addActionToMenu(delete, submenu);
+						}
+					};
+					addActionToMenu(editBase, menu);
+				}
+
+				if (b) {
+					new MenuItem(menu, SWT.SEPARATOR);
+				}
+				final Action newBase = AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
 					@Override
-					protected void populate(final Menu submenu) {
-						final LockableAction edit = new LockableAction("Edit...") {
-							public void run() {
-								final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
-								dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
-							}
-						};
-						addActionToMenu(edit, submenu);
-
-						final Action delete = new LockableAction("Delete...") {
-							public void run() {
-								final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
-								handler.handleCommand(DeleteCommand.create(handler.getEditingDomain(), Collections.singleton(baseFuel)), fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
-							}
-						};
-						addActionToMenu(delete, submenu);
+					public MMXRootObject getRootObject() {
+						return rootObject;
 					}
-				};
-				addActionToMenu(editBase, menu);
-			}
 
-			if (b) {
-				new MenuItem(menu, SWT.SEPARATOR);
-			}
-			final Action newBase = AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
-				@Override
-				public MMXRootObject getRootObject() {
-					return jointModelEditor.getRootObject();
-				}
+					@Override
+					public EReference getContainment() {
+						return FleetPackage.eINSTANCE.getFleetModel_BaseFuels();
+					}
 
-				@Override
-				public EReference getContainment() {
-					return FleetPackage.eINSTANCE.getFleetModel_BaseFuels();
-				}
+					@Override
+					public EObject getContainer() {
+						return fleetModel;
+					}
 
-				@Override
-				public EObject getContainer() {
-					return fleetModel;
-				}
+					@Override
+					public ICommandHandler getCommandHandler() {
+						return jointModelEditor.getDefaultCommandHandler();
+					}
 
-				@Override
-				public ICommandHandler getCommandHandler() {
-					return jointModelEditor.getDefaultCommandHandler();
-				}
+					@Override
+					public IScenarioEditingLocation getEditorPart() {
+						return jointModelEditor;
+					}
 
-				@Override
-				public IScenarioEditingLocation getEditorPart() {
-					return jointModelEditor;
+					@Override
+					public ISelection getCurrentSelection() {
+						return viewer.getSelection();
+					}
+				});
+				if (newBase != null) {
+					newBase.setText("Add new base fuel...");
+					addActionToMenu(newBase, menu);
 				}
-
-				@Override
-				public ISelection getCurrentSelection() {
-					return viewer.getSelection();
-				}
-			});
-			if (newBase != null) {
-				newBase.setText("Add new base fuel...");
-				addActionToMenu(newBase, menu);
 			}
 		}
 	}

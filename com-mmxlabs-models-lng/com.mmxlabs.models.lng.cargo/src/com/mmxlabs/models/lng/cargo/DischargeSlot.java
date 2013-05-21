@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isFOBSale <em>FOB Sale</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
  * </ul>
@@ -25,34 +24,6 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * @generated
  */
 public interface DischargeSlot extends Slot {
-
-	/**
-	 * Returns the value of the '<em><b>Cargo</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cargo</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cargo</em>' reference.
-	 * @see #setCargo(Cargo)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot_Cargo()
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot
-	 * @model opposite="dischargeSlot"
-	 * @generated
-	 */
-	Cargo getCargo();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo <em>Cargo</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cargo</em>' reference.
-	 * @see #getCargo()
-	 * @generated
-	 */
-	void setCargo(Cargo value);
 
 	/**
 	 * Returns the value of the '<em><b>FOB Sale</b></em>' attribute.

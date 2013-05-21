@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -98,7 +99,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> fromPorts;
+	protected EList<APortSet<Port>> fromPorts;
 
 	/**
 	 * The cached value of the '{@link #getToPorts() <em>To Ports</em>}' reference list.
@@ -108,7 +109,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> toPorts;
+	protected EList<APortSet<Port>> toPorts;
 
 	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
@@ -462,6 +463,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -471,6 +473,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -483,6 +486,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
 			otherNames = new EDataTypeUniqueEList<String>(String.class, this, AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES);
@@ -495,9 +499,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getFromPorts() {
+	@Override
+	public EList<APortSet<Port>> getFromPorts() {
 		if (fromPorts == null) {
-			fromPorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS);
+			fromPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS);
 		}
 		return fromPorts;
 	}
@@ -507,9 +512,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getToPorts() {
+	@Override
+	public EList<APortSet<Port>> getToPorts() {
 		if (toPorts == null) {
-			toPorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS);
+			toPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS);
 		}
 		return toPorts;
 	}
@@ -519,6 +525,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Vessel getVessel() {
 		if (vessel != null && vessel.eIsProxy()) {
 			InternalEObject oldVessel = (InternalEObject)vessel;
@@ -545,6 +552,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVessel(Vessel newVessel) {
 		Vessel oldVessel = vessel;
 		vessel = newVessel;
@@ -557,6 +565,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getNotionalDayRate() {
 		return notionalDayRate;
 	}
@@ -566,6 +575,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setNotionalDayRate(int newNotionalDayRate) {
 		int oldNotionalDayRate = notionalDayRate;
 		notionalDayRate = newNotionalDayRate;
@@ -578,6 +588,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getSpeed() {
 		return speed;
 	}
@@ -587,6 +598,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSpeed(double newSpeed) {
 		double oldSpeed = speed;
 		speed = newSpeed;
@@ -601,6 +613,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetSpeed() {
 		double oldSpeed = speed;
 		boolean oldSpeedESet = speedESet;
@@ -615,6 +628,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetSpeed() {
 		return speedESet;
 	}
@@ -624,6 +638,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isRoundTrip() {
 		return roundTrip;
 	}
@@ -633,6 +648,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRoundTrip(boolean newRoundTrip) {
 		boolean oldRoundTrip = roundTrip;
 		roundTrip = newRoundTrip;
@@ -645,6 +661,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinimumLoad() {
 		return minimumLoad;
 	}
@@ -654,6 +671,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinimumLoad(int newMinimumLoad) {
 		int oldMinimumLoad = minimumLoad;
 		minimumLoad = newMinimumLoad;
@@ -666,6 +684,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaximumLoad() {
 		return maximumLoad;
 	}
@@ -675,6 +694,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaximumLoad(int newMaximumLoad) {
 		int oldMaximumLoad = maximumLoad;
 		maximumLoad = newMaximumLoad;
@@ -687,6 +707,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMinimumDischarge() {
 		return minimumDischarge;
 	}
@@ -696,6 +717,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMinimumDischarge(int newMinimumDischarge) {
 		int oldMinimumDischarge = minimumDischarge;
 		minimumDischarge = newMinimumDischarge;
@@ -708,6 +730,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getMaximumDischarge() {
 		return maximumDischarge;
 	}
@@ -717,6 +740,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMaximumDischarge(int newMaximumDischarge) {
 		int oldMaximumDischarge = maximumDischarge;
 		maximumDischarge = newMaximumDischarge;
@@ -729,6 +753,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getRetainHeel() {
 		return retainHeel;
 	}
@@ -738,6 +763,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRetainHeel(int newRetainHeel) {
 		int oldRetainHeel = retainHeel;
 		retainHeel = newRetainHeel;
@@ -750,6 +776,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCargoPrice() {
 		return cargoPrice;
 	}
@@ -759,6 +786,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoPrice(double newCargoPrice) {
 		double oldCargoPrice = cargoPrice;
 		cargoPrice = newCargoPrice;
@@ -771,6 +799,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getBaseFuelPrice() {
 		return baseFuelPrice;
 	}
@@ -780,6 +809,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseFuelPrice(double newBaseFuelPrice) {
 		double oldBaseFuelPrice = baseFuelPrice;
 		baseFuelPrice = newBaseFuelPrice;
@@ -792,6 +822,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCvValue() {
 		return cvValue;
 	}
@@ -801,6 +832,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCvValue(double newCvValue) {
 		double oldCvValue = cvValue;
 		cvValue = newCvValue;
@@ -815,6 +847,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetCvValue() {
 		double oldCvValue = cvValue;
 		boolean oldCvValueESet = cvValueESet;
@@ -829,6 +862,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetCvValue() {
 		return cvValueESet;
 	}
@@ -838,9 +872,11 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated NO
 	 */
+	@Override
 	public EList<UnitCostLine> getCostLines() {
 		if (costLines == null) {
 			costLines = new EObjectContainmentEList<UnitCostLine>(UnitCostLine.class, this, AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES) {
+				@Override
 				public boolean isUnique() {
 					return false;
 				}
@@ -854,6 +890,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Route> getAllowedRoutes() {
 		if (allowedRoutes == null) {
 			allowedRoutes = new EObjectResolvingEList<Route>(Route.class, this, AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES);
@@ -866,6 +903,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getRevenueShare() {
 		return revenueShare;
 	}
@@ -875,6 +913,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRevenueShare(double newRevenueShare) {
 		double oldRevenueShare = revenueShare;
 		revenueShare = newRevenueShare;
@@ -887,6 +926,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getLadenTimeAllowance() {
 		return ladenTimeAllowance;
 	}
@@ -896,6 +936,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLadenTimeAllowance(double newLadenTimeAllowance) {
 		double oldLadenTimeAllowance = ladenTimeAllowance;
 		ladenTimeAllowance = newLadenTimeAllowance;
@@ -908,6 +949,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getBallastTimeAllowance() {
 		return ballastTimeAllowance;
 	}
@@ -917,6 +959,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBallastTimeAllowance(double newBallastTimeAllowance) {
 		double oldBallastTimeAllowance = ballastTimeAllowance;
 		ballastTimeAllowance = newBallastTimeAllowance;
@@ -1011,11 +1054,11 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
 				getFromPorts().clear();
-				getFromPorts().addAll((Collection<? extends APortSet>)newValue);
+				getFromPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS:
 				getToPorts().clear();
-				getToPorts().addAll((Collection<? extends APortSet>)newValue);
+				getToPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__VESSEL:
 				setVessel((Vessel)newValue);

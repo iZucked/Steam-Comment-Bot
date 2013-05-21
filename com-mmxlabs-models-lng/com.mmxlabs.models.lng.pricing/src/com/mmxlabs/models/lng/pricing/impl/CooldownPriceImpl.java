@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -41,7 +42,7 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> ports;
+	protected EList<APortSet<Port>> ports;
 
 	/**
 	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
@@ -77,9 +78,9 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getPorts() {
+	public EList<APortSet<Port>> getPorts() {
 		if (ports == null) {
-			ports = new EObjectResolvingEList<APortSet>(APortSet.class, this, PricingPackage.COOLDOWN_PRICE__PORTS);
+			ports = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, PricingPackage.COOLDOWN_PRICE__PORTS);
 		}
 		return ports;
 	}
@@ -151,7 +152,7 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 		switch (featureID) {
 			case PricingPackage.COOLDOWN_PRICE__PORTS:
 				getPorts().clear();
-				getPorts().addAll((Collection<? extends APortSet>)newValue);
+				getPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case PricingPackage.COOLDOWN_PRICE__INDEX:
 				setIndex((Index<Double>)newValue);

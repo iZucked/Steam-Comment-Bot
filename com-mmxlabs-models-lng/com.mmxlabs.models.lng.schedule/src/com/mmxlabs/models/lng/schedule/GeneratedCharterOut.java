@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,7 +22,7 @@ import com.mmxlabs.models.lng.types.ExtraDataContainer;
  * @model
  * @generated
  */
-public interface GeneratedCharterOut extends Event, ExtraDataContainer {
+public interface GeneratedCharterOut extends Event, ProfitAndLossContainer {
 	/**
 	 * Returns the value of the '<em><b>Revenue</b></em>' attribute.
 	 * <!-- begin-user-doc -->

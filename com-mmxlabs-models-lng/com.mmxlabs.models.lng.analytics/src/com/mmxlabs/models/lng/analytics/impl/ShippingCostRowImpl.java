@@ -193,6 +193,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getPort() {
 		if (port != null && port.eIsProxy()) {
 			InternalEObject oldPort = (InternalEObject)port;
@@ -219,6 +220,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPort(Port newPort) {
 		Port oldPort = port;
 		port = newPort;
@@ -231,6 +233,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getDate() {
 		return date;
 	}
@@ -240,6 +243,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDate(Date newDate) {
 		Date oldDate = date;
 		date = newDate;
@@ -252,6 +256,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCargoPrice() {
 		return cargoPrice;
 	}
@@ -261,6 +266,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoPrice(double newCargoPrice) {
 		double oldCargoPrice = cargoPrice;
 		cargoPrice = newCargoPrice;
@@ -273,6 +279,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getCvValue() {
 		return cvValue;
 	}
@@ -282,6 +289,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCvValue(double newCvValue) {
 		double oldCvValue = cvValue;
 		cvValue = newCvValue;
@@ -294,6 +302,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DestinationType getDestinationType() {
 		return destinationType;
 	}
@@ -303,6 +312,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDestinationType(DestinationType newDestinationType) {
 		DestinationType oldDestinationType = destinationType;
 		destinationType = newDestinationType == null ? DESTINATION_TYPE_EDEFAULT : newDestinationType;
@@ -315,6 +325,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHeelVolume() {
 		return heelVolume;
 	}
@@ -324,6 +335,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHeelVolume(int newHeelVolume) {
 		int oldHeelVolume = heelVolume;
 		heelVolume = newHeelVolume;
@@ -337,6 +349,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isIncludePortCosts() {
 		return includePortCosts;
 	}
@@ -347,6 +360,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIncludePortCosts(boolean newIncludePortCosts) {
 		boolean oldIncludePortCosts = includePortCosts;
 		includePortCosts = newIncludePortCosts;

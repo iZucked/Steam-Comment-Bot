@@ -3,8 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
-import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,7 +16,7 @@ import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
  * @model abstract="true"
  * @generated
  */
-public interface LNGPriceCalculatorParameters extends ALNGPriceCalculatorParameters {
+public interface LNGPriceCalculatorParameters extends UUIDObject {
 } // end of  LNGPriceCalculatorParameters
 
 // finish type fixing

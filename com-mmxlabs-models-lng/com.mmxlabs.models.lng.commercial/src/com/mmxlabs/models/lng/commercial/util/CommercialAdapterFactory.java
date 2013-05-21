@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
-import com.mmxlabs.models.lng.commercial.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -13,14 +12,13 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.types.ALegalEntity;
-import com.mmxlabs.models.lng.types.APurchaseContract;
-import com.mmxlabs.models.lng.types.ASalesContract;
+import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -114,10 +112,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createFixedPriceParametersAdapter();
 			}
 			@Override
-			public Adapter caseIndexPriceParameters(IndexPriceParameters object) {
-				return createIndexPriceParametersAdapter();
-			}
-			@Override
 			public Adapter caseExpressionPriceParameters(ExpressionPriceParameters object) {
 				return createExpressionPriceParametersAdapter();
 			}
@@ -132,26 +126,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
-			}
-			@Override
-			public Adapter caseALegalEntity(ALegalEntity object) {
-				return createALegalEntityAdapter();
-			}
-			@Override
-			public Adapter caseAContract(AContract object) {
-				return createAContractAdapter();
-			}
-			@Override
-			public Adapter caseASalesContract(ASalesContract object) {
-				return createASalesContractAdapter();
-			}
-			@Override
-			public Adapter caseAPurchaseContract(APurchaseContract object) {
-				return createAPurchaseContractAdapter();
-			}
-			@Override
-			public Adapter caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
-				return createALNGPriceCalculatorParametersAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -289,21 +263,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters <em>Index Price Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters
-	 * @generated
-	 */
-	public Adapter createIndexPriceParametersAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters <em>Expression Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -357,77 +316,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ALegalEntity <em>ALegal Entity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ALegalEntity
-	 * @generated
-	 */
-	public Adapter createALegalEntityAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AContract <em>AContract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.AContract
-	 * @generated
-	 */
-	public Adapter createAContractAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ASalesContract <em>ASales Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ASalesContract
-	 * @generated
-	 */
-	public Adapter createASalesContractAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.APurchaseContract <em>APurchase Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.APurchaseContract
-	 * @generated
-	 */
-	public Adapter createAPurchaseContractAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters <em>ALNG Price Calculator Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters
-	 * @generated
-	 */
-	public Adapter createALNGPriceCalculatorParametersAdapter() {
 		return null;
 	}
 

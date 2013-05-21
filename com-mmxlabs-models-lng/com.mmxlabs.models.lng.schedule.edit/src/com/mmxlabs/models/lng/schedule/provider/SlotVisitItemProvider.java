@@ -5,17 +5,12 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -26,6 +21,10 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.SlotVisit} object.
@@ -125,6 +124,7 @@ public class SlotVisitItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.FUEL_USAGE__FUELS);
+			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SLOT_VISIT__SLOT_ALLOCATION);
 		}
 		return childrenFeatures;
@@ -174,6 +174,7 @@ public class SlotVisitItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.SLOT_VISIT__FUELS:
+			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -195,6 +196,11 @@ public class SlotVisitItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.FUEL_USAGE__FUELS,
 				 ScheduleFactory.eINSTANCE.createFuelQuantity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS,
+				 ScheduleFactory.eINSTANCE.create(SchedulePackage.Literals.CAPACITY_MAP_ENTRY)));
 	}
 
 }

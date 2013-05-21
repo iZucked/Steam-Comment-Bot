@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
-import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDiagram;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireData;
 

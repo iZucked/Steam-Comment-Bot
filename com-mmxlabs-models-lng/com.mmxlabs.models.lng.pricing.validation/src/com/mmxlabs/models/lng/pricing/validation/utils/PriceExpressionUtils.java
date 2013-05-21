@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -123,20 +124,23 @@ public class PriceExpressionUtils {
 		if (extraValidationContext != null) {
 			final MMXRootObject rootObject = extraValidationContext.getRootObject();
 
-			final SeriesParser indices = new SeriesParser();
+			if (rootObject instanceof LNGScenarioModel) {
+				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final SeriesParser indices = new SeriesParser();
 
-			final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
-			for (final Index<Double> index : pricingModel.getCommodityIndices()) {
-				if (index instanceof DataIndex) {
-					// For this validation, we do not need real times or values
-					final int[] times = new int[1];
-					final Number[] nums = new Number[1];
-					indices.addSeriesData(index.getName(), times, nums);
-				} else if (index instanceof DerivedIndex) {
-					indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+				for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+					if (index instanceof DataIndex) {
+						// For this validation, we do not need real times or values
+						final int[] times = new int[1];
+						final Number[] nums = new Number[1];
+						indices.addSeriesData(index.getName(), times, nums);
+					} else if (index instanceof DerivedIndex) {
+						indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+					}
 				}
+				return indices;
 			}
-			return indices;
 		}
 		return null;
 	}

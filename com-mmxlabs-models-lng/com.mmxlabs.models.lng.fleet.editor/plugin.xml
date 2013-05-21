@@ -110,6 +110,12 @@
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.fleet.VesselAvailability"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider"
           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
@@ -117,7 +123,7 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.BaseFuelValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.editor.baseFuelProvider"
-          referenceEClass="com.mmxlabs.models.lng.types.ABaseFuel">
+          referenceEClass="com.mmxlabs.models.lng.fleet.BaseFuel">
     </valueProvider>
  </extension>
  <extension
@@ -126,7 +132,7 @@
           id="com.mmxlabs.models.lng.fleet.editor.jointModelEditorContribution"
           implementation="com.mmxlabs.models.lng.fleet.ui.editorpart.FleetModelEditorContribution"
           priority="30"
-          subModelClass="com.mmxlabs.models.lng.fleet.FleetModel">
+          subModelClass="com.mmxlabs.models.lng.fleet.ScenarioFleetModel">
     </jointModelEditor>
  </extension>
  <extension
@@ -135,6 +141,11 @@
           ID="com.mmxlabs.models.lng.fleet.editor.fleetModelImporter"
           subModelClassName="com.mmxlabs.models.lng.fleet.FleetModel"
           subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.FleetModelImporter">
+    </submodelImporter>
+     <submodelImporter
+          ID="com.mmxlabs.models.lng.fleet.editor.ScenarioFleetModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.fleet.ScenarioFleetModel"
+          subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.ScenarioFleetModelImporter">
     </submodelImporter>
  </extension>
  <extension
@@ -159,6 +170,12 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Vessel"
           targetEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselAvailabilityFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="VesselAvailability"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselAvailability">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.fleet.editor.charterOutFactory"

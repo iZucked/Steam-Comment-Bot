@@ -81,15 +81,6 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYTICS_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -163,15 +154,6 @@ public interface AnalyticsPackage extends EPackage {
 	 * @ordered
 	 */
 	int UNIT_COST_MATRIX__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -400,31 +382,13 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_LINE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_LINE__EXTRA_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Unit Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__UNIT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int UNIT_COST_LINE__UNIT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Mmbtu Delivered</b></em>' attribute.
@@ -433,7 +397,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__MMBTU_DELIVERED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int UNIT_COST_LINE__MMBTU_DELIVERED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' reference.
@@ -442,7 +406,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__FROM = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int UNIT_COST_LINE__FROM = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>To</b></em>' reference.
@@ -451,7 +415,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int UNIT_COST_LINE__TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -460,7 +424,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int UNIT_COST_LINE__DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Volume Loaded</b></em>' attribute.
@@ -469,7 +433,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__VOLUME_LOADED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int UNIT_COST_LINE__VOLUME_LOADED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Volume Discharged</b></em>' attribute.
@@ -478,7 +442,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__VOLUME_DISCHARGED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int UNIT_COST_LINE__VOLUME_DISCHARGED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
@@ -487,7 +451,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__HIRE_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int UNIT_COST_LINE__HIRE_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Fuel Cost</b></em>' attribute.
@@ -496,7 +460,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__FUEL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int UNIT_COST_LINE__FUEL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Canal Cost</b></em>' attribute.
@@ -505,7 +469,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__CANAL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int UNIT_COST_LINE__CANAL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Cost Components</b></em>' containment reference list.
@@ -514,7 +478,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__COST_COMPONENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+	int UNIT_COST_LINE__COST_COMPONENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
@@ -523,7 +487,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__PORT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
+	int UNIT_COST_LINE__PORT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Profit</b></em>' attribute.
@@ -533,7 +497,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__PROFIT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
+	int UNIT_COST_LINE__PROFIT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Unit Cost Line</em>' class.
@@ -542,7 +506,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 14;
+	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
 
 
 	/**
@@ -629,7 +593,7 @@ public interface AnalyticsPackage extends EPackage {
 	int VOYAGE__FUEL_COSTS = COST_COMPONENT__FUEL_COSTS;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' attribute.
+	 * The feature id for the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -862,16 +826,6 @@ public interface AnalyticsPackage extends EPackage {
 	int SHIPPING_COST_PLAN__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_PLAN__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -961,16 +915,6 @@ public interface AnalyticsPackage extends EPackage {
 	 * @ordered
 	 */
 	int SHIPPING_COST_ROW__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -1075,16 +1019,6 @@ public interface AnalyticsPackage extends EPackage {
 	int CARGO_SANDBOX__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_SANDBOX__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1146,16 +1080,6 @@ public interface AnalyticsPackage extends EPackage {
 	int PROVISIONAL_CARGO__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Buy</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1176,16 +1100,6 @@ public interface AnalyticsPackage extends EPackage {
 	int PROVISIONAL_CARGO__SELL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Cost Line</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROVISIONAL_CARGO__COST_LINE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1193,7 +1107,16 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROVISIONAL_CARGO__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int PROVISIONAL_CARGO__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Portfolio Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROVISIONAL_CARGO__PORTFOLIO_MODEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Provisional Cargo</em>' class.
@@ -1225,16 +1148,6 @@ public interface AnalyticsPackage extends EPackage {
 	 * @ordered
 	 */
 	int BUY_OPPORTUNITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_OPPORTUNITY__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -1306,16 +1219,6 @@ public interface AnalyticsPackage extends EPackage {
 	 * @ordered
 	 */
 	int SELL_OPPORTUNITY__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SELL_OPPORTUNITY__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -1819,15 +1722,16 @@ public interface AnalyticsPackage extends EPackage {
 	EClass getVoyage();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Route</em>'.
+	 * @return the meta object for the reference '<em>Route</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.Voyage#getRoute()
 	 * @see #getVoyage()
 	 * @generated
 	 */
-	EAttribute getVoyage_Route();
+	EReference getVoyage_Route();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Voyage#getRouteCost <em>Route Cost</em>}'.
@@ -2249,18 +2153,6 @@ public interface AnalyticsPackage extends EPackage {
 	EReference getProvisionalCargo_Sell();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getCostLine <em>Cost Line</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Cost Line</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getCostLine()
-	 * @see #getProvisionalCargo()
-	 * @generated
-	 */
-	EReference getProvisionalCargo_CostLine();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -2271,6 +2163,17 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getProvisionalCargo_Vessel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Portfolio Model</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel()
+	 * @see #getProvisionalCargo()
+	 * @generated
+	 */
+	EReference getProvisionalCargo_PortfolioModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity <em>Buy Opportunity</em>}'.
@@ -2756,12 +2659,12 @@ public interface AnalyticsPackage extends EPackage {
 		EClass VOYAGE = eINSTANCE.getVoyage();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VOYAGE__ROUTE = eINSTANCE.getVoyage_Route();
+		EReference VOYAGE__ROUTE = eINSTANCE.getVoyage_Route();
 
 		/**
 		 * The meta object literal for the '<em><b>Route Cost</b></em>' attribute feature.
@@ -3095,15 +2998,6 @@ public interface AnalyticsPackage extends EPackage {
 		EReference PROVISIONAL_CARGO__SELL = eINSTANCE.getProvisionalCargo_Sell();
 
 		/**
-		 * The meta object literal for the '<em><b>Cost Line</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PROVISIONAL_CARGO__COST_LINE = eINSTANCE.getProvisionalCargo_CostLine();
-
-		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * @since 3.0
@@ -3111,6 +3005,14 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROVISIONAL_CARGO__VESSEL = eINSTANCE.getProvisionalCargo_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Portfolio Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROVISIONAL_CARGO__PORTFOLIO_MODEL = eINSTANCE.getProvisionalCargo_PortfolioModel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl <em>Buy Opportunity</em>}' class.

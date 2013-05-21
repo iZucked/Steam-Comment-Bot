@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
 
 /**
  * <!-- begin-user-doc -->
@@ -80,30 +81,32 @@ public interface Journey extends Event, FuelUsage {
 	void setLaden(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Route</b></em>' attribute.
+	 * Returns the value of the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Route</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Route</em>' attribute.
-	 * @see #setRoute(String)
+	 * @return the value of the '<em>Route</em>' reference.
+	 * @see #setRoute(Route)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_Route()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
-	String getRoute();
+	Route getRoute();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Route</em>' attribute.
+	 * @param value the new value of the '<em>Route</em>' reference.
 	 * @see #getRoute()
 	 * @generated
 	 */
-	void setRoute(String value);
+	void setRoute(Route value);
 
 	/**
 	 * Returns the value of the '<em><b>Toll</b></em>' attribute.

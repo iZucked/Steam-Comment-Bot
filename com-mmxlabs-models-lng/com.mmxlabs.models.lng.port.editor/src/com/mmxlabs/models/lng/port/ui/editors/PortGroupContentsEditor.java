@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Control;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.ui.editors.util.CommandUtil;
  */
 public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 	private CheckboxTableViewer viewer;
+	private PortModel portModel = null;
 
 	public PortGroupContentsEditor(final EStructuralFeature feature) {
 		super(feature);
@@ -129,17 +131,17 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 		return setter;
 	}
 
-	PortModel pm = null;
-
 	@Override
-	public void display(final IScenarioEditingLocation location, MMXRootObject context, EObject input, Collection<EObject> range) {
-		pm = context.getSubModel(PortModel.class);
-		super.display(location, context, input, range);
+	public void display(final IScenarioEditingLocation location, MMXRootObject rootObject, EObject input, Collection<EObject> range) {
+		if (rootObject instanceof LNGScenarioModel) {
+			portModel = ((LNGScenarioModel) rootObject).getPortModel();
+		}
+		super.display(location, rootObject, input, range);
 	}
 
 	@Override
 	protected void updateDisplay(Object value) {
-		viewer.setInput(pm);
+		viewer.setInput(portModel);
 		viewer.refresh();
 	}
 

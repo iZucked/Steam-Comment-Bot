@@ -4,17 +4,19 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
-import com.mmxlabs.models.lng.port.PortGroup;
-import com.mmxlabs.models.lng.port.PortPackage;
-
-import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.impl.APortSetImpl;
-
 import java.util.Collection;
+
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortGroup;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.impl.APortSetImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +31,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *
  * @generated
  */
-public class PortGroupImpl extends APortSetImpl implements PortGroup {
+public class PortGroupImpl extends APortSetImpl<Port> implements PortGroup {
 	/**
 	 * The cached value of the '{@link #getContents() <em>Contents</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -38,7 +40,7 @@ public class PortGroupImpl extends APortSetImpl implements PortGroup {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> contents;
+	protected EList<APortSet<Port>> contents;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -64,28 +66,11 @@ public class PortGroupImpl extends APortSetImpl implements PortGroup {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getContents() {
+	public EList<APortSet<Port>> getContents() {
 		if (contents == null) {
-			contents = new EObjectResolvingEList<APortSet>(APortSet.class, this, PortPackage.PORT_GROUP__CONTENTS);
+			contents = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, PortPackage.PORT_GROUP__CONTENTS);
 		}
 		return contents;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<APort> collect(EList<APortSet> marked) {
-		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
-			final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.APort> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.APort>();
-			marked.add(this);
-				
-			for (final com.mmxlabs.models.lng.types.APortSet set : getContents()) {
-				result.addAll(set.collect(marked));
-			}
-			
-		return result;
 	}
 
 	/**
@@ -113,7 +98,7 @@ public class PortGroupImpl extends APortSetImpl implements PortGroup {
 		switch (featureID) {
 			case PortPackage.PORT_GROUP__CONTENTS:
 				getContents().clear();
-				getContents().addAll((Collection<? extends APortSet>)newValue);
+				getContents().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -146,6 +131,23 @@ public class PortGroupImpl extends APortSetImpl implements PortGroup {
 				return contents != null && !contents.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+	
+
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Port> collect(EList<APortSet<Port>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Port> result = new UniqueEList<Port>();
+		marked.add(this);
+		for (final APortSet<Port> p : getContents()) {
+			result.addAll(p.collect(marked));
+		}
+		return result;
 	}
 
 } //PortGroupImpl

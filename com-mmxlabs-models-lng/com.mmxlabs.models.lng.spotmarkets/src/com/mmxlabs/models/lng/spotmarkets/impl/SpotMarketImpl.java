@@ -3,22 +3,23 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
-import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-
-import com.mmxlabs.models.lng.types.AContract;
-
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.types.impl.ASpotMarketImpl;
+import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,6 +28,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
@@ -36,7 +39,40 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
+public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarket {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
+
 	/**
 	 * The cached value of the '{@link #getAvailability() <em>Availability</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -114,6 +150,39 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	@Override
 	protected EClass eStaticClass() {
 		return SpotMarketsPackage.Literals.SPOT_MARKET;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES);
+		}
+		return otherNames;
 	}
 
 	/**
@@ -268,6 +337,10 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case SpotMarketsPackage.SPOT_MARKET__NAME:
+				return getName();
+			case SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES:
+				return getOtherNames();
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				return getAvailability();
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
@@ -285,9 +358,17 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case SpotMarketsPackage.SPOT_MARKET__NAME:
+				setName((String)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
+				return;
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				setAvailability((SpotAvailability)newValue);
 				return;
@@ -312,6 +393,12 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case SpotMarketsPackage.SPOT_MARKET__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				setAvailability((SpotAvailability)null);
 				return;
@@ -336,6 +423,10 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case SpotMarketsPackage.SPOT_MARKET__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				return availability != null;
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
@@ -354,11 +445,49 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (derivedFeatureID) {
+				case SpotMarketsPackage.SPOT_MARKET__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == NamedObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.NAMED_OBJECT__NAME: return SpotMarketsPackage.SPOT_MARKET__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (minQuantity: ");
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
+		result.append(", minQuantity: ");
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
 		result.append(maxQuantity);

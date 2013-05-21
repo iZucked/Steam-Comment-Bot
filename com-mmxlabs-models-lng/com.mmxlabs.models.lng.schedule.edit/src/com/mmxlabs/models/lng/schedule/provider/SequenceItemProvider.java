@@ -5,22 +5,12 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
-
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -30,6 +20,11 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.Sequence} object.
@@ -66,7 +61,7 @@ public class SequenceItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addVesselPropertyDescriptor(object);
+			addVesselAvailabilityPropertyDescriptor(object);
 			addVesselClassPropertyDescriptor(object);
 			addDailyHireRatePropertyDescriptor(object);
 			addSpotIndexPropertyDescriptor(object);
@@ -76,19 +71,19 @@ public class SequenceItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel feature.
+	 * This adds a property descriptor for the Vessel Availability feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselPropertyDescriptor(Object object) {
+	protected void addVesselAvailabilityPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Sequence_vessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_vessel_feature", "_UI_Sequence_type"),
-				 SchedulePackage.Literals.SEQUENCE__VESSEL,
+				 getString("_UI_Sequence_vesselAvailability_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_vesselAvailability_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__VESSEL_AVAILABILITY,
 				 true,
 				 false,
 				 true,
@@ -285,12 +280,12 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createSlotVisit()));
+				 ScheduleFactory.eINSTANCE.createStartEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createVesselEventVisit()));
+				 ScheduleFactory.eINSTANCE.createEndEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -305,6 +300,21 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createPortVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createSlotVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createVesselEventVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createGeneratedCharterOut()));
 
 		newChildDescriptors.add
@@ -314,34 +324,8 @@ public class SequenceItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createPortVisit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createStartEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createEndEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__FITNESSES,
 				 ScheduleFactory.eINSTANCE.createFitness()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ScheduleEditPlugin.INSTANCE;
 	}
 
 }

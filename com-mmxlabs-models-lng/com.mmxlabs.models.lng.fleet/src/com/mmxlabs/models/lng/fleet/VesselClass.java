@@ -3,12 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselClass;
-import com.mmxlabs.models.lng.types.AVesselSet;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +27,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel <em>Min Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getWarmingTime <em>Warming Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime <em>Cooling Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters <em>Route Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
@@ -39,10 +37,10 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface VesselClass extends AVesselClass {
+public interface VesselClass extends AVesselSet<Vessel> {
 	/**
 	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Inaccessible Ports</em>' reference list isn't clear,
@@ -54,7 +52,7 @@ public interface VesselClass extends AVesselClass {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getInaccessiblePorts();
+	EList<APortSet<Port>> getInaccessiblePorts();
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel</b></em>' reference.
@@ -302,33 +300,6 @@ public interface VesselClass extends AVesselClass {
 	void setWarmingTime(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Cooling Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cooling Time</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cooling Time</em>' attribute.
-	 * @see #setCoolingTime(int)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_CoolingTime()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs'"
-	 * @generated
-	 */
-	int getCoolingTime();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingTime <em>Cooling Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cooling Time</em>' attribute.
-	 * @see #getCoolingTime()
-	 * @generated
-	 */
-	void setCoolingTime(int value);
-
-	/**
 	 * Returns the value of the '<em><b>Cooling Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -397,15 +368,6 @@ public interface VesselClass extends AVesselClass {
 	 * @generated
 	 */
 	void setPilotLightRate(int value);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model markedMany="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();\n\tfinal org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();\n\tmarked.add(this);\n\t\n\tfinal FleetModel myModel = (FleetModel) eContainer();\n\tfor (final Vessel v : myModel.getVessels()) {\n\t\tif (v.getVesselClass() == this) {\n\t\t\tresult.add(v);\n\t\t}\n\t}\n\nreturn result;'"
-	 * @generated
-	 */
-	EList<AVessel> collect(EList<AVesselSet> marked);
 
 } // end of  VesselClass
 

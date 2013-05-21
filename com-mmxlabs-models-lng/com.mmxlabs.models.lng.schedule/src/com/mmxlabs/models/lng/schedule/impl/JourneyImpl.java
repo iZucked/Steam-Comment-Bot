@@ -3,6 +3,21 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -11,25 +26,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-
-import com.mmxlabs.models.lng.port.Port;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -92,24 +88,14 @@ public class JourneyImpl extends EventImpl implements Journey {
 	protected boolean laden = LADEN_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getRoute() <em>Route</em>}' attribute.
+	 * The cached value of the '{@link #getRoute() <em>Route</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRoute()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String ROUTE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getRoute() <em>Route</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRoute()
-	 * @generated
-	 * @ordered
-	 */
-	protected String route = ROUTE_EDEFAULT;
+	protected Route route;
 
 	/**
 	 * The default value of the '{@link #getToll() <em>Toll</em>}' attribute.
@@ -263,20 +249,40 @@ public class JourneyImpl extends EventImpl implements Journey {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getRoute() {
+	public Route getRoute() {
+		if (route != null && route.eIsProxy()) {
+			InternalEObject oldRoute = (InternalEObject)route;
+			route = (Route)eResolveProxy(oldRoute);
+			if (route != oldRoute) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.JOURNEY__ROUTE, oldRoute, route));
+			}
+		}
 		return route;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setRoute(String newRoute) {
-		String oldRoute = route;
+	public Route basicGetRoute() {
+		return route;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRoute(Route newRoute) {
+		Route oldRoute = route;
 		route = newRoute;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__ROUTE, oldRoute, route));
@@ -388,7 +394,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__LADEN:
 				return isLaden();
 			case SchedulePackage.JOURNEY__ROUTE:
-				return getRoute();
+				if (resolve) return getRoute();
+				return basicGetRoute();
 			case SchedulePackage.JOURNEY__TOLL:
 				return getToll();
 			case SchedulePackage.JOURNEY__DISTANCE:
@@ -419,7 +426,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 				setLaden((Boolean)newValue);
 				return;
 			case SchedulePackage.JOURNEY__ROUTE:
-				setRoute((String)newValue);
+				setRoute((Route)newValue);
 				return;
 			case SchedulePackage.JOURNEY__TOLL:
 				setToll((Integer)newValue);
@@ -452,7 +459,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 				setLaden(LADEN_EDEFAULT);
 				return;
 			case SchedulePackage.JOURNEY__ROUTE:
-				setRoute(ROUTE_EDEFAULT);
+				setRoute((Route)null);
 				return;
 			case SchedulePackage.JOURNEY__TOLL:
 				setToll(TOLL_EDEFAULT);
@@ -482,7 +489,7 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__LADEN:
 				return laden != LADEN_EDEFAULT;
 			case SchedulePackage.JOURNEY__ROUTE:
-				return ROUTE_EDEFAULT == null ? route != null : !ROUTE_EDEFAULT.equals(route);
+				return route != null;
 			case SchedulePackage.JOURNEY__TOLL:
 				return toll != TOLL_EDEFAULT;
 			case SchedulePackage.JOURNEY__DISTANCE:
@@ -567,8 +574,6 @@ public class JourneyImpl extends EventImpl implements Journey {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (laden: ");
 		result.append(laden);
-		result.append(", route: ");
-		result.append(route);
 		result.append(", toll: ");
 		result.append(toll);
 		result.append(", distance: ");

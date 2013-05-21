@@ -5,22 +5,12 @@
 package com.mmxlabs.models.lng.analytics.provider;
 
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
-
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -29,6 +19,15 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.ProvisionalCargo} object.
@@ -107,7 +106,7 @@ public class ProvisionalCargoItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.PROVISIONAL_CARGO__BUY);
 			childrenFeatures.add(AnalyticsPackage.Literals.PROVISIONAL_CARGO__SELL);
-			childrenFeatures.add(AnalyticsPackage.Literals.PROVISIONAL_CARGO__COST_LINE);
+			childrenFeatures.add(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL);
 		}
 		return childrenFeatures;
 	}
@@ -161,7 +160,7 @@ public class ProvisionalCargoItemProvider
 		switch (notification.getFeatureID(ProvisionalCargo.class)) {
 			case AnalyticsPackage.PROVISIONAL_CARGO__BUY:
 			case AnalyticsPackage.PROVISIONAL_CARGO__SELL:
-			case AnalyticsPackage.PROVISIONAL_CARGO__COST_LINE:
+			case AnalyticsPackage.PROVISIONAL_CARGO__PORTFOLIO_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -191,19 +190,262 @@ public class ProvisionalCargoItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__COST_LINE,
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createAnalyticsModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createUnitCostMatrix()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 AnalyticsFactory.eINSTANCE.createUnitCostLine()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createCostComponent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createVoyage()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createFuelCost()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createJourney()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createShippingCostPlan()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createShippingCostRow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createCargoSandbox()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createProvisionalCargo()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createBuyOpportunity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 AnalyticsFactory.eINSTANCE.createSellOpportunity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createCommercialModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createLegalEntity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createSalesContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createPurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createTaxRate()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createFleetModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createBaseFuel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createVessel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createVesselClass()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createVesselGroup()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createVesselTypeGroup()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createHeelOptions()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createVesselStateAttributes()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createFuelConsumption()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createVesselClassRouteParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createScenarioFleetModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createVesselAvailability()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createMaintenanceEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createDryDockEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 FleetFactory.eINSTANCE.createCharterOutEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 MMXCoreFactory.eINSTANCE.createNamedObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 MMXCoreFactory.eINSTANCE.createUUIDObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 MMXCoreFactory.eINSTANCE.createMMXRootObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PortFactory.eINSTANCE.createPort()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PortFactory.eINSTANCE.createRoute()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PortFactory.eINSTANCE.createPortGroup()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PortFactory.eINSTANCE.createRouteLine()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PortFactory.eINSTANCE.createPortModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PortFactory.eINSTANCE.createCapabilityGroup()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 PortFactory.eINSTANCE.createLocation()));
 	}
 
 	/**
-	 * Return the resource locator for this item provider's resources.
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public ResourceLocator getResourceLocator() {
-		return AnalyticsEditPlugin.INSTANCE;
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == AnalyticsPackage.Literals.PROVISIONAL_CARGO__BUY ||
+			childFeature == AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL ||
+			childFeature == AnalyticsPackage.Literals.PROVISIONAL_CARGO__SELL;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

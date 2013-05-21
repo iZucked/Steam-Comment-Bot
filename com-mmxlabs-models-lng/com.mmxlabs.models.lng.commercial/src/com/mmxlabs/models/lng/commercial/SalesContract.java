@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.commercial;
 
-import com.mmxlabs.models.lng.types.ASalesContract;
-import com.mmxlabs.models.lng.types.CargoDeliveryType;
-import com.mmxlabs.models.lng.types.ASalesContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
@@ -27,7 +24,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * @model
  * @generated
  */
-public interface SalesContract extends Contract, ASalesContract {
+public interface SalesContract extends Contract {
 
 	/**
 	 * Returns the value of the '<em><b>Min Cv Value</b></em>' attribute.

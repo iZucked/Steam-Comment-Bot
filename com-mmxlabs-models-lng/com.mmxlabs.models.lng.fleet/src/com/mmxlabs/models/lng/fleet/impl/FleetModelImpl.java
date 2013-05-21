@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -31,7 +30,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVessels <em>Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselClasses <em>Vessel Classes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getBaseFuels <em>Base Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselGroups <em>Vessel Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getSpecialVesselGroups <em>Special Vessel Groups</em>}</li>
@@ -60,16 +58,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * @ordered
 	 */
 	protected EList<VesselClass> vesselClasses;
-
-	/**
-	 * The cached value of the '{@link #getVesselEvents() <em>Vessel Events</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselEvents()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<VesselEvent> vesselEvents;
 
 	/**
 	 * The cached value of the '{@link #getBaseFuels() <em>Base Fuels</em>}' containment reference list.
@@ -150,18 +138,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<VesselEvent> getVesselEvents() {
-		if (vesselEvents == null) {
-			vesselEvents = new EObjectContainmentEList<VesselEvent>(VesselEvent.class, this, FleetPackage.FLEET_MODEL__VESSEL_EVENTS);
-		}
-		return vesselEvents;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<BaseFuel> getBaseFuels() {
 		if (baseFuels == null) {
 			baseFuels = new EObjectContainmentEList<BaseFuel>(BaseFuel.class, this, FleetPackage.FLEET_MODEL__BASE_FUELS);
@@ -206,8 +182,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return ((InternalEList<?>)getVessels()).basicRemove(otherEnd, msgs);
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				return ((InternalEList<?>)getVesselClasses()).basicRemove(otherEnd, msgs);
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 				return ((InternalEList<?>)getBaseFuels()).basicRemove(otherEnd, msgs);
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
@@ -230,8 +204,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return getVessels();
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				return getVesselClasses();
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				return getVesselEvents();
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 				return getBaseFuels();
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
@@ -258,10 +230,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				getVesselClasses().clear();
 				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
-				return;
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				getVesselEvents().clear();
-				getVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
 				return;
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 				getBaseFuels().clear();
@@ -293,9 +261,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				getVesselClasses().clear();
 				return;
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				getVesselEvents().clear();
-				return;
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 				getBaseFuels().clear();
 				return;
@@ -321,8 +286,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return vessels != null && !vessels.isEmpty();
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 				return vesselClasses != null && !vesselClasses.isEmpty();
-			case FleetPackage.FLEET_MODEL__VESSEL_EVENTS:
-				return vesselEvents != null && !vesselEvents.isEmpty();
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 				return baseFuels != null && !baseFuels.isEmpty();
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:

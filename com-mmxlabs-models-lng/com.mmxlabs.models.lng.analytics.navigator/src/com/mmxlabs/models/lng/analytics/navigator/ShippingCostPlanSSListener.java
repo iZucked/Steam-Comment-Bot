@@ -21,8 +21,8 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.CargoSandbox;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -60,18 +60,19 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 		 * Process initial scenario state and create fragments.
 		 */
 		private void processScenario() {
-			final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
-			analyticsModel = rootObject.getSubModel(AnalyticsModel.class);
+			final LNGScenarioModel rootObject = (LNGScenarioModel) scenarioInstance.getInstance();
+			analyticsModel = rootObject.getAnalyticsModel();
 
-			for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
-				createFragment(plan);
+			if (analyticsModel != null) {
+				for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
+					createFragment(plan);
+				}
+				for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
+					createFragment(box);
+				}
+
+				analyticsModel.eAdapters().add(ModelAdapter.this);
 			}
-			for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
-				createFragment(box);
-			}
-
-			analyticsModel.eAdapters().add(ModelAdapter.this);
-
 		}
 
 		public void dispose() {

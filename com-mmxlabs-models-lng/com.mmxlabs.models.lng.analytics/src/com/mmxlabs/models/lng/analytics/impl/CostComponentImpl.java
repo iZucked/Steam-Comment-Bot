@@ -109,6 +109,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getDuration() {
 		return duration;
 	}
@@ -118,6 +119,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDuration(int newDuration) {
 		int oldDuration = duration;
 		duration = newDuration;
@@ -130,6 +132,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getHireCost() {
 		return hireCost;
 	}
@@ -139,6 +142,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setHireCost(int newHireCost) {
 		int oldHireCost = hireCost;
 		hireCost = newHireCost;
@@ -151,6 +155,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<FuelCost> getFuelCosts() {
 		if (fuelCosts == null) {
 			fuelCosts = new EObjectContainmentEList<FuelCost>(FuelCost.class, this, AnalyticsPackage.COST_COMPONENT__FUEL_COSTS);
@@ -163,6 +168,7 @@ public class CostComponentImpl extends EObjectImpl implements CostComponent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getFuelCost() {
 		int accumulator = 0;
 		for (final FuelCost fc : getFuelCosts()) {

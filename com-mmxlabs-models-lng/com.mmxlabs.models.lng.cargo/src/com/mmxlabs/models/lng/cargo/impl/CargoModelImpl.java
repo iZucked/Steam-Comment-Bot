@@ -103,7 +103,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 */
 	public EList<LoadSlot> getLoadSlots() {
 		if (loadSlots == null) {
-			loadSlots = new EObjectContainmentEList<LoadSlot>(LoadSlot.class, this, CargoPackage.CARGO_MODEL__LOAD_SLOTS);
+			loadSlots = new EObjectContainmentEList.Resolving<LoadSlot>(LoadSlot.class, this, CargoPackage.CARGO_MODEL__LOAD_SLOTS);
 		}
 		return loadSlots;
 	}
@@ -115,7 +115,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 */
 	public EList<DischargeSlot> getDischargeSlots() {
 		if (dischargeSlots == null) {
-			dischargeSlots = new EObjectContainmentEList<DischargeSlot>(DischargeSlot.class, this, CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS);
+			dischargeSlots = new EObjectContainmentEList.Resolving<DischargeSlot>(DischargeSlot.class, this, CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS);
 		}
 		return dischargeSlots;
 	}
@@ -127,7 +127,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 */
 	public EList<Cargo> getCargoes() {
 		if (cargoes == null) {
-			cargoes = new EObjectContainmentEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES);
+			cargoes = new EObjectContainmentEList.Resolving<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES);
 		}
 		return cargoes;
 	}
@@ -139,7 +139,7 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 */
 	public EList<CargoGroup> getCargoGroups() {
 		if (cargoGroups == null) {
-			cargoGroups = new EObjectContainmentEList<CargoGroup>(CargoGroup.class, this, CargoPackage.CARGO_MODEL__CARGO_GROUPS);
+			cargoGroups = new EObjectContainmentEList.Resolving<CargoGroup>(CargoGroup.class, this, CargoPackage.CARGO_MODEL__CARGO_GROUPS);
 		}
 		return cargoGroups;
 	}

@@ -5,14 +5,21 @@
 package com.mmxlabs.models.lng.port.impl;
 
 import com.mmxlabs.models.lng.port.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.port.CapabilityGroup;
+import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.PortGroup;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 
 /**
  * <!-- begin-user-doc -->

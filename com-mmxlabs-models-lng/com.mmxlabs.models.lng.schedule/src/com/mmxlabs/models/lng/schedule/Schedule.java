@@ -3,10 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.mmxcore.MMXObject;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#isComplete <em>Complete</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSequences <em>Sequences</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSlotAllocations <em>Slot Allocations</em>}</li>
@@ -30,32 +29,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface Schedule extends MMXObject {
-	/**
-	 * Returns the value of the '<em><b>Complete</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Complete</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Complete</em>' attribute.
-	 * @see #setComplete(boolean)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_Complete()
-	 * @model required="true"
-	 * @generated
-	 */
-	boolean isComplete();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Schedule#isComplete <em>Complete</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Complete</em>' attribute.
-	 * @see #isComplete()
-	 * @generated
-	 */
-	void setComplete(boolean value);
-
 	/**
 	 * Returns the value of the '<em><b>Sequences</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.Sequence}.

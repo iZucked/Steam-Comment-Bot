@@ -5,22 +5,12 @@
 package com.mmxlabs.models.lng.fleet.provider;
 
 
-import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselClass;
-
-import com.mmxlabs.models.lng.types.provider.AVesselClassItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -31,6 +21,11 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.types.provider.AVesselSetItemProvider;
+
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.VesselClass} object.
  * <!-- begin-user-doc -->
@@ -38,7 +33,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class VesselClassItemProvider
-	extends AVesselClassItemProvider
+	extends AVesselSetItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -74,7 +69,6 @@ public class VesselClassItemProvider
 			addMaxSpeedPropertyDescriptor(object);
 			addMinHeelPropertyDescriptor(object);
 			addWarmingTimePropertyDescriptor(object);
-			addCoolingTimePropertyDescriptor(object);
 			addCoolingVolumePropertyDescriptor(object);
 			addRouteParametersPropertyDescriptor(object);
 			addPilotLightRatePropertyDescriptor(object);
@@ -259,28 +253,6 @@ public class VesselClassItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Cooling Time feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCoolingTimePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselClass_coolingTime_feature"),
-				 getString("_UI_VesselClass_coolingTime_description"),
-				 FleetPackage.Literals.VESSEL_CLASS__COOLING_TIME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Cooling Volume feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -421,7 +393,6 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL:
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
@@ -483,17 +454,6 @@ public class VesselClassItemProvider
 				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return FleetEditPlugin.INSTANCE;
 	}
 
 }

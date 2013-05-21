@@ -5,19 +5,14 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.schedule.FuelAmount;
-import com.mmxlabs.models.lng.schedule.FuelUnit;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -27,6 +22,10 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.FuelAmount} object.
@@ -65,6 +64,7 @@ public class FuelAmountItemProvider
 
 			addUnitPropertyDescriptor(object);
 			addQuantityPropertyDescriptor(object);
+			addUnitPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -114,6 +114,28 @@ public class FuelAmountItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Unit Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUnitPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FuelAmount_unitPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FuelAmount_unitPrice_feature", "_UI_FuelAmount_type"),
+				 SchedulePackage.Literals.FUEL_AMOUNT__UNIT_PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns FuelAmount.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -153,6 +175,7 @@ public class FuelAmountItemProvider
 		switch (notification.getFeatureID(FuelAmount.class)) {
 			case SchedulePackage.FUEL_AMOUNT__UNIT:
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
+			case SchedulePackage.FUEL_AMOUNT__UNIT_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -179,7 +202,7 @@ public class FuelAmountItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return ScheduleEditPlugin.INSTANCE;
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

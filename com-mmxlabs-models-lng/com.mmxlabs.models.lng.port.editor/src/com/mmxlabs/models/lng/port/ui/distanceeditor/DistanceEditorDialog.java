@@ -42,7 +42,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 
@@ -57,15 +57,15 @@ public class DistanceEditorDialog extends Dialog {
 	private DistanceLineViewer viewer;
 	private Route distanceModel;
 	private EditingDomain editingDomain;
-	private MMXRootObject rootObject;
+	private LNGScenarioModel rootObject;
 	private static WeakReference<PortModel> currentPortModel;
-	
+
 	private static WeakReference<Route> currentDistanceModel;
-	
+
 	public static Route getCurrentDistanceModel() {
 		return currentDistanceModel.get();
 	}
-	
+
 	public DistanceEditorDialog(final Shell parentShell) {
 		super(parentShell);
 	}
@@ -86,49 +86,49 @@ public class DistanceEditorDialog extends Dialog {
 		final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
 
 		final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
-		
+
 		if (menuService != null) {
 			menuService.populateContributionManager(barManager, DISTANCE_EDITOR_TOOLBAR_ID);
-			getShell().addDisposeListener(new DisposeListener() {				
+			getShell().addDisposeListener(new DisposeListener() {
 				@Override
 				public void widgetDisposed(final DisposeEvent e) {
 					menuService.releaseContributions(barManager);
 				}
 			});
 		}
-		
-//		barManager.add(new ImportCSVAction() {
-//			@Override
-//			protected EObject getToplevelObject() {
-//				return valueProviderProvider.getModel();
-//			}
-//
-//			@Override
-//			protected EClass getImportClass() {
-//				return PortPackage.eINSTANCE.getDistanceModel();
-//			}
-//
-//			@Override
-//			public void addObjects(final Collection<EObject> newObjects) {
-//				assert newObjects.size() == 1;
-//				final DistanceModel newModel = (DistanceModel) newObjects.iterator().next();
-//				DistanceEditorDialog.this.distanceModel = newModel;
-//				DistanceEditorDialog.this.viewer.setInput(DistanceEditorDialog.this.distanceModel);
-//				DistanceEditorDialog.this.viewer.refresh();
-//			}
-//		});
 
-//		barManager.add(new ExportCSVAction() {
-//			@Override
-//			public List<EObject> getObjectsToExport() {
-//				return Collections.singletonList((EObject) distanceModel);
-//			}
-//
-//			@Override
-//			public EClass getExportEClass() {
-//				return distanceModel.eClass();
-//			}
-//		});
+		// barManager.add(new ImportCSVAction() {
+		// @Override
+		// protected EObject getToplevelObject() {
+		// return valueProviderProvider.getModel();
+		// }
+		//
+		// @Override
+		// protected EClass getImportClass() {
+		// return PortPackage.eINSTANCE.getDistanceModel();
+		// }
+		//
+		// @Override
+		// public void addObjects(final Collection<EObject> newObjects) {
+		// assert newObjects.size() == 1;
+		// final DistanceModel newModel = (DistanceModel) newObjects.iterator().next();
+		// DistanceEditorDialog.this.distanceModel = newModel;
+		// DistanceEditorDialog.this.viewer.setInput(DistanceEditorDialog.this.distanceModel);
+		// DistanceEditorDialog.this.viewer.refresh();
+		// }
+		// });
+
+		// barManager.add(new ExportCSVAction() {
+		// @Override
+		// public List<EObject> getObjectsToExport() {
+		// return Collections.singletonList((EObject) distanceModel);
+		// }
+		//
+		// @Override
+		// public EClass getExportEClass() {
+		// return distanceModel.eClass();
+		// }
+		// });
 
 		final Composite barComposite = new Composite(c2, SWT.NONE);
 		final GridLayout barLayout = new GridLayout(5, false);
@@ -220,7 +220,7 @@ public class DistanceEditorDialog extends Dialog {
 						public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 							return ((Pair<Port, ?>) element).getFirst().getName().toLowerCase().contains(text);
 						}
-					}});
+					} });
 				}
 			}
 		});
@@ -278,15 +278,13 @@ public class DistanceEditorDialog extends Dialog {
 		return distanceModel;
 	}
 
-	public int open(final IWorkbenchSite site,
-			final IScenarioEditingLocation iScenarioEditingLocation,
-			final Route dm) {
+	public int open(final IWorkbenchSite site, final IScenarioEditingLocation iScenarioEditingLocation, final Route dm) {
 		iScenarioEditingLocation.getReferenceValueProviderCache();
 		this.editingDomain = iScenarioEditingLocation.getEditingDomain();
 		this.distanceModel = EcoreUtil.copy(dm);
 		currentDistanceModel = new WeakReference<Route>(distanceModel);
-		this.rootObject = iScenarioEditingLocation.getRootObject();
-		currentPortModel = new WeakReference<PortModel>(rootObject.getSubModel(PortModel.class));
+		this.rootObject = (LNGScenarioModel) iScenarioEditingLocation.getRootObject();
+		currentPortModel = new WeakReference<PortModel>(rootObject.getPortModel());
 		return super.open();
 	}
 

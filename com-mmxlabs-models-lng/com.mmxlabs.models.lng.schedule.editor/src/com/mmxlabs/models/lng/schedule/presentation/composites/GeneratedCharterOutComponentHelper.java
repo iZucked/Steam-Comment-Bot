@@ -4,21 +4,19 @@
  */
 package com.mmxlabs.models.lng.schedule.presentation.composites;
 
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import com.mmxlabs.models.lng.types.TypesPackage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 
 /**
  * A component helper for GeneratedCharterOut instances
@@ -45,7 +43,7 @@ public class GeneratedCharterOutComponentHelper extends BaseComponentHelper {
 	public GeneratedCharterOutComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.EXTRA_DATA_CONTAINER));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER));
 	}
 	
 	/**

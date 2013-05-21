@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -37,7 +36,7 @@ public class VesselEventVesselSetConstraint extends AbstractModelConstraint {
 		if (target instanceof VesselEvent) {
 			final VesselEvent ve = (VesselEvent) target;
 			
-			final Set<AVessel> vessels = SetUtils.getVessels(ve.getAllowedVessels());			
+			final Set<Vessel> vessels = SetUtils.getObjects(ve.getAllowedVessels());			
 			int possibleVesselCount = vessels.size();
 			
 			if (target instanceof MaintenanceEvent || target instanceof DryDockEvent) {

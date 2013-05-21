@@ -31,13 +31,13 @@ import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A model constraint for checking that curves which are attached to objects have data for
- * the dates associated with those objects.
+ * A model constraint for checking that curves which are attached to objects have data for the dates associated with those objects.
  * 
  * @author Simon McGregor
  * 
@@ -126,49 +126,52 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
 
 		final MMXRootObject rootObject = extraValidationContext.getRootObject();
-		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
+		if (rootObject instanceof LNGScenarioModel) {
 
-		if (pricingModel == null) {
-			return;
-		}
+			final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
 
-		// earliest slot date
-		final Date date = slot.getWindowStartWithSlotOrPortTime();
+			if (pricingModel == null) {
+				return;
+			}
 
-		// check market indices
-		for (Index<?> index : pricingModel.getCommodityIndices()) {
-			if (Exposures.getExposureCoefficient(slot, index) != 0) {
-				if (!curveCovers(date, indexFinder, index, ctx)) {
-					String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
-					final String failureMessage = String.format(format, index.getName(), sdf.format(slot.getWindowStart()), slot.getName());
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
-					if (slot.isSetPriceExpression()) {
-						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
-					} else {
-						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
+			// earliest slot date
+			final Date date = slot.getWindowStartWithSlotOrPortTime();
+
+			// check market indices
+			for (Index<?> index : pricingModel.getCommodityIndices()) {
+				if (Exposures.getExposureCoefficient(slot, index) != 0) {
+					if (!curveCovers(date, indexFinder, index, ctx)) {
+						String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
+						final String failureMessage = String.format(format, index.getName(), sdf.format(slot.getWindowStart()), slot.getName());
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
+						if (slot.isSetPriceExpression()) {
+							dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+						} else {
+							dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
+						}
+						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
+						failures.add(dsd);
 					}
-					dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
-					failures.add(dsd);
 				}
 			}
-		}
 
-		final LegalEntity entity;
-		if (slot.isSetContract() && slot.getContract() != null) {
-			entity = slot.getContract().getEntity();
-		} else {
-			entity = rootObject.getSubModel(CommercialModel.class).getShippingEntity();
-		}
+			final LegalEntity entity;
+			if (slot.isSetContract() && slot.getContract() != null) {
+				entity = slot.getContract().getEntity();
+			} else {
+				entity = ((LNGScenarioModel) rootObject).getCommercialModel().getShippingEntity();
+			}
 
-		// check entity tax rates
-		if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
-			String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
-			final String failureMessage = String.format(format, entity.getName(), sdf.format(date), slot.getName());
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
-			dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
-			dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
-			dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
-			failures.add(dsd);
+			// check entity tax rates
+			if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
+				String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
+				final String failureMessage = String.format(format, entity.getName(), sdf.format(date), slot.getName());
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
+				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
+				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
+				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
+				failures.add(dsd);
+			}
 		}
 
 	}
@@ -184,21 +187,24 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
 
 		final MMXRootObject rootObject = extraValidationContext.getRootObject();
-		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+		if (rootObject instanceof LNGScenarioModel) {
+			final CommercialModel commercialModel = ((LNGScenarioModel) rootObject).getCommercialModel();
 
-		final Slot loadSlot = cargo.getLoadSlot();
+			for (final Slot slot : cargo.getSlots()) {
 
-		final Date date = loadSlot.getWindowStartWithSlotOrPortTime();
-		final LegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
+				final Date date = slot.getWindowStartWithSlotOrPortTime();
+				final LegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
 
-		// check entity tax rates
-		if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
-			String format = "[Entity|'%s'] No tax data for '%s', the load date for cargo '%s'.";
-			final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
-			dsd.addEObjectAndFeature(loadSlot, CargoPackage.Literals.SLOT__WINDOW_START);
-			dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
-			failures.add(dsd);
+				// check entity tax rates
+				if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
+					String format = "[Entity|'%s'] No tax data for '%s', the load date for cargo '%s'.";
+					final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
+					dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
+					dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
+					failures.add(dsd);
+				}
+			}
 		}
 	}
 

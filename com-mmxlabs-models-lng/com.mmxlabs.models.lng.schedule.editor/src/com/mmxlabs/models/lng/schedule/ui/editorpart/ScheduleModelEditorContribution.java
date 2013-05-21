@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
@@ -33,17 +32,20 @@ import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
  */
 public class ScheduleModelEditorContribution extends BaseJointModelEditorContribution<ScheduleModel> {
 	private static final Logger log = LoggerFactory.getLogger(ScheduleModelEditorContribution.class);
+
+	private final List<UUIDObject> adaptedObjects = new ArrayList<UUIDObject>();
+
 	private final MMXContentAdapter dirtyStateAdapter = new MMXContentAdapter() {
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
 			handle(notification);
 		}
+
 		private boolean handle(final Notification notification) {
 			if (notification.isTouch() == false) {
 				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 					return false; // this feature is irrelevant
-				}
-				else if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Schedule()) {
+				} else if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Schedule()) {
 					// If a new schedule is set, ignore this change
 					return false;
 				}
@@ -65,19 +67,18 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 			// Re-process missed notifications to update dirty state.
 			final List<Notification> copied = new ArrayList<Notification>(missed);
 			for (final Notification n : copied) {
-				if (handle(n)) break;
+				if (handle(n)) {
+					break;
+				}
 			}
 		}
 	};
-	private final List<UUIDObject> adaptedObjects = new ArrayList<UUIDObject>();
 
 	@Override
 	public void init(final JointModelEditorPart editorPart, final MMXRootObject rootObject, final UUIDObject modelObject) {
 		super.init(editorPart, rootObject, modelObject);
-		for (final MMXSubModel subModel : rootObject.getSubModels()) {
-			subModel.getSubModelInstance().eAdapters().add(dirtyStateAdapter);
-			adaptedObjects.add(subModel.getSubModelInstance());
-		}
+		rootObject.eAdapters().add(dirtyStateAdapter);
+		adaptedObjects.add(rootObject);
 	}
 
 	@Override

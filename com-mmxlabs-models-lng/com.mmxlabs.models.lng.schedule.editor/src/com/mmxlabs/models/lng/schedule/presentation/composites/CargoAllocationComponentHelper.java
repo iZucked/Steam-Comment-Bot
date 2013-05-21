@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -45,7 +44,7 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 	public CargoAllocationComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.EXTRA_DATA_CONTAINER));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER));
 	}
 	
 	/**
@@ -66,51 +65,20 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_loadAllocationEditor(detailComposite, topClass);
-		add_dischargeAllocationEditor(detailComposite, topClass);
-		add_loadVolumeEditor(detailComposite, topClass);
-		add_dischargeVolumeEditor(detailComposite, topClass);
+		add_slotAllocationsEditor(detailComposite, topClass);
 		add_inputCargoEditor(detailComposite, topClass);
-		add_ladenLegEditor(detailComposite, topClass);
-		add_ballastLegEditor(detailComposite, topClass);
-		add_ladenIdleEditor(detailComposite, topClass);
-		add_ballastIdleEditor(detailComposite, topClass);
+		add_eventsEditor(detailComposite, topClass);
 		add_sequenceEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the loadAllocation feature on CargoAllocation
+	 * Create the editor for the slotAllocations feature on CargoAllocation
 	 *
 	 * @generated
 	 */
-	protected void add_loadAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_ALLOCATION));
+	protected void add_slotAllocationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__SLOT_ALLOCATIONS));
 	}
 
-	/**
-	 * Create the editor for the dischargeAllocation feature on CargoAllocation
-	 *
-	 * @generated
-	 */
-	protected void add_dischargeAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_ALLOCATION));
-	}
-
-	/**
-	 * Create the editor for the loadVolume feature on CargoAllocation
-	 *
-	 * @generated
-	 */
-	protected void add_loadVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_VOLUME));
-	}
-	/**
-	 * Create the editor for the dischargeVolume feature on CargoAllocation
-	 *
-	 * @generated
-	 */
-	protected void add_dischargeVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_VOLUME));
-	}
 	/**
 	 * Create the editor for the inputCargo feature on CargoAllocation
 	 *
@@ -121,39 +89,12 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the ladenLeg feature on CargoAllocation
+	 * Create the editor for the events feature on CargoAllocation
 	 *
 	 * @generated
 	 */
-	protected void add_ladenLegEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_LEG));
-	}
-
-	/**
-	 * Create the editor for the ballastLeg feature on CargoAllocation
-	 *
-	 * @generated
-	 */
-	protected void add_ballastLegEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_LEG));
-	}
-
-	/**
-	 * Create the editor for the ladenIdle feature on CargoAllocation
-	 *
-	 * @generated
-	 */
-	protected void add_ladenIdleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__LADEN_IDLE));
-	}
-
-	/**
-	 * Create the editor for the ballastIdle feature on CargoAllocation
-	 *
-	 * @generated
-	 */
-	protected void add_ballastIdleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_IDLE));
+	protected void add_eventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__EVENTS));
 	}
 
 	/**

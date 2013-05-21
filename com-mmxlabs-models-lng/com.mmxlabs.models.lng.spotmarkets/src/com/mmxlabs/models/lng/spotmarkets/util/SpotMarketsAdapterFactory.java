@@ -4,20 +4,24 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.util;
 
-import com.mmxlabs.models.lng.spotmarkets.*;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.types.ASpotMarket;
-
+import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notifier;
-
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -122,10 +126,6 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
-			}
-			@Override
-			public Adapter caseASpotMarket(ASpotMarket object) {
-				return createASpotMarketAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -312,20 +312,6 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ASpotMarket <em>ASpot Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ASpotMarket
-	 * @generated
-	 */
-	public Adapter createASpotMarketAdapter() {
 		return null;
 	}
 

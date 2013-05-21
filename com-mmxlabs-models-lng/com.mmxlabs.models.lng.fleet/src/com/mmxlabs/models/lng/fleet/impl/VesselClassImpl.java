@@ -3,6 +3,20 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -10,28 +24,10 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-
-import com.mmxlabs.models.lng.types.impl.AVesselClassImpl;
-
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -50,7 +46,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinHeel <em>Min Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getWarmingTime <em>Warming Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCoolingTime <em>Cooling Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getRouteParameters <em>Route Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
@@ -59,7 +54,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
+public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselClass {
 	/**
 	 * The cached value of the '{@link #getInaccessiblePorts() <em>Inaccessible Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -68,7 +63,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> inaccessiblePorts;
+	protected EList<APortSet<Port>> inaccessiblePorts;
 
 	/**
 	 * The cached value of the '{@link #getBaseFuel() <em>Base Fuel</em>}' reference.
@@ -221,26 +216,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	protected int warmingTime = WARMING_TIME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCoolingTime() <em>Cooling Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCoolingTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int COOLING_TIME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getCoolingTime() <em>Cooling Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCoolingTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected int coolingTime = COOLING_TIME_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getCoolingVolume() <em>Cooling Volume</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -314,9 +289,9 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getInaccessiblePorts() {
+	public EList<APortSet<Port>> getInaccessiblePorts() {
 		if (inaccessiblePorts == null) {
-			inaccessiblePorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS);
+			inaccessiblePorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS);
 		}
 		return inaccessiblePorts;
 	}
@@ -576,27 +551,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getCoolingTime() {
-		return coolingTime;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCoolingTime(int newCoolingTime) {
-		int oldCoolingTime = coolingTime;
-		coolingTime = newCoolingTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__COOLING_TIME, oldCoolingTime, coolingTime));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getCoolingVolume() {
 		return coolingVolume;
 	}
@@ -649,19 +603,21 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	public EList<AVessel> collect(EList<AVesselSet> marked) {
-		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
-			final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
-			marked.add(this);
-			
-			final FleetModel myModel = (FleetModel) eContainer();
-			for (final Vessel v : myModel.getVessels()) {
-				if (v.getVesselClass() == this) {
-					result.add(v);
-				}
+	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
+		if (marked.contains(this)) {
+			return ECollections.emptyEList();
+		}
+		final UniqueEList<Vessel> result = new UniqueEList<Vessel>();
+		marked.add(this);
+		
+		final FleetModel myModel = (FleetModel) eContainer();
+		for (final Vessel v : myModel.getVessels()) {
+			if (v.getVesselClass() == this) {
+				result.add(v);
 			}
+		}
 		
 		return result;
 	}
@@ -713,8 +669,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return getMinHeel();
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 				return getWarmingTime();
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
-				return getCoolingTime();
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				return getCoolingVolume();
 			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
@@ -736,7 +690,7 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 		switch (featureID) {
 			case FleetPackage.VESSEL_CLASS__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
-				getInaccessiblePorts().addAll((Collection<? extends APortSet>)newValue);
+				getInaccessiblePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__BASE_FUEL:
 				setBaseFuel((BaseFuel)newValue);
@@ -764,9 +718,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return;
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 				setWarmingTime((Integer)newValue);
-				return;
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
-				setCoolingTime((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				setCoolingVolume((Integer)newValue);
@@ -820,9 +771,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 				setWarmingTime(WARMING_TIME_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
-				setCoolingTime(COOLING_TIME_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				setCoolingVolume(COOLING_VOLUME_EDEFAULT);
 				return;
@@ -864,8 +812,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 				return minHeel != MIN_HEEL_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 				return warmingTime != WARMING_TIME_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__COOLING_TIME:
-				return coolingTime != COOLING_TIME_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 				return coolingVolume != COOLING_VOLUME_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__ROUTE_PARAMETERS:
@@ -898,8 +844,6 @@ public class VesselClassImpl extends AVesselClassImpl implements VesselClass {
 		result.append(minHeel);
 		result.append(", warmingTime: ");
 		result.append(warmingTime);
-		result.append(", coolingTime: ");
-		result.append(coolingTime);
 		result.append(", coolingVolume: ");
 		result.append(coolingVolume);
 		result.append(", pilotLightRate: ");

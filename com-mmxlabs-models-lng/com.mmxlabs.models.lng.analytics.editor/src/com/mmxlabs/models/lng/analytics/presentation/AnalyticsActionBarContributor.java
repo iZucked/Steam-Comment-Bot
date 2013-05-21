@@ -1,6 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.presentation;
 
@@ -243,6 +241,7 @@ public class AnalyticsActionBarContributor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		// Remove any menu items for old selection.
 		//

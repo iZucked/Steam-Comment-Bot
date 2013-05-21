@@ -3,10 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,9 +19,8 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}</li>
  * </ul>
  * </p>
  *
@@ -28,7 +28,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Vessel extends AVessel {
+public interface Vessel extends AVesselSet<Vessel> {
 	/**
 	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -57,7 +57,7 @@ public interface Vessel extends AVessel {
 
 	/**
 	 * Returns the value of the '<em><b>Inaccessible Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Inaccessible Ports</em>' reference list isn't clear,
@@ -69,121 +69,142 @@ public interface Vessel extends AVessel {
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getInaccessiblePorts();
+	EList<APortSet<Port>> getInaccessiblePorts();
 
 	/**
-	 * Returns the value of the '<em><b>Start Heel</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Start Heel</em>' reference isn't clear,
+	 * If the meaning of the '<em>Capacity</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Start Heel</em>' containment reference.
-	 * @see #setStartHeel(HeelOptions)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_StartHeel()
-	 * @model containment="true" required="true"
-	 * @generated
-	 */
-	HeelOptions getStartHeel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Start Heel</em>' containment reference.
-	 * @see #getStartHeel()
-	 * @generated
-	 */
-	void setStartHeel(HeelOptions value);
-
-	/**
-	 * Returns the value of the '<em><b>Availability</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Availability</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Availability</em>' containment reference.
-	 * @see #setAvailability(VesselAvailability)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Availability()
-	 * @model containment="true" required="true"
-	 * @generated
-	 */
-	VesselAvailability getAvailability();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Availability</em>' containment reference.
-	 * @see #getAvailability()
-	 * @generated
-	 */
-	void setAvailability(VesselAvailability value);
-
-	/**
-	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Time Charter Rate</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Time Charter Rate</em>' attribute.
-	 * @see #isSetTimeCharterRate()
-	 * @see #unsetTimeCharterRate()
-	 * @see #setTimeCharterRate(int)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_TimeCharterRate()
+	 * @return the value of the '<em>Capacity</em>' attribute.
+	 * @see #isSetCapacity()
+	 * @see #unsetCapacity()
+	 * @see #setCapacity(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Capacity()
 	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
 	 * @generated
 	 */
-	int getTimeCharterRate();
+	int getCapacity();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Time Charter Rate</em>' attribute.
-	 * @see #isSetTimeCharterRate()
-	 * @see #unsetTimeCharterRate()
-	 * @see #getTimeCharterRate()
+	 * @param value the new value of the '<em>Capacity</em>' attribute.
+	 * @see #isSetCapacity()
+	 * @see #unsetCapacity()
+	 * @see #getCapacity()
 	 * @generated
 	 */
-	void setTimeCharterRate(int value);
+	void setCapacity(int value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @see #isSetTimeCharterRate()
-	 * @see #getTimeCharterRate()
-	 * @see #setTimeCharterRate(int)
+	 * @see #isSetCapacity()
+	 * @see #getCapacity()
+	 * @see #setCapacity(int)
 	 * @generated
 	 */
-	void unsetTimeCharterRate();
+	void unsetCapacity();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Time Charter Rate</em>' attribute is set.
-	 * @see #unsetTimeCharterRate()
-	 * @see #getTimeCharterRate()
-	 * @see #setTimeCharterRate(int)
+	 * @return whether the value of the '<em>Capacity</em>' attribute is set.
+	 * @see #unsetCapacity()
+	 * @see #getCapacity()
+	 * @see #setCapacity(int)
 	 * @generated
 	 */
-	boolean isSetTimeCharterRate();
+	boolean isSetCapacity();
+
+	/**
+	 * Returns the value of the '<em><b>Fill Capacity</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fill Capacity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fill Capacity</em>' attribute.
+	 * @see #isSetFillCapacity()
+	 * @see #unsetFillCapacity()
+	 * @see #setFillCapacity(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_FillCapacity()
+	 * @model default="1" unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 * @generated
+	 */
+	double getFillCapacity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fill Capacity</em>' attribute.
+	 * @see #isSetFillCapacity()
+	 * @see #unsetFillCapacity()
+	 * @see #getFillCapacity()
+	 * @generated
+	 */
+	void setFillCapacity(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #isSetFillCapacity()
+	 * @see #getFillCapacity()
+	 * @see #setFillCapacity(double)
+	 * @generated
+	 */
+	void unsetFillCapacity();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Fill Capacity</em>' attribute is set.
+	 * @see #unsetFillCapacity()
+	 * @see #getFillCapacity()
+	 * @see #setFillCapacity(double)
+	 * @generated
+	 */
+	boolean isSetFillCapacity();
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @model markedMany="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();\nfinal org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();\nmarked.add(this);\nresult.add(this);\nreturn result;'"
+	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<AVessel> collect(EList<AVesselSet> marked);
+	int getVesselOrVesselClassCapacity();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	double getVesselOrVesselClassFillCapacity();
 
 } // end of  Vessel
 

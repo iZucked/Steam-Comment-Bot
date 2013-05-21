@@ -11,9 +11,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.CooldownCostsPane;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -27,8 +27,9 @@ public class CooldownCostsView extends ScenarioTableViewerView<CooldownCostsPane
 
 	@Override
 	protected void initViewerPane(final CooldownCostsPane pane) {
-		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_CooldownPrices() }), getAdapterFactory(), getEditingDomain().getCommandStack());
-		pane.getViewer().setInput(getRootObject().getSubModel(PricingModel.class));
+		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(), PricingPackage.eINSTANCE.getPricingModel_CooldownPrices() }), getAdapterFactory(),
+				getEditingDomain().getCommandStack());
+		pane.getViewer().setInput(getRootObject());
 	}
 
 	@Override

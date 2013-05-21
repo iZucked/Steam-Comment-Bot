@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
 /**
  * <!-- begin-user-doc -->

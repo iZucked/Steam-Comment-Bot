@@ -13,8 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Calendar;
-
 import java.util.Map;
+
 import javax.xml.bind.DatatypeConverter;
 
 import org.eclipse.emf.ecore.EClass;
@@ -24,9 +24,12 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -35,9 +38,11 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -96,25 +101,28 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 		switch (eClass.getClassifierID()) {
 			case SchedulePackage.SCHEDULE_MODEL: return createScheduleModel();
 			case SchedulePackage.SCHEDULE: return createSchedule();
-			case SchedulePackage.SEQUENCE: return createSequence();
-			case SchedulePackage.EVENT: return createEvent();
-			case SchedulePackage.SLOT_VISIT: return createSlotVisit();
-			case SchedulePackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
-			case SchedulePackage.JOURNEY: return createJourney();
-			case SchedulePackage.IDLE: return createIdle();
-			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
-			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
-			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
-			case SchedulePackage.COOLDOWN: return createCooldown();
+			case SchedulePackage.FITNESS: return createFitness();
 			case SchedulePackage.CARGO_ALLOCATION: return createCargoAllocation();
 			case SchedulePackage.SLOT_ALLOCATION: return createSlotAllocation();
-			case SchedulePackage.FUEL_AMOUNT: return createFuelAmount();
-			case SchedulePackage.FITNESS: return createFitness();
-			case SchedulePackage.PORT_VISIT: return createPortVisit();
+			case SchedulePackage.SEQUENCE: return createSequence();
+			case SchedulePackage.EVENT: return createEvent();
 			case SchedulePackage.START_EVENT: return createStartEvent();
 			case SchedulePackage.END_EVENT: return createEndEvent();
+			case SchedulePackage.JOURNEY: return createJourney();
+			case SchedulePackage.IDLE: return createIdle();
+			case SchedulePackage.PORT_VISIT: return createPortVisit();
+			case SchedulePackage.SLOT_VISIT: return createSlotVisit();
+			case SchedulePackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
+			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
+			case SchedulePackage.COOLDOWN: return createCooldown();
+			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
+			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
+			case SchedulePackage.FUEL_AMOUNT: return createFuelAmount();
 			case SchedulePackage.CAPACITY_VIOLATIONS_HOLDER: return createCapacityViolationsHolder();
 			case SchedulePackage.CAPACITY_MAP_ENTRY: return (EObject)createCapacityMapEntry();
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER: return createProfitAndLossContainer();
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS: return createGroupProfitAndLoss();
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS: return createEntityProfitAndLoss();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -128,12 +136,12 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case SchedulePackage.FUEL_UNIT:
-				return createFuelUnitFromString(eDataType, initialValue);
-			case SchedulePackage.FUEL:
-				return createFuelFromString(eDataType, initialValue);
 			case SchedulePackage.SEQUENCE_TYPE:
 				return createSequenceTypeFromString(eDataType, initialValue);
+			case SchedulePackage.FUEL:
+				return createFuelFromString(eDataType, initialValue);
+			case SchedulePackage.FUEL_UNIT:
+				return createFuelUnitFromString(eDataType, initialValue);
 			case SchedulePackage.CAPACITY_VIOLATION_TYPE:
 				return createCapacityViolationTypeFromString(eDataType, initialValue);
 			case SchedulePackage.CALENDAR:
@@ -155,12 +163,12 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case SchedulePackage.FUEL_UNIT:
-				return convertFuelUnitToString(eDataType, instanceValue);
-			case SchedulePackage.FUEL:
-				return convertFuelToString(eDataType, instanceValue);
 			case SchedulePackage.SEQUENCE_TYPE:
 				return convertSequenceTypeToString(eDataType, instanceValue);
+			case SchedulePackage.FUEL:
+				return convertFuelToString(eDataType, instanceValue);
+			case SchedulePackage.FUEL_UNIT:
+				return convertFuelUnitToString(eDataType, instanceValue);
 			case SchedulePackage.CAPACITY_VIOLATION_TYPE:
 				return convertCapacityViolationTypeToString(eDataType, instanceValue);
 			case SchedulePackage.CALENDAR:
@@ -385,6 +393,36 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public Map.Entry<CapacityViolationType, Long> createCapacityMapEntry() {
 		CapacityMapEntryImpl capacityMapEntry = new CapacityMapEntryImpl();
 		return capacityMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitAndLossContainer createProfitAndLossContainer() {
+		ProfitAndLossContainerImpl profitAndLossContainer = new ProfitAndLossContainerImpl();
+		return profitAndLossContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GroupProfitAndLoss createGroupProfitAndLoss() {
+		GroupProfitAndLossImpl groupProfitAndLoss = new GroupProfitAndLossImpl();
+		return groupProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EntityProfitAndLoss createEntityProfitAndLoss() {
+		EntityProfitAndLossImpl entityProfitAndLoss = new EntityProfitAndLossImpl();
+		return entityProfitAndLoss;
 	}
 
 	/**

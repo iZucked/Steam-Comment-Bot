@@ -3,18 +3,15 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.Journey;
-
-import com.mmxlabs.models.lng.port.Port;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.Journey;
+import com.mmxlabs.models.lng.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -75,6 +72,7 @@ public class JourneyImpl extends EObjectImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getFrom() {
 		if (from != null && from.eIsProxy()) {
 			InternalEObject oldFrom = (InternalEObject)from;
@@ -101,6 +99,7 @@ public class JourneyImpl extends EObjectImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFrom(Port newFrom) {
 		Port oldFrom = from;
 		from = newFrom;
@@ -113,6 +112,7 @@ public class JourneyImpl extends EObjectImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Port getTo() {
 		if (to != null && to.eIsProxy()) {
 			InternalEObject oldTo = (InternalEObject)to;
@@ -139,6 +139,7 @@ public class JourneyImpl extends EObjectImpl implements Journey {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTo(Port newTo) {
 		Port oldTo = to;
 		to = newTo;

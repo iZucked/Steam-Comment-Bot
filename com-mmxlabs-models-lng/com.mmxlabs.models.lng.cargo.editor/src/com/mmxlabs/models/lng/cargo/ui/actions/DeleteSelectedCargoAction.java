@@ -32,6 +32,9 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -98,8 +101,7 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 						for (Object obj : selectedObjects) {
 							if (obj instanceof Cargo) {
 								Cargo cargo = (Cargo) obj;
-								trash.remove(cargo.getLoadSlot());
-								trash.remove(cargo.getDischargeSlot());
+								trash.removeAll(cargo.getSlots());
 							}
 						}
 
@@ -113,8 +115,28 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 							final Object object = targetObjects.get(i);
 							final Cargo cargo = (object instanceof Cargo ? (Cargo) object : null);
 							if (cargo != null) {
-								final boolean spotLoad = cargo.getLoadSlot() instanceof SpotSlot;
-								final boolean spotDischarge = cargo.getDischargeSlot() instanceof SpotSlot;
+								int loadSlotCount = 0;
+								int dischargeSlotCount = 0;
+								int spotLoadSlotCount = 0;
+								int spotDischargeSlotCount = 0;
+
+								for (Slot slot : cargo.getSlots()) {
+									if (slot instanceof LoadSlot) {
+										loadSlotCount++;
+										if (slot instanceof SpotLoadSlot) {
+											spotLoadSlotCount++;
+										}
+									} else if (slot instanceof DischargeSlot) {
+										dischargeSlotCount++;
+										if (slot instanceof SpotDischargeSlot) {
+											spotDischargeSlotCount++;
+										}
+									}
+								}
+
+								// Only count as "spot" if all slots of type are spot
+								final boolean spotLoad = spotLoadSlotCount > 0 && loadSlotCount == spotLoadSlotCount;
+								final boolean spotDischarge = spotDischargeSlotCount > 0 && dischargeSlotCount == spotDischargeSlotCount;
 
 								// Pop up a dialog if there are remaining cargoes and the user has not checked "use this response for all".
 								if (!useResponseForAll) {
@@ -187,18 +209,26 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 
 							final boolean deleteLoad = (dialogResponse == ALLBUTTON);
 							final boolean deleteDischarge = (dialogResponse == ALLBUTTON);
-							if (cargo instanceof Cargo) {
-								final LoadSlot loadSlot = cargo.getLoadSlot();
-								final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-								// delete the load slot if the user has so directed (or delete it automatically
-								// if it's a spot slot)
-								if (loadSlot != null && (deleteLoad || loadSlot instanceof SpotSlot)) {
-									trash.add(loadSlot);
-								}
-								// delete the discharge slot if the user has so directed (or delete it automatically
-								// if it's a spot slot)
-								if (dischargeSlot != null && (deleteDischarge || dischargeSlot instanceof SpotSlot)) {
-									trash.add(dischargeSlot);
+							{
+								for (Slot slot : cargo.getSlots()) {
+
+									if (slot instanceof LoadSlot) {
+										final LoadSlot loadSlot = (LoadSlot) slot;
+
+										// delete the load slot if the user has so directed (or delete it automatically
+										// if it's a spot slot)
+										if (deleteLoad || loadSlot instanceof SpotSlot) {
+											trash.add(loadSlot);
+										}
+									} else if (slot instanceof DischargeSlot) {
+
+										final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+										// delete the discharge slot if the user has so directed (or delete it automatically
+										// if it's a spot slot)
+										if (deleteDischarge || dischargeSlot instanceof SpotSlot) {
+											trash.add(dischargeSlot);
+										}
+									}
 								}
 							}
 						}

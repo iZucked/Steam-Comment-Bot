@@ -3,10 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +23,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface VesselGroup extends AVesselSet {
+public interface VesselGroup extends AVesselSet<Vessel> {
 	/**
 	 * Returns the value of the '<em><b>Vessels</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.Vessel}.
@@ -40,15 +39,6 @@ public interface VesselGroup extends AVesselSet {
 	 * @generated
 	 */
 	EList<Vessel> getVessels();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model markedMany="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();\nfinal org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();\nmarked.add(this);\nfor (final Vessel v : getVessels()) {\n\tresult.addAll(v.collect(marked));\n}\nreturn result;'"
-	 * @generated
-	 */
-	EList<AVessel> collect(EList<AVesselSet> marked);
 
 } // end of  VesselGroup
 

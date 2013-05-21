@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.lng.feature"
       label="Models: LNG Feature"
-      version="3.1.1.qualifier"
+      version="4.0.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -30,7 +30,7 @@ All rights reserved.
       <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.ui.runtime.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.rcp.common.feature" version="2.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.scenario.service.feature" version="4.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.migration.feature" version="2.0.0" match="compatible"/>
    </requires>
 
@@ -113,34 +113,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.fleet.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.input"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.input.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.input.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.input.validation"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -231,27 +203,6 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.models.lng.optimiser"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.optimiser.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.optimiser.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.mmxlabs.models.lng.analytics"
          download-size="0"
          install-size="0"
@@ -274,13 +225,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.analytics.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.scenario"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -323,6 +267,76 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.spotmarkets.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.assignment"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.assignment.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.assignment.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.assignment.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.parameters"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.parameters.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.parameters.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.scenario.model"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.scenario.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.scenario.model.edit"
          download-size="0"
          install-size="0"
          version="0.0.0"

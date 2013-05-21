@@ -3,13 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import com.mmxlabs.models.lng.pricing.Index;
+import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.fleet.VesselClass;
-
+import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.mmxcore.MMXObject;
-
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,7 +32,7 @@ import org.eclipse.emf.common.util.EList;
 public interface CharterCostModel extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Vessel Classes</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.VesselClass}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselClass}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Vessel Classes</em>' reference list isn't clear,

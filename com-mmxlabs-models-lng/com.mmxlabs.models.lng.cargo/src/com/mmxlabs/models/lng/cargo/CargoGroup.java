@@ -3,9 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
-import com.mmxlabs.models.mmxcore.NamedObject;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * <!-- begin-user-doc -->

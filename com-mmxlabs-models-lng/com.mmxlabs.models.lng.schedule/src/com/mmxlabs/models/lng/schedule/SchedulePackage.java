@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -13,6 +11,8 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -82,15 +82,6 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE_MODEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -126,51 +117,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SCHEDULE_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE_MODEL___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE_MODEL___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE_MODEL___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE_MODEL___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE_MODEL___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -228,31 +174,13 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Complete</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE__COMPLETE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Sequences</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__SEQUENCES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int SCHEDULE__SEQUENCES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Allocations</b></em>' containment reference list.
@@ -261,7 +189,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__CARGO_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int SCHEDULE__CARGO_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' containment reference list.
@@ -270,7 +198,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Fitnesses</b></em>' containment reference list.
@@ -279,7 +207,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Unused Elements</b></em>' reference list.
@@ -288,7 +216,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
@@ -297,52 +225,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -388,7 +271,483 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequence()
 	 * @generated
 	 */
-	int SEQUENCE = 2;
+	int SEQUENCE = 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EventImpl <em>Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.EventImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEvent()
+	 * @generated
+	 */
+	int EVENT = 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl <em>Slot Visit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotVisit()
+	 * @generated
+	 */
+	int SLOT_VISIT = 12;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getVesselEventVisit()
+	 * @generated
+	 */
+	int VESSEL_EVENT_VISIT = 13;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.JourneyImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getJourney()
+	 * @generated
+	 */
+	int JOURNEY = 9;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl <em>Idle</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.IdleImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIdle()
+	 * @generated
+	 */
+	int IDLE = 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
+	 * @generated
+	 */
+	int GENERATED_CHARTER_OUT = 14;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUsage()
+	 * @generated
+	 */
+	int FUEL_USAGE = 16;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl <em>Fuel Quantity</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelQuantity()
+	 * @generated
+	 */
+	int FUEL_QUANTITY = 17;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CooldownImpl <em>Cooldown</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.CooldownImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCooldown()
+	 * @generated
+	 */
+	int COOLDOWN = 15;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl <em>Cargo Allocation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCargoAllocation()
+	 * @generated
+	 */
+	int CARGO_ALLOCATION = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocation()
+	 * @generated
+	 */
+	int SLOT_ALLOCATION = 4;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl <em>Fuel Amount</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelAmount()
+	 * @generated
+	 */
+	int FUEL_AMOUNT = 18;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl <em>Fitness</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.FitnessImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFitness()
+	 * @generated
+	 */
+	int FITNESS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Fitness Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__FITNESS_VALUE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Fitness</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Fitness</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Cargo Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__SLOT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Spot Market</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__SPOT_MARKET = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Allocation</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__CARGO_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Slot Visit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__SLOT_VISIT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Volume Transferred</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__VOLUME_TRANSFERRED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Slot Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Port</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION___GET_PORT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION___GET_LOCAL_START = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION___GET_LOCAL_END = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION___GET_CONTRACT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
+
+	/**
+	 * The number of operations of the '<em>Slot Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -400,15 +759,6 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Events</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -418,13 +768,13 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int SEQUENCE__VESSEL_AVAILABILITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
@@ -480,51 +830,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -599,16 +904,6 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EventImpl <em>Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.EventImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEvent()
-	 * @generated
-	 */
-	int EVENT = 3;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -616,15 +911,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int EVENT__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -665,6 +951,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -688,51 +975,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -834,14 +1076,24 @@ public interface SchedulePackage extends EPackage {
 	int EVENT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 7;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl <em>Slot Visit</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl <em>Port Visit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotVisit()
+	 * @see com.mmxlabs.models.lng.schedule.impl.PortVisitImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisit()
 	 * @generated
 	 */
-	int SLOT_VISIT = 4;
+	int PORT_VISIT = 11;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl <em>Start Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.StartEventImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getStartEvent()
+	 * @generated
+	 */
+	int START_EVENT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -850,16 +1102,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT__PROXIES = EVENT__PROXIES;
+	int START_EVENT__EXTENSIONS = EVENT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -868,7 +1111,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__START = EVENT__START;
+	int START_EVENT__START = EVENT__START;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
@@ -877,7 +1120,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__END = EVENT__END;
+	int START_EVENT__END = EVENT__END;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -886,7 +1129,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__PORT = EVENT__PORT;
+	int START_EVENT__PORT = EVENT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
@@ -895,7 +1138,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+	int START_EVENT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
@@ -904,7 +1147,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
+	int START_EVENT__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
@@ -913,7 +1156,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__SEQUENCE = EVENT__SEQUENCE;
+	int START_EVENT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -922,7 +1165,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__FUELS = EVENT_FEATURE_COUNT + 0;
+	int START_EVENT__FUELS = EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -932,7 +1175,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
+	int START_EVENT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
@@ -941,7 +1184,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 2;
+	int START_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -950,61 +1202,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 3;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
 
 	/**
-	 * The number of structural features of the '<em>Slot Visit</em>' class.
+	 * The number of structural features of the '<em>Start Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1013,7 +1220,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int START_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -1022,7 +1229,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int START_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -1031,7 +1238,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+	int START_EVENT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -1040,7 +1247,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+	int START_EVENT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
 	 * The operation id for the '<em>Get Duration</em>' operation.
@@ -1049,7 +1256,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___GET_DURATION = EVENT___GET_DURATION;
+	int START_EVENT___GET_DURATION = EVENT___GET_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Local Start</em>' operation.
@@ -1058,7 +1265,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+	int START_EVENT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
 
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
@@ -1067,7 +1274,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+	int START_EVENT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -1076,7 +1283,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___TYPE = EVENT___TYPE;
+	int START_EVENT___TYPE = EVENT___TYPE;
 
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
@@ -1085,7 +1292,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___NAME = EVENT___NAME;
+	int START_EVENT___NAME = EVENT___NAME;
 
 	/**
 	 * The operation id for the '<em>Get Hire Cost</em>' operation.
@@ -1094,7 +1301,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+	int START_EVENT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
 
 	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
@@ -1103,26 +1310,26 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
+	int START_EVENT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Slot Visit</em>' class.
+	 * The number of operations of the '<em>Start Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
+	int START_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl <em>End Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getVesselEventVisit()
+	 * @see com.mmxlabs.models.lng.schedule.impl.EndEventImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEndEvent()
 	 * @generated
 	 */
-	int VESSEL_EVENT_VISIT = 5;
+	int END_EVENT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1131,16 +1338,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT__PROXIES = EVENT__PROXIES;
+	int END_EVENT__EXTENSIONS = EVENT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -1149,7 +1347,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__START = EVENT__START;
+	int END_EVENT__START = EVENT__START;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
@@ -1158,7 +1356,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__END = EVENT__END;
+	int END_EVENT__END = EVENT__END;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -1167,7 +1365,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__PORT = EVENT__PORT;
+	int END_EVENT__PORT = EVENT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
@@ -1176,7 +1374,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+	int END_EVENT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
@@ -1185,7 +1383,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
+	int END_EVENT__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
@@ -1194,7 +1392,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__SEQUENCE = EVENT__SEQUENCE;
+	int END_EVENT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__FUELS = EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -1204,7 +1411,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VIOLATIONS = EVENT_FEATURE_COUNT + 0;
+	int END_EVENT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
@@ -1213,79 +1420,34 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
+	int END_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__EXTRA_DATA = EVENT_FEATURE_COUNT + 2;
+	int END_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
+	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 3;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
 
 	/**
-	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
+	 * The number of structural features of the '<em>End Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1294,7 +1456,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int END_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -1303,7 +1465,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int END_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -1312,7 +1474,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+	int END_EVENT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -1321,7 +1483,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+	int END_EVENT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
 	 * The operation id for the '<em>Get Duration</em>' operation.
@@ -1330,7 +1492,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___GET_DURATION = EVENT___GET_DURATION;
+	int END_EVENT___GET_DURATION = EVENT___GET_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Local Start</em>' operation.
@@ -1339,7 +1501,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+	int END_EVENT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
 
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
@@ -1348,7 +1510,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+	int END_EVENT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -1357,7 +1519,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___TYPE = EVENT___TYPE;
+	int END_EVENT___TYPE = EVENT___TYPE;
 
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
@@ -1366,7 +1528,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___NAME = EVENT___NAME;
+	int END_EVENT___NAME = EVENT___NAME;
 
 	/**
 	 * The operation id for the '<em>Get Hire Cost</em>' operation.
@@ -1375,71 +1537,25 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+	int END_EVENT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
 
 	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
+	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 0;
+	int END_EVENT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
+	 * The number of operations of the '<em>End Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 4;
-
-	/**
-	 * The number of operations of the '<em>Vessel Event Visit</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 5;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.JourneyImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getJourney()
-	 * @generated
-	 */
-	int JOURNEY = 6;
+	int END_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1449,15 +1565,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int JOURNEY__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY__PROXIES = EVENT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -1516,6 +1623,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1541,7 +1649,7 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY__LADEN = EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Route</b></em>' attribute.
+	 * The feature id for the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1584,51 +1692,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1739,16 +1802,6 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl <em>Idle</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.IdleImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIdle()
-	 * @generated
-	 */
-	int IDLE = 7;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1756,15 +1809,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int IDLE__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE__PROXIES = EVENT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -1846,51 +1890,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int IDLE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2001,1398 +2000,6 @@ public interface SchedulePackage extends EPackage {
 	int IDLE_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
-	 * @generated
-	 */
-	int GENERATED_CHARTER_OUT = 8;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__PROXIES = EVENT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__START = EVENT__START;
-
-	/**
-	 * The feature id for the '<em><b>End</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__END = EVENT__END;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
- 	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__PORT = EVENT__PORT;
-
-	/**
-	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Next Event</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__NEXT_EVENT = EVENT__NEXT_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__SEQUENCE = EVENT__SEQUENCE;
-
-	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__EXTRA_DATA = EVENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
-
-	/**
-	 * The operation id for the '<em>Get Time Zone</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
-
-	/**
-	 * The operation id for the '<em>Get Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_DURATION = EVENT___GET_DURATION;
-
-	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
-
-	/**
-	 * The operation id for the '<em>Type</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___TYPE = EVENT___TYPE;
-
-	/**
-	 * The operation id for the '<em>Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___NAME = EVENT___NAME;
-
-	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 4;
-
-	/**
-	 * The number of operations of the '<em>Generated Charter Out</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 5;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUsage()
-	 * @generated
-	 */
-	int FUEL_USAGE = 9;
-
-	/**
-	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_USAGE__FUELS = 0;
-
-	/**
-	 * The number of structural features of the '<em>Fuel Usage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_USAGE_FEATURE_COUNT = 1;
-
-	/**
-	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_USAGE___GET_FUEL_COST = 0;
-
-	/**
-	 * The number of operations of the '<em>Fuel Usage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_USAGE_OPERATION_COUNT = 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl <em>Fuel Quantity</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelQuantity()
-	 * @generated
-	 */
-	int FUEL_QUANTITY = 10;
-
-	/**
-	 * The feature id for the '<em><b>Fuel</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_QUANTITY__FUEL = 0;
-
-	/**
-	 * The feature id for the '<em><b>Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_QUANTITY__COST = 1;
-
-	/**
-	 * The feature id for the '<em><b>Amounts</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_QUANTITY__AMOUNTS = 2;
-
-	/**
-	 * The number of structural features of the '<em>Fuel Quantity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_QUANTITY_FEATURE_COUNT = 3;
-
-	/**
-	 * The number of operations of the '<em>Fuel Quantity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_QUANTITY_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CooldownImpl <em>Cooldown</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.CooldownImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCooldown()
-	 * @generated
-	 */
-	int COOLDOWN = 11;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__PROXIES = EVENT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__START = EVENT__START;
-
-	/**
-	 * The feature id for the '<em><b>End</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__END = EVENT__END;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__PORT = EVENT__PORT;
-
-	/**
-	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Next Event</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__NEXT_EVENT = EVENT__NEXT_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__SEQUENCE = EVENT__SEQUENCE;
-
-	/**
-	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__FUELS = EVENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__VOLUME = EVENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN__COST = EVENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Cooldown</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___ECONTAINER_OP = EVENT___ECONTAINER_OP;
-
-	/**
-	 * The operation id for the '<em>Get Time Zone</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
-
-	/**
-	 * The operation id for the '<em>Get Duration</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_DURATION = EVENT___GET_DURATION;
-
-	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_LOCAL_END = EVENT___GET_LOCAL_END;
-
-	/**
-	 * The operation id for the '<em>Type</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___TYPE = EVENT___TYPE;
-
-	/**
-	 * The operation id for the '<em>Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___NAME = EVENT___NAME;
-
-	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
-	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The number of operations of the '<em>Cooldown</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl <em>Cargo Allocation</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCargoAllocation()
-	 * @generated
-	 */
-	int CARGO_ALLOCATION = 12;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__EXTRA_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__LOAD_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__DISCHARGE_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Load Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__LOAD_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__DISCHARGE_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Laden Leg</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__LADEN_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Leg</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__BALLAST_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Laden Idle</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__LADEN_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Idle</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__BALLAST_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Sequence</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
-
-	/**
-	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_DATA_WITH_KEY__STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
-
-	/**
-	 * The operation id for the '<em>Get Type</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
-
-	/**
-	 * The number of operations of the '<em>Cargo Allocation</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 7;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocation()
-	 * @generated
-	 */
-	int SLOT_ALLOCATION = 13;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Slot</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION__SLOT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Spot Market</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION__SPOT_MARKET = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Cargo Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION__CARGO_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Slot Visit</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION__SLOT_VISIT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION__PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The number of structural features of the '<em>Slot Allocation</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The operation id for the '<em>Get Port</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___GET_PORT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___GET_LOCAL_START = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___GET_LOCAL_END = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Contract</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___GET_CONTRACT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Name</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
-
-	/**
-	 * The number of operations of the '<em>Slot Allocation</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl <em>Fuel Amount</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelAmount()
-	 * @generated
-	 */
-	int FUEL_AMOUNT = 14;
-
-	/**
-	 * The feature id for the '<em><b>Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_AMOUNT__UNIT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_AMOUNT__QUANTITY = 1;
-
-	/**
-	 * The number of structural features of the '<em>Fuel Amount</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_AMOUNT_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Fuel Amount</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUEL_AMOUNT_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl <em>Fitness</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.FitnessImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFitness()
-	 * @generated
-	 */
-	int FITNESS = 15;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
-
-	/**
-	 * The feature id for the '<em><b>Fitness Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS__FITNESS_VALUE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Fitness</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS___MAKE_PROXIES = MMXCorePackage.NAMED_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS___RESOLVE_PROXIES__MAP = MMXCorePackage.NAMED_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS___RESTORE_PROXIES = MMXCorePackage.NAMED_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.NAMED_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS___COLLECT_UUID_OBJECTS = MMXCorePackage.NAMED_OBJECT___COLLECT_UUID_OBJECTS;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>Fitness</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl <em>Port Visit</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.PortVisitImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisit()
-	 * @generated
-	 */
-	int PORT_VISIT = 16;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3400,15 +2007,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_VISIT__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT__PROXIES = EVENT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -3487,56 +2085,12 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Port Visit</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int PORT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3638,32 +2192,13 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl <em>Start Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.StartEventImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getStartEvent()
-	 * @generated
-	 */
-	int START_EVENT = 17;
-
-	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT__PROXIES = EVENT__PROXIES;
+	int SLOT_VISIT__EXTENSIONS = EVENT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -3672,7 +2207,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__START = EVENT__START;
+	int SLOT_VISIT__START = EVENT__START;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
@@ -3681,7 +2216,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__END = EVENT__END;
+	int SLOT_VISIT__END = EVENT__END;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -3690,7 +2225,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__PORT = EVENT__PORT;
+	int SLOT_VISIT__PORT = EVENT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
@@ -3699,7 +2234,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+	int SLOT_VISIT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
@@ -3708,7 +2243,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__NEXT_EVENT = EVENT__NEXT_EVENT;
+	int SLOT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
@@ -3717,7 +2252,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SEQUENCE = EVENT__SEQUENCE;
+	int SLOT_VISIT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -3726,7 +2261,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__FUELS = EVENT_FEATURE_COUNT + 0;
+	int SLOT_VISIT__FUELS = EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -3736,7 +2271,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
+	int SLOT_VISIT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
@@ -3745,16 +2280,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT__EXTRA_DATA = EVENT_FEATURE_COUNT + 3;
+	int SLOT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -3763,61 +2289,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
+	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The number of structural features of the '<em>Start Event</em>' class.
+	 * The number of structural features of the '<em>Slot Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
+	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3826,7 +2307,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int SLOT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -3835,7 +2316,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int SLOT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -3844,7 +2325,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+	int SLOT_VISIT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -3853,7 +2334,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+	int SLOT_VISIT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
 	 * The operation id for the '<em>Get Duration</em>' operation.
@@ -3862,7 +2343,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___GET_DURATION = EVENT___GET_DURATION;
+	int SLOT_VISIT___GET_DURATION = EVENT___GET_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Local Start</em>' operation.
@@ -3871,7 +2352,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+	int SLOT_VISIT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
 
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
@@ -3880,7 +2361,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+	int SLOT_VISIT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -3889,7 +2370,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___TYPE = EVENT___TYPE;
+	int SLOT_VISIT___TYPE = EVENT___TYPE;
 
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
@@ -3898,7 +2379,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___NAME = EVENT___NAME;
+	int SLOT_VISIT___NAME = EVENT___NAME;
 
 	/**
 	 * The operation id for the '<em>Get Hire Cost</em>' operation.
@@ -3907,7 +2388,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+	int SLOT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
 
 	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
@@ -3916,71 +2397,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
+	int SLOT_VISIT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
+	 * The number of operations of the '<em>Slot Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 5;
-
-	/**
-	 * The number of operations of the '<em>Start Event</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 6;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl <em>End Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.EndEventImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEndEvent()
-	 * @generated
-	 */
-	int END_EVENT = 18;
+	int SLOT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3989,16 +2415,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__EXTENSIONS = EVENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT__PROXIES = EVENT__PROXIES;
+	int VESSEL_EVENT_VISIT__EXTENSIONS = EVENT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -4007,7 +2424,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__START = EVENT__START;
+	int VESSEL_EVENT_VISIT__START = EVENT__START;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
@@ -4016,7 +2433,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__END = EVENT__END;
+	int VESSEL_EVENT_VISIT__END = EVENT__END;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -4025,7 +2442,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__PORT = EVENT__PORT;
+	int VESSEL_EVENT_VISIT__PORT = EVENT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
@@ -4034,7 +2451,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+	int VESSEL_EVENT_VISIT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
@@ -4043,7 +2460,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__NEXT_EVENT = EVENT__NEXT_EVENT;
+	int VESSEL_EVENT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
@@ -4052,16 +2469,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SEQUENCE = EVENT__SEQUENCE;
-
-	/**
-	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT__FUELS = EVENT_FEATURE_COUNT + 0;
+	int VESSEL_EVENT_VISIT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -4071,7 +2479,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__VIOLATIONS = EVENT_FEATURE_COUNT + 1;
+	int VESSEL_EVENT_VISIT__VIOLATIONS = EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
@@ -4080,79 +2488,34 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
+	int VESSEL_EVENT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__EXTRA_DATA = EVENT_FEATURE_COUNT + 3;
+	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The number of structural features of the '<em>End Event</em>' class.
+	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___MAKE_PROXIES = EVENT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4161,7 +2524,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int VESSEL_EVENT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -4170,7 +2533,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int VESSEL_EVENT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -4179,7 +2542,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+	int VESSEL_EVENT_VISIT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -4188,7 +2551,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+	int VESSEL_EVENT_VISIT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
 	 * The operation id for the '<em>Get Duration</em>' operation.
@@ -4197,7 +2560,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_DURATION = EVENT___GET_DURATION;
+	int VESSEL_EVENT_VISIT___GET_DURATION = EVENT___GET_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Local Start</em>' operation.
@@ -4206,7 +2569,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+	int VESSEL_EVENT_VISIT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
 
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
@@ -4215,7 +2578,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+	int VESSEL_EVENT_VISIT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -4224,7 +2587,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___TYPE = EVENT___TYPE;
+	int VESSEL_EVENT_VISIT___TYPE = EVENT___TYPE;
 
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
@@ -4233,7 +2596,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___NAME = EVENT___NAME;
+	int VESSEL_EVENT_VISIT___NAME = EVENT___NAME;
 
 	/**
 	 * The operation id for the '<em>Get Hire Cost</em>' operation.
@@ -4242,7 +2605,441 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+	int VESSEL_EVENT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+
+	/**
+	 * The number of operations of the '<em>Vessel Event Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+ 	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+
+	/**
+	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___NAME = EVENT___NAME;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+
+	/**
+	 * The number of operations of the '<em>Generated Charter Out</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__FUELS = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__VOLUME = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__COST = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Cooldown</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+
+	/**
+	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___NAME = EVENT___NAME;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Cooldown</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_USAGE__FUELS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Fuel Usage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_USAGE_FEATURE_COUNT = 1;
 
 	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
@@ -4251,61 +3048,106 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
+	int FUEL_USAGE___GET_FUEL_COST = 0;
 
 	/**
-	 * The operation id for the '<em>Get Data With Path</em>' operation.
+	 * The number of operations of the '<em>Fuel Usage</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 1;
+	int FUEL_USAGE_OPERATION_COUNT = 1;
 
 	/**
-	 * The operation id for the '<em>Get Data With Key</em>' operation.
+	 * The feature id for the '<em><b>Fuel</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 2;
+	int FUEL_QUANTITY__FUEL = 0;
 
 	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * The feature id for the '<em><b>Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 3;
+	int FUEL_QUANTITY__COST = 1;
 
 	/**
-	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * The feature id for the '<em><b>Amounts</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 4;
+	int FUEL_QUANTITY__AMOUNTS = 2;
 
 	/**
-	 * The operation id for the '<em>Get Value With Path As</em>' operation.
+	 * The number of structural features of the '<em>Fuel Quantity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 5;
+	int FUEL_QUANTITY_FEATURE_COUNT = 3;
 
 	/**
-	 * The number of operations of the '<em>End Event</em>' class.
+	 * The number of operations of the '<em>Fuel Quantity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 6;
+	int FUEL_QUANTITY_OPERATION_COUNT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_AMOUNT__UNIT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_AMOUNT__QUANTITY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_AMOUNT__UNIT_PRICE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Fuel Amount</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_AMOUNT_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Fuel Amount</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_AMOUNT_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
@@ -4329,16 +3171,6 @@ public interface SchedulePackage extends EPackage {
 	int CAPACITY_VIOLATIONS_HOLDER__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CAPACITY_VIOLATIONS_HOLDER__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -4357,56 +3189,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int CAPACITY_VIOLATIONS_HOLDER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CAPACITY_VIOLATIONS_HOLDER___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CAPACITY_VIOLATIONS_HOLDER___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CAPACITY_VIOLATIONS_HOLDER___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CAPACITY_VIOLATIONS_HOLDER___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CAPACITY_VIOLATIONS_HOLDER___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4500,6 +3282,149 @@ public interface SchedulePackage extends EPackage {
 	int CAPACITY_MAP_ENTRY_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
+	 * @generated
+	 */
+	int PROFIT_AND_LOSS_CONTAINER = 21;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Profit And Loss Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
+	 * @generated
+	 */
+	int GROUP_PROFIT_AND_LOSS = 22;
+
+	/**
+	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Entity Profit And Losses</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = 1;
+
+	/**
+	 * The number of structural features of the '<em>Group Profit And Loss</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Group Profit And Loss</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl <em>Entity Profit And Loss</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
+	 * @generated
+	 */
+	int ENTITY_PROFIT_AND_LOSS = 23;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS__ENTITY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Entity Profit And Loss</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Entity Profit And Loss</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4507,7 +3432,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 21;
+	int FUEL_UNIT = 26;
 
 
 	/**
@@ -4518,7 +3443,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 22;
+	int FUEL = 25;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4529,7 +3454,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 23;
+	int SEQUENCE_TYPE = 24;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -4540,7 +3465,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 24;
+	int CAPACITY_VIOLATION_TYPE = 27;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4550,7 +3475,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 25;
+	int CALENDAR = 28;
 
 
 	/**
@@ -4561,7 +3486,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 26;
+	int ITERABLE = 29;
 
 
 	/**
@@ -4572,7 +3497,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 27;
+	int OBJECT = 30;
 
 
 	/**
@@ -4617,17 +3542,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSchedule();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Schedule#isComplete <em>Complete</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Complete</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Schedule#isComplete()
-	 * @see #getSchedule()
-	 * @generated
-	 */
-	EAttribute getSchedule_Complete();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getSequences <em>Sequences</em>}'.
@@ -4706,15 +3620,15 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_Events();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVessel <em>Vessel</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVessel()
+	 * @return the meta object for the reference '<em>Vessel Availability</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability()
 	 * @see #getSequence()
 	 * @generated
 	 */
-	EReference getSequence_Vessel();
+	EReference getSequence_VesselAvailability();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}'.
@@ -5023,15 +3937,16 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getJourney_Laden();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Route</em>'.
+	 * @return the meta object for the reference '<em>Route</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Journey#getRoute()
 	 * @see #getJourney()
 	 * @generated
 	 */
-	EAttribute getJourney_Route();
+	EReference getJourney_Route();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Journey#getToll <em>Toll</em>}'.
@@ -5227,48 +4142,16 @@ public interface SchedulePackage extends EPackage {
 	EClass getCargoAllocation();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadAllocation <em>Load Allocation</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadAllocation()
+	 * @return the meta object for the reference list '<em>Slot Allocations</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations()
 	 * @see #getCargoAllocation()
 	 * @generated
 	 */
-	EReference getCargoAllocation_LoadAllocation();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeAllocation <em>Discharge Allocation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeAllocation()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_DischargeAllocation();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadVolume <em>Load Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Load Volume</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLoadVolume()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EAttribute getCargoAllocation_LoadVolume();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeVolume <em>Discharge Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Discharge Volume</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getDischargeVolume()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EAttribute getCargoAllocation_DischargeVolume();
+	EReference getCargoAllocation_SlotAllocations();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}'.
@@ -5282,48 +4165,16 @@ public interface SchedulePackage extends EPackage {
 	EReference getCargoAllocation_InputCargo();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenLeg <em>Laden Leg</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents <em>Events</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Laden Leg</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenLeg()
+	 * @return the meta object for the reference list '<em>Events</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents()
 	 * @see #getCargoAllocation()
 	 * @generated
 	 */
-	EReference getCargoAllocation_LadenLeg();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg <em>Ballast Leg</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Ballast Leg</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastLeg()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_BallastLeg();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle <em>Laden Idle</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Laden Idle</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getLadenIdle()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_LadenIdle();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle <em>Ballast Idle</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Ballast Idle</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastIdle()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_BallastIdle();
+	EReference getCargoAllocation_Events();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}'.
@@ -5345,16 +4196,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getCargoAllocation__GetName();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getType() <em>Get Type</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Type</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getType()
-	 * @generated
-	 */
-	EOperation getCargoAllocation__GetType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotAllocation <em>Slot Allocation</em>}'.
@@ -5420,6 +4261,18 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlotAllocation_Price();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Transferred</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EAttribute getSlotAllocation_VolumeTransferred();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPort() <em>Get Port</em>}' operation.
@@ -5502,6 +4355,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getFuelAmount_Quantity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice <em>Unit Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Unit Price</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice()
+	 * @see #getFuelAmount()
+	 * @generated
+	 */
+	EAttribute getFuelAmount_UnitPrice();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Fitness <em>Fitness</em>}'.
@@ -5648,6 +4512,99 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getCapacityMapEntry_Value();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer <em>Profit And Loss Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Profit And Loss Container</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer
+	 * @generated
+	 */
+	EClass getProfitAndLossContainer();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss <em>Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Group Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss()
+	 * @see #getProfitAndLossContainer()
+	 * @generated
+	 */
+	EReference getProfitAndLossContainer_GroupProfitAndLoss();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss <em>Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Group Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss
+	 * @generated
+	 */
+	EClass getGroupProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss()
+	 * @see #getGroupProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getGroupProfitAndLoss_ProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Entity Profit And Losses</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses()
+	 * @see #getGroupProfitAndLoss()
+	 * @generated
+	 */
+	EReference getGroupProfitAndLoss_EntityProfitAndLosses();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss <em>Entity Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Entity Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss
+	 * @generated
+	 */
+	EClass getEntityProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity()
+	 * @see #getEntityProfitAndLoss()
+	 * @generated
+	 */
+	EReference getEntityProfitAndLoss_Entity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss()
+	 * @see #getEntityProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getEntityProfitAndLoss_ProfitAndLoss();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5782,14 +4739,6 @@ public interface SchedulePackage extends EPackage {
 		EClass SCHEDULE = eINSTANCE.getSchedule();
 
 		/**
-		 * The meta object literal for the '<em><b>Complete</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCHEDULE__COMPLETE = eINSTANCE.getSchedule_Complete();
-
-		/**
 		 * The meta object literal for the '<em><b>Sequences</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5848,12 +4797,12 @@ public interface SchedulePackage extends EPackage {
 		EReference SEQUENCE__EVENTS = eINSTANCE.getSequence_Events();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel Availability</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SEQUENCE__VESSEL = eINSTANCE.getSequence_Vessel();
+		EReference SEQUENCE__VESSEL_AVAILABILITY = eINSTANCE.getSequence_VesselAvailability();
 
 		/**
 		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
@@ -6097,12 +5046,12 @@ public interface SchedulePackage extends EPackage {
 		EAttribute JOURNEY__LADEN = eINSTANCE.getJourney_Laden();
 
 		/**
-		 * The meta object literal for the '<em><b>Route</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute JOURNEY__ROUTE = eINSTANCE.getJourney_Route();
+		EReference JOURNEY__ROUTE = eINSTANCE.getJourney_Route();
 
 		/**
 		 * The meta object literal for the '<em><b>Toll</b></em>' attribute feature.
@@ -6263,36 +5212,13 @@ public interface SchedulePackage extends EPackage {
 		EClass CARGO_ALLOCATION = eINSTANCE.getCargoAllocation();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Allocation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Slot Allocations</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CARGO_ALLOCATION__LOAD_ALLOCATION = eINSTANCE.getCargoAllocation_LoadAllocation();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Allocation</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__DISCHARGE_ALLOCATION = eINSTANCE.getCargoAllocation_DischargeAllocation();
-
-		/**
-		 * The meta object literal for the '<em><b>Load Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CARGO_ALLOCATION__LOAD_VOLUME = eINSTANCE.getCargoAllocation_LoadVolume();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CARGO_ALLOCATION__DISCHARGE_VOLUME = eINSTANCE.getCargoAllocation_DischargeVolume();
+		EReference CARGO_ALLOCATION__SLOT_ALLOCATIONS = eINSTANCE.getCargoAllocation_SlotAllocations();
 
 		/**
 		 * The meta object literal for the '<em><b>Input Cargo</b></em>' reference feature.
@@ -6303,36 +5229,13 @@ public interface SchedulePackage extends EPackage {
 		EReference CARGO_ALLOCATION__INPUT_CARGO = eINSTANCE.getCargoAllocation_InputCargo();
 
 		/**
-		 * The meta object literal for the '<em><b>Laden Leg</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Events</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CARGO_ALLOCATION__LADEN_LEG = eINSTANCE.getCargoAllocation_LadenLeg();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Leg</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__BALLAST_LEG = eINSTANCE.getCargoAllocation_BallastLeg();
-
-		/**
-		 * The meta object literal for the '<em><b>Laden Idle</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__LADEN_IDLE = eINSTANCE.getCargoAllocation_LadenIdle();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Idle</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__BALLAST_IDLE = eINSTANCE.getCargoAllocation_BallastIdle();
+		EReference CARGO_ALLOCATION__EVENTS = eINSTANCE.getCargoAllocation_Events();
 
 		/**
 		 * The meta object literal for the '<em><b>Sequence</b></em>' reference feature.
@@ -6349,14 +5252,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation CARGO_ALLOCATION___GET_NAME = eINSTANCE.getCargoAllocation__GetName();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Type</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation CARGO_ALLOCATION___GET_TYPE = eINSTANCE.getCargoAllocation__GetType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
@@ -6407,6 +5302,15 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT_ALLOCATION__PRICE = eINSTANCE.getSlotAllocation_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Transferred</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ALLOCATION__VOLUME_TRANSFERRED = eINSTANCE.getSlotAllocation_VolumeTransferred();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Port</b></em>' operation.
@@ -6473,6 +5377,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FUEL_AMOUNT__QUANTITY = eINSTANCE.getFuelAmount_Quantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_AMOUNT__UNIT_PRICE = eINSTANCE.getFuelAmount_UnitPrice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl <em>Fitness</em>}' class.
@@ -6594,6 +5506,84 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CAPACITY_MAP_ENTRY__VALUE = eINSTANCE.getCapacityMapEntry_Value();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
+		 * @generated
+		 */
+		EClass PROFIT_AND_LOSS_CONTAINER = eINSTANCE.getProfitAndLossContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Group Profit And Loss</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
+		 * @generated
+		 */
+		EClass GROUP_PROFIT_AND_LOSS = eINSTANCE.getGroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity Profit And Losses</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = eINSTANCE.getGroupProfitAndLoss_EntityProfitAndLosses();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl <em>Entity Profit And Loss</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
+		 * @generated
+		 */
+		EClass ENTITY_PROFIT_AND_LOSS = eINSTANCE.getEntityProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTITY_PROFIT_AND_LOSS__ENTITY = eINSTANCE.getEntityProfitAndLoss_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getEntityProfitAndLoss_ProfitAndLoss();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

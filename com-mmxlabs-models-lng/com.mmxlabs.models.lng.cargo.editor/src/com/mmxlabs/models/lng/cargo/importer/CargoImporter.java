@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.importer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,6 +23,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.models.lng.assignment.AssignmentFactory;
+import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -29,13 +33,11 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputFactory;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
+import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IFieldMap;
@@ -84,10 +86,65 @@ public class CargoImporter extends DefaultClassImporter {
 	// List of column names to filter out of export. UUID is confusing to the user, othernames is not used by cargo or slots. Fixed Price is deprecated.
 	private static final Set<String> filteredColumns = Sets.newHashSet("uuid", "otherNames", "loadSlot.uuid", "loadSlot.fixedPrice", "loadSlot.otherNames", "dischargeSlot.uuid",
 			"dischargeSlot.fixedPrice", "dischargeSlot.otherNames");
+	
+	private static final Map<String, String> fieldNamesToCsvNames = getFieldNamesToCsvNames();
+	private static final Map<String, String> csvNamesToFieldNames = reverseLookup(fieldNamesToCsvNames);
+
+	/**
+	 * Returns a map mapping field names to their CSV aliases.
+	 * @return
+	 */
+	private static Map<String, String> getFieldNamesToCsvNames() {
+		Map<String, String> result = new HashMap<String, String>();
+		
+		result.put("minQuantity", "min");
+		result.put("maxQuantity", "max");
+		result.put("windowStart", "date");
+		result.put("windowStartTime", "time");
+		result.put("priceExpression", "price");		
+		
+		return result;
+	}
+	
+	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
+		final Map<String, String> result = new LinkedHashMap<String, String>();
+
+		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
+			if (shouldExportFeature(attribute)) {
+				exportAttribute(object, attribute, result);
+			}
+		}
+
+		for (final EReference reference : object.eClass().getEAllReferences()) {
+			if (shouldExportFeature(reference)) {
+				exportReference(object, reference, result, root);
+			}
+		}
+
+		return result;
+	}
+
+
+	private static Map<String, String> reverseLookup(Map<String, String> map) {
+		Map<String, String> result = new HashMap<String, String>();
+		for (Entry<String, String> entry: map.entrySet()) {
+			result.put(entry.getValue(), entry.getKey());
+		}
+		return result;
+	}
+
+
 
 	@Override
-	protected boolean shouldFlattenReference(final EReference reference) {
-		return super.shouldFlattenReference(reference) || reference == CargoPackage.eINSTANCE.getCargo_LoadSlot() || reference == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
+	protected boolean shouldExportFeature(final EStructuralFeature feature) {
+
+		if (feature == CargoPackage.eINSTANCE.getCargo_Slots()) {
+			return false;
+		}
+		if (feature == CargoPackage.eINSTANCE.getSlot_Cargo()) {
+			return false;
+		}
+		return super.shouldExportFeature(feature);
 	}
 
 	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
@@ -128,18 +185,40 @@ public class CargoImporter extends DefaultClassImporter {
 
 		final List<Map<String, String>> data = new LinkedList<Map<String, String>>();
 
-		//data.addAll(super.exportObjects(cargoes, root));
-		
-		for (final Cargo cargo : cargoes) {
-			final Map<String, String> result = exportObject(cargo, root);
-			exportSlot(root, result, cargo.getLoadSlot(), KEY_LOADSLOT);
-			exportSlot(root, result, cargo.getDischargeSlot(), KEY_DISCHARGESLOT);
-			
-			result.put(KIND_KEY, cargo.eClass().getName());
-			data.add(result);
+		{
+			for (final Cargo cargo : cargoes) {
+
+				final List<LoadSlot> cLoadSlots = new ArrayList<LoadSlot>();
+				final List<DischargeSlot> cDischargeSlots = new ArrayList<DischargeSlot>();
+				// Slot Slots
+				for (final Slot s : cargo.getSlots()) {
+					if (s instanceof LoadSlot) {
+						cLoadSlots.add((LoadSlot) s);
+					} else if (s instanceof DischargeSlot) {
+						cDischargeSlots.add((DischargeSlot) s);
+					}
+				}
+
+				// How many rows?
+				final int rowCount = Math.max(cLoadSlots.size(), cDischargeSlots.size());
+
+				// Export several rows of data depending on number of slots
+				for (int i = 0; i < rowCount; ++i) {
+					final Map<String, String> result = exportObject(cargo, root);
+
+					if (i < cLoadSlots.size()) {
+						exportSlot(root, result, cLoadSlots.get(i), KEY_LOADSLOT);
+					}
+					if (i < cDischargeSlots.size()) {
+						exportSlot(root, result, cDischargeSlots.get(i), KEY_DISCHARGESLOT);
+					}
+
+					result.put(KIND_KEY, cargo.eClass().getName());
+					data.add(result);
+				}
+			}
 		}
-		
-		
+
 		{
 			for (final LoadSlot slot : loadSlots) {
 				if (slot.getCargo() == null) {
@@ -229,123 +308,173 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 	
 	@Override
-	public Collection<EObject> importObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
 		final Collection<EObject> result = importRawObject(eClass, row, context);
-		LoadSlot load = null;
-		DischargeSlot discharge = null;
-		Cargo cargo = null;
-		for (final EObject o : result) {
-			if (o instanceof Cargo) {
-				cargo = (Cargo) o;
-			} else if (o instanceof LoadSlot) {
-				load = (LoadSlot) o;
-			} else if (o instanceof DischargeSlot) {
-				discharge = (DischargeSlot) o;
-			}
-		}
+		try {
+			try {
+				context.pushReader(reader);
+				Map<String, String> row;
+				final Map<String, Cargo> cargoMap = new HashMap<String, Cargo>();
+				while ((row = reader.readRow()) != null) {
+					// Import Row Data
+					final Collection<EObject> result = importObject(importClass, row, context);
 
-		// fix missing names
+					// Find the individual objects
+					LoadSlot load = null;
+					DischargeSlot discharge = null;
+					Cargo tmpCargo = null;
+					for (final EObject o : result) {
+						if (o instanceof Cargo) {
+							tmpCargo = (Cargo) o;
+						} else if (o instanceof LoadSlot) {
+							load = (LoadSlot) o;
+						} else if (o instanceof DischargeSlot) {
+							discharge = (DischargeSlot) o;
+						}
+					}
+					final List<EObject> newResults = new ArrayList<EObject>(3);
 
-		final List<EObject> newResults = new ArrayList<EObject>(3);
-		boolean keepCargo = true;
-		if (load == null || load.getWindowStart() == null) {
-			keepCargo = false;
-		} else {
-			newResults.add(load);
-		}
-		if (discharge == null || discharge.getWindowStart() == null) {
-			keepCargo = false;
-		} else {
-			newResults.add(discharge);
-		}
-		
-		cargo.setLoadSlot(load);
-		cargo.setDischargeSlot(discharge);
-		
-		if (!keepCargo) {
-			cargo.setLoadSlot(null);
-			cargo.setDischargeSlot(null);
-		} else {
-			newResults.add(cargo);
-		}
-
-		if (cargo != null && cargo.getName() != null && cargo.getName().trim().isEmpty() == false) {
-			final String cargoName = cargo.getName().trim();
-			if (load != null && (load.getName() == null || load.getName().trim().isEmpty())) {
-				final LoadSlot load2 = load;
-				context.doLater(new IDeferment() {
-					@Override
-					public void run(final IImportContext context) {
-						load2.setName(cargoName);
-						context.registerNamedObject(load2);
+					boolean keepCargo = true;
+					if (load == null || load.getWindowStart() == null) {
+						load = null;
+						keepCargo = false;
+					} else {
+						newResults.add(load);
+					}
+					if (discharge == null || discharge.getWindowStart() == null) {
+						discharge = null;
+						keepCargo = false;
+					} else {
+						newResults.add(discharge);
 					}
 
-					@Override
-					public int getStage() {
-						return IImportContext.STAGE_MODIFY_ATTRIBUTES;
-					}
-				});
-			}
-
-			if (discharge != null && (discharge.getName() == null || discharge.getName().trim().isEmpty())) {
-				final DischargeSlot discharge2 = discharge;
-				context.doLater(new IDeferment() {
-					@Override
-					public void run(final IImportContext context) {
-						discharge2.setName("d-" + cargoName);
-						context.registerNamedObject(discharge2);
+					// Look up the "real cargo" - the first one found with this name/ID. Cargoes with multiple load or multiple discharges will be exported across multiple rows.
+					Cargo realCargo = null;
+					if (tmpCargo != null) {
+						if (cargoMap.containsKey(tmpCargo.getName())) {
+							realCargo = cargoMap.get(tmpCargo.getName());
+						}
 					}
 
-					@Override
-					public int getStage() {
-						return IImportContext.STAGE_MODIFY_ATTRIBUTES;
+					if (!keepCargo) {
+						tmpCargo.getSlots().clear();
+					} else if (realCargo == null) {
+						// Keep the cargo and this is the first time we have seen the cargo ID
+						realCargo = tmpCargo;
+						cargoMap.put(tmpCargo.getName(), tmpCargo);
+						newResults.add(realCargo);
 					}
-				});
-			}
-		}
 
-		if (keepCargo && row.containsKey(ASSIGNMENT)) {
-			final Cargo cargo_ = cargo;
-			final String assignedTo = row.get(ASSIGNMENT);
-			final IImportProblem noVessel = context.createProblem("Cannot find vessel " + assignedTo, true, true, true);
-			context.doLater(new IDeferment() {
-				@Override
-				public void run(final IImportContext context) {
-					final InputModel im = context.getRootObject().getSubModel(InputModel.class);
-					if (im != null) {
-						ElementAssignment existing = null;
-						for (final ElementAssignment ea : im.getElementAssignments()) {
-							if (ea.getAssignedObject() == cargo_) {
-								existing = ea;
-								break;
+					// Register Slots
+					if (realCargo != null) {
+						if (load != null) {
+							realCargo.getSlots().add(load);
+						}
+						if (discharge != null) {
+							realCargo.getSlots().add(discharge);
+						}
+					}
+
+					// fix missing names
+					if (realCargo != null && realCargo.getName() != null && realCargo.getName().trim().isEmpty() == false) {
+						final String cargoName = realCargo.getName().trim();
+						if (load != null && (load.getName() == null || load.getName().trim().isEmpty())) {
+							final LoadSlot load2 = load;
+							load2.setName(cargoName);
+						}
+
+						if (discharge != null && (discharge.getName() == null || discharge.getName().trim().isEmpty())) {
+							final DischargeSlot discharge2 = discharge;
+							discharge2.setName("d-" + cargoName);
+						}
+					}
+
+					// Setup vessel assignments
+					if (keepCargo && row.containsKey(ASSIGNMENT)) {
+						final Cargo cargo_ = realCargo;
+						final String assignedTo = row.get(ASSIGNMENT);
+						final IImportProblem noVessel = context.createProblem("Cannot find vessel " + assignedTo, true, true, true);
+						context.doLater(new IDeferment() {
+							@Override
+							public void run(final IImportContext context) {
+								final MMXRootObject rootObject = context.getRootObject();
+								if (rootObject instanceof LNGScenarioModel) {
+									final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
+									if (assignmentModel != null) {
+										ElementAssignment existing = null;
+										for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
+											if (ea.getAssignedObject() == cargo_) {
+												existing = ea;
+												break;
+											}
+										}
+										if (existing == null) {
+											existing = AssignmentFactory.eINSTANCE.createElementAssignment();
+											assignmentModel.getElementAssignments().add(existing);
+											existing.setAssignedObject(cargo_);
+										}
+
+										// attempt to find vessel
+										final NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
+										if (vessel instanceof Vessel) {
+											existing.setAssignment((Vessel) vessel);
+										} else {
+											context.addProblem(noVessel);
+										}
+									}
+								}
 							}
-						}
-						if (existing == null) {
-							existing = InputFactory.eINSTANCE.createElementAssignment();
-							im.getElementAssignments().add(existing);
-							existing.setAssignedObject(cargo_);
-						}
 
-						// attempt to find vessel
-						final NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
-						if (vessel instanceof Vessel) {
-							existing.setAssignment((AVesselSet) vessel);
-						} else {
-							context.addProblem(noVessel);
-						}
+							@Override
+							public int getStage() {
+								return IImportContext.STAGE_MODIFY_SUBMODELS + 10;
+							}
+						});
 					}
-				}
 
-				@Override
-				public int getStage() {
-					return IImportContext.STAGE_MODIFY_SUBMODELS + 10;
+					results.addAll(newResults);
 				}
-			});
+			} finally {
+				reader.close();
+				context.popReader();
+			}
+		} catch (final IOException e) {
+
 		}
-
-		return newResults;
+		for (final EObject o : results) {
+			if (o instanceof NamedObject) {
+				context.registerNamedObject((NamedObject) o);
+			}
+		}
+		return results;
 	}
-
+	
+	private String fieldNameFromCsvName(String csvName) {
+		// special cases
+		
+		if (csvName.equalsIgnoreCase("FOB")) {
+			return "fobsale";
+		}
+		if (csvName.equalsIgnoreCase("DES")) {
+			return "despurchase";
+		}
+		String result = csvNamesToFieldNames.get(csvName);
+		if (result == null) {
+			result = csvName;
+		}
+		return result.toLowerCase();
+		
+	}
+	
+	private IFieldMap renameCsvMapWithFieldNames(FieldMap map) {
+		final Map<String, String> resultMap = new HashMap<String, String>();
+		for (Entry<String, String> entry: map.entrySet()) {
+			resultMap.put(fieldNameFromCsvName(entry.getKey()), entry.getValue());
+		}
+		
+		return new FieldMap(resultMap, map.getPrefix(), map.getSuperMap());
+	}
+	
 	
 	/**
 	 * @since 3.1

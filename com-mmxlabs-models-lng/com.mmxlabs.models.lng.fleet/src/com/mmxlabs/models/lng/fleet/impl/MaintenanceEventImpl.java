@@ -3,10 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.impl;
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
-
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,7 +36,6 @@ public class MaintenanceEventImpl extends VesselEventImpl implements Maintenance
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.MAINTENANCE_EVENT;
 	}
-
 } // end of MaintenanceEventImpl
 
 // finish type fixing

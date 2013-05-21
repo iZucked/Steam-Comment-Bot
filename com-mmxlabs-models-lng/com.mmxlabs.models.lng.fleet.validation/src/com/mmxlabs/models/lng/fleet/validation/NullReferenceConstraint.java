@@ -32,7 +32,8 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
 			// TODO add any more refs to check here
 			FleetPackage.eINSTANCE.getVessel_VesselClass(), FleetPackage.eINSTANCE.getVesselClass_BaseFuel(), FleetPackage.eINSTANCE.getCharterOutEvent_RelocateTo(),
-			FleetPackage.eINSTANCE.getVesselEvent_Port(), FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), FleetPackage.eINSTANCE.getVesselClass_BallastAttributes());
+			FleetPackage.eINSTANCE.getVesselEvent_Port(), FleetPackage.eINSTANCE.getVesselClass_LadenAttributes(), FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(),
+			FleetPackage.eINSTANCE.getVesselAvailability_Vessel());
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 

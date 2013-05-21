@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.fleet.validation;
@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -33,14 +32,15 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject object = ctx.getTarget();
-		if (object instanceof Vessel) {
-			final Vessel vessel = (Vessel) object;
+		if (object instanceof VesselAvailability) {
+//			final Vessel vessel = (Vessel) object;
 			// Gather start/end requirements
 			
-			VesselAvailability availability = vessel.getAvailability();
+//			VesselAvailability availability = vessel.getAvailability();
 			
-			if (availability != null) {
+//			if (availability != null) {
 				// Gather dates
+				VesselAvailability availability = (VesselAvailability) object;
 				final Date startStart = availability.getStartAfter();
 				final Date startEnd = availability.getStartBy();
 
@@ -52,7 +52,7 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 
 				if ((s != null) && (e != null)) {
 					if (e.before(s)) {
-						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName()));
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(availability.getVessel().getName()));
 						if (startStart != null) {
 							status.addEObjectAndFeature(availability, FleetPackage.eINSTANCE.getVesselAvailability_StartAfter());
 						}
@@ -69,7 +69,7 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 					}
 				}
 			}
-		}
+//		}
 
 		return ctx.createSuccessStatus();
 	}

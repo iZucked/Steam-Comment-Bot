@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -53,6 +54,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				return true;
 			} else if (dcsd.getTarget() instanceof DischargeSlot) {
 				return true;
+			} else if (dcsd.getTarget() instanceof ElementAssignment) {
+				final ElementAssignment elementAssignment = (ElementAssignment) dcsd.getTarget();
+				if (elementAssignment.getAssignedObject() instanceof Cargo) {
+					return true;
+				}
 			}
 		}
 
@@ -74,6 +80,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			} else if (dcsd.getTarget() instanceof DischargeSlot) {
 				dischargeSlot = (DischargeSlot) dcsd.getTarget();
 				cargo = dischargeSlot.getCargo();
+			} else if (dcsd.getTarget() instanceof ElementAssignment) {
+				final ElementAssignment elementAssignment = (ElementAssignment) dcsd.getTarget();
+				if (elementAssignment.getAssignedObject() instanceof Cargo) {
+					cargo = (Cargo) elementAssignment.getAssignedObject();
+				}
 			}
 			if (cargo != null) {
 				if (tradesViewer != null) {

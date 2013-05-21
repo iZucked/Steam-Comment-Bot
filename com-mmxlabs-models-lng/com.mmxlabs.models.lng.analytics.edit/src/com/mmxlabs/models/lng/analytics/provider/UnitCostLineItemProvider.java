@@ -5,22 +5,11 @@
 package com.mmxlabs.models.lng.analytics.provider;
 
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.UnitCostLine;
-
-import com.mmxlabs.models.lng.types.TypesFactory;
-import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -31,6 +20,11 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.UnitCostLine;
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.UnitCostLine} object.
@@ -360,7 +354,6 @@ public class UnitCostLineItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 			childrenFeatures.add(AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS);
 		}
 		return childrenFeatures;
@@ -426,7 +419,6 @@ public class UnitCostLineItemProvider
 			case AnalyticsPackage.UNIT_COST_LINE__PROFIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA:
 			case AnalyticsPackage.UNIT_COST_LINE__COST_COMPONENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -447,11 +439,6 @@ public class UnitCostLineItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA,
-				 TypesFactory.eINSTANCE.createExtraData()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS,
 				 AnalyticsFactory.eINSTANCE.createCostComponent()));
 
@@ -464,17 +451,6 @@ public class UnitCostLineItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.UNIT_COST_LINE__COST_COMPONENTS,
 				 AnalyticsFactory.eINSTANCE.createVisit()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return AnalyticsEditPlugin.INSTANCE;
 	}
 
 }

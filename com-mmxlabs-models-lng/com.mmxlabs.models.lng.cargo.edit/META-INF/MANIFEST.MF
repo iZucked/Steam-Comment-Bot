@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.cargo.edit;singleton:=true
-Bundle-Version: 3.1.1.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin$Implementation
 Bundle-Vendor: %providerName
@@ -11,6 +11,11 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.models.lng.cargo.provider
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.edit;bundle-version="2.7.2";visibility:=reexport,
- com.mmxlabs.models.lng.cargo;bundle-version="[3.0.0,4.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.types.edit;bundle-version="[4.0.0,5.0.0)";visibility:=reexport
+ com.mmxlabs.models.lng.cargo;bundle-version="[4.0.0,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.types.edit;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.commercial.edit;bundle-version="[4.0.0,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.fleet.edit;bundle-version="[4.0.0,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.port.edit;bundle-version="[4.0.0,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.pricing.edit;bundle-version="[4.0.0,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.spotmarkets.edit;bundle-version="[4.0.0,5.0.0)";visibility:=reexport
 Bundle-ActivationPolicy: lazy

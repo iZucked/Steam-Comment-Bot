@@ -5,15 +5,11 @@
 package com.mmxlabs.models.lng.cargo.provider;
 
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -23,6 +19,9 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.DischargeSlot} object.
@@ -59,33 +58,10 @@ public class DischargeSlotItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addCargoPropertyDescriptor(object);
 			addFOBSalePropertyDescriptor(object);
 			addPurchaseDeliveryTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Cargo feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCargoPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_DischargeSlot_cargo_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_DischargeSlot_cargo_feature", "_UI_DischargeSlot_type"),
-				 CargoPackage.Literals.DISCHARGE_SLOT__CARGO,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**

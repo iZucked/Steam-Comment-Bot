@@ -13,13 +13,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.regex.Matcher;
-
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.hamcrest.core.AnyOf;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Matchers;

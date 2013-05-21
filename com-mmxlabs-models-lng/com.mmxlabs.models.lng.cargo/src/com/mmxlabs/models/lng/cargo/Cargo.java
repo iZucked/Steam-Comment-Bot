@@ -3,9 +3,15 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
-import com.mmxlabs.models.lng.types.ACargo;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,10 +21,9 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}</li>
  * </ul>
  * </p>
  *
@@ -26,63 +31,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Cargo extends ACargo {
-	/**
-	 * Returns the value of the '<em><b>Load Slot</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Load Slot</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Slot</em>' reference.
-	 * @see #setLoadSlot(LoadSlot)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_LoadSlot()
-	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getCargo
-	 * @model opposite="cargo" required="true"
-	 * @generated
-	 */
-	LoadSlot getLoadSlot();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#getLoadSlot <em>Load Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Slot</em>' reference.
-	 * @see #getLoadSlot()
-	 * @generated
-	 */
-	void setLoadSlot(LoadSlot value);
-
-	/**
-	 * Returns the value of the '<em><b>Discharge Slot</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo <em>Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Discharge Slot</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Discharge Slot</em>' reference.
-	 * @see #setDischargeSlot(DischargeSlot)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_DischargeSlot()
-	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo
-	 * @model opposite="cargo" required="true"
-	 * @generated
-	 */
-	DischargeSlot getDischargeSlot();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Discharge Slot</em>' reference.
-	 * @see #getDischargeSlot()
-	 * @generated
-	 */
-	void setDischargeSlot(DischargeSlot value);
-
+public interface Cargo extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -138,7 +87,7 @@ public interface Cargo extends ACargo {
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}&lt;com.mmxlabs.models.lng.fleet.Vessel>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
@@ -150,7 +99,27 @@ public interface Cargo extends ACargo {
 	 * @model
 	 * @generated
 	 */
-	EList<AVesselSet> getAllowedVessels();
+	EList<AVesselSet<Vessel>> getAllowedVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Slots</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Slot}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * The slots are all the slots linked to this {@link Cargo}. These could be {@link LoadSlot}s or {@link DischargeSlot}s
+	 *  - or any other slot implementation. Note this list is unsorted. Clients of this method should date sort the slots if required.
+	 *  See {@link #getSortedSlots()} or {@link CargoSlotSorter} to help with this.
+	 * </p>
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Slots</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_Slots()
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getCargo
+	 * @model opposite="cargo"
+	 * @generated
+	 */
+	EList<Slot> getSlots();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -159,6 +128,16 @@ public interface Cargo extends ACargo {
 	 * @generated
 	 */
 	CargoType getCargoType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Returns date sorted copy of the {@link #getSlots()} {@link List}. A new list is created each time this method is called.
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<Slot> getSortedSlots();
 
 } // end of  Cargo
 

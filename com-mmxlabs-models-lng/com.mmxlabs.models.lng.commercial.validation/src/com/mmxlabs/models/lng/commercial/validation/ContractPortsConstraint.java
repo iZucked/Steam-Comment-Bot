@@ -30,7 +30,7 @@ public class ContractPortsConstraint extends AbstractModelMultiConstraint {
 			if (!contract.getAllowedPorts().isEmpty()) {
 				if (contract.getPreferredPort() != null) {
 					
-					if (!SetUtils.getPorts(contract.getAllowedPorts()).contains(contract.getPreferredPort())) {
+					if (!SetUtils.getObjects(contract.getAllowedPorts()).contains(contract.getPreferredPort())) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
 								"Contract preferred port %s is not in the list of allowed ports.", contract.getPreferredPort().getName())));
 						status.addEObjectAndFeature(contract, CommercialPackage.eINSTANCE.getContract_PreferredPort());

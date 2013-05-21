@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -28,6 +29,9 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -190,7 +194,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		isInited = true;
 
 		// Initialize simple dependencies
-		TypesPackage.eINSTANCE.eClass();
+		CommercialPackage.eINSTANCE.eClass();
+		FleetPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theAnalyticsPackage.createPackageContents();
@@ -212,6 +217,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getAnalyticsModel() {
 		return analyticsModelEClass;
 	}
@@ -221,6 +227,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_RoundTripMatrices() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(0);
 	}
@@ -230,6 +237,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_SelectedMatrix() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(1);
 	}
@@ -240,6 +248,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_ShippingCostPlans() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(2);
 	}
@@ -250,6 +259,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getAnalyticsModel_CargoSandboxes() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(3);
 	}
@@ -259,6 +269,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getUnitCostMatrix() {
 		return unitCostMatrixEClass;
 	}
@@ -268,6 +279,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getUnitCostMatrix_FromPorts() {
 		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(0);
 	}
@@ -277,6 +289,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getUnitCostMatrix_ToPorts() {
 		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(1);
 	}
@@ -286,6 +299,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getUnitCostMatrix_Vessel() {
 		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(2);
 	}
@@ -295,6 +309,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_NotionalDayRate() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(3);
 	}
@@ -304,6 +319,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_Speed() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(4);
 	}
@@ -313,6 +329,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_RoundTrip() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(5);
 	}
@@ -322,6 +339,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_MinimumLoad() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(6);
 	}
@@ -331,6 +349,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_MaximumLoad() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(7);
 	}
@@ -340,6 +359,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_MinimumDischarge() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(8);
 	}
@@ -349,6 +369,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_MaximumDischarge() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(9);
 	}
@@ -358,6 +379,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_RetainHeel() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(10);
 	}
@@ -367,6 +389,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_CargoPrice() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(11);
 	}
@@ -376,6 +399,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_BaseFuelPrice() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(12);
 	}
@@ -385,6 +409,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_CvValue() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(13);
 	}
@@ -394,6 +419,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getUnitCostMatrix_CostLines() {
 		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(14);
 	}
@@ -403,6 +429,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getUnitCostMatrix_AllowedRoutes() {
 		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(15);
 	}
@@ -412,6 +439,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_RevenueShare() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(16);
 	}
@@ -421,6 +449,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_LadenTimeAllowance() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(17);
 	}
@@ -430,6 +459,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostMatrix_BallastTimeAllowance() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(18);
 	}
@@ -439,6 +469,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getUnitCostLine() {
 		return unitCostLineEClass;
 	}
@@ -448,6 +479,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_UnitCost() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(0);
 	}
@@ -457,6 +489,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_MmbtuDelivered() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(1);
 	}
@@ -466,6 +499,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getUnitCostLine_From() {
 		return (EReference)unitCostLineEClass.getEStructuralFeatures().get(2);
 	}
@@ -475,6 +509,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getUnitCostLine_To() {
 		return (EReference)unitCostLineEClass.getEStructuralFeatures().get(3);
 	}
@@ -484,6 +519,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_Duration() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(4);
 	}
@@ -493,6 +529,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_VolumeLoaded() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(5);
 	}
@@ -502,6 +539,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_VolumeDischarged() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(6);
 	}
@@ -511,6 +549,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_HireCost() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(7);
 	}
@@ -520,6 +559,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_FuelCost() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(8);
 	}
@@ -529,6 +569,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_CanalCost() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(9);
 	}
@@ -538,6 +579,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getUnitCostLine_CostComponents() {
 		return (EReference)unitCostLineEClass.getEStructuralFeatures().get(10);
 	}
@@ -547,6 +589,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_PortCost() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(11);
 	}
@@ -557,6 +600,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUnitCostLine_Profit() {
 		return (EAttribute)unitCostLineEClass.getEStructuralFeatures().get(12);
 	}
@@ -566,17 +610,20 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVoyage() {
 		return voyageEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVoyage_Route() {
-		return (EAttribute)voyageEClass.getEStructuralFeatures().get(0);
+	@Override
+	public EReference getVoyage_Route() {
+		return (EReference)voyageEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -584,6 +631,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVoyage_RouteCost() {
 		return (EAttribute)voyageEClass.getEStructuralFeatures().get(1);
 	}
@@ -593,6 +641,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVoyage_Speed() {
 		return (EAttribute)voyageEClass.getEStructuralFeatures().get(2);
 	}
@@ -602,6 +651,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVoyage_Distance() {
 		return (EAttribute)voyageEClass.getEStructuralFeatures().get(3);
 	}
@@ -611,6 +661,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVoyage_IdleTime() {
 		return (EAttribute)voyageEClass.getEStructuralFeatures().get(4);
 	}
@@ -620,6 +671,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVoyage_TravelTime() {
 		return (EAttribute)voyageEClass.getEStructuralFeatures().get(5);
 	}
@@ -629,6 +681,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVisit() {
 		return visitEClass;
 	}
@@ -638,6 +691,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVisit_PortCost() {
 		return (EAttribute)visitEClass.getEStructuralFeatures().get(0);
 	}
@@ -647,6 +701,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCostComponent() {
 		return costComponentEClass;
 	}
@@ -656,6 +711,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCostComponent_Duration() {
 		return (EAttribute)costComponentEClass.getEStructuralFeatures().get(0);
 	}
@@ -665,6 +721,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getCostComponent_HireCost() {
 		return (EAttribute)costComponentEClass.getEStructuralFeatures().get(1);
 	}
@@ -674,6 +731,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCostComponent_FuelCosts() {
 		return (EReference)costComponentEClass.getEStructuralFeatures().get(2);
 	}
@@ -683,6 +741,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFuelCost() {
 		return fuelCostEClass;
 	}
@@ -692,6 +751,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelCost_Name() {
 		return (EAttribute)fuelCostEClass.getEStructuralFeatures().get(0);
 	}
@@ -701,6 +761,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelCost_Unit() {
 		return (EAttribute)fuelCostEClass.getEStructuralFeatures().get(1);
 	}
@@ -710,6 +771,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelCost_Quantity() {
 		return (EAttribute)fuelCostEClass.getEStructuralFeatures().get(2);
 	}
@@ -719,6 +781,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getFuelCost_Cost() {
 		return (EAttribute)fuelCostEClass.getEStructuralFeatures().get(3);
 	}
@@ -728,6 +791,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getJourney() {
 		return journeyEClass;
 	}
@@ -737,6 +801,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getJourney_From() {
 		return (EReference)journeyEClass.getEStructuralFeatures().get(0);
 	}
@@ -746,6 +811,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getJourney_To() {
 		return (EReference)journeyEClass.getEStructuralFeatures().get(1);
 	}
@@ -756,6 +822,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getShippingCostPlan() {
 		return shippingCostPlanEClass;
 	}
@@ -766,6 +833,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getShippingCostPlan_Vessel() {
 		return (EReference)shippingCostPlanEClass.getEStructuralFeatures().get(0);
 	}
@@ -776,6 +844,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getShippingCostPlan_NotionalDayRate() {
 		return (EAttribute)shippingCostPlanEClass.getEStructuralFeatures().get(1);
 	}
@@ -786,6 +855,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getShippingCostPlan_BaseFuelPrice() {
 		return (EAttribute)shippingCostPlanEClass.getEStructuralFeatures().get(2);
 	}
@@ -796,6 +866,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getShippingCostPlan_Rows() {
 		return (EReference)shippingCostPlanEClass.getEStructuralFeatures().get(3);
 	}
@@ -806,6 +877,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getShippingCostRow() {
 		return shippingCostRowEClass;
 	}
@@ -816,6 +888,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getShippingCostRow_Port() {
 		return (EReference)shippingCostRowEClass.getEStructuralFeatures().get(0);
 	}
@@ -826,6 +899,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getShippingCostRow_Date() {
 		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(1);
 	}
@@ -836,6 +910,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getShippingCostRow_CargoPrice() {
 		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(2);
 	}
@@ -846,6 +921,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getShippingCostRow_CvValue() {
 		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(3);
 	}
@@ -856,6 +932,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getShippingCostRow_DestinationType() {
 		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(4);
 	}
@@ -866,6 +943,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getShippingCostRow_HeelVolume() {
 		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(5);
 	}
@@ -876,6 +954,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getShippingCostRow_IncludePortCosts() {
 		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(6);
 	}
@@ -888,6 +967,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getCargoSandbox() {
 		return cargoSandboxEClass;
 	}
@@ -898,6 +978,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getCargoSandbox_Cargoes() {
 		return (EReference)cargoSandboxEClass.getEStructuralFeatures().get(0);
 	}
@@ -908,6 +989,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getProvisionalCargo() {
 		return provisionalCargoEClass;
 	}
@@ -918,6 +1000,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getProvisionalCargo_Buy() {
 		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(0);
 	}
@@ -928,6 +1011,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getProvisionalCargo_Sell() {
 		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(1);
 	}
@@ -938,17 +1022,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getProvisionalCargo_CostLine() {
+	@Override
+	public EReference getProvisionalCargo_Vessel() {
 		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getProvisionalCargo_Vessel() {
+	public EReference getProvisionalCargo_PortfolioModel() {
 		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -958,6 +1042,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getBuyOpportunity() {
 		return buyOpportunityEClass;
 	}
@@ -968,6 +1053,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBuyOpportunity_Port() {
 		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(0);
 	}
@@ -978,6 +1064,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getBuyOpportunity_Contract() {
 		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(1);
 	}
@@ -988,6 +1075,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_Date() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(2);
 	}
@@ -998,6 +1086,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getBuyOpportunity_PriceExpression() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(3);
 	}
@@ -1008,6 +1097,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSellOpportunity() {
 		return sellOpportunityEClass;
 	}
@@ -1018,6 +1108,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSellOpportunity_Port() {
 		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(0);
 	}
@@ -1028,6 +1119,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSellOpportunity_Contract() {
 		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(1);
 	}
@@ -1038,6 +1130,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_Date() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(2);
 	}
@@ -1048,6 +1141,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSellOpportunity_PriceExpression() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(3);
 	}
@@ -1058,6 +1152,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getDestinationType() {
 		return destinationTypeEEnum;
 	}
@@ -1067,6 +1162,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public AnalyticsFactory getAnalyticsFactory() {
 		return (AnalyticsFactory)getEFactoryInstance();
 	}
@@ -1133,7 +1229,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(unitCostLineEClass, UNIT_COST_LINE__PROFIT);
 
 		voyageEClass = createEClass(VOYAGE);
-		createEAttribute(voyageEClass, VOYAGE__ROUTE);
+		createEReference(voyageEClass, VOYAGE__ROUTE);
 		createEAttribute(voyageEClass, VOYAGE__ROUTE_COST);
 		createEAttribute(voyageEClass, VOYAGE__SPEED);
 		createEAttribute(voyageEClass, VOYAGE__DISTANCE);
@@ -1179,8 +1275,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		provisionalCargoEClass = createEClass(PROVISIONAL_CARGO);
 		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__BUY);
 		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__SELL);
-		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__COST_LINE);
 		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__VESSEL);
+		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__PORTFOLIO_MODEL);
 
 		buyOpportunityEClass = createEClass(BUY_OPPORTUNITY);
 		createEReference(buyOpportunityEClass, BUY_OPPORTUNITY__PORT);
@@ -1224,6 +1320,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
+		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
+		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -1234,7 +1333,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		unitCostMatrixEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		unitCostMatrixEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		unitCostLineEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		unitCostLineEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
 		voyageEClass.getESuperTypes().add(this.getCostComponent());
 		visitEClass.getESuperTypes().add(this.getCostComponent());
 		shippingCostPlanEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
@@ -1252,9 +1350,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAnalyticsModel_CargoSandboxes(), this.getCargoSandbox(), null, "cargoSandboxes", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitCostMatrixEClass, UnitCostMatrix.class, "UnitCostMatrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getUnitCostMatrix_FromPorts(), theTypesPackage.getAPortSet(), null, "fromPorts", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnitCostMatrix_ToPorts(), theTypesPackage.getAPortSet(), null, "toPorts", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnitCostMatrix_Vessel(), theTypesPackage.getAVessel(), null, "vessel", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		EGenericType g1 = createEGenericType(theTypesPackage.getAPortSet());
+		EGenericType g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getUnitCostMatrix_FromPorts(), g1, null, "fromPorts", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getUnitCostMatrix_ToPorts(), g1, null, "toPorts", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnitCostMatrix_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_NotionalDayRate(), ecorePackage.getEInt(), "notionalDayRate", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_Speed(), ecorePackage.getEDouble(), "speed", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_RoundTrip(), ecorePackage.getEBoolean(), "roundTrip", "true", 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1267,7 +1371,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getUnitCostMatrix_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getUnitCostMatrix_CostLines(), this.getUnitCostLine(), null, "costLines", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnitCostMatrix_AllowedRoutes(), theTypesPackage.getARoute(), null, "allowedRoutes", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnitCostMatrix_AllowedRoutes(), thePortPackage.getRoute(), null, "allowedRoutes", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_RevenueShare(), ecorePackage.getEDouble(), "revenueShare", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_LadenTimeAllowance(), ecorePackage.getEDouble(), "ladenTimeAllowance", "0.06", 0, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_BallastTimeAllowance(), ecorePackage.getEDouble(), "ballastTimeAllowance", "0.06", 0, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1275,8 +1379,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(unitCostLineEClass, UnitCostLine.class, "UnitCostLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnitCostLine_UnitCost(), ecorePackage.getEDouble(), "unitCost", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostLine_MmbtuDelivered(), ecorePackage.getEInt(), "mmbtuDelivered", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnitCostLine_From(), theTypesPackage.getAPort(), null, "from", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnitCostLine_To(), theTypesPackage.getAPort(), null, "to", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnitCostLine_From(), thePortPackage.getPort(), null, "from", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnitCostLine_To(), thePortPackage.getPort(), null, "to", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostLine_Duration(), ecorePackage.getEInt(), "duration", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostLine_VolumeLoaded(), ecorePackage.getEInt(), "volumeLoaded", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostLine_VolumeDischarged(), ecorePackage.getEInt(), "volumeDischarged", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1290,7 +1394,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		addEOperation(unitCostLineEClass, ecorePackage.getEInt(), "getTotalCost", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(voyageEClass, Voyage.class, "Voyage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getVoyage_Route(), ecorePackage.getEString(), "route", null, 1, 1, Voyage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVoyage_Route(), thePortPackage.getRoute(), null, "route", null, 0, 1, Voyage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVoyage_RouteCost(), ecorePackage.getEInt(), "routeCost", null, 1, 1, Voyage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVoyage_Speed(), ecorePackage.getEDouble(), "speed", null, 1, 1, Voyage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVoyage_Distance(), ecorePackage.getEInt(), "distance", null, 1, 1, Voyage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1314,17 +1418,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getFuelCost_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, FuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(journeyEClass, Journey.class, "Journey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getJourney_From(), theTypesPackage.getAPort(), null, "from", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getJourney_To(), theTypesPackage.getAPort(), null, "to", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getJourney_From(), thePortPackage.getPort(), null, "from", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getJourney_To(), thePortPackage.getPort(), null, "to", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(shippingCostPlanEClass, ShippingCostPlan.class, "ShippingCostPlan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getShippingCostPlan_Vessel(), theTypesPackage.getAVessel(), null, "vessel", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getShippingCostPlan_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostPlan_NotionalDayRate(), ecorePackage.getEInt(), "notionalDayRate", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostPlan_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getShippingCostPlan_Rows(), this.getShippingCostRow(), null, "rows", null, 0, -1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(shippingCostRowEClass, ShippingCostRow.class, "ShippingCostRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getShippingCostRow_Port(), theTypesPackage.getAPort(), null, "port", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getShippingCostRow_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_Date(), ecorePackage.getEDate(), "date", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_CargoPrice(), ecorePackage.getEDouble(), "cargoPrice", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1338,18 +1442,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(provisionalCargoEClass, ProvisionalCargo.class, "ProvisionalCargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getProvisionalCargo_Buy(), this.getBuyOpportunity(), null, "buy", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProvisionalCargo_Sell(), this.getSellOpportunity(), null, "sell", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getProvisionalCargo_CostLine(), this.getUnitCostLine(), null, "costLine", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getProvisionalCargo_Vessel(), theTypesPackage.getAVessel(), null, "vessel", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProvisionalCargo_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProvisionalCargo_PortfolioModel(), ecorePackage.getEObject(), null, "portfolioModel", null, 0, 1, ProvisionalCargo.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyOpportunityEClass, BuyOpportunity.class, "BuyOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBuyOpportunity_Port(), theTypesPackage.getAPort(), null, "port", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBuyOpportunity_Contract(), theTypesPackage.getAPurchaseContract(), null, "contract", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBuyOpportunity_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBuyOpportunity_Contract(), theCommercialPackage.getPurchaseContract(), null, "contract", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_Date(), ecorePackage.getEDate(), "date", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sellOpportunityEClass, SellOpportunity.class, "SellOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSellOpportunity_Port(), theTypesPackage.getAPort(), null, "port", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSellOpportunity_Contract(), theTypesPackage.getASalesContract(), null, "contract", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSellOpportunity_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSellOpportunity_Contract(), theCommercialPackage.getSalesContract(), null, "contract", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_Date(), ecorePackage.getEDate(), "date", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

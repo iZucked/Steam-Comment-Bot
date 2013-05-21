@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.models.lng.port;
 
-import com.mmxlabs.models.lng.types.ARoute;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +27,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Route extends ARoute {
+public interface Route extends NamedObject, UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Lines</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.port.RouteLine}.
