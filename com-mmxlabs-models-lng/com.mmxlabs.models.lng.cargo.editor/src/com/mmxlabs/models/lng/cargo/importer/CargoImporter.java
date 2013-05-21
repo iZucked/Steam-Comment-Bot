@@ -224,6 +224,48 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	@Override
+	public Collection<EObject> importObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
+		final Collection<EObject> result = importRawObject(eClass, row, context);
+		LoadSlot load = null;
+		DischargeSlot discharge = null;
+		Cargo cargo = null;
+		for (final EObject o : result) {
+			if (o instanceof Cargo) {
+				cargo = (Cargo) o;
+			} else if (o instanceof LoadSlot) {
+				load = (LoadSlot) o;
+			} else if (o instanceof DischargeSlot) {
+				discharge = (DischargeSlot) o;
+			}
+		}
+
+		// fix missing names
+
+		final List<EObject> newResults = new ArrayList<EObject>(3);
+		boolean keepCargo = true;
+		if (load == null || load.getWindowStart() == null) {
+			keepCargo = false;
+		} else {
+			newResults.add(load);
+		}
+		if (discharge == null || discharge.getWindowStart() == null) {
+			keepCargo = false;
+		} else {
+			newResults.add(discharge);
+		}
+
+		if (!keepCargo) {
+			cargo.getSlots().clear();
+		} else {
+			cargo.getSlots().add(load);
+			cargo.getSlots().add(discharge);
+			newResults.add(cargo);
+		}
+
+		return newResults;
+	}
+
+	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
 		final LinkedList<EObject> results = new LinkedList<EObject>();
 		try {
@@ -233,7 +275,7 @@ public class CargoImporter extends DefaultClassImporter {
 				final Map<String, Cargo> cargoMap = new HashMap<String, Cargo>();
 				while ((row = reader.readRow()) != null) {
 					// Import Row Data
-					final Collection<EObject> result = importRawObject(importClass, row, context);
+					final Collection<EObject> result = importObject(importClass, row, context);
 
 					// Find the individual objects
 					LoadSlot load = null;
@@ -272,8 +314,10 @@ public class CargoImporter extends DefaultClassImporter {
 						}
 					}
 
+					// Always clear slots at this information will be updated below
+					tmpCargo.getSlots().clear();
 					if (!keepCargo) {
-						tmpCargo.getSlots().clear();
+						// Do nothing
 					} else if (realCargo == null) {
 						// Keep the cargo and this is the first time we have seen the cargo ID
 						realCargo = tmpCargo;
@@ -382,9 +426,6 @@ public class CargoImporter extends DefaultClassImporter {
 
 	}
 
-	/**
-	 * @since 3.1
-	 */
 	public Collection<EObject> importRawObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
 		objects.addAll(super.importObject(eClass, row, context));
@@ -412,5 +453,4 @@ public class CargoImporter extends DefaultClassImporter {
 		}
 		return objects;
 	}
-
 }

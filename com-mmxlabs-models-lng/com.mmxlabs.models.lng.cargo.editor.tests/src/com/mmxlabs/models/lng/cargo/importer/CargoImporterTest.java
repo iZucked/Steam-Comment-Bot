@@ -46,8 +46,8 @@ public class CargoImporterTest {
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Port().getName().toLowerCase(), "PortName");
 			row.put("buy.price", "PRICE+1");
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
-			row.put("buy." + CargoPackage.eINSTANCE.getSlot_WindowStart().getName().toLowerCase(), "2013-1-1");
-			row.put("buy." + CargoPackage.eINSTANCE.getSlot_WindowStartTime().getName().toLowerCase(), "9");
+			row.put("buy.date", "2013-1-1");
+			row.put("buy.time", "9");
 			row.put("buy." + CargoPackage.eINSTANCE.getLoadSlot_CargoCV().getName().toLowerCase(), "12.7");
 		}
 		CargoImporter cargoImporter = new CargoImporter();
@@ -97,8 +97,8 @@ public class CargoImporterTest {
 			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Port().getName().toLowerCase(), "PortName");
 			row.put("sell.price", "PRICE+1");
 			row.put("sell." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
-			row.put("sell." + CargoPackage.eINSTANCE.getSlot_WindowStart().getName().toLowerCase(), "2013-1-1");
-			row.put("sell." + CargoPackage.eINSTANCE.getSlot_WindowStartTime().getName().toLowerCase(), "9");
+			row.put("sell.date", "2013-1-1");
+			row.put("sell.time", "9");
 			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
 		}
 		CargoImporter cargoImporter = new CargoImporter();
