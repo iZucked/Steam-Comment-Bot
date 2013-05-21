@@ -161,6 +161,8 @@ public class CargoImporter extends DefaultClassImporter {
 				if (slot.getCargo() == null) {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
 					exportSlot(root, result, slot, KEY_LOADSLOT);
+					/*
+					*/
 					data.add(result);
 				}
 			}
@@ -170,6 +172,8 @@ public class CargoImporter extends DefaultClassImporter {
 				if (slot.getCargo() == null) {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
 					exportSlot(root, result, slot, KEY_DISCHARGESLOT);
+					/*
+					*/
 					data.add(result);
 				}
 			}
