@@ -4,19 +4,21 @@
  */
 package com.mmxlabs.models.mmxcore.provider;
 
-import com.mmxlabs.models.mmxcore.util.MMXCoreAdapterFactory;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-
+import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ChangeNotifier;
+import org.eclipse.emf.edit.provider.ChildCreationExtenderManager;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IChangeNotifier;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -24,6 +26,9 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.util.MMXCoreAdapterFactory;
 
 /**
  * This is the factory that is used to provide the interfaces needed to support Viewers.
@@ -34,7 +39,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable, IChildCreationExtender {
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -50,6 +55,15 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	 * @generated
 	 */
 	protected IChangeNotifier changeNotifier = new ChangeNotifier();
+
+	/**
+	 * This helps manage the child creation extenders.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ChildCreationExtenderManager childCreationExtenderManager = new ChildCreationExtenderManager(MmxcoreEditPlugin.INSTANCE, MMXCorePackage.eNS_URI);
 
 	/**
 	 * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
@@ -71,29 +85,6 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 		supportedTypes.add(ITreeItemContentProvider.class);
 		supportedTypes.add(IItemLabelProvider.class);
 		supportedTypes.add(IItemPropertySource.class);
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXObject} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MMXObjectItemProvider mmxObjectItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.MMXObject}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMMXObjectAdapter() {
-		if (mmxObjectItemProvider == null) {
-			mmxObjectItemProvider = new MMXObjectItemProvider(this);
-		}
-
-		return mmxObjectItemProvider;
 	}
 
 	/**
@@ -143,29 +134,6 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXProxy} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MMXProxyItemProvider mmxProxyItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.MMXProxy}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMMXProxyAdapter() {
-		if (mmxProxyItemProvider == null) {
-			mmxProxyItemProvider = new MMXProxyItemProvider(this);
-		}
-
-		return mmxProxyItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXRootObject} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -186,29 +154,6 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 		}
 
 		return mmxRootObjectItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.MMXSubModel} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MMXSubModelItemProvider mmxSubModelItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.MMXSubModel}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMMXSubModelAdapter() {
-		if (mmxSubModelItemProvider == null) {
-			mmxSubModelItemProvider = new MMXSubModelItemProvider(this);
-		}
-
-		return mmxSubModelItemProvider;
 	}
 
 	/**
@@ -270,6 +215,36 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public List<IChildCreationExtender> getChildCreationExtenders() {
+		return childCreationExtenderManager.getChildCreationExtenders();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
+		return childCreationExtenderManager.getNewChildDescriptors(object, editingDomain);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ResourceLocator getResourceLocator() {
+		return childCreationExtenderManager;
+	}
+
+	/**
 	 * This adds a listener.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -310,12 +285,9 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	 * @generated
 	 */
 	public void dispose() {
-		if (mmxObjectItemProvider != null) mmxObjectItemProvider.dispose();
 		if (namedObjectItemProvider != null) namedObjectItemProvider.dispose();
 		if (uuidObjectItemProvider != null) uuidObjectItemProvider.dispose();
-		if (mmxProxyItemProvider != null) mmxProxyItemProvider.dispose();
 		if (mmxRootObjectItemProvider != null) mmxRootObjectItemProvider.dispose();
-		if (mmxSubModelItemProvider != null) mmxSubModelItemProvider.dispose();
 	}
 
 }

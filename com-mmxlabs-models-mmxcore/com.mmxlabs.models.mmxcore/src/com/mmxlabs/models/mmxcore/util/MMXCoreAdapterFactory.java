@@ -4,14 +4,16 @@
  */
 package com.mmxlabs.models.mmxcore.util;
 
-import com.mmxlabs.models.mmxcore.*;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -82,16 +84,8 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 				return createUUIDObjectAdapter();
 			}
 			@Override
-			public Adapter caseMMXProxy(MMXProxy object) {
-				return createMMXProxyAdapter();
-			}
-			@Override
 			public Adapter caseMMXRootObject(MMXRootObject object) {
 				return createMMXRootObjectAdapter();
-			}
-			@Override
-			public Adapter caseMMXSubModel(MMXSubModel object) {
-				return createMMXSubModelAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -156,20 +150,6 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXProxy <em>MMX Proxy</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.mmxcore.MMXProxy
-	 * @generated
-	 */
-	public Adapter createMMXProxyAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXRootObject <em>MMX Root Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -180,20 +160,6 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMMXRootObjectAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXSubModel <em>MMX Sub Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.mmxcore.MMXSubModel
-	 * @generated
-	 */
-	public Adapter createMMXSubModelAdapter() {
 		return null;
 	}
 

@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 public abstract class MMXContentAdapter extends EContentAdapter implements IMMXAdapter {
 	private List<Notification> missedNotifications = new LinkedList<Notification>();
@@ -24,8 +23,6 @@ public abstract class MMXContentAdapter extends EContentAdapter implements IMMXA
 	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
 	
 	public MMXContentAdapter() {
-		ignoredFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Proxies());
-		ignoredFeatures.addAll(MMXCorePackage.eINSTANCE.getMMXProxy().getEStructuralFeatures());
 	}
 	
 	@Override

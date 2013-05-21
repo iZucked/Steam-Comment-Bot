@@ -4,17 +4,13 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
-import java.util.Map;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -163,11 +159,4 @@ public class UUIDObjectImpl extends MMXObjectImpl implements UUIDObject {
 		result.append(')');
 		return result.toString();
 	}
-
-	@Override
-	public void collectUUIDObjects(Map<String, UUIDObject> objectsByUUID) {
-		super.collectUUIDObjects(objectsByUUID);
-		objectsByUUID.put(getUuid(), this);
-	}
-	
 } //UUIDObjectImpl
