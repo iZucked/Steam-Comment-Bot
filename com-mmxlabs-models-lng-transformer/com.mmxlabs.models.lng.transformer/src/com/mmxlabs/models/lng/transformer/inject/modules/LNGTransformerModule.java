@@ -52,7 +52,7 @@ public class LNGTransformerModule extends AbstractModule {
 	private final LNGScenarioModel scenario;
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public LNGTransformerModule(final LNGScenarioModel scenario) {
 		this.scenario = scenario;
