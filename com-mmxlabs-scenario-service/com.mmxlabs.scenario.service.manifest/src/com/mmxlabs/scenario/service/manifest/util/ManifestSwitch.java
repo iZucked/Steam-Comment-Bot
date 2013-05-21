@@ -4,12 +4,12 @@
  */
 package com.mmxlabs.scenario.service.manifest.util;
 
-import com.mmxlabs.scenario.service.manifest.*;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 
 /**
  * <!-- begin-user-doc -->

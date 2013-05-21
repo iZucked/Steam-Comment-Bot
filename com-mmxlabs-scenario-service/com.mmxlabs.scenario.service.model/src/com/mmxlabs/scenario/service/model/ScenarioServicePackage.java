@@ -407,22 +407,14 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__ADAPTERS = CONTAINER_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Sub Model UR Is</b></em>' attribute list.
+	 * The feature id for the '<em><b>Root Object URI</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__SUB_MODEL_UR_IS = CONTAINER_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Dependency UUI Ds</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCENARIO_INSTANCE__DEPENDENCY_UUI_DS = CONTAINER_FEATURE_COUNT + 6;
+	int SCENARIO_INSTANCE__ROOT_OBJECT_URI = CONTAINER_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Dirty</b></em>' attribute.
@@ -431,7 +423,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__DIRTY = CONTAINER_FEATURE_COUNT + 7;
+	int SCENARIO_INSTANCE__DIRTY = CONTAINER_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Locks</b></em>' containment reference list.
@@ -440,7 +432,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__LOCKS = CONTAINER_FEATURE_COUNT + 8;
+	int SCENARIO_INSTANCE__LOCKS = CONTAINER_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Validation Status Code</b></em>' attribute.
@@ -449,7 +441,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = CONTAINER_FEATURE_COUNT + 9;
+	int SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = CONTAINER_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Scenario Version</b></em>' attribute.
@@ -459,7 +451,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__SCENARIO_VERSION = CONTAINER_FEATURE_COUNT + 10;
+	int SCENARIO_INSTANCE__SCENARIO_VERSION = CONTAINER_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Version Context</b></em>' attribute.
@@ -469,17 +461,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__VERSION_CONTEXT = CONTAINER_FEATURE_COUNT + 11;
+	int SCENARIO_INSTANCE__VERSION_CONTEXT = CONTAINER_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Fragments</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__FRAGMENTS = CONTAINER_FEATURE_COUNT + 12;
+	int SCENARIO_INSTANCE__FRAGMENTS = CONTAINER_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
@@ -489,7 +481,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 13;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -622,7 +614,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl <em>Scenario Fragment</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl
 	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioFragment()
@@ -633,7 +625,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Scenario Instance</b></em>' container reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -643,7 +635,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -653,7 +645,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fragment</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -663,7 +655,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Content Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -673,7 +665,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Scenario Fragment</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -896,26 +888,16 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getScenarioInstance_Adapters();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getSubModelURIs <em>Sub Model UR Is</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getRootObjectURI <em>Root Object URI</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Sub Model UR Is</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getSubModelURIs()
+	 * @return the meta object for the attribute '<em>Root Object URI</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getRootObjectURI()
 	 * @see #getScenarioInstance()
 	 * @generated
 	 */
-	EAttribute getScenarioInstance_SubModelURIs();
-
-	/**
-	 * Returns the meta object for the attribute list '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getDependencyUUIDs <em>Dependency UUI Ds</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Dependency UUI Ds</em>'.
-	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getDependencyUUIDs()
-	 * @see #getScenarioInstance()
-	 * @generated
-	 */
-	EAttribute getScenarioInstance_DependencyUUIDs();
+	EAttribute getScenarioInstance_RootObjectURI();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getScenarioVersion <em>Scenario Version</em>}'.
@@ -944,7 +926,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Fragments</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments()
@@ -1119,7 +1101,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioFragment <em>Scenario Fragment</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Scenario Fragment</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment
@@ -1130,7 +1112,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the container reference '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getScenarioInstance <em>Scenario Instance</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the container reference '<em>Scenario Instance</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getScenarioInstance()
@@ -1142,7 +1124,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getName()
@@ -1154,7 +1136,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getFragment <em>Fragment</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Fragment</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getFragment()
@@ -1166,7 +1148,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getContentType <em>Content Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Content Type</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getContentType()
@@ -1372,20 +1354,13 @@ public interface ScenarioServicePackage extends EPackage {
 		EAttribute SCENARIO_INSTANCE__ADAPTERS = eINSTANCE.getScenarioInstance_Adapters();
 
 		/**
-		 * The meta object literal for the '<em><b>Sub Model UR Is</b></em>' attribute list feature.
+		 * The meta object literal for the '<em><b>Root Object URI</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_INSTANCE__SUB_MODEL_UR_IS = eINSTANCE.getScenarioInstance_SubModelURIs();
-
-		/**
-		 * The meta object literal for the '<em><b>Dependency UUI Ds</b></em>' attribute list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__DEPENDENCY_UUI_DS = eINSTANCE.getScenarioInstance_DependencyUUIDs();
+		EAttribute SCENARIO_INSTANCE__ROOT_OBJECT_URI = eINSTANCE.getScenarioInstance_RootObjectURI();
 
 		/**
 		 * The meta object literal for the '<em><b>Scenario Version</b></em>' attribute feature.
@@ -1408,7 +1383,7 @@ public interface ScenarioServicePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Fragments</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1541,7 +1516,7 @@ public interface ScenarioServicePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl <em>Scenario Fragment</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl
 		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioFragment()
@@ -1552,7 +1527,7 @@ public interface ScenarioServicePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Scenario Instance</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1561,7 +1536,7 @@ public interface ScenarioServicePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1570,7 +1545,7 @@ public interface ScenarioServicePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Fragment</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1579,7 +1554,7 @@ public interface ScenarioServicePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Content Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

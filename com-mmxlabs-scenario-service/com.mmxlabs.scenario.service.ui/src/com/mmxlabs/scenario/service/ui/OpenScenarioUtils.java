@@ -48,7 +48,7 @@ public class OpenScenarioUtils {
 	}
 
 	/**
-	 * @since 3.1
+	 * @since 4.0
 	 */
 	public static IEditorPart openAndReturnEditorPart(final IWorkbenchPage activePage, final ScenarioInstance model) throws PartInitException {
 		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
@@ -56,7 +56,7 @@ public class OpenScenarioUtils {
 	}
 
 	/**
-	 * @since 3.1
+	 * @since 4.0
 	 */
 	public static IEditorPart openAndReturnEditorPart(final IWorkbenchPage activePage, final IScenarioServiceEditorInput editorInput) throws PartInitException {
 

@@ -4,6 +4,17 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import static com.mmxlabs.scenario.service.model.ScenarioServicePackage.CONTAINER;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -14,16 +25,6 @@ import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EGenericType;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -330,20 +331,12 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getScenarioInstance_SubModelURIs() {
+	public EAttribute getScenarioInstance_RootObjectURI() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getScenarioInstance_DependencyUUIDs() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -353,7 +346,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_ScenarioVersion() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(10);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -363,7 +356,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_VersionContext() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(11);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -373,7 +366,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	public EReference getScenarioInstance_Fragments() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(12);
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -382,7 +375,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_Dirty() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(7);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -391,7 +384,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	public EReference getScenarioInstance_Locks() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(8);
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -400,7 +393,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_ValidationStatusCode() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(9);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -622,8 +615,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__LOCKED);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__INSTANCE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__ADAPTERS);
-		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__SUB_MODEL_UR_IS);
-		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__DEPENDENCY_UUI_DS);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__ROOT_OBJECT_URI);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__DIRTY);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__LOCKS);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VALIDATION_STATUS_CODE);
@@ -737,10 +729,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		g1.getETypeArguments().add(g2);
 		initEAttribute(getScenarioInstance_Adapters(), g1, "adapters", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
-		initEAttribute(getScenarioInstance_SubModelURIs(), ecorePackage.getEString(), "subModelURIs", null, 0, -1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+		initEAttribute(getScenarioInstance_RootObjectURI(), ecorePackage.getEString(), "rootObjectURI", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getScenarioInstance_DependencyUUIDs(), ecorePackage.getEString(), "dependencyUUIDs", null, 0, -1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_Dirty(), ecorePackage.getEBoolean(), "dirty", "false", 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenarioInstance_Locks(), this.getScenarioLock(), this.getScenarioLock_Instance(), "locks", null, 0, -1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,

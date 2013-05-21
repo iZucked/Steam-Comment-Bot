@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.scenario.service.model;
 
-import com.mmxlabs.scenario.service.IScenarioService;
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.scenario.service.IScenarioService;
 
 /**
  * <!-- begin-user-doc -->
