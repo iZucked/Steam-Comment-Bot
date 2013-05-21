@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -237,13 +236,13 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// This is not calculator.multiply, because hireRate is not scaled.
 					if (hireRateCurve != null) {
-						int hireRate = (int) hireRateCurve.getValueAtPoint(vesselStartTime);
+						int hireRate = hireRateCurve.getValueAtPoint(vesselStartTime);
 						final long hireCost = (long) hireRate * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
 						currentCost += hireCost;
 					}
 
-					// Check for capacity violations, prefer solutions with fewer violations
-					currentProblemCount = currentPlan.getCapacityViolations();
+					// Check for violations, prefer solutions with fewer violations
+					currentProblemCount = currentPlan.getViolationsCount();
 
 					if (currentProblemCount < bestLastProblemCount || (currentProblemCount == bestLastProblemCount && currentCost < bestLastLegCost)) {
 						bestLastLegCost = currentCost;
@@ -273,9 +272,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			currentPlan = calculateVoyagePlan();
 			cost = evaluatePlan(currentPlan);
 			if (currentPlan != null) {
-				currentProblemCount = currentPlan.getCapacityViolations();
-			}
-			else {
+				currentProblemCount = currentPlan.getViolationsCount();
+			} else {
 				currentProblemCount = Integer.MAX_VALUE;
 			}
 		}
@@ -406,7 +404,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		final int feasibility = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, CollectionsUtil.integersToIntArray(arrivalTimes), currentSequence.toArray());
+		final int feasibility = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, arrivalTimes, currentSequence.toArray());
 
 		if (feasibility >= 0) {
 			return currentPlan;

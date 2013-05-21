@@ -11,7 +11,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * A common interface for events that use fuel to implement
  * 
  * @author hinton
- *
+ * 
  */
 public interface IFuelUsingEvent {
 	/**
@@ -29,4 +29,20 @@ public interface IFuelUsingEvent {
 	 * @return
 	 */
 	long getFuelCost(FuelComponent fuel);
+
+	/**
+	 * Return the unit price for this fuel component. See also {@link #getFuelPriceUnit(FuelComponent)}
+	 * 
+	 * @param fuel
+	 * @return
+	 */
+	int getFuelUnitPrice(FuelComponent fuel);
+
+	/**
+	 * Returns the {@link FuelUnit} used for the price per unit. See {@link #getFuelUnitPrice(FuelComponent)}.
+	 * 
+	 * @param fuel
+	 * @return
+	 */
+	FuelUnit getFuelPriceUnit(FuelComponent fuel);
 }

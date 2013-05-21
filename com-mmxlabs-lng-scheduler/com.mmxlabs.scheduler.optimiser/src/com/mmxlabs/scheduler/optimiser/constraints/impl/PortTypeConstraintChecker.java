@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -47,6 +48,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IOrderedSequenceElementsDataComponentProvider orderedSequenceProvider;
 
 	/**
 	 * @since 2.0
@@ -146,16 +150,19 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				}
 			}
 
+			// don't enforce any constraints here if the ordered sequence provider specifies a previous element
+			final boolean checkConstraint = (orderedSequenceProvider.getPreviousElement(t) == null && (previous == null || orderedSequenceProvider.getNextElement(previous) == null));
+
 			switch (type) {
 			case Discharge:
-				if (seenDischarge) {
+				if (seenDischarge && checkConstraint) {
 					// Cannot have two discharges in a row
 					if (messages != null) {
 						messages.add("Cannot have two PortType.Discharge in a row");
 					}
 					return false;
 				}
-				if (!seenLoad) {
+				if (!seenLoad && checkConstraint) {
 					// Cannot discharge without loading
 					if (messages != null) {
 						messages.add("Cannot have PortType.Discharge without a PortType.Load");
@@ -166,7 +173,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				seenDischarge = true;
 				break;
 			case Load:
-				if (seenLoad) {
+				if (seenLoad && checkConstraint) {
 					// Cannot have two loads in a row
 					if (messages != null) {
 						messages.add("Cannot have two PortType.Load in a row");
@@ -177,7 +184,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				seenDischarge = false;
 				break;
 			case Start:
-				if (previous != null) {
+				if (previous != null && checkConstraint) {
 					// Start must occur at the start
 					if (messages != null) {
 						messages.add("PortType.Start must occur at beginning of Sequence");
@@ -193,7 +200,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Maintenance:
 			case Other:
 			case Virtual:
-				if (seenLoad) {
+				if (seenLoad && checkConstraint) {
 					// Cannot insert between load and discharge
 					if (messages != null) {
 						messages.add("Cannot insert " + type + " between PortType.Load and PortType.Discharge");
@@ -202,7 +209,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				}
 				break;
 			case End:
-				if (seenLoad) {
+				if (seenLoad && checkConstraint) {
 					// Need a discharge
 					if (messages != null) {
 						messages.add("Cannot leave unused Need to PortType.Load");
@@ -255,6 +262,14 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
+
+		// don't enforce any constraints here if the ordered sequence provider specifies a previous element
+		if (orderedSequenceProvider.getPreviousElement(second) != null) {
+			return true;
+		}
+		if (orderedSequenceProvider.getNextElement(first) != null) {
+			return true;
+		}
 
 		// check the legality of this sequencing decision
 		// End can't come before anything and Start can't come after anything

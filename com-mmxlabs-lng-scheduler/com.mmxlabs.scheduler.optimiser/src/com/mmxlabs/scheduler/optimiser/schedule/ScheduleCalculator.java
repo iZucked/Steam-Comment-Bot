@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Provider;
@@ -17,6 +19,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -127,10 +131,11 @@ public class ScheduleCalculator {
 			// now add some more data for each load slot
 			final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
 			for (final IAllocationAnnotation annotation : allocations.values()) {
-				final ISequenceElement loadElement = portSlotProvider.getElement(annotation.getLoadOption());
-				final ISequenceElement dischargeElement = portSlotProvider.getElement(annotation.getDischargeOption());
-				elementAnnotations.setAnnotation(loadElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
-				elementAnnotations.setAnnotation(dischargeElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
+				final List<IPortSlot> slots = annotation.getSlots();
+				for (final IPortSlot portSlot : slots) {
+					final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
+					elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
+				}
 			}
 		}
 
@@ -149,32 +154,41 @@ public class ScheduleCalculator {
 
 			int time = sequence.getStartTime();
 
-			// FIXME : This is messy, what if iterator order is out of sync!
-			// TODO Turn into a map! -- volume allocator should perform the hook up
-
 			for (final VoyagePlan plan : sequence.getVoyagePlans()) {
 				boolean cargo = false;
 				if (plan.getSequence().length >= 3) {
 
-					PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
-					PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
+					// Extract list of all the PortDetails encountered
+					final List<PortDetails> portDetails = new LinkedList<PortDetails>();
+					for (final Object obj : plan.getSequence()) {
+						if (obj instanceof PortDetails) {
+							portDetails.add((PortDetails) obj);
+						}
+					}
+
+					// TODO: this logic looks decidedly shaky - plan sequence length could change with logic changes
+					final boolean isDesFobCase = ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan
+							.getSequence().length == 4);
 
 					final IAllocationAnnotation currentAllocation = allocations.get(plan);
+					if (currentAllocation != null) {
+						if (isDesFobCase) {
+							final PortDetails firstDetails = portDetails.get(1);
 
-					if ((currentAllocation != null)
-							&& ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
-						cargo = true;
-						final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
-						firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
-					} else if ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 4) {
-						firstDetails = (PortDetails) plan.getSequence()[1];
-						lastDetails = (PortDetails) plan.getSequence()[2];
-						if ((currentAllocation != null)
-								&& ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
 							cargo = true;
+
+							// for now, only handle single load/discharge case
+							assert (currentAllocation.getSlots().size() == 2);
+							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getLoadTime(), annotatedSolution);
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
+							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
+
+						} else {
+							final PortDetails firstDetails = portDetails.get(0);
+							cargo = true;
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
 							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
 						}
 					}

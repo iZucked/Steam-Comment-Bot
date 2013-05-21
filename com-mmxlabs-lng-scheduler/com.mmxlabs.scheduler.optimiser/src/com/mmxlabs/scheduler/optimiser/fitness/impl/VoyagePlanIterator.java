@@ -89,7 +89,7 @@ public class VoyagePlanIterator {
 	}
 
 	public final boolean nextObjectIsStartOfPlan() {
-		return ((currentSequence != null) && (currentPlanIndex == 0)) || planIterator.hasNext();
+		return ((currentPlanIndex >= (currentSequence.length - 1) && currentPlan.isIgnoreEnd()) || currentPlanIndex >= currentSequence.length);
 	}
 
 	public final int getCurrentTime() {

@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -97,7 +98,7 @@ public class TestCalculations {
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
 		final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -120,7 +121,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
@@ -131,7 +132,7 @@ public class TestCalculations {
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, false);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
+		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
 		builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 24);
 		builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 24);
@@ -161,7 +162,6 @@ public class TestCalculations {
 		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
 		voyageCalculator.setPortCVProvider(portCVProvider);
-		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
 
@@ -317,8 +317,7 @@ public class TestCalculations {
 
 			Assert.assertEquals(24 * laden_nboRateInM3PerHour, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
 			Assert.assertEquals((24l * 1200l * 500000) / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-			// Not yet set
-			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+			Assert.assertEquals(24l * laden_nboRateInM3PerHour * cargoCVValue / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 			// Assert.assertEquals(25 * 1200 * 2,
 			// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 			// FuelUnit.MMBTu));
@@ -417,8 +416,7 @@ public class TestCalculations {
 
 			Assert.assertEquals(24 * ballast_nboRateInM3PerHour, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
 			Assert.assertEquals((24l * ballast_nboRateInM3PerHour * baseFuelEquivalence) / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-			// Not yet set
-			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+			Assert.assertEquals(24l * ballast_nboRateInM3PerHour * cargoCVValue / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 			// Assert.assertEquals(25 * 1000 * 2,
 			// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 			// FuelUnit.MMBTu));
@@ -520,7 +518,7 @@ public class TestCalculations {
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
 		final int baseFuelUnitEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelUnitEquivalence, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelUnitEquivalence, 0, Integer.MAX_VALUE, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -548,7 +546,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
@@ -559,7 +557,7 @@ public class TestCalculations {
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, false);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
+		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
 		builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
 		builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 25);
@@ -590,8 +588,6 @@ public class TestCalculations {
 
 		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
 		voyageCalculator.setPortCVProvider(portCVProvider);
-
-		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
 
@@ -748,15 +744,14 @@ public class TestCalculations {
 
 			Assert.assertEquals(18 * laden_nboRateInM3PerHour, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
 			Assert.assertEquals((18l * laden_nboRateInM3PerHour * baseFuelUnitEquivalence) / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-			// Not yet set
-			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+			Assert.assertEquals(18l * laden_nboRateInM3PerHour * cargoCVValue / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 			// Assert.assertEquals(25 * 1200 * 2,
 			// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 			// FuelUnit.MMBTu));
 
 			Assert.assertEquals(18 * 800, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
 			Assert.assertEquals((18l * 800 * baseFuelUnitEquivalence) / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+			Assert.assertEquals(18l * 800 * cargoCVValue / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
 			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
 			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
@@ -801,7 +796,7 @@ public class TestCalculations {
 
 			Assert.assertEquals(6 * 1000, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
 			Assert.assertEquals((6l * 1000 * 500) / Calculator.ScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-			Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+			Assert.assertEquals(6l * 1000 * cargoCVValue / Calculator.HighScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
 			Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
@@ -847,15 +842,14 @@ public class TestCalculations {
 
 			Assert.assertEquals(18 * 1000, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
 			Assert.assertEquals((18l * 1000l * 500) / Calculator.ScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
-			// Not yet set
-			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+			Assert.assertEquals(18l * 1000 * cargoCVValue / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 			// Assert.assertEquals(25 * 1000 * 2,
 			// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 			// FuelUnit.MMBTu));
 			//
 			Assert.assertEquals(18 * 800, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
 			Assert.assertEquals((18l * 800l * 500) / Calculator.ScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
-			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
+			Assert.assertEquals(18l * 800 * cargoCVValue / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
 			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
 			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
@@ -900,7 +894,7 @@ public class TestCalculations {
 
 			Assert.assertEquals(6 * 800, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
 			Assert.assertEquals((6 * 800 * 500) / Calculator.ScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-			Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+			Assert.assertEquals(6l * 800 * cargoCVValue / Calculator.HighScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
 			Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
@@ -950,7 +944,7 @@ public class TestCalculations {
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(1);
 		final int baseFuelEquivalance = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalance, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalance, 0, Integer.MAX_VALUE, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -977,7 +971,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2);
@@ -988,7 +982,7 @@ public class TestCalculations {
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, false);
 
-		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
+		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
 		builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
 		builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 25);
@@ -1018,7 +1012,6 @@ public class TestCalculations {
 		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
 		voyageCalculator.setPortCVProvider(portCVProvider);
-		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
 
@@ -1179,7 +1172,7 @@ public class TestCalculations {
 			Assert.assertEquals(18 * 1200, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
 			Assert.assertEquals((18l * 1200l * 500) / Calculator.ScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
 			// Not yet set
-			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
+			Assert.assertEquals(18l * laden_nboRateInM3PerHour * cargoCVValue / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 			// Assert.assertEquals(25 * 1200 * 2,
 			// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 			// FuelUnit.MMBTu));
@@ -1231,7 +1224,7 @@ public class TestCalculations {
 
 			Assert.assertEquals(6 * 1000, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
 			Assert.assertEquals((6l * 1000 * 500) / Calculator.ScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT));
-			Assert.assertEquals(0, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
+			Assert.assertEquals(6l * 1000 * cargoCVValue / Calculator.HighScaleFactor, idleEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MMBTu));
 
 			Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.NBO));
 			Assert.assertEquals(0, idleEvent.getFuelCost(FuelComponent.FBO));
@@ -1377,12 +1370,12 @@ public class TestCalculations {
 	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences,  final IAnnotatedSolution solution) {
+		public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources,  final IAnnotatedSolution solution) {
+		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 

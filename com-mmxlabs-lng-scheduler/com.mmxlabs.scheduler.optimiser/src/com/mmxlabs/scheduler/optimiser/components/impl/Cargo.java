@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.List;
+
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 /**
  * Default implementation of {@link ICargo}.
@@ -16,37 +17,14 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
  */
 public final class Cargo implements ICargo {
 
-	private ILoadOption loadSlot;
+	private final List<IPortSlot> portSlots;
 
-	private IDischargeOption dischargeSlot;
-
-	private String id;
-
-	@Override
-	public ILoadOption getLoadOption() {
-		return loadSlot;
-	}
-
-	public void setLoadOption(final ILoadOption loadOption) {
-		this.loadSlot = loadOption;
+	public Cargo(final List<IPortSlot> portSlots) {
+		this.portSlots = portSlots;
 	}
 
 	@Override
-	public IDischargeOption getDischargeOption() {
-		return dischargeSlot;
+	public List<IPortSlot> getPortSlots() {
+		return portSlots;
 	}
-
-	public void setDischargeOption(final IDischargeOption dischargeOption) {
-		this.dischargeSlot = dischargeOption;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	public void setId(final String id) {
-		this.id = id;
-	}
-
 }

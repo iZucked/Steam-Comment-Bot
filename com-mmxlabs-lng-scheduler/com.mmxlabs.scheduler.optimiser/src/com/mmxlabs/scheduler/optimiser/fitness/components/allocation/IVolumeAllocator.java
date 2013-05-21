@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
+import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -44,7 +45,7 @@ public interface IVolumeAllocator {
 	 * @return
 	 * @since 2.0
 	 */
-	public IAllocationAnnotation allocate(IVessel vessel, VoyagePlan plan, int[] arrivalTimes);
+	public IAllocationAnnotation allocate(IVessel vessel, VoyagePlan plan, List<Integer> arrivalTimes);
 
 	public void dispose();
 

@@ -50,11 +50,6 @@ public final class VesselClass implements IVesselClass {
 	private long cooldownVolume;
 
 	/**
-	 * The time in hours required to cool the tanks on vessels of this class.
-	 */
-	private int cooldownTime;
-
-	/**
 	 * The time in hours required for empty tanks to warm up on vessels of this class.
 	 */
 	private int warmupTime;
@@ -207,21 +202,12 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	@Override
-	public int getCooldownTime() {
-		return cooldownTime;
-	}
-
-	@Override
 	public long getCooldownVolume() {
 		return cooldownVolume;
 	}
 
 	public void setCooldownVolume(final long cooldownVolume) {
 		this.cooldownVolume = cooldownVolume;
-	}
-
-	public void setCooldownTime(final int cooldownTime) {
-		this.cooldownTime = cooldownTime;
 	}
 
 	public void setWarmupTime(final int warmupTime) {

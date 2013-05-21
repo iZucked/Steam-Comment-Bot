@@ -4,8 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
+import java.util.List;
+
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 /**
  * An annotation which is appended to both {@link ILoadOption} and {@link IDischargeOption} indicating decisions made by the {@link IVolumeAllocator}
@@ -14,15 +17,21 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
  * 
  */
 public interface IAllocationAnnotation {
+	/*
+	@Deprecated
 	ILoadOption getLoadOption();
 
+	@Deprecated
 	IDischargeOption getDischargeOption();
+	*/
+	
+	List<IPortSlot> getSlots();
 
 	/**
 	 * Returns the total load volume in M3. This is the sum of the discharge volume, fuel volume and the remaining heel.
 	 * 
 	 */
-	long getLoadVolumeInM3();
+	//long getLoadVolumeInM3();
 
 	/**
 	 * Returns the total LNG in m3 used as fuel during this cargo.
@@ -43,33 +52,21 @@ public interface IAllocationAnnotation {
 	 * 
 	 * @return
 	 */
-	long getDischargeVolumeInM3();
+	//long getDischargeVolumeInM3();
+	long getSlotVolumeInM3(IPortSlot slot);
 
 	/**
-	 * Returns the time loading began
+	 * Returns the time a load or discharge began
 	 * 
 	 * @return
 	 */
-	int getLoadTime();
+	int getSlotTime(IPortSlot slot);
 
 	/**
-	 * Returns the time discharging began
+	 * Returns the price per M3 for LNG bought or sold at this slot
 	 * 
+	 * @param slot
 	 * @return
 	 */
-	int getDischargeTime();
-
-	/**
-	 * Returns the price/m3 at load
-	 * 
-	 * @return
-	 */
-	int getLoadPricePerM3();
-
-	/**
-	 * Returns the price/m3 at discharge
-	 * 
-	 * @return
-	 */
-	int getDischargePricePerM3();
+	int getSlotPricePerM3(IPortSlot slot);
 }

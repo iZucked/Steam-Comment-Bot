@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
-
 /**
  * A utility class to convert to/from internal/external optimiser units. The optimiser uses integer arithmetic internally and so external floating point numbers need to be scaled appropriately for use
  * within the optimiser and values being extracted back out will need the reverse conversion.
@@ -28,12 +27,12 @@ public final class OptimiserUnitConvertor {
 	 * @param price
 	 * @return
 	 */
-	public static int convertToInternalPrice(double price) {
-		long value = Math.round(price * (double)Calculator.HighScaleFactor );
+	public static int convertToInternalPrice(final double price) {
+		final long value = Math.round(price * (double) Calculator.HighScaleFactor);
 		return (int) value;
 	}
 
-	public static double convertToExternalPrice(int price) {
+	public static double convertToExternalPrice(final int price) {
 		return (double) price / (double) Calculator.HighScaleFactor;
 	}
 
@@ -43,19 +42,19 @@ public final class OptimiserUnitConvertor {
 	 * @param rate
 	 * @return
 	 */
-	public static int convertToInternalDailyRate(double dailyRate) {
+	public static int convertToInternalDailyRate(final double dailyRate) {
 		return (int) ((double) Calculator.ScaleFactor * dailyRate);
 	}
 
-	public static int convertToInternalHourlyRate(double dailyRate) {
+	public static int convertToInternalHourlyRate(final double dailyRate) {
 		return (int) ((double) Calculator.ScaleFactor * dailyRate / 24.0);
 	}
 
-	public static double convertToExternalDailyRate(int dailyRate) {
+	public static double convertToExternalDailyRate(final int dailyRate) {
 		return (double) dailyRate / (double) Calculator.ScaleFactor;
 	}
 
-	public static double convertToExternalHourlyRate(int hourlyRate) {
+	public static double convertToExternalHourlyRate(final int hourlyRate) {
 		return (double) hourlyRate * 24.0 / (double) Calculator.ScaleFactor;
 	}
 
@@ -65,11 +64,11 @@ public final class OptimiserUnitConvertor {
 	 * @param factor
 	 * @return
 	 */
-	public static int convertToInternalConversionFactor(double factor) {
+	public static int convertToInternalConversionFactor(final double factor) {
 		return (int) (Calculator.HighScaleFactor * factor);
 	}
 
-	public static double convertToExternalConversionFactor(int factor) {
+	public static double convertToExternalConversionFactor(final int factor) {
 		return (double) factor / (double) Calculator.HighScaleFactor;
 	}
 
@@ -79,11 +78,11 @@ public final class OptimiserUnitConvertor {
 	 * @param speed
 	 * @return
 	 */
-	public static int convertToInternalSpeed(double speed) {
+	public static int convertToInternalSpeed(final double speed) {
 		return (int) (Calculator.ScaleFactor * speed);
 	}
 
-	public static double convertToExternalSpeed(int speed) {
+	public static double convertToExternalSpeed(final int speed) {
 		return (double) speed / (double) Calculator.ScaleFactor;
 	}
 
@@ -93,11 +92,11 @@ public final class OptimiserUnitConvertor {
 	 * @param volume
 	 * @return
 	 */
-	public static long convertToInternalVolume(int volume) {
+	public static long convertToInternalVolume(final int volume) {
 		return (long) volume * (long) Calculator.ScaleFactor;
 	}
 
-	public static int convertToExternalVolume(long volume) {
+	public static int convertToExternalVolume(final long volume) {
 		return (int) (volume / (long) Calculator.ScaleFactor);
 	}
 
@@ -107,11 +106,11 @@ public final class OptimiserUnitConvertor {
 	 * @param dailyCost
 	 * @return
 	 */
-	public static long convertToInternalDailyCost(int dailyCost) {
+	public static long convertToInternalDailyCost(final int dailyCost) {
 		return (long) dailyCost * (long) Calculator.ScaleFactor;
 	}
 
-	public static int convertToExternalDailyCost(long dailyCost) {
+	public static int convertToExternalDailyCost(final long dailyCost) {
 		return (int) (dailyCost / (long) Calculator.ScaleFactor);
 	}
 
@@ -121,11 +120,11 @@ public final class OptimiserUnitConvertor {
 	 * @param dailyCost
 	 * @return
 	 */
-	public static long convertToInternalHourlyCost(int dailyCost) {
+	public static long convertToInternalHourlyCost(final int dailyCost) {
 		return (long) dailyCost * (long) Calculator.ScaleFactor / 24l;
 	}
 
-	public static int convertToExernalHourlyCost(long hourlyCost) {
+	public static int convertToExernalHourlyCost(final long hourlyCost) {
 		return (int) (hourlyCost * 24l / (long) Calculator.ScaleFactor);
 	}
 
@@ -135,11 +134,11 @@ public final class OptimiserUnitConvertor {
 	 * @param cost
 	 * @return
 	 */
-	public static long convertToInternalFixedCost(int cost) {
+	public static long convertToInternalFixedCost(final int cost) {
 		return (long) cost * (long) Calculator.ScaleFactor;
 	}
 
-	public static int convertToExternalFixedCost(long cost) {
+	public static int convertToExternalFixedCost(final long cost) {
 		return (int) (cost / (long) Calculator.ScaleFactor);
 	}
 

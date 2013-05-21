@@ -343,7 +343,7 @@ public class VoyagePlanAnnotatorTest {
 
 		public void setVoyageFuelDetails(final VoyageDetails details) {
 			for (final FuelComponent fuel : costs.keySet()) {
-				details.setFuelConsumption(fuel, fuel.getDefaultFuelUnit(), consumptions.get(fuel));
+				details.setFuelConsumption(fuel, fuel.getPricingFuelUnit(), consumptions.get(fuel));
 				details.setFuelUnitPrice(fuel, OptimiserUnitConvertor.convertToInternalPrice(costs.get(fuel)));
 			}
 		}
@@ -358,7 +358,7 @@ public class VoyagePlanAnnotatorTest {
 				if (costs.containsKey(fuel)) {
 					final long consumption = consumptions.get(fuel);
 					final double cost = costs.get(fuel);
-					Assert.assertEquals(consumption, journey.getFuelConsumption(fuel, fuel.getDefaultFuelUnit()));
+					Assert.assertEquals(consumption, journey.getFuelConsumption(fuel, fuel.getPricingFuelUnit()));
 					Assert.assertEquals((long) (consumption * cost), journey.getFuelCost(fuel));
 				}
 			}
@@ -381,7 +381,7 @@ public class VoyagePlanAnnotatorTest {
 				if (costs.containsKey(fuel)) {
 					final long consumption = consumptions.get(fuel);
 					final double cost = costs.get(fuel);
-					Assert.assertEquals(consumption, journey.getFuelConsumption(fuel, fuel.getDefaultFuelUnit()));
+					Assert.assertEquals(consumption, journey.getFuelConsumption(fuel, fuel.getPricingFuelUnit()));
 					Assert.assertEquals((long) (consumption * cost), journey.getFuelCost(fuel));
 				}
 			}

@@ -39,7 +39,6 @@ import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvide
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
@@ -103,11 +102,6 @@ public final class AbstractSequenceSchedulerTest {
 
 		loadSlot1.setId("load-slot-1");
 
-		final Cargo cargo1 = new Cargo();
-		cargo1.setId("cargo1");
-		cargo1.setLoadOption(loadSlot1);
-		cargo1.setDischargeOption(dischargeSlot1);
-
 		dischargeSlot1.setId("discharge-slot-1");
 
 		final LoadSlot loadSlot2 = new LoadSlot();
@@ -122,11 +116,6 @@ public final class AbstractSequenceSchedulerTest {
 
 		loadSlot2.setCooldownForbidden(true);
 		loadSlot2.setCooldownSet(true);
-
-		final Cargo cargo2 = new Cargo();
-		cargo2.setId("cargo2");
-		cargo2.setLoadOption(loadSlot2);
-		cargo2.setDischargeOption(dischargeSlot2);
 
 		final ISequenceElement element1 = new SequenceElement(index, "element1");
 		final ISequenceElement element2 = new SequenceElement(index, "element2");
@@ -378,11 +367,6 @@ public final class AbstractSequenceSchedulerTest {
 		final DischargeSlot dischargeSlot1 = new DischargeSlot();
 		dischargeSlot1.setPort(port2);
 		dischargeSlot1.setTimeWindow(timeWindow2);
-
-		final Cargo cargo1 = new Cargo();
-		cargo1.setId("cargo1");
-		cargo1.setLoadOption(loadSlot1);
-		cargo1.setDischargeOption(dischargeSlot1);
 
 		final LoadSlot loadSlot2 = new LoadSlot();
 		loadSlot2.setPort(port3);

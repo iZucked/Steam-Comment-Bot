@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.junit.Assert;
@@ -58,8 +60,6 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		calc.calculateVoyageFuelRequirements(options, details);
 
 		// Check results
@@ -100,8 +100,6 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		calc.calculateVoyageFuelRequirements(options, details);
 
 		// Check results
@@ -141,8 +139,6 @@ public class LNGVoyageCalculatorTest {
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
-
-		calc.init();
 
 		calc.calculateVoyageFuelRequirements(options, details);
 
@@ -186,8 +182,6 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		calc.calculateVoyageFuelRequirements(options, details);
 
 		// Check results
@@ -228,8 +222,6 @@ public class LNGVoyageCalculatorTest {
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
-
-		calc.init();
 
 		calc.calculateVoyageFuelRequirements(options, details);
 
@@ -273,8 +265,6 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		calc.calculateVoyageFuelRequirements(options, details);
 
 		// Check results
@@ -313,8 +303,6 @@ public class LNGVoyageCalculatorTest {
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
-
-		calc.init();
 
 		calc.calculateVoyageFuelRequirements(options, details);
 
@@ -355,8 +343,6 @@ public class LNGVoyageCalculatorTest {
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
-
-		calc.init();
 
 		calc.calculateVoyageFuelRequirements(options, details);
 
@@ -423,8 +409,6 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		calc.calculateVoyageFuelRequirements(options, details);
 
 		// Check results
@@ -467,8 +451,6 @@ public class LNGVoyageCalculatorTest {
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
-
-		calc.init();
 
 		final IVesselClass vesselClass = options.getVessel().getVesselClass();
 
@@ -521,8 +503,6 @@ public class LNGVoyageCalculatorTest {
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
-
-		calc.init();
 
 		final IVesselClass vesselClass = options.getVessel().getVesselClass();
 
@@ -584,11 +564,13 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		final Object[] sequence = new Object[] { loadDetails, details, dischargeDetails };
 
-		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
+		final List<Integer> arrivalTimes = new ArrayList<Integer>();
+		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
+			arrivalTimes.add(0);
+		}
+
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -611,6 +593,8 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setBaseFuelUnitPrice(OptimiserUnitConvertor.convertToInternalPrice(2));
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
+
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
@@ -651,11 +635,12 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		final Object[] sequence = new Object[] { loadDetails, details, dischargeDetails };
 
-		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
+		final List<Integer> arrivalTimes = new ArrayList<Integer>();
+		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
+			arrivalTimes.add(0);
+		}
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -690,6 +675,7 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 
 		final PortDetails loadDetails = new PortDetails();
@@ -721,13 +707,14 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		calc.init();
-
 		final Object[] sequence = new Object[] { loadDetails, details, dischargeDetails };
 
 		// Expect to throw a RuntimeException here for a capacity violation
 		fail("Better to return object, recording the error");
-		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
+		final List<Integer> arrivalTimes = new ArrayList<Integer>();
+		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
+			arrivalTimes.add(0);
+		}
 		final VoyagePlan plan = new VoyagePlan();
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
@@ -742,6 +729,8 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setBaseFuelUnitPrice(OptimiserUnitConvertor.convertToInternalPrice(2));
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
+
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
@@ -801,11 +790,12 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		final Object[] sequence = new Object[] { loadDetails, details1, dischargeDetails, details2, otherDetails };
 
-		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
+		final List<Integer> arrivalTimes = new ArrayList<Integer>();
+		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
+			arrivalTimes.add(0);
+		}
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -878,11 +868,12 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		final Object[] sequence = new Object[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
 
-		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
+		final List<Integer> arrivalTimes = new ArrayList<Integer>();
+		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
+			arrivalTimes.add(0);
+		}
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -960,11 +951,12 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		calc.init();
-
 		final Object[] sequence = new Object[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
 
-		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
+		final List<Integer> arrivalTimes = new ArrayList<Integer>();
+		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
+			arrivalTimes.add(0);
+		}
 		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
@@ -1014,8 +1006,6 @@ public class LNGVoyageCalculatorTest {
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
-
-		calc.init();
 
 		final VesselClass vesselClass = (VesselClass) options.getVessel().getVesselClass();
 

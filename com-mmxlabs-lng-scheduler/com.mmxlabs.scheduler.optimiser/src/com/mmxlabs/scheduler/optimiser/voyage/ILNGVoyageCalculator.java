@@ -23,11 +23,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface ILNGVoyageCalculator {
 
 	/**
-	 * Method to ensure all required members have been set before use. This should be called once object construction has been completed and before using calculate* methods.
-	 */
-	void init();
-
-	/**
 	 * Calculate the fuel requirements, speed and times for the port to port journey options defined in {@link VoyageOptions} and store the results in {@link VoyageDetails}.
 	 * 
 	 * @param options
@@ -52,11 +47,11 @@ public interface ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return Returns zero for a feasible journey, or a positive integer indicating a relative ranking of problems due to e.g. capacity violations. Returns a negative for a infeasible journey.
 	 */
-	int calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, int[] arrivalTimes, Object... sequence);
+	int calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, List<Integer> arrivalTimes, Object... sequence);
 
 	/**
-	 * Given a sequence containing {@link IPortDetails}, {@link IVoyageOptions} and other objects, create and return a new sequence with fuel cost information attached 
-	 * to corresponding appropriate objects.     
+	 * Given a sequence containing {@link IPortDetails}, {@link IVoyageOptions} and other objects, create and return a new sequence with fuel cost information attached to corresponding appropriate
+	 * objects.
 	 * 
 	 * @author Simon McGregor
 	 * @param sequence

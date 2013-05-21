@@ -14,52 +14,54 @@ public enum FuelComponent {
 	/**
 	 * Voyage used base fuel as main fuel source.
 	 */
-	Base(FuelUnit.MT),
+	Base(FuelUnit.MT, FuelUnit.MT),
 
 	/**
 	 * Voyage used NBO as main fuel source
 	 */
-	NBO(FuelUnit.M3),
+	NBO(FuelUnit.M3, FuelUnit.MMBTu),
 
 	/**
 	 * NBO Voyage is supplemented by FBO.
 	 */
-	FBO(FuelUnit.M3),
+	FBO(FuelUnit.M3, FuelUnit.MMBTu),
 
 	/**
 	 * NBO Voyage is supplemented by base fuel.
 	 */
-	Base_Supplemental(FuelUnit.MT),
+	Base_Supplemental(FuelUnit.MT, FuelUnit.MT),
 
 	/**
 	 * Idle time NBO use
 	 */
-	IdleNBO(FuelUnit.M3),
+	IdleNBO(FuelUnit.M3, FuelUnit.MMBTu),
 
 	/**
 	 * Idle time base fuel use
 	 */
-	IdleBase(FuelUnit.MT),
+	IdleBase(FuelUnit.MT, FuelUnit.MT),
 
 	/**
 	 * Some vessels require a pilot light when running on base fuel only. This tracks use during travel times.
 	 */
-	PilotLight(FuelUnit.MT),
+	PilotLight(FuelUnit.MT, FuelUnit.MT),
 
 	/**
 	 * Some vessels require a pilot light when running on base fuel only. This tracks use during idle times.
 	 */
-	IdlePilotLight(FuelUnit.MT),
+	IdlePilotLight(FuelUnit.MT, FuelUnit.MT),
 
 	/**
 	 * Gas was purchased from the port for cooldown.
 	 */
-	Cooldown(FuelUnit.M3);
+	Cooldown(FuelUnit.M3, FuelUnit.MMBTu);
 
 	private final FuelUnit fuelUnit;
+	private final FuelUnit pricingFuelUnit;
 
-	private FuelComponent(final FuelUnit fuelUnit) {
+	private FuelComponent(final FuelUnit fuelUnit, final FuelUnit pricingFuelUnit) {
 		this.fuelUnit = fuelUnit;
+		this.pricingFuelUnit = pricingFuelUnit;
 	}
 
 	/**
@@ -123,6 +125,10 @@ public enum FuelComponent {
 			return true;
 		}
 		return false;
+	}
+
+	public FuelUnit getPricingFuelUnit() {
+		return pricingFuelUnit;
 	}
 
 }

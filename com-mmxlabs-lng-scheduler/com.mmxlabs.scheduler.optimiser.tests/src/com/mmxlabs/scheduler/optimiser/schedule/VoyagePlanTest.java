@@ -85,7 +85,7 @@ public class VoyagePlanTest {
 		p.setSequence(sequence);
 		p.setFuelConsumption(fuel1, consumption);
 		p.setTotalFuelCost(fuel2, cost);
-		p.setCapacityViolations(cvtQty);
+		p.setViolationsCount(cvtQty);
 
 		return p;
 	}

@@ -204,7 +204,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				forceNBO = true;
 			}
 		} else if (useNBO) {
-			options.setAvailableLNG(vessel.getVesselClass().getCargoCapacity());
+			options.setAvailableLNG(vessel.getCargoCapacity());
 		} else {
 			options.setAvailableLNG(0);
 		}
@@ -346,7 +346,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				state = VesselState.Ballast;
 				// but the last discharge which might have been partial *was* a partial discharge
 				if (possiblePartialDischargeIndex > -1) {
-					result[possiblePartialDischargeIndex] = VesselState.Laden;
+					result[possiblePartialDischargeIndex + 1] = VesselState.Laden;
 				}
 				// and this one might be too
 				possiblePartialDischargeIndex = idx;
@@ -505,6 +505,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 * @param resource
 	 * @param sequence
 	 * @param arrivalTimes
+	 *            Array of arrival times at each {@link ISequenceElement} in the {@link ISequence}
 	 * @return
 	 * @throws InfeasibleVoyageException
 	 */

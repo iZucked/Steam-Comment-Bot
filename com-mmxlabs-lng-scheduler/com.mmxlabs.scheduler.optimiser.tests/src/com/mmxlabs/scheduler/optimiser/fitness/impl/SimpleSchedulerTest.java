@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ConstantValueCurve;
@@ -33,17 +34,13 @@ import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
@@ -79,7 +76,7 @@ public class SimpleSchedulerTest {
 		keypoints.put(20000, 20000l);
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0);
 
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 15000);
@@ -87,9 +84,9 @@ public class SimpleSchedulerTest {
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 15000);
 
 		// TODO: Setup start/end ports correctly
-		builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVessel("vessel-2", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVessel("vessel-3", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0);
+		builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0, 150000000);
+		builder.createVessel("vessel-2", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0, 150000000);
+		builder.createVessel("vessel-3", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0, 150000000);
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);
@@ -121,13 +118,13 @@ public class SimpleSchedulerTest {
 		final IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6", port4, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, false);
 		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, false);
 
-		builder.createCargo("cargo1", load1, discharge1, false);
-		builder.createCargo("cargo2", load2, discharge2, false);
-		builder.createCargo("cargo3", load3, discharge3, false);
-		builder.createCargo("cargo4", load4, discharge4, false);
-		builder.createCargo("cargo5", load5, discharge5, false);
-		builder.createCargo("cargo6", load6, discharge6, false);
-		builder.createCargo("cargo7", load7, discharge7, false);
+		builder.createCargo(Lists.<IPortSlot> newArrayList(load1, discharge1), false);
+		builder.createCargo(Lists.<IPortSlot> newArrayList(load2, discharge2), false);
+		builder.createCargo(Lists.<IPortSlot> newArrayList(load3, discharge3), false);
+		builder.createCargo(Lists.<IPortSlot> newArrayList(load4, discharge4), false);
+		builder.createCargo(Lists.<IPortSlot> newArrayList(load5, discharge5), false);
+		builder.createCargo(Lists.<IPortSlot> newArrayList(load6, discharge6), false);
+		builder.createCargo(Lists.<IPortSlot> newArrayList(load7, discharge7), false);
 
 		// TODO: Set port durations
 
