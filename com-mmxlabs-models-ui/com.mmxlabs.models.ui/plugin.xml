@@ -92,5 +92,11 @@
             inheritable="true"
             modelClass="com.mmxlabs.models.mmxcore.NamedObject">
       </componentHelper>
+      <componentHelper
+            helperClass="com.mmxlabs.models.ui.mmxcore.OtherNamesObjectComponentHelper"
+            id="com.mmxlabs.models.ui.mmxcore.OtherNamesObjectComponentHelper"
+            inheritable="true"
+            modelClass="com.mmxlabs.models.mmxcore.OtherNamesObject">
+      </componentHelper>
    </extension>
 </plugin>

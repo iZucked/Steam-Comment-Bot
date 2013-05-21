@@ -20,10 +20,12 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -37,7 +39,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class NameUniquenessConstraint extends AbstractModelConstraint {
-	private IStatus validate(final IValidationContext ctx, final EAttribute nameAttribute, final EAttribute otherNamesAttribute) {
+	private IStatus validate(final IValidationContext ctx, final EAttribute nameAttribute, @Nullable final EAttribute otherNamesAttribute) {
 		final EObject target = ctx.getTarget();
 		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
 		final Pair<EObject, EReference> containerAndFeature = new Pair<EObject, EReference>(extraValidationContext.getContainer(target), extraValidationContext.getContainment(target));
@@ -74,15 +76,17 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 						bad.add(n);
 					}
 					temp.add(n);
-					final Collection<String> names = (Collection<String>) no.eGet(otherNamesAttribute);
-					for (final String ns : names) {
-						if (n.equals(ns)) {
-							continue;
+					if (otherNamesAttribute != null) {
+						final Collection<String> names = (Collection<String>) no.eGet(otherNamesAttribute);
+						for (final String ns : names) {
+							if (n.equals(ns)) {
+								continue;
+							}
+							if (temp.contains(ns)) {
+								bad.add(ns);
+							}
+							temp.add(ns);
 						}
-						if (temp.contains(ns)) {
-							bad.add(ns);
-						}
-						temp.add(ns);
 					}
 				}
 			}
@@ -93,16 +97,18 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 				dsd.addEObjectAndFeature(target, nameAttribute);
 				return dsd;
 			}
-			final Collection<String> names = (Collection<String>) target.eGet(otherNamesAttribute);
-			for (final String ns : names) {
-				if (name.equals(ns)) {
-					continue;
-				}
-				if (bad.contains(ns)) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name
-							+ " has non-unique other name " + ns));
-					dsd.addEObjectAndFeature(target, nameAttribute);
-					return dsd;
+			if (otherNamesAttribute != null) {
+				final Collection<String> names = (Collection<String>) target.eGet(otherNamesAttribute);
+				for (final String ns : names) {
+					if (name.equals(ns)) {
+						continue;
+					}
+					if (bad.contains(ns)) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name
+								+ " has non-unique other name " + ns));
+						dsd.addEObjectAndFeature(target, nameAttribute);
+						return dsd;
+					}
 				}
 			}
 		}
@@ -112,8 +118,10 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof NamedObject) {
-			return validate(ctx, MMXCorePackage.eINSTANCE.getNamedObject_Name(), MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
+		if (target instanceof OtherNamesObject) {
+			return validate(ctx, MMXCorePackage.eINSTANCE.getNamedObject_Name(), MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames());
+		} else if (target instanceof NamedObject) {
+			return validate(ctx, MMXCorePackage.eINSTANCE.getNamedObject_Name(), null);
 		}
 		return ctx.createSuccessStatus();
 	}

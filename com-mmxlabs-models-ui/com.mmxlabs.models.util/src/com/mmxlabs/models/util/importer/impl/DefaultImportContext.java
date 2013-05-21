@@ -22,8 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -83,8 +83,11 @@ public class DefaultImportContext implements IImportContext {
 	public void registerNamedObject(final NamedObject object) {
 		registerObjectWithName(object, object.getName());
 
-		for (final String otherName : object.getOtherNames()) {
-			registerObjectWithName(object, otherName);
+		if (object instanceof OtherNamesObject) {
+			final OtherNamesObject otherNamesObject = (OtherNamesObject) object;
+			for (final String otherName : otherNamesObject.getOtherNames()) {
+				registerObjectWithName(object, otherName);
+			}
 		}
 	}
 
@@ -304,20 +307,19 @@ public class DefaultImportContext implements IImportContext {
 	public CSVReader peekReader() {
 		return readerStack.peek();
 	}
-	
+
 	/**
 	 * @since 3.1
 	 */
 	public void registerNamedObjectsFromSubModels() {
 		// first set up all existing named objects
-		for (final MMXSubModel subModel : getRootObject().getSubModels()) {
-			final TreeIterator<EObject> allObjects = subModel.getSubModelInstance().eAllContents();
-			
-			while (allObjects.hasNext()) {
-				final EObject o = allObjects.next();
-				if (o instanceof NamedObject)
-					registerNamedObject((NamedObject) o);
+		final TreeIterator<EObject> allObjects = rootObject.eAllContents();
+
+		while (allObjects.hasNext()) {
+			final EObject o = allObjects.next();
+			if (o instanceof NamedObject) {
+				registerNamedObject((NamedObject) o);
 			}
-		}		
+		}
 	}
 }

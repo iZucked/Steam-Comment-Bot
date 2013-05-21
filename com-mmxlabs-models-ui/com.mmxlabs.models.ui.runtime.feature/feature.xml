@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.ui.runtime.feature"
       label="Models: UI Runtime Feature"
-      version="3.2.0.qualifier"
+      version="4.0.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -23,12 +23,6 @@ All rights reserved.
    <license url="http://www.example.com/license">
       [Enter License Description here.]
    </license>
-
-   <requires>
-      <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="3.1.0" match="compatible"/>
-      <import feature="com.mmxlabs.models.migration.feature" version="2.0.0" match="compatible"/>
-   </requires>
 
    <plugin
          id="com.mmxlabs.models.ui"

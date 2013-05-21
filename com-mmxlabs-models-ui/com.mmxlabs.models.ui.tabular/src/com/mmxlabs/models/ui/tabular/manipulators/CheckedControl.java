@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 
 import java.util.Arrays;
@@ -22,6 +22,9 @@ import org.eclipse.swt.widgets.Listener;
 
 import com.mmxlabs.models.ui.editors.util.ControlUtils;
 
+/**
+ * @since 4.0
+ */
 public class CheckedControl<T extends Control> extends Composite {
 	private final Button check;
 	private T control;

@@ -22,9 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 
 /**
@@ -81,15 +79,10 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 	public MergedMultiModelReferenceValueProvider(final MMXRootObject rootObject, final EClass targetType) {
 		super();
 
-		for (final MMXSubModel subModel : rootObject.getSubModels()) {
-			final UUIDObject subModelInstance = subModel.getSubModelInstance();
-			if (subModelInstance != null) {
-				for (final EReference ref : subModelInstance.eClass().getEAllContainments()) {
-					if (ref.isMany() && targetType.isSuperTypeOf(ref.getEReferenceType())) {
-						validReferences.add(new Pair<EObject, EStructuralFeature>(subModelInstance, ref));
-						subModelInstance.eAdapters().add(adapter);
-					}
-				}
+		for (final EReference ref : rootObject.eClass().getEAllContainments()) {
+			if (ref.isMany() && targetType.isSuperTypeOf(ref.getEReferenceType())) {
+				validReferences.add(new Pair<EObject, EStructuralFeature>(rootObject, ref));
+				rootObject.eAdapters().add(adapter);
 			}
 		}
 	}

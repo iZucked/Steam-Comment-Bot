@@ -29,7 +29,6 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public Object getValue(final Object object) {
-		// TODO Auto-generated method stub
 		final Object value = super.getValue(object);
 		return value;
 	}
