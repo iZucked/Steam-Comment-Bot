@@ -97,7 +97,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			portVisit = sv;
 
 			// Output allocation info
-			// TODO: Break up IAllocationAnnotation in separate instances for the load and discahrtge.
+			// TODO: Break up IAllocationAnnotation in separate instances for the load and discharge.
 			// TODO: Break up IAllocatiobAnnotation to pull out fuel use as a separate chunk.
 			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
 
