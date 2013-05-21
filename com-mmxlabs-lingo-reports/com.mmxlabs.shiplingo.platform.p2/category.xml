@@ -6,9 +6,6 @@
 
 -->
 <site>
-   <feature id="com.mmxlabs.platform.feature" version="0.0.0">
-      <category name="all"/>
-   </feature>
     <feature id="com.mmxlabs.shiplingo.platform.feature" version="0.0.0">
       <category name="all"/>
    </feature>
