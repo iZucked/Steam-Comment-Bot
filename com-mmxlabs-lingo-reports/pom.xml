@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.shiplingo.platform</groupId>
 	<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
-	<version>3.0.4-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
@@ -28,28 +28,16 @@
 	<modules>
 		<module>target-definition</module>
 
-		<!-- Proper plugin projects -->
-		<module>com.mmxlabs.shiplingo.platform.app</module>
-		<module>com.mmxlabs.shiplingo.platform.ui</module>
 		<module>com.mmxlabs.shiplingo.platform.scheduleview</module>
-		<module>com.mmxlabs.shiplingo.platform.reports</module>
 
-		<!-- Documentation -->
-		<module>com.mmxlabs.shiplingo.platform.doc</module>
+		<module>com.mmxlabs.shiplingo.platform.reports</module>
+		<module>com.mmxlabs.shiplingo.platform.reports.tests</module>
 
 		<!-- Features -->
 		<module>com.mmxlabs.shiplingo.platform.feature</module>
-		<module>com.mmxlabs.platform.feature</module>
-
-
-		<!-- Product file project -->
-		<!-- <module>com.mmxlabs.shiplingo.platform.product</module> -->
-
-		<!-- Test Plugins -->
-		<!-- <module>com.mmxlabs.shiplingo.platform.its</module> -->
-		<module>com.mmxlabs.shiplingo.platform.reports.tests</module>
 
 		<module>com.mmxlabs.shiplingo.platform.p2</module>
+
 	</modules>
 
 	<build>

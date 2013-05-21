@@ -5,16 +5,20 @@
 package com.mmxlabs.shiplingo.platform.reports.properties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.google.common.collect.Lists;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -22,21 +26,24 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.models.util.emfpath.EMFPathPropertyDescriptor;
 import com.mmxlabs.shiplingo.platform.reports.properties.ScheduledEventPropertySourceProvider.SimpleLabelProvider;
 
+/**
+ * @since 3.0
+ */
 public class EventPropertySource implements IPropertySource {
 
+	private final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 	private final Event event;
 	private IPropertyDescriptor[] descriptors = null;
-	private ExtraDataContainerPropertySource delegateSource;
 
 	public EventPropertySource(final Event event) {
 		this.event = event;
@@ -51,6 +58,7 @@ public class EventPropertySource implements IPropertySource {
 	public synchronized IPropertyDescriptor[] getPropertyDescriptors() {
 		// create descriptors for whatever normal fields the event has
 		// then create descriptors for fuel mix, because fuel mix is special
+
 		if (descriptors != null) {
 			return descriptors;
 		}
@@ -92,6 +100,8 @@ public class EventPropertySource implements IPropertySource {
 
 			list.add(descriptor);
 
+			addPropertyDescriptor(list, "Slot ID", MMXCorePackage.eINSTANCE.getNamedObject_Name(),
+					Lists.<Object> newArrayList(SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation(), SchedulePackage.eINSTANCE.getSlotAllocation_Slot()));
 			// if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
 			// descriptor = new PropertyDescriptor(
 			// new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
@@ -111,6 +121,13 @@ public class EventPropertySource implements IPropertySource {
 
 		if (event instanceof VesselEventVisit) {
 
+			// {
+
+			// addPropertyDescriptor(list, null, FleetPackage.eINSTANCE.getCharterOutEvent_HireRate(), Collections.<Object> singletonList(SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent()));
+			// addPropertyDescriptor(list, null, FleetPackage.eINSTANCE.getCharterOutEvent_RepositioningFee(),
+			// Collections.<Object> singletonList(SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent()));
+			// }
+			//
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
 			if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
 				{
@@ -130,21 +147,21 @@ public class EventPropertySource implements IPropertySource {
 					list.add(descriptor);
 				}
 			}
-			// if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
-			// descriptor = new PropertyDescriptor(
-			// new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
-			// descriptor.setCategory(eClass.getName());
-			// descriptor.setLabelProvider(lp);
-			//
-			// list.add(descriptor);
-			// } else {
-			// descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
-			// SchedulePackage.eINSTANCE.getCargoAllocation_DischargeVolume()), "Discharge Volume");
-			// descriptor.setCategory(eClass.getName());
-			// descriptor.setLabelProvider(lp);
-			//
-			// list.add(descriptor);
-			// }
+//			if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
+//				PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
+//						SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
+//				descriptor.setCategory(eClass.getName());
+//				descriptor.setLabelProvider(lp);
+//
+//				list.add(descriptor);
+//			} else {
+//				PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
+//						SchedulePackage.eINSTANCE.getCargoAllocation_DischargeVolume()), "Discharge Volume");
+//				descriptor.setCategory(eClass.getName());
+//				descriptor.setLabelProvider(lp);
+//
+//				list.add(descriptor);
+//			}
 		}
 
 		{
@@ -180,6 +197,9 @@ public class EventPropertySource implements IPropertySource {
 
 			list.add(descriptor);
 
+			// addPropertyDescriptor(list, "From Time", SchedulePackage.eINSTANCE.getEvent__GetLocalStart(), Collections.<Object> emptyList());
+			// addPropertyDescriptor(list, "To Time", SchedulePackage.eINSTANCE.getEvent__GetLocalEnd(), Collections.<Object> emptyList());
+
 			descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent__GetLocalEnd()),
 
 			"To Date");
@@ -211,18 +231,27 @@ public class EventPropertySource implements IPropertySource {
 			}
 		}
 
-		ExtraDataContainer container = null;
-		if (event instanceof ExtraDataContainer) {
-			container = (ExtraDataContainer) event;
+		// Find the path to a ProfieAndLossContainer
+		final List<Object> featureList = new ArrayList<Object>();
+		ProfitAndLossContainer container = null;
+		if (event instanceof ProfitAndLossContainer) {
+			container = (ProfitAndLossContainer) event;
 		} else if (event instanceof SlotAllocation) {
 			container = (((SlotAllocation) event).getCargoAllocation());
+			featureList.add(SchedulePackage.eINSTANCE.getSlotAllocation_CargoAllocation());
 		} else if (event instanceof SlotVisit) {
 			container = (((SlotVisit) event).getSlotAllocation().getCargoAllocation());
+			featureList.add(SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation());
+			featureList.add(SchedulePackage.eINSTANCE.getSlotAllocation_CargoAllocation());
 		}
 		if (container != null) {
-			final ExtraDataContainerPropertySource delegateSource = new ExtraDataContainerPropertySource(container);
-			this.delegateSource = delegateSource;
-			list.addAll(Arrays.asList(delegateSource.getPropertyDescriptors()));
+			// Add final step the the group object
+			featureList.add(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss());
+			// Create the property!
+			final EMFPathPropertyDescriptor desc = EMFPathPropertyDescriptor.create(event, adapterFactory, SchedulePackage.eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss(), featureList);
+			if (desc != null) {
+				 list.add(desc);
+			}
 		}
 		descriptors = list.toArray(new IPropertyDescriptor[0]);
 
@@ -241,8 +270,9 @@ public class EventPropertySource implements IPropertySource {
 			}
 			return null;
 		} else {// properties for fuelmix
-			return delegateSource.getPropertyValue(id);
+			// return delegateSource.getPropertyValue(id);
 		}
+		return null;
 	}
 
 	@Override
@@ -277,6 +307,17 @@ public class EventPropertySource implements IPropertySource {
 			}
 		}
 		return sb.toString();
+	}
+
+	private void addPropertyDescriptor(List<IPropertyDescriptor> list, String displayName, final EStructuralFeature feature, final List<Object> featureList) {
+		// Create the property!
+		final EMFPathPropertyDescriptor desc = EMFPathPropertyDescriptor.create(event, adapterFactory, feature, featureList);
+		if (desc != null) {
+			if (displayName != null) {
+				desc.setDisplayName(displayName);
+			}
+			list.add(desc);
+		}
 	}
 
 }

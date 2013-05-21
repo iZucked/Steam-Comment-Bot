@@ -4,14 +4,16 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -46,7 +48,7 @@ public class CargoReportView extends EMFReportView {
 
 		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName());
 
-		addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
+		addColumn("Type", objectFormatter, s.getCargoAllocation_InputCargo(), CargoPackage.eINSTANCE.getCargo__GetCargoType());
 
 		addColumn("Vessel", new BaseFormatter() {
 			@Override
@@ -54,97 +56,97 @@ public class CargoReportView extends EMFReportView {
 
 				if (object instanceof Sequence) {
 					final Sequence sequence = (Sequence) object;
-					if (sequence.getVessel() == null) {
+					if (sequence.getVesselAvailability() == null) {
 						return "Chartered";
 					} else {
-						return sequence.getVessel().getName();
+						return sequence.getVesselAvailability().getVessel().getName();
 					}
 				}
 
 				return super.format(object);
 			}
 		}, s.getCargoAllocation_Sequence());
-
-		addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
-
-		addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
-
-		addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-		addColumn("Load Time", timePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-
-		addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalEnd());
-		addColumn("Discharge Time", timePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalEnd());
-
-		addColumn("Load Volume", integerFormatter, s.getCargoAllocation_LoadVolume());
-
-		// addColumn("Fuel Volume", integerFormatter, s.getCargoAllocation_FuelVolume());
-
-		addColumn("Discharge Volume", integerFormatter, s.getCargoAllocation_DischargeVolume());
-
-		addColumn("Laden Cost", new IntegerFormatter() {
-			@Override
-			public Integer getIntValue(final Object object) {
-
-				if (object instanceof CargoAllocation) {
-					final CargoAllocation allocation = (CargoAllocation) object;
-
-					int total = 0;
-					final SlotAllocation slotAllocation = allocation.getLoadAllocation();
-					total += slotAllocation.getSlotVisit().getFuelCost();
-					total += slotAllocation.getSlotVisit().getHireCost();
-					total += slotAllocation.getSlotVisit().getPortCost();
-
-					final Journey journey = allocation.getLadenLeg();
-					if (journey != null) {
-						total += journey.getFuelCost();
-						total += journey.getHireCost();
-						total += journey.getToll();
-					}
-
-					final Idle idle = allocation.getLadenIdle();
-					if (idle != null) {
-						total += idle.getFuelCost();
-						total += idle.getHireCost();
-					}
-					return total;
-				}
-				return null;
-			}
-
-		});
-
-		addColumn("Ballast Cost", new IntegerFormatter() {
-			@Override
-			public Integer getIntValue(final Object object) {
-
-				if (object instanceof CargoAllocation) {
-					final CargoAllocation allocation = (CargoAllocation) object;
-
-					int total = 0;
-
-					final SlotAllocation slotAllocation = allocation.getDischargeAllocation();
-					total += slotAllocation.getSlotVisit().getFuelCost();
-					total += slotAllocation.getSlotVisit().getHireCost();
-					total += slotAllocation.getSlotVisit().getPortCost();
-
-					final Journey journey = allocation.getBallastLeg();
-					if (journey != null) {
-						total += journey.getFuelCost();
-						total += journey.getHireCost();
-						total += journey.getToll();
-					}
-
-					final Idle idle = allocation.getBallastIdle();
-					if (idle != null) {
-						total += idle.getFuelCost();
-						total += idle.getHireCost();
-					}
-
-					return total;
-				}
-				return null;
-			}
-		});
+		//
+		// addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
+		//
+		// addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
+		//
+		// addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
+		// addColumn("Load Time", timePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
+		//
+		// addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalEnd());
+		// addColumn("Discharge Time", timePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalEnd());
+		//
+		// addColumn("Load Volume", integerFormatter, s.getCargoAllocation_LoadVolume());
+		//
+		// // addColumn("Fuel Volume", integerFormatter, s.getCargoAllocation_FuelVolume());
+		//
+		// addColumn("Discharge Volume", integerFormatter, s.getCargoAllocation_DischargeVolume());
+		//
+		// addColumn("Laden Cost", new IntegerFormatter() {
+		// @Override
+		// public Integer getIntValue(final Object object) {
+		//
+		// if (object instanceof CargoAllocation) {
+		// final CargoAllocation allocation = (CargoAllocation) object;
+		//
+		// int total = 0;
+		// final SlotAllocation slotAllocation = allocation.getLoadAllocation();
+		// total += slotAllocation.getSlotVisit().getFuelCost();
+		// total += slotAllocation.getSlotVisit().getHireCost();
+		// total += slotAllocation.getSlotVisit().getPortCost();
+		//
+		// final Journey journey = allocation.getLadenLeg();
+		// if (journey != null) {
+		// total += journey.getFuelCost();
+		// total += journey.getHireCost();
+		// total += journey.getToll();
+		// }
+		//
+		// final Idle idle = allocation.getLadenIdle();
+		// if (idle != null) {
+		// total += idle.getFuelCost();
+		// total += idle.getHireCost();
+		// }
+		// return total;
+		// }
+		// return null;
+		// }
+		//
+		// });
+		//
+		// addColumn("Ballast Cost", new IntegerFormatter() {
+		// @Override
+		// public Integer getIntValue(final Object object) {
+		//
+		// if (object instanceof CargoAllocation) {
+		// final CargoAllocation allocation = (CargoAllocation) object;
+		//
+		// int total = 0;
+		//
+		// final SlotAllocation slotAllocation = allocation.getDischargeAllocation();
+		// total += slotAllocation.getSlotVisit().getFuelCost();
+		// total += slotAllocation.getSlotVisit().getHireCost();
+		// total += slotAllocation.getSlotVisit().getPortCost();
+		//
+		// final Journey journey = allocation.getBallastLeg();
+		// if (journey != null) {
+		// total += journey.getFuelCost();
+		// total += journey.getHireCost();
+		// total += journey.getToll();
+		// }
+		//
+		// final Idle idle = allocation.getBallastIdle();
+		// if (idle != null) {
+		// total += idle.getFuelCost();
+		// total += idle.getHireCost();
+		// }
+		//
+		// return total;
+		// }
+		// return null;
+		// }
+		// });
 
 		addColumn("Total Cost", new IntegerFormatter() {
 			@Override
@@ -153,40 +155,22 @@ public class CargoReportView extends EMFReportView {
 					final CargoAllocation allocation = (CargoAllocation) object;
 
 					int total = 0;
-					{
-						final SlotAllocation slotAllocation = allocation.getLoadAllocation();
+					for (SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+						// final SlotAllocation slotAllocation = allocation.getLoadAllocation();
 						total += slotAllocation.getSlotVisit().getFuelCost();
 						total += slotAllocation.getSlotVisit().getHireCost();
 						total += slotAllocation.getSlotVisit().getPortCost();
-
-						final Journey journey = allocation.getLadenLeg();
-						if (journey != null) {
-							total += journey.getFuelCost();
-							total += journey.getHireCost();
-							total += journey.getToll();
-						}
-
-						final Idle idle = allocation.getLadenIdle();
-						if (idle != null) {
-							total += idle.getFuelCost();
-							total += idle.getHireCost();
-						}
 					}
-					{
-						final SlotAllocation slotAllocation = allocation.getDischargeAllocation();
-						total += slotAllocation.getSlotVisit().getFuelCost();
-						total += slotAllocation.getSlotVisit().getHireCost();
-						total += slotAllocation.getSlotVisit().getPortCost();
+					for (Event event : allocation.getEvents()) {
 
-						final Journey journey = allocation.getBallastLeg();
-						if (journey != null) {
+						if (event instanceof Journey) {
+							Journey journey = (Journey) event;
 							total += journey.getFuelCost();
 							total += journey.getHireCost();
 							total += journey.getToll();
-						}
+						} else if (event instanceof Idle) {
 
-						final Idle idle = allocation.getBallastIdle();
-						if (idle != null) {
+							Idle idle = (Idle) event;
 							total += idle.getFuelCost();
 							total += idle.getHireCost();
 						}
@@ -216,11 +200,14 @@ public class CargoReportView extends EMFReportView {
 			if (a instanceof CargoAllocation) {
 				final CargoAllocation allocation = (CargoAllocation) a;
 
-				setInputEquivalents(
-						allocation,
-						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
-								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
-								allocation.getInputCargo() }));
+				final List<Object> equivalents = new LinkedList<Object>();
+				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+					equivalents.add(slotAllocation.getSlot());
+					equivalents.add(slotAllocation.getSlotVisit());
+				}
+				equivalents.addAll(allocation.getEvents());
+				equivalents.add(allocation.getInputCargo());
+				setInputEquivalents(allocation, equivalents);
 			}
 		}
 	}

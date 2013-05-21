@@ -37,16 +37,15 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
@@ -106,9 +105,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			text = seqText;
 		} else if (element instanceof Journey) {
 			Journey j = (Journey) element;
-			if (j.getRoute().contains("canal")) {
+			if (j.getRoute().isCanal()) {
 				if (memento.getBoolean(Show_Canals)) {
-					text = j.getRoute().replace("canal", "");
+					text = j.getRoute().getName().replace("canal", "");
 				}
 			}
 		}
@@ -229,9 +228,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				for (FuelQuantity fq : journey.getFuels()) {
 					eventText.append(String.format(" | %s", fq.getFuel().toString()));
 				}
-				if (journey.getRoute().contains("canal")) {
+				if (journey.getRoute().isCanal()) {
 					eventText.append(" | " + journey.getRoute() + "\n");
-				}	
+				}
 
 			} else if (element instanceof SlotVisit) {
 				eventText.append("Time in port: " + durationTime + " \n");
@@ -294,14 +293,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return port + " -- " + journey.getDestination().getName() + (journey.isLaden() ? " (Laden)" : " (Ballast)");
 		} else if (element instanceof Idle) {
 			final Idle idle = (Idle) element;
-			return "At " + port + (idle.isLaden() ? " (Laden" : " (Ballast") + " idle)";
+			return (port == null) ? "" : ("At " + port) + (idle.isLaden() ? " (Laden" : " (Ballast") + " idle)";
 		} else if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof Event) {
-			return "At " + port + (element instanceof Cooldown ? " (Cooldown)" : ""); // + displayTypeName;
+			return (port == null) ? "" : ("At " + port) + (element instanceof Cooldown ? " (Cooldown)" : ""); // + displayTypeName;
 		} else if (element instanceof SlotVisit) {
 			final SlotVisit sv = (SlotVisit) element;
-			return "At " + port + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? " (Load)" : "(Discharge)"); // + displayTypeName;
+			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)"); // + displayTypeName;
 		}
 
 		return null;
@@ -426,7 +425,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	}
 
 	private Integer getPnL(Object object) {
-		ExtraDataContainer container = null;
+		ProfitAndLossContainer container = null;
 
 		if (object instanceof CargoAllocation) {
 			container = (CargoAllocation) object;
@@ -448,12 +447,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 
 		if (container != null) {
-			final ExtraData dataWithKey = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
 			if (dataWithKey != null) {
-				final Integer v = dataWithKey.getValueAs(Integer.class);
-				if (v != null) {
-					return v;
-				}
+				return (int) dataWithKey.getProfitAndLoss();
 			}
 		}
 

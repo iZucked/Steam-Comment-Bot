@@ -4,18 +4,20 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.utils;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.AContract;
 
 /**
  * @since 3.0
@@ -41,41 +43,40 @@ public class ScheduleDiffUtils {
 			ca = (CargoAllocation) otherObject;
 
 			// Check vessel
-			if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+			if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
 				return true;
 			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
 				return true;
-			} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+			} else if (ca.getSequence().getVesselAvailability() != null && (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
 				return true;
 			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
 				return true;
 			}
 
-			if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
+			EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
+			EList<SlotAllocation> refSlotAllocations = ref.getSlotAllocations();
+
+			if (caSlotAllocations.size() != refSlotAllocations.size()) {
 				return true;
 			}
 
-			{
-				final AContract caContract = ca.getLoadAllocation().getContract();
-				final AContract refContract = ref.getLoadAllocation().getContract();
-				final String caName = caContract == null ? null : caContract.getName();
-				final String refName = refContract == null ? null : refContract.getName();
+			for (int i = 0; i < caSlotAllocations.size(); ++i) {
+				SlotAllocation caAllocation = caSlotAllocations.get(i);
+				SlotAllocation refAllocation = refSlotAllocations.get(i);
 
-				if (!Equality.isEqual(caName, refName)) {
+				if (!caAllocation.getPort().getName().equals(refAllocation.getPort().getName())) {
 					return true;
 				}
-			}
-			if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
-				return true;
-			}
-			{
-				final AContract caContract = ca.getDischargeAllocation().getContract();
-				final AContract refContract = ref.getDischargeAllocation().getContract();
-				final String caName = caContract == null ? null : caContract.getName();
-				final String refName = refContract == null ? null : refContract.getName();
 
-				if (!Equality.isEqual(caName, refName)) {
-					return true;
+				{
+					final Contract caContract = caAllocation.getContract();
+					final Contract refContract = refAllocation.getContract();
+					final String caName = caContract == null ? null : caContract.getName();
+					final String refName = refContract == null ? null : refContract.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
 				}
 			}
 		} else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
@@ -85,11 +86,11 @@ public class ScheduleDiffUtils {
 
 			ca = (SlotVisit) otherObject;
 
-			if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+			if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
 				return true;
 			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
 				return true;
-			} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+			} else if (ca.getSequence().getVesselAvailability() != null && (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
 				return true;
 			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
 				return true;
@@ -99,8 +100,8 @@ public class ScheduleDiffUtils {
 				return true;
 			}
 
-			final AContract caContract = ca.getSlotAllocation().getContract();
-			final AContract refContract = ref.getSlotAllocation().getContract();
+			final Contract caContract = ca.getSlotAllocation().getContract();
+			final Contract refContract = ref.getSlotAllocation().getContract();
 			final String caName = caContract == null ? null : caContract.getName();
 			final String refName = refContract == null ? null : refContract.getName();
 

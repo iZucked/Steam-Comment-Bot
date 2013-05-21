@@ -6,10 +6,24 @@ package com.mmxlabs.shiplingo.platform.reports;
 
 import java.util.Collection;
 
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public interface IScenarioInstanceElementCollector {
+	/**
+	 * Notify implementors that we are beginning a new element collection process. Expect zero or more calls to {@link #collectElements(LNGScenarioModel, boolean)} followed by a call to
+	 * {@link #endCollecting()}
+	 */
 	public void beginCollecting();
+
+	/**
+	 * Notify implementors that all scenarios have been presented. Implementors should finalise any data processing. No more calls to {@link #collectElements(LNGScenarioModel, boolean)} are expected.
+	 */
 	public void endCollecting();
-	public Collection<? extends Object> collectElements(final MMXRootObject rootObject, final boolean isPinned);
+
+	/**
+	 * Notify the implementor of each scenario under consideration. Passes in a flag to inidicate that the given scenario is pinned. Up to one pinned scenario is expected to be presented at one time.
+	 * 
+	 * @since 4.0
+	 */
+	public Collection<? extends Object> collectElements(final LNGScenarioModel rootObject, final boolean isPinned);
 }

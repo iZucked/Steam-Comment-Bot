@@ -125,13 +125,19 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		private final IFormatter formatter;
 		private final EMFPath path;
 		private final String title;
+		private final String tooltip;
 		public GridViewerColumn column;
 
 		public ColumnHandler(final IFormatter formatter, final Object[] features, final String title) {
+			this(formatter, features, title, null);
+		}
+
+		public ColumnHandler(final IFormatter formatter, final Object[] features, final String title, final String tooltip) {
 			super();
 			this.formatter = formatter;
 			this.path = new CompiledEMFPath(getClass().getClassLoader(), true, features);
 			this.title = title;
+			this.tooltip = tooltip;
 		}
 
 		public GridViewerColumn createColumn(final EObjectTableViewer viewer) {
@@ -161,6 +167,11 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			final GridColumn tc = column.getColumn();
 			tc.setData(COLUMN_HANDLER, this);
 			this.column = column;
+
+			if (tooltip != null) {
+				column.getColumn().setHeaderTooltip(tooltip);
+			}
+
 			return column;
 		}
 	}
@@ -237,6 +248,76 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			return getComparable(object);
 		}
 	}
+	
+	public class CostFormatter implements IFormatter {
+		public Integer getIntValue(final Object object) {
+			if (object == null) {
+				return null;
+			}
+			return ((Number) object).intValue();
+		}
+
+		@Override
+		public String format(final Object object) {
+			if (object == null) {
+				return "";
+			}
+			final Integer x = getIntValue(object);
+			if (x == null) {
+				return "";
+			}
+			return String.format("$%,d", x);
+		}
+
+		@Override
+		public Comparable getComparable(final Object object) {
+			final Integer x = getIntValue(object);
+			if (x == null) {
+				return -Integer.MAX_VALUE;
+			}
+			return x;
+		}
+
+		@Override
+		public Object getFilterable(final Object object) {
+			return getComparable(object);
+		}
+	}
+
+	public class PriceFormatter implements IFormatter {
+		public Double getDoubleValue(final Object object) {
+			if (object == null) {
+				return null;
+			}
+			return ((Number) object).doubleValue();
+		}
+
+		@Override
+		public String format(final Object object) {
+			if (object == null) {
+				return "";
+			}
+			final Double x = getDoubleValue(object);
+			if (x == null) {
+				return "";
+			}
+			return String.format("$%,.2f", x);
+		}
+
+		@Override
+		public Comparable getComparable(final Object object) {
+			final Double x = getDoubleValue(object);
+			if (x == null) {
+				return -Double.MAX_VALUE;
+			}
+			return x;
+		}
+
+		@Override
+		public Object getFilterable(final Object object) {
+			return getComparable(object);
+		}
+	}
 
 	protected class CalendarFormatter extends BaseFormatter {
 		final DateFormat dateFormat;
@@ -282,16 +363,16 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected final IFormatter timePartFormatter = new CalendarFormatter(DateFormat.getTimeInstance(DateFormat.SHORT), false);
 
 	protected final IntegerFormatter integerFormatter = new IntegerFormatter();
-
-	protected final IFormatter costFormatter = new IntegerFormatter() {
-		@Override
-		public Integer getIntValue(final Object object) {
-			if (object == null) {
-				return null;
-			}
-			return -super.getIntValue(object);
-		}
-	};
+//
+//	protected final IFormatter costFormatter = new IntegerFormatter() {
+//		@Override
+//		public Integer getIntValue(final Object object) {
+//			if (object == null) {
+//				return null;
+//			}
+//			return -super.getIntValue(object);
+//		}
+//	};
 
 	private EObjectTableViewer viewer;
 
@@ -315,7 +396,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					if (scheduleColumnHandler != null) {
 						final GridViewerColumn c = scheduleColumnHandler.column;
 						if (c != null) {
-							c.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
+							c.getColumn().setVisible(synchronizerOutput.getLNGPortfolioModels().size() > 1);
 						}
 					}
 				}
@@ -398,7 +479,26 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		if (viewer != null) {
 			handler.createColumn(viewer).getColumn().pack();
 		}
+		return handler;
+	}
 
+	/**
+	 * Similar to {@link #addColumn(String, IFormatter, Object...)} but supports a column tooltip
+	 * 
+	 * @param title
+	 * @param tooltip
+	 * @param formatter
+	 * @param path
+	 * @return
+	 */
+	protected ColumnHandler addColumn(final String title, final String tooltip, final IFormatter formatter, final Object... path) {
+		final ColumnHandler handler = new ColumnHandler(formatter, path, title, tooltip);
+		handlers.add(handler);
+		handlersInOrder.add(handler);
+
+		if (viewer != null) {
+			handler.createColumn(viewer).getColumn().pack();
+		}
 		return handler;
 	}
 
@@ -443,7 +543,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			};
 		};
 
-		filterField.setViewer(viewer);
+		filterField.setFilterSupport(viewer.getFilterSupport());
 
 		viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -691,7 +791,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @since 2.0
 	 * @param result
 	 */
-	protected void processInputs(Object[] result) {
+	protected void processInputs(final Object[] result) {
 
 	}
 }

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,15 +11,17 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.utils.ScheduleDiffUtils;
 
+/**
+ * @since 3.0
+ */
 public class CargoPnLReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
@@ -41,17 +42,17 @@ public class CargoPnLReportView extends EMFReportView {
 		// addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
 		addPNLColumn();
 
-		// addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
-		addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-		// addColumn("Buy Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
-		addColumn("Buy Price", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation_Price());
-
-		// addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
-		// addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
-		// addColumn("Sell Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
-		addColumn("Sell Price", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation_Price());
-
-		// addColumn("Vessel", objectFormatter, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
+		// // addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
+		// addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
+		// // addColumn("Buy Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
+		// addColumn("Buy Price", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation_Price());
+		//
+		// // addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
+		// // addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
+		// // addColumn("Sell Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
+		// addColumn("Sell Price", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation_Price());
+		//
+		// // addColumn("Vessel", objectFormatter, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
 
 	}
 
@@ -74,12 +75,9 @@ public class CargoPnLReportView extends EMFReportView {
 				if (object instanceof CargoAllocation) {
 
 					CargoAllocation cargoAllocation = (CargoAllocation) object;
-					final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+					final GroupProfitAndLoss dataWithKey = cargoAllocation.getGroupProfitAndLoss();
 					if (dataWithKey != null) {
-						final Integer v = dataWithKey.getValueAs(Integer.class);
-						if (v != null) {
-							return v;
-						}
+						return (int) dataWithKey.getProfitAndLoss();
 					}
 				}
 
@@ -94,12 +92,12 @@ public class CargoPnLReportView extends EMFReportView {
 			// map to events
 			if (a instanceof CargoAllocation) {
 				final CargoAllocation allocation = (CargoAllocation) a;
-
-				setInputEquivalents(
-						allocation,
-						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
-								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
-								allocation.getInputCargo() }));
+				//
+				// setInputEquivalents(
+				// allocation,
+				// Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
+				// allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
+				// allocation.getInputCargo() }));
 			}
 		}
 	}

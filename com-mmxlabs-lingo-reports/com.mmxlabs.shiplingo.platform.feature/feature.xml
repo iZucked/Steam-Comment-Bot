@@ -8,12 +8,12 @@
 <feature
       id="com.mmxlabs.shiplingo.platform.feature"
       label="Shiplingo Platform Feature"
-      version="3.0.4.qualifier"
+      version="4.0.0.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.shiplingo.platform.app">
 
    <description url="http://www.minimaxlabs.com/">
-      MMX Labs Pugins for ShipLingo Demo
+      MMX Labs Pugins for Lingo Platform
    </description>
 
    <copyright url="http://www.example.com/copyright">
@@ -31,7 +31,7 @@ All rights reserved.
       <import feature="com.mmxlabs.jobmanager.feature" version="1.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.lng.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.rcp.common.feature" version="2.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.scenario.service.feature" version="4.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.lng.transformer.feature" version="3.0.0" match="compatible"/>
    </requires>
 

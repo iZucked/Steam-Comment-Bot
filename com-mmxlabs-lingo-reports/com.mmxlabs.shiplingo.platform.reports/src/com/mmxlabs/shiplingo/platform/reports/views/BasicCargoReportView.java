@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -45,15 +46,15 @@ public class BasicCargoReportView extends EMFReportView {
 		// TODO cargo id not slot id.
 		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName());
 
-		addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
-
-		addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
-		addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-		addColumn("Purchase Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
-
-		addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
-		addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
-		addColumn("Sales Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
+//		addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
+//
+//		addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
+//		addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
+//		addColumn("Purchase Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
+//
+//		addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
+//		addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
+//		addColumn("Sales Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
 
 		addColumn("Vessel", objectFormatter, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
 
@@ -76,11 +77,14 @@ public class BasicCargoReportView extends EMFReportView {
 			if (a instanceof CargoAllocation) {
 				final CargoAllocation allocation = (CargoAllocation) a;
 
-				setInputEquivalents(
-						allocation,
-						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
-								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
-								allocation.getInputCargo() }));
+				final List<Object> equivalents = new LinkedList<Object>();
+				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+					equivalents.add(slotAllocation.getSlot());
+					equivalents.add(slotAllocation.getSlotVisit());
+				}
+				equivalents.addAll(allocation.getEvents());
+				equivalents.add(allocation.getInputCargo());
+				setInputEquivalents(allocation, equivalents);
 			}
 		}
 	}

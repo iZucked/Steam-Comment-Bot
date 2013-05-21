@@ -14,12 +14,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -28,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -88,9 +87,10 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		for (final Sequence seq : schedule.getSequences()) {
 
 			int vesselCapacity = Integer.MAX_VALUE;
-			final Vessel vessel = seq.getVessel();
-			if (vessel != null) {
-				vesselCapacity = vessel.getVesselClass().getCapacity();
+			VesselAvailability vesselAvailability = seq.getVesselAvailability();
+			if (vesselAvailability != null) {
+				final Vessel vessel = vesselAvailability.getVessel();
+				vesselCapacity = vessel.getVesselOrVesselClassCapacity();
 			} else {
 				final VesselClass vesselClass = seq.getVesselClass();
 				if (vesselClass != null) {
@@ -127,37 +127,23 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 				if (evt instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) evt;
 
-					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
+					SlotAllocation slotAllocation = visit.getSlotAllocation();
+					if (visit.getStart().after(slotAllocation.getSlot().getWindowEndWithSlotOrPortTime())) {
 
-						final long late = visit.getStart().getTime() - visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
+						final long late = visit.getStart().getTime() - slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().getTime();
 						lateness += (late / 1000 / 60 / 60);
 					}
 
-					final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-					if (visit.getSlotAllocation().getSlot() != null) {
-						final Slot slot = visit.getSlotAllocation().getSlot();
-						if (slot instanceof LoadSlot) {
-							final LoadSlot loadSlot = (LoadSlot) slot;
-							final int minQuantity = loadSlot.getMinQuantity();
-							final int maxQuantity = loadSlot.getMaxQuantity();
-							if (maxQuantity != 0 && maxQuantity < cargoAllocation.getLoadVolume()) {
-								capacityViolations++;
-							} else if (minQuantity != 0 && minQuantity > cargoAllocation.getLoadVolume()) {
-								capacityViolations++;
-							} else if (vesselCapacity < cargoAllocation.getLoadVolume()) {
-								capacityViolations++;
-							}
-						} else if (slot instanceof DischargeSlot) {
-							final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-							final int minQuantity = dischargeSlot.getMinQuantity();
-							final int maxQuantity = dischargeSlot.getMaxQuantity();
-							if (maxQuantity != 0 && maxQuantity < cargoAllocation.getDischargeVolume()) {
-								capacityViolations++;
-							} else if (minQuantity != 0 && minQuantity > cargoAllocation.getDischargeVolume()) {
-								capacityViolations++;
-							} else if (vesselCapacity < cargoAllocation.getDischargeVolume()) {
-								capacityViolations++;
-							}
+					if (slotAllocation.getSlot() != null) {
+						Slot slot = slotAllocation.getSlot();
+						final int minQuantity = slot.getMinQuantity();
+						final int maxQuantity = slot.getMaxQuantity();
+						if (maxQuantity != 0 && maxQuantity < slotAllocation.getVolumeTransferred()) {
+							capacityViolations++;
+						} else if (minQuantity != 0 && minQuantity > slotAllocation.getVolumeTransferred()) {
+							capacityViolations++;
+						} else if (vesselCapacity < slotAllocation.getVolumeTransferred()) {
+							capacityViolations++;
 						}
 					}
 

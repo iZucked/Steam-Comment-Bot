@@ -6,9 +6,7 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
 import java.util.EventObject;
-import java.util.List;
 
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
@@ -20,21 +18,17 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
-import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.shiplingo.platform.reports.views.KPIContentProvider.RowData;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -114,33 +108,27 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 						totalPNL += getElementPNL(cargoAllocation);
 					}
 
-				} else if (evt instanceof ExtraDataContainer) {
-					totalPNL += getElementPNL((ExtraDataContainer) evt);
+				} else if (evt instanceof ProfitAndLossContainer) {
+					totalPNL += getElementPNL((ProfitAndLossContainer) evt);
 				}
 			}
 		}
 
 		EObject object = schedule.eContainer();
 		while ((object != null) && !(object instanceof MMXRootObject)) {
-			if (object instanceof EObject) {
-				object = ((EObject) object).eContainer();
-			}
+			object = object.eContainer();
 		}
 
 		return new RowData(scenarioInstance.getName(), totalPNL, totalCost, totalIdleHours);
 	}
 
-	private long getElementPNL(final ExtraDataContainer container) {
-		final long total = 0l;
+	private long getElementPNL(final ProfitAndLossContainer container) {
 
-		final ExtraData dataWithKey = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
-		if (dataWithKey != null) {
-			final Integer v = dataWithKey.getValueAs(Integer.class);
-			if (v != null) {
-				return v.longValue();
-			}
+		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+		if (groupProfitAndLoss != null) {
+			return groupProfitAndLoss.getProfitAndLoss();
 		}
-		return total;
+		return 0;
 	}
 
 	@Override
@@ -152,14 +140,14 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		currentViewer = viewer;
 
 		rowData = new RowData[0];
-		
+
 		pinnedData = null;
 		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
 			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
 			for (final Object o : synchOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
-					RowData rd = createRowData((Schedule) o, synchOutput.getScenarioInstance(o));
+					final RowData rd = createRowData((Schedule) o, synchOutput.getScenarioInstance(o));
 					rowDataList.add(rd);
 					if (synchOutput.isPinned(o)) {
 						pinnedData = rd;
@@ -168,7 +156,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			}
 			rowData = rowDataList.toArray(rowData);
 		}
-		
+
 		if (rowData.length == 0) {
 			rowData = new RowData[] { new RowData("", null, null, null) };
 		}

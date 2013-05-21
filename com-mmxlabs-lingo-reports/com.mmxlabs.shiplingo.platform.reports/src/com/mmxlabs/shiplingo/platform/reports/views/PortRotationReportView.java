@@ -6,6 +6,8 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -13,14 +15,16 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -40,9 +44,30 @@ public class PortRotationReportView extends EMFReportView {
 	private ColumnHandler vesselColumn;
 	private ColumnHandler durationColumn;
 
+	/**
+	 * Mapping between fuel and the quantity unit displayed.
+	 */
+	private final Map<Fuel, FuelUnit> fuelQuanityUnits = new HashMap<Fuel, FuelUnit>();
+	/**
+	 * Mapping between fuel and the unit price unit displayed.
+	 */
+	private final Map<Fuel, FuelUnit> fuelUnitPriceUnits = new HashMap<Fuel, FuelUnit>();
+
 	public PortRotationReportView() {
 
 		super("com.mmxlabs.shiplingo.platform.reports.PortRotationReportView");
+
+		{
+			fuelQuanityUnits.put(Fuel.BASE_FUEL, FuelUnit.MT);
+			fuelQuanityUnits.put(Fuel.FBO, FuelUnit.M3);
+			fuelQuanityUnits.put(Fuel.NBO, FuelUnit.M3);
+			fuelQuanityUnits.put(Fuel.PILOT_LIGHT, FuelUnit.MT);
+
+			fuelUnitPriceUnits.put(Fuel.BASE_FUEL, FuelUnit.MT);
+			fuelUnitPriceUnits.put(Fuel.FBO, FuelUnit.MMBTU);
+			fuelUnitPriceUnits.put(Fuel.NBO, FuelUnit.MMBTU);
+			fuelUnitPriceUnits.put(Fuel.PILOT_LIGHT, FuelUnit.MT);
+		}
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
@@ -82,50 +107,37 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("From Port", objectFormatter, sp.getEvent_Port(), name);
 		addColumn("To Port", objectFormatter, sp.getJourney_Destination(), name);
 		addColumn("At Port", objectFormatter, sp.getEvent_Port(), name);
-		addColumn("Route", objectFormatter, sp.getJourney_Route());
+		addColumn("Route", objectFormatter, sp.getJourney_Route(), name);
 
-		addColumn("Load Volume", new IntegerFormatter() {
+		addColumn("Transfer Volume", "In m3", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof SlotVisit) {
 					final SlotVisit sv = (SlotVisit) object;
-					final CargoAllocation ca = sv.getSlotAllocation().getCargoAllocation();
-					if (ca == null) {
+					final SlotAllocation sa = sv.getSlotAllocation();
+					if (sa == null) {
 						return null;
 					}
-					// if (ca.getLoadSlot().equals(sv.getSlot())) {
-					// return (int) ca.getLoadVolume();
-					// }
-					return ca.getLoadVolume();
-				}
-				return null;
-			}
-		});
-
-		addColumn("Discharge Volume", new IntegerFormatter() {
-			@Override
-			public Integer getIntValue(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit sv = (SlotVisit) object;
-					final CargoAllocation ca = sv.getSlotAllocation().getCargoAllocation();
-					if (ca == null) {
-						return null;
-					}
-					return ca.getDischargeVolume();
+					return sa.getVolumeTransferred();
 				}
 				return null;
 			}
 		});
 
 		for (final Fuel fuelName : Fuel.values()) {
-			addColumn(fuelName.toString(), new IntegerFormatter() {
+			addColumn(fuelName.toString(), "In " + fuelQuanityUnits.get(fuelName), new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelUsage) {
 						final FuelUsage mix = (FuelUsage) object;
 						for (final FuelQuantity q : mix.getFuels()) {
 							if (q.getFuel().equals(fuelName)) {
-								return q.getAmounts().get(0).getQuantity();
+								final FuelUnit unit = fuelQuanityUnits.get(fuelName);
+								for (final FuelAmount fa : q.getAmounts()) {
+									if (fa.getUnit() == unit) {
+										return fa.getQuantity();
+									}
+								}
 							}
 						}
 
@@ -135,25 +147,26 @@ public class PortRotationReportView extends EMFReportView {
 					}
 				}
 			});
-			addColumn(fuelName + " Unit Price", new IntegerFormatter() {
+			addColumn(fuelName + " Unit Price", "Price per " + fuelUnitPriceUnits.get(fuelName), new PriceFormatter() {
 				@Override
-				public Integer getIntValue(final Object object) {
+				public Double getDoubleValue(final Object object) {
 					if (object instanceof FuelUsage) {
-						for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
-							if (q.getFuel().equals(fuelName)) {
-								if (q.getCost() == 0)
-									return 0;
-								if (q.getAmounts().get(0).getQuantity() == 0)
-									return null;
-								return q.getCost() / q.getAmounts().get(0).getQuantity();
+						final FuelUsage mix = (FuelUsage) object;
+						for (final FuelQuantity q : mix.getFuels()) {
+							if (q.getFuel() == fuelName) {
+								final FuelUnit unit = fuelUnitPriceUnits.get(fuelName);
+								for (final FuelAmount fa : q.getAmounts()) {
+									if (fa.getUnit() == unit) {
+										return fa.getUnitPrice();
+									}
+								}
 							}
 						}
 					}
-
 					return null;
 				}
 			});
-			addColumn(fuelName + " Cost", new IntegerFormatter() {
+			addColumn(fuelName + " Cost", new CostFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -170,7 +183,7 @@ public class PortRotationReportView extends EMFReportView {
 			});
 		}
 
-		addColumn("Fuel Cost", new IntegerFormatter() {
+		addColumn("Fuel Cost", new CostFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof FuelUsage) {
@@ -180,16 +193,16 @@ public class PortRotationReportView extends EMFReportView {
 				}
 			}
 		});
-		addColumn("Charter Cost", new IntegerFormatter() {
+		addColumn("Charter Cost", new CostFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				return (int) ((Event) object).getHireCost();
 			}
 		});
 
-		addColumn("Canal Cost", integerFormatter, sp.getJourney_Toll());
+		addColumn("Canal Cost", new CostFormatter(), sp.getJourney_Toll());
 
-		addColumn("Port Costs", new IntegerFormatter() {
+		addColumn("Port Costs", new CostFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
@@ -200,7 +213,7 @@ public class PortRotationReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Total Cost", new IntegerFormatter() {
+		addColumn("Total Cost", new CostFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				long total = 0;
