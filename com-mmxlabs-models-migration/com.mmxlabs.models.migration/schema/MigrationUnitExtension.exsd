@@ -3,10 +3,10 @@
 <schema targetNamespace="com.mmxlabs.models.migration" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.mmxlabs.models.migration" id="MigrationUnit" name="MigrationUnit"/>
+         <meta.schema plugin="com.mmxlabs.models.migration" id="MigrationUnitExtension" name="MigrationUnitExtension"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         Register extensions to a migration unit, providing pre and post execution hooks and ability to register additional metamodels.
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="MigrationUnit" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="MigrationUnitExtension" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,47 +47,26 @@
       </complexType>
    </element>
 
-   <element name="MigrationUnit">
+   <element name="MigrationUnitExtension">
       <complexType>
-         <attribute name="context" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The Migration Context this Migration Unit applies to
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.MigrationContext/MigrationContext/@name"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-         <attribute name="from" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The Version number this migration unit can migrate from.
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="to" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The Version number this migration unit can migrate to.
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="class" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The class implementing a MigrationUnit
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java" basedOn=":com.mmxlabs.models.migration.IMigrationUnit"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-         <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
+               <appinfo>
+                  <meta.attribute kind="java"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="migrationUnit" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.MigrationUnit/MigrationUnit/@id" deprecated="true"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>

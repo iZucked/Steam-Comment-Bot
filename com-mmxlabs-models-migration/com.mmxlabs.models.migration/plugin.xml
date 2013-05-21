@@ -10,5 +10,6 @@
    <extension-point id="DefaultMigrationContext" name="DefaultMigrationContext" schema="schema/DefaultMigrationContext.exsd"/>
    <extension-point id="MigrationContext" name="MigrationContext" schema="schema/MigrationContext.exsd"/>
    <extension-point id="MigrationUnit" name="MigrationUnit" schema="schema/MigrationUnit.exsd"/>
+   <extension-point id="MigrationUnitExtension" name="MigrationUnitExtension" schema="schema/MigrationUnitExtension.exsd"/>
 
 </plugin>

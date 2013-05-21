@@ -7,6 +7,7 @@ package com.mmxlabs.models.migration.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +19,10 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
+import com.mmxlabs.models.migration.IMigrationUnitExtension;
 import com.mmxlabs.models.migration.extensions.DefaultMigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationContextExtensionPoint;
+import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
 
 /**
@@ -37,6 +40,9 @@ public class MigrationRegistry implements IMigrationRegistry {
 
 	private final Map<String, Map<Integer, IMigrationUnit>> fromVersionMap = new HashMap<String, Map<Integer, IMigrationUnit>>();
 
+	private final Map<IMigrationUnit, String> migrationExtPointIDMap = new HashMap<IMigrationUnit, String>();
+	private final Map<String, List<IMigrationUnitExtension>> migrationUnitExtensionsMap = new HashMap<String, List<IMigrationUnitExtension>>();
+
 	private String defaultContext;
 
 	/**
@@ -48,35 +54,47 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 */
 	@Inject
 	public void init(final Iterable<MigrationContextExtensionPoint> migrationContexts, final Iterable<MigrationUnitExtensionPoint> migrationUnits,
-			final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts) {
+			final Iterable<MigrationUnitExtensionExtensionPoint> migrationUnitExtensions, final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts) {
 
-//		for (final MigrationContextExtensionPoint ext : migrationContexts) {
-//			final String contextName = ext.getContextName();
-//			try {
-//				if (contextName != null) {
-//					registerContext(contextName, Integer.parseInt(ext.getLatestVersion()));
-//				}
-//			} catch (final NumberFormatException e) {
-//				log.error("Unable to register context: " + contextName, e);
-//			}
-//		}
-//		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
-//			try {
-//				if (ext != null) {
-//					registerMigrationUnit(new MigrationUnitProxy(ext));
-//				}
-//			} catch (final Exception e) {
-//				log.error("Unable to register migration unit for context: " + (ext == null ? "unknown" : ext.getContext()), e);
-//			}
-//		}
-//
-//		for (final DefaultMigrationContextExtensionPoint ext : defaultMigrationContexts) {
-//			if (defaultContext == null) {
-//				defaultContext = ext.getContext();
-//			} else {
-//				log.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
-//			}
-//		}
+		for (final MigrationContextExtensionPoint ext : migrationContexts) {
+			final String contextName = ext.getContextName();
+			try {
+				if (contextName != null) {
+					registerContext(contextName, Integer.parseInt(ext.getLatestVersion()));
+				}
+			} catch (final NumberFormatException e) {
+				log.error("Unable to register context: " + contextName, e);
+			}
+		}
+		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
+			try {
+				if (ext != null) {
+					final MigrationUnitProxy proxy = new MigrationUnitProxy(ext);
+					registerMigrationUnit(ext.getID(), proxy);
+
+				}
+			} catch (final Exception e) {
+				log.error("Unable to register migration unit for context: " + (ext == null ? "unknown" : ext.getContext()), e);
+			}
+		}
+		for (final MigrationUnitExtensionExtensionPoint ext : migrationUnitExtensions) {
+			try {
+				if (ext != null) {
+					final MigrationUnitExtensionProxy proxy = new MigrationUnitExtensionProxy(ext);
+					registerMigrationUnitExtension(ext.getMigrationUnitID(), proxy);
+				}
+			} catch (final Exception e) {
+				log.error("Unable to register migration unit extension for unit: " + (ext == null ? "unknown" : ext.getMigrationUnitID()), e);
+			}
+		}
+
+		for (final DefaultMigrationContextExtensionPoint ext : defaultMigrationContexts) {
+			if (defaultContext == null) {
+				defaultContext = ext.getContext();
+			} else {
+				log.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
+			}
+		}
 	}
 
 	@SuppressWarnings("null")
@@ -115,11 +133,24 @@ public class MigrationRegistry implements IMigrationRegistry {
 
 		int currentVersion = fromVersion;
 		while (currentVersion != toVersion) {
-			final IMigrationUnit nextUnit = froms.get(currentVersion);
+			IMigrationUnit nextUnit = froms.get(currentVersion);
 			// Is there another unit?
 			if (nextUnit == null) {
 				throw new RuntimeException(String.format("Unable to find migration chain between verions %d and %d for context %s.", fromVersion, toVersion, context));
 			}
+
+			// Wrap the migration unit in any extension points found.
+			if (migrationExtPointIDMap.containsKey(nextUnit)) {
+				final String unitID = migrationExtPointIDMap.get(nextUnit);
+				if (migrationUnitExtensionsMap.containsKey(unitID)) {
+					final List<IMigrationUnitExtension> extensions = migrationUnitExtensionsMap.get(unitID);
+					for (final IMigrationUnitExtension ext : extensions) {
+						ext.setMigrationUnit(nextUnit);
+						nextUnit = ext;
+					}
+				}
+			}
+
 			// Add unit to chain
 			chain.add(nextUnit);
 			// Next version to find!
@@ -152,6 +183,22 @@ public class MigrationRegistry implements IMigrationRegistry {
 	public void registerMigrationUnit(@NonNull final IMigrationUnit unit) {
 		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(unit.getContext());
 		map.put(unit.getSourceVersion(), unit);
+	}
+
+	public void registerMigrationUnit(final String id, @NonNull final IMigrationUnit unit) {
+		registerMigrationUnit(unit);
+		migrationExtPointIDMap.put(unit, id);
+	}
+
+	public void registerMigrationUnitExtension(final String unitID, @NonNull final IMigrationUnitExtension unitExtension) {
+		final List<IMigrationUnitExtension> extensions;
+		if (migrationUnitExtensionsMap.containsKey(unitID)) {
+			extensions = migrationUnitExtensionsMap.get(unitID);
+		} else {
+			extensions = new LinkedList<IMigrationUnitExtension>();
+			migrationUnitExtensionsMap.put(unitID, extensions);
+		}
+		extensions.add(unitExtension);
 	}
 
 	@Override

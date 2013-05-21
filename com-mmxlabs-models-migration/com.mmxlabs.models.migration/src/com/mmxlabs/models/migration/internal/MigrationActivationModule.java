@@ -15,6 +15,7 @@ import com.google.inject.Singleton;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.extensions.DefaultMigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationContextExtensionPoint;
+import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
 import com.mmxlabs.models.migration.impl.MigrationRegistry;
 
@@ -32,6 +33,7 @@ class MigrationActivationModule extends AbstractModule {
 		// Extension points
 		bind(iterable(MigrationContextExtensionPoint.class)).toProvider(service(MigrationContextExtensionPoint.class).multiple());
 		bind(iterable(MigrationUnitExtensionPoint.class)).toProvider(service(MigrationUnitExtensionPoint.class).multiple());
+		bind(iterable(MigrationUnitExtensionExtensionPoint.class)).toProvider(service(MigrationUnitExtensionExtensionPoint.class).multiple());
 		bind(iterable(DefaultMigrationContextExtensionPoint.class)).toProvider(service(DefaultMigrationContextExtensionPoint.class).multiple());
 
 		// Bind implementation as a singleton to our service interface
