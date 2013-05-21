@@ -29,7 +29,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -1075,11 +1075,11 @@ public class DefaultScenarioCreator {
 	public SalesContract addSalesContract(final String name, final float dischargePrice) {
 		final CommercialModel commercialModel = scenario.getCommercialModel();
 		final SalesContract result = CommercialFactory.eINSTANCE.createSalesContract();
-		final FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 		result.setName(name);
 
 		result.setEntity(contractEntity);
-		params.setPricePerMMBTU(dischargePrice);
+		params.setPriceExpression(Float.toString(dischargePrice));
 
 		result.setPriceInfo(params);
 		commercialModel.getSalesContracts().add(result);
@@ -1099,12 +1099,12 @@ public class DefaultScenarioCreator {
 	public PurchaseContract addPurchaseContract(final String name, final double purchasePrice) {
 		final CommercialModel commercialModel = scenario.getCommercialModel();
 		final PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
-		final FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 
 		result.setName(name);
 
 		result.setEntity(contractEntity);
-		params.setPricePerMMBTU(purchasePrice);
+		params.setPriceExpression(Double.toString(purchasePrice));
 
 		result.setPriceInfo(params);
 		commercialModel.getPurchaseContracts().add(result);

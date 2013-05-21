@@ -40,7 +40,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	private IPortSlotProvider portSlotProvider;
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {

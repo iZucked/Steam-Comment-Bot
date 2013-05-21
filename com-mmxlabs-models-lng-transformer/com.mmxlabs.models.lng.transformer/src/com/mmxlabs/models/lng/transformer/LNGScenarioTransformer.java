@@ -198,7 +198,7 @@ public class LNGScenarioTransformer {
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
 	 * @param scenario
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	@Inject
 	public LNGScenarioTransformer(final LNGScenarioModel rootObject) {
@@ -207,7 +207,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	protected void init(final LNGScenarioModel rootObject) {
 
@@ -1817,7 +1817,7 @@ public class LNGScenarioTransformer {
 	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
 	 * 
 	 * @return
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	public OptimiserSettings getOptimisationSettings() {
 		final ParametersModel om = rootObject.getParametersModel();

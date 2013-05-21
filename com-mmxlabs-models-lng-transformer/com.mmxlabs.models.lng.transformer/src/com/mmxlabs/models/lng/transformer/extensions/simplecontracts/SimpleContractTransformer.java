@@ -19,7 +19,6 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -42,14 +41,14 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  */
 public class SimpleContractTransformer implements IContractTransformer {
 
-	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceParameters(), CommercialPackage.eINSTANCE.getExpressionPriceParameters(),
-			CommercialPackage.eINSTANCE.getSalesContract(), CommercialPackage.eINSTANCE.getPurchaseContract());
+	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getExpressionPriceParameters(), CommercialPackage.eINSTANCE.getSalesContract(),
+			CommercialPackage.eINSTANCE.getPurchaseContract());
 
 	@Inject
 	private SeriesParser indices;
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
@@ -60,13 +59,9 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	private SimpleContract instantiate(final LNGPriceCalculatorParameters priceInfo) {
-		if (priceInfo instanceof FixedPriceParameters) {
-			final FixedPriceParameters fixedPriceInfo = (FixedPriceParameters) priceInfo;
-			return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(fixedPriceInfo.getPricePerMMBTU()));
-		} else if (priceInfo instanceof ExpressionPriceParameters) {
+		if (priceInfo instanceof ExpressionPriceParameters) {
 			final ExpressionPriceParameters expressionPriceInfo = (ExpressionPriceParameters) priceInfo;
 			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression());
-
 		}
 
 		return null;

@@ -43,6 +43,9 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
 
+	/**
+	 * @since 4.0
+	 */
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;

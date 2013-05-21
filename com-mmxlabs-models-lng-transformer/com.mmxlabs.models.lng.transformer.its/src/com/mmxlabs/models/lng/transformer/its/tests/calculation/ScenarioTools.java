@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -363,7 +362,7 @@ public class ScenarioTools {
 		s.setName("Shipping");
 
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
-		final FixedPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+		final ExpressionPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 		pc.setPriceInfo(purchaseParams);
 
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
@@ -617,7 +616,7 @@ public class ScenarioTools {
 		s.setName("Shipping");
 
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
-		final FixedPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+		final ExpressionPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 		pc.setPriceInfo(purchaseParams);
 
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();

@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -667,11 +667,11 @@ public class CustomScenarioCreator {
 	 */
 	public SalesContract addSalesContract(final String name, final float dischargePrice) {
 		final SalesContract result = CommercialFactory.eINSTANCE.createSalesContract();
-		final FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 		result.setName(name);
 
 		result.setEntity(contractEntity);
-		params.setPricePerMMBTU(dischargePrice);
+		params.setPriceExpression(Float.toString(dischargePrice));
 
 		result.setPriceInfo(params);
 		commercialModel.getSalesContracts().add(result);
@@ -690,7 +690,7 @@ public class CustomScenarioCreator {
 	 */
 	public PurchaseContract addPurchaseContract(final String name) {
 		final PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
-		final FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 
 		result.setName(name);
 
