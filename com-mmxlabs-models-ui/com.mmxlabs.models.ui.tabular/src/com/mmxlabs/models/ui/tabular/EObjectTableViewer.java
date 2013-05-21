@@ -4,19 +4,12 @@
  */
 package com.mmxlabs.models.ui.tabular;
 
-import java.util.ArrayList;
 import java.util.EventObject;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -30,8 +23,6 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -40,8 +31,6 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -51,11 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.ui.tabular.filter.FilterUtils;
-import com.mmxlabs.models.ui.tabular.filter.IFilter;
-import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
-import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
@@ -80,7 +65,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		@Override
 		public void commandStackChanged(final EventObject event) {
 
-			// TODO: This is fairly coarse grained check -perhaps we should check the mostRecentCommand result and check to see if it contains the conainer - OR contained elements?
+			// TODO: This is fairly coarse grained check -perhaps we should check the mostRecentCommand result and check to see if it contains the container - OR contained elements?
 
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
@@ -94,26 +79,11 @@ public class EObjectTableViewer extends GridTableViewer {
 	};
 
 	protected IColorProvider delegateColourProvider;
+	
+	protected final Set<String> allMnemonics = new HashSet<String>();
 
-	private final Set<String> allMnemonics = new HashSet<String>();
 
-	protected IStatusProvider statusProvider;
-
-	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
-
-		@Override
-		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-			final HashSet<Object> updates = new HashSet<Object>();
-			for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
-				if (!entry.getValue().isOK())
-					updates.add(entry.getKey());
-			}
-
-			validationErrors.clear();
-
-			processStatus(status, true);
-		}
-	};
+	private final EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
 
 	final HashSet<EObject> objectsToUpdate = new HashSet<EObject>();
 	boolean waitingForUpdate = false;
@@ -133,60 +103,6 @@ public class EObjectTableViewer extends GridTableViewer {
 		}
 	};
 
-	// final MMXContentAdapter adapter = new MMXContentAdapter() {
-	// @Override
-	// protected void missedNotifications(final List<Notification> notifications) {
-	// for (final Notification notification : new ArrayList<Notification>(notifications)) {
-	// if (!notification.isTouch()) {
-	// Display.getDefault().asyncExec(new Runnable() {
-	// @Override
-	// public void run() {
-	// if (!getControl().isDisposed())
-	// refresh();
-	// }
-	// });
-	// return;
-	// }
-	// }
-	// }
-	//
-	// @Override
-	// public void reallyNotifyChanged(final Notification notification) {
-	// // System.err.println(notification);
-	// if (notification.isTouch() == false) {
-	// if (notification.getEventType() == Notification.REMOVING_ADAPTER)
-	// return;
-	// // this is a change, so we have to refresh.
-	// // ideally we just want to update the changed object, but we
-	// // get the notification from
-	// // somewhere below, so we need to go up
-	// EObject source = (EObject) notification.getNotifier();
-	// // if (currentElements.contains(source))
-	// // return;
-	// if (source == currentContainer) {
-	// Display.getDefault().asyncExec(new Runnable() {
-	// @Override
-	// public void run() {
-	// refresh();
-	// }
-	// });
-	// return;
-	// }
-	// source = getElementForNotificationTarget(source);
-	// if (source != null) {
-	// synchronized (objectsToUpdate) {
-	// objectsToUpdate.add(source);
-	// if (!waitingForUpdate) {
-	// waitingForUpdate = true;
-	// Display.getDefault().asyncExec(updateRunner);
-	// }
-	// }
-	// return;
-	// }
-	// }
-	// }
-	// };
-
 	/**
 	 * @since 3.1
 	 */
@@ -194,26 +110,13 @@ public class EObjectTableViewer extends GridTableViewer {
 		refresh();
 	}
 
-	public EObject getElementForNotificationTarget(EObject source) {
-		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null))
-			;
-		return source;
-	}
-
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
-
-	private final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
 
 	/**
 	 * A one-element list referring to the EObject which contains all the display elements. #adapter uses this to determine when a notification comes on the top-level object, and so all the contents
 	 * should be refreshed (e.g. after an import)
 	 */
 	EObject currentContainer;
-
-	/**
-	 * Overridding sort order of objects. Any change in column sort order will set this back to null.
-	 */
-	private List<Object> fixedSortOrder = null;
 
 	/**
 	 * @return the currentContainer
@@ -229,51 +132,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	/**
 	 * A set containing the elements currently being displayed, which is used by #adapter to determine which row to refresh when a notification comes in
 	 */
-	final HashSet<EObject> currentElements = new HashSet<EObject>();
-
-	// private final IMMXAdapter externalAdapter = new MMXAdapterImpl() {
-	//
-	// protected void missedNotifications(final List<Notification> missed) {
-	// for (final Notification n : new ArrayList<Notification>(missed)) {
-	// if (n != null) {
-	// reallyNotifyChanged(n);
-	// }
-	// }
-	// }
-	//
-	// @Override
-	// public void reallyNotifyChanged(final Notification msg) {
-	// if (!msg.isTouch()) {
-	// final Object notifier = msg.getNotifier();
-	// // redraw all objects listening to this notifier
-	// final Set<EObject> changed = externalReferences.get(notifier);
-	// if (changed != null) {
-	// Display.getDefault().asyncExec(new Runnable() {
-	// public void run() {
-	// // wait to refresh if there is an import happening
-	// // elsewhere. then refresh everything.
-	// if (refreshOrGiveUp()) {
-	// return;
-	// }
-	//
-	// for (final EObject e : changed) {
-	// EObjectTableViewer.this.update(e, null);
-	// }
-	//
-	// }
-	// });
-	// }
-	// }
-	// }
-	// };
-	//
-	// private final Map<EObject, Set<Notifier>> externalNotifiersByObject = new HashMap<EObject, Set<Notifier>>();
-	//
-	// private final Map<Notifier, Set<EObject>> externalReferences = new HashMap<Notifier, Set<EObject>>();
-
-	private boolean sortDescending = false;
-
-	private IFilter filter = null;
+	private final HashSet<EObject> currentElements = new HashSet<EObject>();
 
 	protected boolean lockedForEditing = false;
 
@@ -297,7 +156,8 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private boolean displayValidationErrors = true;
 
-	final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
+	private final EObjectTableViewerValidationSupport validationSupport;
+	private final EObjectTableViewerFilterSupport filterSupport;
 
 	public boolean isDisplayValidationErrors() {
 		return displayValidationErrors;
@@ -309,17 +169,22 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	public EObjectTableViewer(final Composite parent, final int style) {
 		super(parent, style);
-
+		this.validationSupport = createValidationSupport();
+		this.filterSupport = new EObjectTableViewerFilterSupport(this);
 		ColumnViewerToolTipSupport.enableFor(this);
 	}
 
-	public void setFilterString(final String filterString) {
-		if (filterString.isEmpty()) {
-			filter = null;
-		}
-		final FilterUtils utils = new FilterUtils();
-		filter = utils.parseFilterString(filterString);
-		refresh(false);
+	/**
+	 * @since 4.0
+	 */
+	protected EObjectTableViewerValidationSupport createValidationSupport() {
+		return new EObjectTableViewerValidationSupport(this) {
+
+			@Override
+			public EObject getElementForValidationTarget(EObject source) {
+				return getElementForNotificationTarget(source);
+			}
+		};
 	}
 
 	private void setColumnMnemonics(final GridColumn column, final List<String> mnemonics) {
@@ -374,7 +239,45 @@ public class EObjectTableViewer extends GridTableViewer {
 		// final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
 	}
-
+	
+	public void setColumnMnemonics(final GridColumn column, final List<String> mnemonics) {
+		column.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnemonics);		
+		for (String string: mnemonics) {
+			allMnemonics.add(string);
+		}
+	}
+	
+	protected String uniqueMnemonic(final String mnemonic) {
+		String result = mnemonic;
+		int suffix = 2;
+		while (allMnemonics.contains(result)) {
+			result = mnemonic + suffix++;
+		}
+		return result;
+	}
+	
+	protected List<String> makeMnemonics(final String columnName) {
+		LinkedList<String> result = new LinkedList<String>();
+		
+		result.add(uniqueMnemonic(columnName.toLowerCase().replace(" ", "")));
+		String initials = "";
+		boolean ws = true;
+		for (int i = 0; i < columnName.length(); i++) {
+			final char c = columnName.charAt(i);
+			if (Character.isWhitespace(c)) {
+				ws = true;
+			} else {
+				if (ws) {
+					initials += c;
+				}
+				ws = false;
+			}
+		}
+		result.add(uniqueMnemonic(initials.toLowerCase()));
+		
+		return result;
+	}
+	
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
 
 		// create a column
@@ -398,29 +301,8 @@ public class EObjectTableViewer extends GridTableViewer {
 		tColumn.setData(COLUMN_RENDERER, renderer);
 		tColumn.setData(COLUMN_PATH, path);
 
+		
 		setColumnMnemonics(tColumn, makeMnemonics(columnName));
-
-		// GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
-		// long timer = 0;
-		//
-		// /*
-		// * (non-Javadoc)
-		// *
-		// * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
-		// */
-		// @Override
-		// protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-		// final long fireTime = System.currentTimeMillis();
-		// final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
-		// || ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
-		// // this we get loads of keydown events.
-		// timer = fireTime;
-		// return activate;
-		// }
-		//
-		// }, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
-
-		columnSortOrder.add(tColumn);
 
 		column.setLabelProvider(new EObjectTableViewerColumnProvider(this, renderer, path));
 
@@ -451,30 +333,7 @@ public class EObjectTableViewer extends GridTableViewer {
 				refresh();
 			}
 		});
-
-		column.getColumn().addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-			}
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-
-				// Sort order changed - clear fixed ordering
-				fixedSortOrder = null;
-
-				if (columnSortOrder.get(0) == tColumn) {
-					sortDescending = !sortDescending;
-				} else {
-					sortDescending = false;
-					columnSortOrder.get(0).setSort(SWT.NONE);
-					columnSortOrder.remove(tColumn);
-					columnSortOrder.add(0, tColumn);
-				}
-				tColumn.setSort(sortDescending ? SWT.UP : SWT.DOWN);
-				viewer.refresh(false);
-			}
-		});
+		sortingSupport.addSortableColumn(viewer, column, tColumn);
 
 		column.getColumn().setCellRenderer(createCellRenderer());
 
@@ -499,56 +358,11 @@ public class EObjectTableViewer extends GridTableViewer {
 		tColumn.setMoveable(true);
 		tColumn.setText(columnName);
 		tColumn.pack();
-		// tColumn.setResizable(true);
 
 		setColumnMnemonics(tColumn, makeMnemonics(columnName));
 
-		// GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
-		// long timer = 0;
-		//
-		// /*
-		// * (non-Javadoc)
-		// *
-		// * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
-		// */
-		// @Override
-		// protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-		// final long fireTime = System.currentTimeMillis();
-		// final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
-		// || ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
-		// // this we get loads of keydown events.
-		// timer = fireTime;
-		// return activate;
-		// }
-		//
-		// }, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
-
 		if (sortable) {
-			columnSortOrder.add(tColumn);
-
-			column.getColumn().addSelectionListener(new SelectionListener() {
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-				}
-
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-
-					// Sort order changed - clear fixed ordering
-					fixedSortOrder = null;
-
-					if (columnSortOrder.get(0) == tColumn) {
-						sortDescending = !sortDescending;
-					} else {
-						sortDescending = false;
-						columnSortOrder.get(0).setSort(SWT.NONE);
-						columnSortOrder.remove(tColumn);
-						columnSortOrder.add(0, tColumn);
-					}
-					tColumn.setSort(sortDescending ? SWT.UP : SWT.DOWN);
-					viewer.refresh(false);
-				}
-			});
+			sortingSupport.addSortableColumn(viewer, column, tColumn);
 		}
 		column.getColumn().setCellRenderer(createCellRenderer());
 
@@ -579,11 +393,9 @@ public class EObjectTableViewer extends GridTableViewer {
 		// externalReferences.clear();
 		// externalNotifiersByObject.clear();
 		currentElements.clear();
-		columnSortOrder.clear();
+		sortingSupport.clearColumnSortOrder();
 
-		if (statusProvider != null) {
-			statusProvider.removeStatusChangedListener(statusChangedListener);
-		}
+		validationSupport.dispose();
 	}
 
 	@Override
@@ -634,6 +446,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 				if (oldInput == null) {
 					Display.getDefault().asyncExec(new Runnable() {
+						@Override
 						public void run() {
 							if (!viewer.getControl().isDisposed()) {
 								if (viewer instanceof GridTableViewer) {
@@ -666,87 +479,16 @@ public class EObjectTableViewer extends GridTableViewer {
 					}
 				}
 
-				if (statusProvider != null && inputElement != null) {
+				if (inputElement != null) {
 					// Perform initial validation
-					processStatus(statusProvider.getStatus(), false);
+					validationSupport.processStatus(false);
 				}
 
 				return elements;
 			}
 		});
 
-		viewer.setComparator(new ViewerComparator() {
-			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-
-				// If there is a fixed sort order use that.
-				if (fixedSortOrder != null) {
-					final int idx1 = fixedSortOrder.indexOf(e1);
-					final int idx2 = fixedSortOrder.indexOf(e2);
-					return idx1 - idx2;
-				}
-
-				final Iterator<GridColumn> iterator = columnSortOrder.iterator();
-				int comparison = 0;
-				while (iterator.hasNext() && (comparison == 0)) {
-					final GridColumn column = iterator.next();
-					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
-					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
-
-					if (path != null) {
-
-						final Object v1 = path.get((EObject) e1);
-						final Object v2 = path.get((EObject) e2);
-
-						final Comparable left = renderer.getComparable(v1);
-						final Comparable right = renderer.getComparable(v2);
-						if (left == null) {
-							return -1;
-						} else if (right == null) {
-							return 1;
-						} else {
-							comparison = left.compareTo(right);
-						}
-					} else {
-						final Comparable left = renderer.getComparable(e1);
-						final Comparable right = renderer.getComparable(e2);
-						if (left == null) {
-							return -1;
-						} else if (right == null) {
-							return 1;
-						} else {
-							comparison = left.compareTo(right);
-						}
-					}
-				}
-				return sortDescending ? -comparison : comparison;
-			}
-		});
-
-		addFilter(new ViewerFilter() {
-			@Override
-			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-				if (filter == null) {
-					return true;
-				}
-
-				/**
-				 * This map contains representations of each column for this object, both the real value and the display value.
-				 */
-				final Map<String, Pair<?, ?>> attributes = new HashMap<String, Pair<?, ?>>();
-				// this could probably be much faster
-				for (final GridColumn column : getGrid().getColumns()) {
-					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
-					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
-					if (path == null)
-						continue;
-					final Object fieldValue = path.get((EObject) element);
-					final Object filterValue = renderer.getFilterValue(fieldValue);
-					final Object renderValue = renderer.render(fieldValue);
-
-					final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
-					for (final String m : mnemonics) {
-						// make sure we add the attribute with a unique key
+		viewer.setComparator(sortingSupport.createViewerComparer());
 						String key = m;
 						int suffix = 2;
 						while (attributes.containsKey(key)) {
@@ -754,13 +496,8 @@ public class EObjectTableViewer extends GridTableViewer {
 							suffix += 1;
 						}
 						attributes.put(key, new Pair<Object, Object>(filterValue, renderValue));
-					}
-				}
 
-				return filter.matches(attributes);
-
-			}
-		});
+		addFilter(filterSupport.createViewerFilter());
 	}
 
 	private EReference currentReference;
@@ -809,138 +546,11 @@ public class EObjectTableViewer extends GridTableViewer {
 		return false;
 	}
 
-	// protected void removeAdapters() {
-	// adapter.disable();
-	// externalAdapter.disable();
-	// if (currentContainer != null) {
-	// currentContainer.eAdapters().remove(adapter);
-	// }
-	// for (final Notifier n : externalReferences.keySet()) {
-	// n.eAdapters().remove(externalAdapter);
-	// }
-	//
-	// externalReferences.clear();
-	// externalNotifiersByObject.clear();
-	//
-	// // TODO put this into IMMXAdapter#enable(boolean)
-	// adapter.enable();
-	// externalAdapter.enable();
-	// }
-	//
-	// private void updateObjectExternalNotifiers(final EObject object) {
-	// final Set<Notifier> dropNotifiers = new HashSet<Notifier>();
-	// final Set<Notifier> addNotifiers = new HashSet<Notifier>();
-	// Set<Notifier> notifiers = externalNotifiersByObject.get(object);
-	//
-	// // look at the existing notifiers for this object, and disassociate them
-	// if (notifiers != null) {
-	// for (final Notifier notifier : notifiers) {
-	// final Set<EObject> references = externalReferences.get(notifier);
-	// references.remove(object);
-	// if (references.isEmpty()) {
-	// dropNotifiers.add(notifier); // we may no longer have any
-	// // need to be notified by
-	// // this notifier at all
-	// }
-	// }
-	// } else {
-	// notifiers = new HashSet<Notifier>();
-	// }
-	//
-	// // now ask all the cell renderers what we need to watch for this object
-	// for (final Pair<EMFPath, ICellRenderer> pathAndRenderer : cellRenderers) {
-	// final Iterable<Pair<Notifier, List<Object>>> newNotifiers = pathAndRenderer.getSecond().getExternalNotifiers(pathAndRenderer.getFirst().get(object));
-	// for (final Pair<Notifier, List<Object>> notifierAndFeatures : newNotifiers) {
-	// // get the notifier we are interested in
-	// final Notifier n = notifierAndFeatures.getFirst();
-	// if (n == null) {
-	// log.debug(pathAndRenderer + " has provided a null notifier for " + object);
-	// continue;
-	// }
-	// notifiers.add(n); // add it to the notifiers for this object
-	//
-	// // relate this object to this notifier, so we can disconnect it
-	// // in a future update.
-	// Set<EObject> er = externalReferences.get(n);
-	// if (er == null) {
-	// er = new HashSet<EObject>();
-	// externalReferences.put(n, er);
-	// }
-	//
-	// if (er.isEmpty()) {
-	// addNotifiers.add(n); // this notifier had no related
-	// // objects, so we need to adapt it.
-	// }
-	//
-	// er.add(object);
-	// }
-	// }
-	//
-	// // actually hook up the notifiers
-	// final Iterator<Notifier> iter = dropNotifiers.iterator();
-	// while (iter.hasNext()) {
-	// final Notifier n = iter.next();
-	// if (addNotifiers.contains(n)) {
-	// iter.remove();
-	// addNotifiers.remove(n);
-	// }
-	// }
-	//
-	// for (final Notifier n : dropNotifiers) {
-	// if (n != null) {
-	// n.eAdapters().remove(externalAdapter);
-	// }
-	// }
-	//
-	// for (final Notifier n : addNotifiers) {
-	// if (n != null) {
-	// n.eAdapters().add(externalAdapter);
-	// }
-	// }
-	// }
-
-	/**
-	 * @return names that can be used in the filter (see {@link #setFilterString(String)})
-	 */
-	public Map<String, List<String>> getColumnMnemonics() {
-		final Map<String, List<String>> ms = new TreeMap<String, List<String>>();
-
-		final GridColumn[] columns = getGrid().getColumns();
 		int[] columnOrder = getGrid().getColumnOrder();
 		for (int i = 0; i < columns.length; ++i) {
 			final GridColumn column = columns[i];
-			final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
-			ms.put(column.getText() + " (col no.  " + (1 + columnOrder[i]) + ")", mnemonics);
-		}
-
-		return ms;
-	}
-
-	/**
-	 * Get possible (unfiltered) values for the column with the given name
-	 * 
-	 * @param columnName
-	 * @return
-	 */
-	public Set<String> getDistinctValues(final String columnName) {
-		final TreeSet<String> result = new TreeSet<String>();
-
-		for (final GridColumn column : getGrid().getColumns()) {
-			if (column.getText().equals(columnName)) {
-				final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
-				final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
-				for (final EObject element : currentElements) {
-					result.add(renderer.render(path.get(element)));
-				}
-				return result;
-			}
-		}
-
-		return result;
-	}
-
 	public void removeColumn(final GridViewerColumn column) {
-		columnSortOrder.remove(column.getColumn());
+		sortingSupport.removeSortableColumn(column.getColumn());
 		final Pair<EMFPath, ICellRenderer> pathAndRenderer = (Pair<EMFPath, ICellRenderer>) column.getColumn().getData(COLUMN_RENDERER_AND_PATH);
 		cellRenderers.remove(pathAndRenderer);
 		column.getColumn().dispose();
@@ -954,82 +564,45 @@ public class EObjectTableViewer extends GridTableViewer {
 		this.delegateColourProvider = delegateColourProvider;
 	}
 
-	public Map<Object, IStatus> getValidationErrors() {
-		return validationErrors;
-	}
-
-	public IStatusProvider getStatusProvider() {
-		return statusProvider;
-	}
-
-	public void setStatusProvider(final IStatusProvider statusProvider) {
-		this.statusProvider = statusProvider;
-		statusProvider.addStatusChangedListener(statusChangedListener);
-	}
-
 	/**
-	 * @since 2.0
+	 * @since 4.0
 	 */
-	protected void processStatus(final IStatus status, final boolean update) {
-		// Call an inner process status method to avoid potentially costly performance hits should this method be overridden and there are a lot of validation issues.
+	public EObjectTableViewerValidationSupport getValidationSupport() {
+		return validationSupport;
 		recursiveProcessStatus(status, update);
 	}
 
 	private void recursiveProcessStatus(final IStatus status, final boolean update) {
-		if (status == null)
-			return;
-		if (status.isMultiStatus()) {
-			for (final IStatus s : status.getChildren()) {
-				recursiveProcessStatus(s, update);
-			}
-		}
-		if (status instanceof IDetailConstraintStatus) {
-			final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
-			if (!status.isOK()) {
-				updateObject(getElementForNotificationTarget(detailConstraintStatus.getTarget()), status, update);
+	}
 
-				for (final EObject e : detailConstraintStatus.getObjects()) {
-					updateObject(getElementForNotificationTarget(e), status, update);
-				}
-			}
-		}
+	public EObject getElementForNotificationTarget(EObject source) {
+		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null))
+			;
+		return source;
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 4.0
 	 */
-	protected void updateObject(final EObject object, final IStatus status, final boolean update) {
-		if (object != null) {
-			setStatus(object, status);
-			if (update) {
-				update(object, null);
-			}
-		}
+	public HashSet<EObject> getCurrentElements() {
+		return currentElements;
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 4.0
 	 */
-	protected void setStatus(final Object e, final IStatus s) {
-		final IStatus existing = validationErrors.get(e);
-		if (existing == null || s.getSeverity() > existing.getSeverity()) {
-			validationErrors.put(e, s);
-		}
+	public EObjectTableViewerFilterSupport getFilterSupport() {
+		return filterSupport;
+	}
+
+	public void setStatusProvider(IStatusProvider statusProvider) {
+		validationSupport.setStatusProvider(statusProvider);
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 4.0
 	 */
-	public List<Object> getFixedSortOrder() {
-		return fixedSortOrder;
-	}
-
-	/**
-	 * Set a predefined sort order to override current column sort order. This will be overridden if the column sort order changes.
-	 * 
-	 * @since 2.0
-	 */
-	public void setFixedSortOrder(final List<Object> fixedSortOrder) {
-		this.fixedSortOrder = fixedSortOrder;
+	public EObjectTableViewerSortingSupport getSortingSupport() {
+		return sortingSupport;
 	}
 }

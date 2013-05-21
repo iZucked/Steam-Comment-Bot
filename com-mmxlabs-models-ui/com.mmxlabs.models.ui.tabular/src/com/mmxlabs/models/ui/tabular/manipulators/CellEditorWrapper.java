@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.tabular;
+package com.mmxlabs.models.ui.tabular.manipulators;
 
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -16,8 +16,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
+
 /**
- * @since 3.1
+ * @since 4.0
  */
 public class CellEditorWrapper<T extends Control> extends CellEditor {
 		private CheckedControl<T> inner;

@@ -315,7 +315,27 @@ public class DefaultClassImporter implements IClassImporter {
 					ai.setAttribute(instance, attribute, row.get(lowerCase), context);
 				}
 			} else {
-				context.addProblem(context.createProblem("Field not present", true, false, true));
+				boolean shouldWarn = shouldExportFeature(attribute);
+				if (shouldWarn) {
+					if (attribute == MMXCorePackage.eINSTANCE.getNamedObject_OtherNames()) {
+						// Annotation is not on the feature itself, but rather the sub-class
+						final EAnnotation annotation = instance.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/annotations/namedobject");
+						boolean exportOtherNames = false;
+						if (annotation != null) {
+							final String showOtherNamesAnnotation = annotation.getDetails().get("showOtherNames");
+							if (showOtherNamesAnnotation != null) {
+								exportOtherNames = Boolean.parseBoolean(showOtherNamesAnnotation);
+							}
+						}
+						if (!exportOtherNames) {
+							shouldWarn = false;
+						}
+					}
+				}
+
+				if (shouldWarn) {
+					context.addProblem(context.createProblem("Field not present", true, false, true));
+				}
 			}
 		}
 	}
@@ -419,8 +439,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
-		return !(feature == MMXCorePackage.eINSTANCE.getMMXObject_Extensions() || feature == MMXCorePackage.eINSTANCE.getMMXObject_Proxies() || feature == MMXCorePackage.eINSTANCE
-				.getUUIDObject_Uuid());
+		return !(feature == MMXCorePackage.eINSTANCE.getMMXObject_Extensions() || feature == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid());
 	}
 
 	protected boolean shouldFlattenReference(final EReference reference) {

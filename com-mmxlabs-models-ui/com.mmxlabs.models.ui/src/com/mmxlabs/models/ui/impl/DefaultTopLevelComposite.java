@@ -94,7 +94,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		}
 	}
 
-	private void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	/**
+	 * @since 4.0
+	 */
+	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
 			g2.setText(EditorUtils.unmangle(ref.getName()));

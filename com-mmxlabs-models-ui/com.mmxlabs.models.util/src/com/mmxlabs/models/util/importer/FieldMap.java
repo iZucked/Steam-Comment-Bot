@@ -158,13 +158,13 @@ public class FieldMap implements IFieldMap {
 			superMap.notifyAccess(prefix + key);
 		}
 	}
-
-	/**
-	 * @since 3.2
-	 */
+	
 	public String getPrefix() {
 		return prefix;
 	}
+	
+	public FieldMap getSuperMap() {
+		return superMap;
 
 	/**
 	 * @since 3.2

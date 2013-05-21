@@ -12,12 +12,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
@@ -31,37 +32,44 @@ public class JointModelEditorContributionRegistry implements IJointModelEditorCo
 
 	@Override
 	public List<IJointModelEditorContribution> initEditorContributions(final JointModelEditorPart part, final MMXRootObject root) {
-		final List<Pair<IJointModelEditorExtension, UUIDObject>> matches = new ArrayList<Pair<IJointModelEditorExtension, UUIDObject>>(root.getSubModels().size());
+		final List<Pair<IJointModelEditorExtension, UUIDObject>> matches = new ArrayList<Pair<IJointModelEditorExtension, UUIDObject>>(10);
 
 		final HashMap<String, IJointModelEditorExtension> extensionsByModel = new HashMap<String, IJointModelEditorExtension>();
 		for (final IJointModelEditorExtension ex : extensions) {
 			extensionsByModel.put(ex.getSubModelClassName(), ex);
 		}
 
-		for (final MMXSubModel subModel : root.getSubModels()) {
-			final IJointModelEditorExtension ex = extensionsByModel.get(subModel.getSubModelInstance().eClass().getInstanceClass().getCanonicalName());
-			if (ex != null) {
-				matches.add(new Pair<IJointModelEditorExtension, UUIDObject>(ex, subModel.getSubModelInstance()));
+		final TreeIterator<EObject> itr = root.eAllContents();
+		while (itr.hasNext()) {
+			final EObject obj = itr.next();
+			final String subClassName = obj.eClass().getInstanceClass().getCanonicalName();
+			if (extensionsByModel.containsKey(subClassName)) {
+				final IJointModelEditorExtension ex = extensionsByModel.get(subClassName);
+				if (ex != null) {
+					matches.add(new Pair<IJointModelEditorExtension, UUIDObject>(ex, (UUIDObject)obj));
+				}
+				// Skip the subtree
+				itr.prune();
 			}
 		}
 
 		Collections.sort(matches, new Comparator<Pair<IJointModelEditorExtension, UUIDObject>>() {
 
 			@Override
-			public int compare(Pair<IJointModelEditorExtension, UUIDObject> o1, Pair<IJointModelEditorExtension, UUIDObject> o2) {
+			public int compare(final Pair<IJointModelEditorExtension, UUIDObject> o1, final Pair<IJointModelEditorExtension, UUIDObject> o2) {
 
 				// Peaberry bug: Prority cannot be converted into an int directly;
 				// @see http://code.google.com/p/peaberry/issues/detail?id=74
 				int p1 = 100;
 				try {
 					p1 = Integer.parseInt(o1.getFirst().getPriority());
-				} catch (NumberFormatException nfe) {
+				} catch (final NumberFormatException nfe) {
 					// Ignore
 				}
 				int p2 = 100;
 				try {
 					p2 = Integer.parseInt(o2.getFirst().getPriority());
-				} catch (NumberFormatException nfe) {
+				} catch (final NumberFormatException nfe) {
 					// Ignore
 				}
 
