@@ -275,6 +275,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
