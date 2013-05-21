@@ -350,7 +350,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -360,7 +360,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -373,7 +373,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

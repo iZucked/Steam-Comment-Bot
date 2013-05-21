@@ -58,6 +58,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	/**
 	 * The cached value of the '{@link #getVesselAvailability() <em>Vessel Availability</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getVesselAvailability()
 	 * @generated
@@ -68,6 +69,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	/**
 	 * This is true if the Vessel Availability reference has been set.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -207,6 +209,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -224,6 +227,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -233,6 +237,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -247,6 +252,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -261,6 +267,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

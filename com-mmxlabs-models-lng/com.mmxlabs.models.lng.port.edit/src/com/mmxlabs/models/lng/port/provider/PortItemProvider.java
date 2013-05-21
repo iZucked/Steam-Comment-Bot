@@ -254,6 +254,7 @@ public class PortItemProvider
 	/**
 	 * This adds a property descriptor for the Atobviac Code feature.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -276,6 +277,7 @@ public class PortItemProvider
 	/**
 	 * This adds a property descriptor for the Dataloy Code feature.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

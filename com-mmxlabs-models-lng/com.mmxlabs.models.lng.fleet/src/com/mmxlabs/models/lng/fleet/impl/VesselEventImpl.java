@@ -179,7 +179,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -189,7 +189,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -202,7 +202,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

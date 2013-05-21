@@ -309,10 +309,16 @@ public class CargoModelRowTransformer {
 			this.group = group;
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public boolean isPrimaryRecord() {
 			return primaryRecord;
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public void setPrimaryRecord(boolean primaryRecord) {
 			this.primaryRecord = primaryRecord;
 		}
@@ -408,12 +414,18 @@ public class CargoModelRowTransformer {
 		 */
 		private boolean primaryRecordOnly;
 
+		/**
+		 * @since 4.0
+		 */
 		public RowDataEMFPath(boolean primaryRecordOnly, final Type type, final Iterable<?> path) {
 			super(true, path);
 			this.type = type;
 			this.primaryRecordOnly = primaryRecordOnly;
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public RowDataEMFPath(boolean primaryRecordOnly, final Type type, final Object... path) {
 			super(true, path);
 			this.type = type;

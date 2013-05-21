@@ -52,7 +52,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -63,7 +63,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -74,7 +74,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getOtherNames()
 	 * @generated
@@ -124,7 +124,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * The cached value of the '{@link #getSlots() <em>Slots</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getSlots()
 	 * @generated
@@ -153,7 +153,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -163,7 +163,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -176,7 +176,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -247,7 +247,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -283,7 +283,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * <!-- begin-user-doc -->
 	 * Returns date sorted copy of the {@link #getSlots()} {@link List}.
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */

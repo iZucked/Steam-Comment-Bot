@@ -232,6 +232,7 @@ public class VesselAvailabilityItemProvider
 	/**
 	 * This adds a property descriptor for the Time Charter Rate feature.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

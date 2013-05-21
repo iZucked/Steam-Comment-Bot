@@ -994,6 +994,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2121,6 +2122,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Time Charter Rate</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate()
@@ -2851,6 +2853,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

@@ -754,6 +754,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

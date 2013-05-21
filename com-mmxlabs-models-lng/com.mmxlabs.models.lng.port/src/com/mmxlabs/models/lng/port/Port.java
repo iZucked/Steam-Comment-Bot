@@ -270,6 +270,7 @@ public interface Port extends APortSet<Port> {
 	 * If the meaning of the '<em>Atobviac Code</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Atobviac Code</em>' attribute.
 	 * @see #setAtobviacCode(String)
@@ -282,6 +283,7 @@ public interface Port extends APortSet<Port> {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Atobviac Code</em>' attribute.
 	 * @see #getAtobviacCode()
@@ -296,6 +298,7 @@ public interface Port extends APortSet<Port> {
 	 * If the meaning of the '<em>Dataloy Code</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Dataloy Code</em>' attribute.
 	 * @see #setDataloyCode(String)
@@ -308,6 +311,7 @@ public interface Port extends APortSet<Port> {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Dataloy Code</em>' attribute.
 	 * @see #getDataloyCode()

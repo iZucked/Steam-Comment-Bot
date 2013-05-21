@@ -154,6 +154,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -163,6 +164,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -175,6 +177,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -1112,6 +1112,7 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Portfolio Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2167,6 +2168,7 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Portfolio Model</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel()
@@ -3009,6 +3011,7 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Portfolio Model</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

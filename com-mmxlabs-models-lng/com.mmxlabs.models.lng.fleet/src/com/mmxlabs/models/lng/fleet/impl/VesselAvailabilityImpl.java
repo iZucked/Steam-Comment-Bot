@@ -58,6 +58,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getTimeCharterRate()
 	 * @generated
@@ -68,6 +69,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	/**
 	 * The cached value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getTimeCharterRate()
 	 * @generated
@@ -78,6 +80,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 	/**
 	 * This is true if the Time Charter Rate attribute has been set.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -547,6 +550,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -556,6 +560,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -570,6 +575,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -584,6 +590,7 @@ public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvail
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

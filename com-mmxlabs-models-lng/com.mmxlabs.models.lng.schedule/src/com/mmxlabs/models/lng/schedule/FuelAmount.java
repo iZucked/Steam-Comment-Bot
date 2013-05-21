@@ -86,6 +86,7 @@ public interface FuelAmount extends EObject {
 	 * If the meaning of the '<em>Unit Price</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Unit Price</em>' attribute.
 	 * @see #setUnitPrice(double)
@@ -98,6 +99,7 @@ public interface FuelAmount extends EObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice <em>Unit Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Unit Price</em>' attribute.
 	 * @see #getUnitPrice()

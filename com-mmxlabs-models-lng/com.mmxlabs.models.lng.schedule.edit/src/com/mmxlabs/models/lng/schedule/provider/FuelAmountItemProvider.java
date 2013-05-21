@@ -118,6 +118,7 @@ public class FuelAmountItemProvider
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 4.0
 	 */
 	protected void addUnitPricePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add

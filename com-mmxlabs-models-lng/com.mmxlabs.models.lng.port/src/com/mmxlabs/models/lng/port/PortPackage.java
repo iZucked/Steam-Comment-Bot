@@ -190,6 +190,7 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Atobviac Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -199,6 +200,7 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Dataloy Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -711,6 +713,7 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Atobviac Code</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getAtobviacCode()
@@ -722,6 +725,7 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Dataloy Code</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getDataloyCode()
@@ -1062,6 +1066,7 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Atobviac Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1070,6 +1075,7 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Dataloy Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

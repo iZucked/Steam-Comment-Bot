@@ -134,7 +134,7 @@ public interface FleetFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Scenario Fleet Model</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Scenario Fleet Model</em>'.
 	 * @generated

@@ -103,7 +103,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -113,7 +113,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -126,7 +126,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

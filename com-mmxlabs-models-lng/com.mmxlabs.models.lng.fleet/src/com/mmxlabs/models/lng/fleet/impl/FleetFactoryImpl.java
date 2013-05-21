@@ -247,7 +247,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

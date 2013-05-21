@@ -85,7 +85,7 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -95,7 +95,7 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -108,7 +108,7 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
