@@ -43,7 +43,7 @@
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="priceInfo" eType="#//LNGPriceCalculatorParameters"
-        unsettable="false" containment="true"/>
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//Contract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
@@ -60,10 +60,6 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LNGPriceCalculatorParameters" abstract="true"
       eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
-  <eClassifiers xsi:type="ecore:EClass" name="FixedPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricePerMMBTU" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExpressionPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""/>

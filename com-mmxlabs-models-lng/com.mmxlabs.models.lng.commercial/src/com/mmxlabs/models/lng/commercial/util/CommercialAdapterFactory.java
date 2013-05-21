@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -107,10 +106,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseLNGPriceCalculatorParameters(LNGPriceCalculatorParameters object) {
 				return createLNGPriceCalculatorParametersAdapter();
-			}
-			@Override
-			public Adapter caseFixedPriceParameters(FixedPriceParameters object) {
-				return createFixedPriceParametersAdapter();
 			}
 			@Override
 			public Adapter caseExpressionPriceParameters(ExpressionPriceParameters object) {
@@ -245,21 +240,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createLNGPriceCalculatorParametersAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters <em>Fixed Price Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.FixedPriceParameters
-	 * @generated
-	 */
-	public Adapter createFixedPriceParametersAdapter() {
 		return null;
 	}
 

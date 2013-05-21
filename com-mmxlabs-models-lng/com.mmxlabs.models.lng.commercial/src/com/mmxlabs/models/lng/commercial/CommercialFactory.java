@@ -81,16 +81,6 @@ public interface CommercialFactory extends EFactory {
 	TaxRate createTaxRate();
 
 	/**
-	 * Returns a new object of class '<em>Fixed Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Fixed Price Parameters</em>'.
-	 * @generated
-	 */
-	FixedPriceParameters createFixedPriceParameters();
-
-	/**
 	 * Returns a new object of class '<em>Expression Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0

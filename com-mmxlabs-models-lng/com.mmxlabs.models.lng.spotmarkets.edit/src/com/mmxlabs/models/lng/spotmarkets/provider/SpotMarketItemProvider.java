@@ -226,11 +226,6 @@ public class SpotMarketItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SpotMarketsPackage.Literals.SPOT_MARKET__PRICE_INFO,
-				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SpotMarketsPackage.Literals.SPOT_MARKET__PRICE_INFO,
 				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
 	}
 

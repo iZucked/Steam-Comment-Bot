@@ -52,11 +52,6 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
 	<componentHelper
-		id="com.mmxlabs.models.lng.commercial.helpers.FixedPriceParameters"
-		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.FixedPriceParametersComponentHelper"
-		inheritable="false"
-		modelClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters" />
-	<componentHelper
 		id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
 		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
 		inheritable="false"

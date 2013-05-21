@@ -704,57 +704,6 @@ public interface CommercialPackage extends EPackage {
 	int LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl <em>Fixed Price Parameters</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getFixedPriceParameters()
-	 * @generated
-	 */
-	int FIXED_PRICE_PARAMETERS = 7;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FIXED_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FIXED_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Fixed Price Parameters</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FIXED_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -763,7 +712,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
 	 * @generated
 	 */
-	int EXPRESSION_PRICE_PARAMETERS = 8;
+	int EXPRESSION_PRICE_PARAMETERS = 7;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1109,29 +1058,6 @@ public interface CommercialPackage extends EPackage {
 	EClass getLNGPriceCalculatorParameters();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters <em>Fixed Price Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Fixed Price Parameters</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.FixedPriceParameters
-	 * @generated
-	 */
-	EClass getFixedPriceParameters();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price Per MMBTU</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.FixedPriceParameters#getPricePerMMBTU()
-	 * @see #getFixedPriceParameters()
-	 * @generated
-	 */
-	EAttribute getFixedPriceParameters_PricePerMMBTU();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters <em>Expression Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1418,26 +1344,6 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass LNG_PRICE_CALCULATOR_PARAMETERS = eINSTANCE.getLNGPriceCalculatorParameters();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl <em>Fixed Price Parameters</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getFixedPriceParameters()
-		 * @generated
-		 */
-		EClass FIXED_PRICE_PARAMETERS = eINSTANCE.getFixedPriceParameters();
-
-		/**
-		 * The meta object literal for the '<em><b>Price Per MMBTU</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU = eINSTANCE.getFixedPriceParameters_PricePerMMBTU();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.

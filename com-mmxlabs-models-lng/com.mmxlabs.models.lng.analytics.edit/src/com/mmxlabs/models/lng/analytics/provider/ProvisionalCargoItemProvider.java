@@ -291,11 +291,6 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
 
 		newChildDescriptors.add

@@ -229,30 +229,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.FixedPriceParameters} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected FixedPriceParametersItemProvider fixedPriceParametersItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.FixedPriceParameters}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createFixedPriceParametersAdapter() {
-		if (fixedPriceParametersItemProvider == null) {
-			fixedPriceParametersItemProvider = new FixedPriceParametersItemProvider(this);
-		}
-
-		return fixedPriceParametersItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters} instances.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -411,7 +387,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
 		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
 		if (taxRateItemProvider != null) taxRateItemProvider.dispose();
-		if (fixedPriceParametersItemProvider != null) fixedPriceParametersItemProvider.dispose();
 		if (expressionPriceParametersItemProvider != null) expressionPriceParametersItemProvider.dispose();
 	}
 

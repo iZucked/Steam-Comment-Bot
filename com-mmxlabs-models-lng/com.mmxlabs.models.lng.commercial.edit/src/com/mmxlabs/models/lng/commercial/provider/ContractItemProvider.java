@@ -371,11 +371,6 @@ public class ContractItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
-				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
 				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
 	}
 
