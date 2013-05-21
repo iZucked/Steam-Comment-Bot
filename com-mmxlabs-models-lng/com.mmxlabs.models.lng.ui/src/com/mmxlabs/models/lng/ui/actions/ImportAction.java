@@ -37,6 +37,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
@@ -48,53 +49,57 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
  */
 public abstract class ImportAction extends LockableAction {
 	/**
-	 * Encapsulation of the data required to perform the import action.
-	 * Typically pulled from an IScenarioEditingLocation, but can also be
-	 * pulled from elsewhere, e.g. in a bulk import. 
+	 * Encapsulation of the data required to perform the import action. Typically pulled from an IScenarioEditingLocation, but can also be pulled from elsewhere, e.g. in a bulk import.
 	 * 
 	 * @author Simon McGregor
 	 * @since 3.1
-	 *
+	 * 
 	 */
 	public interface ImportHooksProvider {
 		Shell getShell();
+
 		MMXRootObject getRootObject();
+
 		EditingDomain getEditingDomain();
+
 		String getImportFilePath();
+
 		char getCsvSeparator();
+
 		void lock();
+
 		void unlock();
 	}
-	
+
 	/**
 	 * @since 3.1
 	 */
 	protected final ImportHooksProvider importHooksProvider;
-	
+
 	/**
 	 * @since 3.1
 	 */
 	public ImportAction(final ImportHooksProvider ihp) {
 		super("Import", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
 		importHooksProvider = ihp;
-		
+
 	}
-	
+
 	public ImportAction(final IScenarioEditingLocation part) {
 		// create a new import hooks provider which pulls the data from the scenario editing location
 		// and gets the import filename from a dialog
 		this(new ImportHooksProvider() {
-			
+
 			@Override
 			public Shell getShell() {
 				return part.getShell();
 			}
-			
+
 			@Override
 			public MMXRootObject getRootObject() {
 				return part.getRootObject();
 			}
-			
+
 			@Override
 			public EditingDomain getEditingDomain() {
 				return part.getEditingDomain();
@@ -103,7 +108,7 @@ public abstract class ImportAction extends LockableAction {
 			@Override
 			public void lock() {
 				part.setDisableCommandProviders(true);
-				part.setDisableUpdates(true);				
+				part.setDisableUpdates(true);
 			}
 
 			@Override
@@ -131,14 +136,14 @@ public abstract class ImportAction extends LockableAction {
 	public void run() {
 		// import the data
 		final DefaultImportContext context = safelyImport();
-		
-		// if there were any problems, pop up a problem dialog 
+
+		// if there were any problems, pop up a problem dialog
 		if (context != null && context.getProblems().isEmpty() == false) {
 			final ImportProblemDialog ipd = new ImportProblemDialog(importHooksProvider.getShell());
 			ipd.open(context);
 		}
 	}
-	
+
 	/**
 	 * @since 3.1
 	 */
@@ -149,13 +154,13 @@ public abstract class ImportAction extends LockableAction {
 			context = new DefaultImportContext();
 			context.setRootObject(importHooksProvider.getRootObject());
 			context.registerNamedObjectsFromSubModels();
-			
+
 			doImportStages(context);
 
 		} finally {
 			importHooksProvider.unlock();
-		}		
-		
+		}
+
 		return context;
 	}
 
@@ -257,8 +262,11 @@ public abstract class ImportAction extends LockableAction {
 			if (object instanceof NamedObject) {
 				final NamedObject namedObject = (NamedObject) object;
 				result.put(namedObject.getName(), namedObject);
-				for (final String otherName : namedObject.getOtherNames()) {
-					result.put(otherName, namedObject);
+				if (namedObject instanceof OtherNamesObject) {
+					final OtherNamesObject otherNamesObject = (OtherNamesObject) namedObject;
+					for (final String otherName : otherNamesObject.getOtherNames()) {
+						result.put(otherName, namedObject);
+					}
 				}
 			}
 		}
