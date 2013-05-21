@@ -1,16 +1,10 @@
 package com.mmxlabs.lingo.its.utils;
 
-import static org.ops4j.peaberry.util.TypeLiterals.iterable;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -18,22 +12,8 @@ import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.io.ByteStreams;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.internal.Activator;
-import com.mmxlabs.lingo.models.migration.LingoMigrationConstants;
-import com.mmxlabs.lingo.models.migration.units.LingoMigrateToV1;
-import com.mmxlabs.model.service.impl.ModelService;
-import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
-import com.mmxlabs.models.lng.migration.units.MigrateToV1;
-import com.mmxlabs.models.lng.migration.units.MigrateToV2;
 import com.mmxlabs.models.migration.IMigrationRegistry;
-import com.mmxlabs.models.migration.IMigrationUnit;
-import com.mmxlabs.models.migration.extensions.DefaultMigrationContextExtensionPoint;
-import com.mmxlabs.models.migration.extensions.MigrationContextExtensionPoint;
-import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
-import com.mmxlabs.models.migration.impl.MigrationRegistry;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -45,23 +25,19 @@ public class MigrationHelper {
 
 		public TestScenarioService(final String name) {
 			super(name);
-			setModelService(new ModelService());
 		}
 
 		@Override
-		public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException {
-			// TODO Auto-generated method stub
+		public ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException {
 			return null;
 		}
 
 		@Override
 		public void delete(final Container container) {
-			// TODO Auto-generated method stub
 		}
 
 		@Override
 		protected ScenarioService initServiceModel() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -70,114 +46,6 @@ public class MigrationHelper {
 			return URI.createURI(uri);
 		}
 
-	}
-
-	private static class TestMigrationContextExtensionPoint implements MigrationContextExtensionPoint {
-
-		private final String context;
-		private final int latestVersion;
-
-		public TestMigrationContextExtensionPoint(final String context, final int latestVersion) {
-			this.context = context;
-			this.latestVersion = latestVersion;
-		}
-
-		@Override
-		public String getContextName() {
-			return context;
-		}
-
-		@Override
-		public String getLatestVersion() {
-			return Integer.toString(latestVersion);
-		}
-
-	}
-
-	private static class TestMigrationUnitExtensionPoint implements MigrationUnitExtensionPoint {
-
-		private final IMigrationUnit unit;
-
-		public TestMigrationUnitExtensionPoint(final IMigrationUnit unit) {
-			this.unit = unit;
-		}
-
-		@Override
-		public String getContext() {
-			return unit.getContext();
-		}
-
-		@Override
-		public String getFrom() {
-			return Integer.toString(unit.getSourceVersion());
-		}
-
-		@Override
-		public String getTo() {
-			return Integer.toString(unit.getDestinationVersion());
-		}
-
-		@Override
-		public IMigrationUnit createMigrationUnit() {
-			return unit;
-		}
-
-	}
-
-	private static class TestDefaultMigrationContextExtensionPoint implements DefaultMigrationContextExtensionPoint {
-
-		private final String context;
-
-		public TestDefaultMigrationContextExtensionPoint(final String context) {
-			this.context = context;
-		}
-
-		@Override
-		public String getContext() {
-			return context;
-		}
-
-	}
-
-	public static MigrationRegistry createMigrationRegistry() {
-		final MigrationRegistry migrationRegistry = new MigrationRegistry();
-		final Injector injector = Guice.createInjector(new AbstractModule() {
-
-			@Override
-			protected void configure() {
-				bind(IMigrationRegistry.class).toInstance(migrationRegistry);
-
-				// Bind some empty lists so that the injection for the registry has some data to use.
-				// We will fill in the real data further down
-				final List<MigrationContextExtensionPoint> migrationContexts = new ArrayList<MigrationContextExtensionPoint>();
-				final List<MigrationUnitExtensionPoint> migrationUnits = new ArrayList<MigrationUnitExtensionPoint>();
-				final List<DefaultMigrationContextExtensionPoint> defaultMigrationContexts = new ArrayList<DefaultMigrationContextExtensionPoint>();
-
-				bind(iterable(MigrationContextExtensionPoint.class)).toInstance(migrationContexts);
-				bind(iterable(MigrationUnitExtensionPoint.class)).toInstance(migrationUnits);
-				bind(iterable(DefaultMigrationContextExtensionPoint.class)).toInstance(defaultMigrationContexts);
-
-			}
-		});
-
-		// The real data to pass to the registry
-		final List<MigrationContextExtensionPoint> migrationContexts = new ArrayList<MigrationContextExtensionPoint>();
-		final List<MigrationUnitExtensionPoint> migrationUnits = new ArrayList<MigrationUnitExtensionPoint>();
-		final List<DefaultMigrationContextExtensionPoint> defaultMigrationContexts = new ArrayList<DefaultMigrationContextExtensionPoint>();
-
-		// Populate!
-		migrationContexts.add(new TestMigrationContextExtensionPoint(ModelsLNGMigrationConstants.Context, 2));
-		migrationContexts.add(new TestMigrationContextExtensionPoint(LingoMigrationConstants.Context, -1));
-
-		migrationUnits.add(new TestMigrationUnitExtensionPoint(new MigrateToV1()));
-		migrationUnits.add(new TestMigrationUnitExtensionPoint(new MigrateToV2()));
-		// These need the migration registry injected
-		migrationUnits.add(new TestMigrationUnitExtensionPoint(injector.getInstance(LingoMigrateToV1.class)));
-
-		defaultMigrationContexts.add(new TestDefaultMigrationContextExtensionPoint(LingoMigrationConstants.Context));
-
-		migrationRegistry.init(migrationContexts, migrationUnits, defaultMigrationContexts);
-		return migrationRegistry;
 	}
 
 	public static void migrateAndLoad(final ScenarioInstance instance) throws IOException {
@@ -200,36 +68,27 @@ public class MigrationHelper {
 
 		{
 
-			final EList<String> subModelURIs = instance.getSubModelURIs();
+			final String subModelURI = instance.getRootObjectURI();
 
 			final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
 			// Get original URI's as a list
-			final List<URI> uris = new ArrayList<URI>();
-			for (final String uriStr : subModelURIs) {
-				final URI uri = scenarioService.resolveURI(uriStr);
-				uris.add(uri);
-			}
-			instance.getSubModelURIs().clear();
+			final URI uri = scenarioService.resolveURI(subModelURI);
 			// Copy data files for manipulation
-			final List<URI> tmpURIs = new ArrayList<URI>();
-			for (final URI uri : uris) {
-				assert uri != null;
-				final File f = File.createTempFile("migration", ".xmi");
-				// Create a temp file and generate a URI to it to pass into migration code.
-				final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
-				assert tmpURI != null;
-				copyURIData(uc, uri, tmpURI);
+			assert uri != null;
+			final File f = File.createTempFile("migration", ".xmi");
+			// Create a temp file and generate a URI to it to pass into migration code.
+			final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
+			assert tmpURI != null;
+			copyURIData(uc, uri, tmpURI);
 
-				// Store the URI
-				tmpURIs.add(tmpURI);
-				// Add a mapping between the original URI and the temp URI. This should permit internal references to resolve to the new data file.
-				// TODO: Check to see whether or not the URI is the original URI or the "resolved" uri.
-				uc.getURIMap().put(uri, tmpURI);
+			// Store the URI
+			// Add a mapping between the original URI and the temp URI. This should permit internal references to resolve to the new data file.
+			// TODO: Check to see whether or not the URI is the original URI or the "resolved" uri.
+			uc.getURIMap().put(uri, tmpURI);
 
-				instance.getSubModelURIs().add(tmpURI.toString());
+			instance.setRootObjectURI(tmpURI.toString());
 
-			}
 		}
 
 		scenarioService.load(instance);

@@ -1,4 +1,4 @@
-uuid,name,otherNames,minQuantity,maxQuantity,priceInfo.constant,priceInfo.multiplier,entity,allowedPorts,priceInfo.index,priceInfo.kind,priceInfo.pricePerMMBTU,kind
-_QpoQ8K_aEeGyyNbjDp7Faw,NBP Spot P,,0,1000000,0.0,1.0,Others,All LOAD Ports,NBP,IndexPriceParameters,,PurchaseContract
-_T94P8K_aEeGyyNbjDp7Faw,HH Spot P,,0,1000000,0.0,1.0,Others,All LOAD Ports,HH,IndexPriceParameters,,PurchaseContract
-_pDILYK_aEeGyyNbjDp7Faw,Buy 5,,0,1000000,,,Others,,,FixedPriceParameters,5.0,PurchaseContract
+uuid,name,otherNames,minQuantity,maxQuantity,entity,allowedPorts,priceInfo.priceExpression,priceInfo.kind,priceInfo.pricePerMMBTU,kind
+_QpoQ8K_aEeGyyNbjDp7Faw,NBP Spot P,,0,1000000,Others,All LOAD Ports,NBP,ExpressionPriceParameters,,PurchaseContract
+_T94P8K_aEeGyyNbjDp7Faw,HH Spot P,,0,1000000,Others,All LOAD Ports,HH,ExpressionPriceParameters,,PurchaseContract
+_pDILYK_aEeGyyNbjDp7Faw,Buy 5,,0,1000000,Others,,,FixedPriceParameters,5,PurchaseContract

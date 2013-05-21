@@ -6,8 +6,10 @@ package com.mmxlabs.lingo.its.tests.scenarios;
 
 import java.net.URL;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore("Ignored as data models have changed and there is no migration")
 public class TestDemoCases extends AbstractOptimisationResultTester {
 
 	@Test

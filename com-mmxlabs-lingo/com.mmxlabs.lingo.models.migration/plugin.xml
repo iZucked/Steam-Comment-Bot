@@ -17,6 +17,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationUnit">
       <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV1"
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV1"
             context="com.mmxlabs.lingo"
             from="0"

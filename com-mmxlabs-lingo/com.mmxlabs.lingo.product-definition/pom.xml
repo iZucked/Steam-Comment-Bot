@@ -5,12 +5,12 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
 		<groupId>com.mmxlabs.lingo</groupId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.product-definition</artifactId>
 	<packaging>eclipse-repository</packaging>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -54,5 +54,4 @@
 
 		</plugins>
 	</build>
-
 </project>

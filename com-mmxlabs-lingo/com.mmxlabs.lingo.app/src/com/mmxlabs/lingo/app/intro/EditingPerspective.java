@@ -39,6 +39,6 @@ public class EditingPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
 		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.optimisation");
-		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.analysis");
+		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
 	}
 }

@@ -44,7 +44,7 @@
          </property>
 	 <property
         name="aboutText"
-        value="Lingo Platform">
+        value="LiNGO Platform&#x0A;&#x0A;Version: 3.0.0">
        </property>
       </product>
    </extension>

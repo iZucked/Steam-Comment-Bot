@@ -13,14 +13,14 @@
       <perspective
             class="com.mmxlabs.shiplingo.platform.ui.AnalysisPerspective"
             icon="icons/exec_statistic_view.gif"
-            id="com.mmxlabs.shiplingo.platform.app.perspective.analysis"
+            id="com.mmxlabs.lingo.app.perspective.analysis"
             name="Analysis">
       </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
-            targetID="com.mmxlabs.shiplingo.platform.app.perspective.analysis">
+            targetID="com.mmxlabs.lingo.app.perspective.analysis">
          <view
                closeable="false"
                id="com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView"
