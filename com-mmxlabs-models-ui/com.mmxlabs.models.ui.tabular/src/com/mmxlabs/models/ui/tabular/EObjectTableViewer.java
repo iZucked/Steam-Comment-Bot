@@ -48,6 +48,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * without import/export buttons.
  * 
  * @author Tom Hinton
+ * @since 4.0
  * 
  */
 public class EObjectTableViewer extends GridTableViewer {
@@ -79,9 +80,11 @@ public class EObjectTableViewer extends GridTableViewer {
 	};
 
 	protected IColorProvider delegateColourProvider;
-	
-	protected final Set<String> allMnemonics = new HashSet<String>();
 
+	/**
+	 * @since 4.0
+	 */
+	protected final Set<String> allMnemonics = new HashSet<String>();
 
 	private final EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
 
@@ -181,72 +184,30 @@ public class EObjectTableViewer extends GridTableViewer {
 		return new EObjectTableViewerValidationSupport(this) {
 
 			@Override
-			public EObject getElementForValidationTarget(EObject source) {
+			public EObject getElementForValidationTarget(final EObject source) {
 				return getElementForNotificationTarget(source);
 			}
 		};
-	}
-
-	private void setColumnMnemonics(final GridColumn column, final List<String> mnemonics) {
-
-		column.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnemonics);
-		for (final String string : mnemonics) {
-			allMnemonics.add(string);
-		}
-	}
-
-	private String uniqueMnemonic(final String mnemonic) {
-		String result = mnemonic;
-		int suffix = 2;
-		while (allMnemonics.contains(result)) {
-			result = mnemonic + suffix++;
-		}
-		return result;
-	}
-
-	private List<String> makeMnemonics(final String columnName) {
-		final LinkedList<String> result = new LinkedList<String>();
-		{
-			final String uniqueMnemonic = uniqueMnemonic(columnName.toLowerCase().replace(" ", ""));
-			if (uniqueMnemonic != null && !uniqueMnemonic.isEmpty()) {
-				result.add(uniqueMnemonic);
-			}
-		}
-		String initials = "";
-		boolean ws = true;
-		for (int i = 0; i < columnName.length(); i++) {
-			final char c = columnName.charAt(i);
-			if (Character.isWhitespace(c)) {
-				ws = true;
-			} else {
-				if (ws) {
-					initials += c;
-				}
-				ws = false;
-			}
-		}
-		{
-			final String uniqueMnemonic = uniqueMnemonic(initials.toLowerCase());
-			if (uniqueMnemonic != null && !uniqueMnemonic.isEmpty()) {
-				result.add(uniqueMnemonic);
-			}
-		}
-
-		return result;
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
 		// final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
 	}
-	
+
+	/**
+	 * @since 4.0
+	 */
 	public void setColumnMnemonics(final GridColumn column, final List<String> mnemonics) {
-		column.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnemonics);		
-		for (String string: mnemonics) {
+		column.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnemonics);
+		for (final String string : mnemonics) {
 			allMnemonics.add(string);
 		}
 	}
-	
+
+	/**
+	 * @since 4.0
+	 */
 	protected String uniqueMnemonic(final String mnemonic) {
 		String result = mnemonic;
 		int suffix = 2;
@@ -255,10 +216,13 @@ public class EObjectTableViewer extends GridTableViewer {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * @since 4.0
+	 */
 	protected List<String> makeMnemonics(final String columnName) {
-		LinkedList<String> result = new LinkedList<String>();
-		
+		final LinkedList<String> result = new LinkedList<String>();
+
 		result.add(uniqueMnemonic(columnName.toLowerCase().replace(" ", "")));
 		String initials = "";
 		boolean ws = true;
@@ -274,10 +238,10 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		}
 		result.add(uniqueMnemonic(initials.toLowerCase()));
-		
+
 		return result;
 	}
-	
+
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
 
 		// create a column
@@ -300,8 +264,8 @@ public class EObjectTableViewer extends GridTableViewer {
 		// store the renderer here, so that we can use it in sorting later.
 		tColumn.setData(COLUMN_RENDERER, renderer);
 		tColumn.setData(COLUMN_PATH, path);
+		tColumn.setData(COLUMN_MANIPULATOR, manipulator);
 
-		
 		setColumnMnemonics(tColumn, makeMnemonics(columnName));
 
 		column.setLabelProvider(new EObjectTableViewerColumnProvider(this, renderer, path));
@@ -489,13 +453,6 @@ public class EObjectTableViewer extends GridTableViewer {
 		});
 
 		viewer.setComparator(sortingSupport.createViewerComparer());
-						String key = m;
-						int suffix = 2;
-						while (attributes.containsKey(key)) {
-							key = m + suffix;
-							suffix += 1;
-						}
-						attributes.put(key, new Pair<Object, Object>(filterValue, renderValue));
 
 		addFilter(filterSupport.createViewerFilter());
 	}
@@ -546,9 +503,6 @@ public class EObjectTableViewer extends GridTableViewer {
 		return false;
 	}
 
-		int[] columnOrder = getGrid().getColumnOrder();
-		for (int i = 0; i < columns.length; ++i) {
-			final GridColumn column = columns[i];
 	public void removeColumn(final GridViewerColumn column) {
 		sortingSupport.removeSortableColumn(column.getColumn());
 		final Pair<EMFPath, ICellRenderer> pathAndRenderer = (Pair<EMFPath, ICellRenderer>) column.getColumn().getData(COLUMN_RENDERER_AND_PATH);
@@ -569,10 +523,6 @@ public class EObjectTableViewer extends GridTableViewer {
 	 */
 	public EObjectTableViewerValidationSupport getValidationSupport() {
 		return validationSupport;
-		recursiveProcessStatus(status, update);
-	}
-
-	private void recursiveProcessStatus(final IStatus status, final boolean update) {
 	}
 
 	public EObject getElementForNotificationTarget(EObject source) {
@@ -595,7 +545,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		return filterSupport;
 	}
 
-	public void setStatusProvider(IStatusProvider statusProvider) {
+	public void setStatusProvider(final IStatusProvider statusProvider) {
 		validationSupport.setStatusProvider(statusProvider);
 	}
 
