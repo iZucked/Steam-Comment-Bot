@@ -9,6 +9,7 @@ import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
@@ -35,7 +36,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @model
  * @generated
  */
-public interface VesselAvailability extends MMXObject {
+public interface VesselAvailability extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Start At</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.

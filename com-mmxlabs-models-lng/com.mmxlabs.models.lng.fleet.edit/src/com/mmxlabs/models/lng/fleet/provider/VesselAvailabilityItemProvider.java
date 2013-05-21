@@ -25,6 +25,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
@@ -34,7 +35,7 @@ import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
  * @generated
  */
 public class VesselAvailabilityItemProvider
-	extends MMXObjectItemProvider
+	extends UUIDObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -301,8 +302,10 @@ public class VesselAvailabilityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		VesselAvailability vesselAvailability = (VesselAvailability)object;
-		return getString("_UI_VesselAvailability_type") + " " + vesselAvailability.getTimeCharterRate();
+		String label = ((VesselAvailability)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_VesselAvailability_type") :
+			getString("_UI_VesselAvailability_type") + " " + label;
 	}
 
 	/**

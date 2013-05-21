@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
@@ -43,7 +44,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *
  * @generated
  */
-public class VesselAvailabilityImpl extends MMXObjectImpl implements VesselAvailability {
+public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvailability {
 	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->

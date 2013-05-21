@@ -189,6 +189,7 @@ public class FleetSwitch<T1> extends Switch<T1> {
 			case FleetPackage.VESSEL_AVAILABILITY: {
 				VesselAvailability vesselAvailability = (VesselAvailability)theEObject;
 				T1 result = caseVesselAvailability(vesselAvailability);
+				if (result == null) result = caseUUIDObject(vesselAvailability);
 				if (result == null) result = caseMMXObject(vesselAvailability);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
