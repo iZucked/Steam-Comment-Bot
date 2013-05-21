@@ -13,7 +13,6 @@ import org.junit.Test;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -77,19 +76,13 @@ public class ExposuresTest {
 		when(otherIndex.getName()).thenReturn(redHerringName);
 
 		// set up mock contracts
-		FixedPriceParameters fixedPriceContract = mock(FixedPriceParameters.class);
-
 		ExpressionPriceParameters priceExpressionContract = mock(ExpressionPriceParameters.class);
 		when(priceExpressionContract.getPriceExpression()).thenReturn(contractPriceExpression);
-
-		// a slot with a fixed price contract provides no exposure
-		testSlotExposureCoefficient(null, fixedPriceContract, index, 0);
 
 		// a slot with a price expression contract uses the price expression
 		testSlotExposureCoefficient(null, priceExpressionContract, index, pecCoefficient);
 
 		// a slot with a price expression overrides any contract
-		testSlotExposureCoefficient(slotPriceExpression, fixedPriceContract, index, slotCoefficient);
 		testSlotExposureCoefficient(slotPriceExpression, priceExpressionContract, index, slotCoefficient);
 	}
 
