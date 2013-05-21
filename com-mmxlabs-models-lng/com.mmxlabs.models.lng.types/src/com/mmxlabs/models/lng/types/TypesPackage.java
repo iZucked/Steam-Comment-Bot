@@ -103,16 +103,6 @@ public interface TypesPackage extends EPackage {
 	int OBJECT_SET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OBJECT_SET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Object Set</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -120,7 +110,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECT_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int OBJECT_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -208,16 +198,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int APORT_SET__NAME = OBJECT_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int APORT_SET__OTHER_NAMES = OBJECT_SET__OTHER_NAMES;
 
 	/**
 	 * The number of structural features of the '<em>APort Set</em>' class.
@@ -310,16 +290,6 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AVESSEL_SET__NAME = OBJECT_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AVESSEL_SET__OTHER_NAMES = OBJECT_SET__OTHER_NAMES;
 
 	/**
 	 * The number of structural features of the '<em>AVessel Set</em>' class.
