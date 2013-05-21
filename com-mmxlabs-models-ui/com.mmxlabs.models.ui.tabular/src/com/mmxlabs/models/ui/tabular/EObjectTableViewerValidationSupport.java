@@ -54,11 +54,15 @@ public class EObjectTableViewerValidationSupport {
 	}
 
 	protected void processStatus(final IStatus status, final boolean update) {
+		recursiveProcessStatus(status, update);
+	}
+
+	private void recursiveProcessStatus(final IStatus status, final boolean update) {
 		if (status == null)
 			return;
 		if (status.isMultiStatus()) {
 			for (final IStatus s : status.getChildren()) {
-				processStatus(s, update);
+				recursiveProcessStatus(s, update);
 			}
 		}
 		if (status instanceof IDetailConstraintStatus) {
