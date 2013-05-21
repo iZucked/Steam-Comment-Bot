@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore.util;
 
+import com.mmxlabs.models.mmxcore.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -84,6 +85,14 @@ public class MMXCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case MMXCorePackage.OTHER_NAMES_OBJECT: {
+				OtherNamesObject otherNamesObject = (OtherNamesObject)theEObject;
+				T result = caseOtherNamesObject(otherNamesObject);
+				if (result == null) result = caseNamedObject(otherNamesObject);
+				if (result == null) result = caseMMXObject(otherNamesObject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case MMXCorePackage.UUID_OBJECT: {
 				UUIDObject uuidObject = (UUIDObject)theEObject;
 				T result = caseUUIDObject(uuidObject);
@@ -130,6 +139,22 @@ public class MMXCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Other Names Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Other Names Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOtherNamesObject(OtherNamesObject object) {
 		return null;
 	}
 

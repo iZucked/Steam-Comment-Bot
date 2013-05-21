@@ -33,6 +33,16 @@ public interface MMXCoreFactory extends EFactory {
 	NamedObject createNamedObject();
 
 	/**
+	 * Returns a new object of class '<em>Other Names Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Other Names Object</em>'.
+	 * @generated
+	 */
+	OtherNamesObject createOtherNamesObject();
+
+	/**
 	 * Returns a new object of class '<em>UUID Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

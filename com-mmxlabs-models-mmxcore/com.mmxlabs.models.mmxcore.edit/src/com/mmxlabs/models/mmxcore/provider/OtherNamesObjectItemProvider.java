@@ -1,15 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
 package com.mmxlabs.models.mmxcore.provider;
 
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -20,17 +22,15 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.NamedObject;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.mmxcore.NamedObject} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.mmxcore.OtherNamesObject} object.
  * <!-- begin-user-doc -->
+ * @since 4.0
  * <!-- end-user-doc -->
  * @generated
  */
-public class NamedObjectItemProvider
-	extends MMXObjectItemProvider
+public class OtherNamesObjectItemProvider
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -43,7 +43,7 @@ public class NamedObjectItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NamedObjectItemProvider(AdapterFactory adapterFactory) {
+	public OtherNamesObjectItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -58,25 +58,25 @@ public class NamedObjectItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
+			addOtherNamesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Name feature.
+	 * This adds a property descriptor for the Other Names feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addNamePropertyDescriptor(Object object) {
+	protected void addOtherNamesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_NamedObject_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
-				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
+				 getString("_UI_OtherNamesObject_otherNames_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OtherNamesObject_otherNames_feature", "_UI_OtherNamesObject_type"),
+				 MMXCorePackage.Literals.OTHER_NAMES_OBJECT__OTHER_NAMES,
 				 true,
 				 false,
 				 false,
@@ -86,14 +86,14 @@ public class NamedObjectItemProvider
 	}
 
 	/**
-	 * This returns NamedObject.gif.
+	 * This returns OtherNamesObject.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/NamedObject"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/OtherNamesObject"));
 	}
 
 	/**
@@ -104,10 +104,10 @@ public class NamedObjectItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((NamedObject)object).getName();
+		String label = ((OtherNamesObject)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_NamedObject_type") :
-			getString("_UI_NamedObject_type") + " " + label;
+			getString("_UI_OtherNamesObject_type") :
+			getString("_UI_OtherNamesObject_type") + " " + label;
 	}
 
 	/**
@@ -121,8 +121,8 @@ public class NamedObjectItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(NamedObject.class)) {
-			case MMXCorePackage.NAMED_OBJECT__NAME:
+		switch (notification.getFeatureID(OtherNamesObject.class)) {
+			case MMXCorePackage.OTHER_NAMES_OBJECT__OTHER_NAMES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

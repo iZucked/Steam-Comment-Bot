@@ -16,6 +16,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -38,6 +39,13 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * @generated
 	 */
 	private EClass namedObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass otherNamesObjectEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -179,12 +187,22 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.2
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNamedObject_OtherNames() {
-		return (EAttribute)namedObjectEClass.getEStructuralFeatures().get(1);
+	public EClass getOtherNamesObject() {
+		return otherNamesObjectEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOtherNamesObject_OtherNames() {
+		return (EAttribute)otherNamesObjectEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -250,7 +268,9 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		namedObjectEClass = createEClass(NAMED_OBJECT);
 		createEAttribute(namedObjectEClass, NAMED_OBJECT__NAME);
-		createEAttribute(namedObjectEClass, NAMED_OBJECT__OTHER_NAMES);
+
+		otherNamesObjectEClass = createEClass(OTHER_NAMES_OBJECT);
+		createEAttribute(otherNamesObjectEClass, OTHER_NAMES_OBJECT__OTHER_NAMES);
 
 		uuidObjectEClass = createEClass(UUID_OBJECT);
 		createEAttribute(uuidObjectEClass, UUID_OBJECT__UUID);
@@ -287,6 +307,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		// Add supertypes to classes
 		namedObjectEClass.getESuperTypes().add(this.getMMXObject());
+		otherNamesObjectEClass.getESuperTypes().add(this.getNamedObject());
 		uuidObjectEClass.getESuperTypes().add(this.getMMXObject());
 		mmxRootObjectEClass.getESuperTypes().add(this.getUUIDObject());
 
@@ -304,7 +325,9 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		initEClass(namedObjectEClass, NamedObject.class, "NamedObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNamedObject_Name(), ecorePackage.getEString(), "name", null, 1, 1, NamedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getNamedObject_OtherNames(), ecorePackage.getEString(), "otherNames", null, 0, -1, NamedObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(otherNamesObjectEClass, OtherNamesObject.class, "OtherNamesObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getOtherNamesObject_OtherNames(), ecorePackage.getEString(), "otherNames", null, 0, -1, OtherNamesObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(uuidObjectEClass, UUIDObject.class, "UUIDObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUUIDObject_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, UUIDObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

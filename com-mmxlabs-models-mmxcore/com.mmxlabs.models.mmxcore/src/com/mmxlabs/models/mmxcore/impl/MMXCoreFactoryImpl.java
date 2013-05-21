@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
+import com.mmxlabs.models.mmxcore.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -61,6 +62,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case MMXCorePackage.NAMED_OBJECT: return createNamedObject();
+			case MMXCorePackage.OTHER_NAMES_OBJECT: return createOtherNamesObject();
 			case MMXCorePackage.UUID_OBJECT: return createUUIDObject();
 			case MMXCorePackage.MMX_ROOT_OBJECT: return createMMXRootObject();
 			default:
@@ -76,6 +78,17 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	public NamedObject createNamedObject() {
 		NamedObjectImpl namedObject = new NamedObjectImpl();
 		return namedObject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OtherNamesObject createOtherNamesObject() {
+		OtherNamesObjectImpl otherNamesObject = new OtherNamesObjectImpl();
+		return otherNamesObject;
 	}
 
 	/**

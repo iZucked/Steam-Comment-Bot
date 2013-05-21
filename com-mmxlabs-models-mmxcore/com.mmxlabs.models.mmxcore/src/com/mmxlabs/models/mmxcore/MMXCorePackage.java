@@ -151,23 +151,13 @@ public interface MMXCorePackage extends EPackage {
 	int NAMED_OBJECT__NAME = MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.2
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NAMED_OBJECT__OTHER_NAMES = MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Named Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_OBJECT_FEATURE_COUNT = MMX_OBJECT_FEATURE_COUNT + 2;
+	int NAMED_OBJECT_FEATURE_COUNT = MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -206,6 +196,97 @@ public interface MMXCorePackage extends EPackage {
 	int NAMED_OBJECT_OPERATION_COUNT = MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.OtherNamesObjectImpl <em>Other Names Object</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.mmxcore.impl.OtherNamesObjectImpl
+	 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getOtherNamesObject()
+	 * @generated
+	 */
+	int OTHER_NAMES_OBJECT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_NAMES_OBJECT__EXTENSIONS = NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_NAMES_OBJECT__NAME = NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_NAMES_OBJECT__OTHER_NAMES = NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Other Names Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_NAMES_OBJECT_FEATURE_COUNT = NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_NAMES_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_NAMES_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_NAMES_OBJECT___ECONTAINER_OP = NAMED_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Other Names Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_NAMES_OBJECT_OPERATION_COUNT = NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl <em>UUID Object</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -213,7 +294,7 @@ public interface MMXCorePackage extends EPackage {
 	 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getUUIDObject()
 	 * @generated
 	 */
-	int UUID_OBJECT = 2;
+	int UUID_OBJECT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -286,7 +367,7 @@ public interface MMXCorePackage extends EPackage {
 	 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getMMXRootObject()
 	 * @generated
 	 */
-	int MMX_ROOT_OBJECT = 3;
+	int MMX_ROOT_OBJECT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -424,16 +505,27 @@ public interface MMXCorePackage extends EPackage {
 	EAttribute getNamedObject_Name();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.mmxcore.NamedObject#getOtherNames <em>Other Names</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.OtherNamesObject <em>Other Names Object</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.2
+	 * @since 4.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Other Names</em>'.
-	 * @see com.mmxlabs.models.mmxcore.NamedObject#getOtherNames()
-	 * @see #getNamedObject()
+	 * @return the meta object for class '<em>Other Names Object</em>'.
+	 * @see com.mmxlabs.models.mmxcore.OtherNamesObject
 	 * @generated
 	 */
-	EAttribute getNamedObject_OtherNames();
+	EClass getOtherNamesObject();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.mmxcore.OtherNamesObject#getOtherNames <em>Other Names</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Other Names</em>'.
+	 * @see com.mmxlabs.models.mmxcore.OtherNamesObject#getOtherNames()
+	 * @see #getOtherNamesObject()
+	 * @generated
+	 */
+	EAttribute getOtherNamesObject_OtherNames();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.UUIDObject <em>UUID Object</em>}'.
@@ -549,13 +641,24 @@ public interface MMXCorePackage extends EPackage {
 		EAttribute NAMED_OBJECT__NAME = eINSTANCE.getNamedObject_Name();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.OtherNamesObjectImpl <em>Other Names Object</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.mmxcore.impl.OtherNamesObjectImpl
+		 * @see com.mmxlabs.models.mmxcore.impl.MMXCorePackageImpl#getOtherNamesObject()
+		 * @generated
+		 */
+		EClass OTHER_NAMES_OBJECT = eINSTANCE.getOtherNamesObject();
+
+		/**
 		 * The meta object literal for the '<em><b>Other Names</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.2
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute NAMED_OBJECT__OTHER_NAMES = eINSTANCE.getNamedObject_OtherNames();
+		EAttribute OTHER_NAMES_OBJECT__OTHER_NAMES = eINSTANCE.getOtherNamesObject_OtherNames();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl <em>UUID Object</em>}' class.

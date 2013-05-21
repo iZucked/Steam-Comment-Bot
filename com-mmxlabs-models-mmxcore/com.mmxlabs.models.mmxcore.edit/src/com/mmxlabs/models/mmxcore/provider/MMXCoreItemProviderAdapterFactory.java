@@ -111,6 +111,30 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.OtherNamesObject} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OtherNamesObjectItemProvider otherNamesObjectItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.OtherNamesObject}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOtherNamesObjectAdapter() {
+		if (otherNamesObjectItemProvider == null) {
+			otherNamesObjectItemProvider = new OtherNamesObjectItemProvider(this);
+		}
+
+		return otherNamesObjectItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.UUIDObject} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -286,6 +310,7 @@ public class MMXCoreItemProviderAdapterFactory extends MMXCoreAdapterFactory imp
 	 */
 	public void dispose() {
 		if (namedObjectItemProvider != null) namedObjectItemProvider.dispose();
+		if (otherNamesObjectItemProvider != null) otherNamesObjectItemProvider.dispose();
 		if (uuidObjectItemProvider != null) uuidObjectItemProvider.dispose();
 		if (mmxRootObjectItemProvider != null) mmxRootObjectItemProvider.dispose();
 	}

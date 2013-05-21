@@ -14,6 +14,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamedObject" eSuperTypes="#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OtherNamesObject" eSuperTypes="#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="otherNames" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>

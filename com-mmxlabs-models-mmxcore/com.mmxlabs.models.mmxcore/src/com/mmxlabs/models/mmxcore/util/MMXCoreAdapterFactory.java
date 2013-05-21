@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore.util;
 
+import com.mmxlabs.models.mmxcore.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -80,6 +81,10 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 				return createNamedObjectAdapter();
 			}
 			@Override
+			public Adapter caseOtherNamesObject(OtherNamesObject object) {
+				return createOtherNamesObjectAdapter();
+			}
+			@Override
 			public Adapter caseUUIDObject(UUIDObject object) {
 				return createUUIDObjectAdapter();
 			}
@@ -132,6 +137,21 @@ public class MMXCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.OtherNamesObject <em>Other Names Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.mmxcore.OtherNamesObject
+	 * @generated
+	 */
+	public Adapter createOtherNamesObjectAdapter() {
 		return null;
 	}
 
