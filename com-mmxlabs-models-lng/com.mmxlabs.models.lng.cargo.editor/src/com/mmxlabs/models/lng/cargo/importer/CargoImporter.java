@@ -316,10 +316,10 @@ public class CargoImporter extends DefaultClassImporter {
 						if (cargoMap.containsKey(tmpCargo.getName())) {
 							realCargo = cargoMap.get(tmpCargo.getName());
 						}
+						// Always clear slots at this information will be updated below
+						tmpCargo.getSlots().clear();
 					}
 
-					// Always clear slots at this information will be updated below
-					tmpCargo.getSlots().clear();
 					if (!keepCargo) {
 						// Do nothing
 					} else if (realCargo == null) {

@@ -76,33 +76,33 @@ public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-			if (loadMaxVolume < dischargeMinVolume) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getName() + "] Max load volume less than min discharge)."));
-
-				for (final Slot slot : cargo.getSlots()) {
-					if (slot instanceof LoadSlot) {
-						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-					} else if (slot instanceof DischargeSlot) {
-						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-
-					}
-				}
-
-				failures.add(status);
-			}
-			if (loadMinVolume > dischargeMaxVolume) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getName() + "] Min load volume greater than max discharge)."));
-				for (final Slot slot : cargo.getSlots()) {
-					if (slot instanceof LoadSlot) {
-						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-					} else if (slot instanceof DischargeSlot) {
-						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-
-					}
-				}
-
-				failures.add(status);
-			}
+//			if (loadMaxVolume < dischargeMinVolume) {
+//				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getName() + "] Max load volume less than min discharge)."));
+//
+//				for (final Slot slot : cargo.getSlots()) {
+//					if (slot instanceof LoadSlot) {
+//						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+//					} else if (slot instanceof DischargeSlot) {
+//						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+//
+//					}
+//				}
+//
+//				failures.add(status);
+//			}
+//			if (loadMinVolume > dischargeMaxVolume) {
+//				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getName() + "] Min load volume greater than max discharge)."));
+//				for (final Slot slot : cargo.getSlots()) {
+//					if (slot instanceof LoadSlot) {
+//						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+//					} else if (slot instanceof DischargeSlot) {
+//						status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
+//
+//					}
+//				}
+//
+//				failures.add(status);
+//			}
 		}
 
 		return Activator.PLUGIN_ID;

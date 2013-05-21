@@ -393,9 +393,9 @@ public class CargoEditorMenuHelper {
 					}
 				}
 
-				createEditMenu(manager, slot, slot.getCargo());
-				createEditContractMenu(manager, slot, slot.getContract());
-				createDeleteSlotMenu(manager, slot);
+				// createEditMenu(manager, slot, slot.getCargo());
+				// createEditContractMenu(manager, slot, slot.getContract());
+				// createDeleteSlotMenu(manager, slot);
 			}
 		};
 		return l;
@@ -810,13 +810,17 @@ public class CargoEditorMenuHelper {
 		public void run() {
 
 			final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
+
+			final Cargo targetCargo = target.getCargo();
 			final Cargo c = source.getCargo();
+
 			currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), source, CargoPackage.eINSTANCE.getSlot_Cargo(), null));
 			currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), target, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-
+			if (targetCargo != null && targetCargo != c && (targetCargo.getSlots().size() - 1) < 2) {
+				currentWiringCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), targetCargo));
+			}
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 		}
-
 	}
 
 	/**
