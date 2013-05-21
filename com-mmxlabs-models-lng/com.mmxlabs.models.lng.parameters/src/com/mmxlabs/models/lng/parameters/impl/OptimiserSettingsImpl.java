@@ -34,7 +34,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getConstraints <em>Constraints</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getRange <em>Range</em>}</li>
@@ -67,16 +66,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
 
 	/**
 	 * The cached value of the '{@link #getObjectives() <em>Objectives</em>}' containment reference list.
@@ -206,18 +195,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES);
-		}
-		return otherNames;
 	}
 
 	/**
@@ -427,8 +404,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		switch (featureID) {
 			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
 				return getName();
-			case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES:
-				return getOtherNames();
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
 				return getObjectives();
 			case ParametersPackage.OPTIMISER_SETTINGS__CONSTRAINTS:
@@ -458,10 +433,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		switch (featureID) {
 			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
 				setName((String)newValue);
-				return;
-			case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
 				getObjectives().clear();
@@ -502,9 +473,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
 				getObjectives().clear();
 				return;
@@ -540,8 +508,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		switch (featureID) {
 			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
 				return objectives != null && !objectives.isEmpty();
 			case ParametersPackage.OPTIMISER_SETTINGS__CONSTRAINTS:
@@ -570,7 +536,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case ParametersPackage.OPTIMISER_SETTINGS__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -587,7 +552,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return ParametersPackage.OPTIMISER_SETTINGS__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return ParametersPackage.OPTIMISER_SETTINGS__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -606,8 +570,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(", seed: ");
 		result.append(seed);
 		result.append(", rewire: ");

@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,7 +36,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
  * @model annotation="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject showOtherNames='true'"
  * @generated
  */
-public interface Port extends APortSet<Port> {
+public interface Port extends APortSet<Port>, OtherNamesObject {
 
 	/**
 	 * Returns the value of the '<em><b>Capabilities</b></em>' attribute list.

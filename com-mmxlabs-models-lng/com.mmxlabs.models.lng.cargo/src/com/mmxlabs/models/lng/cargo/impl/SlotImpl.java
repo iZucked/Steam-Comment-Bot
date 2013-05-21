@@ -41,7 +41,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
@@ -80,17 +79,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
 
 	/**
 	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
@@ -369,19 +357,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, CargoPackage.SLOT__OTHER_NAMES);
-		}
-		return otherNames;
 	}
 
 	/**
@@ -963,8 +938,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		switch (featureID) {
 			case CargoPackage.SLOT__NAME:
 				return getName();
-			case CargoPackage.SLOT__OTHER_NAMES:
-				return getOtherNames();
 			case CargoPackage.SLOT__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
@@ -1004,10 +977,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		switch (featureID) {
 			case CargoPackage.SLOT__NAME:
 				setName((String)newValue);
-				return;
-			case CargoPackage.SLOT__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)newValue);
@@ -1056,9 +1025,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 			case CargoPackage.SLOT__CONTRACT:
 				unsetContract();
 				return;
@@ -1105,8 +1071,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		switch (featureID) {
 			case CargoPackage.SLOT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case CargoPackage.SLOT__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 			case CargoPackage.SLOT__CONTRACT:
 				return isSetContract();
 			case CargoPackage.SLOT__PORT:
@@ -1143,7 +1107,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case CargoPackage.SLOT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case CargoPackage.SLOT__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -1165,7 +1128,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return CargoPackage.SLOT__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return CargoPackage.SLOT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -1235,8 +1197,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(", windowStart: ");
 		result.append(windowStart);
 		result.append(", windowStartTime: ");

@@ -180,15 +180,6 @@ public interface CommercialPackage extends EPackage {
 	int LEGAL_ENTITY__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LEGAL_ENTITY__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -196,7 +187,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY__TAX_RATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int LEGAL_ENTITY__TAX_RATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
@@ -205,7 +196,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl <em>Contract</em>}' class.
@@ -245,22 +236,13 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTRACT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int CONTRACT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
@@ -269,7 +251,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int CONTRACT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
@@ -278,7 +260,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__PREFERRED_PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int CONTRACT__PREFERRED_PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -287,7 +269,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int CONTRACT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -296,7 +278,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int CONTRACT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -306,7 +288,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
@@ -316,7 +298,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int CONTRACT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
@@ -326,7 +308,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int CONTRACT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
@@ -336,7 +318,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int CONTRACT__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
@@ -345,7 +327,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -383,15 +365,6 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__NAME = CONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SALES_CONTRACT__OTHER_NAMES = CONTRACT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -553,15 +526,6 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__NAME = CONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PURCHASE_CONTRACT__OTHER_NAMES = CONTRACT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.

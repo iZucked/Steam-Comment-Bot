@@ -64,7 +64,6 @@ public class SpotMarketItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addOtherNamesPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
 		}
@@ -86,29 +85,6 @@ public class SpotMarketItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Other Names feature.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOtherNamesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NamedObject_otherNames_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
-				 MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES,
 				 true,
 				 false,
 				 false,
@@ -219,7 +195,6 @@ public class SpotMarketItemProvider
 
 		switch (notification.getFeatureID(SpotMarket.class)) {
 			case SpotMarketsPackage.SPOT_MARKET__NAME:
-			case SpotMarketsPackage.SPOT_MARKET__OTHER_NAMES:
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

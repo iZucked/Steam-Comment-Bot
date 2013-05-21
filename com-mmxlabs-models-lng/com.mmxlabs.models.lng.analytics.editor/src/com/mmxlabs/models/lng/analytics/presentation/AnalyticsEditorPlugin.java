@@ -48,16 +48,11 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	public AnalyticsEditorPlugin() {
 		super
 			(new ResourceLocator [] {
-				AssignmentEditPlugin.INSTANCE,
-				CargoEditPlugin.INSTANCE,
 				CommercialEditPlugin.INSTANCE,
 				FleetEditPlugin.INSTANCE,
 				LNGTypesEditPlugin.INSTANCE,
 				MmxcoreEditPlugin.INSTANCE,
 				PortEditPlugin.INSTANCE,
-				PricingEditPlugin.INSTANCE,
-				ScheduleEditPlugin.INSTANCE,
-				SpotMarketsEditPlugin.INSTANCE,
 			});
 	}
 

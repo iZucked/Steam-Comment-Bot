@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.lng.cargo.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;

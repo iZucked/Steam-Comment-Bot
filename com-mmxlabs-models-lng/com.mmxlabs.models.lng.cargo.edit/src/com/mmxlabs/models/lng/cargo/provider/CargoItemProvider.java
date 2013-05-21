@@ -61,7 +61,6 @@ public class CargoItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addOtherNamesPropertyDescriptor(object);
 			addAllowRewiringPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
 			addSlotsPropertyDescriptor(object);
@@ -84,29 +83,6 @@ public class CargoItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Other Names feature.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOtherNamesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NamedObject_otherNames_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
-				 MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES,
 				 true,
 				 false,
 				 false,
@@ -220,7 +196,6 @@ public class CargoItemProvider
 
 		switch (notification.getFeatureID(Cargo.class)) {
 			case CargoPackage.CARGO__NAME:
-			case CargoPackage.CARGO__OTHER_NAMES:
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 			case CargoPackage.CARGO__SLOTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

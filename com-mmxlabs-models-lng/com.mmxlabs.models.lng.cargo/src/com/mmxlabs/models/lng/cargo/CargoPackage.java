@@ -99,22 +99,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOW_REWIRING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int CARGO__ALLOW_REWIRING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -123,7 +114,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int CARGO__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -133,7 +124,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -142,7 +133,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -237,22 +228,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SLOT__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -261,7 +243,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SLOT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
@@ -270,7 +252,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SLOT__WINDOW_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Window Start Time</b></em>' attribute.
@@ -279,7 +261,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SLOT__WINDOW_START_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -288,7 +270,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SLOT__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -297,7 +279,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -306,7 +288,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -315,7 +297,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -324,7 +306,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -334,7 +316,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -344,7 +326,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -353,7 +335,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -490,15 +472,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__NAME = SLOT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__OTHER_NAMES = SLOT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -780,15 +753,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__NAME = SLOT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__OTHER_NAMES = SLOT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -1237,15 +1201,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NAME = LOAD_SLOT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__OTHER_NAMES = LOAD_SLOT__OTHER_NAMES;
-
-	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1536,15 +1491,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__NAME = DISCHARGE_SLOT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__OTHER_NAMES = DISCHARGE_SLOT__OTHER_NAMES;
-
-	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1808,15 +1754,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_GROUP__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_GROUP__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Cargoes</b></em>' reference list.

@@ -423,15 +423,6 @@ public interface SchedulePackage extends EPackage {
 	int FITNESS__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FITNESS__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
-
-	/**
 	 * The feature id for the '<em><b>Fitness Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.provider.APortSetItemProvider;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.port.Port} object.
@@ -61,6 +62,7 @@ public class PortItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addOtherNamesPropertyDescriptor(object);
 			addCapabilitiesPropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
 			addLoadDurationPropertyDescriptor(object);
@@ -73,6 +75,28 @@ public class PortItemProvider
 			addDataloyCodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Other Names feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOtherNamesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OtherNamesObject_otherNames_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OtherNamesObject_otherNames_feature", "_UI_OtherNamesObject_type"),
+				 MMXCorePackage.Literals.OTHER_NAMES_OBJECT__OTHER_NAMES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -364,6 +388,7 @@ public class PortItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Port.class)) {
+			case PortPackage.PORT__OTHER_NAMES:
 			case PortPackage.PORT__CAPABILITIES:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__LOAD_DURATION:

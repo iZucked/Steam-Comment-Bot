@@ -198,7 +198,7 @@ public class MergePorts extends LockableAction {
 		otherNames.remove(retained.getName());
 
 		// Update Other names
-		cmd.append(SetCommand.create(ed, retained, MMXCorePackage.eINSTANCE.getNamedObject_OtherNames(), otherNames));
+		cmd.append(SetCommand.create(ed, retained, MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(), otherNames));
 		// Update location
 		cmd.append(SetCommand.create(ed, retained, PortPackage.eINSTANCE.getPort_Location(), loc));
 		// Update capabilities

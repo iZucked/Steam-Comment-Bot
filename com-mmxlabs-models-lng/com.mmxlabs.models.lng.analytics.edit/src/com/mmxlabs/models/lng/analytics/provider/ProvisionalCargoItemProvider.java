@@ -381,6 +381,11 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 MMXCoreFactory.eINSTANCE.createOtherNamesObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 MMXCoreFactory.eINSTANCE.createUUIDObject()));
 
 		newChildDescriptors.add

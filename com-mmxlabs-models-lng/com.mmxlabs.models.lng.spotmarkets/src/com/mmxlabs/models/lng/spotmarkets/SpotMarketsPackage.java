@@ -308,22 +308,13 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKET__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__AVAILABILITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SPOT_MARKET__AVAILABILITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -332,7 +323,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SPOT_MARKET__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -341,7 +332,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SPOT_MARKET__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
@@ -350,7 +341,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SPOT_MARKET__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
@@ -359,7 +350,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
@@ -397,15 +388,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DES_PURCHASE_MARKET__NAME = SPOT_MARKET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DES_PURCHASE_MARKET__OTHER_NAMES = SPOT_MARKET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
@@ -508,15 +490,6 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__NAME = SPOT_MARKET__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DES_SALES_MARKET__OTHER_NAMES = SPOT_MARKET__OTHER_NAMES;
-
-	/**
 	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -606,15 +579,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_PURCHASES_MARKET__NAME = SPOT_MARKET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FOB_PURCHASES_MARKET__OTHER_NAMES = SPOT_MARKET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
@@ -715,15 +679,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_SALES_MARKET__NAME = SPOT_MARKET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FOB_SALES_MARKET__OTHER_NAMES = SPOT_MARKET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Availability</b></em>' containment reference.

@@ -547,6 +547,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		EGenericType g2 = createEGenericType(this.getPort());
 		g1.getETypeArguments().add(g2);
 		portEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(theMMXCorePackage.getOtherNamesObject());
+		portEClass.getEGenericSuperTypes().add(g1);
 		routeEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		routeEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
