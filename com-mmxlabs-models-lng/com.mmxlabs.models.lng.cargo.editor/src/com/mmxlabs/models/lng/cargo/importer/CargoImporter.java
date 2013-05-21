@@ -56,56 +56,30 @@ public class CargoImporter extends DefaultClassImporter {
 
 	private static final String ASSIGNMENT = "assignment";
 
-	private static final Map<String, String> fieldNamesToCsvNames = getFieldNamesToCsvNames();
-	private static final Map<String, String> csvNamesToFieldNames = reverseLookup(fieldNamesToCsvNames);
-
-	private static Map<String, String> reverseLookup(Map<String, String> map) {
-		Map<String, String> result = new HashMap<String, String>();
-		for (Entry<String, String> entry: map.entrySet()) {
-			result.put(entry.getValue(), entry.getKey());
-		}
-		return result;
-	}
-
-	/**
-	 * Returns a map mapping field names to their CSV aliases.
-	 * @return
-	 */
-	private static Map<String, String> getFieldNamesToCsvNames() {
-		Map<String, String> result = new HashMap<String, String>();
-		
-		result.put("minQuantity", "min");
-		result.put("maxQuantity", "max");
-		result.put("windowStart", "date");
-		result.put("windowStartTime", "time");
-		result.put("priceExpression", "price");		
-		
-		return result;
-	}
-	
 	// List of column names to filter out of export. UUID is confusing to the user, othernames is not used by cargo or slots. Fixed Price is deprecated.
 	private static final Set<String> filteredColumns = Sets.newHashSet("uuid", "otherNames", "loadSlot.uuid", "loadSlot.fixedPrice", "loadSlot.otherNames", "dischargeSlot.uuid",
 			"dischargeSlot.fixedPrice", "dischargeSlot.otherNames");
-	
+
 	private static final Map<String, String> fieldNamesToCsvNames = getFieldNamesToCsvNames();
 	private static final Map<String, String> csvNamesToFieldNames = reverseLookup(fieldNamesToCsvNames);
 
 	/**
 	 * Returns a map mapping field names to their CSV aliases.
+	 * 
 	 * @return
 	 */
 	private static Map<String, String> getFieldNamesToCsvNames() {
-		Map<String, String> result = new HashMap<String, String>();
-		
+		final Map<String, String> result = new HashMap<String, String>();
+
 		result.put("minQuantity", "min");
 		result.put("maxQuantity", "max");
 		result.put("windowStart", "date");
 		result.put("windowStartTime", "time");
-		result.put("priceExpression", "price");		
-		
+		result.put("priceExpression", "price");
+
 		return result;
 	}
-	
+
 	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
@@ -124,16 +98,13 @@ public class CargoImporter extends DefaultClassImporter {
 		return result;
 	}
 
-
-	private static Map<String, String> reverseLookup(Map<String, String> map) {
-		Map<String, String> result = new HashMap<String, String>();
-		for (Entry<String, String> entry: map.entrySet()) {
+	private static Map<String, String> reverseLookup(final Map<String, String> map) {
+		final Map<String, String> result = new HashMap<String, String>();
+		for (final Entry<String, String> entry : map.entrySet()) {
 			result.put(entry.getValue(), entry.getKey());
 		}
 		return result;
 	}
-
-
 
 	@Override
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
@@ -147,40 +118,6 @@ public class CargoImporter extends DefaultClassImporter {
 		return super.shouldExportFeature(feature);
 	}
 
-	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
-		final Map<String, String> result = new LinkedHashMap<String, String>();
-
-		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
-			if (shouldExportFeature(attribute)) {
-				exportAttribute(object, attribute, result);
-			}
-		}
-
-		for (final EReference reference : object.eClass().getEAllReferences()) {
-			if (shouldExportFeature(reference)) {
-				exportReference(object, reference, result, root);
-			}
-		}
-
-		return result;
-	}
-
-	/**
-	 * @since 3.0
-	 */
-	@Override
-	protected boolean shouldExportFeature(final EStructuralFeature feature) {
-
-		if (feature == CargoPackage.Literals.CARGO__DISCHARGE_SLOT || feature == CargoPackage.Literals.CARGO__LOAD_SLOT) {
-			return false;
-		}
-		if (feature == CargoPackage.Literals.DISCHARGE_SLOT__CARGO || feature == CargoPackage.Literals.LOAD_SLOT__CARGO) {
-			return false;
-		}
-		return super.shouldExportFeature(feature);
-	}
-
-	
 	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots, final MMXRootObject root) {
 
 		final List<Map<String, String>> data = new LinkedList<Map<String, String>>();
@@ -252,64 +189,43 @@ public class CargoImporter extends DefaultClassImporter {
 	/**
 	 * @since 3.1
 	 */
-	public Collection<EObject> importRawObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
-		final List<EObject> objects = new LinkedList<EObject>();
-		objects.addAll(super.importObject(eClass, row, context));
-
-		// Special case for load and discharge slots. These are not under the correct reference type string - so fake it here
-		final IFieldMap fieldMap = new FieldMap(row);
-		{
-			final String lcrn = KEY_LOADSLOT;
-			final IFieldMap subMap = fieldMap.getSubMap(lcrn + DOT);
-			final IFieldMap subKeys = renameCsvMapWithFieldNames((FieldMap) subMap);
-
-			final EClass referenceType = CargoPackage.eINSTANCE.getLoadSlot();
-			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
-			final Collection<EObject> values = classImporter.importObject(referenceType, subKeys, context);
-			objects.addAll(values);
+	protected void exportSlot(final MMXRootObject rootObject, final Map<String, String> result, final Slot slot, final String referenceName) {
+		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(slot.eClass());
+		if (importer != null) {
+			final Map<String, String> subMap = importer.exportObjects(Collections.singleton(slot), rootObject).iterator().next();
+			for (final Map.Entry<String, String> e : subMap.entrySet()) {
+				result.put(referenceName + DOT + csvNameFromFieldName(e.getKey(), slot), e.getValue());
+			}
 		}
-		{
-			final String lcrn = KEY_DISCHARGESLOT;
-			final IFieldMap subKeys = renameCsvMapWithFieldNames((FieldMap) fieldMap.getSubMap(lcrn + DOT));
-
-			final EClass referenceType = CargoPackage.eINSTANCE.getDischargeSlot();
-			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
-			final Collection<EObject> values = classImporter.importObject(referenceType, subKeys, context);
-			objects.addAll(values);
-		}
-		return objects;
 	}
-	
-	
-	private String fieldNameFromCsvName(String csvName) {
+
+	private String csvNameFromFieldName(final String fieldName, final Slot slot) {
 		// special cases
-		
-		if (csvName.equalsIgnoreCase("FOB")) {
-			return "fobsale";
+		if (slot instanceof LoadSlot && fieldName.equals("DESPurchase")) {
+			return "DES";
 		}
-		if (csvName.equalsIgnoreCase("DES")) {
-			return "despurchase";
+		if (slot instanceof DischargeSlot && fieldName.equals("FOBSale")) {
+			return "FOB";
 		}
-		String result = csvNamesToFieldNames.get(csvName);
-		if (result == null) {
-			result = csvName;
-		}
-		return result.toLowerCase();
-		
+
+		final String result = fieldNamesToCsvNames.get(fieldName);
+		if (result == null)
+			return fieldName;
+		return result;
 	}
-	
-	private IFieldMap renameCsvMapWithFieldNames(FieldMap map) {
+
+	private IFieldMap renameCsvMapWithFieldNames(final FieldMap map) {
 		final Map<String, String> resultMap = new HashMap<String, String>();
-		for (Entry<String, String> entry: map.entrySet()) {
+		for (final Entry<String, String> entry : map.entrySet()) {
 			resultMap.put(fieldNameFromCsvName(entry.getKey()), entry.getValue());
 		}
-		
+
 		return new FieldMap(resultMap, map.getPrefix(), map.getSuperMap());
 	}
-	
+
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
-		final Collection<EObject> result = importRawObject(eClass, row, context);
+		final LinkedList<EObject> results = new LinkedList<EObject>();
 		try {
 			try {
 				context.pushReader(reader);
@@ -317,7 +233,7 @@ public class CargoImporter extends DefaultClassImporter {
 				final Map<String, Cargo> cargoMap = new HashMap<String, Cargo>();
 				while ((row = reader.readRow()) != null) {
 					// Import Row Data
-					final Collection<EObject> result = importObject(importClass, row, context);
+					final Collection<EObject> result = importRawObject(importClass, row, context);
 
 					// Find the individual objects
 					LoadSlot load = null;
@@ -448,10 +364,10 @@ public class CargoImporter extends DefaultClassImporter {
 		}
 		return results;
 	}
-	
-	private String fieldNameFromCsvName(String csvName) {
+
+	private String fieldNameFromCsvName(final String csvName) {
 		// special cases
-		
+
 		if (csvName.equalsIgnoreCase("FOB")) {
 			return "fobsale";
 		}
@@ -463,45 +379,38 @@ public class CargoImporter extends DefaultClassImporter {
 			result = csvName;
 		}
 		return result.toLowerCase();
-		
+
 	}
-	
-	private IFieldMap renameCsvMapWithFieldNames(FieldMap map) {
-		final Map<String, String> resultMap = new HashMap<String, String>();
-		for (Entry<String, String> entry: map.entrySet()) {
-			resultMap.put(fieldNameFromCsvName(entry.getKey()), entry.getValue());
-		}
-		
-		return new FieldMap(resultMap, map.getPrefix(), map.getSuperMap());
-	}
-	
-	
+
 	/**
 	 * @since 3.1
 	 */
-	protected void exportSlot(final MMXRootObject rootObject, final Map<String, String> result, final Slot slot, final String referenceName) {
-		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(slot.eClass());
-		if (importer != null) {
-			final Map<String, String> subMap = importer.exportObjects(Collections.singleton(slot), rootObject).iterator().next();
-			for (final Map.Entry<String, String> e : subMap.entrySet()) {
-				result.put(referenceName + DOT + csvNameFromFieldName(e.getKey(), slot), e.getValue());
-			}
+	public Collection<EObject> importRawObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
+		final List<EObject> objects = new LinkedList<EObject>();
+		objects.addAll(super.importObject(eClass, row, context));
+
+		// Special case for load and discharge slots. These are not under the correct reference type string - so fake it here
+		final IFieldMap fieldMap = new FieldMap(row);
+		{
+			final String lcrn = KEY_LOADSLOT;
+			final IFieldMap subMap = fieldMap.getSubMap(lcrn + DOT);
+			final IFieldMap subKeys = renameCsvMapWithFieldNames((FieldMap) subMap);
+
+			final EClass referenceType = CargoPackage.eINSTANCE.getLoadSlot();
+			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
+			final Collection<EObject> values = classImporter.importObject(referenceType, subKeys, context);
+			objects.addAll(values);
 		}
+		{
+			final String lcrn = KEY_DISCHARGESLOT;
+			final IFieldMap subKeys = renameCsvMapWithFieldNames((FieldMap) fieldMap.getSubMap(lcrn + DOT));
+
+			final EClass referenceType = CargoPackage.eINSTANCE.getDischargeSlot();
+			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
+			final Collection<EObject> values = classImporter.importObject(referenceType, subKeys, context);
+			objects.addAll(values);
+		}
+		return objects;
 	}
 
-	private String csvNameFromFieldName(String fieldName, Slot slot) {
-		// special cases
-		if (slot instanceof LoadSlot && fieldName.equals("DESPurchase")) {
-			return "DES";
-		}
-		if (slot instanceof DischargeSlot && fieldName.equals("FOBSale")) {
-			return "FOB";
-		}
-
-		String result = fieldNamesToCsvNames.get(fieldName);
-		if (result == null) return fieldName;
-		return result;
-	}
-	
-	
 }
