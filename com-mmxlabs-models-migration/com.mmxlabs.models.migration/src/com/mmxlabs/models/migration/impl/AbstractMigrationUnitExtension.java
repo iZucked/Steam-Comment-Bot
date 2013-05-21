@@ -20,6 +20,7 @@ import com.mmxlabs.models.migration.IMigrationUnitExtension;
  * implemented.
  * 
  * @author Simon Goodall
+ * @since 3.0
  * 
  */
 public abstract class AbstractMigrationUnitExtension implements IMigrationUnitExtension {

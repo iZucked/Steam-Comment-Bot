@@ -51,6 +51,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 * @param defaultMigrationContexts
 	 * @param migrationContexts
 	 * @param migrationUnits
+	 * @since 3.0
 	 */
 	@Inject
 	public void init(final Iterable<MigrationContextExtensionPoint> migrationContexts, final Iterable<MigrationUnitExtensionPoint> migrationUnits,
@@ -185,11 +186,17 @@ public class MigrationRegistry implements IMigrationRegistry {
 		map.put(unit.getSourceVersion(), unit);
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	public void registerMigrationUnit(final String id, @NonNull final IMigrationUnit unit) {
 		registerMigrationUnit(unit);
 		migrationExtPointIDMap.put(unit, id);
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	public void registerMigrationUnitExtension(final String unitID, @NonNull final IMigrationUnitExtension unitExtension) {
 		final List<IMigrationUnitExtension> extensions;
 		if (migrationUnitExtensionsMap.containsKey(unitID)) {

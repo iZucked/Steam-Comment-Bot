@@ -16,6 +16,9 @@ import com.mmxlabs.models.migration.IMigrationUnit;
 @ExtensionBean("com.mmxlabs.models.migration.MigrationUnit")
 public interface MigrationUnitExtensionPoint {
 
+	/**
+	 * @since 3.0
+	 */
 	@MapName("id")
 	@Nullable
 	String getID();
