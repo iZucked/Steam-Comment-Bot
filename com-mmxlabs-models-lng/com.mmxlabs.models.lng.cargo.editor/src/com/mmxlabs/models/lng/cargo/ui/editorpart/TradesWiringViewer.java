@@ -539,7 +539,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
-				editingDomain)), new RowDataEMFPath(Type.LOAD_ALLOCATION, true));
+				editingDomain) {
+
+			@Override
+			protected String renderSetValue(final Object container, final Object setValue) {
+				if (setValue instanceof Number) {
+					return String.format("$%.2f", ((Number) setValue).doubleValue());
+				}
+				return super.renderSetValue(container, setValue);
+			}
+		}), new RowDataEMFPath(Type.LOAD_ALLOCATION, true));
 		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable getComparable(final Object object) {
@@ -570,8 +579,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}, new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
-		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
-				editingDomain)), new RowDataEMFPath(Type.DISCHARGE_ALLOCATION, true));
+		addTradesColumn(dischargeColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
+				editingDomain) {
+
+			@Override
+			protected String renderSetValue(final Object container, final Object setValue) {
+				if (setValue instanceof Number) {
+					return String.format("$%.2f", ((Number) setValue).doubleValue());
+				}
+				return super.renderSetValue(container, setValue);
+			}
+		}), new RowDataEMFPath(Type.DISCHARGE_ALLOCATION, true));
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
