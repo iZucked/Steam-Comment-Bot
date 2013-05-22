@@ -386,7 +386,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (aSet == null || bSet == null) {
 					return false;
 				}
-				
+
 				aSet.retainAll(bSet);
 				if (!aSet.isEmpty()) {
 					return true;
@@ -540,11 +540,35 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
 		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
 				editingDomain)), new RowDataEMFPath(Type.LOAD_ALLOCATION, true));
-		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
+		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+			@Override
+			public Comparable getComparable(final Object object) {
+
+				if (object instanceof RowData) {
+					final RowData rowData = (RowData) object;
+					if (rowData.dischargeSlot != null) {
+						return rowData.dischargeSlot.getWindowStart();
+					}
+				}
+
+				return super.getComparable(object);
+			}
+		}, new RowDataEMFPath(Type.LOAD, true));
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
-		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+			@Override
+			public Comparable getComparable(final Object object) {
+				if (object instanceof RowData) {
+					final RowData rowData = (RowData) object;
+					if (rowData.loadSlot != null) {
+						return rowData.loadSlot.getWindowStart();
+					}
+				}
+				return super.getComparable(object);
+			}
+		}, new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
 				editingDomain)), new RowDataEMFPath(Type.DISCHARGE_ALLOCATION, true));
@@ -699,7 +723,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final ExtraDataContainer container = (ExtraDataContainer) object;
 					final ExtraData data = container.getDataWithKey("GroupValue");
 					if (data != null) {
-						return String.format("%.2fm", ((float) data.getValueAs(Integer.class))/1000000);
+						return String.format("%.2fm", ((float) data.getValueAs(Integer.class)) / 1000000);
 					}
 				}
 				return super.getText(element);
@@ -1065,16 +1089,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			{
 				final Action newLoad = new Action("FOB purchase") {
 					public void run() {
-						
+
 						final CompoundCommand cmd = new CompoundCommand("FOB purchase");
-						
+
 						final LoadSlot newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 						newLoad.setDESPurchase(false);
 						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newLoad.setOptional(true);
 						newLoad.setName("");
 						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-						
+
 						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
