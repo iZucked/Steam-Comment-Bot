@@ -551,7 +551,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}), new RowDataEMFPath(Type.LOAD_ALLOCATION, true));
 		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
-			public Comparable getComparable(final Object object) {
+			public Comparable<?> getComparable(final Object object) {
 
 				if (object instanceof RowData) {
 					final RowData rowData = (RowData) object;
@@ -568,7 +568,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
-			public Comparable getComparable(final Object object) {
+			public Comparable<?> getComparable(final Object object) {
 				if (object instanceof RowData) {
 					final RowData rowData = (RowData) object;
 					if (rowData.loadSlot != null) {
