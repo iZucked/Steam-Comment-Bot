@@ -698,8 +698,28 @@ public class EObjectTableViewer extends GridTableViewer {
 						final Object v1 = path.get((EObject) e1);
 						final Object v2 = path.get((EObject) e2);
 
-						final Comparable left = renderer.getComparable(v1);
-						final Comparable right = renderer.getComparable(v2);
+						// Hack for trades table - if first attempt fails to return an object, then pass in parent object and hope for the best....
+						// This permits the renderer to fall back to another object if e.g. we sort by load date, but have no load slot on the row, we can fall back to discharge date.
+						// Really we need some better API for this and avoid catching an AssertionError!
+						Comparable left = renderer.getComparable(v1);
+						if (left == null) {
+							try {
+								left = renderer.getComparable(e1);
+							} catch (Exception e) {
+								// Arg! Hack!
+							} catch (AssertionError ae) {
+
+							}
+						}
+						Comparable right = renderer.getComparable(v2);
+						if (right == null) {
+							try {
+								right = renderer.getComparable(e2);
+							} catch (Exception e) {
+							} catch (AssertionError ae) {
+
+							}
+						}
 						if (left == null) {
 							return -1;
 						} else if (right == null) {
