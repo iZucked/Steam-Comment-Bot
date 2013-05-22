@@ -263,8 +263,9 @@ public class CargoImporter extends DefaultClassImporter {
 		} else {
 			cargo.getSlots().add(load);
 			cargo.getSlots().add(discharge);
-			newResults.add(cargo);
 		}
+		// Always return cargo object for LDD style cargo import
+		newResults.add(cargo);
 
 		return newResults;
 	}
