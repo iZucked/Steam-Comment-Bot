@@ -40,31 +40,27 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		this.field = field;
 		this.editingDomain = editingDomain;
 	}
-	
+
 	@Override
 	public String render(final Object object) {
-		
+
 		if (object == null) {
-			return "";
+			return null;
 		}
-		
+
 		if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
-			return renderUnsetValue(object, 
-					(object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) :
-						null);
+			return renderUnsetValue(object, (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : null);
 		} else {
-			return renderSetValue(object, 
-					getValue(object)
-					);
+			return renderSetValue(object, getValue(object));
 		}
 	}
-	
+
 	protected String renderUnsetValue(final Object container, final Object unsetDefault) {
 		return renderSetValue(container, unsetDefault);
 	}
-	
+
 	protected String renderSetValue(final Object container, final Object setValue) {
-		return setValue == null ? "":setValue.toString();
+		return setValue == null ? null : setValue.toString();
 	}
 
 	@Override
@@ -83,20 +79,20 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		}
 
 		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
-//		command.setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
+		// command.setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
 		editingDomain.getCommandStack().execute(command);
 	}
-	
+
 	public void doSetValue(final Object object, final Object value) {
 		runSetCommand(object, value);
 	}
-	
+
 	@Override
 	public final CellEditor getCellEditor(final Composite c, final Object object) {
 		if (object == null) {
 			return null;
 		}
-		
+
 		if (field.isUnsettable()) {
 			final CellEditorWrapper wrapper = new CellEditorWrapper(c);
 			wrapper.setDelegate(createCellEditor(wrapper.getInnerComposite(), object));
@@ -104,7 +100,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		}
 		return createCellEditor(c, object);
 	}
-	
+
 	protected CellEditor createCellEditor(final Composite c, final Object object) {
 		return new TextCellEditor(c);
 	}
@@ -114,7 +110,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object == null) {
 			return null;
 		}
-		
+
 		return reallyGetValue(object);
 	}
 
@@ -127,7 +123,8 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object == null) {
 			return null;
 		}
-		if (field.isUnsettable() && ((EObject)object).eIsSet(field) == false) return SetCommand.UNSET_VALUE;
+		if (field.isUnsettable() && ((EObject) object).eIsSet(field) == false)
+			return SetCommand.UNSET_VALUE;
 		final Object result = ((EObject) object).eGet(field);
 		if ((result == null) && (field.getEType() == EcorePackage.eINSTANCE.getEString())) {
 			return "";
