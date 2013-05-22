@@ -437,11 +437,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
 				for (final FuelComponent fc : FuelComponent.values()) {
-					
+
 					fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 					fuelConsumptions[fc.ordinal()] += details.getRouteAdditionalConsumption(fc, fc.getDefaultFuelUnit());
 				}
-				
+
 				details.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
 				details.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricePerMT);
 				details.setFuelUnitPrice(FuelComponent.IdleBase, baseFuelPricePerMT);
@@ -803,18 +803,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
 			final long c = fuelConsumptions[fc.ordinal()];
 			voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(c, baseFuelPricePerMT));
-			
 		}
-		if (voyagePlan.getTotalFuelCost(FuelComponent.Base) == 7000) {
-			int ii = 0;
-		}
-
-		 for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
-			 if (fuelConsumptions[fc.ordinal()] == 12000) {
-				 int ii = 0;
-			 }
-		// voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(fuelConsumptions[fc.ordinal()], dischargeM3Price));
-		 }
 
 		final int cooldownM3Price = calculateCooldownPrices(vesselClass, arrivalTimes, sequence);
 		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
