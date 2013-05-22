@@ -163,7 +163,7 @@ public class CargoEditorMenuHelper {
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 				} else {
 					createNewSlotMenu(newMenuManager, dischargeSlot, false);
-					createMenus(manager, dischargeSlot, cargoModel.getLoadSlots(), false);
+					createMenus(manager, dischargeSlot, filterSlotsByRestrictions(dischargeSlot, cargoModel.getLoadSlots()), false);
 					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 				}
@@ -275,7 +275,7 @@ public class CargoEditorMenuHelper {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 				} else {
 					createNewSlotMenu(newMenuManager, loadSlot, true);
-					createMenus(manager, loadSlot, cargoModel.getDischargeSlots(), true);
+					createMenus(manager, loadSlot, filterSlotsByRestrictions(loadSlot, cargoModel.getDischargeSlots()), true);
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 				}
@@ -291,6 +291,52 @@ public class CargoEditorMenuHelper {
 		};
 		return l;
 
+	}
+
+	/**
+	 * Filter the possibleTargets list to exclude incompatible pairings due to contract restrictions
+	 * 
+	 * @param source
+	 * @param possibleTargets
+	 * @return
+	 */
+	private List<Slot> filterSlotsByRestrictions(Slot source, final List<? extends Slot> possibleTargets) {
+
+		List<Slot> filteredSlots = new LinkedList<Slot>();
+		for (Slot slot : possibleTargets) {
+			// Check restrictions on both slots
+			if (checkSourceConstraints(source, slot) && checkSourceConstraints(slot, source)) {
+				filteredSlots.add(slot);
+			}
+		}
+		return filteredSlots;
+	}
+
+	/**
+	 * Given a source slot, check that the target slot is compatible with the source slot contract restrictions.
+	 * 
+	 * @param source
+	 * @param target
+	 * @return
+	 */
+	private boolean checkSourceConstraints(Slot source, Slot target) {
+		if (source.getContract() != null) {
+			Contract sourceContract = source.getContract();
+			if (!sourceContract.getRestrictedPorts().isEmpty()) {
+				if (sourceContract.getRestrictedPorts().contains(target.getPort()) != sourceContract.isRestrictedListsArePermissive()) {
+					// Trying to pair to a restricted port - skip
+					return false;
+				}
+			}
+
+			if (!sourceContract.getRestrictedContracts().isEmpty() && target.getContract() != null) {
+				if (sourceContract.getRestrictedContracts().contains(target.getContract()) != sourceContract.isRestrictedListsArePermissive()) {
+					// Trying to pair to a restricted contract - skip
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	private void createMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
