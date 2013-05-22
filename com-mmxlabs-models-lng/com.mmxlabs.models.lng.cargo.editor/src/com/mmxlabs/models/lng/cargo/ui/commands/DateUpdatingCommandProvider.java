@@ -33,11 +33,16 @@ public class DateUpdatingCommandProvider implements IModelCommandProvider {
 	@Override
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
+		
+		// only modify commands which SET the port on a slot
 		if (commandClass == SetCommand.class) {
+			// only modify commands which set the port on a SLOT 
 			if (parameter.getEOwner() instanceof Slot) {
 				final Slot slot = (Slot) parameter.getEOwner();
+				// no modification if the window start is unset
 				if (slot.getWindowStart() == null)
 					return null;
+				// only modify commands which set the PORT on a slot
 				if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) {
 					// port is changing, so update time to suit
 					final EObject newValue = parameter.getEValue();
@@ -61,6 +66,7 @@ public class DateUpdatingCommandProvider implements IModelCommandProvider {
 
 							final Date newDate = newCalendar.getTime();
 
+							// return a new command setting the window start on the slot to the port's local midnight time
 							return SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), newDate);
 						}
 					}
