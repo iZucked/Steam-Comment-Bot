@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -57,6 +59,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -832,6 +835,33 @@ public class CargoEditorMenuHelper {
 			if (targetCargo != null && targetCargo != c && (targetCargo.getSlots().size() - 1) < 2) {
 				currentWiringCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), targetCargo));
 			}
+
+			// Quick hacky bit to change cargo ID to match new defining load slot id
+			if (target instanceof LoadSlot) {
+				LoadSlot loadSlot = (LoadSlot) target;
+				if (loadSlot.getWindowStart() != null && !c.getSlots().isEmpty()) {
+					EList<Slot> sortedSlots = c.getSortedSlots();
+					Iterator<Slot> iterator = sortedSlots.iterator();
+					while (iterator.hasNext()) {
+						Slot slot = iterator.next();
+						// This is the slot we are replacing!
+						if (slot == source) {
+							continue;
+						}
+
+//						if (slot instanceof DischargeSlot) {
+//							continue;
+//						}
+						Date slotDate = slot.getWindowStartWithSlotOrPortTime();
+						if (slotDate == null || target.getWindowEndWithSlotOrPortTime().before(slotDate)) {
+							currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, MMXCorePackage.eINSTANCE.getNamedObject_Name(), target.getName()));
+						} else {
+							break;
+						}
+					}
+				}
+			}
+
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 		}
 	}
