@@ -301,15 +301,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						} else {
 							Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
 							Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
-//							if (g1 == null || g1.getRows().isEmpty()) {
-//								comparison = -1;
-//							} else if (g2 == null || g2.getRows().isEmpty()) {
-//								comparison = 1;
-//							} else {
-								return vc.compare(viewer, rd1,rd2);
-//							}
+							// if (g1 == null || g1.getRows().isEmpty()) {
+							// comparison = -1;
+							// } else if (g2 == null || g2.getRows().isEmpty()) {
+							// comparison = 1;
+							// } else {
+							return vc.compare(viewer, rd1, rd2);
+							// }
 						}
-//						return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
+						// return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
 					}
 				});
 			}
@@ -599,7 +599,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 				return super.renderSetValue(container, setValue);
 			}
-		}), new RowDataEMFPath(Type.LOAD_ALLOCATION, true));
+		}), new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
 		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable<?> getComparable(final Object object) {
@@ -613,9 +613,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				return super.getComparable(object);
 			}
-		}, new RowDataEMFPath(Type.LOAD, true));
-
-
+		}, new RowDataEMFPath(false, Type.LOAD));
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
@@ -630,8 +628,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 				return super.getComparable(object);
 			}
-		}, new RowDataEMFPath(Type.DISCHARGE, true));
-		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		}, new RowDataEMFPath(false, Type.DISCHARGE));
+		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		addTradesColumn(dischargeColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
 				editingDomain) {
 
@@ -642,25 +640,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 				return super.renderSetValue(container, setValue);
 			}
-		}), new RowDataEMFPath(Type.DISCHARGE_ALLOCATION, true));
-
-		final GridViewerColumn wiringColumn = addWiringColumn();
-
-		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
-			@Override
-			public Comparable<?> getComparable(Object object) {
-				if (object instanceof RowData) {
-					RowData rowData = (RowData) object;
-					if (rowData.loadSlot != null) {
-						return rowData.loadSlot.getWindowStart();
-					}
-				}
-				return super.getComparable(object);
-			}
-		}, new RowDataEMFPath(false, Type.DISCHARGE));
-		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-		addTradesColumn(dischargeColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
-				editingDomain)), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
+		}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
@@ -822,7 +802,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
 					final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
 					if (data != null) {
-						return String.format("%.2fm", ((float) data.getProfitAnsLoss()) / 1000000);
+						return String.format("%.2fm", ((float) data.getProfitAndLoss()) / 1000000);
 					}
 				}
 				return super.getText(element);
