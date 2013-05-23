@@ -120,9 +120,25 @@ public class EObjectTableViewerSortingSupport {
 
 						final Object v1 = path.get((EObject) e1);
 						final Object v2 = path.get((EObject) e2);
+int ii = 0;
+						Comparable left = renderer.getComparable(v1);
+						if (left == null) {
+							try {
+								left = renderer.getComparable(e1);
+							} catch (Exception e) {
+							} catch (AssertionError ae) {
 
-						final Comparable left = renderer.getComparable(v1);
-						final Comparable right = renderer.getComparable(v2);
+							}
+						}
+						Comparable right = renderer.getComparable(v2);
+						if (right == null) {
+							try {
+								right = renderer.getComparable(e2);
+							} catch (Exception e) {
+							} catch (AssertionError ae) {
+
+							}
+						}
 						if (left == null) {
 							return -1;
 						} else if (right == null) {
