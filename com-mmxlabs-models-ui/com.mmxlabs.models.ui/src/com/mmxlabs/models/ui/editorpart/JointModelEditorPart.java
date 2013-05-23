@@ -29,7 +29,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -95,8 +94,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * @author hinton
  * 
  */
-public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider, IScenarioEditingLocation, IMMXRootObjectProvider,
-		IScenarioInstanceProvider, IValidationStatusGoto {
+public class JointModelEditorPart extends MultiPageEditorPart implements ISelectionProvider, IScenarioEditingLocation, IMMXRootObjectProvider, IScenarioInstanceProvider, IValidationStatusGoto {
 
 	/**
 	 * Flag to enable the default EMF tree view editor
