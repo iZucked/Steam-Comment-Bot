@@ -589,21 +589,59 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
-				editingDomain)), new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
-		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain){
+				editingDomain) {
+
 			@Override
-			public Comparable<?> getComparable(Object object) {
-				
+			protected String renderSetValue(final Object container, final Object setValue) {
+				if (setValue instanceof Number) {
+					return String.format("$%.2f", ((Number) setValue).doubleValue());
+				}
+				return super.renderSetValue(container, setValue);
+			}
+		}), new RowDataEMFPath(Type.LOAD_ALLOCATION, true));
+		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+
 				if (object instanceof RowData) {
-					RowData rowData = (RowData) object;
+					final RowData rowData = (RowData) object;
 					if (rowData.dischargeSlot != null) {
 						return rowData.dischargeSlot.getWindowStart();
 					}
 				}
-				
+
 				return super.getComparable(object);
 			}
-		}, new RowDataEMFPath(false, Type.LOAD));
+		}, new RowDataEMFPath(Type.LOAD, true));
+
+
+
+		final GridViewerColumn wiringColumn = addWiringColumn();
+
+		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+				if (object instanceof RowData) {
+					final RowData rowData = (RowData) object;
+					if (rowData.loadSlot != null) {
+						return rowData.loadSlot.getWindowStart();
+					}
+				}
+				return super.getComparable(object);
+			}
+		}, new RowDataEMFPath(Type.DISCHARGE, true));
+		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		addTradesColumn(dischargeColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
+				editingDomain) {
+
+			@Override
+			protected String renderSetValue(final Object container, final Object setValue) {
+				if (setValue instanceof Number) {
+					return String.format("$%.2f", ((Number) setValue).doubleValue());
+				}
+				return super.renderSetValue(container, setValue);
+			}
+		}), new RowDataEMFPath(Type.DISCHARGE_ALLOCATION, true));
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
@@ -772,7 +810,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
 					final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
 					if (data != null) {
-						return String.format("$%,d", data.getProfitAndLoss());
+						return String.format("%.2fm", ((float) data.getProfitAnsLoss()) / 1000000);
 					}
 				}
 				return super.getText(element);

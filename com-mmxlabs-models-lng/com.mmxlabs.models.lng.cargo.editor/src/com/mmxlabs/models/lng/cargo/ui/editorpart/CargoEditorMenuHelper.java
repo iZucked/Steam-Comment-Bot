@@ -360,6 +360,52 @@ public class CargoEditorMenuHelper {
 	}
 
 	/**
+	 * Filter the possibleTargets list to exclude incompatible pairings due to contract restrictions
+	 * 
+	 * @param source
+	 * @param possibleTargets
+	 * @return
+	 */
+	private List<Slot> filterSlotsByRestrictions(Slot source, final List<? extends Slot> possibleTargets) {
+
+		List<Slot> filteredSlots = new LinkedList<Slot>();
+		for (Slot slot : possibleTargets) {
+			// Check restrictions on both slots
+			if (checkSourceConstraints(source, slot) && checkSourceConstraints(slot, source)) {
+				filteredSlots.add(slot);
+			}
+		}
+		return filteredSlots;
+	}
+
+	/**
+	 * Given a source slot, check that the target slot is compatible with the source slot contract restrictions.
+	 * 
+	 * @param source
+	 * @param target
+	 * @return
+	 */
+	private boolean checkSourceConstraints(Slot source, Slot target) {
+		if (source.getContract() != null) {
+			Contract sourceContract = source.getContract();
+			if (!sourceContract.getRestrictedPorts().isEmpty()) {
+				if (sourceContract.getRestrictedPorts().contains(target.getPort()) != sourceContract.isRestrictedListsArePermissive()) {
+					// Trying to pair to a restricted port - skip
+					return false;
+				}
+			}
+
+			if (!sourceContract.getRestrictedContracts().isEmpty() && target.getContract() != null) {
+				if (sourceContract.getRestrictedContracts().contains(target.getContract()) != sourceContract.isRestrictedListsArePermissive()) {
+					// Trying to pair to a restricted contract - skip
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * @since 4.0
 	 */
 	public IMenuListener createSwapSlotsMenuListener(final List<Slot> slots, final int index) {
