@@ -352,6 +352,10 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			dup.getMetadata().setCreated(cpy.getMetadata().getCreated());
 			dup.getMetadata().setLastModified(new Date());
 			dup.setName(cpy.getName());
+			
+			// Copy version context information
+			dup.setVersionContext(cpy.getVersionContext());
+			dup.setScenarioVersion(cpy.getScenarioVersion());
 
 			// Clean up
 			for (final IModelInstance toUnload : instancesToUnload) {
