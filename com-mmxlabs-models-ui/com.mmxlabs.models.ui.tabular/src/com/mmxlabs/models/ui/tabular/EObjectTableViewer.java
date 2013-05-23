@@ -479,6 +479,8 @@ public class EObjectTableViewer extends GridTableViewer {
 						}
 						if (object instanceof EObject) {
 							o = (EObject) object;
+						} else if (object == null) {
+							return new Object[] {};
 						}
 					}
 					return new Object[] { o };
