@@ -65,6 +65,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -599,7 +600,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return super.renderSetValue(container, setValue);
 			}
 		}), new RowDataEMFPath(Type.LOAD_ALLOCATION, true));
-		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable<?> getComparable(final Object object) {
 
@@ -684,6 +685,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				}
 			});
+		}
+
+		// Trigger sorting on the load date column to make this the initial sort column.
+		{
+			final Listener[] listeners = loadDateColumn.getColumn().getListeners(SWT.Selection);
+			for (final Listener l : listeners) {
+				final org.eclipse.swt.widgets.Event e = new org.eclipse.swt.widgets.Event();
+				e.type = SWT.Selection;
+				e.widget = loadDateColumn.getColumn();
+				l.handleEvent(e);
+			}
 		}
 
 		addPNLColumn("P&L", new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_ALLOCATION));
