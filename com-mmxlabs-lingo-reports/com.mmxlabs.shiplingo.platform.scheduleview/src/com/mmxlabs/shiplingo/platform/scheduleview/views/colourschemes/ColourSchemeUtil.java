@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
@@ -155,6 +156,14 @@ public class ColourSchemeUtil {
 		final int travelTime = (int) Math.round((float) distance / IdleRisk_speed);
 
 		return (travelTime / totalTime > IdleRisk_threshold);
+	}
+	
+	public static boolean isSpot(final SlotVisit visit) {
+		Slot slot = visit.getSlotAllocation().getSlot();
+		if (slot instanceof SpotSlot) {
+			return true;
+		}
+		return false;
 	}
 	
 	public static boolean isFOBSaleCargo(final SlotVisit visit) {
