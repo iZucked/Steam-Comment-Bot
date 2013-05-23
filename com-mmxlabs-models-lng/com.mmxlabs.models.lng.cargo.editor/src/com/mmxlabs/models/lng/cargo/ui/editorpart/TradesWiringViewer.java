@@ -298,15 +298,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						if (g1 == g2) {
 							return vc.compare(viewer, e1, e2);
 						} else {
-							if (g1 == null || g1.getRows().isEmpty()) {
-								comparison = -1;
-							} else if (g2 == null || g2.getRows().isEmpty()) {
-								comparison = 1;
-							} else {
-								return vc.compare(viewer, g1.getRows().get(0), g2.getRows().get(0));
-							}
+							Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
+							Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
+//							if (g1 == null || g1.getRows().isEmpty()) {
+//								comparison = -1;
+//							} else if (g2 == null || g2.getRows().isEmpty()) {
+//								comparison = 1;
+//							} else {
+								return vc.compare(viewer, rd1,rd2);
+//							}
 						}
-						return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
+//						return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
 					}
 				});
 			}
@@ -500,7 +502,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				@Override
 				public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-					// TODO Auto-generated method stub
 					final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
 					transformer.updateWiringValidity(rootData, getScenarioViewer().getValidationSupport().getValidationErrors());
 					wiringDiagram.redraw();
@@ -589,13 +590,37 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
 				editingDomain)), new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
-		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
+		addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain){
+			@Override
+			public Comparable<?> getComparable(Object object) {
+				
+				if (object instanceof RowData) {
+					RowData rowData = (RowData) object;
+					if (rowData.dischargeSlot != null) {
+						return rowData.dischargeSlot.getWindowStart();
+					}
+				}
+				
+				return super.getComparable(object);
+			}
+		}, new RowDataEMFPath(false, Type.LOAD));
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
-		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+			@Override
+			public Comparable<?> getComparable(Object object) {
+				if (object instanceof RowData) {
+					RowData rowData = (RowData) object;
+					if (rowData.loadSlot != null) {
+						return rowData.loadSlot.getWindowStart();
+					}
+				}
+				return super.getComparable(object);
+			}
+		}, new RowDataEMFPath(false, Type.DISCHARGE));
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
+		addTradesColumn(dischargeColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
 				editingDomain)), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
