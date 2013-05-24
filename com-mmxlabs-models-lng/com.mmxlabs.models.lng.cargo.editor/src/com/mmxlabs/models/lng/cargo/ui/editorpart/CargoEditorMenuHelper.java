@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,11 +18,9 @@ import java.util.TreeSet;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -302,10 +299,10 @@ public class CargoEditorMenuHelper {
 	 * @param possibleTargets
 	 * @return
 	 */
-	private List<Slot> filterSlotsByCompatibility(Slot source, final List<? extends Slot> possibleTargets) {
+	private List<Slot> filterSlotsByCompatibility(final Slot source, final List<? extends Slot> possibleTargets) {
 
-		List<Slot> filteredSlots = new LinkedList<Slot>();
-		for (Slot slot : possibleTargets) {
+		final List<Slot> filteredSlots = new LinkedList<Slot>();
+		for (final Slot slot : possibleTargets) {
 			// Check restrictions on both slots
 			if (slot instanceof LoadSlot) {
 				if (((LoadSlot) slot).isDESPurchase()) {
@@ -334,9 +331,9 @@ public class CargoEditorMenuHelper {
 	 * @param target
 	 * @return
 	 */
-	private boolean checkSourceContractConstraints(Slot source, Slot target) {
+	private boolean checkSourceContractConstraints(final Slot source, final Slot target) {
 		if (source.getContract() != null) {
-			Contract sourceContract = source.getContract();
+			final Contract sourceContract = source.getContract();
 			if (!sourceContract.getRestrictedPorts().isEmpty()) {
 				if (sourceContract.getRestrictedPorts().contains(target.getPort()) != sourceContract.isRestrictedListsArePermissive()) {
 					// Trying to pair to a restricted port - skip
@@ -354,7 +351,7 @@ public class CargoEditorMenuHelper {
 		return true;
 	}
 
-	private void createMenus(final IMenuManager manager, final Slot source, Cargo sourceCargo, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
+	private void createMenus(final IMenuManager manager, final Slot source, final Cargo sourceCargo, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
 
 		final Map<String, Set<Slot>> unusedSlotsByDate = new TreeMap<String, Set<Slot>>();
 		final Set<Slot> nearSlotsByDate = createSlotTreeSet();
@@ -538,7 +535,7 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private String getActionName(final Slot slot, boolean isLoad, final boolean includeContract, final boolean includePort) {
+	private String getActionName(final Slot slot, final boolean isLoad, final boolean includeContract, final boolean includePort) {
 		final StringBuilder sb = new StringBuilder();
 
 		{
@@ -576,7 +573,7 @@ public class CargoEditorMenuHelper {
 //			sb.append(", ");
 //		}
 //		sb.append(" | ");
-		Cargo c = isLoad ? ((LoadSlot) slot).getCargo() : ((DischargeSlot) slot).getCargo();
+		final Cargo c = isLoad ? ((LoadSlot) slot).getCargo() : ((DischargeSlot) slot).getCargo();
 		if (c != null) {
 			sb.append(" -- ");
 			sb.append("cargo '" + c.getName() + "'");
@@ -628,13 +625,22 @@ public class CargoEditorMenuHelper {
 				} else {
 					dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isSpecial, market);
 				}
+				dischargeSlot.setWindowStart(source.getWindowStart());
+				if (loadSlot.isDESPurchase()) {
+					dischargeSlot.setPort(source.getPort());
+				}
 			} else {
+				dischargeSlot = (DischargeSlot) source;
 				if (market == null) {
 					loadSlot = cec.createNewLoad(setCommands, cargoModel, isSpecial);
+					loadSlot.setWindowStart(source.getWindowStart());
 				} else {
 					loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isSpecial, market);
+					loadSlot.setWindowStart(source.getWindowStart());
 				}
-				dischargeSlot = (DischargeSlot) source;
+				if (dischargeSlot.isFOBSale()) {
+					loadSlot.setPort(source.getPort());
+				}
 			}
 			cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
 
