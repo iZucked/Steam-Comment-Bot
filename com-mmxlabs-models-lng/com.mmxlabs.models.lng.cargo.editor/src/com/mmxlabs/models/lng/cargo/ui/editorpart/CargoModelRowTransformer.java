@@ -220,6 +220,8 @@ public class CargoModelRowTransformer {
 				group.addShipToShipWire(slot);
 			}
 			
+			group.patchWires();
+			
 			result.add(group);
 		}
 		
@@ -428,6 +430,7 @@ public class CargoModelRowTransformer {
 		RowData loadRowData;
 		DischargeSlot dischargeSlot;
 		RowData dischargeRowData;
+		boolean dashed;
 
 	}
 
@@ -486,6 +489,8 @@ public class CargoModelRowTransformer {
 			// and add a wire to the group, showing the ship-to-ship transfer
 			WireData wire = new WireData();
 			getWires().add(wire);
+			wire.colour = gray;
+			wire.dashed = true;
 			
 			LoadSlot loadSlot = null;
 			DischargeSlot dischargeSlot = null;
@@ -571,7 +576,7 @@ public class CargoModelRowTransformer {
 		}
 		
 		public void patchWires() {
-			for (final RowData row: getRows()) {
+ 			for (final RowData row: getRows()) {
 				// patch up the WireData information with the new RowData objects
 				for (final WireData wire : getWires()) {
 					if (wire.loadSlot != null && wire.loadSlot == row.loadSlot) {
