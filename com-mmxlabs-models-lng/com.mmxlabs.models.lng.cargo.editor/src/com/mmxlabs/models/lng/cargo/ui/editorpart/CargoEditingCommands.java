@@ -22,10 +22,12 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.ShipToShipBinding;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
@@ -107,6 +109,22 @@ public class CargoEditingCommands {
 		return newLoad;
 	}
 
+	public LoadSlot createNewShipToShipLoad(final List<Command> setCommands, final DischargeSlot linkedSlot, final CargoModel cargoModel) {
+		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+		newLoad.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
+		newLoad.setPriceExpression("0");
+		newLoad.setMinQuantity(linkedSlot.getMinQuantity());
+		newLoad.setMaxQuantity(linkedSlot.getMaxQuantity());
+		newLoad.setPort(linkedSlot.getPort());
+		newLoad.setWindowStart(linkedSlot.getWindowStart());
+		newLoad.setTransferFrom(linkedSlot);
+		newLoad.setName(linkedSlot.getName() + "-transfer");
+		
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoad));
+		
+		return newLoad;				
+	}
+	
 	public LoadSlot createNewLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase) {
 
 		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
