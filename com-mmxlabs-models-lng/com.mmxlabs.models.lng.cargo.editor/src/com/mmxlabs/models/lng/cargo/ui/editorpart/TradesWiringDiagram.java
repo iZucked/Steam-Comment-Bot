@@ -178,9 +178,18 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
 
 				graphics.setForeground(wire.colour);
+				
+				if (wire.dashed) {
+					graphics.setLineDash(new int [] {2, 3});
+				}
+				else {
+					graphics.setLineDash(null);
+				}
+				
 				graphics.drawPath(path);
 				path.dispose();
 
+				graphics.setLineDash(null);
 			}
 		}
 
@@ -360,23 +369,29 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			RowData fromRowData = rootData.getRows().get(sortedIndex);
 
-			// now find column
-			if (!draggedToNowhere && !draggingFromLeft && (e.x >= ca.x + terminalSize && e.x <= ca.x + 2 * terminalSize)) {
-				// arrived in left column from right
-				newWiring.put(fromRowData, null);
-				newWiring.put(toRowData, fromRowData);
-				newWiring.put(null, toRowData);
-			} else if (!draggedToNowhere && draggingFromLeft && (e.x >= ca.x + ca.width - terminalSize * 2 && e.x <= ca.x + ca.width - terminalSize)) {
-				// arrived in right column
-				newWiring.put(fromRowData, toRowData);
-				newWiring.put(toRowData, null);
-				newWiring.put(null, fromRowData);
-			} else {
-				// clear wire
-				newWiring.put(fromRowData, null);
-				newWiring.put(null, fromRowData);
+			// check if the user is trying to pair two slots which are a ship-to-ship transfer
+			// (i.e. they are effectively the same slot!)
+			boolean shipToShipLink = (toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot) || (toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot);
+			
+			if (!shipToShipLink) {
+				// now find column
+				if (!draggedToNowhere && !draggingFromLeft && (e.x >= ca.x + terminalSize && e.x <= ca.x + 2 * terminalSize)) {
+					// arrived in left column from right
+					newWiring.put(fromRowData, null);
+					newWiring.put(toRowData, fromRowData);
+					newWiring.put(null, toRowData);
+				} else if (!draggedToNowhere && draggingFromLeft && (e.x >= ca.x + ca.width - terminalSize * 2 && e.x <= ca.x + ca.width - terminalSize)) {
+					// arrived in right column
+					newWiring.put(fromRowData, toRowData);
+					newWiring.put(toRowData, null);
+					newWiring.put(null, fromRowData);
+				} else {
+					// clear wire
+					newWiring.put(fromRowData, null);
+					newWiring.put(null, fromRowData);
+				}
+				wiringChanged(newWiring);
 			}
-			wiringChanged(newWiring);
 		}
 
 		if (!canvas.isDisposed()) {
