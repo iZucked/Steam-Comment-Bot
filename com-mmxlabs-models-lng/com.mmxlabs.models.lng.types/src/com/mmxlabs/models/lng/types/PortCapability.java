@@ -58,7 +58,15 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	MAINTENANCE(3, "MAINTENANCE", "MAINTENANCE");
+	MAINTENANCE(3, "MAINTENANCE", "MAINTENANCE"), /**
+													 * The '<em><b>TRANSFER</b></em>' literal object.
+													 * <!-- begin-user-doc -->
+													 * <!-- end-user-doc -->
+													 * @see #TRANSFER_VALUE
+													 * @generated
+													 * @ordered
+													 */
+	TRANSFER(4, "TRANSFER", "TRANSFER");
 
 	/**
 	 * The '<em><b>LOAD</b></em>' literal value.
@@ -121,12 +129,28 @@ public enum PortCapability implements Enumerator {
 	public static final int MAINTENANCE_VALUE = 3;
 
 	/**
+	 * The '<em><b>TRANSFER</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>TRANSFER</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #TRANSFER
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int TRANSFER_VALUE = 4;
+
+	/**
 	 * An array of all the '<em><b>Port Capability</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final PortCapability[] VALUES_ARRAY = new PortCapability[] { LOAD, DISCHARGE, DRYDOCK, MAINTENANCE, };
+	private static final PortCapability[] VALUES_ARRAY = new PortCapability[] {
+			LOAD, DISCHARGE, DRYDOCK, MAINTENANCE, TRANSFER, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Port Capability</b></em>' enumerators.
@@ -134,7 +158,8 @@ public enum PortCapability implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<PortCapability> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<PortCapability> VALUES = Collections
+			.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
 	 * Returns the '<em><b>Port Capability</b></em>' literal with the specified literal value.
@@ -184,6 +209,8 @@ public enum PortCapability implements Enumerator {
 			return DRYDOCK;
 		case MAINTENANCE_VALUE:
 			return MAINTENANCE;
+		case TRANSFER_VALUE:
+			return TRANSFER;
 		}
 		return null;
 	}

@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import java.lang.Iterable;
 
 /**
  * <!-- begin-user-doc -->
@@ -119,10 +120,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 */
 	public static TypesPackage init() {
 		if (isInited)
-			return (TypesPackage) EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
+			return (TypesPackage) EPackage.Registry.INSTANCE
+					.getEPackage(TypesPackage.eNS_URI);
 
 		// Obtain or create and register package
-		TypesPackageImpl theTypesPackage = (TypesPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TypesPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new TypesPackageImpl());
+		TypesPackageImpl theTypesPackage = (TypesPackageImpl) (EPackage.Registry.INSTANCE
+				.get(eNS_URI) instanceof TypesPackageImpl ? EPackage.Registry.INSTANCE
+				.get(eNS_URI) : new TypesPackageImpl());
 
 		isInited = true;
 
@@ -265,7 +269,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aVesselSetEClass = createEClass(AVESSEL_SET);
 
 		iTimezoneProviderEClass = createEClass(ITIMEZONE_PROVIDER);
-		createEOperation(iTimezoneProviderEClass, ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE);
+		createEOperation(iTimezoneProviderEClass,
+				ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE);
 
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
@@ -300,13 +305,17 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		MMXCorePackage theMMXCorePackage = (MMXCorePackage) EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
+		MMXCorePackage theMMXCorePackage = (MMXCorePackage) EPackage.Registry.INSTANCE
+				.getEPackage(MMXCorePackage.eNS_URI);
 
 		// Create type parameters
-		ETypeParameter objectSetEClass_T = addETypeParameter(objectSetEClass, "T");
-		ETypeParameter objectSetEClass_U = addETypeParameter(objectSetEClass, "U");
+		ETypeParameter objectSetEClass_T = addETypeParameter(objectSetEClass,
+				"T");
+		ETypeParameter objectSetEClass_U = addETypeParameter(objectSetEClass,
+				"U");
 		ETypeParameter aPortSetEClass_U = addETypeParameter(aPortSetEClass, "U");
-		ETypeParameter aVesselSetEClass_U = addETypeParameter(aVesselSetEClass, "U");
+		ETypeParameter aVesselSetEClass_U = addETypeParameter(aVesselSetEClass,
+				"U");
 		addETypeParameter(iterableEDataType, "T");
 
 		// Set bounds for type parameters
@@ -319,7 +328,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		// Add supertypes to classes
 		objectSetEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		objectSetEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		objectSetEClass.getESuperTypes()
+				.add(theMMXCorePackage.getNamedObject());
 		g1 = createEGenericType(this.getObjectSet());
 		g2 = createEGenericType(this.getAPortSet());
 		g1.getETypeArguments().add(g2);
@@ -338,22 +348,31 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aVesselSetEClass.getEGenericSuperTypes().add(g1);
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(objectSetEClass, ObjectSet.class, "ObjectSet", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(objectSetEClass, ObjectSet.class, "ObjectSet", IS_ABSTRACT,
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		EOperation op = initEOperation(getObjectSet__Collect__EList(), null, "collect", 0, -1, IS_UNIQUE, IS_ORDERED);
+		EOperation op = initEOperation(getObjectSet__Collect__EList(), null,
+				"collect", 0, -1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(objectSetEClass_T);
 		addEParameter(op, g1, "marked", 0, -1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(objectSetEClass_U);
 		initEOperation(op, g1);
 
-		initEClass(aPortSetEClass, APortSet.class, "APortSet", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(aPortSetEClass, APortSet.class, "APortSet", IS_ABSTRACT,
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(aVesselSetEClass, AVesselSet.class, "AVesselSet", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(aVesselSetEClass, AVesselSet.class, "AVesselSet",
+				IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(iTimezoneProviderEClass, ITimezoneProvider.class, "ITimezoneProvider", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iTimezoneProviderEClass, ITimezoneProvider.class,
+				"ITimezoneProvider", IS_ABSTRACT, IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
 
-		op = initEOperation(getITimezoneProvider__GetTimeZone__EAttribute(), ecorePackage.getEString(), "getTimeZone", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEAttribute(), "attribute", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getITimezoneProvider__GetTimeZone__EAttribute(),
+				ecorePackage.getEString(), "getTimeZone", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+		addEParameter(op, ecorePackage.getEAttribute(), "attribute", 1, 1,
+				IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");
@@ -361,14 +380,17 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.DISCHARGE);
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.DRYDOCK);
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.MAINTENANCE);
+		addEEnumLiteral(portCapabilityEEnum, PortCapability.TRANSFER);
 
-		initEEnum(cargoDeliveryTypeEEnum, CargoDeliveryType.class, "CargoDeliveryType");
+		initEEnum(cargoDeliveryTypeEEnum, CargoDeliveryType.class,
+				"CargoDeliveryType");
 		addEEnumLiteral(cargoDeliveryTypeEEnum, CargoDeliveryType.ANY);
 		addEEnumLiteral(cargoDeliveryTypeEEnum, CargoDeliveryType.SHIPPED);
 		addEEnumLiteral(cargoDeliveryTypeEEnum, CargoDeliveryType.NOT_SHIPPED);
 
 		// Initialize data types
-		initEDataType(iterableEDataType, Iterable.class, "Iterable", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(iterableEDataType, Iterable.class, "Iterable",
+				IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

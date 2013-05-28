@@ -44,6 +44,7 @@
     <eLiterals name="DISCHARGE" value="1" literal="DISCHARGE"/>
     <eLiterals name="DRYDOCK" value="2" literal="DRYDOCK"/>
     <eLiterals name="MAINTENANCE" value="3" literal="MAINTENANCE"/>
+    <eLiterals name="TRANSFER" value="4"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">
     <eTypeParameters name="T"/>
