@@ -43,7 +43,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
@@ -57,7 +56,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -220,13 +218,13 @@ public class CargoEditorMenuHelper {
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				if (dischargeSlot.isFOBSale()) {
-					createNewSlotMenu(newMenuManager, dischargeSlot, false);
-					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
+					createNewSlotMenu(newMenuManager, dischargeSlot);
+					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
 				} else {
-					createNewSlotMenu(newMenuManager, dischargeSlot, false);
+					createNewSlotMenu(newMenuManager, dischargeSlot);
 					createMenus(manager, dischargeSlot, cargoModel.getLoadSlots(), false);
-					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
-					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
+					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot);
+					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
 				}
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getCargo());
 				createEditContractMenu(manager, dischargeSlot, dischargeSlot.getContract());
@@ -332,13 +330,13 @@ public class CargoEditorMenuHelper {
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				if (loadSlot.isDESPurchase()) {
-					createNewSlotMenu(newMenuManager, loadSlot, true);
-					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
+					createNewSlotMenu(newMenuManager, loadSlot);
+					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot);
 				} else {
-					createNewSlotMenu(newMenuManager, loadSlot, true);
+					createNewSlotMenu(newMenuManager, loadSlot);
 					createMenus(manager, loadSlot, cargoModel.getDischargeSlots(), true);
-					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
-					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
+					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot);
+					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot);
 				}
 
 				createEditMenu(manager, loadSlot, loadSlot.getCargo());
@@ -546,26 +544,27 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	void createNewSlotMenu(final IMenuManager menuManager, final Slot source, final boolean sourceIsLoad) {
+	void createNewSlotMenu(final IMenuManager menuManager, final Slot source) {
 
-		if (sourceIsLoad) {
+		if (source instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) source;
 			if (loadSlot.isDESPurchase()) {
 				// Only create new Discharge
-				menuManager.add(new CreateSlotAction("Discharge", source, null, sourceIsLoad, false));
+				menuManager.add(new CreateSlotAction("Discharge", source, null, false, false));
 			} else {
 				//
-				menuManager.add(new CreateSlotAction("Discharge", source, null, sourceIsLoad, false));
-				menuManager.add(new CreateSlotAction("FOB Sale", source, null, sourceIsLoad, true));
+				menuManager.add(new CreateSlotAction("Discharge", source, null, false, false));
+				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, false));
 			}
 		} else {
 			final DischargeSlot dischargeSlot = (DischargeSlot) source;
-			if (dischargeSlot.isFOBSale()) {
-				// only load
-				menuManager.add(new CreateSlotAction("Load", source, null, sourceIsLoad, false));
-			} else {
-				menuManager.add(new CreateSlotAction("Load", source, null, sourceIsLoad, false));
-				menuManager.add(new CreateSlotAction("DES Purchase", source, null, sourceIsLoad, true));
+			menuManager.add(new CreateSlotAction("Load", source, null, false, false));
+			if (!dischargeSlot.isFOBSale()) {
+				menuManager.add(new CreateSlotAction("DES Purchase", source, null, true, false));
+			}
+			
+			if (dischargeSlot.getTransferTo() == null) {
+				menuManager.add(new CreateSlotAction("Ship to Ship", source, null, false, true));
 			}
 		}
 	}
@@ -586,7 +585,7 @@ public class CargoEditorMenuHelper {
 		return slotsByDate;
 	}
 
-	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, final boolean sourceIsLoad) {
+	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source) {
 		final SpotMarketsModel pricingModel = scenarioModel.getSpotMarketsModel();
 		final Collection<SpotMarket> validMarkets = new LinkedList<SpotMarket>();
 		String menuName = "";
@@ -621,7 +620,7 @@ public class CargoEditorMenuHelper {
 		final MenuManager subMenu = new MenuManager("New " + menuName + " Market Slot", null);
 
 		for (final SpotMarket market : validMarkets) {
-			subMenu.add(new CreateSlotAction("Create " + market.getName() + " slot", source, market, sourceIsLoad, isSpecial));
+			subMenu.add(new CreateSlotAction("Create " + market.getName() + " slot", source, market, isSpecial, false));
 		}
 
 		manager.add(subMenu);
@@ -710,14 +709,16 @@ public class CargoEditorMenuHelper {
 		private final Slot source;
 		private final SpotMarket market;
 		private final boolean sourceIsLoad;
-		private final boolean isSpecial;
+		private final boolean isDesPurchaseOrFobSale;
+		private final boolean isShipToShip;
 
-		public CreateSlotAction(final String name, final Slot source, final SpotMarket market, final boolean sourceIsLoad, final boolean isSpecial) {
+		public CreateSlotAction(final String name, final Slot source, final SpotMarket market, final boolean isDesPurchaseOrFobSale, final boolean isShipToShip) {
 			super(name);
 			this.source = source;
 			this.market = market;
-			this.sourceIsLoad = sourceIsLoad;
-			this.isSpecial = isSpecial;
+			this.sourceIsLoad = source instanceof LoadSlot;
+			this.isShipToShip = isShipToShip;
+			this.isDesPurchaseOrFobSale = isDesPurchaseOrFobSale;
 		}
 
 		@Override
@@ -727,25 +728,34 @@ public class CargoEditorMenuHelper {
 			final List<Command> setCommands = new LinkedList<Command>();
 			final List<Command> deleteCommands = new LinkedList<Command>();
 
-			LoadSlot loadSlot;
-			DischargeSlot dischargeSlot;
-			if (sourceIsLoad) {
-				loadSlot = (LoadSlot) source;
-				if (market == null) {
-					dischargeSlot = cec.createNewDischarge(setCommands, cargoModel, isSpecial);
-				} else {
-					dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isSpecial, market);
-				}
-			} else {
-				if (market == null) {
-					loadSlot = cec.createNewLoad(setCommands, cargoModel, isSpecial);
-				} else {
-					loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isSpecial, market);
-				}
-				dischargeSlot = (DischargeSlot) source;
+			// when we create a ship to ship linked slot, we don't rewire the cargoes
+			if (isShipToShip && !sourceIsLoad) {
+				cec.createNewShipToShipLoad(setCommands, (DischargeSlot) source, cargoModel);
 			}
-			cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
+			// when we create another slot, we rewire the cargoes
+			else {
+				LoadSlot loadSlot;
+				DischargeSlot dischargeSlot;
+				if (sourceIsLoad) {
+					loadSlot = (LoadSlot) source;
+					if (market == null) {
+						dischargeSlot = cec.createNewDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale);
+					} else {
+						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
+					}
+				} else {
+					if (market == null) {
+						loadSlot = cec.createNewLoad(setCommands, cargoModel, isDesPurchaseOrFobSale);
+					} else {
+						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
+					}
+					dischargeSlot = (DischargeSlot) source;
+				}
+				cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
+			}
 
+			// make a compound command which adds and sets values before deleting anything 
+			
 			final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
 			// Process set before delete
 			for (final Command c : setCommands) {
