@@ -61,6 +61,7 @@ public class LoadSlotItemProvider
 			addCargoCVPropertyDescriptor(object);
 			addArriveColdPropertyDescriptor(object);
 			addDESPurchasePropertyDescriptor(object);
+			addTransferFromPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -127,6 +128,28 @@ public class LoadSlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Transfer From feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTransferFromPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadSlot_transferFrom_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_transferFrom_feature", "_UI_LoadSlot_type"),
+				 CargoPackage.Literals.LOAD_SLOT__TRANSFER_FROM,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
