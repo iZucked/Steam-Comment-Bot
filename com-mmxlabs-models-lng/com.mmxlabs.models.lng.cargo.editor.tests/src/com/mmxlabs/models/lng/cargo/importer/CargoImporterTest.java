@@ -35,20 +35,20 @@ public class CargoImporterTest {
 			row.put("kind", "");
 			row.put("name", "");
 
-			row.put("loadslot.kind", "LoadSlot");
-			row.put("loadslot." + MMXCorePackage.eINSTANCE.getNamedObject_Name().getName().toLowerCase(), "LoadSlot1");
-			row.put("loadslot." + MMXCorePackage.eINSTANCE.getUUIDObject_Uuid().getName().toLowerCase(), "UUID");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_Contract().getName().toLowerCase(), "ContractName");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_Duration().getName().toLowerCase(), "42");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_MaxQuantity().getName().toLowerCase(), "2000");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_MinQuantity().getName().toLowerCase(), "1000");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_Optional().getName().toLowerCase(), "TRUE");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_Port().getName().toLowerCase(), "PortName");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_PriceExpression().getName().toLowerCase(), "PRICE+1");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_WindowStart().getName().toLowerCase(), "2013-1-1");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getSlot_WindowStartTime().getName().toLowerCase(), "9");
-			row.put("loadslot." + CargoPackage.eINSTANCE.getLoadSlot_CargoCV().getName().toLowerCase(), "12.7");
+			row.put("buy.kind", "LoadSlot");
+			row.put("buy." + MMXCorePackage.eINSTANCE.getNamedObject_Name().getName().toLowerCase(), "LoadSlot1");
+			row.put("buy." + MMXCorePackage.eINSTANCE.getUUIDObject_Uuid().getName().toLowerCase(), "UUID");
+			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Contract().getName().toLowerCase(), "ContractName");
+			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Duration().getName().toLowerCase(), "42");
+			row.put("buy.min", "2000");
+			row.put("buy.max", "1000");
+			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Optional().getName().toLowerCase(), "TRUE");
+			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Port().getName().toLowerCase(), "PortName");
+			row.put("buy.price", "PRICE+1");
+			row.put("buy." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
+			row.put("buy.date", "2013-1-1");
+			row.put("buy.time", "9");
+			row.put("buy." + CargoPackage.eINSTANCE.getLoadSlot_CargoCV().getName().toLowerCase(), "12.7");
 		}
 		CargoImporter cargoImporter = new CargoImporter();
 		IImportContext context = Mockito.mock(IImportContext.class);
