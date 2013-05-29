@@ -214,6 +214,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CargoReflexiveTransferSlotConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CargoReflexiveTransferSlotConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cargo transfer slot confusion"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="DischargeSlot">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.OptionalSlotConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.OptionalSlotConstraint"
                   isEnabledByDefault="true"
