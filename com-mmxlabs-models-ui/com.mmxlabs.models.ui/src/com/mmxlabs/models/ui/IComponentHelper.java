@@ -30,6 +30,10 @@ public interface IComponentHelper {
 	
 	/**
 	 * Get the external editing range for things produced by this CH.
+	 * These should be any objects in fields where those objects need to be cloned
+	 * when the original object is cloned, because they can be edited along with the 
+	 * object.
+	 * 
 	 * @param root
 	 * @param value
 	 * @return
