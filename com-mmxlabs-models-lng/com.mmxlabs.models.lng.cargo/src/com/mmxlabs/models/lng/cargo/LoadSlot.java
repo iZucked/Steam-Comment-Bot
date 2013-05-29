@@ -15,6 +15,7 @@ package com.mmxlabs.models.lng.cargo;
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}</li>
  * </ul>
  * </p>
  *
@@ -154,6 +155,34 @@ public interface LoadSlot extends Slot {
 	 * @generated
 	 */
 	void setDESPurchase(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Transfer From</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo <em>Transfer To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Transfer From</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Transfer From</em>' reference.
+	 * @see #setTransferFrom(DischargeSlot)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_TransferFrom()
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo
+	 * @model opposite="transferTo"
+	 * @generated
+	 */
+	DischargeSlot getTransferFrom();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Transfer From</em>' reference.
+	 * @see #getTransferFrom()
+	 * @generated
+	 */
+	void setTransferFrom(DischargeSlot value);
 
 	/**
 	 * <!-- begin-user-doc -->
