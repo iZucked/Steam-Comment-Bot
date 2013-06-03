@@ -603,6 +603,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Transfer From</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -885,6 +886,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Transfer To</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1348,6 +1350,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Transfer From</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1639,6 +1642,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Transfer To</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2171,6 +2175,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Transfer From</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom()
@@ -2225,6 +2230,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo <em>Transfer To</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Transfer To</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo()
@@ -2618,6 +2624,7 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Transfer From</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2661,6 +2668,7 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Transfer To</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
