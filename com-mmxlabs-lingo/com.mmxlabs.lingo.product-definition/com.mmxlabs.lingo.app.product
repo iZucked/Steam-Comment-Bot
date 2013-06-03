@@ -16,6 +16,7 @@ Version: 3.0.0
    </configIni>
 
    <launcherArgs>
+      <programArgs>-console</programArgs>
       <vmArgs>-ea -server -Xmx768m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
