@@ -28,7 +28,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl#getOtherNames <em>Other Names</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,16 +53,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -110,18 +99,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.OBJECT_SET__OTHER_NAMES);
-		}
-		return otherNames;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<U> collect(EList<T> marked) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -138,8 +115,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 		switch (featureID) {
 		case TypesPackage.OBJECT_SET__NAME:
 			return getName();
-		case TypesPackage.OBJECT_SET__OTHER_NAMES:
-			return getOtherNames();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -156,10 +131,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 		case TypesPackage.OBJECT_SET__NAME:
 			setName((String) newValue);
 			return;
-		case TypesPackage.OBJECT_SET__OTHER_NAMES:
-			getOtherNames().clear();
-			getOtherNames().addAll((Collection<? extends String>) newValue);
-			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -175,9 +146,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 		case TypesPackage.OBJECT_SET__NAME:
 			setName(NAME_EDEFAULT);
 			return;
-		case TypesPackage.OBJECT_SET__OTHER_NAMES:
-			getOtherNames().clear();
-			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -192,8 +160,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 		switch (featureID) {
 		case TypesPackage.OBJECT_SET__NAME:
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case TypesPackage.OBJECT_SET__OTHER_NAMES:
-			return otherNames != null && !otherNames.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -209,8 +175,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 			switch (derivedFeatureID) {
 			case TypesPackage.OBJECT_SET__NAME:
 				return MMXCorePackage.NAMED_OBJECT__NAME;
-			case TypesPackage.OBJECT_SET__OTHER_NAMES:
-				return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 			default:
 				return -1;
 			}
@@ -229,8 +193,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 			switch (baseFeatureID) {
 			case MMXCorePackage.NAMED_OBJECT__NAME:
 				return TypesPackage.OBJECT_SET__NAME;
-			case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES:
-				return TypesPackage.OBJECT_SET__OTHER_NAMES;
 			default:
 				return -1;
 			}
@@ -266,8 +228,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDOb
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(')');
 		return result.toString();
 	}
