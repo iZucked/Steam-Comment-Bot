@@ -23,9 +23,12 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public class SlotShipToShipBindingCommandProvider extends SynchronisedFeatureCommandProvider {
 	@Override
 	protected Set<EStructuralFeature> makeBoundFeatures() {
-		// construct the set of structural features which are to be synchronised 
+		// construct the set of structural features which are to be synchronised
+		// Keep in sync with the new ship to ship context menu in CargoEditingCommands
 		HashSet<EStructuralFeature> result = new HashSet<EStructuralFeature>();
 		result.add(CargoPackage.Literals.SLOT__DURATION);
+		result.add(CargoPackage.Literals.SLOT__WINDOW_START);
+		result.add(CargoPackage.Literals.SLOT__WINDOW_START_TIME);
 		result.add(CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
 		result.add(CargoPackage.Literals.SLOT__PORT);
 		result.add(CargoPackage.Literals.SLOT__MIN_QUANTITY);
