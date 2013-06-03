@@ -86,6 +86,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * The cargo must be delivered by a third party.
+	 * @since 5.0
 	 * <!-- end-model-doc -->
 	 * @see #NOT_SHIPPED
 	 * @model name="NotShipped"
