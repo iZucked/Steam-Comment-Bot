@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.WeakHashMap;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -21,6 +23,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -33,6 +36,8 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
  * 
  */
 public class EMFScheduleContentProvider implements IGanttChartContentProvider {
+
+	private final WeakHashMap<Slot, SlotVisit> cachedElements = new WeakHashMap<Slot, SlotVisit>();
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
@@ -64,7 +69,14 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			return seqs.toArray();
 		} else if (parent instanceof Sequence) {
 			final Sequence sequence = (Sequence) parent;
-			return sequence.getEvents().toArray();
+			final EList<Event> events = sequence.getEvents();
+			for (final Event event : events) {
+				if (event instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) event;
+					cachedElements.put(slotVisit.getSlotAllocation().getSlot(), slotVisit);
+				}
+			}
+			return events.toArray();
 		}
 		return null;
 	}
@@ -86,7 +98,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
+		cachedElements.clear();
 	}
 
 	@Override
@@ -202,5 +214,30 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Object getElementDependency(final Object element) {
+
+		if (element instanceof SlotVisit) {
+			final SlotVisit slotVisit = (SlotVisit) element;
+			final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+			if (slotAllocation != null) {
+				final Slot slot = slotAllocation.getSlot();
+				Slot transferSlot = null;
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+//					transferSlot = loadSlot.getTransferFrom();
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					transferSlot = dischargeSlot.getTransferTo();
+				}
+				if (transferSlot != null) {
+					return cachedElements.get(transferSlot);
+				}
+			}
+		}
+
+		return null;
 	}
 }
