@@ -121,6 +121,7 @@ public interface DischargeSlot extends Slot {
 	 * If the meaning of the '<em>Transfer To</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Transfer To</em>' reference.
 	 * @see #setTransferTo(LoadSlot)
@@ -134,6 +135,7 @@ public interface DischargeSlot extends Slot {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo <em>Transfer To</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Transfer To</em>' reference.
 	 * @see #getTransferTo()

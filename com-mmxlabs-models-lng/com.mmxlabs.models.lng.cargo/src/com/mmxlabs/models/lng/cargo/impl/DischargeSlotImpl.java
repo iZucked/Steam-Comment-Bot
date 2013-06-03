@@ -88,6 +88,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	/**
 	 * The cached value of the '{@link #getTransferTo() <em>Transfer To</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getTransferTo()
 	 * @generated
@@ -187,6 +188,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -204,6 +206,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -213,6 +216,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -228,6 +232,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

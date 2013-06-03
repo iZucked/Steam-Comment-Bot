@@ -135,6 +135,7 @@ public class LoadSlotItemProvider
 	/**
 	 * This adds a property descriptor for the Transfer From feature.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
