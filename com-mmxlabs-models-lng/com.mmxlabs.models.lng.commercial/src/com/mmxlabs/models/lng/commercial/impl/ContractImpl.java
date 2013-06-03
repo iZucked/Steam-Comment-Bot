@@ -32,7 +32,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPreferredPort <em>Preferred Port</em>}</li>
@@ -69,17 +68,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
 
 	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
@@ -226,7 +214,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -236,7 +224,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -245,19 +233,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, CommercialPackage.CONTRACT__OTHER_NAMES);
-		}
-		return otherNames;
 	}
 
 	/**
@@ -509,8 +484,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		switch (featureID) {
 			case CommercialPackage.CONTRACT__NAME:
 				return getName();
-			case CommercialPackage.CONTRACT__OTHER_NAMES:
-				return getOtherNames();
 			case CommercialPackage.CONTRACT__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
@@ -546,10 +519,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		switch (featureID) {
 			case CommercialPackage.CONTRACT__NAME:
 				setName((String)newValue);
-				return;
-			case CommercialPackage.CONTRACT__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case CommercialPackage.CONTRACT__ENTITY:
 				setEntity((LegalEntity)newValue);
@@ -596,9 +565,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case CommercialPackage.CONTRACT__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 			case CommercialPackage.CONTRACT__ENTITY:
 				setEntity((LegalEntity)null);
 				return;
@@ -640,8 +606,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		switch (featureID) {
 			case CommercialPackage.CONTRACT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case CommercialPackage.CONTRACT__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 			case CommercialPackage.CONTRACT__ENTITY:
 				return entity != null;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
@@ -674,7 +638,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case CommercialPackage.CONTRACT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case CommercialPackage.CONTRACT__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -691,7 +654,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return CommercialPackage.CONTRACT__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return CommercialPackage.CONTRACT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -710,8 +672,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(", minQuantity: ");
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");

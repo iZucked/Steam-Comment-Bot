@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
+import com.mmxlabs.models.lng.commercial.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -12,7 +13,6 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -139,15 +139,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.FIXED_PRICE_PARAMETERS: {
-				FixedPriceParameters fixedPriceParameters = (FixedPriceParameters)theEObject;
-				T result = caseFixedPriceParameters(fixedPriceParameters);
-				if (result == null) result = caseLNGPriceCalculatorParameters(fixedPriceParameters);
-				if (result == null) result = caseUUIDObject(fixedPriceParameters);
-				if (result == null) result = caseMMXObject(fixedPriceParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: {
 				ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters)theEObject;
 				T result = caseExpressionPriceParameters(expressionPriceParameters);
@@ -265,22 +256,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLNGPriceCalculatorParameters(LNGPriceCalculatorParameters object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Fixed Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Fixed Price Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseFixedPriceParameters(FixedPriceParameters object) {
 		return null;
 	}
 

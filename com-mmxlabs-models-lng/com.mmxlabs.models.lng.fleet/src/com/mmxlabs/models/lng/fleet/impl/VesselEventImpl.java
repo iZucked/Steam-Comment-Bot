@@ -33,7 +33,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getDurationInDays <em>Duration In Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselEventImpl#getPort <em>Port</em>}</li>
@@ -66,17 +65,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
 
 	/**
 	 * The default value of the '{@link #getDurationInDays() <em>Duration In Days</em>}' attribute.
@@ -179,7 +167,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -189,7 +177,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -198,19 +186,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_EVENT__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, FleetPackage.VESSEL_EVENT__OTHER_NAMES);
-		}
-		return otherNames;
 	}
 
 	/**
@@ -346,8 +321,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		switch (featureID) {
 			case FleetPackage.VESSEL_EVENT__NAME:
 				return getName();
-			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
-				return getOtherNames();
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 				return getDurationInDays();
 			case FleetPackage.VESSEL_EVENT__ALLOWED_VESSELS:
@@ -374,10 +347,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		switch (featureID) {
 			case FleetPackage.VESSEL_EVENT__NAME:
 				setName((String)newValue);
-				return;
-			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 				setDurationInDays((Integer)newValue);
@@ -410,9 +379,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 			case FleetPackage.VESSEL_EVENT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 				setDurationInDays(DURATION_IN_DAYS_EDEFAULT);
 				return;
@@ -442,8 +408,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		switch (featureID) {
 			case FleetPackage.VESSEL_EVENT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case FleetPackage.VESSEL_EVENT__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 				return durationInDays != DURATION_IN_DAYS_EDEFAULT;
 			case FleetPackage.VESSEL_EVENT__ALLOWED_VESSELS:
@@ -468,7 +432,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case FleetPackage.VESSEL_EVENT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case FleetPackage.VESSEL_EVENT__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -490,7 +453,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return FleetPackage.VESSEL_EVENT__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return FleetPackage.VESSEL_EVENT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -514,8 +476,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(", durationInDays: ");
 		result.append(durationInDays);
 		result.append(", startAfter: ");

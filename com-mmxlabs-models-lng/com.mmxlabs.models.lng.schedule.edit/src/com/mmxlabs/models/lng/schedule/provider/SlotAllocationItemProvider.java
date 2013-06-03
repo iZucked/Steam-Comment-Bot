@@ -184,7 +184,7 @@ public class SlotAllocationItemProvider
 	/**
 	 * This adds a property descriptor for the Volume Transferred feature.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

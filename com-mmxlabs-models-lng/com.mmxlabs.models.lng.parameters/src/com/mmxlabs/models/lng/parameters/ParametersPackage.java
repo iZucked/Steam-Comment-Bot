@@ -152,22 +152,13 @@ public interface ParametersPackage extends EPackage {
 	int OPTIMISER_SETTINGS__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_SETTINGS__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Objectives</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__OBJECTIVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int OPTIMISER_SETTINGS__OBJECTIVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Constraints</b></em>' containment reference list.
@@ -176,7 +167,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__CONSTRAINTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int OPTIMISER_SETTINGS__CONSTRAINTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Range</b></em>' containment reference.
@@ -185,7 +176,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__RANGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int OPTIMISER_SETTINGS__RANGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
@@ -194,7 +185,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__ANNEALING_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int OPTIMISER_SETTINGS__ANNEALING_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Seed</b></em>' attribute.
@@ -203,7 +194,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__SEED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int OPTIMISER_SETTINGS__SEED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
@@ -212,7 +203,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__ARGUMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int OPTIMISER_SETTINGS__ARGUMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Rewire</b></em>' attribute.
@@ -221,7 +212,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS__REWIRE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int OPTIMISER_SETTINGS__REWIRE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Optimiser Settings</em>' class.
@@ -230,7 +221,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -259,15 +250,6 @@ public interface ParametersPackage extends EPackage {
 	 * @ordered
 	 */
 	int OBJECTIVE__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OBJECTIVE__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Weight</b></em>' attribute.
@@ -323,15 +305,6 @@ public interface ParametersPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONSTRAINT__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONSTRAINT__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Enabled</b></em>' attribute.

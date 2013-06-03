@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -84,6 +85,7 @@ public class PortSwitch<T1> extends Switch<T1> {
 				Port port = (Port)theEObject;
 				T1 result = casePort(port);
 				if (result == null) result = caseAPortSet(port);
+				if (result == null) result = caseOtherNamesObject(port);
 				if (result == null) result = caseObjectSet(port);
 				if (result == null) result = caseUUIDObject(port);
 				if (result == null) result = caseNamedObject(port);
@@ -325,6 +327,22 @@ public class PortSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <U> T1 caseAPortSet(APortSet<U> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Other Names Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Other Names Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseOtherNamesObject(OtherNamesObject object) {
 		return null;
 	}
 

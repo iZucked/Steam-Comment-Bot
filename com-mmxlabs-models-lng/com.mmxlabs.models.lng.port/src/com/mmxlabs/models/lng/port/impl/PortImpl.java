@@ -22,6 +22,8 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.impl.APortSetImpl;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,6 +32,7 @@ import com.mmxlabs.models.lng.types.impl.APortSetImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getCapabilities <em>Capabilities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLoadDuration <em>Load Duration</em>}</li>
@@ -47,6 +50,17 @@ import com.mmxlabs.models.lng.types.impl.APortSetImpl;
  * @generated
  */
 public class PortImpl extends APortSetImpl<Port> implements Port {
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
+
 	/**
 	 * The cached value of the '{@link #getCapabilities() <em>Capabilities</em>}' attribute list.
 	 * <!-- begin-user-doc -->
@@ -199,6 +213,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The default value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getAtobviacCode()
 	 * @generated
@@ -209,6 +224,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getAtobviacCode()
 	 * @generated
@@ -219,6 +235,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The default value of the '{@link #getDataloyCode() <em>Dataloy Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getDataloyCode()
 	 * @generated
@@ -229,6 +246,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getDataloyCode() <em>Dataloy Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getDataloyCode()
 	 * @generated
@@ -253,6 +271,19 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	protected EClass eStaticClass() {
 		return PortPackage.Literals.PORT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, PortPackage.PORT__OTHER_NAMES);
+		}
+		return otherNames;
 	}
 
 	/**
@@ -459,6 +490,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -468,6 +500,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -480,6 +513,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -489,6 +523,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -521,6 +556,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case PortPackage.PORT__OTHER_NAMES:
+				return getOtherNames();
 			case PortPackage.PORT__CAPABILITIES:
 				return getCapabilities();
 			case PortPackage.PORT__TIME_ZONE:
@@ -556,6 +593,10 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case PortPackage.PORT__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
+				return;
 			case PortPackage.PORT__CAPABILITIES:
 				getCapabilities().clear();
 				getCapabilities().addAll((Collection<? extends PortCapability>)newValue);
@@ -602,6 +643,9 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case PortPackage.PORT__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 			case PortPackage.PORT__CAPABILITIES:
 				getCapabilities().clear();
 				return;
@@ -647,6 +691,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case PortPackage.PORT__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case PortPackage.PORT__CAPABILITIES:
 				return capabilities != null && !capabilities.isEmpty();
 			case PortPackage.PORT__TIME_ZONE:
@@ -679,11 +725,45 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == OtherNamesObject.class) {
+			switch (derivedFeatureID) {
+				case PortPackage.PORT__OTHER_NAMES: return MMXCorePackage.OTHER_NAMES_OBJECT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == OtherNamesObject.class) {
+			switch (baseFeatureID) {
+				case MMXCorePackage.OTHER_NAMES_OBJECT__OTHER_NAMES: return PortPackage.PORT__OTHER_NAMES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (capabilities: ");
+		result.append(" (otherNames: ");
+		result.append(otherNames);
+		result.append(", capabilities: ");
 		result.append(capabilities);
 		result.append(", timeZone: ");
 		result.append(timeZone);

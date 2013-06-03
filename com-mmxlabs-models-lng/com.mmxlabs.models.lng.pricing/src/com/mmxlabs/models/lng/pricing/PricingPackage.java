@@ -188,22 +188,13 @@ public interface PricingPackage extends EPackage {
 	int INDEX__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Index</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int INDEX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -241,15 +232,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int DATA_INDEX__NAME = INDEX__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATA_INDEX__OTHER_NAMES = INDEX__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
@@ -305,15 +287,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int DERIVED_INDEX__NAME = INDEX__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DERIVED_INDEX__OTHER_NAMES = INDEX__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Expression</b></em>' attribute.

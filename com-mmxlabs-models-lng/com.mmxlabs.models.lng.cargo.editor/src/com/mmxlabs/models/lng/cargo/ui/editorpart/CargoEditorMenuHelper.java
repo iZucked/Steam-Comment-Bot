@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -56,6 +58,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -128,6 +131,13 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
+	private void addSetToSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Set<Slot> targetSet, final boolean includeContract,
+			final boolean includePort) {
+		for (final Slot target : targetSet) {
+			createWireAction(manager, source, target, sourceIsLoad, includeContract, includePort);
+		}
+	}
+
 	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Map<String, Set<Slot>> targets, final boolean includeContract,
 			final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
@@ -148,20 +158,20 @@ public class CargoEditorMenuHelper {
 				}
 				subMenu.add(subSubMenu);
 			}
-
 		}
 
 		manager.add(subMenu);
 	}
 
-	private void buildSwapMenu(final IMenuManager manager, final String name, final Slot source, final Map<String, Set<Slot>> targets, final boolean includeContract, final boolean includePort) {
+	private void buildSwapMenu(final IMenuManager manager, final String name, final Slot source, final Map<String, Set<Slot>> targets, boolean isLoad, final boolean includeContract,
+			final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
 
 		// For single item sub menus, skip the sub menu and add item directly
 		if (targets.size() == 1) {
 			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
 				for (final Slot target : e.getValue()) {
-					createSwapAction(subMenu, source, target, includeContract, includePort);
+					createSwapAction(subMenu, source, target, isLoad, includeContract, includePort);
 				}
 			}
 
@@ -169,7 +179,7 @@ public class CargoEditorMenuHelper {
 			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
 				final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
 				for (final Slot target : e.getValue()) {
-					createSwapAction(subSubMenu, source, target, includeContract, includePort);
+					createSwapAction(subSubMenu, source, target, isLoad, includeContract, includePort);
 				}
 				subMenu.add(subSubMenu);
 			}
@@ -222,12 +232,11 @@ public class CargoEditorMenuHelper {
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
 				} else {
 					createNewSlotMenu(newMenuManager, dischargeSlot);
-					createMenus(manager, dischargeSlot, cargoModel.getLoadSlots(), false);
+					createMenus(manager, dischargeSlot, dischargeSlot.getCargo(), filterSlotsByCompatibility(dischargeSlot, cargoModel.getLoadSlots()), false);
 					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
 				}
-				createEditMenu(manager, dischargeSlot, dischargeSlot.getCargo());
-				createEditContractMenu(manager, dischargeSlot, dischargeSlot.getContract());
+				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
 				if (dischargeSlot.getCargo() != null) {
 					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), dischargeSlot.getCargo());
@@ -240,14 +249,12 @@ public class CargoEditorMenuHelper {
 
 	}
 
-	private void createEditContractMenu(final IMenuManager newMenuManager, final Slot slot, final Contract contract) {
-		newMenuManager.add(new Separator());
-		newMenuManager.add(new EditAction("Edit Contract", contract));
-	}
-
-	private void createEditMenu(final IMenuManager newMenuManager, final Slot slot, final Cargo cargo) {
+	private void createEditMenu(final IMenuManager newMenuManager, final Slot slot, final Contract contract, final Cargo cargo) {
 		newMenuManager.add(new Separator());
 		newMenuManager.add(new EditAction("Edit Slot", slot));
+		if (contract != null) {
+			newMenuManager.add(new EditAction("Edit Contract", contract));
+		}
 		if (cargo != null) {
 			if (cargo.getSlots().size() > 2) {
 				newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
@@ -334,13 +341,11 @@ public class CargoEditorMenuHelper {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot);
 				} else {
 					createNewSlotMenu(newMenuManager, loadSlot);
-					createMenus(manager, loadSlot, cargoModel.getDischargeSlots(), true);
+					createMenus(manager, loadSlot, loadSlot.getCargo(), filterSlotsByCompatibility(loadSlot, cargoModel.getDischargeSlots()), true);
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot);
 				}
-
-				createEditMenu(manager, loadSlot, loadSlot.getCargo());
-				createEditContractMenu(manager, loadSlot, loadSlot.getContract());
+				createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 				createDeleteSlotMenu(manager, loadSlot);
 				if (loadSlot.getCargo() != null) {
 					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), loadSlot.getCargo());
@@ -371,7 +376,14 @@ public class CargoEditorMenuHelper {
 						// createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 					} else {
 						// createNewSlotMenu(newMenuManager, loadSlot, true);
-						createSwapWithMenus(manager, loadSlot, cargoModel.getLoadSlots(), true);
+						final List<Slot> filteredSlots = new LinkedList<Slot>();
+						for (final LoadSlot s : cargoModel.getLoadSlots()) {
+							if (!s.isDESPurchase()) {
+								filteredSlots.add(s);
+							}
+						}
+
+						createSwapWithMenus(manager, loadSlot, filteredSlots, true);
 						// createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 						// createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 					}
@@ -382,16 +394,22 @@ public class CargoEditorMenuHelper {
 						// createNewSlotMenu(newMenuManager, dischargeSlot, false);
 						// createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 					} else {
+						final List<Slot> filteredSlots = new LinkedList<Slot>();
+						for (final DischargeSlot s : cargoModel.getDischargeSlots()) {
+							if (!s.isFOBSale()) {
+								filteredSlots.add(s);
+							}
+						}
 						// createNewSlotMenu(newMenuManager, dischargeSlot, false);
-						createSwapWithMenus(manager, dischargeSlot, cargoModel.getDischargeSlots(), false);
+						createSwapWithMenus(manager, dischargeSlot, filteredSlots, false);
 						// createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
 						// createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 					}
 				}
 
-				createEditMenu(manager, slot, slot.getCargo());
-				createEditContractMenu(manager, slot, slot.getContract());
-				createDeleteSlotMenu(manager, slot);
+				// createEditMenu(manager, slot, slot.getCargo());
+				// createEditContractMenu(manager, slot, slot.getContract());
+				// createDeleteSlotMenu(manager, slot);
 			}
 		};
 		return l;
@@ -439,11 +457,11 @@ public class CargoEditorMenuHelper {
 
 			final Contract contract = target.getContract();
 			if (contract != null) {
-				addSlotToTargets(target, contract.getName(), slotsByContract);
+				addTargetByDateToSortedSet(target, contract.getName(), slotsByContract);
 			}
 			final Port port = target.getPort();
 			if (port != null) {
-				addSlotToTargets(target, port.getName(), slotsByPort);
+				addTargetByDateToSortedSet(target, port.getName(), slotsByPort);
 			}
 
 			// if (daysDifference < 5) {
@@ -461,42 +479,104 @@ public class CargoEditorMenuHelper {
 			// if (daysDifference < 60) {
 			// addSlotToTargets(target, "Less than 60 Days", slotsByDate);
 			// }
-			addSlotToTargets(target, "Any", slotsByDate);
+			addTargetByDateToSortedSet(target, "Any", slotsByDate);
 
 		}
 		{
-			buildSwapMenu(manager, "Swap Slots By Contract", source, slotsByContract, false, true);
+			buildSwapMenu(manager, "Swap Slots By Contract", source, slotsByContract, sourceIsLoad, false, true);
 			// buildSubMenu(manager, "Slots By Date", source, sourceIsLoad, slotsByDate, true, true);
-			buildSwapMenu(manager, "Swap Slots By Port", source, slotsByPort, true, false);
+			buildSwapMenu(manager, "Swap Slots By Port", source, slotsByPort, sourceIsLoad, true, false);
 		}
 	}
 
-	private void createMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
+	/**
+	 * 
+	 * @param source
+	 * @param possibleTargets
+	 * @return
+	 */
+	private List<Slot> filterSlotsByCompatibility(final Slot source, final List<? extends Slot> possibleTargets) {
 
+		final List<Slot> filteredSlots = new LinkedList<Slot>();
+		for (final Slot slot : possibleTargets) {
+			// Check restrictions on both slots
+			if (slot instanceof LoadSlot) {
+				if (((LoadSlot) slot).isDESPurchase()) {
+					if (!(slot.getPort() == source.getPort())) {
+						continue;
+					}
+				}
+			}
+			if (slot instanceof DischargeSlot) {
+				if (((DischargeSlot) slot).isFOBSale()) {
+					continue;
+				}
+			}
+			if (!checkSourceContractConstraints(source, slot) || !checkSourceContractConstraints(slot, source)) {
+				continue;
+			}
+			filteredSlots.add(slot);
+		}
+		return filteredSlots;
+	}
+
+	/**
+	 * Given a source slot, check that the target slot is compatible with the source slot contract restrictions.
+	 * 
+	 * @param source
+	 * @param target
+	 * @return
+	 */
+	private boolean checkSourceContractConstraints(final Slot source, final Slot target) {
+		if (source.getContract() != null) {
+			final Contract sourceContract = source.getContract();
+			if (!sourceContract.getRestrictedPorts().isEmpty()) {
+				if (sourceContract.getRestrictedPorts().contains(target.getPort()) != sourceContract.isRestrictedListsArePermissive()) {
+					// Trying to pair to a restricted port - skip
+					return false;
+				}
+			}
+
+			if (!sourceContract.getRestrictedContracts().isEmpty() && target.getContract() != null) {
+				if (sourceContract.getRestrictedContracts().contains(target.getContract()) != sourceContract.isRestrictedListsArePermissive()) {
+					// Trying to pair to a restricted contract - skip
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private void createMenus(final IMenuManager manager, final Slot source, final Cargo sourceCargo, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
+
+		final Map<String, Set<Slot>> unusedSlotsByDate = new TreeMap<String, Set<Slot>>();
+		final Set<Slot> nearSlotsByDate = createSlotTreeSet();
 		final Map<String, Set<Slot>> slotsByDate = new TreeMap<String, Set<Slot>>();
 		final Map<String, Set<Slot>> slotsByContract = new TreeMap<String, Set<Slot>>();
 		final Map<String, Set<Slot>> slotsByPort = new TreeMap<String, Set<Slot>>();
 
 		for (final Slot target : possibleTargets) {
 
+			final Cargo targetCargo;
 			final int daysDifference;
-			// Perform some filtering on the possible targets
+			// Filter out some of the possible targets
 			{
 				final LoadSlot loadSlot;
 				final DischargeSlot dischargeSlot;
 				if (sourceIsLoad) {
 					loadSlot = (LoadSlot) source;
 					dischargeSlot = (DischargeSlot) target;
+					targetCargo = dischargeSlot.getCargo();
 				} else {
 					loadSlot = (LoadSlot) target;
 					dischargeSlot = (DischargeSlot) source;
+					targetCargo = loadSlot.getCargo();
 				}
 				// Filter out current pairing
-				if (loadSlot.getCargo() != null && loadSlot.getCargo() == dischargeSlot.getCargo()) {
+				if (sourceCargo != null && sourceCargo == targetCargo) {
 					continue;
 				}
-
-				// Filter backwards pairings
+				// Filter null windows and backwards pairings
 				if (loadSlot.getWindowStart() == null) {
 					continue;
 				}
@@ -510,37 +590,53 @@ public class CargoEditorMenuHelper {
 				daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
 			}
 
+			if (targetCargo == null) {
+				addTargetByDateToSortedSet(target, "Unused", unusedSlotsByDate);
+			}
+
 			final Contract contract = target.getContract();
 			if (contract != null) {
-				addSlotToTargets(target, contract.getName(), slotsByContract);
+				addTargetByDateToSortedSet(target, contract.getName(), slotsByContract);
 			}
 			final Port port = target.getPort();
 			if (port != null) {
-				addSlotToTargets(target, port.getName(), slotsByPort);
+				addTargetByDateToSortedSet(target, port.getName(), slotsByPort);
 			}
 
-			if (daysDifference < 5) {
-				addSlotToTargets(target, "Less than 5 Days", slotsByDate);
+			// if (daysDifference < 5) {
+			// addTargetByDateToSortedSet(target, "Less than 5 Days", slotsByDate);
+			// // addTargetByDateToSortedSet(target, "near", nearSlotsByDate);
+			// nearSlotsByDate.add(target);
+			// }
+			// if (daysDifference < 10) {
+			// addTargetByDateToSortedSet(target, "Less than 10 Days", slotsByDate);
+			// nearSlotsByDate.add(target);
+			// }
+			// if (daysDifference < 20) {
+			// addTargetByDateToSortedSet(target, "Less than 20 Days", slotsByDate);
+			// nearSlotsByDate.add(target);
+			// }
+			if (daysDifference <= 60) {
+				// addTargetByDateToSortedSet(target, "Less than 30 Days", slotsByDate);
+				nearSlotsByDate.add(target);
 			}
-			if (daysDifference < 10) {
-				addSlotToTargets(target, "Less than 10 Days", slotsByDate);
+			if (daysDifference > 60 && daysDifference <= 90) {
+				addTargetByDateToSortedSet(target, "[>60 Days]", slotsByDate);
 			}
-			if (daysDifference < 20) {
-				addSlotToTargets(target, "Less than 20 Days", slotsByDate);
-			}
-			if (daysDifference < 30) {
-				addSlotToTargets(target, "Less than 30 Days", slotsByDate);
-			}
-			if (daysDifference < 60) {
-				addSlotToTargets(target, "Less than 60 Days", slotsByDate);
-			}
-			addSlotToTargets(target, "Any", slotsByDate);
-
+			// if (daysDifference < 60) {
+			// addTargetByDateToSortedSet(target, "Less than 60 Days", slotsByDate);
+			// }
+			// addTargetByDateToSortedSet(target, "Any", slotsByDate);
 		}
 		{
-			buildSubMenu(manager, "Slots By Contract", source, sourceIsLoad, slotsByContract, false, true);
-			buildSubMenu(manager, "Slots By Date", source, sourceIsLoad, slotsByDate, true, true);
-			buildSubMenu(manager, "Slots By Port", source, sourceIsLoad, slotsByPort, true, false);
+			buildSubMenu(manager, sourceIsLoad ? "Shorts" : "Longs", source, sourceIsLoad, unusedSlotsByDate, false, true);
+			final MenuManager allMenu = new MenuManager("All", null);
+			manager.add(allMenu);
+			addSetToSubMenu(allMenu, "Close dates", source, sourceIsLoad, nearSlotsByDate, true, true);
+			buildSubMenu(allMenu, "More...", source, sourceIsLoad, slotsByDate, true, true);
+			allMenu.add(new Separator());
+			buildSubMenu(allMenu, "By contract", source, sourceIsLoad, slotsByContract, false, true);
+			buildSubMenu(allMenu, "By port", source, sourceIsLoad, slotsByPort, true, true);
 		}
 	}
 
@@ -627,8 +723,8 @@ public class CargoEditorMenuHelper {
 
 	}
 
-	private void createWireAction(final MenuManager subMenu, final Slot source, final Slot target, final boolean sourceIsLoad, final boolean includeContract, final boolean includePort) {
-		final String name = getActionName(target, includeContract, includePort);
+	private void createWireAction(final IMenuManager subMenu, final Slot source, final Slot target, final boolean sourceIsLoad, final boolean includeContract, final boolean includePort) {
+		final String name = getActionName(target, !sourceIsLoad, includeContract, includePort);
 		if (sourceIsLoad) {
 			subMenu.add(new WireAction(name, (LoadSlot) source, (DischargeSlot) target));
 		} else {
@@ -636,64 +732,60 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void createSwapAction(final MenuManager subMenu, final Slot source, final Slot target, final boolean includeContract, final boolean includePort) {
-		final String name = getActionName(target, includeContract, includePort);
+	private void createSwapAction(final MenuManager subMenu, final Slot source, final Slot target, final boolean isLoad, final boolean includeContract, final boolean includePort) {
+		final String name = getActionName(target, isLoad, includeContract, includePort);
 		subMenu.add(new SwapAction(name, source, target));
 	}
 
-	private String getActionName(final Slot slot, final boolean includePort, final boolean includeContract) {
+	private String getActionName(final Slot slot, final boolean isLoad, final boolean includePort, final boolean includeContract) {
 		final StringBuilder sb = new StringBuilder();
 
-		if (includeContract && slot.getContract() != null) {
-			sb.append(slot.getContract().getName());
-			sb.append(" - ");
-		}
-
-		if (includePort && slot.getPort() != null) {
-			sb.append(slot.getPort().getName());
-			sb.append(" - ");
-		}
 		{
-			final DateFormat df = DateFormat.getDateInstance();
+			final SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+			df.applyPattern("dd MMM yy");
 			if (slot.getPort() != null) {
 				final TimeZone zone = LocalDateUtil.getTimeZone(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 				df.setTimeZone(zone);
 			}
 			sb.append(df.format(slot.getWindowStart()));
-			sb.append(" - ");
 		}
 		{
-			sb.append(slot.getName());
-			sb.append(" - ");
-
+			// sb.append(" '"+ slot.getName()+ "'");
 		}
-		Cargo c = null;
-		if (slot instanceof LoadSlot) {
-			if (((LoadSlot) slot).isDESPurchase()) {
-				sb.append("(DES Purchase) ");
-			}
-			c = ((LoadSlot) slot).getCargo();
-		}
-		if (slot instanceof DischargeSlot) {
-			if (((DischargeSlot) slot).isFOBSale()) {
-				sb.append("(FOB Sale) ");
-			}
-			c = ((DischargeSlot) slot).getCargo();
+		// if (slot instanceof LoadSlot) {
+		// if (((LoadSlot) slot).isDESPurchase()) {
+		// sb.append(", DES");
+		// }
+		// c = ((LoadSlot) slot).getCargo();
+		// }
+		// if (slot instanceof DischargeSlot) {
+		// if (((DischargeSlot) slot).isFOBSale()) {
+		// sb.append(", FOB ");
+		// }
+		// c = ((DischargeSlot) slot).getCargo();
+		// }
+		if (includePort && slot.getPort() != null) {
+			sb.append(", " + slot.getPort().getName());
 		}
 		if (slot instanceof SpotSlot) {
-			sb.append(((SpotSlot) slot).getMarket().getName());
-			sb.append(" - ");
-
+			sb.append(", " + ((SpotSlot) slot).getMarket().getName());
 		}
+		// if (includeContract && slot.getContract() != null) {
+		// sb.append(slot.getContract().getName());
+		// sb.append(", ");
+		// }
+		// sb.append(" | ");
+		final Cargo c = isLoad ? ((LoadSlot) slot).getCargo() : ((DischargeSlot) slot).getCargo();
 		if (c != null) {
-			sb.append(" (Cargo " + c.getName() + ")");
+			sb.append(" -- ");
+			sb.append("cargo '" + c.getName() + "'");
 		} else {
-			sb.append("(unused)");
+			// sb.append(isLoad ? "Long" : "Short");
 		}
 		return sb.toString();
 	}
 
-	private void addSlotToTargets(final Slot target, final String group, final Map<String, Set<Slot>> targets) {
+	private void addTargetByDateToSortedSet(final Slot target, final String group, final Map<String, Set<Slot>> targets) {
 		Set<Slot> targetGroupSlots;
 		if (targets.containsKey(group)) {
 			targetGroupSlots = targets.get(group);
@@ -743,13 +835,22 @@ public class CargoEditorMenuHelper {
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 					}
+				dischargeSlot.setWindowStart(source.getWindowStart());
+				if (loadSlot.isDESPurchase()) {
+					dischargeSlot.setPort(source.getPort());
+				}
 				} else {
+				dischargeSlot = (DischargeSlot) source;
 					if (market == null) {
 						loadSlot = cec.createNewLoad(setCommands, cargoModel, isDesPurchaseOrFobSale);
+					loadSlot.setWindowStart(source.getWindowStart());
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
+					loadSlot.setWindowStart(source.getWindowStart());
+				}
+				if (dischargeSlot.isFOBSale()) {
+					loadSlot.setPort(source.getPort());
 					}
-					dischargeSlot = (DischargeSlot) source;
 				}
 				cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
 			}
@@ -818,13 +919,44 @@ public class CargoEditorMenuHelper {
 		public void run() {
 
 			final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
+
+			final Cargo targetCargo = target.getCargo();
 			final Cargo c = source.getCargo();
+
 			currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), source, CargoPackage.eINSTANCE.getSlot_Cargo(), null));
 			currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), target, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
+			if (targetCargo != null && targetCargo != c && (targetCargo.getSlots().size() - 1) < 2) {
+				currentWiringCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), targetCargo));
+			}
+
+			// Quick hacky bit to change cargo ID to match new defining load slot id
+			if (target instanceof LoadSlot) {
+				LoadSlot loadSlot = (LoadSlot) target;
+				if (loadSlot.getWindowStart() != null && !c.getSlots().isEmpty()) {
+					EList<Slot> sortedSlots = c.getSortedSlots();
+					Iterator<Slot> iterator = sortedSlots.iterator();
+					while (iterator.hasNext()) {
+						Slot slot = iterator.next();
+						// This is the slot we are replacing!
+						if (slot == source) {
+							continue;
+						}
+
+						// if (slot instanceof DischargeSlot) {
+						// continue;
+						// }
+						Date slotDate = slot.getWindowStartWithSlotOrPortTime();
+						if (slotDate == null || target.getWindowEndWithSlotOrPortTime().before(slotDate)) {
+							currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, MMXCorePackage.eINSTANCE.getNamedObject_Name(), target.getName()));
+						} else {
+							break;
+						}
+					}
+				}
+			}
 
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 		}
-
 	}
 
 	/**

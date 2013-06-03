@@ -213,6 +213,7 @@
                      class="Slot">
                </target>
             </constraint>
+            <!--
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoReflexiveTransferSlotConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoReflexiveTransferSlotConstraint"
@@ -245,6 +246,7 @@
                      class="Slot">
                </target>
             </constraint>
+            -->
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.FOBDESCargoDatesConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.FOBDESCargoDatesConstraint"

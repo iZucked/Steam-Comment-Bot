@@ -61,7 +61,6 @@ public class BaseFuelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addOtherNamesPropertyDescriptor(object);
 			addEquivalenceFactorPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -70,7 +69,7 @@ public class BaseFuelItemProvider
 	/**
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -82,29 +81,6 @@ public class BaseFuelItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Other Names feature.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOtherNamesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NamedObject_otherNames_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
-				 MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES,
 				 true,
 				 false,
 				 false,
@@ -173,7 +149,6 @@ public class BaseFuelItemProvider
 
 		switch (notification.getFeatureID(BaseFuel.class)) {
 			case FleetPackage.BASE_FUEL__NAME:
-			case FleetPackage.BASE_FUEL__OTHER_NAMES:
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

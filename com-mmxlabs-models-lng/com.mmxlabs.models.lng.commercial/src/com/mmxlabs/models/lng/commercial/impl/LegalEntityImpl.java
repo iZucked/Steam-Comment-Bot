@@ -30,7 +30,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl#getTaxRates <em>Tax Rates</em>}</li>
  * </ul>
  * </p>
@@ -58,16 +57,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
 	/**
 	 * The cached value of the '{@link #getTaxRates() <em>Tax Rates</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -101,7 +90,7 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -111,7 +100,7 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -120,19 +109,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.LEGAL_ENTITY__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, CommercialPackage.LEGAL_ENTITY__OTHER_NAMES);
-		}
-		return otherNames;
 	}
 
 	/**
@@ -172,8 +148,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 		switch (featureID) {
 			case CommercialPackage.LEGAL_ENTITY__NAME:
 				return getName();
-			case CommercialPackage.LEGAL_ENTITY__OTHER_NAMES:
-				return getOtherNames();
 			case CommercialPackage.LEGAL_ENTITY__TAX_RATES:
 				return getTaxRates();
 		}
@@ -191,10 +165,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 		switch (featureID) {
 			case CommercialPackage.LEGAL_ENTITY__NAME:
 				setName((String)newValue);
-				return;
-			case CommercialPackage.LEGAL_ENTITY__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case CommercialPackage.LEGAL_ENTITY__TAX_RATES:
 				getTaxRates().clear();
@@ -215,9 +185,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 			case CommercialPackage.LEGAL_ENTITY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case CommercialPackage.LEGAL_ENTITY__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 			case CommercialPackage.LEGAL_ENTITY__TAX_RATES:
 				getTaxRates().clear();
 				return;
@@ -235,8 +202,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 		switch (featureID) {
 			case CommercialPackage.LEGAL_ENTITY__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case CommercialPackage.LEGAL_ENTITY__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 			case CommercialPackage.LEGAL_ENTITY__TAX_RATES:
 				return taxRates != null && !taxRates.isEmpty();
 		}
@@ -253,7 +218,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case CommercialPackage.LEGAL_ENTITY__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case CommercialPackage.LEGAL_ENTITY__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -270,7 +234,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return CommercialPackage.LEGAL_ENTITY__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return CommercialPackage.LEGAL_ENTITY__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -289,8 +252,6 @@ public class LegalEntityImpl extends UUIDObjectImpl implements LegalEntity {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(')');
 		return result.toString();
 	}

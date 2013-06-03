@@ -65,7 +65,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -534,7 +534,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -558,7 +558,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -582,7 +582,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -606,7 +606,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -630,7 +630,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -711,7 +711,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -721,7 +721,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -731,7 +731,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -809,7 +809,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * A child creation extender for the {@link CommercialPackage}.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

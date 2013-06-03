@@ -57,6 +57,7 @@ public interface Sequence extends MMXObject {
 	 * If the meaning of the '<em>Vessel Availability</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessel Availability</em>' reference.
 	 * @see #isSetVesselAvailability()
@@ -71,6 +72,7 @@ public interface Sequence extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Vessel Availability</em>' reference.
 	 * @see #isSetVesselAvailability()
@@ -83,6 +85,7 @@ public interface Sequence extends MMXObject {
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetVesselAvailability()
 	 * @see #getVesselAvailability()
@@ -94,6 +97,7 @@ public interface Sequence extends MMXObject {
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference is set.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Vessel Availability</em>' reference is set.
 	 * @see #unsetVesselAvailability()

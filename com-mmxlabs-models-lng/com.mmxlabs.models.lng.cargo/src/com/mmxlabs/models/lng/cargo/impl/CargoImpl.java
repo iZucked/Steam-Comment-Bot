@@ -39,7 +39,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSlots <em>Slots</em>}</li>
@@ -52,7 +51,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -63,24 +62,13 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
 
 	/**
 	 * The default value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
@@ -124,7 +112,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * The cached value of the '{@link #getSlots() <em>Slots</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getSlots()
 	 * @generated
@@ -153,7 +141,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -163,7 +151,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -172,19 +160,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, CargoPackage.CARGO__OTHER_NAMES);
-		}
-		return otherNames;
 	}
 
 	/**
@@ -247,7 +222,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -283,7 +258,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * <!-- begin-user-doc -->
 	 * Returns date sorted copy of the {@link #getSlots()} {@link List}.
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -330,8 +305,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		switch (featureID) {
 			case CargoPackage.CARGO__NAME:
 				return getName();
-			case CargoPackage.CARGO__OTHER_NAMES:
-				return getOtherNames();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
@@ -353,10 +326,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		switch (featureID) {
 			case CargoPackage.CARGO__NAME:
 				setName((String)newValue);
-				return;
-			case CargoPackage.CARGO__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				setAllowRewiring((Boolean)newValue);
@@ -384,9 +353,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 			case CargoPackage.CARGO__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case CargoPackage.CARGO__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				unsetAllowRewiring();
 				return;
@@ -410,8 +376,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		switch (featureID) {
 			case CargoPackage.CARGO__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case CargoPackage.CARGO__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isSetAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
@@ -432,7 +396,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case CargoPackage.CARGO__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case CargoPackage.CARGO__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -449,7 +412,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return CargoPackage.CARGO__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return CargoPackage.CARGO__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -484,8 +446,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(", allowRewiring: ");
 		if (allowRewiringESet) result.append(allowRewiring); else result.append("<unset>");
 		result.append(')');

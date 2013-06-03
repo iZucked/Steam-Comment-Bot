@@ -14,18 +14,18 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -42,17 +42,16 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  */
 public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
-	private static final Logger log = LoggerFactory.getLogger(ContractManipulator.class);
+	private static final String NONE = "<None>";
 
 	private final EditingDomain editingDomain;
 
 	private final IReferenceValueProvider valueProvider;
 
-	private ComboBoxCellEditor editor;
-
-	// Data pertaining to a single slot. Note, this class will be used for multiple slot instances.
-	private final ArrayList<Object> valueList = new ArrayList<Object>();
-	private final ArrayList<String> names = new ArrayList<String>();
+	/**
+	 * Label provider to map between contracts and price expressions to strings.
+	 */
+	private final LabelProvider labelProvider;
 
 	/**
 	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
@@ -68,54 +67,65 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
 		this.valueProvider = valueProvider.getReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_Contract());
 		this.editingDomain = editingDomain;
+		labelProvider = new LabelProvider() {
+			@Override
+			public String getText(final Object element) {
+
+				// Is the element missing?
+				if (element == null || "".equals(element)) {
+					return NONE;
+				}
+
+				if (element instanceof Contract) {
+					return ((Contract) element).getName();
+				}
+				return super.getText(element);
+			}
+		};
 	}
 
 	@Override
 	public String render(final Object object) {
-		canEdit(object);
-		Object superValue = getValue(object);
 
-		if (superValue instanceof Integer) {
-			final Integer idx = (Integer) superValue;
-			if (idx.intValue() != -1) {
-				superValue = valueList.get(idx);
-			} else {
-				superValue = SetCommand.UNSET_VALUE;
-			}
+		if (object == null) {
+			return null;
 		}
-
-		if (superValue == SetCommand.UNSET_VALUE) {
-			if (object instanceof MMXObject) {
-				final Object defaultValue = ((MMXObject) object).getUnsetValue(CargoPackage.eINSTANCE.getSlot_Contract());
-				if (defaultValue instanceof EObject || defaultValue == null) {
-					return valueProvider.getName((EObject) object, CargoPackage.eINSTANCE.getSlot_Contract(), (EObject) defaultValue);
-				}
-			}
-		} else {
-			if ((superValue instanceof Contract) || (superValue == null)) {
-				return valueProvider.getName((EObject) object, CargoPackage.eINSTANCE.getSlot_Contract(), (EObject) superValue);
-			} else {
-				return "" + superValue;
-			}
-		}
-		return "";
+		final Object superValue = getValue(object);
+		return labelProvider.getText(superValue);
 	}
 
 	public void doSetValue(final Object object, final Object value) {
-		if (value.equals(-1) || (value.equals(0) && ((EObject) object).eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression()))) {
-			final CCombo cc = (CCombo) editor.getControl();
-			final String text = cc.getText();
-			runSetCommand(object, text);
+		if (value instanceof Contract) {
+			runSetCommand(object, (Contract) value);
+		} else {
+			final String text = (String) value;
+			if (NONE.equals(text)) {
+				runSetCommand(object, (Contract) null);
+			} else {
+				runSetCommand(object, (String) text);
+			}
+
 			return;
 		}
-		final Object newValue = valueList.get((Integer) value);
-		runSetCommand(object, (Contract) newValue);
 	}
 
 	public CellEditor createCellEditor(final Composite c, final Object object) {
-		editor = new ComboBoxCellEditor(c, new String[0], SWT.FLAT | SWT.BORDER);
-		// editor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-		setEditorNames();
+		final ComboBoxViewerCellEditor editor = new ComboBoxViewerCellEditor(c, SWT.FLAT | SWT.BORDER) {
+			/**
+			 * Override doGetValue to also return the custom string if a valid selection has not been made.
+			 */
+			@Override
+			protected Object doGetValue() {
+				final Object value = super.doGetValue();
+				if (value == null) {
+					return ((CCombo) getControl()).getText();
+				}
+				return value;
+			}
+		};
+		editor.setContentProvider(new ArrayContentProvider());
+		editor.setLabelProvider(labelProvider);
+		setEditorValues(editor, (EObject) object);
 		return editor;
 	}
 
@@ -129,14 +139,12 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		final EObject eObject = (EObject) object;
 
 		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
-			return 0;
+			return eObject.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
+		} else if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_Contract())) {
+			return eObject.eGet(CargoPackage.eINSTANCE.getSlot_Contract());
+		} else {
+			return null;
 		}
-
-		final int x = valueList.indexOf(eObject.eGet(CargoPackage.eINSTANCE.getSlot_Contract()));
-		if (x == -1) {
-			log.warn("Index of " + object + " to be selected is -1, so it is not a legal option in the control");
-		}
-		return x;
 	}
 
 	@Override
@@ -145,40 +153,27 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (object == null) {
 			return false;
 		}
+		return true;
+	}
 
-		// get legal item list
-		final EObject slot = (EObject) object;
+	private void setEditorValues(final ComboBoxViewerCellEditor editor, final EObject slot) {
 		final Iterable<Pair<String, EObject>> values = valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
 
-		valueList.clear();
-		names.clear();
+		final List<Object> valueList = new ArrayList<Object>();
 		for (final Pair<String, EObject> value : values) {
-			names.add(value.getFirst());
 			valueList.add(value.getSecond());
 		}
 
 		if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
 			final Object priceExpression = slot.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
-			names.add(0, priceExpression.toString());
 			valueList.add(0, priceExpression);
 		}
-
-		setEditorNames();
-		return valueList.size() > 0;
-	}
-
-	void setEditorNames() {
-		if (editor == null) {
-			return;
-		}
-		// names can be null; editor entries can't
-		final String [] items = new String [names.size()];
-		int i = 0;
-		for (String name: names) {
-			items[i++] = (name == null) ? "" : name;
-		}
-		//editor.setItems(names.toArray(new String[] {}));
-		editor.setItems(items);
+		// Add our "null" element
+		valueList.add(NONE);
+		// Remove any real null value
+		while (valueList.remove(null))
+			;
+		editor.setInput(valueList);
 	}
 
 	@Override
@@ -213,16 +208,18 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		}
 	}
 
-	/**
-	 * @since 4.0
-	 */
-	public void runSetCommand(final Object object, final Contract value) {
+	private void runSetCommand(final Object object, final Contract value) {
 		final Object currentValue = reallyGetValue(object);
 		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
 			return;
 		}
+		final Command command;
+		if (value == null) {
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_Contract(), SetCommand.UNSET_VALUE));
 
-		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_Contract(), value));
+		} else {
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_Contract(), value));
+		}
 		editingDomain.getCommandStack().execute(command);
 	}
 

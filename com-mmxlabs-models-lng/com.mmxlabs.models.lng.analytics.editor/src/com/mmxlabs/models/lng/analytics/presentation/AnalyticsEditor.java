@@ -605,16 +605,11 @@ public class AnalyticsEditor
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new AnalyticsItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new AssignmentItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new CargoItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new CommercialItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new FleetItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new TypesItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new MMXCoreItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new PortItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new PricingItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ScheduleItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new SpotMarketsItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the command stack that will notify this editor as commands are executed.

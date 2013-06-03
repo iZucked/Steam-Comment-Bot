@@ -52,11 +52,6 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
 	<componentHelper
-		id="com.mmxlabs.models.lng.commercial.helpers.FixedPriceParameters"
-		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.FixedPriceParametersComponentHelper"
-		inheritable="false"
-		modelClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters" />
-	<componentHelper
 		id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
 		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
 		inheritable="false"
@@ -112,13 +107,6 @@
 
     <!-- Purchase Contract Factories -->
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.fixedPurchaseFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
-          label="Fixed Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
           ID="com.mmxlabs.models.lng.commercial.editor.expressionPurchaseFactory"
           factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
           label="Price Expression Purchase Contract"
@@ -126,13 +114,6 @@
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     <!-- Sales Contract Factories -->
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.fixedSalesFactory"
-          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
-          label="Fixed Sales Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
-    </factory>
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.expressionSalesFactory"
           factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"

@@ -26,7 +26,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl#getOtherNames <em>Other Names</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,17 +53,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 	 */
 	protected String name = NAME_EDEFAULT;
 	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -85,7 +73,7 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -95,7 +83,7 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -104,19 +92,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.INDEX__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, PricingPackage.INDEX__OTHER_NAMES);
-		}
-		return otherNames;
 	}
 
 	/**
@@ -173,8 +148,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 		switch (featureID) {
 			case PricingPackage.INDEX__NAME:
 				return getName();
-			case PricingPackage.INDEX__OTHER_NAMES:
-				return getOtherNames();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -191,10 +164,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 			case PricingPackage.INDEX__NAME:
 				setName((String)newValue);
 				return;
-			case PricingPackage.INDEX__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -210,9 +179,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 			case PricingPackage.INDEX__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case PricingPackage.INDEX__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -227,8 +193,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 		switch (featureID) {
 			case PricingPackage.INDEX__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case PricingPackage.INDEX__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -243,7 +207,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case PricingPackage.INDEX__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case PricingPackage.INDEX__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -260,7 +223,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return PricingPackage.INDEX__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return PricingPackage.INDEX__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -279,8 +241,6 @@ public abstract class IndexImpl<Value> extends UUIDObjectImpl implements Index<V
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(')');
 		return result.toString();
 	}

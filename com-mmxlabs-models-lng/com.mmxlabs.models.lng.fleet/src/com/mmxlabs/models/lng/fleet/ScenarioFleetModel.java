@@ -10,7 +10,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Scenario Fleet Model</b></em>'.
- * @since 3.0
+ * @since 4.0
  * <!-- end-user-doc -->
  *
  * <p>

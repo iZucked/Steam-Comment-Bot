@@ -4,10 +4,15 @@
  */
 package com.mmxlabs.models.lng.cargo.importer;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
 
 public class CargoImporterTest {
@@ -86,20 +92,20 @@ public class CargoImporterTest {
 			row.put("kind", "");
 			row.put("name", "");
 
-			row.put("dischargeslot.kind", "DischargeSlot");
-			row.put("dischargeslot." + MMXCorePackage.eINSTANCE.getNamedObject_Name().getName().toLowerCase(), "DischargeSlot1");
-			row.put("dischargeslot." + MMXCorePackage.eINSTANCE.getUUIDObject_Uuid().getName().toLowerCase(), "UUID");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_Contract().getName().toLowerCase(), "ContractName");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_Duration().getName().toLowerCase(), "42");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_MaxQuantity().getName().toLowerCase(), "2000");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_MinQuantity().getName().toLowerCase(), "1000");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_Optional().getName().toLowerCase(), "TRUE");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_Port().getName().toLowerCase(), "PortName");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_PriceExpression().getName().toLowerCase(), "PRICE+1");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_WindowStart().getName().toLowerCase(), "2013-1-1");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getSlot_WindowStartTime().getName().toLowerCase(), "9");
-			row.put("dischargeslot." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
+			row.put("sell.kind", "DischargeSlot");
+			row.put("sell." + MMXCorePackage.eINSTANCE.getNamedObject_Name().getName().toLowerCase(), "DischargeSlot1");
+			row.put("sell." + MMXCorePackage.eINSTANCE.getUUIDObject_Uuid().getName().toLowerCase(), "UUID");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Contract().getName().toLowerCase(), "ContractName");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Duration().getName().toLowerCase(), "42");
+			row.put("sell.max", "2000");
+			row.put("sell.min", "1000");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Optional().getName().toLowerCase(), "TRUE");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Port().getName().toLowerCase(), "PortName");
+			row.put("sell.price", "PRICE+1");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
+			row.put("sell.date", "2013-1-1");
+			row.put("sell.time", "9");
+			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
 		}
 		CargoImporter cargoImporter = new CargoImporter();
 		IImportContext context = Mockito.mock(IImportContext.class);
@@ -126,5 +132,122 @@ public class CargoImporterTest {
 		Assert.assertEquals(9, dischargeSlot.getWindowStartTime());
 		Assert.assertEquals(CargoDeliveryType.ANY, dischargeSlot.getPurchaseDeliveryType());
 	}
+	
+
+	
+	@Test
+	public void testImportDataDischargeSlotOnly() throws IOException {
+		
+		List<Map<String, String>> recordData = new ArrayList<Map<String, String>>(1);
+		// Build Data structure to import
+		{
+
+			Map<String, String> row = new HashMap<String, String>();
+			row.put("kind", "");
+			row.put("name", "");
+
+			row.put("sell.kind", "DischargeSlot");
+			row.put("sell." + MMXCorePackage.eINSTANCE.getNamedObject_Name().getName().toLowerCase(), "DischargeSlot1");
+			row.put("sell." + MMXCorePackage.eINSTANCE.getUUIDObject_Uuid().getName().toLowerCase(), "UUID");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Contract().getName().toLowerCase(), "ContractName");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Duration().getName().toLowerCase(), "42");
+			row.put("sell.max", "2000");
+			row.put("sell.min", "1000");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Optional().getName().toLowerCase(), "TRUE");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_Port().getName().toLowerCase(), "PortName");
+			row.put("sell.price", "PRICE+1");
+			row.put("sell." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
+			row.put("sell.date", "2013-1-1");
+			row.put("sell.time", "9");
+			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
+			
+			recordData.add(row);
+		}
+		
+		File tmp = File.createTempFile("CargoImporterTest", ".csv");
+		writeCSV(recordData, tmp);
+		CSVReader reader = new CSVReader(tmp);
+		
+		CargoImporter cargoImporter = new CargoImporter();
+		IImportContext context = Mockito.mock(IImportContext.class);
+		Collection<EObject> importedObjects = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
+
+		Assert.assertEquals(1, importedObjects.size());
+
+		EObject obj = importedObjects.iterator().next();
+		Assert.assertTrue(obj instanceof DischargeSlot);
+
+		DischargeSlot dischargeSlot = (DischargeSlot) obj;
+
+		Assert.assertEquals("DischargeSlot1", dischargeSlot.getName());
+		Assert.assertEquals("UUID", dischargeSlot.getUuid());
+		// Assert.assertEquals("ContractName", loadSlot.getContract());
+		Assert.assertEquals(42, dischargeSlot.getDuration());
+		Assert.assertEquals(1000, dischargeSlot.getMinQuantity());
+		Assert.assertEquals(2000, dischargeSlot.getMaxQuantity());
+		Assert.assertTrue(dischargeSlot.isOptional());
+		// Assert.assertEquals("PortName", loadSlot.getPort());
+		Assert.assertEquals("PRICE+1", dischargeSlot.getPriceExpression());
+		Assert.assertEquals(7, dischargeSlot.getWindowSize());
+		Assert.assertEquals(new Date(2013 - 1900, 0, 1, 0, 0, 0), dischargeSlot.getWindowStart());
+		Assert.assertEquals(9, dischargeSlot.getWindowStartTime());
+		Assert.assertEquals(CargoDeliveryType.ANY, dischargeSlot.getPurchaseDeliveryType());
+	}
+
+	
+
+	
+	////////////////// Methods liefteed from ExportCSVWizard
+	
+	/**
+	 * @param rows
+	 * @param outputFile
+	 */
+	private void writeCSV(final Collection<Map<String, String>> rows, final File outputFile) {
+		if (rows.isEmpty())
+			return;
+		final LinkedHashSet<String> keys = new LinkedHashSet<String>();
+		for (final Map<String, String> row : rows) {
+			keys.addAll(row.keySet());
+		}
+
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter(outputFile));
+			boolean firstKey = true;
+			for (final String key : keys) {
+				if (!firstKey)
+					writer.write(",");
+				firstKey = false;
+				writer.write(escape(key));
+			}
+			for (final Map<String, String> row : rows) {
+				writer.write("\n");
+				firstKey = true;
+				for (final String key : keys) {
+					if (!firstKey)
+						writer.write(",");
+					firstKey = false;
+					writer.write(escape(row.get(key)));
+				}
+			}
+		} catch (final IOException e) {
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (final IOException e) {
+				}
+			}
+		}
+	}
+
+	private String escape(final String key) {
+		if (key == null)
+			return "";
+		final String sub = key.trim().replace("\"", "\\\"");
+		return sub.contains(",") ? "\"" + sub + "\"" : sub;
+	}
+
 
 }

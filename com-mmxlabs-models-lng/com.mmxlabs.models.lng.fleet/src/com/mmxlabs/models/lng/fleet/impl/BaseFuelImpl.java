@@ -25,7 +25,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl#getEquivalenceFactor <em>Equivalence Factor</em>}</li>
  * </ul>
  * </p>
@@ -53,16 +52,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
-	/**
-	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @see #getOtherNames()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> otherNames;
 	/**
 	 * The default value of the '{@link #getEquivalenceFactor() <em>Equivalence Factor</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -103,7 +92,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -113,7 +102,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -122,19 +111,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.BASE_FUEL__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<String> getOtherNames() {
-		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, FleetPackage.BASE_FUEL__OTHER_NAMES);
-		}
-		return otherNames;
 	}
 
 	/**
@@ -168,8 +144,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		switch (featureID) {
 			case FleetPackage.BASE_FUEL__NAME:
 				return getName();
-			case FleetPackage.BASE_FUEL__OTHER_NAMES:
-				return getOtherNames();
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				return getEquivalenceFactor();
 		}
@@ -187,10 +161,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		switch (featureID) {
 			case FleetPackage.BASE_FUEL__NAME:
 				setName((String)newValue);
-				return;
-			case FleetPackage.BASE_FUEL__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				setEquivalenceFactor((Double)newValue);
@@ -210,9 +180,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 			case FleetPackage.BASE_FUEL__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case FleetPackage.BASE_FUEL__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				setEquivalenceFactor(EQUIVALENCE_FACTOR_EDEFAULT);
 				return;
@@ -230,8 +197,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		switch (featureID) {
 			case FleetPackage.BASE_FUEL__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case FleetPackage.BASE_FUEL__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				return equivalenceFactor != EQUIVALENCE_FACTOR_EDEFAULT;
 		}
@@ -248,7 +213,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case FleetPackage.BASE_FUEL__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case FleetPackage.BASE_FUEL__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -265,7 +229,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return FleetPackage.BASE_FUEL__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return FleetPackage.BASE_FUEL__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -284,8 +247,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", otherNames: ");
-		result.append(otherNames);
 		result.append(", equivalenceFactor: ");
 		result.append(equivalenceFactor);
 		result.append(')');

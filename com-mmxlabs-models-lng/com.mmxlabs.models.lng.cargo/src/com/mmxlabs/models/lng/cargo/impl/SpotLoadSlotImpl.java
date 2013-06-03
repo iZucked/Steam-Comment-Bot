@@ -58,7 +58,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -76,7 +76,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -86,7 +86,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

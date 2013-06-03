@@ -63,7 +63,6 @@ public class ContractItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addOtherNamesPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addAllowedPortsPropertyDescriptor(object);
 			addPreferredPortPropertyDescriptor(object);
@@ -79,7 +78,7 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -91,29 +90,6 @@ public class ContractItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Other Names feature.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOtherNamesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NamedObject_otherNames_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
-				 MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES,
 				 true,
 				 false,
 				 false,
@@ -346,14 +322,14 @@ public class ContractItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((Contract)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Contract_type") :
-			getString("_UI_Contract_type") + " " + label;
+			label;
 	}
 
 	/**
@@ -369,7 +345,6 @@ public class ContractItemProvider
 
 		switch (notification.getFeatureID(Contract.class)) {
 			case CommercialPackage.CONTRACT__NAME:
-			case CommercialPackage.CONTRACT__OTHER_NAMES:
 			case CommercialPackage.CONTRACT__MIN_QUANTITY:
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
@@ -392,11 +367,6 @@ public class ContractItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
-				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
 
 		newChildDescriptors.add
 			(createChildParameter

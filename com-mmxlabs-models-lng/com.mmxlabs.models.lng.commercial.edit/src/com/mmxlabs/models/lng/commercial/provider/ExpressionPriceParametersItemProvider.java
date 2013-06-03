@@ -101,14 +101,14 @@ public class ExpressionPriceParametersItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ExpressionPriceParameters)object).getUuid();
+		String label = ((ExpressionPriceParameters)object).getPriceExpression();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ExpressionPriceParameters_type") :
-			getString("_UI_ExpressionPriceParameters_type") + " " + label;
+			label;
 	}
 
 	/**

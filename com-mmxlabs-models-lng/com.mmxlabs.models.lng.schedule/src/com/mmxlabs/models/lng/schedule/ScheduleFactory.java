@@ -208,6 +208,7 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Profit And Loss Container</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Profit And Loss Container</em>'.
 	 * @generated
@@ -217,6 +218,7 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Group Profit And Loss</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Group Profit And Loss</em>'.
 	 * @generated
@@ -226,6 +228,7 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Entity Profit And Loss</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Entity Profit And Loss</em>'.
 	 * @generated

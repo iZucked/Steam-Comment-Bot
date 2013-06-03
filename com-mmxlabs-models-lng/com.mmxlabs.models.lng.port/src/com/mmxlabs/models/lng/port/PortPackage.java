@@ -104,7 +104,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__OTHER_NAMES = TypesPackage.APORT_SET__OTHER_NAMES;
+	int PORT__OTHER_NAMES = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Capabilities</b></em>' attribute list.
@@ -113,7 +113,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__CAPABILITIES = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
+	int PORT__CAPABILITIES = TypesPackage.APORT_SET_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Time Zone</b></em>' attribute.
@@ -122,7 +122,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__TIME_ZONE = TypesPackage.APORT_SET_FEATURE_COUNT + 1;
+	int PORT__TIME_ZONE = TypesPackage.APORT_SET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Load Duration</b></em>' attribute.
@@ -131,7 +131,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__LOAD_DURATION = TypesPackage.APORT_SET_FEATURE_COUNT + 2;
+	int PORT__LOAD_DURATION = TypesPackage.APORT_SET_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Duration</b></em>' attribute.
@@ -140,7 +140,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DISCHARGE_DURATION = TypesPackage.APORT_SET_FEATURE_COUNT + 3;
+	int PORT__DISCHARGE_DURATION = TypesPackage.APORT_SET_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
@@ -149,7 +149,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 4;
+	int PORT__CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Default Start Time</b></em>' attribute.
@@ -158,7 +158,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_START_TIME = TypesPackage.APORT_SET_FEATURE_COUNT + 5;
+	int PORT__DEFAULT_START_TIME = TypesPackage.APORT_SET_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Allow Cooldown</b></em>' attribute.
@@ -167,7 +167,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__ALLOW_COOLDOWN = TypesPackage.APORT_SET_FEATURE_COUNT + 6;
+	int PORT__ALLOW_COOLDOWN = TypesPackage.APORT_SET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Default Window Size</b></em>' attribute.
@@ -176,7 +176,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DEFAULT_WINDOW_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 7;
+	int PORT__DEFAULT_WINDOW_SIZE = TypesPackage.APORT_SET_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' containment reference.
@@ -185,25 +185,27 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 8;
+	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Atobviac Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 9;
+	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Dataloy Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
+	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -212,7 +214,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -241,15 +243,6 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int ROUTE__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROUTE__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -332,15 +325,6 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_GROUP__NAME = TypesPackage.APORT_SET__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_GROUP__OTHER_NAMES = TypesPackage.APORT_SET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' reference list.
@@ -527,15 +511,6 @@ public interface PortPackage extends EPackage {
 	int CAPABILITY_GROUP__NAME = TypesPackage.APORT_SET__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CAPABILITY_GROUP__OTHER_NAMES = TypesPackage.APORT_SET__OTHER_NAMES;
-
-	/**
 	 * The feature id for the '<em><b>Capability</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -711,6 +686,7 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Atobviac Code</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getAtobviacCode()
@@ -722,6 +698,7 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Dataloy Code</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getDataloyCode()
@@ -1062,6 +1039,7 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Atobviac Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1070,6 +1048,7 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Dataloy Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

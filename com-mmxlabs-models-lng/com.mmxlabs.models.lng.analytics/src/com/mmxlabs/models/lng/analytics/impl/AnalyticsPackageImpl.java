@@ -1029,9 +1029,11 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getProvisionalCargo_PortfolioModel() {
 		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(3);
 	}

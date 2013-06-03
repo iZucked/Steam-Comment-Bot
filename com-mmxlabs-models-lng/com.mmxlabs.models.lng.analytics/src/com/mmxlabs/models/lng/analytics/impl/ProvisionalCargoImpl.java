@@ -68,6 +68,7 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	/**
 	 * The cached value of the '{@link #getPortfolioModel() <em>Portfolio Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getPortfolioModel()
 	 * @generated
@@ -226,15 +227,18 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getPortfolioModel() {
 		return portfolioModel;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -250,9 +254,11 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortfolioModel(EObject newPortfolioModel) {
 		if (newPortfolioModel != portfolioModel) {
 			NotificationChain msgs = null;

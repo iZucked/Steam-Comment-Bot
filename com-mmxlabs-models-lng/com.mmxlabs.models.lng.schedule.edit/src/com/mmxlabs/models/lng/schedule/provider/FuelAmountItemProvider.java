@@ -116,6 +116,7 @@ public class FuelAmountItemProvider
 	/**
 	 * This adds a property descriptor for the Unit Price feature.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

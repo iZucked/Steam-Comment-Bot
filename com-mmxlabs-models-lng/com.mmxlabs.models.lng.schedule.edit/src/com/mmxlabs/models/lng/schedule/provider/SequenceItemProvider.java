@@ -73,6 +73,7 @@ public class SequenceItemProvider
 	/**
 	 * This adds a property descriptor for the Vessel Availability feature.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

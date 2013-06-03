@@ -9,6 +9,7 @@ import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
@@ -35,7 +36,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @model
  * @generated
  */
-public interface VesselAvailability extends MMXObject {
+public interface VesselAvailability extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Start At</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
@@ -343,6 +344,7 @@ public interface VesselAvailability extends MMXObject {
 	 * If the meaning of the '<em>Time Charter Rate</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Time Charter Rate</em>' attribute.
 	 * @see #isSetTimeCharterRate()
@@ -357,6 +359,7 @@ public interface VesselAvailability extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Time Charter Rate</em>' attribute.
 	 * @see #isSetTimeCharterRate()
@@ -369,6 +372,7 @@ public interface VesselAvailability extends MMXObject {
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetTimeCharterRate()
 	 * @see #getTimeCharterRate()
@@ -380,6 +384,7 @@ public interface VesselAvailability extends MMXObject {
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Time Charter Rate</em>' attribute is set.
 	 * @see #unsetTimeCharterRate()
