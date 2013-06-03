@@ -374,12 +374,12 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider.getElementDuration(element, resource);
 
 			if (lastElement != null) {
-				final IPort lastPort = portProvider.getPortForElement(lastElement);
+				final IPort prevPort = portProvider.getPortForElement(lastElement);
 				final IPort port = portProvider.getPortForElement(element);
 
 				int minTravelTime = Integer.MAX_VALUE;
 				int maxTravelTime = 0;
-				for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(lastPort, port)) {
+				for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, port)) {
 					final int distance = entry.getValue();
 					if (distance != Integer.MAX_VALUE) {
 						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vessel.getVesselClass());
