@@ -68,6 +68,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
@@ -89,6 +91,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
@@ -260,6 +263,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapAlternativeElementProviderEditor alternativeElementProviderEditor = new HashMapAlternativeElementProviderEditor(SchedulerConstants.DCP_alternativeElementProvider);
 		bind(IAlternativeElementProvider.class).toInstance(alternativeElementProviderEditor);
 		bind(IAlternativeElementProviderEditor.class).toInstance(alternativeElementProviderEditor);
+		
+		final HashMapShipToShipBindingProviderEditor shipToShipProviderEditor = new HashMapShipToShipBindingProviderEditor(SchedulerConstants.DCP_shipToShipElementProvider);
+		bind(IShipToShipBindingProvider.class).toInstance(shipToShipProviderEditor);
+		bind(IShipToShipBindingProviderEditor.class).toInstance(shipToShipProviderEditor);
 	
 	}
 

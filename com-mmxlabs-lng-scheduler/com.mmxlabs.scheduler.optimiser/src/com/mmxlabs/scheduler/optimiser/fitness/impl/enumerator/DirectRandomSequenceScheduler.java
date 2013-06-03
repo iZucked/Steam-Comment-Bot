@@ -52,10 +52,24 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 				random.setSeed(seed);
 				randomise(index);
 			}
+			synchroniseShipToShipBindings();
 			evaluate(resourceIndices);
 		}
 
 		return reEvaluateAndGetBestResult(solution);
+	}
+
+	private void synchroniseShipToShipBindings() {
+		for (int i = 0; i < bindings.size(); i+=4) {
+			final int discharge_seq = bindings.get(i);
+			final int discharge_index = bindings.get(i+1);
+			final int load_seq = bindings.get(i+2);
+			final int load_index = bindings.get(i+3);
+			
+			// sequence elements bound by ship-to-ship transfers are effectively the same slot, so the arrival times must be synchronised
+			arrivalTimes[load_seq][load_index] = arrivalTimes[discharge_seq][discharge_index];
+		}
+		
 	}
 
 	private void randomise(final int seq) {
@@ -69,6 +83,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 				final int min = getMinArrivalTime(seq, pos);
 				final int max = getMaxArrivalTime(seq, pos);
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
+				// TODO force sync this with any ship-to-ship bindings 
 			}
 
 			// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.

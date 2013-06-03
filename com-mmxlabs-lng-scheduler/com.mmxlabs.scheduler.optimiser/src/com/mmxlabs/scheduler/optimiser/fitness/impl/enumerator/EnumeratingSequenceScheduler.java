@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -60,7 +62,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Indicates how many evaluations the best value came after
 	 */
 	protected int bestIndex = 0;
-
+	
 	/**
 	 * The output of the scheduler; these are the arrival times for each element in each sequence.
 	 * 
@@ -103,6 +105,16 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 */
 	private boolean[][] useTimeWindow;
 
+	
+	/**
+	 * A list of ship-to-ship binding information in <D_i, D_j, L_i, L_j> quadruples where D_i, D_j are the indices of the sequence and the position within the sequence
+	 * of the discharge element, and L_i & L_j similarly for the load. This representation is for efficiency purposes.
+	 * 
+	 * N.B. The implementation assumes relatively few ship-to-ship bindings, since the time complexity of the algorithm increases linearly with the
+	 * number of such bindings.
+	 */
+	protected ArrayList<Integer> bindings = new ArrayList<Integer>();
+	
 	/**
 	 * Holds a list of points at which the cost function can be separated. This occurs when a given journey leg <em>always</em> involves some idle time, so there can be no knock-on effects on the
 	 * segment following the point from the times chosen up to the point.
@@ -154,7 +166,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 		resize(isVirtual, sequenceIndex, size);
 		resize(useTimeWindow, sequenceIndex, size);
-
+				
 		sizes[sequenceIndex] = size;
 	}
 
@@ -258,6 +270,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	protected final void prepare(final int[] indices) {
 		final int size = sequences.size();
+		bindings.clear();
 
 		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
 			prepare();
@@ -268,6 +281,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			// for (int i = 0; i < size; i++) {
 			prepare(i);
 		}
+		imposeShipToShipConstraints();
 	}
 
 	protected ScheduledSequences getBestResult() {
@@ -276,6 +290,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	protected final void prepare() {
 		final int size = sequences.size();
+		bindings.clear();
 
 		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
 			arrivalTimes = new int[size][];
@@ -291,8 +306,66 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		for (int i = 0; i < size; i++) {
 			prepare(i);
 		}
+		
+		imposeShipToShipConstraints();
 	}
-
+	
+	private final void recordShipToShipBindings(int seqIndex, int withinSeqIndex, ISequenceElement element) {
+		
+		final IPortSlot slot = portSlotProvider.getPortSlot(element);
+		final IPortSlot converseSlot = shipToShipProvider.getConverseTransferElement(slot);  
+		final ISequenceElement transferConverseElement = portSlotProvider.getElement(converseSlot);
+		
+		if (transferConverseElement != null) {
+			final boolean element_is_discharge = slot.getPortType() == PortType.Discharge;
+			
+			/* offsets within the <bindings> quadruples to represent this element's sequence, its sequence within the index,
+			 * and similarly for the element which is bound to it
+			 */					
+			int thisSequenceOffset, thisIndexOffset, converseSequenceOffset, converseIndexOffset;
+			if (element_is_discharge) {
+				thisSequenceOffset = 0;
+				thisIndexOffset = 1;
+				converseSequenceOffset = 2;
+				converseIndexOffset = 3;
+			}
+			else {
+				thisSequenceOffset = 2;
+				thisIndexOffset = 3;
+				converseSequenceOffset = 0;
+				converseIndexOffset = 1;					
+			}
+			
+			boolean attached = false;
+			
+			/*
+			 * Attach this element's indices to the bindings array if its converse element is already there
+			 */
+			for (int k = 0; k < bindings.size(); k+=4) {
+				int converseSequence = bindings.get(k + converseSequenceOffset);
+				int converseIndex = bindings.get(k + converseIndexOffset);
+				
+				if (sequences.getSequence(converseSequence).get(converseIndex) == transferConverseElement) {
+					bindings.set(k + thisSequenceOffset, seqIndex);
+					bindings.set(k + thisIndexOffset, withinSeqIndex);
+					attached = true;
+					break;
+				}
+			}
+			
+			if (!attached) {
+				int addIndex = bindings.size();
+				for (int k = 0; k < 4; k++) {
+					bindings.add(-1);
+				}
+				bindings.set(addIndex + thisSequenceOffset, seqIndex);
+				bindings.set(addIndex + thisIndexOffset, withinSeqIndex);
+			}
+		}
+	}
+	
+	
+	
 	/**
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
@@ -334,7 +407,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		final int minSpeed = vessel.getVesselClass().getMinSpeed();
 
 		int index = 0;
-		ISequenceElement lastElement = null;
+		ISequenceElement prevElement = null;
 
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
@@ -342,19 +415,21 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
 				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
-				if (startRequirement != null) {
-					final ITimeWindow timeWindow = startRequirement.getTimeWindow();
-					if (timeWindow != null) {
-						windows = Collections.singletonList(timeWindow);
-					} else {
-						windows = Collections.<ITimeWindow> singletonList(defaultStartWindow);
-					}
-				} else {
-					windows = Collections.<ITimeWindow> singletonList(defaultStartWindow);
+				
+				// "windows" defaults to the default start window
+				ITimeWindow timeWindow = defaultStartWindow;
+
+				// but can be overridden by a specified start requirement
+				if (startRequirement != null && startRequirement.getTimeWindow() != null) {
+					timeWindow = startRequirement.getTimeWindow();
 				}
+				
+				windows = Collections.singletonList(timeWindow);
 			} else if (portTypeProvider.getPortType(element) == PortType.End) {
 				final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+				// "windows" defaults to an empty list
 				if (endRequirement != null) {
+					// but can be overridden by the specified end requirement
 					final ITimeWindow timeWindow = endRequirement.getTimeWindow();
 					if (timeWindow != null) {
 						windows = Collections.singletonList(timeWindow);
@@ -365,16 +440,19 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 					windows = Collections.<ITimeWindow> emptyList();
 				}
 			} else {
+				// "windows" defaults to whatever windows are specified by the time window provider
 				windows = timeWindowProvider.getTimeWindows(element);
+				
+				recordShipToShipBindings(sequenceIndex, index, element);
 			}
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
-			useTimeWindow[index] = lastElement == null ? false : portTypeProvider.getPortType(lastElement) == PortType.Short_Cargo_End;
+			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Short_Cargo_End;
 
 			// Calculate minimum inter-element durations
 			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider.getElementDuration(element, resource);
 
-			if (lastElement != null) {
-				final IPort prevPort = portProvider.getPortForElement(lastElement);
+			if (prevElement != null) {
+				final IPort prevPort = portProvider.getPortForElement(prevElement);
 				final IPort port = portProvider.getPortForElement(element);
 
 				int minTravelTime = Integer.MAX_VALUE;
@@ -427,7 +505,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			}
 
 			index++;
-			lastElement = element;
+			prevElement = element;
 		}
 
 		// now perform reverse-pass to trim any overly late end times
@@ -458,6 +536,30 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		// }
 		//
 		// separationPoints.add(arrivalTimes.length - 1);
+	}
+
+	/**
+	 * Refines start and end times to make sure that ship to ship transfers are respected.
+	 * @param bindings A linked list of integers indicating which sequence elements are bound to which other sequence elements. This should have the form of <i1, j1, i2, j2> quadruplets
+	 * giving the indices of the sequence, and the position within the sequence, for the discharge slots and bound load slots respectively. This list is consumed by the method. 
+	 * 
+	 * Note: the horrible semantics of this method are for efficiency reasons and are constrained by the data representations used by other methods in this class. 
+	 */
+	protected final void imposeShipToShipConstraints() {
+		for (int i = 0; i < bindings.size(); i+=4) {
+			final int discharge_seq = bindings.get(i);
+			final int discharge_index = bindings.get(i+1);
+			final int load_seq = bindings.get(i+2);
+			final int load_index = bindings.get(i+3);
+			
+			// sequence elements bound by ship-to-ship transfers are effectively the same slot, so window start and end times have to be constrained conservatively
+			final int wst = Math.max(windowStartTime[discharge_seq][discharge_index], windowStartTime[load_seq][load_index]);
+			final int wet = Math.min(windowEndTime[discharge_seq][discharge_index], windowEndTime[load_seq][load_index]);
+			
+			windowStartTime[discharge_seq][discharge_index] = windowStartTime[load_seq][load_index] = wst; 
+			windowEndTime[discharge_seq][discharge_index] = windowEndTime[load_seq][load_index] = wet; 
+			
+		}
 	}
 
 	/**

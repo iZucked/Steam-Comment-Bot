@@ -94,4 +94,5 @@ public final class SchedulerConstants {
 	 * @since 2.0
 	 */
 	public static final String DCP_alternativeElementProvider = "provider-alternative-element";
+	public static final String DCP_shipToShipElementProvider = "provider-ship-to-ship";
 }
