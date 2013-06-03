@@ -21,7 +21,8 @@ public interface TypesFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesFactory eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesFactoryImpl.init();
+	TypesFactory eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesFactoryImpl
+			.init();
 
 	/**
 	 * Returns the package supported by this factory.

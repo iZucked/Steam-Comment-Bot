@@ -187,7 +187,8 @@ public class TypesSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T extends ObjectSet<T, U>, U> T1 caseObjectSet(ObjectSet<T, U> object) {
+	public <T extends ObjectSet<T, U>, U> T1 caseObjectSet(
+			ObjectSet<T, U> object) {
 		return null;
 	}
 

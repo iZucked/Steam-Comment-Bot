@@ -18,7 +18,8 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  *
  * @generated
  */
-public abstract class AVesselSetImpl<U> extends ObjectSetImpl<AVesselSet<U>, U> implements AVesselSet<U> {
+public abstract class AVesselSetImpl<U> extends ObjectSetImpl<AVesselSet<U>, U>
+		implements AVesselSet<U> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

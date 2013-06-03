@@ -59,7 +59,8 @@ public interface TypesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl.init();
+	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl
+			.init();
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
@@ -569,7 +570,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
+		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE
+				.getITimezoneProvider__GetTimeZone__EAttribute();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
@@ -589,7 +591,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation OBJECT_SET___COLLECT__ELIST = eINSTANCE.getObjectSet__Collect__EList();
+		EOperation OBJECT_SET___COLLECT__ELIST = eINSTANCE
+				.getObjectSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
