@@ -6,18 +6,23 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
@@ -59,6 +64,172 @@ public class CargoModelRowTransformer {
 	}
 
 	/**
+	 * Returns any slot the specified slot is linked to in a ship-to-ship transfer
+	 * @param slot
+	 */
+	private static Slot getLinkedSlot(Slot slot) {
+		if (slot instanceof LoadSlot) {
+			return ((LoadSlot) slot).getTransferFrom();
+		}
+		else if (slot instanceof DischargeSlot) {
+			return ((DischargeSlot) slot).getTransferTo();
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Given a group of slots, merges it with any other groups which contain directly or indirectly linked slots through 
+	 * ship-to-ship transfers. Returns a list of all slots merged in this way and removes any merged groups from the
+	 * list of "other groups".
+	 * 
+	 * @param groupToMerge The group of slots to base the merge on.
+	 * @param otherGroups  The other groups which may or may not require merging (merged groups are removed from this list).
+	 * @param lookup A convenience map indicating which slots are in which group.
+	 * @return The complete merged group.
+	 */
+	private List<Slot> _mergeGroups(final List<Slot> groupToMerge, final List<List<Slot>> otherGroups, final Map<Slot, List<Slot>> lookup) {
+		final List<Slot> result = new LinkedList<Slot>();
+		
+		// make a list of groups to merge
+		final List<List<Slot>> groupsToMerge = new LinkedList<List<Slot>>();
+		groupsToMerge.add(groupToMerge);
+		
+		// keep merging groups until there are no more left to merge
+		while (!groupsToMerge.isEmpty()) {
+			// deal with the first remaining group
+			List<Slot> group = groupsToMerge.remove(0);
+			
+			for (Slot slot: group) {
+				// add every element of this group to the merged group
+				result.add(slot);
+				
+				// check if the slot we just added was linked to another slot via ship-to-ship transfer 
+				Slot linkedSlot = getLinkedSlot(slot);
+				
+				// if so,
+				if (linkedSlot != null) {
+					List<Slot> linkedGroup = lookup.get(linkedSlot);
+					// force merging of the group the linked slot is in (assuming it hasn't already been merged or flagged for merging)  
+					if (otherGroups.contains(linkedGroup)) {
+						otherGroups.remove(linkedGroup);
+						groupsToMerge.add(linkedGroup);
+					}
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	/**
+	 * Given a cargo, returns a GroupData object containing the slots in this cargo, 
+	 * along with any other cargoes which contain directly or indirectly linked slots through 
+	 * ship-to-ship transfers. Removes any merged cargoes from the list of "other cargoes".
+	 * 
+	 * @param groupToMerge The cargo to base the GroupData on.
+	 * @param otherGroups  The other cargoes which may or may not require merging (merged cargoes are removed from this list).
+	 * @return A GroupData object containing the slots in all linked cargoes.
+	 */
+	private GroupData mergeCargoes(final Cargo cargoToMerge, final List<Cargo> otherCargoes, final List<Slot> loneSlots, AssignmentModel assignmentModel) {
+		final GroupData result = new GroupData();
+		
+		// make a list of cargoes to merge
+		final List<Cargo> cargoesToMerge = new LinkedList<Cargo>();
+		
+		cargoesToMerge.add(cargoToMerge);
+				
+		// keep merging cargoes until there are no more left to merge
+		while (!cargoesToMerge.isEmpty()) {
+			// deal with the first remaining cargo
+			Cargo cargo = cargoesToMerge.remove(0);
+			
+			// add the relevant row and wiring data for the cargo to the GroupData object
+			result.addCargo(cargo, assignmentModel);
+			
+			for (Slot slot: cargo.getSlots()) {
+				// check if the slot we just added was linked to another slot via ship-to-ship transfer 
+				Slot linkedSlot = getLinkedSlot(slot);
+				
+				// if so,
+				if (linkedSlot != null) {					
+					Cargo linkedGroup = linkedSlot.getCargo();
+					// force merging of the group the linked slot is in (assuming it hasn't already been merged or flagged for merging)  
+					if (otherCargoes.contains(linkedGroup)) {
+						otherCargoes.remove(linkedGroup);
+						cargoesToMerge.add(linkedGroup);
+						
+						result.addShipToShipWire(slot);						
+					}
+					
+					// merge any unpaired slots which are not part of the cargo but are linked by ship-to-ship transfers 
+					else if (loneSlots.contains(linkedSlot)) {
+						loneSlots.remove(linkedSlot);
+						result.addLoneSlot(linkedSlot);
+						
+						result.addShipToShipWire(slot);
+					}
+				}
+			}
+		}
+		
+		result.patchWires();
+		
+		return result;
+	}
+
+	
+	private List<GroupData> makeGroups(final AssignmentModel assignmentModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, Schedule schedule,
+			final Map<Object, IStatus> validationInfo) {
+		final List<GroupData> result = new LinkedList<GroupData>();
+		
+		// make a modifiable copy of the cargoes list  
+		final List<Cargo> cargoesCopy = new LinkedList<Cargo>(cargoes);
+		final List<Slot> unpairedSlots = new LinkedList<Slot>();
+		
+		for (Slot slot: allLoadSlots) {
+			if (slot.getCargo() == null) {
+				unpairedSlots.add(slot);
+			}
+		}
+		for (Slot slot: allDischargeSlots) {
+			if (slot.getCargo() == null) {
+				unpairedSlots.add(slot);
+			}
+		}
+		
+		// build a list of GroupData objects from the cargoes, merging them into groups if appropriate
+		while (!cargoesCopy.isEmpty()) {
+			Cargo cargo = cargoesCopy.remove(0);
+			result.add(mergeCargoes(cargo, cargoesCopy, unpairedSlots, assignmentModel));
+		}
+		
+		// and add any necessary groups of unpaired cargoes 
+		while (!unpairedSlots.isEmpty()) {
+			GroupData group = new GroupData();
+
+			Slot slot = unpairedSlots.remove(0);
+			
+			group.addLoneSlot(slot);
+
+			Slot linkedSlot = getLinkedSlot(slot);
+			if (unpairedSlots.contains(linkedSlot)) {
+				unpairedSlots.remove(linkedSlot);
+				group.addLoneSlot(linkedSlot);
+				group.addShipToShipWire(slot);
+			}
+			
+			group.patchWires();
+			
+			result.add(group);
+		}
+		
+		return result;
+	}
+	
+	
+	/**
 	 * Perform the List to {@link RootData} transformation.
 	 * 
 	 * @param assignmentModel
@@ -83,88 +254,17 @@ public class CargoModelRowTransformer {
 			for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 				slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
 			}
-		}
+		}			
 
-		// Loop through all cargoes first, generating full cargo row items
-		for (final Cargo cargo : cargoes) {
-			final GroupData group = new GroupData();
+		List<GroupData> groups = makeGroups(assignmentModel, cargoes, allLoadSlots, allDischargeSlots, schedule, validationInfo);
+		
+		for (GroupData group: groups) {
 			root.getGroups().add(group);
-			group.getObjects().add(cargo);
-
-			// Build up list of slots assigned to cargo, sorting into loads and discharges
-			final List<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
-			final List<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
-			for (final Object slot : cargo.getSortedSlots()) {
-				if (slot instanceof LoadSlot) {
-					loadSlots.add((LoadSlot) slot);
-				} else if (slot instanceof DischargeSlot) {
-					dischargeSlots.add((DischargeSlot) slot);
-				} else {
-					// Assume some kind of discharge?
-					// dischargeSlots.add((Slot) slot);
-				}
-
-			}
-
-			// Generate the wiring - currently this is the full many-many mapping between loads and discharges.
-			// In future this should be better (in some way...)
-			for (final Object slot : cargo.getSlots()) {
-
-				if (slot instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) slot;
-					for (final Object slot2 : cargo.getSlots()) {
-						if (slot2 instanceof DischargeSlot) {
-							final DischargeSlot dischargeSlot = (DischargeSlot) slot2;
-							final WireData wire = new WireData();
-							wire.loadSlot = loadSlot;
-							wire.dischargeSlot = dischargeSlot;
-							group.getWires().add(wire);
-						}
-					}
-				}
-			}
-			// Set the colour for all cargo wires.
 			setWiringColour(validationInfo, group);
-
-			// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
-			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
-				final RowData row = new RowData();
-				row.setGroup(group);
-				group.getRows().add(row);
-				root.getRows().add(row);
-
-				row.primaryRecord = i == 0;
-
-				row.cargo = cargo;
-				// Add slot if possible
-				if (i < loadSlots.size()) {
-					row.loadSlot = loadSlots.get(i);
-				}
-				if (i < dischargeSlots.size()) {
-					row.dischargeSlot = dischargeSlots.get(i);
-				}
-				// Add element assignment to all rows (TODO: just add it once?)
-				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
-				if (elementAssignment != null) {
-					row.elementAssignment = elementAssignment;
-				}
-
-				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
-				row.loadTerminalColour = green;
-				row.dischargeTerminalColour = green;
-
-				// patch up the WireData information with the new RowData objects
-				for (final WireData wire : group.getWires()) {
-					if (wire.loadSlot != null && wire.loadSlot == row.loadSlot) {
-						wire.loadRowData = row;
-					}
-					if (wire.dischargeSlot != null && wire.dischargeSlot == row.dischargeSlot) {
-						wire.dischargeRowData = row;
-					}
-				}
-			}
+			root.getRows().addAll(group.getRows());
 		}
-
+		
+		/*
 		// Process all loads without a cargo
 		for (final LoadSlot slot : allLoadSlots) {
 			if (slot.getCargo() == null) {
@@ -207,7 +307,7 @@ public class CargoModelRowTransformer {
 				}
 				row.loadTerminalColour = red;
 			}
-		}
+		}*/
 
 		// Construct arrays of data so that index X across all arrays points to the same row
 		for (final RowData rd : root.getRows()) {
@@ -336,6 +436,7 @@ public class CargoModelRowTransformer {
 		RowData loadRowData;
 		DischargeSlot dischargeSlot;
 		RowData dischargeRowData;
+		boolean dashed;
 
 	}
 
@@ -345,7 +446,7 @@ public class CargoModelRowTransformer {
 	 * @author sg
 	 * 
 	 */
-	public static class GroupData extends EObjectImpl {
+	public class GroupData extends EObjectImpl {
 
 		private final List<RowData> rows = new ArrayList<RowData>();
 		private final List<EObject> objects = new ArrayList<EObject>();
@@ -355,6 +456,157 @@ public class CargoModelRowTransformer {
 			return objects;
 		}
 
+		/**
+		 * @since 4.0
+		 */
+		public void addLoneSlot(Slot slot) {			
+			if (slot.getCargo() == null) {
+
+				getObjects().add(slot);
+
+				final RowData row = new RowData();
+				row.setGroup(this);
+				getRows().add(row);
+				
+				if (slot instanceof LoadSlot) {
+				//root.getRows().add(row);
+					row.loadSlot = (LoadSlot) slot;
+	
+					if (slot.isOptional()) {
+						row.loadTerminalColour = green;
+					} else {
+						row.loadTerminalColour = red;
+					}
+					row.dischargeTerminalColour = red;
+				}
+				else if (slot instanceof DischargeSlot) {
+					row.dischargeSlot = (DischargeSlot) slot;
+	
+					if (slot.isOptional()) {
+						row.dischargeTerminalColour = green;
+					} else {
+						row.dischargeTerminalColour = red;
+					}
+					row.loadTerminalColour = red;
+				}
+			
+			}
+			
+		}
+
+		/**
+		 * @since 4.0
+		 */
+		public void addShipToShipWire(Slot slot) {
+			// and add a wire to the group, showing the ship-to-ship transfer
+			WireData wire = new WireData();
+			getWires().add(wire);
+			wire.colour = gray;
+			wire.dashed = true;
+			
+			LoadSlot loadSlot = null;
+			DischargeSlot dischargeSlot = null;
+			
+			if (slot instanceof LoadSlot) {
+				loadSlot = (LoadSlot) slot;
+				dischargeSlot = ((LoadSlot) slot).getTransferFrom();
+			}
+			else if (slot instanceof DischargeSlot) {
+				dischargeSlot = (DischargeSlot) slot;
+				loadSlot = ((DischargeSlot) slot).getTransferTo();
+			}
+			
+			wire.loadSlot = loadSlot;
+			wire.dischargeSlot = dischargeSlot;			
+		}
+
+		/**
+		 * @since 4.0
+		 */
+		public void addCargo(Cargo cargo, AssignmentModel assignmentModel) {
+			getObjects().add(cargo);
+
+			// Build up list of slots assigned to cargo, sorting into loads and discharges
+			final List<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
+			final List<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
+			for (final Object slot : cargo.getSortedSlots()) {
+				if (slot instanceof LoadSlot) {
+					loadSlots.add((LoadSlot) slot);
+				} else if (slot instanceof DischargeSlot) {
+					dischargeSlots.add((DischargeSlot) slot);
+				} else {
+					// Assume some kind of discharge?
+					// dischargeSlots.add((Slot) slot);
+				}
+
+			}
+
+			// Generate the wiring - currently this is the full many-many mapping between loads and discharges.
+			// In future this should be better (in some way...)
+			for (final Object slot : cargo.getSlots()) {
+
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					for (final Object slot2 : cargo.getSlots()) {
+						if (slot2 instanceof DischargeSlot) {
+							final DischargeSlot dischargeSlot = (DischargeSlot) slot2;
+							final WireData wire = new WireData();
+							wire.loadSlot = loadSlot;
+							wire.dischargeSlot = dischargeSlot;
+							getWires().add(wire);
+						}
+					}
+				}
+			}
+			// Set the colour for all cargo wires.
+			//setWiringColour(validationInfo, group);
+
+			// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
+			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
+				final RowData row = new RowData();
+				row.setGroup(this);
+				getRows().add(row);
+				//root.getRows().add(row);
+
+				row.primaryRecord = i == 0;
+
+				row.cargo = cargo;
+				// Add slot if possible
+				if (i < loadSlots.size()) {
+					row.loadSlot = loadSlots.get(i);
+				}
+				if (i < dischargeSlots.size()) {
+					row.dischargeSlot = dischargeSlots.get(i);
+				}
+				// Add element assignment to all rows (TODO: just add it once?)
+				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
+				if (elementAssignment != null) {
+					row.elementAssignment = elementAssignment;
+				}
+
+				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
+				row.loadTerminalColour = green;
+				row.dischargeTerminalColour = green;
+			}
+		}
+		
+		/**
+		 * @since 4.0
+		 */
+		public void patchWires() {
+ 			for (final RowData row: getRows()) {
+				// patch up the WireData information with the new RowData objects
+				for (final WireData wire : getWires()) {
+					if (wire.loadSlot != null && wire.loadSlot == row.loadSlot) {
+						wire.loadRowData = row;
+					}
+					if (wire.dischargeSlot != null && wire.dischargeSlot == row.dischargeSlot) {
+						wire.dischargeRowData = row;
+					}
+				}				
+			}
+		}
+		
 		public List<RowData> getRows() {
 			return rows;
 		}

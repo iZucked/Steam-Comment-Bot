@@ -6,12 +6,15 @@ package com.mmxlabs.models.lng.cargo.impl;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.PortPackage;
 
@@ -25,6 +28,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isDESPurchase <em>DES Purchase</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getTransferFrom <em>Transfer From</em>}</li>
  * </ul>
  * </p>
  *
@@ -108,6 +112,17 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @ordered
 	 */
 	protected boolean desPurchase = DES_PURCHASE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getTransferFrom() <em>Transfer From</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getTransferFrom()
+	 * @generated
+	 * @ordered
+	 */
+	protected DischargeSlot transferFrom;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -243,6 +258,70 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DischargeSlot getTransferFrom() {
+		if (transferFrom != null && transferFrom.eIsProxy()) {
+			InternalEObject oldTransferFrom = (InternalEObject)transferFrom;
+			transferFrom = (DischargeSlot)eResolveProxy(oldTransferFrom);
+			if (transferFrom != oldTransferFrom) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.LOAD_SLOT__TRANSFER_FROM, oldTransferFrom, transferFrom));
+			}
+		}
+		return transferFrom;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DischargeSlot basicGetTransferFrom() {
+		return transferFrom;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetTransferFrom(DischargeSlot newTransferFrom, NotificationChain msgs) {
+		DischargeSlot oldTransferFrom = transferFrom;
+		transferFrom = newTransferFrom;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__TRANSFER_FROM, oldTransferFrom, newTransferFrom);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTransferFrom(DischargeSlot newTransferFrom) {
+		if (newTransferFrom != transferFrom) {
+			NotificationChain msgs = null;
+			if (transferFrom != null)
+				msgs = ((InternalEObject)transferFrom).eInverseRemove(this, CargoPackage.DISCHARGE_SLOT__TRANSFER_TO, DischargeSlot.class, msgs);
+			if (newTransferFrom != null)
+				msgs = ((InternalEObject)newTransferFrom).eInverseAdd(this, CargoPackage.DISCHARGE_SLOT__TRANSFER_TO, DischargeSlot.class, msgs);
+			msgs = basicSetTransferFrom(newTransferFrom, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__TRANSFER_FROM, newTransferFrom, newTransferFrom));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -262,6 +341,36 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
+				if (transferFrom != null)
+					msgs = ((InternalEObject)transferFrom).eInverseRemove(this, CargoPackage.DISCHARGE_SLOT__TRANSFER_TO, DischargeSlot.class, msgs);
+				return basicSetTransferFrom((DischargeSlot)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
+				return basicSetTransferFrom(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CargoPackage.LOAD_SLOT__CARGO_CV:
@@ -270,6 +379,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return isArriveCold();
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
 				return isDESPurchase();
+			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
+				if (resolve) return getTransferFrom();
+				return basicGetTransferFrom();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -290,6 +402,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return;
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
 				setDESPurchase((Boolean)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
+				setTransferFrom((DischargeSlot)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -312,6 +427,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
 				setDESPurchase(DES_PURCHASE_EDEFAULT);
 				return;
+			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
+				setTransferFrom((DischargeSlot)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -330,6 +448,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return isSetArriveCold();
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
 				return desPurchase != DES_PURCHASE_EDEFAULT;
+			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
+				return transferFrom != null;
 		}
 		return super.eIsSet(featureID);
 	}

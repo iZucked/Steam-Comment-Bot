@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isFOBSale <em>FOB Sale</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo <em>Transfer To</em>}</li>
  * </ul>
  * </p>
  *
@@ -111,6 +112,36 @@ public interface DischargeSlot extends Slot {
 	 * @generated
 	 */
 	boolean isSetPurchaseDeliveryType();
+
+	/**
+	 * Returns the value of the '<em><b>Transfer To</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Transfer To</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Transfer To</em>' reference.
+	 * @see #setTransferTo(LoadSlot)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot_TransferTo()
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom
+	 * @model opposite="transferFrom"
+	 * @generated
+	 */
+	LoadSlot getTransferTo();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo <em>Transfer To</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Transfer To</em>' reference.
+	 * @see #getTransferTo()
+	 * @generated
+	 */
+	void setTransferTo(LoadSlot value);
 } // end of  DischargeSlot
 
 // finish type fixing

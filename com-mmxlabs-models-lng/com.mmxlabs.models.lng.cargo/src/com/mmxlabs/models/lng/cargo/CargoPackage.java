@@ -601,13 +601,23 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__DES_PURCHASE = SLOT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Transfer From</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__TRANSFER_FROM = SLOT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -874,13 +884,23 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Transfer To</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__TRANSFER_TO = SLOT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 2;
+	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1328,6 +1348,16 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__DES_PURCHASE = LOAD_SLOT__DES_PURCHASE;
 
 	/**
+	 * The feature id for the '<em><b>Transfer From</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__TRANSFER_FROM = LOAD_SLOT__TRANSFER_FROM;
+
+	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1608,6 +1638,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Transfer To</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__TRANSFER_TO = DISCHARGE_SLOT__TRANSFER_TO;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -2133,6 +2173,18 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_DESPurchase();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Transfer From</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EReference getLoadSlot_TransferFrom();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrPortCV() <em>Get Slot Or Port CV</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2174,6 +2226,18 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDischargeSlot_PurchaseDeliveryType();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo <em>Transfer To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Transfer To</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo()
+	 * @see #getDischargeSlot()
+	 * @generated
+	 */
+	EReference getDischargeSlot_TransferTo();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CargoModel <em>Model</em>}'.
@@ -2558,6 +2622,15 @@ public interface CargoPackage extends EPackage {
 		EAttribute LOAD_SLOT__DES_PURCHASE = eINSTANCE.getLoadSlot_DESPurchase();
 
 		/**
+		 * The meta object literal for the '<em><b>Transfer From</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LOAD_SLOT__TRANSFER_FROM = eINSTANCE.getLoadSlot_TransferFrom();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port CV</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2591,6 +2664,15 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = eINSTANCE.getDischargeSlot_PurchaseDeliveryType();
+
+		/**
+		 * The meta object literal for the '<em><b>Transfer To</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DISCHARGE_SLOT__TRANSFER_TO = eINSTANCE.getDischargeSlot_TransferTo();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.

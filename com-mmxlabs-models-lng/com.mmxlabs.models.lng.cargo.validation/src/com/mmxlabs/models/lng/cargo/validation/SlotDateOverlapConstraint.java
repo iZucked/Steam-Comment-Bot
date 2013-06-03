@@ -172,6 +172,18 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			slotOverlaps.remove(original);
 			slotOverlaps.remove(slot);
 			slotOverlaps.remove(replacement);
+			if (slot instanceof LoadSlot) {
+				final DischargeSlot transferSlot = ((LoadSlot) slot).getTransferFrom();
+				slotOverlaps.remove(extraValidationContext.getReplacement(transferSlot));
+				slotOverlaps.remove(extraValidationContext.getOriginal(transferSlot));
+				slotOverlaps.remove(transferSlot);
+			} else if (slot instanceof DischargeSlot) {
+				final LoadSlot transferSlot = ((DischargeSlot) slot).getTransferTo();
+				slotOverlaps.remove(extraValidationContext.getReplacement(transferSlot));
+				slotOverlaps.remove(extraValidationContext.getOriginal(transferSlot));
+				slotOverlaps.remove(transferSlot);
+			}
+
 			assert slotOverlaps.contains(slot) == false;
 			if (slotOverlaps.isEmpty()) {
 				return ctx.createSuccessStatus();
@@ -191,7 +203,7 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			final String slotStr = sb.toString();
 
 			final String message;
-			message = String.format("[Slot|'%s'] Overlaps with slot(s) '%s'", slot.getName() == null? "(no ID)":slot.getName(), slotStr);
+			message = String.format("[Slot|'%s'] Overlaps with slot(s) '%s'", slot.getName() == null ? "(no ID)" : slot.getName(), slotStr);
 
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
@@ -208,7 +220,7 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 
 		final MMXRootObject rootObject = extraValidationContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
-			final CargoModel cargoModel = ((LNGScenarioModel)rootObject).getPortfolioModel().getCargoModel();
+			final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getCargoModel();
 
 			for (final LoadSlot slot : cargoModel.getLoadSlots()) {
 				if (slot instanceof SpotSlot) {

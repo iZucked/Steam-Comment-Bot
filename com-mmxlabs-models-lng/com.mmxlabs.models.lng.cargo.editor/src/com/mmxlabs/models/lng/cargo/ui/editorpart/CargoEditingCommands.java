@@ -107,6 +107,42 @@ public class CargoEditingCommands {
 		return newLoad;
 	}
 
+	/**
+	 * @since 4.0
+	 */
+	public LoadSlot createNewShipToShipLoad(final List<Command> setCommands, final DischargeSlot linkedSlot, final CargoModel cargoModel) {
+		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+		newLoad.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
+
+		// Note: Keep in sync with SlotShipToShipBindingCommandProvider
+		if (linkedSlot.isSetPriceExpression()) {
+			newLoad.setPriceExpression(linkedSlot.getPriceExpression());
+		} else {
+			newLoad.setPriceExpression("0");
+		}
+		if (linkedSlot.isSetMinQuantity()) {
+			newLoad.setMinQuantity(linkedSlot.getMinQuantity());
+		}
+		if (linkedSlot.isSetMaxQuantity()) {
+			newLoad.setMaxQuantity(linkedSlot.getMaxQuantity());
+		}
+		if (linkedSlot.isSetDuration()) {
+			newLoad.setDuration(linkedSlot.getDuration());
+		}
+		if (linkedSlot.isSetWindowStartTime()) {
+			newLoad.setWindowStartTime(linkedSlot.getWindowStartTime());
+		}
+		newLoad.setWindowStart(linkedSlot.getWindowStart());
+		newLoad.setPort(linkedSlot.getPort());
+		newLoad.setTransferFrom(linkedSlot);
+
+		newLoad.setName(linkedSlot.getName() + "-transfer");
+
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoad));
+
+		return newLoad;
+	}
+
 	public LoadSlot createNewLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase) {
 
 		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);

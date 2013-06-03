@@ -54,11 +54,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="arriveCold" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="DESPurchase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transferFrom" eType="#//DischargeSlot"
+        eOpposite="#//DischargeSlot/transferTo"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot" eSuperTypes="#//Slot">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="FOBSale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="false" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transferTo" eType="#//LoadSlot"
+        eOpposite="#//LoadSlot/transferFrom"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CargoModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlots" upperBound="-1"
