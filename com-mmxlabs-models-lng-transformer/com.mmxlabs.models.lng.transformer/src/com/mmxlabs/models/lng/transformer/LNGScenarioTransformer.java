@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TimeZone;
@@ -125,6 +126,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
+import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 
@@ -160,6 +162,9 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private Injector injector;
+	
+	@Inject
+	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
 
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
@@ -705,6 +710,8 @@ public class LNGScenarioTransformer {
 		}
 
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		final Map<Slot, IPortSlot> transferSlotMap = new HashMap<Slot, IPortSlot>();
+		
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
 
 			if (eCargo.getSortedSlots().get(0).getWindowStartWithSlotOrPortTime().after(latestDate)) {
@@ -741,6 +748,8 @@ public class LNGScenarioTransformer {
 			}
 
 			for (final Slot slot : eCargo.getSortedSlots()) {
+				boolean isTransfer = false;
+				
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					// Bind FOB/DES slots to resource
@@ -778,6 +787,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 					}
+					isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					if (dischargeSlot.isFOBSale()) {
@@ -785,8 +795,15 @@ public class LNGScenarioTransformer {
 							builder.bindLoadSlotsToFOBSale((IDischargeOption) slotMap.get(dischargeSlot), load.getPort());
 						}
 					}
+					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
 				}
-			}
+				
+				// remember any slots which were part of a ship-to-ship transfer
+				// but don't do anything with them yet, because we need to wait until all slots have been processed
+				if (isTransfer) {
+					transferSlotMap.put(slot, slotMap.get(slot));
+				}
+			}			
 
 			final ICargo cargo = builder.createCargo(slots, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
@@ -804,6 +821,21 @@ public class LNGScenarioTransformer {
 			}
 		}
 
+		// register ship-to-ship transfers with the relevant data component provider
+		for (Entry<Slot, IPortSlot> entry: transferSlotMap.entrySet()) {
+			final Slot slot = entry.getKey();
+			final IPortSlot portSlot = entry.getValue();
+			Slot converse = null;
+			if (slot instanceof DischargeSlot) {
+				converse = ((DischargeSlot) slot).getTransferTo();
+			}
+			else if (slot instanceof LoadSlot) {
+				converse = ((LoadSlot) slot).getTransferFrom();
+			}
+			
+			shipToShipBindingProvider.setConverseTransferElement(portSlot, transferSlotMap.get(converse));
+		}
+		
 		for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
 
 			// TODO: Filter on date
