@@ -35,29 +35,42 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 
 				final Port port = slot.getPort();
 				if (port != null) {
-					final EList<PortCapability> capabilities = port.getCapabilities();
-
+					PortCapability requiredCapability = null;
+					Cargo cargo = null;
+					
 					if (slot instanceof LoadSlot) {
-						if (!((LoadSlot) slot).isDESPurchase() && !capabilities.contains(PortCapability.LOAD)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.LOAD.getName(), "'"+slot.getName()+"'", "'"+port.getName()+"'"));
-							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
-							final Cargo cargo = ((LoadSlot) slot).getCargo();
-							if (cargo != null) {
-								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
-							}
-							return dsd;
+						final LoadSlot loadSlot = (LoadSlot) slot;
+						cargo = loadSlot.getCargo();
+						
+						if (loadSlot.getTransferFrom() != null) {
+							requiredCapability = PortCapability.TRANSFER;
 						}
+						else if (!loadSlot.isDESPurchase()) {
+							requiredCapability = PortCapability.LOAD;
+						}									
 					}
 
-					if (slot instanceof DischargeSlot) {
-						if (!((DischargeSlot) slot).isFOBSale() && !capabilities.contains(PortCapability.DISCHARGE)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.DISCHARGE.getName(), "'"+slot.getName()+"'", "'"+port.getName()+"'"));
+					else if (slot instanceof DischargeSlot) {
+						final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+						cargo = dischargeSlot.getCargo();
+						
+						if (dischargeSlot.getTransferTo() != null) {
+							requiredCapability = PortCapability.TRANSFER;
+						}
+						else if (!dischargeSlot.isFOBSale()) {
+							requiredCapability = PortCapability.DISCHARGE;
+						}
+					}
+					
+					final EList<PortCapability> capabilities = port.getCapabilities();
+					if (requiredCapability != null) {
+						if (!capabilities.contains(requiredCapability)) {
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(requiredCapability.getName(), "'"+slot.getName()+"'", "'"+port.getName()+"'"));
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
-							final Cargo cargo = ((DischargeSlot) slot).getCargo();
 							if (cargo != null) {
 								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
 							}
-							return dsd;
+							return dsd;							
 						}
 					}
 				}
