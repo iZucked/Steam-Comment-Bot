@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -12,6 +14,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -46,7 +51,22 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 		if (value instanceof Cargo) {
 			final Cargo cargo = (Cargo) value;
 
-			external.addAll(cargo.getSlots());
+			Set<Slot> slots = new HashSet<Slot>();
+			for (Slot slot : cargo.getSlots()) {
+				slots.add(slot);
+				if (slot instanceof LoadSlot) {
+					LoadSlot loadSlot = (LoadSlot) slot;
+					if (loadSlot.getTransferFrom() != null) {
+						slots.add(loadSlot.getTransferFrom());
+					}
+				} else if (slot instanceof DischargeSlot) {
+					DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					if (dischargeSlot.getTransferTo() != null) {
+						slots.add(dischargeSlot.getTransferTo());
+					}
+				}
+			}
+			external.addAll(slots);
 		}
 
 		return external;

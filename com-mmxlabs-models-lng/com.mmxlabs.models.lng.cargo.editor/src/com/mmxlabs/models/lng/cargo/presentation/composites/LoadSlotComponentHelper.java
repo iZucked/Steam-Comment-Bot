@@ -61,7 +61,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);
 	}
 
 	/**
@@ -71,7 +71,8 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
 		add_DESPurchaseEditor(detailComposite, topClass);
@@ -127,6 +128,9 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 				external.add(cargo);
 				external.addAll(cargo.getSlots());
 				external.remove(value);
+			}
+			if (loadSlot.getTransferFrom() != null) {
+				external.add(loadSlot.getTransferFrom());
 			}
 		}
 		external.addAll(super.getExternalEditingRange(root, value));
