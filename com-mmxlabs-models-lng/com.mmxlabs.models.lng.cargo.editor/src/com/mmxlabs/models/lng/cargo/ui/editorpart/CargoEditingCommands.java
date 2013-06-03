@@ -117,13 +117,6 @@ public class CargoEditingCommands {
 		newLoad.setWindowStart(linkedSlot.getWindowStart());
 		newLoad.setTransferFrom(linkedSlot);
 		
-		// try to get the CV value of the linkedSlot cargo
-		Cargo linkedCargo = linkedSlot.getCargo();
-		if (linkedCargo != null) {
-			LoadSlot originalLoad = (LoadSlot) linkedSlot.getCargo().getSortedSlots().get(0);
-			newLoad.setCargoCV(originalLoad.getSlotOrPortCV());
-		}
-		
 		newLoad.setName(linkedSlot.getName() + "-transfer");
 		
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoad));
