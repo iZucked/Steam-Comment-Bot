@@ -188,22 +188,13 @@ public interface PortPackage extends EPackage {
 	int PORT__LOCATION = TypesPackage.APORT_SET_FEATURE_COUNT + 8;
 
 	/**
-	 * The feature id for the '<em><b>Unlocode</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__UNLOCODE = TypesPackage.APORT_SET_FEATURE_COUNT + 9;
-
-	/**
 	 * The feature id for the '<em><b>Atobviac Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
+	int PORT__ATOBVIAC_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Dataloy Code</b></em>' attribute.
@@ -212,7 +203,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
+	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Port</em>' class.
@@ -221,7 +212,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -718,17 +709,6 @@ public interface PortPackage extends EPackage {
 	EReference getPort_Location();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getUnlocode <em>Unlocode</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Unlocode</em>'.
-	 * @see com.mmxlabs.models.lng.port.Port#getUnlocode()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EAttribute getPort_Unlocode();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1078,14 +1058,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT__LOCATION = eINSTANCE.getPort_Location();
-
-		/**
-		 * The meta object literal for the '<em><b>Unlocode</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PORT__UNLOCODE = eINSTANCE.getPort_Unlocode();
 
 		/**
 		 * The meta object literal for the '<em><b>Atobviac Code</b></em>' attribute feature.

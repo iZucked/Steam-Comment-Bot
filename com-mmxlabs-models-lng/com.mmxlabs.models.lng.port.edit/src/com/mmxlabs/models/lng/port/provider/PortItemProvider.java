@@ -69,7 +69,6 @@ public class PortItemProvider
 			addDefaultStartTimePropertyDescriptor(object);
 			addAllowCooldownPropertyDescriptor(object);
 			addDefaultWindowSizePropertyDescriptor(object);
-			addUnlocodePropertyDescriptor(object);
 			addAtobviacCodePropertyDescriptor(object);
 			addDataloyCodePropertyDescriptor(object);
 		}
@@ -110,7 +109,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_timeZone_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_timeZone_feature", "_UI_Port_type"),
+				 getString("_UI_Port_timeZone_description"),
 				 PortPackage.Literals.PORT__TIME_ZONE,
 				 true,
 				 false,
@@ -253,28 +252,6 @@ public class PortItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Unlocode feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addUnlocodePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Port_unlocode_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_unlocode_feature", "_UI_Port_type"),
-				 PortPackage.Literals.PORT__UNLOCODE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Atobviac Code feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -393,7 +370,6 @@ public class PortItemProvider
 			case PortPackage.PORT__DEFAULT_START_TIME:
 			case PortPackage.PORT__ALLOW_COOLDOWN:
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
-			case PortPackage.PORT__UNLOCODE:
 			case PortPackage.PORT__ATOBVIAC_CODE:
 			case PortPackage.PORT__DATALOY_CODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

@@ -11,8 +11,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
@@ -29,6 +32,8 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
@@ -40,6 +45,10 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.timezone.ITimezoneProvider;
+import com.mmxlabs.common.timezone.impl.GoogleTimezoneProvider;
+import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -99,34 +108,56 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), PortPackage.eINSTANCE.getPortModel_PortGroups());
 			}
 		});
-		
+
 		final Action importAction = createImportAction();
 		if (importAction != null) {
 			getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, importAction);
 		}
-		
-		/*
-		 * Action tzAction = new Action("Update timezones") {
-		 * 
-		 * @Override public void run() {
-		 * 
-		 * ITimezoneProvider tzProvider = new GoogleTimezoneProvider();
-		 * 
-		 * EditingDomain ed = jointModelEditorPart.getEditingDomain(); ISelection selection = getScenarioViewer().getSelection(); if (selection instanceof IStructuredSelection) { CompoundCommand cc =
-		 * new CompoundCommand("Update Port Timezones"); IStructuredSelection ss = (IStructuredSelection) selection; Iterator<?> itr = ss.iterator(); while (itr.hasNext()) {
-		 * 
-		 * Object next = itr.next();
-		 * 
-		 * if (next instanceof Port) { Port p = (Port) next; if (p.getLocation() != null) { Location l = p.getLocation(); TimeZone tz = tzProvider.findTimeZone((float) l.getLat(), (float) l.getLon());
-		 * if (tz != null) { Command cmd = SetCommand.create(ed, p, PortPackage.eINSTANCE.getPort_TimeZone(), tz.getID()); cc.append(cmd); }
-		 * 
-		 * }
-		 * 
-		 * } } if (!cc.isEmpty()) { ed.getCommandStack().execute(cc); }
-		 * 
-		 * } // TODO Auto-generated method stub super.run(); } }; getToolBarManager().add(tzAction);
-		 */
 		getToolBarManager().update(true);
+
+		final Action tzAction = new Action("Update timezones") {
+
+			@Override
+			public void run() {
+
+				final ITimezoneProvider tzProvider = new GoogleTimezoneProvider();
+
+				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+				final ISelection selection = getScenarioViewer().getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final CompoundCommand cc = new CompoundCommand("Update Port Timezones");
+					final IStructuredSelection ss = (IStructuredSelection) selection;
+					final Iterator<?> itr = ss.iterator();
+					while (itr.hasNext()) {
+
+						final Object next = itr.next();
+
+						if (next instanceof Port) {
+							final Port p = (Port) next;
+							if (p.getLocation() != null) {
+								final Location l = p.getLocation();
+								try {
+									final TimeZone tz = tzProvider.findTimeZone((float) l.getLat(), (float) l.getLon());
+									if (tz != null) {
+										final Command cmd = SetCommand.create(ed, p, PortPackage.eINSTANCE.getPort_TimeZone(), tz.getID());
+										cc.append(cmd);
+									}
+								} catch (Exception e) {
+									// Ignore - but could provide some feeback to user?
+								}
+							}
+						}
+					}
+					if (!cc.isEmpty()) {
+						ed.getCommandStack().execute(cc);
+					}
+				}
+				super.run();
+			}
+		};
+//		getMenuManager().add(tzAction);
+//		getMenuManager().update(true);
+
 		defaultSetTitle("Ports");
 	}
 
@@ -142,7 +173,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			@Override
 			protected void populate(final Menu menu) {
 				addActionToMenu(importPorts, menu);
-				MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
+				final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final PortModel pm = ((LNGScenarioModel) rootObject).getPortModel();
 					new MenuItem(menu, SWT.SEPARATOR);
@@ -161,7 +192,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 								CSVReader reader = null;
 								try {
-								reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
+									reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
 									final Route importRoute = routeImporter.importRoute(reader, context);
 									context.run();
 									final CompoundCommand cc = new CompoundCommand();
@@ -200,7 +231,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 						@Override
 						protected void doImportStages(final DefaultImportContext context) {
 							final String path = importHooksProvider.getImportFilePath();
-						
+
 							if (path == null)
 								return;
 
@@ -267,8 +298,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 							@Override
 							protected void doImportStages(final DefaultImportContext context) {
-							final String path = importHooksProvider.getImportFilePath();
-							
+								final String path = importHooksProvider.getImportFilePath();
+
 								if (path == null)
 									return;
 
@@ -328,9 +359,9 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		@Override
 		protected void populate(final Menu menu) {
-			MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
+			final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
-				final PortModel portModel = ((LNGScenarioModel)rootObject).getPortModel();
+				final PortModel portModel = ((LNGScenarioModel) rootObject).getPortModel();
 				for (final Route canal : portModel.getRoutes()) {
 					final Action canalEditor = new AbstractMenuAction(canal.getName()) {
 						@Override
