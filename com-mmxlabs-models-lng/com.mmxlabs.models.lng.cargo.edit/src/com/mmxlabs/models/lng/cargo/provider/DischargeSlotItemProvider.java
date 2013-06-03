@@ -113,6 +113,7 @@ public class DischargeSlotItemProvider
 	/**
 	 * This adds a property descriptor for the Transfer To feature.
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

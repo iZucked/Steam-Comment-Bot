@@ -456,6 +456,9 @@ public class CargoModelRowTransformer {
 			return objects;
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public void addLoneSlot(Slot slot) {			
 			if (slot.getCargo() == null) {
 
@@ -491,6 +494,9 @@ public class CargoModelRowTransformer {
 			
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public void addShipToShipWire(Slot slot) {
 			// and add a wire to the group, showing the ship-to-ship transfer
 			WireData wire = new WireData();
@@ -514,6 +520,9 @@ public class CargoModelRowTransformer {
 			wire.dischargeSlot = dischargeSlot;			
 		}
 
+		/**
+		 * @since 4.0
+		 */
 		public void addCargo(Cargo cargo, AssignmentModel assignmentModel) {
 			getObjects().add(cargo);
 
@@ -581,6 +590,9 @@ public class CargoModelRowTransformer {
 			}
 		}
 		
+		/**
+		 * @since 4.0
+		 */
 		public void patchWires() {
  			for (final RowData row: getRows()) {
 				// patch up the WireData information with the new RowData objects
