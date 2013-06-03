@@ -135,15 +135,15 @@ public class CargoEditorMenuHelper {
 
 	private void addSetToSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Set<Slot> targetSet, final boolean includeContract,
 			final boolean includePort) {
-				for (final Slot target : targetSet) {
-					createWireAction(manager, source, target, sourceIsLoad, includeContract, includePort);
-				}
+		for (final Slot target : targetSet) {
+			createWireAction(manager, source, target, sourceIsLoad, includeContract, includePort);
+		}
 	}
 
 	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Map<String, Set<Slot>> targets, final boolean includeContract,
 			final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
-		
+
 		// For single item sub menus, skip the sub menu and add item directly
 		if (targets.size() == 1) {
 			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
@@ -165,14 +165,15 @@ public class CargoEditorMenuHelper {
 		manager.add(subMenu);
 	}
 
-	private void buildSwapMenu(final IMenuManager manager, final String name, final Slot source, final Map<String, Set<Slot>> targets, final boolean includeContract, final boolean includePort) {
+	private void buildSwapMenu(final IMenuManager manager, final String name, final Slot source, final Map<String, Set<Slot>> targets, boolean isLoad, final boolean includeContract,
+			final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
 
 		// For single item sub menus, skip the sub menu and add item directly
 		if (targets.size() == 1) {
 			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
 				for (final Slot target : e.getValue()) {
-					createSwapAction(subMenu, source, target, includeContract, includePort);
+					createSwapAction(subMenu, source, target, isLoad, includeContract, includePort);
 				}
 			}
 
@@ -180,7 +181,7 @@ public class CargoEditorMenuHelper {
 			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
 				final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
 				for (final Slot target : e.getValue()) {
-					createSwapAction(subSubMenu, source, target, includeContract, includePort);
+					createSwapAction(subSubMenu, source, target, isLoad, includeContract, includePort);
 				}
 				subMenu.add(subSubMenu);
 			}
@@ -458,11 +459,11 @@ public class CargoEditorMenuHelper {
 
 			final Contract contract = target.getContract();
 			if (contract != null) {
-				addSlotToTargets(target, contract.getName(), slotsByContract);
+				addTargetByDateToSortedSet(target, contract.getName(), slotsByContract);
 			}
 			final Port port = target.getPort();
 			if (port != null) {
-				addSlotToTargets(target, port.getName(), slotsByPort);
+				addTargetByDateToSortedSet(target, port.getName(), slotsByPort);
 			}
 
 			// if (daysDifference < 5) {
@@ -480,13 +481,13 @@ public class CargoEditorMenuHelper {
 			// if (daysDifference < 60) {
 			// addSlotToTargets(target, "Less than 60 Days", slotsByDate);
 			// }
-			addSlotToTargets(target, "Any", slotsByDate);
+			addTargetByDateToSortedSet(target, "Any", slotsByDate);
 
 		}
 		{
-			buildSwapMenu(manager, "Swap Slots By Contract", source, slotsByContract, false, true);
+			buildSwapMenu(manager, "Swap Slots By Contract", source, slotsByContract, sourceIsLoad, false, true);
 			// buildSubMenu(manager, "Slots By Date", source, sourceIsLoad, slotsByDate, true, true);
-			buildSwapMenu(manager, "Swap Slots By Port", source, slotsByPort, true, false);
+			buildSwapMenu(manager, "Swap Slots By Port", source, slotsByPort, sourceIsLoad, true, false);
 		}
 	}
 
@@ -503,7 +504,7 @@ public class CargoEditorMenuHelper {
 			// Check restrictions on both slots
 			if (slot instanceof LoadSlot) {
 				if (((LoadSlot) slot).isDESPurchase()) {
-					if(!(slot.getPort()==source.getPort())){
+					if (!(slot.getPort() == source.getPort())) {
 						continue;
 					}
 				}
@@ -591,10 +592,10 @@ public class CargoEditorMenuHelper {
 				daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
 			}
 
-			if(targetCargo == null){
+			if (targetCargo == null) {
 				addTargetByDateToSortedSet(target, "Unused", unusedSlotsByDate);
 			}
-					
+
 			final Contract contract = target.getContract();
 			if (contract != null) {
 				addTargetByDateToSortedSet(target, contract.getName(), slotsByContract);
@@ -604,33 +605,33 @@ public class CargoEditorMenuHelper {
 				addTargetByDateToSortedSet(target, port.getName(), slotsByPort);
 			}
 
-//			if (daysDifference < 5) {
-//				addTargetByDateToSortedSet(target, "Less than 5 Days", slotsByDate);
-////				addTargetByDateToSortedSet(target, "near", nearSlotsByDate);
-//				nearSlotsByDate.add(target);
-//			}
-//			if (daysDifference < 10) {
-//				addTargetByDateToSortedSet(target, "Less than 10 Days", slotsByDate);
-//				nearSlotsByDate.add(target);
-//			}
-//			if (daysDifference < 20) {
-//				addTargetByDateToSortedSet(target, "Less than 20 Days", slotsByDate);
-//				nearSlotsByDate.add(target);
-//			}
+			// if (daysDifference < 5) {
+			// addTargetByDateToSortedSet(target, "Less than 5 Days", slotsByDate);
+			// // addTargetByDateToSortedSet(target, "near", nearSlotsByDate);
+			// nearSlotsByDate.add(target);
+			// }
+			// if (daysDifference < 10) {
+			// addTargetByDateToSortedSet(target, "Less than 10 Days", slotsByDate);
+			// nearSlotsByDate.add(target);
+			// }
+			// if (daysDifference < 20) {
+			// addTargetByDateToSortedSet(target, "Less than 20 Days", slotsByDate);
+			// nearSlotsByDate.add(target);
+			// }
 			if (daysDifference <= 60) {
-//				addTargetByDateToSortedSet(target, "Less than 30 Days", slotsByDate);
+				// addTargetByDateToSortedSet(target, "Less than 30 Days", slotsByDate);
 				nearSlotsByDate.add(target);
 			}
 			if (daysDifference > 60 && daysDifference <= 90) {
 				addTargetByDateToSortedSet(target, "[>60 Days]", slotsByDate);
 			}
-//			if (daysDifference < 60) {
-//				addTargetByDateToSortedSet(target, "Less than 60 Days", slotsByDate);
-//			}
-//			addTargetByDateToSortedSet(target, "Any", slotsByDate);
+			// if (daysDifference < 60) {
+			// addTargetByDateToSortedSet(target, "Less than 60 Days", slotsByDate);
+			// }
+			// addTargetByDateToSortedSet(target, "Any", slotsByDate);
 		}
 		{
-			buildSubMenu(manager, sourceIsLoad? "Shorts" : "Longs", source, sourceIsLoad, unusedSlotsByDate, false, true);
+			buildSubMenu(manager, sourceIsLoad ? "Shorts" : "Longs", source, sourceIsLoad, unusedSlotsByDate, false, true);
 			final MenuManager allMenu = new MenuManager("All", null);
 			manager.add(allMenu);
 			addSetToSubMenu(allMenu, "Close dates", source, sourceIsLoad, nearSlotsByDate, true, true);
@@ -732,12 +733,12 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void createSwapAction(final MenuManager subMenu, final Slot source, final Slot target, final boolean includeContract, final boolean includePort) {
-		final String name = getActionName(target, includeContract, includePort);
+	private void createSwapAction(final MenuManager subMenu, final Slot source, final Slot target, final boolean isLoad, final boolean includeContract, final boolean includePort) {
+		final String name = getActionName(target, isLoad, includeContract, includePort);
 		subMenu.add(new SwapAction(name, source, target));
 	}
 
-	private String getActionName(final Slot slot, final boolean includePort, final boolean includeContract) {
+	private String getActionName(final Slot slot, final boolean isLoad, final boolean includePort, final boolean includeContract) {
 		final StringBuilder sb = new StringBuilder();
 
 		{
@@ -750,38 +751,38 @@ public class CargoEditorMenuHelper {
 			sb.append(df.format(slot.getWindowStart()));
 		}
 		{
-//			sb.append(" '"+ slot.getName()+ "'");
+			// sb.append(" '"+ slot.getName()+ "'");
 		}
-//		if (slot instanceof LoadSlot) {
-//			if (((LoadSlot) slot).isDESPurchase()) {
-//				sb.append(", DES");
-//			}
-//			c = ((LoadSlot) slot).getCargo();
-//		}
-//		if (slot instanceof DischargeSlot) {
-//			if (((DischargeSlot) slot).isFOBSale()) {
-//				sb.append(", FOB ");
-//			}
-//			c = ((DischargeSlot) slot).getCargo();
-//		}
+		// if (slot instanceof LoadSlot) {
+		// if (((LoadSlot) slot).isDESPurchase()) {
+		// sb.append(", DES");
+		// }
+		// c = ((LoadSlot) slot).getCargo();
+		// }
+		// if (slot instanceof DischargeSlot) {
+		// if (((DischargeSlot) slot).isFOBSale()) {
+		// sb.append(", FOB ");
+		// }
+		// c = ((DischargeSlot) slot).getCargo();
+		// }
 		if (includePort && slot.getPort() != null) {
 			sb.append(", " + slot.getPort().getName());
 		}
 		if (slot instanceof SpotSlot) {
 			sb.append(", " + ((SpotSlot) slot).getMarket().getName());
 		}
-//		if (includeContract && slot.getContract() != null) {
-//			sb.append(slot.getContract().getName());
-//			sb.append(", ");
-//		}
-//		sb.append(" | ");
+		// if (includeContract && slot.getContract() != null) {
+		// sb.append(slot.getContract().getName());
+		// sb.append(", ");
+		// }
+		// sb.append(" | ");
 		final Cargo c = isLoad ? ((LoadSlot) slot).getCargo() : ((DischargeSlot) slot).getCargo();
 		if (c != null) {
 			sb.append(" -- ");
 			sb.append("cargo '" + c.getName() + "'");
 		} else {
-//			sb.append(isLoad ? "Long" : "Short");
-		}	
+			// sb.append(isLoad ? "Long" : "Short");
+		}
 		return sb.toString();
 	}
 

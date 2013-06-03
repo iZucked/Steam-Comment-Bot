@@ -1171,7 +1171,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						}
 
-						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -1199,7 +1199,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						}
 
-						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -1227,7 +1227,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						}
 
-						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -1256,7 +1256,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						}
 
-						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
