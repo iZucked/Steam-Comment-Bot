@@ -10,6 +10,7 @@ import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -65,10 +66,10 @@ public abstract class SynchronisedFeatureCommandProvider implements
 		if (commandClass == SetCommand.class) {
 			EStructuralFeature feature = parameter.getEStructuralFeature();
 			if (boundFeatures.contains(feature)) {
-				final EObject value = parameter.getEValue();
+				final Object value = parameter.getValue();
 				// don't try to synchronise a value which is already synced
 				// (since this is likely to lead to infinite loops)
-				if (syncedObject.eGet(feature).equals(value)) {
+				if (Equality.isEqual(syncedObject.eGet(feature), value)) {
 					return null;
 				}
 				// create a new command to set the synchronised 
