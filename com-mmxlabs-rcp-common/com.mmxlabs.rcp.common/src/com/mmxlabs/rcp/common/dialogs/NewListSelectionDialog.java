@@ -52,7 +52,7 @@ import com.mmxlabs.common.Pair;
  * TODO selection management, filtering, sensible size on opening, collapse unneeded groups.
  * 
  * @author Simon McGregor
- * @since 2.3
+ * @since 3.0
  * 
  */
 public class NewListSelectionDialog extends Dialog {
