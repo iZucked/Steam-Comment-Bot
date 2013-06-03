@@ -1141,6 +1141,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		protected void populate(final Menu menu) {
 			final CargoModel cargoModel = getPortfolioModel().getCargoModel();
 
+			RowData discoveredRowData = null;
+			ISelection selection = getScenarioViewer().getSelection();
+			if (selection instanceof IStructuredSelection) {
+				Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+				if (firstElement instanceof RowData) {
+					discoveredRowData = (RowData) firstElement;
+				}
+			}
+			final RowData referenceRowData = discoveredRowData;
 			{
 				final Action newLoad = new Action("FOB purchase") {
 					public void run() {
@@ -1152,7 +1161,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newLoad.setOptional(true);
 						newLoad.setName("");
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+						if (referenceRowData != null) {
+							if (referenceRowData.loadSlot != null) {
+								newLoad.setWindowStart(referenceRowData.loadSlot.getWindowStart());
+								newLoad.setPort(referenceRowData.loadSlot.getPort());
+							} else if (referenceRowData.dischargeSlot != null) {
+								newLoad.setWindowStart(referenceRowData.dischargeSlot.getWindowStart());
+							}
+						}
+
+						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -1170,7 +1189,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newLoad.setOptional(true);
 						newLoad.setName("");
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+						if (referenceRowData != null) {
+							if (referenceRowData.dischargeSlot != null) {
+								newLoad.setWindowStart(referenceRowData.dischargeSlot.getWindowStart());
+								newLoad.setPort(referenceRowData.dischargeSlot.getPort());
+							} else if (referenceRowData.loadSlot != null) {
+								newLoad.setWindowStart(referenceRowData.getLoadSlot().getWindowStart());
+							}
+						}
+
+						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -1188,7 +1217,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newDischarge.setOptional(true);
 						newDischarge.setName("");
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+
+						if (referenceRowData != null) {
+							if (referenceRowData.dischargeSlot != null) {
+								newDischarge.setWindowStart(referenceRowData.dischargeSlot.getWindowStart());
+								newDischarge.setPort(referenceRowData.dischargeSlot.getPort());
+							} else if (referenceRowData.loadSlot != null) {
+								newDischarge.setWindowStart(referenceRowData.loadSlot.getWindowStart());
+							}
+						}
+
+						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
@@ -1207,7 +1246,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newDischarge.setOptional(true);
 						newDischarge.setName("");
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+
+						if (referenceRowData != null) {
+							if (referenceRowData.loadSlot != null) {
+								newDischarge.setWindowStart(referenceRowData.loadSlot.getWindowStart());
+								newDischarge.setPort(referenceRowData.loadSlot.getPort());
+							} else if (referenceRowData.dischargeSlot != null) {
+								newDischarge.setWindowStart(referenceRowData.dischargeSlot.getWindowStart());
+							}
+						}
+
+						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
