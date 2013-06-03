@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
  * 
  * {@link #getElements(Object)} returns top level resources these should (could) return groups and again these can return actual events
  * 
- * @author sg
+ * @author Simon Goodall
  * 
  */
 public interface IGanttChartContentProvider extends ITreeContentProvider {
@@ -24,9 +24,16 @@ public interface IGanttChartContentProvider extends ITreeContentProvider {
 	Calendar getElementPlannedStartTime(Object element);
 
 	Calendar getElementPlannedEndTime(Object element);
-	
+
 	/**
 	 * @since 2.0
 	 */
 	String getGroupIdentifier(Object element);
+
+	/**
+	 * Returns another element on the gantt view the given element depends upon.
+	 * 
+	 * @since 3.0
+	 */
+	Object getElementDependency(Object element);
 }

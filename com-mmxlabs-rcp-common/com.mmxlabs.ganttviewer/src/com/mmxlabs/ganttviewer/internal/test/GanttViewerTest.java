@@ -130,6 +130,12 @@ public class GanttViewerTest {
 		public String getGroupIdentifier(final Object element) {
 			return null;
 		}
+
+		@Override
+		public Object getElementDependency(Object element) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	public static void main(final String[] args) {
