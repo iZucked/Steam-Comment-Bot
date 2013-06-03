@@ -262,6 +262,9 @@ public class GanttChartViewer extends StructuredViewer {
 			int layer = 0;
 			// Each resource to map to a GanntSection
 			try {
+
+				Map<Object, GanttEvent> eventMap = new HashMap<Object, GanttEvent>();
+
 				for (final Object r : resources) {
 					final String rName = getLabelProviderText(labelProvider, r);
 					final GanttSection section = new GanttSection(ganttChart, rName);
@@ -294,6 +297,7 @@ public class GanttChartViewer extends StructuredViewer {
 							} else {
 								event = new GanttEvent(ganttChart, c, cName, startDate, endDate, 0);
 							}
+							eventMap.put(c, event);
 							event.setVerticalEventAlignment(SWT.CENTER);
 
 							if (image != null) {
@@ -345,6 +349,7 @@ public class GanttChartViewer extends StructuredViewer {
 
 							internalMap.put(c, event);
 							internalReverseMap.put(event, c);
+
 						}
 						// Make section text horizontal rather than vertical as we
 						// expect only a single line of entries due to the group
@@ -362,6 +367,17 @@ public class GanttChartViewer extends StructuredViewer {
 
 					layer++;
 				}
+				if (contentProvider instanceof IGanttChartContentProvider) {
+					IGanttChartContentProvider cp = (IGanttChartContentProvider) contentProvider;
+
+					for (Object c : eventMap.keySet()) {
+						Object elementDependency = cp.getElementDependency(c);
+						if (elementDependency != null) {
+							ganttChart.addDependency(eventMap.get(c), eventMap.get(elementDependency));
+						}
+					}
+				}
+
 			} catch (final Exception ex) {
 				log.error(ex.getMessage(), ex);
 			}
