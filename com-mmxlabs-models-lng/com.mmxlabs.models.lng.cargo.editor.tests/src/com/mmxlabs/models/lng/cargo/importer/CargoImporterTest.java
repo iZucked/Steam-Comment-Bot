@@ -46,8 +46,8 @@ public class CargoImporterTest {
 			row.put("buy." + MMXCorePackage.eINSTANCE.getUUIDObject_Uuid().getName().toLowerCase(), "UUID");
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Contract().getName().toLowerCase(), "ContractName");
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Duration().getName().toLowerCase(), "42");
-			row.put("buy.max", "2000");
-			row.put("buy.min", "1000");
+			row.put("buy.min", "2000");
+			row.put("buy.max", "1000");
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Optional().getName().toLowerCase(), "TRUE");
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_Port().getName().toLowerCase(), "PortName");
 			row.put("buy.price", "PRICE+1");

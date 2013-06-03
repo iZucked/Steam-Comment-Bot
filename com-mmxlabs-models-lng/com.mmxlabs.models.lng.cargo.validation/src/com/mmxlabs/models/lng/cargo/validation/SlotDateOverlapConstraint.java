@@ -172,6 +172,13 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			slotOverlaps.remove(original);
 			slotOverlaps.remove(slot);
 			slotOverlaps.remove(replacement);
+			if (slot instanceof LoadSlot) {
+				slotOverlaps.remove(((LoadSlot) slot).getTransferFrom());
+			}
+			else if (slot instanceof DischargeSlot) {
+				slotOverlaps.remove(((DischargeSlot) slot).getTransferTo());
+			}
+			
 			assert slotOverlaps.contains(slot) == false;
 			if (slotOverlaps.isEmpty()) {
 				return ctx.createSuccessStatus();

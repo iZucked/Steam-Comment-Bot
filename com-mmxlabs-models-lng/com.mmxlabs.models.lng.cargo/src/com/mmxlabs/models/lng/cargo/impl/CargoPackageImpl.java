@@ -434,6 +434,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getLoadSlot_TransferFrom() {
+		return (EReference)loadSlotEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getLoadSlot__GetSlotOrPortCV() {
 		return loadSlotEClass.getEOperations().get(0);
 	}
@@ -464,6 +473,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EAttribute getDischargeSlot_PurchaseDeliveryType() {
 		return (EAttribute)dischargeSlotEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDischargeSlot_TransferTo() {
+		return (EReference)dischargeSlotEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -632,11 +650,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__ARRIVE_COLD);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__DES_PURCHASE);
+		createEReference(loadSlotEClass, LOAD_SLOT__TRANSFER_FROM);
 		createEOperation(loadSlotEClass, LOAD_SLOT___GET_SLOT_OR_PORT_CV);
 
 		dischargeSlotEClass = createEClass(DISCHARGE_SLOT);
 		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__FOB_SALE);
 		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE);
+		createEReference(dischargeSlotEClass, DISCHARGE_SLOT__TRANSFER_TO);
 
 		cargoModelEClass = createEClass(CARGO_MODEL);
 		createEReference(cargoModelEClass, CARGO_MODEL__LOAD_SLOTS);
@@ -751,12 +771,14 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_ArriveCold(), ecorePackage.getEBoolean(), "arriveCold", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_DESPurchase(), ecorePackage.getEBoolean(), "DESPurchase", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLoadSlot_TransferFrom(), this.getDischargeSlot(), this.getDischargeSlot_TransferTo(), "transferFrom", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getLoadSlot__GetSlotOrPortCV(), ecorePackage.getEDouble(), "getSlotOrPortCV", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(dischargeSlotEClass, DischargeSlot.class, "DischargeSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDischargeSlot_FOBSale(), ecorePackage.getEBoolean(), "FOBSale", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDischargeSlot_PurchaseDeliveryType(), theTypesPackage.getCargoDeliveryType(), "PurchaseDeliveryType", "false", 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDischargeSlot_TransferTo(), this.getLoadSlot(), this.getLoadSlot_TransferFrom(), "transferTo", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoModel_LoadSlots(), this.getLoadSlot(), null, "loadSlots", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

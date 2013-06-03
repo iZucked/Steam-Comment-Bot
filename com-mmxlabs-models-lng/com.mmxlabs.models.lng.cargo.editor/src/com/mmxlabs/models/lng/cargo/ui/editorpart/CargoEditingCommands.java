@@ -107,6 +107,26 @@ public class CargoEditingCommands {
 		return newLoad;
 	}
 
+	/**
+	 * @since 4.0
+	 */
+	public LoadSlot createNewShipToShipLoad(final List<Command> setCommands, final DischargeSlot linkedSlot, final CargoModel cargoModel) {
+		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+		newLoad.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
+		newLoad.setPriceExpression("0");
+		newLoad.setMinQuantity(linkedSlot.getMinQuantity());
+		newLoad.setMaxQuantity(linkedSlot.getMaxQuantity());
+		newLoad.setPort(linkedSlot.getPort());
+		newLoad.setWindowStart(linkedSlot.getWindowStart());
+		newLoad.setTransferFrom(linkedSlot);
+		
+		newLoad.setName(linkedSlot.getName() + "-transfer");
+		
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoad));
+		
+		return newLoad;				
+	}
+	
 	public LoadSlot createNewLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase) {
 
 		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);

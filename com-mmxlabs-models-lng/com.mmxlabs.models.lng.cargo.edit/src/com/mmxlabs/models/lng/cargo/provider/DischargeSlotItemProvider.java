@@ -60,6 +60,7 @@ public class DischargeSlotItemProvider
 
 			addFOBSalePropertyDescriptor(object);
 			addPurchaseDeliveryTypePropertyDescriptor(object);
+			addTransferToPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -105,6 +106,29 @@ public class DischargeSlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Transfer To feature.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTransferToPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DischargeSlot_transferTo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DischargeSlot_transferTo_feature", "_UI_DischargeSlot_type"),
+				 CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
