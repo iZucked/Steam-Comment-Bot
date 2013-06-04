@@ -245,6 +245,13 @@ public class CargoEditingCommands {
 		Cargo cargo = loadSlot.getCargo();
 		if (cargo != null) {
 
+			// Clear existing discharge slots
+			for (Slot slot : cargo.getSlots()) {
+				if (slot instanceof DischargeSlot) {
+					DischargeSlot dischargeSlot2 = (DischargeSlot) slot;
+					setCommands.add(SetCommand.create(editingDomain, dischargeSlot2, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+				}
+			}
 			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 
 			// Optional market slots can be removed.
