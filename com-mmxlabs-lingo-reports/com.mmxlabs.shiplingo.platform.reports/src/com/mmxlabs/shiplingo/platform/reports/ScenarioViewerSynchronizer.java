@@ -236,11 +236,13 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 		// Only react to changes involving the ScheduleModel
 		final CommandStack commandStack = (CommandStack) event.getSource();
 		final Command mostRecentCommand = commandStack.getMostRecentCommand();
-		final Collection<?> result = mostRecentCommand.getResult();
-		for (final Object o : result) {
-			if (o instanceof ScheduleModel || o instanceof Schedule) {
-				refreshViewer();
-				return;
+		if (mostRecentCommand != null) {
+			final Collection<?> result = mostRecentCommand.getResult();
+			for (final Object o : result) {
+				if (o instanceof ScheduleModel || o instanceof Schedule) {
+					refreshViewer();
+					return;
+				}
 			}
 		}
 	}
