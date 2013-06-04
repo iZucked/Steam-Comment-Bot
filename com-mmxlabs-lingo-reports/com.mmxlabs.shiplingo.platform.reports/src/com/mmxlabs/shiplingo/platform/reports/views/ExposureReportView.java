@@ -83,7 +83,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					result.add(new ColumnManager<IndexExposureData>(String.format("%d-%02d", date.getYear(), date.getMonth())) {
 						public String getColumnText(IndexExposureData data) {
 							double result = data.exposures.containsKey(date) ? data.exposures.get(date) : 0;
-							return Double.toString(result);
+							return String.format("%,.01f", result);
 						}
 
 						public int compare(IndexExposureData o1, IndexExposureData o2) {
