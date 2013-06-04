@@ -125,18 +125,29 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		}
 		super.setEditorWrapper(wrapper);
 	}
-	
+
 	@Override
 	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
 			if (value instanceof Slot) {
 				if (value instanceof LoadSlot) {
-					g2.setText("Load");
+					final LoadSlot loadSlot = (LoadSlot) value;
+					if (loadSlot.getTransferFrom() != null) {
+						g2.setText("STS: Load");
+					} else {
+						g2.setText("Load");
+					}
 				} else if (value instanceof DischargeSlot) {
-					g2.setText("Discharge");
+					final DischargeSlot dischargeSlot = (DischargeSlot) value;
+					if (dischargeSlot.getTransferTo() != null) {
+						g2.setText("STS: Discharge");
+					} else {
+						g2.setText("Discharge");
+
+					}
 				} else {
-					String groupName = EditorUtils.unmangle(value.eClass().getName());
+					final String groupName = EditorUtils.unmangle(value.eClass().getName());
 					g2.setText(groupName);
 				}
 			} else {
