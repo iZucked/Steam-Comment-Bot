@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -46,7 +47,8 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 
 				Type prevSlotType = null;
 				Slot prevSlot = null;
-				for (final Slot slot : cargo.getSortedSlots()) {
+				EList<Slot> sortedSlots = cargo.getSortedSlots();
+				for (final Slot slot : sortedSlots) {
 					final Type slotType;
 					if (slot instanceof LoadSlot) {
 						slotType = Type.Load;
