@@ -317,6 +317,8 @@ public class HorizontalKPIReportView extends ViewPart {
 
 	@Override
 	public void dispose() {
+		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
+		viewerSynchronizer = null;
 
 		getSite().getPage().removePartListener(partListener);
 		super.dispose();
