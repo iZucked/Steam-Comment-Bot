@@ -7,6 +7,7 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ITableColorProvider;
@@ -21,13 +22,19 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIContentProvider.RowData;
@@ -43,7 +50,8 @@ public class HorizontalKPIReportView extends ViewPart {
 
 	private HorizontalKPIContentProvider contentProvider;
 
-	private IEditorPart activeEditor = null;
+	// private IEditorPart activeEditor = null;
+	private ScheduleModel scheduleModel;
 
 	private IPartListener partListener;
 
@@ -125,7 +133,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		}
 
 		@Override
-		public Color getForeground(Object element, int columnIndex) {
+		public Color getForeground(final Object element, final int columnIndex) {
 
 			if (element instanceof RowData) {
 				int color = SWT.COLOR_DARK_GRAY;
@@ -149,7 +157,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		}
 
 		@Override
-		public Color getBackground(Object element, int columnIndex) {
+		public Color getBackground(final Object element, final int columnIndex) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -201,13 +209,50 @@ public class HorizontalKPIReportView extends ViewPart {
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), ID);
 
+		partListener = new IPartListener() {
+
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partClosed(final IWorkbenchPart part) {
+
+			}
+
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
+				if (part instanceof IEditorPart) {
+					// Active editor changed
+					activeEditorChange((IEditorPart) part);
+				}
+				viewer.refresh();
+			}
+
+			@Override
+			public void partActivated(final IWorkbenchPart part) {
+				if (part instanceof IEditorPart) {
+					// Active editor changed
+					activeEditorChange((IEditorPart) part);
+				}
+				viewer.refresh();
+			}
+		};
+		getSite().getPage().addPartListener(partListener);
+		// Set initial active editor
+		activeEditorChange(getSite().getPage().getActiveEditor());
+
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			private boolean hasPin = false;
-			private int numberOfSchedules;
+			// private boolean hasPin = false;
+			// private int numberOfSchedules;
 
 			@Override
 			public void beginCollecting() {
-				numberOfSchedules = 0;
+				// numberOfSchedules = 0;
 			}
 
 			@Override
@@ -217,50 +262,15 @@ public class HorizontalKPIReportView extends ViewPart {
 
 			@Override
 			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
-				++numberOfSchedules;
-				return Collections.singleton(schedule);
+
+				if (pinned || (scheduleModel != null && schedule == scheduleModel.getSchedule())) {
+					// ++numberOfSchedules;
+					return Collections.singleton(schedule);
+				} else {
+					return Collections.emptySet();
+				}
 			}
 		});
-
-		partListener = new IPartListener() {
-
-			@Override
-			public void partOpened(IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partDeactivated(IWorkbenchPart part) {
-			}
-
-			@Override
-			public void partClosed(IWorkbenchPart part) {
-				if (part == activeEditor) {
-					activeEditor = null;
-					viewer.setInput(null);
-				}
-
-			}
-
-			@Override
-			public void partBroughtToTop(IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partActivated(IWorkbenchPart part) {
-				if (part instanceof IEditorPart) {
-					// Active editor changed
-					activeEditor = (IEditorPart) part;
-					viewer.setInput(activeEditor.getEditorInput());
-				}
-			}
-		};
-		getSite().getPage().addPartListener(partListener);
-		IEditorPart aEditor = getSite().getPage().getActiveEditor();
-		if (aEditor != null) {
-			viewer.setInput(aEditor.getEditorInput());
-		}
 	}
 
 	/**
@@ -283,38 +293,6 @@ public class HorizontalKPIReportView extends ViewPart {
 		});
 	}
 
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
-	}
-
-	// private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
-	// if (showDeltaColumn) {
-	// if (delta == null) {
-	// delta = new GridViewerColumn(viewer, SWT.NONE);
-	// delta.getColumn().setText("Change");
-	// delta.getColumn().pack();
-	// // addSortSelectionListener(delta.getColumn(), 4);
-	// viewer.setLabelProvider(viewer.getLabelProvider());
-	// }
-	// } else {
-	// if (delta != null) {
-	// delta.getColumn().dispose();
-	// delta = null;
-	// }
-	// }
-	//
-	// scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > 1);
-	// }
-	//
-
 	@Override
 	public void dispose() {
 		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
@@ -322,6 +300,29 @@ public class HorizontalKPIReportView extends ViewPart {
 
 		getSite().getPage().removePartListener(partListener);
 		super.dispose();
+	}
+
+	private void activeEditorChange(final IEditorPart activeEditor) {
+		ScheduleModel scheduleModel = null;
+		if (activeEditor != null) {
+			final IEditorInput editorInput = activeEditor.getEditorInput();
+			if (editorInput instanceof IScenarioServiceEditorInput) {
+				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) editorInput;
+				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
+				if (scenarioInstance != null) {
+					final EObject instance = scenarioInstance.getInstance();
+					if (instance instanceof LNGScenarioModel) {
+						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+						final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
+						if (portfolioModel != null) {
+							scheduleModel = portfolioModel.getScheduleModel();
+						}
+					}
+				}
+			}
+		}
+		// this.activeEditor = activeEditor;
+		this.scheduleModel = scheduleModel;
 	}
 
 }
