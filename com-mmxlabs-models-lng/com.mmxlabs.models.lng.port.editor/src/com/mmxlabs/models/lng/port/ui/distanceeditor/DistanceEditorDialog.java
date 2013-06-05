@@ -8,6 +8,7 @@ import java.lang.ref.WeakReference;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.Viewer;
@@ -61,6 +62,8 @@ public class DistanceEditorDialog extends Dialog {
 	private static WeakReference<PortModel> currentPortModel;
 
 	private static WeakReference<Route> currentDistanceModel;
+
+	private static WeakReference<EditingDomain> currentEditingDomain;
 
 	public static Route getCurrentDistanceModel() {
 		return currentDistanceModel.get();
@@ -281,6 +284,7 @@ public class DistanceEditorDialog extends Dialog {
 	public int open(final IWorkbenchSite site, final IScenarioEditingLocation iScenarioEditingLocation, final Route dm) {
 		iScenarioEditingLocation.getReferenceValueProviderCache();
 		this.editingDomain = iScenarioEditingLocation.getEditingDomain();
+		currentEditingDomain = new WeakReference<EditingDomain>(editingDomain);
 		this.distanceModel = EcoreUtil.copy(dm);
 		currentDistanceModel = new WeakReference<Route>(distanceModel);
 		this.rootObject = (LNGScenarioModel) iScenarioEditingLocation.getRootObject();
@@ -295,5 +299,15 @@ public class DistanceEditorDialog extends Dialog {
 
 	public static PortModel getCurrentPortModel() {
 		return currentPortModel.get();
+	}
+
+	/**
+	 * Return the current {@link EditingDomain} or null if not available.
+	 * 
+	 * @since 4.0
+	 */
+	@Nullable
+	public static EditingDomain getEditingDomain() {
+		return currentEditingDomain.get();
 	}
 }
