@@ -155,7 +155,6 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/lng/transformer/com.mmxlabs.models.lng.transformer.p2/4.0.0-SNAPSHOT/com.mmxlabs.models.lng.transformer.p2-4.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.platform.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.shiplingo.platform.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.shiplingo.platform.feature.source.feature.group" version="0.0.0"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/shiplingo/platform/com.mmxlabs.shiplingo.platform.p2/4.0.0-SNAPSHOT/com.mmxlabs.shiplingo.platform.p2-4.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
