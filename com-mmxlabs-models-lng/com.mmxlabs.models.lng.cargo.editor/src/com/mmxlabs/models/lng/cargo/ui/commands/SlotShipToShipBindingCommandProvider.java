@@ -28,6 +28,7 @@ public class SlotShipToShipBindingCommandProvider extends SynchronisedFeatureCom
 		HashSet<EStructuralFeature> result = new HashSet<EStructuralFeature>();
 		result.add(CargoPackage.Literals.SLOT__DURATION);
 		result.add(CargoPackage.Literals.SLOT__WINDOW_START);
+		result.add(CargoPackage.Literals.SLOT__WINDOW_SIZE);
 		result.add(CargoPackage.Literals.SLOT__WINDOW_START_TIME);
 		result.add(CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
 		result.add(CargoPackage.Literals.SLOT__PORT);
