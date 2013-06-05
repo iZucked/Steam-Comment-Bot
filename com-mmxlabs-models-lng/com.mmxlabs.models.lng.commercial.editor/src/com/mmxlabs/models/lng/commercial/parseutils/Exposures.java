@@ -48,7 +48,7 @@ public class Exposures {
 		 * @param key
 		 * @param value
 		 */
-		public void plusEquals(T key, Double value) {
+		public void plusEquals(final T key, final Double value) {
 			if (containsKey(key)) {
 				put(key, get(key) + value);
 			} else {
@@ -65,17 +65,17 @@ public class Exposures {
 	 */
 	// TODO: move this out of here into a top-level class of its own somewhere useful.
 	public static class MonthYear implements Comparable<MonthYear> {
-		private int month;
-		private int year;
+		private final int month;
+		private final int year;
 
-		public MonthYear(Date date) {
-			Calendar calendar = Calendar.getInstance();
+		public MonthYear(final Date date) {
+			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(date);
 			this.month = calendar.get(Calendar.MONTH) + 1;
 			this.year = calendar.get(Calendar.YEAR);
 		}
 
-		public MonthYear(int month, int year) {
+		public MonthYear(final int month, final int year) {
 			this.month = month;
 			this.year = year;
 
@@ -88,10 +88,10 @@ public class Exposures {
 		 *            The total number of months to add to this MonthYear
 		 * @return A new MonthYear which is the specified number of months later.
 		 */
-		public MonthYear addMonths(int months) {
-			int convenienceMonth = month - 1 + months;
-			int newYear = year + convenienceMonth / 12;
-			int newMonth = 1 + convenienceMonth % 12;
+		public MonthYear addMonths(final int months) {
+			final int convenienceMonth = month - 1 + months;
+			final int newYear = year + convenienceMonth / 12;
+			final int newMonth = 1 + convenienceMonth % 12;
 			return new MonthYear(newMonth, newYear);
 		}
 
@@ -103,19 +103,19 @@ public class Exposures {
 			return year;
 		}
 
-		public boolean after(MonthYear my) {
+		public boolean after(final MonthYear my) {
 			return compareTo(my) > 0;
 		}
 
-		public boolean before(MonthYear my) {
+		public boolean before(final MonthYear my) {
 			return compareTo(my) < 0;
 		}
 
 		@Override
 		// need to override equals and hashCode to provide sensible hashing behaviour
-		public boolean equals(Object object) {
+		public boolean equals(final Object object) {
 			if (object instanceof MonthYear) {
-				MonthYear my = (MonthYear) object;
+				final MonthYear my = (MonthYear) object;
 				return (month == my.getMonth()) && (year == my.getYear());
 			}
 			return false;
@@ -124,12 +124,12 @@ public class Exposures {
 		@Override
 		// need to override equals and hashCode to provide sensible hashing behaviour
 		public int hashCode() {
-			int result = year * 100 + month;
+			final int result = year * 100 + month;
 			return result;
 		}
 
 		@Override
-		public int compareTo(MonthYear my) {
+		public int compareTo(final MonthYear my) {
 			return (month + year * 100) - (my.getMonth() + my.getYear() * 100);
 		}
 	}
@@ -145,7 +145,7 @@ public class Exposures {
 		public final String token;
 		public final Node[] children;
 
-		public Node(String token, Node[] children) {
+		public Node(final String token, final Node[] children) {
 			this.token = token;
 			this.children = children;
 		}
@@ -157,11 +157,11 @@ public class Exposures {
 	static class NodeExpression implements IExpression<Node> {
 		Node node;
 
-		public NodeExpression(Node node) {
+		public NodeExpression(final Node node) {
 			this.node = node;
 		}
 
-		public NodeExpression(String token, Node[] children) {
+		public NodeExpression(final String token, final Node[] children) {
 			this.node = new Node(token, children);
 		}
 
@@ -181,13 +181,13 @@ public class Exposures {
 			setInfixOperatorFactory(new IInfixOperatorFactory<Node>() {
 
 				@Override
-				public IExpression<Node> createInfixOperator(char operator, IExpression<Node> lhs, IExpression<Node> rhs) {
-					Node[] children = { lhs.evaluate(), rhs.evaluate() };
+				public IExpression<Node> createInfixOperator(final char operator, final IExpression<Node> lhs, final IExpression<Node> rhs) {
+					final Node[] children = { lhs.evaluate(), rhs.evaluate() };
 					return new NodeExpression("" + operator, children);
 				}
 
 				@Override
-				public boolean isOperatorHigherPriority(char a, char b) {
+				public boolean isOperatorHigherPriority(final char a, final char b) {
 					if (a == b)
 						return false;
 					switch (a) {
@@ -204,7 +204,7 @@ public class Exposures {
 				}
 
 				@Override
-				public boolean isInfixOperator(char operator) {
+				public boolean isInfixOperator(final char operator) {
 					return operator == '*' || operator == '/' || operator == '+' || operator == '-';
 				}
 
@@ -213,15 +213,15 @@ public class Exposures {
 			setTermFactory(new ITermFactory<Node>() {
 
 				@Override
-				public IExpression<Node> createTerm(String term) {
+				public IExpression<Node> createTerm(final String term) {
 					return new NodeExpression(term, new Node[0]);
 				}
 			});
 
 			setFunctionFactory(new IFunctionFactory<Node>() {
 				@Override
-				public IExpression<Node> createFunction(String name, final List<IExpression<Node>> arguments) {
-					Node[] children = new Node[arguments.size()];
+				public IExpression<Node> createFunction(final String name, final List<IExpression<Node>> arguments) {
+					final Node[] children = new Node[arguments.size()];
 
 					for (int i = 0; i < arguments.size(); i++) {
 						children[i] = arguments.get(i).evaluate();
@@ -233,12 +233,12 @@ public class Exposures {
 
 			setPrefixOperatorFactory(new IPrefixOperatorFactory<Node>() {
 				@Override
-				public boolean isPrefixOperator(char operator) {
+				public boolean isPrefixOperator(final char operator) {
 					return false;
 				}
 
 				@Override
-				public IExpression<Node> createPrefixOperator(char operator, IExpression<Node> argument) {
+				public IExpression<Node> createPrefixOperator(final char operator, final IExpression<Node> argument) {
 					throw new RuntimeException("Unknown prefix op " + operator);
 				}
 			});
@@ -247,8 +247,8 @@ public class Exposures {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static double getExposureCoefficient(Node node, Index index) {
-		String indexToken = index.getName();
+	private static double getExposureCoefficient(final Node node, final Index index) {
+		final String indexToken = index.getName();
 
 		if (node.token.equals("+")) {
 			return getExposureCoefficient(node.children[0], index) + getExposureCoefficient(node.children[1], index);
@@ -278,12 +278,12 @@ public class Exposures {
 
 	}
 
-	public static double getExposureCoefficient(String priceExpression, Index<?> index) {
-		RawTreeParser parser = new RawTreeParser();
+	public static double getExposureCoefficient(final String priceExpression, final Index<?> index) {
+		final RawTreeParser parser = new RawTreeParser();
 		try {
-			IExpression<Node> parsed = parser.parse(priceExpression);
+			final IExpression<Node> parsed = parser.parse(priceExpression);
 			return getExposureCoefficient(parsed.evaluate(), index);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return 0;
 		}
 	}
@@ -295,19 +295,19 @@ public class Exposures {
 	 * @param index
 	 * @return
 	 */
-	public static double getExposureCoefficient(Slot slot, Index<?> index) {
+	public static double getExposureCoefficient(final Slot slot, final Index<?> index) {
 		String priceExpression = null;
 		if (slot.isSetPriceExpression()) {
 			priceExpression = slot.getPriceExpression();
 		} else {
 			LNGPriceCalculatorParameters parameters = null;
-			Contract contract = slot.getContract();
+			final Contract contract = slot.getContract();
 			if (contract != null) {
 				parameters = contract.getPriceInfo();
 			}
 			// do a case switch on price parameters
 			if (parameters instanceof ExpressionPriceParameters) {
-				ExpressionPriceParameters pec = (ExpressionPriceParameters) parameters;
+				final ExpressionPriceParameters pec = (ExpressionPriceParameters) parameters;
 				priceExpression = pec.getPriceExpression();
 			}
 		}
@@ -327,14 +327,14 @@ public class Exposures {
 	 * @param index
 	 * @return
 	 */
-	public static Map<MonthYear, Double> getExposuresByMonth(Schedule schedule, Index<?> index) {
-		CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();
+	public static Map<MonthYear, Double> getExposuresByMonth(final Schedule schedule, final Index<?> index) {
+		final CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();
 
-		for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-			for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-				int volume = slotAllocation.getVolumeTransferred();
-				Slot slot = slotAllocation.getSlot();
-				double exposureCoefficient = getExposureCoefficient(slot, index);
+		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				final int volume = slotAllocation.getVolumeTransferred();
+				final Slot slot = slotAllocation.getSlot();
+				final double exposureCoefficient = getExposureCoefficient(slot, index);
 				double exposure = exposureCoefficient * volume;
 
 				if (slot instanceof LoadSlot) {
@@ -346,7 +346,7 @@ public class Exposures {
 					// Unknown slot type!
 					throw new IllegalStateException("Unsupported slot type");
 				}
-				Date date = slotAllocation.getSlotVisit().getStart();
+				final Date date = slotAllocation.getSlotVisit().getStart();
 				result.plusEquals(new MonthYear(date), exposure);
 			}
 		}
