@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -46,7 +47,7 @@ public class ColourSchemeUtil {
 	static final RGB VesselEvent_Green = new RGB(0, 225, 150);
 	static final RGB VesselEvent_Green2 = new RGB(80, 180, 50);
 	static final RGB VesselEvent_Green3 = new RGB(50, 200, 80);
-	// static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
+//	static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
 	static final RGB VesselEvent_Brown = new RGB(77, 88, 50);
 
 	static final RGB Warning_Yellow = new RGB(255, 255, 25);
@@ -151,6 +152,14 @@ public class ColourSchemeUtil {
 		final int travelTime = Math.round(distance / IdleRisk_speed);
 
 		return (travelTime / totalTime > IdleRisk_threshold);
+	}
+	
+	public static boolean isSpot(final SlotVisit visit) {
+		Slot slot = visit.getSlotAllocation().getSlot();
+		if (slot instanceof SpotSlot) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isFOBSaleCargo(final SlotVisit visit) {
