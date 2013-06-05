@@ -365,7 +365,109 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	}
 	
 	
+	/**
+	 * Refines the start and end times of a sequence, making sure that there is enough travel time between 
+	 * each window.
+	 * 
+	 * @param startTimes
+	 * @param endTimes
+	 */
+	protected final void refineWindows(final int seqIndex) {
+		final int [] startTimes = windowStartTime[seqIndex];
+		final int [] endTimes = windowEndTime[seqIndex];
+		final int [] minTravelTimes = minTimeToNextElement[seqIndex];
+		final boolean [] useRawTimeWindow = useTimeWindow[seqIndex];
+		// time windows after the first one have their start time clipped, so
+		// they don't start any earlier
+		// than you could get to them without being late.
+		for (int i = 1; i < startTimes.length; i++) {
+			if (!useRawTimeWindow[i]) {
+				startTimes[i] = Math.max(startTimes[i], startTimes[i - 1] + minTravelTimes[i - 1]);
+				endTimes[i] = Math.max(endTimes[i], startTimes[i]);
+			}
+		}
+		
+		// now perform reverse-pass to trim any overly late end times
+		// (that is end times which would make us late at the next element)
+		for (int i = startTimes.length - 2; i >= 0; i--) {
+			// trim the end of this time window so that the next element is
+			// reachable without lateness
+			// (but never so that the end time is before the start time)
+			if (!useRawTimeWindow[i + 1]) {
+				endTimes[i] = Math.max(startTimes[i], Math.min(endTimes[i], endTimes[i + 1] - minTravelTimes[i]));
+			}
+		}
+	}
 	
+	/**
+	 * Refines start and end times to make sure that ship to ship transfers are respected.
+	 * @param bindings A linked list of integers indicating which sequence elements are bound to which other sequence elements. This should have the form of <i1, j1, i2, j2> quadruplets
+	 * giving the indices of the sequence, and the position within the sequence, for the discharge slots and bound load slots respectively. This list is consumed by the method. 
+	 * 
+	 * Note: the horrible semantics of this method are for efficiency reasons and are constrained by the data representations used by other methods in this class. 
+	 */
+	protected final void imposeShipToShipConstraints() {
+		boolean recalculateDischarge = false;
+		boolean recalculateLoad = false;
+		
+		int max_iterations = 100;
+		
+		/*
+		 * We need to keep recalculating the windows until nothing gets modified.
+		 */
+		do {
+			for (int i = 0; i < bindings.size(); i+=4) {
+				final int discharge_seq = bindings.get(i);
+				final int discharge_index = bindings.get(i+1);
+				final int load_seq = bindings.get(i+2);
+				final int load_index = bindings.get(i+3);
+				
+				recalculateDischarge = false;
+				recalculateLoad = false;
+				
+				// sequence elements bound by ship-to-ship transfers are effectively the same slot, so window start and end times have to be constrained conservatively
+				int wst = Math.max(windowStartTime[discharge_seq][discharge_index], windowStartTime[load_seq][load_index]);
+				int wet = Math.min(windowEndTime[discharge_seq][discharge_index], windowEndTime[load_seq][load_index]);
+				
+				// If there is no overlap in the time windows, we need to use the later time window
+				wet = Math.max(wet, wst);
+
+				if (windowStartTime[discharge_seq][discharge_index] != wst) {
+					windowStartTime[discharge_seq][discharge_index] = wst;
+					recalculateDischarge = true;
+				}
+
+				if (windowEndTime[discharge_seq][discharge_index] != wet) {
+					windowEndTime[discharge_seq][discharge_index] = wet;
+					recalculateDischarge = true;
+				}
+
+				if (windowStartTime[load_seq][load_index] != wst) {
+					windowStartTime[load_seq][load_index] = wst;
+					recalculateLoad = true;
+				}
+
+				if (windowEndTime[load_seq][load_index] != wet) {
+					windowEndTime[load_seq][load_index] = wet;
+					recalculateLoad = true;
+				}
+				
+				// any sequence which we changed the time on, we have to recalculate
+				if (recalculateDischarge) {
+					refineWindows(discharge_seq);
+				}
+				if (recalculateLoad) {
+					refineWindows(load_seq);
+				}
+			}
+			max_iterations--;
+		} while ((recalculateDischarge || recalculateLoad) && max_iterations > 0);
+		
+		if (max_iterations <=0) {
+			System.err.println("Something went wrong in the re-windowing of ship to ship transfers");
+		}
+	}
+
 	/**
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
@@ -499,7 +601,8 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 						// Cargo shorts - pretend this is a start element
 						windowStartTime[index] = window.getStart();
 					} else {
-						windowStartTime[index] = Math.min(windowEndTime[index], Math.max(window.getStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]));
+						windowStartTime[index] = Math.max(window.getStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
+						windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index]);
 					}
 				}
 			}
@@ -536,30 +639,6 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		// }
 		//
 		// separationPoints.add(arrivalTimes.length - 1);
-	}
-
-	/**
-	 * Refines start and end times to make sure that ship to ship transfers are respected.
-	 * @param bindings A linked list of integers indicating which sequence elements are bound to which other sequence elements. This should have the form of <i1, j1, i2, j2> quadruplets
-	 * giving the indices of the sequence, and the position within the sequence, for the discharge slots and bound load slots respectively. This list is consumed by the method. 
-	 * 
-	 * Note: the horrible semantics of this method are for efficiency reasons and are constrained by the data representations used by other methods in this class. 
-	 */
-	protected final void imposeShipToShipConstraints() {
-		for (int i = 0; i < bindings.size(); i+=4) {
-			final int discharge_seq = bindings.get(i);
-			final int discharge_index = bindings.get(i+1);
-			final int load_seq = bindings.get(i+2);
-			final int load_index = bindings.get(i+3);
-			
-			// sequence elements bound by ship-to-ship transfers are effectively the same slot, so window start and end times have to be constrained conservatively
-			final int wst = Math.max(windowStartTime[discharge_seq][discharge_index], windowStartTime[load_seq][load_index]);
-			final int wet = Math.min(windowEndTime[discharge_seq][discharge_index], windowEndTime[load_seq][load_index]);
-			
-			windowStartTime[discharge_seq][discharge_index] = windowStartTime[load_seq][load_index] = wst; 
-			windowEndTime[discharge_seq][discharge_index] = windowEndTime[load_seq][load_index] = wet; 
-			
-		}
 	}
 
 	/**
