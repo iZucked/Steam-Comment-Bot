@@ -140,6 +140,9 @@ public class LiveEvaluator extends MMXAdapterImpl {
 											return null;
 										}
 										final LNGScenarioModel root = (LNGScenarioModel) instance.getScenarioService().load(instance);
+										if (root == null) {
+											return null;
+										}
 										final ScheduleModel subModel = root.getPortfolioModel().getScheduleModel();
 										if (!subModel.isDirty()) {
 											return null;

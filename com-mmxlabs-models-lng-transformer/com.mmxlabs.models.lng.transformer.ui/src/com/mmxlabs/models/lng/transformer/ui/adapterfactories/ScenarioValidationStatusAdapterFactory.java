@@ -57,7 +57,7 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 
 		final ValidationHelper helper = new ValidationHelper();
 
-		return helper.runValidation(validator, new DefaultExtraValidationContext(rootObject), Collections.singleton(rootObject));
+		return helper.runValidation(validator, new DefaultExtraValidationContext(rootObject, false), Collections.singleton(rootObject));
 	}
 
 	@Override

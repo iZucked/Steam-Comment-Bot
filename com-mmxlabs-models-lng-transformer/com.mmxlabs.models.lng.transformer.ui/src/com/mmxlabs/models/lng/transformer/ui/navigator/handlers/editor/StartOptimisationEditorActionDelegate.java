@@ -229,7 +229,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 		});
 
 		final ValidationHelper helper = new ValidationHelper();
-		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root);
+		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
 
 		final IStatus status = helper.runValidation(validator, extraContext, Collections.singleton(root));
 
