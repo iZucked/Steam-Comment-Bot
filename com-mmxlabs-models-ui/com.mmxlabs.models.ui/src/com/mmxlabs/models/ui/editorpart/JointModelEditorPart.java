@@ -489,7 +489,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		site.setSelectionProvider(this);
 
 		validationContextStack.clear();
-		validationContextStack.push(new DefaultExtraValidationContext(getRootObject()));
+		validationContextStack.push(new DefaultExtraValidationContext(getRootObject(), false));
 
 		setPinMode();
 		setLocked(!editorLock.isAvailable());

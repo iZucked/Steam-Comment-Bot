@@ -36,13 +36,23 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	private HashMap<EObject, EObject> replacements = new HashMap<EObject, EObject>();
 	private HashMap<EObject, EObject> originals = new HashMap<EObject, EObject>();
 
-	public DefaultExtraValidationContext(final MMXRootObject rootObject) {
+	private final boolean validatingClone;
+
+	/**
+	 * @since 4.0
+	 */
+	public DefaultExtraValidationContext(final MMXRootObject rootObject, boolean validatingClone) {
 		this.rootObject = rootObject;
+		this.validatingClone = validatingClone;
 	}
 
-	public DefaultExtraValidationContext(final IExtraValidationContext outerContext) {
+	/**
+	 * @since 4.0
+	 */
+	public DefaultExtraValidationContext(final IExtraValidationContext outerContext, boolean validatingClone) {
 		this.outerContext = outerContext;
 		this.rootObject = outerContext.getRootObject();
+		this.validatingClone = validatingClone;
 	}
 
 	@Override
@@ -167,4 +177,13 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 			return object;
 		}
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	@Override
+	public boolean isValidatingClone() {
+		return validatingClone;
+	}
+
 }

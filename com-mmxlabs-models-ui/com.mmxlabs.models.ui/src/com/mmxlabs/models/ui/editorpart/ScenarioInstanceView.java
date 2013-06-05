@@ -182,7 +182,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			getRootObject();
 
 			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
-			extraValidationContext.push(new DefaultExtraValidationContext(getRootObject()));
+			extraValidationContext.push(new DefaultExtraValidationContext(getRootObject(), false));
 		} else {
 			scenarioInstanceStatusProvider = null;
 			valueProviderCache = null;

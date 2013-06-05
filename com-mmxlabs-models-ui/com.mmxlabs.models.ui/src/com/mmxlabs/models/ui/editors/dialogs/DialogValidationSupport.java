@@ -42,7 +42,7 @@ public class DialogValidationSupport {
 	private Collection<EObject> validationTargets;
 
 	public DialogValidationSupport(final IExtraValidationContext extraValidationContext) {
-		validationContext = new DefaultExtraValidationContext(extraValidationContext);
+		validationContext = new DefaultExtraValidationContext(extraValidationContext, true);
 
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 	}

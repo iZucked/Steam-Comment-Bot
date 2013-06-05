@@ -40,7 +40,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		final Object instance = scenarioInstance.getInstance();
 		if (instance instanceof MMXRootObject) {
 			final MMXRootObject rootObject = (MMXRootObject) instance;
-			extraContext = new DefaultExtraValidationContext(rootObject);
+			extraContext = new DefaultExtraValidationContext(rootObject, false);
 			rootObject.eAdapters().add(ScenarioInstanceValidator.this);
 		}
 	}
