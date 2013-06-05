@@ -35,7 +35,7 @@ public class ColourSchemeUtil {
 //	static final RGB Light_Gas_Blue = new RGB(150,255,255);
 	static final RGB Light_Gas_Blue = new RGB(150,200,255);
 	static final RGB Green = new RGB(0,180,50);
-	static final RGB Light_Green = new RGB(40, 255, 50);
+	static final RGB Light_Green = new RGB(100, 255, 100);
 	static final RGB Teal = new RGB(0, 120, 120);
 
 	static final RGB Slot_White = new RGB(255,255,255);
@@ -47,7 +47,8 @@ public class ColourSchemeUtil {
 	static final RGB VesselEvent_Green2 = new RGB(80, 180, 50);
 	static final RGB VesselEvent_Green3 = new RGB(50, 200, 80);
 //	static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
-	static final RGB VesselEvent_Brown = new RGB(77, 88, 50);
+//	static final RGB VesselEvent_Brown = new RGB(77, 88, 50);
+	static final RGB VesselEvent_Brown = new RGB(150, 150, 80);
 		
 	static final RGB Warning_Yellow = new RGB(255,255,25);
 	static final RGB Warning_Orange = new RGB(255,120,25);
