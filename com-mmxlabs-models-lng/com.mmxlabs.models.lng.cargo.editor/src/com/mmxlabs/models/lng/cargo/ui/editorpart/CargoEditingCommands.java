@@ -55,7 +55,7 @@ public class CargoEditingCommands {
 	/**
 	 * @since 4.0
 	 */
-	public CargoEditingCommands(final EditingDomain editingDomain, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
+	public CargoEditingCommands(final EditingDomain editingDomain, final LNGScenarioModel rootObject, final LNGPortfolioModel portfolioModel) {
 		this.editingDomain = editingDomain;
 		this.rootObject = rootObject;
 		this.portfolioModel = portfolioModel;
@@ -245,6 +245,13 @@ public class CargoEditingCommands {
 		Cargo cargo = loadSlot.getCargo();
 		if (cargo != null) {
 
+			// Clear existing discharge slots
+			for (final Slot slot : cargo.getSlots()) {
+				if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot2 = (DischargeSlot) slot;
+					setCommands.add(SetCommand.create(editingDomain, dischargeSlot2, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
+				}
+			}
 			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 
 			// Optional market slots can be removed.

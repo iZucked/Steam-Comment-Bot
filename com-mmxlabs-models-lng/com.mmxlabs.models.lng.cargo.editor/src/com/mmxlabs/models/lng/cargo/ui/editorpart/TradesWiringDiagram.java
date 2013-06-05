@@ -371,7 +371,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			// check if the user is trying to pair two slots which are a ship-to-ship transfer
 			// (i.e. they are effectively the same slot!)
-			boolean shipToShipLink = (toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot) || (toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot);
+			boolean shipToShipLink = toRowData != null && fromRowData != null && ((toRowData.loadSlot != null && fromRowData.dischargeSlot != null && toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot) || (toRowData.dischargeSlot != null && fromRowData.loadSlot != null && toRowData.dischargeSlot.getTransferTo() == fromRowData.loadSlot));
 			
 			if (!shipToShipLink) {
 				// now find column

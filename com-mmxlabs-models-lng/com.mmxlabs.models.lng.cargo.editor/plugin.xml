@@ -125,6 +125,18 @@
           id="com.mmxlabs.models.lng.cargo.editor.cargoCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.cargo.LoadSlot"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.LoadSlotCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.LoadSlotCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.cargo.DischargeSlot"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.DischargeSlotCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.DischargeSlotCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">

@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -41,15 +42,22 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) object;
 			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 
+				// String builder to store cargo type
+				final StringBuilder sb = new StringBuilder();
+
 				Type prevSlotType = null;
 				Slot prevSlot = null;
-				for (final Slot slot : cargo.getSortedSlots()) {
+				EList<Slot> sortedSlots = cargo.getSortedSlots();
+				for (final Slot slot : sortedSlots) {
 					final Type slotType;
 					if (slot instanceof LoadSlot) {
 						slotType = Type.Load;
+						sb.append("L");
 					} else if (slot instanceof DischargeSlot) {
 						slotType = Type.Discharge;
+						sb.append("D");
 					} else {
+						sb.append("U");
 						// Unknown type
 						slotType = null;
 					}
@@ -73,6 +81,15 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 
 					prevSlot = slot;
 					prevSlotType = slotType;
+				}
+
+				// Examine string for valid slot combinations
+				final String cargoType = sb.toString();
+				if (!(cargoType.equals("LD") || cargoType.equals("LDD"))) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
+							+ "' - Cargo should be LD or LDD."));
+					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
+					failures.add(dsd);
 				}
 			}
 		}
