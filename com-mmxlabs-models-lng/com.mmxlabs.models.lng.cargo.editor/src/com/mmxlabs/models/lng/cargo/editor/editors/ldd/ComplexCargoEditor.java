@@ -345,7 +345,7 @@ public class ComplexCargoEditor extends Dialog {
 	@Override
 	public int open() {
 
-		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(scenarioEditingLocation.getExtraValidationContext()));
+		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(scenarioEditingLocation.getExtraValidationContext(), false));
 
 		final List<EObject> validationTargets = new ArrayList<EObject>();
 		validationTargets.add(cargo);
