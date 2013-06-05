@@ -16,7 +16,7 @@
             id="com.mmxlabs.scheduleview">
       </category>
       <view
-            name="Scheduler View"
+            name="Schedule"
             icon="icons/schedule_view.gif"
             category="com.mmxlabs.scheduleview"
             class="com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerView"
