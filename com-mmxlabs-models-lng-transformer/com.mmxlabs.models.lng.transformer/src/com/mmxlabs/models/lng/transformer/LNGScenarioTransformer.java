@@ -162,7 +162,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private Injector injector;
-	
+
 	@Inject
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
 
@@ -198,6 +198,8 @@ public class LNGScenarioTransformer {
 	private final Map<String, Slot> marketSlotsByID = new HashMap<String, Slot>();
 
 	private final EnumMap<SpotType, TreeMap<String, Collection<Slot>>> existingSpotCount = new EnumMap<SpotType, TreeMap<String, Collection<Slot>>>(SpotType.class);
+
+	private final Map<Vessel, VesselAvailability> vesselAvailabiltyMap = new HashMap<Vessel, VesselAvailability>();
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
@@ -497,7 +499,7 @@ public class LNGScenarioTransformer {
 					continue;
 				}
 
-				final AVesselSet vesselSet = assignment.getAssignment();
+				final AVesselSet<Vessel> vesselSet = assignment.getAssignment();
 				final IVessel vessel;
 				if (vesselSet instanceof VesselClass) {
 					final List<IVessel> spots = spotVesselsByClass.get(vesselSet);
@@ -509,7 +511,8 @@ public class LNGScenarioTransformer {
 					}
 
 				} else if (vesselSet instanceof Vessel) {
-					vessel = entities.getOptimiserObject(vesselSet, IVessel.class);
+					final VesselAvailability vesselAvailability = vesselAvailabiltyMap.get(vesselSet);
+					vessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
 				} else {
 					vessel = null;
 				}
@@ -711,7 +714,7 @@ public class LNGScenarioTransformer {
 
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 		final Map<Slot, IPortSlot> transferSlotMap = new HashMap<Slot, IPortSlot>();
-		
+
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
 
 			if (eCargo.getSortedSlots().get(0).getWindowStartWithSlotOrPortTime().after(latestDate)) {
@@ -749,7 +752,7 @@ public class LNGScenarioTransformer {
 
 			for (final Slot slot : eCargo.getSortedSlots()) {
 				boolean isTransfer = false;
-				
+
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					// Bind FOB/DES slots to resource
@@ -797,13 +800,13 @@ public class LNGScenarioTransformer {
 					}
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
 				}
-				
+
 				// remember any slots which were part of a ship-to-ship transfer
 				// but don't do anything with them yet, because we need to wait until all slots have been processed
 				if (isTransfer) {
 					transferSlotMap.put(slot, slotMap.get(slot));
 				}
-			}			
+			}
 
 			final ICargo cargo = builder.createCargo(slots, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
@@ -822,20 +825,19 @@ public class LNGScenarioTransformer {
 		}
 
 		// register ship-to-ship transfers with the relevant data component provider
-		for (Entry<Slot, IPortSlot> entry: transferSlotMap.entrySet()) {
+		for (final Entry<Slot, IPortSlot> entry : transferSlotMap.entrySet()) {
 			final Slot slot = entry.getKey();
 			final IPortSlot portSlot = entry.getValue();
 			Slot converse = null;
 			if (slot instanceof DischargeSlot) {
 				converse = ((DischargeSlot) slot).getTransferTo();
-			}
-			else if (slot instanceof LoadSlot) {
+			} else if (slot instanceof LoadSlot) {
 				converse = ((LoadSlot) slot).getTransferFrom();
 			}
-			
+
 			shipToShipBindingProvider.setConverseTransferElement(portSlot, transferSlotMap.get(converse));
 		}
-		
+
 		for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
 
 			// TODO: Filter on date
@@ -1712,6 +1714,8 @@ public class LNGScenarioTransformer {
 		// for (final VesselAvailability vesselAvailability : fleetModel.getScenarioFleetModel().getVesselAvailabilities()) {
 		for (final VesselAvailability vesselAvailability : sortedAvailabilities) {
 			final Vessel eV = vesselAvailability.getVessel();
+
+			vesselAvailabiltyMap.put(eV, vesselAvailability);
 
 			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, vesselAvailability.isSetStartAfter() ? vesselAvailability.getStartAfter() : null,
 					vesselAvailability.isSetStartBy() ? vesselAvailability.getStartBy() : null, SetUtils.getObjects(vesselAvailability.getStartAt()));
