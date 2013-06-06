@@ -105,7 +105,11 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			public void run() {
 				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getJointModelEditorPart().getShell(), PortEditorPane.this.getJointModelEditorPart()
 						.getDefaultCommandHandler());
-				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), PortPackage.eINSTANCE.getPortModel_PortGroups());
+				final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
+				if (rootObject instanceof LNGScenarioModel) {
+					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+					dcd.open(getJointModelEditorPart(), rootObject, lngScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups());
+				}
 			}
 		});
 
@@ -142,7 +146,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 										final Command cmd = SetCommand.create(ed, p, PortPackage.eINSTANCE.getPort_TimeZone(), tz.getID());
 										cc.append(cmd);
 									}
-								} catch (Exception e) {
+								} catch (final Exception e) {
 									// Ignore - but could provide some feeback to user?
 								}
 							}
@@ -155,8 +159,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				super.run();
 			}
 		};
-//		getMenuManager().add(tzAction);
-//		getMenuManager().update(true);
+		// getMenuManager().add(tzAction);
+		// getMenuManager().update(true);
 
 		defaultSetTitle("Ports");
 	}
