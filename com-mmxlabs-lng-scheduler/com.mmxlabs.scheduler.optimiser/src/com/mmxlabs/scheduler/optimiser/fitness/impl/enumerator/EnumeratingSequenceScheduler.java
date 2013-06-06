@@ -434,7 +434,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * 
 	 *            Note: the horrible semantics of this method are for efficiency reasons and are constrained by the data representations used by other methods in this class.
 	 */
-	protected final void imposeShipToShipConstraints() {
+	private final void imposeShipToShipConstraints() {
 		boolean recalculateDischarge = false;
 		boolean recalculateLoad = false;
 
