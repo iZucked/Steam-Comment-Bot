@@ -44,6 +44,15 @@ public class SlotInlineEditorChangedListener implements IInlineEditorExternalNot
 				editor.setEditorEnabled(!((DischargeSlot) input).isFOBSale());
 			}
 		}
+		if (notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Cargo()) {
+			if (input instanceof DischargeSlot) {
+				final DischargeSlot slot = (DischargeSlot) input;
+				editor.setEditorEnabled(!(slot.isFOBSale() && slot.getCargo() != null));
+			} else if (input instanceof LoadSlot) {
+				final LoadSlot slot = (LoadSlot) input;
+				editor.setEditorEnabled(!(slot.isDESPurchase() && slot.getCargo() != null));
+			}
+		}
 	}
 
 	@Override
@@ -51,9 +60,11 @@ public class SlotInlineEditorChangedListener implements IInlineEditorExternalNot
 		this.editor = editor;
 		this.input = object;
 		if (input instanceof LoadSlot) {
-			editor.setEditorEnabled(!((LoadSlot) input).isDESPurchase());
+			final LoadSlot slot = (LoadSlot) input;
+			editor.setEditorEnabled(!(slot.isDESPurchase() && slot.getCargo() != null));
 		} else if (input instanceof DischargeSlot) {
-			editor.setEditorEnabled(!((DischargeSlot) input).isFOBSale());
+			final DischargeSlot slot = (DischargeSlot) input;
+			editor.setEditorEnabled(!(slot.isFOBSale() && slot.getCargo() != null));
 		} else if (input instanceof Cargo) {
 			editor.setEditorEnabled(((Cargo) input).getCargoType() == CargoType.FLEET);
 		}
