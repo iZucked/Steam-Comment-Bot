@@ -5,13 +5,7 @@ syntax: regexp
 syntax: regexp
 ^.*/target$
 syntax: regexp
-^.*/\.settings$
-
-
-syntax: regexp
 ^\.project$
-
-
 .*~$
 
 syntax: regexp
