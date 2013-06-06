@@ -306,7 +306,7 @@ public class CargoEditorMenuHelper {
 				final Action action = new Action("Lock") {
 					@Override
 					public void run() {
-						final Command cmd = AssignmentEditorHelper.unlockElement(scenarioEditingLocation.getEditingDomain(), elementAssignment);
+						final Command cmd = AssignmentEditorHelper.lockElement(scenarioEditingLocation.getEditingDomain(), elementAssignment);
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
