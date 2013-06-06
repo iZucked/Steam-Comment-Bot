@@ -44,8 +44,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * A sequence scheduler which enumerates possible combinations of arrival times explicitly, rather than using the GA byte array decoding method. This should be subclassable into a random sequence
  * scheduler as well, with reduced decoding overhead
  * 
- * (C) Minimax labs inc. 2010
- * 
  * @author hinton
  * 
  */
