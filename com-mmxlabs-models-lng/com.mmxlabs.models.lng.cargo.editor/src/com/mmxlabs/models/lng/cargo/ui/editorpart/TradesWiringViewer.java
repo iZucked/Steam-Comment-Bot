@@ -405,16 +405,23 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 					mgr.removeAll();
 
-					// TODO: Simple load/discharge filter. Really need to determine when we build the columns and save into a set somewhere
-					if (loadColumns.contains(column) && rowDataItem.loadSlot != null) {
-
-						final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
-						listener.menuAboutToShow(mgr);
+					if (loadColumns.contains(column)) {
+						if (rowDataItem.loadSlot != null) {
+							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
+							listener.menuAboutToShow(mgr);
+						} else {
+							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
+							listener.menuAboutToShow(mgr);
+						}
 					}
-					if (dischargeColumns.contains(column) && rowDataItem.dischargeSlot != null) {
-
-						final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
-						listener.menuAboutToShow(mgr);
+					if (dischargeColumns.contains(column)) {
+						if (rowDataItem.dischargeSlot != null) {
+							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
+							listener.menuAboutToShow(mgr);
+						} else if (rowDataItem.loadSlot != null) {
+							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
+							listener.menuAboutToShow(mgr);
+						}
 					}
 
 					menu.setVisible(true);
