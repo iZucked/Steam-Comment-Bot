@@ -1,5 +1,5 @@
-uuid,name,otherNames,minQuantity,maxQuantity,priceInfo.uuid,priceInfo.pricePerMMBTU,entity,allowedPorts,priceInfo.kind,kind
-_g2QRlG3kEeGoB9CX9jdaHQ,HH Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd4PA,5.0,US,,FixedPriceParameters,PurchaseContract
-_g2QRlW3kEeGoB9CX9jdaHQ,NBP Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd5PA,5.0,Europe,,FixedPriceParameters,PurchaseContract
-_g2QRlm3kEeGoB9CX9jdaHQ,JCC Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd6PA,5.0,Asia,,FixedPriceParameters,PurchaseContract
-_g2QRl23kEeGoB9CX9jdaHQ,TTF Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd7PA,5.0,Europe,,FixedPriceParameters,PurchaseContract
+uuid,name,otherNames,minQuantity,maxQuantity,priceInfo.uuid,priceInfo.priceExpression,entity,allowedPorts,priceInfo.kind,kind
+_g2QRlG3kEeGoB9CX9jdaHQ,HH Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd4PA,5,US,,ExpressionPriceParameters,PurchaseContract
+_g2QRlW3kEeGoB9CX9jdaHQ,NBP Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd5PA,5,Europe,,ExpressionPriceParameters,PurchaseContract
+_g2QRlm3kEeGoB9CX9jdaHQ,JCC Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd6PA,5,Asia,,ExpressionPriceParameters,PurchaseContract
+_g2QRl23kEeGoB9CX9jdaHQ,TTF Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd7PA,5,Europe,,ExpressionPriceParameters,PurchaseContract

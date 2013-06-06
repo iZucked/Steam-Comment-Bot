@@ -1,8 +1,8 @@
-uuid,name,otherNames,minQuantity,maxQuantity,entity,allowedPorts,priceInfo.priceExpression,priceInfo.kind,preferredPort,priceInfo.pricePerMMBTU,kind
-_s615QK_ZEeGyyNbjDp7Faw,Asian Spot Sales,,0,1000000,Others,,Asian_Spot,ExpressionPriceParameters,,,SalesContract
-_zWfuEK_ZEeGyyNbjDp7Faw,Brent Spot Sales,,0,1000000,Others,,Brent,ExpressionPriceParameters,,,SalesContract
-_18lmkK_ZEeGyyNbjDp7Faw,HH Spot Sales,,0,1000000,Others,,HH,ExpressionPriceParameters,,,SalesContract
-_3zSpgK_ZEeGyyNbjDp7Faw,Japanese Avg. Spot,,0,1000000,Others,Japanese Ports,Japanese_Import,ExpressionPriceParameters,Higashi-Ogishima,,SalesContract
-_6IN5gK_ZEeGyyNbjDp7Faw,Korean Avg. Spot,,0,1000000,Others,,Korean_Import,ExpressionPriceParameters,,,SalesContract
-_8jjTgK_ZEeGyyNbjDp7Faw,NBP Spot S,,0,1000000,Others,,NBP,ExpressionPriceParameters,,,SalesContract
-_nSc38K_aEeGyyNbjDp7Faw,Sell 10,,0,1000000,Others,,,FixedPriceParameters,,10,SalesContract
+uuid,name,otherNames,minQuantity,maxQuantity,entity,allowedPorts,priceInfo.priceExpression,priceInfo.kind,preferredPort,kind
+_s615QK_ZEeGyyNbjDp7Faw,Asian Spot Sales,,0,1000000,Others,,Asian_Spot,ExpressionPriceParameters,,SalesContract
+_zWfuEK_ZEeGyyNbjDp7Faw,Brent Spot Sales,,0,1000000,Others,,Brent,ExpressionPriceParameters,,SalesContract
+_18lmkK_ZEeGyyNbjDp7Faw,HH Spot Sales,,0,1000000,Others,,HH,ExpressionPriceParameters,,SalesContract
+_3zSpgK_ZEeGyyNbjDp7Faw,Japanese Avg. Spot,,0,1000000,Others,Japanese Ports,Japanese_Import,ExpressionPriceParameters,Higashi-Ogishima,SalesContract
+_6IN5gK_ZEeGyyNbjDp7Faw,Korean Avg. Spot,,0,1000000,Others,,Korean_Import,ExpressionPriceParameters,,SalesContract
+_8jjTgK_ZEeGyyNbjDp7Faw,NBP Spot S,,0,1000000,Others,,NBP,ExpressionPriceParameters,,SalesContract
+_nSc38K_aEeGyyNbjDp7Faw,Sell 10,,0,1000000,Others,,10,ExpressionPriceParameters,,SalesContract
