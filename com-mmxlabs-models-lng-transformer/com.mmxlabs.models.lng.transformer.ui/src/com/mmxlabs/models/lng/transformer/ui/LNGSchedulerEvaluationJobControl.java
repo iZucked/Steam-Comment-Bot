@@ -81,6 +81,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	@Override
 	public void cancel() {
+		setJobState(EJobState.CANCELLED);
 	}
 
 	@Override

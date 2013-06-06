@@ -165,7 +165,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 
 									@Override
 									public void run() {
-										MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", ex.getMessage());
+										MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + ex.getMessage());
 									}
 								});
 							}
@@ -197,7 +197,25 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 						});
 						// instance.setLocked(true);
 						instance.getLock(k).awaitClaim();
-						control.start();
+						try {
+							control.start();
+						} catch (final Throwable t) {
+							log.error(t.getMessage(), t);
+							instance.getLock(k).release();
+							control.cancel();
+
+
+							final Display display = Display.getDefault();
+							if (display != null) {
+								display.asyncExec(new Runnable() {
+
+									@Override
+									public void run() {
+										MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + t.getMessage());
+									}
+								});
+							}
+						}
 					}
 				}
 			} catch (final IOException e) {
