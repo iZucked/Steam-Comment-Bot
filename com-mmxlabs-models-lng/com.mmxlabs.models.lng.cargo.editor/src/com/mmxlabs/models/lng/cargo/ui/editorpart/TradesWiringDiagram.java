@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -48,7 +50,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireD
  *         maybe by splitting the classes code which was previously synchronious can now be executed in parallel.
  * @since 3.0
  */
-public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener {
+public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener, KeyListener {
 
 	/**
 	 * The actual wiring permutation; if the ith element is j, left hand terminal i is wired to right hand terminal j. If the ith element is -1, the ith element is not connected to anywhere.
@@ -57,7 +59,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	private int terminalSize = 9;
 	private int pathWidth = 2;
-	private int borderWidth = 1;
+	private final int borderWidth = 1;
 
 	private boolean dragging = false;
 	private int draggingFrom = -1;
@@ -66,7 +68,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	private int dragX, dragY;
 	private boolean locked;
 
-	private Canvas canvas;
+	private final Canvas canvas;
 	private int[] sortedIndices;
 	private int[] reverseSortedIndices;
 
@@ -83,6 +85,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		canvas.addPaintListener(this);
 		canvas.addMouseListener(this);
 		canvas.addMouseMoveListener(this);
+		canvas.addKeyListener(this);
 	}
 
 	public int getTerminalSize() {
@@ -128,7 +131,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		final List<Float> terminalPositions = getTerminalPositions(rootData);
 
 		// Copy ref in case of concurrent change during paint
-		RootData root = rootData;
+		final RootData root = rootData;
 
 		final GC graphics = e.gc;
 
@@ -145,17 +148,17 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		graphics.setLineWidth(2);
 
 		// draw paths
-		for (GroupData groupData : root.getGroups()) {
-			for (WireData wire : groupData.getWires()) {
-				int unsortedSource = root.getRows().indexOf(wire.loadRowData);
-				int unsortedDestination = root.getRows().indexOf(wire.dischargeRowData);
+		for (final GroupData groupData : root.getGroups()) {
+			for (final WireData wire : groupData.getWires()) {
+				final int unsortedSource = root.getRows().indexOf(wire.loadRowData);
+				final int unsortedDestination = root.getRows().indexOf(wire.dischargeRowData);
 				if (unsortedSource < 0 || unsortedDestination < 0) {
 					// Error?
 					continue;
 				}
 				// Map back between current row (sorted) and data (unsorted)
-				int sortedDestination = sortedIndices == null ? unsortedDestination : sortedIndices[unsortedDestination];
-				int sortedSource = sortedIndices == null ? unsortedSource : sortedIndices[unsortedSource];
+				final int sortedDestination = sortedIndices == null ? unsortedDestination : sortedIndices[unsortedDestination];
+				final int sortedSource = sortedIndices == null ? unsortedSource : sortedIndices[unsortedSource];
 
 				// Filtering can lead to missing terminals
 				if (sortedDestination == -1 || sortedSource == -1) {
@@ -178,14 +181,13 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
 
 				graphics.setForeground(wire.colour);
-				
+
 				if (wire.dashed) {
-					graphics.setLineDash(new int [] {2, 3});
-				}
-				else {
+					graphics.setLineDash(new int[] { 2, 3 });
+				} else {
 					graphics.setLineDash(null);
 				}
-				
+
 				graphics.drawPath(path);
 				path.dispose();
 
@@ -220,7 +222,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		int rawI = 0;
 		for (final float midpoint : terminalPositions) {
 			// Map back between current row (sorted) and data (unsorted)
-			int i = (reverseSortedIndices == null || rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
+			final int i = (reverseSortedIndices == null || rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
 			// -1 indicates filtered row
 			if (i == -1) {
 				continue;
@@ -228,7 +230,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			// Draw left hand terminal
 			graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-			RowData row = root.getRows().get(i);
+			final RowData row = root.getRows().get(i);
 			if (row.loadSlot != null) {
 				graphics.setBackground(row.loadTerminalColour);
 				graphics.fillOval(ca.x + terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
@@ -353,7 +355,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			if (!(terminal >= positions.size()) && reverseSortedIndices != null) {
 				terminal = reverseSortedIndices[terminal];
 			}
-			RowData toRowData = terminal >= rootData.getRows().size() ? null : rootData.getRows().get(terminal);
+			final RowData toRowData = terminal >= rootData.getRows().size() ? null : rootData.getRows().get(terminal);
 			final boolean draggedToNowhere = terminal >= positions.size() || !(draggingFromLeft ? toRowData.dischargeSlot != null : toRowData.loadSlot != null);
 
 			final Rectangle ca = getCanvasClientArea();
@@ -361,18 +363,21 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			// final boolean control = (e.stateMask & SWT.CONTROL) != 0;
 
 			// Map back from the sorted display order to the raw data order
-			int sortedIndex = reverseSortedIndices == null ? draggingFrom : reverseSortedIndices[draggingFrom];
+			final int sortedIndex = reverseSortedIndices == null ? draggingFrom : reverseSortedIndices[draggingFrom];
 
 			// New Load -> Discharge pairing
 			// May contain a null key!
-			Map<RowData, RowData> newWiring = new HashMap<RowData, RowData>();
+			final Map<RowData, RowData> newWiring = new HashMap<RowData, RowData>();
 
-			RowData fromRowData = rootData.getRows().get(sortedIndex);
+			final RowData fromRowData = rootData.getRows().get(sortedIndex);
 
 			// check if the user is trying to pair two slots which are a ship-to-ship transfer
 			// (i.e. they are effectively the same slot!)
-			boolean shipToShipLink = toRowData != null && fromRowData != null && ((toRowData.loadSlot != null && fromRowData.dischargeSlot != null && toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot) || (toRowData.dischargeSlot != null && fromRowData.loadSlot != null && toRowData.dischargeSlot.getTransferTo() == fromRowData.loadSlot));
-			
+			final boolean shipToShipLink = toRowData != null
+					&& fromRowData != null
+					&& ((toRowData.loadSlot != null && fromRowData.dischargeSlot != null && toRowData.loadSlot.getTransferFrom() == fromRowData.dischargeSlot) || (toRowData.dischargeSlot != null
+							&& fromRowData.loadSlot != null && toRowData.dischargeSlot.getTransferTo() == fromRowData.loadSlot));
+
 			if (!shipToShipLink) {
 				// now find column
 				if (!draggedToNowhere && !draggingFromLeft && (e.x >= ca.x + terminalSize && e.x <= ca.x + 2 * terminalSize)) {
@@ -421,7 +426,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		canvas.redraw();
 	}
 
-	public synchronized void setSortOrder(RootData rootData, int[] sortedIndices, int[] reverseSortedIndices) {
+	public synchronized void setSortOrder(final RootData rootData, final int[] sortedIndices, final int[] reverseSortedIndices) {
 		this.rootData = rootData;
 		this.sortedIndices = sortedIndices;
 		this.reverseSortedIndices = reverseSortedIndices;
@@ -439,5 +444,31 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 */
 	public void onMouseup() {
 
+	}
+
+	/**
+	 * Sent when a key is pressed on the system keyboard.
+	 * 
+	 * @param e
+	 *            an event containing information about the key press
+	 * @since 4.0
+	 */
+	public void keyPressed(final KeyEvent e) {
+
+	}
+
+	/**
+	 * Sent when a key is released on the system keyboard.
+	 * 
+	 * @param e
+	 *            an event containing information about the key release
+	 * @since 4.0
+	 */
+	public void keyReleased(final KeyEvent e) {
+		if (e.character == SWT.ESC) {
+			dragging = false;
+			canvas.redraw();
+
+		}
 	}
 }
