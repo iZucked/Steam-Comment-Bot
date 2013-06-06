@@ -422,6 +422,8 @@ public class LNGSchedulerJobUtils {
 			}
 		}
 
+		
+		// Create all the new vessel assignment objects.
 		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
 
 		for (final Sequence sequence : schedule.getSequences()) {
