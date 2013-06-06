@@ -342,9 +342,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	private final void recordShipToShipBindings(final int seqIndex, final int withinSeqIndex, final ISequenceElement element) {
 
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
-		final IPortSlot converseSlot = shipToShipProvider.getConverseTransferElement(slot);  
+		final IPortSlot converseSlot = shipToShipProvider.getConverseTransferElement(slot);
 		final ISequenceElement transferConverseElement = portSlotProvider.getElement(converseSlot);
-		
+
 		if (transferConverseElement != null) {
 			final boolean element_is_discharge = slot.getPortType() == PortType.Discharge;
 
@@ -437,9 +437,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	protected final void imposeShipToShipConstraints() {
 		boolean recalculateDischarge = false;
 		boolean recalculateLoad = false;
-		
+
 		int max_iterations = 100;
-		
+
 		/*
 		 * We need to keep recalculating the windows until nothing gets modified.
 		 */
