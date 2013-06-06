@@ -14,6 +14,7 @@ import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChec
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
@@ -58,6 +59,9 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(ContractCvConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new ContractCvConstraintCheckerFactory()).export());
+
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(DifferentSTSVesselsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(new DifferentSTSVesselsConstraintCheckerFactory()).export());
 
 	}
 }
