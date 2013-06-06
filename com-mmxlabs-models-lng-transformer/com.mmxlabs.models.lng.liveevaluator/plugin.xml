@@ -24,7 +24,7 @@
     <command
           defaultHandler="com.mmxlabs.models.lng.analytics.ui.liveeval.internal.LiveEvaluatorStateCommandHandler"
           id="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
-          name="Toggle Live Evaluator">
+          name="Auto-evaluate on/off">
        <state
              class="org.eclipse.ui.handlers.RegistryToggleState:true"
              id="org.eclipse.ui.commands.toggleState">
@@ -35,13 +35,14 @@
        point="org.eclipse.ui.menus">
     <menuContribution
           allPopups="false"
-          locationURI="toolbar:org.eclipse.ui.trim.status">
+	          locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+<!-- 			locationURI="toolbar:org.eclipse.ui.trim.status" -->
        <toolbar
              id="com.mmxlabs.models.lng.analytics.editor.toolbar1">
           <command
                 commandId="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
                 icon="icons/bg-eval.gif"
-                label="Toggle Background Evaluation"
+                label="Auto-evaluate on/off"
                 style="toggle">
           </command>
        </toolbar>
