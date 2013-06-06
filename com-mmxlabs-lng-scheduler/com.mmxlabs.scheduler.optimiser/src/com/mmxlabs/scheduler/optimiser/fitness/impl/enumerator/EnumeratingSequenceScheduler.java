@@ -451,6 +451,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 				final int load_seq = bindings.get(i + LOAD_SEQUENCE_INDEX_OFFSET);
 				final int load_index = bindings.get(i + LOAD_WITHIN_SEQUENCE_INDEX_OFFSET);
 
+				// Must be on different routes
+				assert discharge_seq != load_seq;
+				
 				recalculateDischarge = false;
 				recalculateLoad = false;
 
