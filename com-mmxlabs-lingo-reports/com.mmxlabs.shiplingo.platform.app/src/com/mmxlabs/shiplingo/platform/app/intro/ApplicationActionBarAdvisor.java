@@ -102,17 +102,17 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	private IWorkbenchAction hideShowEditorAction;
 
-	private IWorkbenchAction savePerspectiveAction;
+//	private IWorkbenchAction savePerspectiveAction;
 
 	private IWorkbenchAction resetPerspectiveAction;
 
 	// private IWorkbenchAction editActionSetAction;
 
-	private IWorkbenchAction closePerspAction;
+//	private IWorkbenchAction closePerspAction;
 
 	private IWorkbenchAction lockToolBarAction;
 
-	private IWorkbenchAction closeAllPerspsAction;
+//	private IWorkbenchAction closeAllPerspsAction;
 
 	// private IWorkbenchAction showViewMenuAction;
 
@@ -626,12 +626,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private MenuManager createWindowMenu() {
 		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_window, IWorkbenchActionConstants.M_WINDOW);
 
-		menu.add(newWindowAction);
 		// menu.add(newEditorAction);
 
-		menu.add(new Separator());
+//		menu.add(new Separator());
 		addPerspectiveActions(menu);
 		menu.add(new Separator());
+		menu.add(newWindowAction);
 		// addKeyboardShortcuts(menu);
 		final Separator sep = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
 		sep.setVisible(!Util.isMac());
@@ -651,24 +651,24 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 */
 	private void addPerspectiveActions(final MenuManager menu) {
 		{
+			final MenuManager showViewMenuMgr = new MenuManager(IDEWorkbenchMessages.Workbench_showView, "showView"); //$NON-NLS-1$
+			final IContributionItem showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST.create(getWindow());
+			showViewMenuMgr.add(showViewMenu);
+			menu.add(showViewMenuMgr);
+		}
+		menu.add(resetPerspectiveAction);
+		{
 			final String openText = IDEWorkbenchMessages.Workbench_openPerspective;
 			final MenuManager changePerspMenuMgr = new MenuManager(openText, "openPerspective"); //$NON-NLS-1$
 			final IContributionItem changePerspMenuItem = ContributionItemFactory.PERSPECTIVES_SHORTLIST.create(getWindow());
 			changePerspMenuMgr.add(changePerspMenuItem);
 			menu.add(changePerspMenuMgr);
 		}
-		{
-			final MenuManager showViewMenuMgr = new MenuManager(IDEWorkbenchMessages.Workbench_showView, "showView"); //$NON-NLS-1$
-			final IContributionItem showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST.create(getWindow());
-			showViewMenuMgr.add(showViewMenu);
-			menu.add(showViewMenuMgr);
-		}
 		menu.add(new Separator());
 		// menu.add(editActionSetAction);
-		menu.add(savePerspectiveAction);
-		menu.add(resetPerspectiveAction);
-		menu.add(closePerspAction);
-		menu.add(closeAllPerspsAction);
+//		menu.add(savePerspectiveAction);
+//		menu.add(closePerspAction);
+//		menu.add(closeAllPerspsAction);
 	}
 
 	//
@@ -820,12 +820,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		openPreferencesAction = null;
 		saveAsAction = null;
 		hideShowEditorAction = null;
-		savePerspectiveAction = null;
+//		savePerspectiveAction = null;
 		resetPerspectiveAction = null;
 		// editActionSetAction = null;
-		closePerspAction = null;
+//		closePerspAction = null;
 		lockToolBarAction = null;
-		closeAllPerspsAction = null;
+//		closeAllPerspsAction = null;
 		// showViewMenuAction = null;
 		// showPartPaneMenuAction = null;
 		// nextPartAction = null;
@@ -1043,8 +1043,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		hideShowEditorAction = ActionFactory.SHOW_EDITOR.create(window);
 		register(hideShowEditorAction);
-		savePerspectiveAction = ActionFactory.SAVE_PERSPECTIVE.create(window);
-		register(savePerspectiveAction);
+//		savePerspectiveAction = ActionFactory.SAVE_PERSPECTIVE.create(window);
+//		register(savePerspectiveAction);
 		// editActionSetAction = ActionFactory.EDIT_ACTION_SETS
 		// .create(window);
 		// register(editActionSetAction);
@@ -1052,10 +1052,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(lockToolBarAction);
 		resetPerspectiveAction = ActionFactory.RESET_PERSPECTIVE.create(window);
 		register(resetPerspectiveAction);
-		closePerspAction = ActionFactory.CLOSE_PERSPECTIVE.create(window);
-		register(closePerspAction);
-		closeAllPerspsAction = ActionFactory.CLOSE_ALL_PERSPECTIVES.create(window);
-		register(closeAllPerspsAction);
+//		closePerspAction = ActionFactory.CLOSE_PERSPECTIVE.create(window);
+//		register(closePerspAction);
+//		closeAllPerspsAction = ActionFactory.CLOSE_ALL_PERSPECTIVES.create(window);
+//		register(closeAllPerspsAction);
 
 		// forwardHistoryAction = ActionFactory.FORWARD_HISTORY
 		// .create(window);
