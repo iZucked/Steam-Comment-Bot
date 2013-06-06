@@ -133,6 +133,21 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
+	@Inject
+	private IPortTypeProvider portTypeProvider;
+
+	@Inject
+	private ITimeWindowDataComponentProvider timeWindowProvider;
+
+	@Inject
+	private IPortProvider portProvider;
+
+	@Inject
+	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+
+	@Inject
+	private IElementDurationProvider durationProvider;
+
 	/**
 	 * Resize one of the integer buffers above
 	 */
@@ -496,13 +511,6 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex];
 		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
 		final boolean[] useTimeWindow = this.useTimeWindow[sequenceIndex];
-
-		final IPortTypeProvider portTypeProvider = super.getPortTypeProvider();
-
-		final ITimeWindowDataComponentProvider timeWindowProvider = super.getTimeWindowProvider();
-		final IPortProvider portProvider = super.getPortProvider();
-		final IMultiMatrixProvider<IPort, Integer> distanceProvider = super.getDistanceProvider();
-		final IElementDurationProvider durationProvider = super.getDurationsProvider();
 
 		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
 
