@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
@@ -208,6 +209,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		}
 
 		final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
+		final FleetModel fleetModel = rootObject.getFleetModel();
 		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
 		for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
 			vesselAvailabilityMap.put(va.getVessel(), va);
@@ -215,7 +217,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		// Process initial vessel assignments list
 		if (!assignmentModel.getElementAssignments().isEmpty()) {
-			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, scenarioFleetModel);
+			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, fleetModel, scenarioFleetModel);
 			for (final CollectedAssignment seq : assignments) {
 				IVessel vessel = null;
 				log.debug("Processing assignment " + seq.getVesselOrClass().getName());
