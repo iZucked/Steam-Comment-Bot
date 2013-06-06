@@ -11,4 +11,4 @@ syntax: regexp
 syntax: regexp
 ^optimiser-.*/\.project$
 syntax: regexp
-^optimiser-.*/META-INF$
+^optimiser-.*/META-INF/MANIFEST.MF$
