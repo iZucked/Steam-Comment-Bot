@@ -33,7 +33,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -124,11 +126,11 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	// protected final ArrayList<Integer> separationPoints = new
 	// ArrayList<Integer>();
 
-	// private ITimeWindowDataComponentProvider timeWindowProvider;
-	// private IElementDurationProvider durationProvider;
-	// private IVesselProvider vesselProvider;
-	// private IMultiMatrixProvider<T, Integer> distanceProvider;
-	//
+	@Inject
+	private IShipToShipBindingProvider shipToShipProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
