@@ -109,7 +109,7 @@ public class LNGSchedulerJobUtils {
 			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 			childInjector.injectMembers(exporter);
 		}
-		LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
+		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
 
 		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
 		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
@@ -215,7 +215,7 @@ public class LNGSchedulerJobUtils {
 		// final List<Command> nullCommands = new LinkedList<Command>();
 		final List<Command> setCommands = new LinkedList<Command>();
 
-		// Set of slots which may not be linked to a cargo 
+		// Set of slots which may not be linked to a cargo
 		final Set<Slot> unsetCargoSlots = new HashSet<Slot>();
 		// Set of slots which really are linked to a cargo. This will later be taken out of the unsetCargoSlots
 		final Set<Slot> setCargoSlots = new HashSet<Slot>();
@@ -281,7 +281,6 @@ public class LNGSchedulerJobUtils {
 							c.setAllowRewiring(true);
 							c.setName(slot.getName());
 							cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), c));
-							cmd.append(AddCommand.create(domain, c, CargoPackage.eINSTANCE.getCargo_Slots(), loadSlot));
 							loadCargo = c;
 							slotToCargoMap.put(loadSlot, c);
 						} else {
@@ -360,7 +359,7 @@ public class LNGSchedulerJobUtils {
 
 		// Add the unset commands first so they do not overwrite the set commands
 		unsetCargoSlots.removeAll(setCargoSlots);
-		for (Slot slot : unsetCargoSlots) {
+		for (final Slot slot : unsetCargoSlots) {
 			cmd.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 		}
 		// Then add in the set commands
@@ -425,12 +424,7 @@ public class LNGSchedulerJobUtils {
 
 		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
 
-		int spotIndex = 0;
 		for (final Sequence sequence : schedule.getSequences()) {
-			int thisIndex = 0;
-			if (sequence.isSpotVessel()) {
-				thisIndex = spotIndex++;
-			}
 
 			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
 			int index = 0;
@@ -456,7 +450,9 @@ public class LNGSchedulerJobUtils {
 					ea.setAssignedObject(object);
 					ea.setAssignment(assignment);
 					ea.setSequence(index++);
-					ea.setSpotIndex(thisIndex);
+					if (sequence.isSetSpotIndex()) {
+						ea.setSpotIndex(sequence.getSpotIndex());
+					}
 					ea.setLocked(previouslyLocked.contains(object));
 					reassigned.add(object);
 					newElementAssignments.add(ea);
