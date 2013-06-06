@@ -48,6 +48,12 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  */
 public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
+
+	private static final int DISCHARGE_SEQUENCE_INDEX_OFFSET = 0;
+	private static final int DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET = 1;
+	private static final int LOAD_SEQUENCE_INDEX_OFFSET = 2;
+	private static final int LOAD_WITHIN_SEQUENCE_INDEX_OFFSET = 3;
+
 	/**
 	 * How long to let empty time windows be. Since these mostly happen at the end of sequences we make this zero.
 	 */
@@ -347,18 +353,17 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			 */
 			int thisSequenceOffset, thisIndexOffset, converseSequenceOffset, converseIndexOffset;
 			if (element_is_discharge) {
-				thisSequenceOffset = 0;
-				thisIndexOffset = 1;
-				converseSequenceOffset = 2;
-				converseIndexOffset = 3;
+				thisSequenceOffset = DISCHARGE_SEQUENCE_INDEX_OFFSET;
+				thisIndexOffset = DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET;
+				converseSequenceOffset = LOAD_SEQUENCE_INDEX_OFFSET;
+				converseIndexOffset = LOAD_WITHIN_SEQUENCE_INDEX_OFFSET;
+			} else {
+				thisSequenceOffset = LOAD_SEQUENCE_INDEX_OFFSET;
+				thisIndexOffset = LOAD_WITHIN_SEQUENCE_INDEX_OFFSET;
+				converseSequenceOffset = DISCHARGE_SEQUENCE_INDEX_OFFSET;
+				converseIndexOffset = DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET;
 			}
-			else {
-				thisSequenceOffset = 2;
-				thisIndexOffset = 3;
-				converseSequenceOffset = 0;
-				converseIndexOffset = 1;					
-			}
-			
+
 			boolean attached = false;
 
 			/*
@@ -439,12 +444,13 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		 * We need to keep recalculating the windows until nothing gets modified.
 		 */
 		do {
-			for (int i = 0; i < bindings.size(); i+=4) {
-				final int discharge_seq = bindings.get(i);
-				final int discharge_index = bindings.get(i+1);
-				final int load_seq = bindings.get(i+2);
-				final int load_index = bindings.get(i+3);
-				
+			for (int i = 0; i < bindings.size(); i += 4) {
+
+				final int discharge_seq = bindings.get(i + DISCHARGE_SEQUENCE_INDEX_OFFSET);
+				final int discharge_index = bindings.get(i + DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET);
+				final int load_seq = bindings.get(i + LOAD_SEQUENCE_INDEX_OFFSET);
+				final int load_index = bindings.get(i + LOAD_WITHIN_SEQUENCE_INDEX_OFFSET);
+
 				recalculateDischarge = false;
 				recalculateLoad = false;
 
