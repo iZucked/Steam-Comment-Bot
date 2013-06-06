@@ -737,7 +737,7 @@ public class CargoEditorMenuHelper {
 		subMenu.add(new SwapAction(name, source, target));
 	}
 
-	private String getActionName(final Slot slot, final boolean isLoad, final boolean includePort, final boolean includeContract) {
+	private String getActionName(final Slot slot, final boolean isLoad, final boolean includeContract, final boolean includePort) {
 		final StringBuilder sb = new StringBuilder();
 
 		{
