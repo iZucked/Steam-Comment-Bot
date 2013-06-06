@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -77,9 +78,10 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
-			final ScenarioFleetModel fleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
+			final FleetModel fleetModel = scenarioModel.getFleetModel();
+			final ScenarioFleetModel scenarioFleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
 
-			final List<CollectedAssignment> resources = AssignmentEditorHelper.collectAssignments(modelObject, fleetModel);
+			final List<CollectedAssignment> resources = AssignmentEditorHelper.collectAssignments(modelObject, fleetModel, scenarioFleetModel);
 
 			Collections.sort(resources, new Comparator<CollectedAssignment>() {
 				@Override

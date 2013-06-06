@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -59,7 +60,7 @@ public class AssignmentImporter {
 						public void run(final IImportContext context) {
 							final MMXRootObject root = context.getRootObject();
 							if (root instanceof LNGScenarioModel) {
-								LNGScenarioModel lngScenarioModel = (LNGScenarioModel) root;
+								final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) root;
 
 								final AssignmentModel im = lngScenarioModel.getPortfolioModel().getAssignmentModel();
 								if (im != null) {
@@ -98,10 +99,10 @@ public class AssignmentImporter {
 		}
 	}
 
-	public List<Map<String, String>> exportAssignments(final AssignmentModel im, final ScenarioFleetModel fm) {
+	public List<Map<String, String>> exportAssignments(final AssignmentModel assignmentModel, final FleetModel fleetModel, final ScenarioFleetModel scenarioFleetModel) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 
-		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(im, fm);
+		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, fleetModel, scenarioFleetModel);
 
 		for (final CollectedAssignment ca : assignments) {
 			final HashMap<String, String> row = new HashMap<String, String>();

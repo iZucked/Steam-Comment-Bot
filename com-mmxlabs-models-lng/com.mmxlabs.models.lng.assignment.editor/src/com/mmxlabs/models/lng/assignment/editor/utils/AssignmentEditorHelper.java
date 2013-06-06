@@ -221,7 +221,7 @@ public class AssignmentEditorHelper {
 		return SetCommand.create(ed, ea, AssignmentPackage.eINSTANCE.getElementAssignment_Locked(), false);
 	}
 
-	public static List<CollectedAssignment> collectAssignments(final AssignmentModel im, ScenarioFleetModel scenarioFleetModel) {
+	public static List<CollectedAssignment> collectAssignments(final AssignmentModel im, final FleetModel fleetModel, final ScenarioFleetModel scenarioFleetModel) {
 		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
 		// Enforce consistent order
 		final Map<Triple<AVesselSet<Vessel>, Integer, Integer>, List<ElementAssignment>> grouping = new TreeMap<Triple<AVesselSet<Vessel>, Integer, Integer>, List<ElementAssignment>>(
@@ -240,20 +240,24 @@ public class AssignmentEditorHelper {
 				});
 
 		int index = 0;
-		final List<Vessel> vesselOrder = new ArrayList<Vessel>();
+		final List<AVesselSet<Vessel>> vesselOrder = new ArrayList<AVesselSet<Vessel>>();
 		for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
-			Vessel v = va.getVessel();
+			final Vessel v = va.getVessel();
 			vesselOrder.add(v);
-			grouping.put(new Triple<AVesselSet<Vessel>, Integer, Integer>(v, 0, index++), new ArrayList<ElementAssignment>());
+			grouping.put(new Triple<AVesselSet<Vessel>, Integer, Integer>(v, index++, 0), new ArrayList<ElementAssignment>());
+		}
+		for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
+			vesselOrder.add(vesselClass);
+			grouping.put(new Triple<AVesselSet<Vessel>, Integer, Integer>(vesselClass, index++, 0), new ArrayList<ElementAssignment>());
 		}
 
 		for (final ElementAssignment ea : im.getElementAssignments()) {
 			if (ea.getAssignment() == null) {
 				continue;
 			}
+
 			// Use vessel index normally, but for spots include spot index
-			final int third = vesselOrder.contains(ea.getAssignment()) ? vesselOrder.indexOf(ea.getAssignment()) : index + ea.getSpotIndex();
-			final Triple<AVesselSet<Vessel>, Integer, Integer> k = new Triple<AVesselSet<Vessel>, Integer, Integer>(ea.getAssignment(), ea.getSpotIndex(), third);
+			final Triple<AVesselSet<Vessel>, Integer, Integer> k = new Triple<AVesselSet<Vessel>, Integer, Integer>(ea.getAssignment(), vesselOrder.indexOf(ea.getAssignment()), ea.getSpotIndex());
 			List<ElementAssignment> l = grouping.get(k);
 			if (l == null) {
 				l = new ArrayList<ElementAssignment>();
@@ -263,7 +267,7 @@ public class AssignmentEditorHelper {
 		}
 
 		for (final Triple<AVesselSet<Vessel>, Integer, Integer> k : grouping.keySet()) {
-			result.add(new CollectedAssignment(grouping.get(k), k.getFirst(), k.getSecond()));
+			result.add(new CollectedAssignment(grouping.get(k), k.getFirst(), k.getThird()));
 		}
 
 		return result;

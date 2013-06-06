@@ -56,7 +56,7 @@ public class AssignmentModelImporter implements ISubmodelImporter {
 		if (root instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
 			final LNGPortfolioModel portfolioModel = scenarioModel.getPortfolioModel();
-			output.put(ASSIGNMENTS, importer.exportAssignments(portfolioModel.getAssignmentModel(), portfolioModel.getScenarioFleetModel()));
+			output.put(ASSIGNMENTS, importer.exportAssignments(portfolioModel.getAssignmentModel(), scenarioModel.getFleetModel(), portfolioModel.getScenarioFleetModel()));
 		}
 	}
 
