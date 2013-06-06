@@ -91,6 +91,20 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 
 	private void validateAttributes(final IValidationContext ctx, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final List<IStatus> failures, final int severity) {
 
+		if (loadSlot.isOptional()) {
+			final String failureMessage = String.format("Ship to Ship slot cannot be optional");
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
+			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Optional());
+			failures.add(dsd);
+		}
+
+		if (dischargeSlot.isOptional()) {
+			final String failureMessage = String.format("Ship to Ship slot cannot be optional");
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
+			dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Optional());
+			failures.add(dsd);
+		}
+
 		if (!Equality.isEqual(loadSlot.getWindowStart(), dischargeSlot.getWindowStart())) {
 			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Window Start");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
