@@ -20,6 +20,10 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
@@ -191,12 +195,22 @@ public class ElementAssignmentItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		ElementAssignment elementAssignment = (ElementAssignment)object;
-		return getString("_UI_ElementAssignment_type") + " " + elementAssignment.isLocked();
+		ElementAssignment elementAssignment = (ElementAssignment) object;
+		AVesselSet<Vessel> assignment = elementAssignment.getAssignment();
+		String assignmentName = null;
+		if (assignment instanceof NamedObject) {
+			assignmentName = assignment.getName();
+		}
+		String objectName = null;
+		UUIDObject assignedObject = elementAssignment.getAssignedObject();
+		if (assignedObject instanceof NamedObject) {
+			objectName = ((NamedObject) assignedObject).getName();
+		}
+		return getString("_UI_ElementAssignment_type") + " - " + objectName + " - " + assignmentName + " (" + elementAssignment.isLocked() + ")";
 	}
 
 	/**
