@@ -62,7 +62,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Indicates how many evaluations the best value came after
 	 */
 	protected int bestIndex = 0;
-	
+
 	/**
 	 * The output of the scheduler; these are the arrival times for each element in each sequence.
 	 * 
@@ -105,16 +105,16 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 */
 	private boolean[][] useTimeWindow;
 
-	
 	/**
-	 * A list of ship-to-ship binding information in <D_i, D_j, L_i, L_j> quadruples where D_i, D_j are the indices of the sequence and the position within the sequence
-	 * of the discharge element, and L_i & L_j similarly for the load. This representation is for efficiency purposes.
+	 * A list of ship-to-ship binding information in <D_i, D_j, L_i, L_j> quadruples where D_i, D_j are the indices of the sequence and the position within the sequence of the discharge element, and
+	 * L_i & L_j similarly for the load. This representation is for efficiency purposes.
 	 * 
-	 * N.B. The implementation assumes relatively few ship-to-ship bindings, since the time complexity of the algorithm increases linearly with the
-	 * number of such bindings.
+	 * N.B. The implementation assumes relatively few ship-to-ship bindings, since the time complexity of the algorithm increases linearly with the number of such bindings.
+	 * 
+	 * @since 5.0
 	 */
 	protected ArrayList<Integer> bindings = new ArrayList<Integer>();
-	
+
 	/**
 	 * Holds a list of points at which the cost function can be separated. This occurs when a given journey leg <em>always</em> involves some idle time, so there can be no knock-on effects on the
 	 * segment following the point from the times chosen up to the point.
@@ -166,7 +166,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 		resize(isVirtual, sequenceIndex, size);
 		resize(useTimeWindow, sequenceIndex, size);
-				
+
 		sizes[sequenceIndex] = size;
 	}
 
@@ -306,7 +306,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		for (int i = 0; i < size; i++) {
 			prepare(i);
 		}
-		
+
 		imposeShipToShipConstraints();
 	}
 	
@@ -318,10 +318,10 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		
 		if (transferConverseElement != null) {
 			final boolean element_is_discharge = slot.getPortType() == PortType.Discharge;
-			
-			/* offsets within the <bindings> quadruples to represent this element's sequence, its sequence within the index,
-			 * and similarly for the element which is bound to it
-			 */					
+
+			/*
+			 * offsets within the <bindings> quadruples to represent this element's sequence, its sequence within the index, and similarly for the element which is bound to it
+			 */
 			int thisSequenceOffset, thisIndexOffset, converseSequenceOffset, converseIndexOffset;
 			if (element_is_discharge) {
 				thisSequenceOffset = 0;
@@ -337,14 +337,14 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			}
 			
 			boolean attached = false;
-			
+
 			/*
 			 * Attach this element's indices to the bindings array if its converse element is already there
 			 */
-			for (int k = 0; k < bindings.size(); k+=4) {
-				int converseSequence = bindings.get(k + converseSequenceOffset);
-				int converseIndex = bindings.get(k + converseIndexOffset);
-				
+			for (int k = 0; k < bindings.size(); k += 4) {
+				final int converseSequence = bindings.get(k + converseSequenceOffset);
+				final int converseIndex = bindings.get(k + converseIndexOffset);
+
 				if (sequences.getSequence(converseSequence).get(converseIndex) == transferConverseElement) {
 					bindings.set(k + thisSequenceOffset, seqIndex);
 					bindings.set(k + thisIndexOffset, withinSeqIndex);
@@ -352,9 +352,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 					break;
 				}
 			}
-			
+
 			if (!attached) {
-				int addIndex = bindings.size();
+				final int addIndex = bindings.size();
 				for (int k = 0; k < 4; k++) {
 					bindings.add(-1);
 				}
@@ -363,11 +363,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			}
 		}
 	}
-	
-	
+
 	/**
-	 * Refines the start and end times of a sequence, making sure that there is enough travel time between 
-	 * each window.
+	 * Refines the start and end times of a sequence, making sure that there is enough travel time between each window.
 	 * 
 	 * @param startTimes
 	 * @param endTimes
@@ -386,7 +384,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 				endTimes[i] = Math.max(endTimes[i], startTimes[i]);
 			}
 		}
-		
+
 		// now perform reverse-pass to trim any overly late end times
 		// (that is end times which would make us late at the next element)
 		for (int i = startTimes.length - 2; i >= 0; i--) {
@@ -398,13 +396,15 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			}
 		}
 	}
-	
+
 	/**
 	 * Refines start and end times to make sure that ship to ship transfers are respected.
-	 * @param bindings A linked list of integers indicating which sequence elements are bound to which other sequence elements. This should have the form of <i1, j1, i2, j2> quadruplets
-	 * giving the indices of the sequence, and the position within the sequence, for the discharge slots and bound load slots respectively. This list is consumed by the method. 
 	 * 
-	 * Note: the horrible semantics of this method are for efficiency reasons and are constrained by the data representations used by other methods in this class. 
+	 * @param bindings
+	 *            A linked list of integers indicating which sequence elements are bound to which other sequence elements. This should have the form of <i1, j1, i2, j2> quadruplets giving the indices
+	 *            of the sequence, and the position within the sequence, for the discharge slots and bound load slots respectively. This list is consumed by the method.
+	 * 
+	 *            Note: the horrible semantics of this method are for efficiency reasons and are constrained by the data representations used by other methods in this class.
 	 */
 	protected final void imposeShipToShipConstraints() {
 		boolean recalculateDischarge = false;
@@ -424,11 +424,11 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 				
 				recalculateDischarge = false;
 				recalculateLoad = false;
-				
+
 				// sequence elements bound by ship-to-ship transfers are effectively the same slot, so window start and end times have to be constrained conservatively
-				int wst = Math.max(windowStartTime[discharge_seq][discharge_index], windowStartTime[load_seq][load_index]);
+				final int wst = Math.max(windowStartTime[discharge_seq][discharge_index], windowStartTime[load_seq][load_index]);
 				int wet = Math.min(windowEndTime[discharge_seq][discharge_index], windowEndTime[load_seq][load_index]);
-				
+
 				// If there is no overlap in the time windows, we need to use the later time window
 				wet = Math.max(wet, wst);
 
@@ -451,7 +451,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 					windowEndTime[load_seq][load_index] = wet;
 					recalculateLoad = true;
 				}
-				
+
 				// any sequence which we changed the time on, we have to recalculate
 				if (recalculateDischarge) {
 					refineWindows(discharge_seq);
@@ -462,8 +462,8 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			}
 			max_iterations--;
 		} while ((recalculateDischarge || recalculateLoad) && max_iterations > 0);
-		
-		if (max_iterations <=0) {
+
+		if (max_iterations <= 0) {
 			System.err.println("Something went wrong in the re-windowing of ship to ship transfers");
 		}
 	}
@@ -517,7 +517,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
 				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
-				
+
 				// "windows" defaults to the default start window
 				ITimeWindow timeWindow = defaultStartWindow;
 
@@ -525,7 +525,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 				if (startRequirement != null && startRequirement.getTimeWindow() != null) {
 					timeWindow = startRequirement.getTimeWindow();
 				}
-				
+
 				windows = Collections.singletonList(timeWindow);
 			} else if (portTypeProvider.getPortType(element) == PortType.End) {
 				final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
@@ -544,7 +544,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			} else {
 				// "windows" defaults to whatever windows are specified by the time window provider
 				windows = timeWindowProvider.getTimeWindows(element);
-				
+
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
