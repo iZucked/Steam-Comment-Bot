@@ -194,8 +194,10 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					}
 
 					else if (loadVesselSet instanceof VesselClass && dischargeVesselSet instanceof VesselClass) {
-						if (loadAssignment.getSpotIndex() == dischargeAssignment.getSpotIndex()) {
-							problem = true;
+						if (loadVesselSet.equals(dischargeVesselSet)) {
+							if (loadAssignment.getSpotIndex() == dischargeAssignment.getSpotIndex()) {
+								problem = true;
+							}
 						}
 					}
 					if (problem) {
