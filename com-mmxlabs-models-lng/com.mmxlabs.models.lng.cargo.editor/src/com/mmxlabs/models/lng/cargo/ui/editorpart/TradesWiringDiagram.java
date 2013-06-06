@@ -465,10 +465,12 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 * @since 4.0
 	 */
 	public void keyReleased(final KeyEvent e) {
+		// Cancel any drag in effect
 		if (e.character == SWT.ESC) {
-			dragging = false;
-			canvas.redraw();
-
+			if (dragging) {
+				dragging = false;
+				canvas.redraw();
+			}
 		}
 	}
 }
