@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?><target name="Job manager Target (Indigo)" sequenceNumber="1">
 <locations>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
+<unit id="org.eclipse.jdt.annotation.source" version="0.0.0"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.aopalliance" version="1.0.0.v201105210816"/>
+<unit id="com.google.inject.source" version="3.0.0.v201203062045"/>
+<unit id="com.google.inject" version="3.0.0.v201203062045"/>
+<unit id="javax.inject" version="1.0.0.v20091030"/>
+<unit id="javax.inject.source" version="1.0.0.v20091030"/>
+<unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
+<unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
 </location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
-</location><location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
-<unit id="com.mmxlabs.common.common-util.source" version="2.1.0.201211271403"/>
-<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="3.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="3.0.0.RELEASE"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.7.2.v20120130-0943"/>
-<repository location="http://download.eclipse.org/releases/indigo"/>
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.platform.sdk" version="3.7.2.M20120208-0800"/>
@@ -32,24 +30,41 @@
 <repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.core.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.integration.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.generator" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.generator.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.integration" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.library" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.library.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
-<unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
-<unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
-<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
-</location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="json-simple.source.source" version="1.1.1"/>
 <unit id="com.googlecode.json-simple" version="1.1.1"/>
+<unit id="com.google.guava" version="13.0.1"/>
+<unit id="com.google.guava.source" version="13.0.1"/>
+<unit id="org.ops4j.peaberry.activation.source" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.eclipse.source" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.source" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.activation" version="1.3.0"/>
+<unit id="org.ops4j.peaberry" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
+<unit id="org.mockito.mockito-all" version="1.9.5"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.common.common-util.source" version="2.1.0.201211271403"/>
+<unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.1.0.RELEASE/com.mmxlabs.common.util.p2-2.1.0.RELEASE-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/3.0.0-SNAPSHOT/com.mmxlabs.rcp.common.p2-3.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/4.0.0-SNAPSHOT/com.mmxlabs.models.mmxcore.p2-4.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="1.1.0.201205150811"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.8.1.v20120917-0436"/>
+<unit id="org.eclipse.emf.query.sdk.feature.group" version="1.6.0.v20120328-0001-67T-95GFz05DNIrNLOSNK_NPj507"/>
+<unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.6.0.v20120328-0001-67T-96SGR75UNqZNTdeQnghI6uFA"/>
+<unit id="org.eclipse.ocl.all.sdk.feature.group" version="4.0.1.v20120919-0602"/>
+<repository location="http://download.eclipse.org/releases/juno/"/>
 </location>
 </locations>
 </target>
