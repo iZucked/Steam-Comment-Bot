@@ -324,9 +324,17 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 		imposeShipToShipConstraints();
 	}
-	
-	private final void recordShipToShipBindings(int seqIndex, int withinSeqIndex, ISequenceElement element) {
-		
+
+	/**
+	 * Store the sequence and index within the sequence of the slot/element if it part of a ship to ship binding. This data is stored in the {@link #bindings} list as a quadruple mapping both slots
+	 * together such that we have, [ discharge sequence index, discharge within sequence index, load sequence index, load within sequence index]
+	 * 
+	 * @param seqIndex
+	 * @param withinSeqIndex
+	 * @param element
+	 */
+	private final void recordShipToShipBindings(final int seqIndex, final int withinSeqIndex, final ISequenceElement element) {
+
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
 		final IPortSlot converseSlot = shipToShipProvider.getConverseTransferElement(slot);  
 		final ISequenceElement transferConverseElement = portSlotProvider.getElement(converseSlot);
@@ -385,11 +393,11 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * @param startTimes
 	 * @param endTimes
 	 */
-	protected final void refineWindows(final int seqIndex) {
-		final int [] startTimes = windowStartTime[seqIndex];
-		final int [] endTimes = windowEndTime[seqIndex];
-		final int [] minTravelTimes = minTimeToNextElement[seqIndex];
-		final boolean [] useRawTimeWindow = useTimeWindow[seqIndex];
+	private final void refineWindows(final int seqIndex) {
+		final int[] startTimes = windowStartTime[seqIndex];
+		final int[] endTimes = windowEndTime[seqIndex];
+		final int[] minTravelTimes = minTimeToNextElement[seqIndex];
+		final boolean[] useRawTimeWindow = useTimeWindow[seqIndex];
 		// time windows after the first one have their start time clipped, so
 		// they don't start any earlier
 		// than you could get to them without being late.
