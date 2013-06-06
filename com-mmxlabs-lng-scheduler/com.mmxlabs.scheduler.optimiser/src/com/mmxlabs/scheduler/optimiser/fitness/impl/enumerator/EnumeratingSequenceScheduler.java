@@ -373,7 +373,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 				final int converseSequence = bindings.get(k + converseSequenceOffset);
 				final int converseIndex = bindings.get(k + converseIndexOffset);
 
-				if (sequences.getSequence(converseSequence).get(converseIndex) == transferConverseElement) {
+				if (converseSequence != -1 && converseIndex != -1 && sequences.getSequence(converseSequence).get(converseIndex) == transferConverseElement) {
 					bindings.set(k + thisSequenceOffset, seqIndex);
 					bindings.set(k + thisIndexOffset, withinSeqIndex);
 					attached = true;
