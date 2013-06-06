@@ -34,7 +34,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (loadSlot.getTransferFrom() != null) {
 					final DischargeSlot transferFrom = loadSlot.getTransferFrom();
-					validateAttriutes(ctx, loadSlot, transferFrom, failures, severity);
+					validateAttributes(ctx, loadSlot, transferFrom, failures, severity);
 
 					final Cargo cargo = ((DischargeSlot) extraValidationContext.getOriginal(transferFrom)).getCargo();
 					if (cargo != null) {
@@ -55,7 +55,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 				if (dischargeSlot.getTransferTo() != null) {
 					final LoadSlot transferTo = dischargeSlot.getTransferTo();
-					validateAttriutes(ctx, transferTo, dischargeSlot, failures, severity);
+					validateAttributes(ctx, transferTo, dischargeSlot, failures, severity);
 
 					final Cargo cargo = dischargeSlot.getCargo();
 					if (cargo != null) {
@@ -78,7 +78,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	private void validateAttriutes(final IValidationContext ctx, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final List<IStatus> failures, int severity) {
+	private void validateAttributes(final IValidationContext ctx, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final List<IStatus> failures, int severity) {
 
 		if (!Equality.isEqual(loadSlot.getWindowStart(), dischargeSlot.getWindowStart())) {
 			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Window Start");
