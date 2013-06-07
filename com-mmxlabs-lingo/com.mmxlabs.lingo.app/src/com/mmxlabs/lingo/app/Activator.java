@@ -34,8 +34,6 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		// See http://www.bredex.de/index.php/blog_article_en/items/automated-version-number-management-for-about-dialog-in-eclipse-products.html
-		System.setProperty("com.mmxlabs.lingo.application.version", context.getBundle().getVersion().toString());
 	}
 
 	/*
