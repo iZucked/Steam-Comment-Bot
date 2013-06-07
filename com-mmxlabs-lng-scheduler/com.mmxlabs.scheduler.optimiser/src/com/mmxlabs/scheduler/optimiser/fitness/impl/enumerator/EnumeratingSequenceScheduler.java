@@ -561,10 +561,10 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 					if (timeWindow != null) {
 						windows = Collections.singletonList(timeWindow);
 					} else {
-						windows = Collections.<ITimeWindow> emptyList();
+						windows = timeWindowProvider.getTimeWindows(element);
 					}
 				} else {
-					windows = Collections.<ITimeWindow> emptyList();
+					windows = timeWindowProvider.getTimeWindows(element);
 				}
 			} else {
 				// "windows" defaults to whatever windows are specified by the time window provider
