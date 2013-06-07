@@ -5,14 +5,15 @@
 
    <aboutInfo>
       <image path="/com.mmxlabs.lingo.product/icons/alt_window_16.gif"/>
-      <text>%aboutText</text>
+      <text>
+         %aboutText
+      </text>
    </aboutInfo>
 
    <configIni use="default">
    </configIni>
 
    <launcherArgs>
-      <programArgs>-console</programArgs>
       <vmArgs>-ea -server -Xmx768m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
