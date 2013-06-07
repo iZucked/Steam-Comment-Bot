@@ -5,11 +5,7 @@
 
    <aboutInfo>
       <image path="/com.mmxlabs.lingo.product/icons/alt_window_16.gif"/>
-      <text>
-         LiNGO Platform
-
-Version: 3.0.0
-      </text>
+      <text>%aboutText</text>
    </aboutInfo>
 
    <configIni use="default">
