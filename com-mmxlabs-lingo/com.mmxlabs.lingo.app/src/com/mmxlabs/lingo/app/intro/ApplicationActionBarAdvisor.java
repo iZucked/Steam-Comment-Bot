@@ -626,16 +626,17 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private MenuManager createWindowMenu() {
 		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_window, IWorkbenchActionConstants.M_WINDOW);
 
-		menu.add(newWindowAction);
 		// menu.add(newEditorAction);
 
 		menu.add(new Separator());
 		addPerspectiveActions(menu);
 		menu.add(new Separator());
 		// addKeyboardShortcuts(menu);
+		menu.add(newWindowAction);
 		final Separator sep = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
 		sep.setVisible(!Util.isMac());
 		menu.add(sep);
+
 
 		// See the comment for quit in createFileMenu
 		final ActionContributionItem openPreferencesItem = new ActionContributionItem(openPreferencesAction);
@@ -651,24 +652,24 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 */
 	private void addPerspectiveActions(final MenuManager menu) {
 		{
+			{
+				final MenuManager showViewMenuMgr = new MenuManager(IDEWorkbenchMessages.Workbench_showView, "showView"); //$NON-NLS-1$
+				final IContributionItem showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST.create(getWindow());
+				showViewMenuMgr.add(showViewMenu);
+				menu.add(showViewMenuMgr);
+			}
+			menu.add(resetPerspectiveAction);
 			final String openText = IDEWorkbenchMessages.Workbench_openPerspective;
 			final MenuManager changePerspMenuMgr = new MenuManager(openText, "openPerspective"); //$NON-NLS-1$
 			final IContributionItem changePerspMenuItem = ContributionItemFactory.PERSPECTIVES_SHORTLIST.create(getWindow());
 			changePerspMenuMgr.add(changePerspMenuItem);
 			menu.add(changePerspMenuMgr);
 		}
-		{
-			final MenuManager showViewMenuMgr = new MenuManager(IDEWorkbenchMessages.Workbench_showView, "showView"); //$NON-NLS-1$
-			final IContributionItem showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST.create(getWindow());
-			showViewMenuMgr.add(showViewMenu);
-			menu.add(showViewMenuMgr);
-		}
 		menu.add(new Separator());
 		// menu.add(editActionSetAction);
-		menu.add(savePerspectiveAction);
-		menu.add(resetPerspectiveAction);
-		menu.add(closePerspAction);
-		menu.add(closeAllPerspsAction);
+//		menu.add(savePerspectiveAction);
+//		menu.add(closePerspAction);
+//		menu.add(closeAllPerspsAction);
 	}
 
 	//
