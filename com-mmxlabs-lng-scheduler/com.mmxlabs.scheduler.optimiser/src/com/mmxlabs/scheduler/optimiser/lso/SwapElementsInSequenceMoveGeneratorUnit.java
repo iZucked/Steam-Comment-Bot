@@ -46,7 +46,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 		// Find a random none-empty ISequence
 		ISequence sequence = null;
 		IResource resource = null;
-		for (int i = 0; sequence == null && i < sequences.size(); ++i) {
+		for (int i = 0; i < sequences.size(); ++i) {
 			final int idx = RandomHelper.nextIntBetween(random, 0, sequences.size() - 1);
 			final ISequence s = sequences.getSequence(idx);
 			if (s == null || s.size() < 2) {
