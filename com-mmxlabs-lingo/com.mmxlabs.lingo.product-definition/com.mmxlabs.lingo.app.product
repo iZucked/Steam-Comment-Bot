@@ -6,7 +6,10 @@
    <aboutInfo>
       <image path="/com.mmxlabs.lingo.product/icons/alt_window_16.gif"/>
       <text>
-         %aboutText
+         LiNGO Platform
+
+Version: {0}
+Build: {1}
       </text>
    </aboutInfo>
 
