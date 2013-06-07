@@ -7,6 +7,11 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
+/**
+ * Factory for the {@link DifferentSTSVesselsConstraintChecker}
+ * 
+ * @since 5.0
+ */
 public class DifferentSTSVesselsConstraintCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "DifferentSTSVesselsConstraintChecker";
