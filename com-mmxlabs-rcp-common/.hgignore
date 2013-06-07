@@ -31,3 +31,6 @@ syntax: regexp
 ^com\.mmxlabs\.rcp\.common\.p2/\.project$
 syntax: glob
 target-definition/.classpath
+
+syntax: regexp
+^com\.mmxlabs\.rcp\.common\.feature/p2\.inf$
