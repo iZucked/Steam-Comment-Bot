@@ -705,14 +705,26 @@ public class CargoModelRowTransformer {
 					return super.get(rowData.dischargeAllocation, depth);
 				case LOAD_ALLOCATION:
 					return super.get(rowData.loadAllocation, depth);
+				case LOAD_OR_DISCHARGE: {
+					final Object result = get(rowData.loadSlot, depth);
+					return result != null ? result : get(rowData.dischargeSlot, depth);
+
+				}
+				case DISCHARGE_OR_LOAD: {
+					final Object result = get(rowData.dischargeSlot, depth);
+					return result != null ? result : get(rowData.loadSlot, depth);
+
+				}
+					
 				}
 			}
 			return super.get(root, depth);
 		}
+		
 	}
 
 	public enum Type {
-		CARGO, LOAD, DISCHARGE, ASSIGNMENT, CARGO_ALLOCATION, LOAD_ALLOCATION, DISCHARGE_ALLOCATION
+		CARGO, LOAD, DISCHARGE, ASSIGNMENT, CARGO_ALLOCATION, LOAD_ALLOCATION, DISCHARGE_ALLOCATION, DISCHARGE_OR_LOAD, LOAD_OR_DISCHARGE
 	}
 
 	/**
