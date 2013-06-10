@@ -651,6 +651,10 @@ public class CargoEditorMenuHelper {
 				//
 				menuManager.add(new CreateSlotAction("Discharge", source, null, false, false));
 				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, false));
+				
+				if (loadSlot.getTransferFrom() == null) {
+					menuManager.add(new CreateSlotAction("Ship to Ship", source, null, false, true));
+				}
 			}
 		} else {
 			final DischargeSlot dischargeSlot = (DischargeSlot) source;
@@ -658,7 +662,7 @@ public class CargoEditorMenuHelper {
 			if (!dischargeSlot.isFOBSale()) {
 				menuManager.add(new CreateSlotAction("DES Purchase", source, null, true, false));
 			}
-			
+
 			if (dischargeSlot.getTransferTo() == null) {
 				menuManager.add(new CreateSlotAction("Ship to Ship", source, null, false, true));
 			}
@@ -821,8 +825,12 @@ public class CargoEditorMenuHelper {
 			final List<Command> deleteCommands = new LinkedList<Command>();
 
 			// when we create a ship to ship linked slot, we don't rewire the cargoes
-			if (isShipToShip && !sourceIsLoad) {
-				cec.createNewShipToShipLoad(setCommands, (DischargeSlot) source, cargoModel);
+			if (isShipToShip) {
+				if (sourceIsLoad) {
+					cec.createNewShipToShipDischarge(setCommands, (LoadSlot) source, cargoModel);
+				} else {
+					cec.createNewShipToShipLoad(setCommands, (DischargeSlot) source, cargoModel);
+				}
 			}
 			// when we create another slot, we rewire the cargoes
 			else {
@@ -835,28 +843,28 @@ public class CargoEditorMenuHelper {
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 					}
-				dischargeSlot.setWindowStart(source.getWindowStart());
-				if (loadSlot.isDESPurchase()) {
-					dischargeSlot.setPort(source.getPort());
-				}
+					dischargeSlot.setWindowStart(source.getWindowStart());
+					if (loadSlot.isDESPurchase()) {
+						dischargeSlot.setPort(source.getPort());
+					}
 				} else {
-				dischargeSlot = (DischargeSlot) source;
+					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {
 						loadSlot = cec.createNewLoad(setCommands, cargoModel, isDesPurchaseOrFobSale);
-					loadSlot.setWindowStart(source.getWindowStart());
+						loadSlot.setWindowStart(source.getWindowStart());
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
-					loadSlot.setWindowStart(source.getWindowStart());
-				}
-				if (dischargeSlot.isFOBSale()) {
-					loadSlot.setPort(source.getPort());
+						loadSlot.setWindowStart(source.getWindowStart());
+					}
+					if (dischargeSlot.isFOBSale()) {
+						loadSlot.setPort(source.getPort());
 					}
 				}
 				cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
 			}
 
-			// make a compound command which adds and sets values before deleting anything 
-			
+			// make a compound command which adds and sets values before deleting anything
+
 			final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
 			// Process set before delete
 			for (final Command c : setCommands) {
