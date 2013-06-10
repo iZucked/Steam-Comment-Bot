@@ -138,7 +138,7 @@ public class CargoEditingCommands {
 		newLoad.setName(linkedSlot.getName() + "-transfer");
 
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoad));
-		setCommands.add(AddCommand.create(editingDomain, linkedSlot, CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO, newLoad));
+		setCommands.add(SetCommand.create(editingDomain, linkedSlot, CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO, newLoad));
 
 		return newLoad;
 	}
@@ -174,7 +174,7 @@ public class CargoEditingCommands {
 		newDischarge.setName(linkedSlot.getName() + "-transfer");
 
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, newDischarge));
-		setCommands.add(AddCommand.create(editingDomain, linkedSlot, CargoPackage.Literals.LOAD_SLOT__TRANSFER_FROM, newDischarge));
+		setCommands.add(SetCommand.create(editingDomain, linkedSlot, CargoPackage.Literals.LOAD_SLOT__TRANSFER_FROM, newDischarge));
 
 		return newDischarge;
 	}
