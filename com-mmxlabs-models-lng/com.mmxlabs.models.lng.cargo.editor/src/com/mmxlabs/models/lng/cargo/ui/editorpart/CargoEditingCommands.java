@@ -134,11 +134,11 @@ public class CargoEditingCommands {
 		}
 		newLoad.setWindowStart(linkedSlot.getWindowStart());
 		newLoad.setPort(linkedSlot.getPort());
-		newLoad.setTransferFrom(linkedSlot);
 
 		newLoad.setName(linkedSlot.getName() + "-transfer");
 
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoad));
+		setCommands.add(AddCommand.create(editingDomain, linkedSlot, CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO, newLoad));
 
 		return newLoad;
 	}
