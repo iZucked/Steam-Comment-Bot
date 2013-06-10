@@ -100,12 +100,12 @@ public class EObjectTableViewerSortingSupport {
 	public ViewerComparator createViewerComparer() {
 		return new ViewerComparator() {
 			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+			public int compare(final Viewer viewer, final Object leftObject, final Object rightObject) {
 
 				// If there is a fixed sort order use that.
 				if (fixedSortOrder != null) {
-					final int idx1 = fixedSortOrder.indexOf(e1);
-					final int idx2 = fixedSortOrder.indexOf(e2);
+					final int idx1 = fixedSortOrder.indexOf(leftObject);
+					final int idx2 = fixedSortOrder.indexOf(rightObject);
 					return idx1 - idx2;
 				}
 
@@ -113,49 +113,33 @@ public class EObjectTableViewerSortingSupport {
 				int comparison = 0;
 				while (iterator.hasNext() && (comparison == 0)) {
 					final GridColumn column = iterator.next();
+					// additional text rendering information and comparison information
 					final ICellRenderer renderer = (ICellRenderer) column.getData(EObjectTableViewer.COLUMN_RENDERER);
-					final EMFPath path = (EMFPath) column.getData(EObjectTableViewer.COLUMN_PATH);
-
-					if (path != null) {
-
-						final Object v1 = path.get((EObject) e1);
-						final Object v2 = path.get((EObject) e2);
-int ii = 0;
-						Comparable left = renderer.getComparable(v1);
-						if (left == null) {
-							try {
-								left = renderer.getComparable(e1);
-							} catch (Exception e) {
-							} catch (AssertionError ae) {
-
-							}
-						}
-						Comparable right = renderer.getComparable(v2);
-						if (right == null) {
-							try {
-								right = renderer.getComparable(e2);
-							} catch (Exception e) {
-							} catch (AssertionError ae) {
-
-							}
-						}
-						if (left == null) {
-							return -1;
-						} else if (right == null) {
-							return 1;
-						} else {
-							comparison = left.compareTo(right);
-						}
+					
+					final EMFPath sortPath = (EMFPath) column.getData(EObjectTableViewer.COLUMN_SORT_PATH);
+					// ???
+					final EMFPath path = sortPath != null ? sortPath : (EMFPath) column.getData(EObjectTableViewer.COLUMN_PATH);
+					
+					final Object leftOwner;
+					final Object rightOwner;
+					
+					if (path == null) {
+						leftOwner = leftObject;
+						rightOwner = rightObject;
+					}
+					else {
+						leftOwner = path.get((EObject) leftObject);
+						rightOwner = path.get((EObject) rightObject);
+					}
+					
+					final Comparable left = renderer.getComparable(leftOwner);
+					final Comparable right = renderer.getComparable(rightOwner);
+					if (left == null) {
+						return -1;
+					} else if (right == null) {
+						return 1;
 					} else {
-						final Comparable left = renderer.getComparable(e1);
-						final Comparable right = renderer.getComparable(e2);
-						if (left == null) {
-							return -1;
-						} else if (right == null) {
-							return 1;
-						} else {
-							comparison = left.compareTo(right);
-						}
+						comparison = left.compareTo(right);
 					}
 				}
 				return sortDescending ? -comparison : comparison;
