@@ -1,0 +1,6 @@
+name,taxRates,kind,shipping,2000-04-01
+Europe,,LegalEntity,Y,0.0000
+US,,LegalEntity,,0.0000
+Asia,,LegalEntity,,0.0000
+Third-parties,,LegalEntity,,0.0000
+Shipping,,LegalEntity,,0.0000
