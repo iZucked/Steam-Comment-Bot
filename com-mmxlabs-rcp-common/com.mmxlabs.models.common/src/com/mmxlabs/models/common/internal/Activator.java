@@ -72,11 +72,11 @@ public class Activator extends AbstractUIPlugin {
 
 	public List<IModelCommandProvider> getModelCommandProviders() {
 
-		List<IModelCommandProvider> providers = new ArrayList<IModelCommandProvider>();
-		for (IModelCommandProvider p : commandProviderServices) {
+		final List<IModelCommandProvider> providers = new ArrayList<IModelCommandProvider>();
+		for (final IModelCommandProvider p : commandProviderServices) {
 			providers.add(p);
 		}
-		for (IModelCommandProviderExtension e : commandProvidersExtensions) {
+		for (final IModelCommandProviderExtension e : commandProvidersExtensions) {
 			providers.add(new ModelCommandProviderExtensionProxy(e));
 		}
 
