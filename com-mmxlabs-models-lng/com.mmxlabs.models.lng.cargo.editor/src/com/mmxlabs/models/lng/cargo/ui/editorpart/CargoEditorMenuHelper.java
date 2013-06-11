@@ -651,7 +651,7 @@ public class CargoEditorMenuHelper {
 				//
 				menuManager.add(new CreateSlotAction("Discharge", source, null, false, false));
 				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, false));
-				
+
 				if (loadSlot.getTransferFrom() == null) {
 					menuManager.add(new CreateSlotAction("Ship to Ship", source, null, false, true));
 				}
@@ -826,11 +826,7 @@ public class CargoEditorMenuHelper {
 
 			// when we create a ship to ship linked slot, we don't rewire the cargoes
 			if (isShipToShip) {
-				if (sourceIsLoad) {
-					cec.createNewShipToShipDischarge(setCommands, (LoadSlot) source, cargoModel);
-				} else {
-					cec.createNewShipToShipLoad(setCommands, (DischargeSlot) source, cargoModel);
-				}
+				cec.insertShipToShipSlots(setCommands, source, cargoModel);
 			}
 			// when we create another slot, we rewire the cargoes
 			else {
