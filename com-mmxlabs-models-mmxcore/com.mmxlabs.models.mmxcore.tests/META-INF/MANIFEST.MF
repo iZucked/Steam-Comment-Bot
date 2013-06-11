@@ -8,4 +8,4 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit,
- org.mockito;bundle-version="1.8.4"
+ org.mockito.mockito-all;bundle-version="1.9.5"
