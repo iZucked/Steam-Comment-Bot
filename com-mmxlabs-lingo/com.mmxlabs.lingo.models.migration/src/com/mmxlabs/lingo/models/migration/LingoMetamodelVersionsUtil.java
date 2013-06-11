@@ -29,7 +29,7 @@ public class LingoMetamodelVersionsUtil {
 
 	public static MetamodelLoader createV1Loader() {
 
-		final MetamodelLoader loader = MetamodelVersionsUtil.createV2Loader(null);
+		final MetamodelLoader loader = MetamodelVersionsUtil.createV1Loader(null);
 
 		return loader;
 	}

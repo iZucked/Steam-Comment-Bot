@@ -46,13 +46,13 @@ public class LingoMigrateToV1 implements IMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -1;
+		return 1;
 	}
 
 	@Override
 	public void migrate(@NonNull final List<URI> baseURIs, @NonNull final URIConverter uc, @Nullable final Map<String, URI> extraPackagesOrig) throws Exception {
 
-		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, 0, 2);
+		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, 0, 1);
 		for (final IMigrationUnit unit : chain) {
 			unit.migrate(baseURIs, uc, null);
 		}
