@@ -55,27 +55,39 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 
 	@Override
 	public void debug(final String msg) {
-		doLog(IStatus.INFO, msg, null);
+		if (isDebugEnabled()) {
+			doLog(IStatus.INFO, msg, null);
+		}
 	}
 
 	@Override
 	public void debug(final String format, final Object arg) {
-		doLog(IStatus.INFO, String.format(format, arg), null);
+		if (isDebugEnabled()) {
+			doLog(IStatus.INFO, String.format(format, arg), null);
+		}
 	}
 
 	@Override
 	public void debug(final String format, final Object arg1, final Object arg2) {
-		doLog(IStatus.INFO, String.format(format, arg1, arg2), null);
+		if (isDebugEnabled()) {
+			doLog(IStatus.INFO, String.format(format, arg1, arg2), null);
+		}
 	}
 
 	@Override
 	public void debug(final String format, final Object[] argArray) {
-		doLog(IStatus.INFO, String.format(format, argArray), null);
+
+		if (isDebugEnabled()) {
+			doLog(IStatus.INFO, String.format(format, argArray), null);
+		}
 	}
 
 	@Override
 	public void debug(final String msg, final Throwable t) {
-		doLog(IStatus.INFO, msg, t);
+
+		if (isDebugEnabled()) {
+			doLog(IStatus.INFO, msg, t);
+		}
 	}
 
 	@Override
