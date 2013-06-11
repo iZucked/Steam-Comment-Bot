@@ -5,6 +5,7 @@
 package com.mmxlabs.models.common.commandservice;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -17,10 +18,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.common.internal.Activator;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -31,17 +32,17 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDomain {
 	private static final Logger log = LoggerFactory.getLogger(CommandProviderAwareEditingDomain.class);
 	private final MMXRootObject rootObject;
-	private final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker;
 
 	private boolean commandProvidersDisabled = false;
 
 	private boolean enabled = true;
 
-	public CommandProviderAwareEditingDomain(final AdapterFactory adapterFactory, final CommandStack commandStack, final MMXRootObject rootObject,
-			final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker, final ResourceSet resourceSet) {
+	/**
+	 * @since 3.0
+	 */
+	public CommandProviderAwareEditingDomain(final AdapterFactory adapterFactory, final CommandStack commandStack, final MMXRootObject rootObject, final ResourceSet resourceSet) {
 		super(adapterFactory, commandStack, resourceSet);
 		this.rootObject = rootObject;
-		this.commandProviderTracker = commandProviderTracker;
 	}
 
 	public void setAdaptersEnabled(final boolean enabled) {
@@ -106,7 +107,8 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		if (!isCommandProvidersDisabled()) {
 			final CompoundCommand wrapper = new CompoundCommand();
 			wrapper.append(normal);
-			final IModelCommandProvider[] providers = commandProviderTracker.getServices(new IModelCommandProvider[0]);
+
+			final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
 			for (final IModelCommandProvider provider : providers) {
 				provider.startCommandProvision();
 			}
@@ -178,4 +180,5 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	public boolean isEnabled() {
 		return enabled;
 	}
+
 }

@@ -4,8 +4,16 @@
  */
 package com.mmxlabs.models.common.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -16,6 +24,14 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+
+	private Injector injector;
+
+	@Inject
+	private Iterable<IModelCommandProvider> commandProviderServices;
+
+	@Inject
+	private Iterable<IModelCommandProviderExtension> commandProvidersExtensions;
 
 	/**
 	 * The constructor
@@ -33,6 +49,10 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+
+		injector = Guice.createInjector(new ModelCommandProviderModule(context));
+		injector.injectMembers(this);
+
 	}
 
 	/*
@@ -48,5 +68,18 @@ public class Activator extends AbstractUIPlugin {
 
 	public static Activator getPlugin() {
 		return plugin;
+	}
+
+	public List<IModelCommandProvider> getModelCommandProviders() {
+
+		List<IModelCommandProvider> providers = new ArrayList<IModelCommandProvider>();
+		for (IModelCommandProvider p : commandProviderServices) {
+			providers.add(p);
+		}
+		for (IModelCommandProviderExtension e : commandProvidersExtensions) {
+			providers.add(new ModelCommandProviderExtensionProxy(e));
+		}
+
+		return providers;
 	}
 }
