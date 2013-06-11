@@ -25,4 +25,5 @@ public class ModelsLNGMigrationConstants {
 	public static final String NSURI_PortModel = "http://www.mmxlabs.com/models/lng/port/1/";
 	public static final String NSURI_ScheduleModel = "http://www.mmxlabs.com/models/lng/schedule/1/";
 	public static final String NSURI_SpotMarketsModel = "http://www.mmxlabs.com/models/lng/spotmarkets/1/";
+	public static final String NSURI_ScenarioModel = "http://www.mmxlabs.com/models/lng/scenario/1/";
 }

@@ -28,11 +28,13 @@ public class MetamodelVersionsUtil {
 	 * 
 	 */
 	public enum ModelsLNGSet_v1 {
-		Analytics, Cargo, Commercial, Fleet, Input, Optimiser, Port, Pricing, Schedule, SpotMarkets
+		Scenario, Analytics, Cargo, Commercial, Fleet, Input, Optimiser, Port, Pricing, Schedule, SpotMarkets
 	}
 
 	public static ModelsLNGSet_v1 getTypeFromNS(final String nsURI) {
-		if (ModelsLNGMigrationConstants.NSURI_AnalyticsModel.equals(nsURI)) {
+		if (ModelsLNGMigrationConstants.NSURI_ScenarioModel.equals(nsURI)) {
+			return ModelsLNGSet_v1.Scenario;
+		} else if (ModelsLNGMigrationConstants.NSURI_AnalyticsModel.equals(nsURI)) {
 			return ModelsLNGSet_v1.Analytics;
 		} else if (ModelsLNGMigrationConstants.NSURI_CargoModel.equals(nsURI)) {
 			return ModelsLNGSet_v1.Cargo;
@@ -54,34 +56,6 @@ public class MetamodelVersionsUtil {
 			return ModelsLNGSet_v1.SpotMarkets;
 		}
 		return null;
-	}
-
-	public static MetamodelLoader createV0Loader(final Map<String, URI> extraPackages) {
-
-		final MetamodelLoader loader = new MetamodelLoader();
-
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
-		final EPackage typesPackage = loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_FleetModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.input/model/input-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_InputModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.optimiser/model/optimiser-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_OptimiserModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/spotmarkets-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
-
-		hookSerializableObjectConvertor(typesPackage);
-
-		if (extraPackages != null) {
-			for (final Map.Entry<String, URI> e : extraPackages.entrySet()) {
-				loader.loadEPackage(e.getValue(), e.getKey());
-			}
-		}
-
-		return loader;
 	}
 
 	/**
@@ -106,22 +80,23 @@ public class MetamodelVersionsUtil {
 		});
 	}
 
-	public static MetamodelLoader createV1Loader(final Map<String, URI> extraPackages) {
+	public static MetamodelLoader createV0Loader(final Map<String, URI> extraPackages) {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
 		final EPackage typesPackage = loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_FleetModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.input/model/input-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_InputModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.optimiser/model/optimiser-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_OptimiserModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_FleetModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.input/model/input-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_InputModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.optimiser/model/optimiser-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_OptimiserModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/spotmarkets-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario/model/scenario-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 
 		hookSerializableObjectConvertor(typesPackage);
 
@@ -134,38 +109,14 @@ public class MetamodelVersionsUtil {
 		return loader;
 	}
 
-	public static MetamodelLoader createV2Loader(final Map<String, URI> extraPackages) {
-
-		final MetamodelLoader loader = new MetamodelLoader();
-
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
-		final EPackage typesPackage = loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_FleetModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.input/model/input-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_InputModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.optimiser/model/optimiser-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_OptimiserModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets-v2.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
-
-		hookSerializableObjectConvertor(typesPackage);
-
-		if (extraPackages != null) {
-			for (final Map.Entry<String, URI> e : extraPackages.entrySet()) {
-				loader.loadEPackage(e.getValue(), e.getKey());
-			}
-		}
-
-		return loader;
+	public static MetamodelLoader createV1Loader(final Map<String, URI> extraPackages) {
+		return createCurrentLoader(extraPackages);
 	}
 
 	/**
 	 * @since 4.0
 	 */
-	public static MetamodelLoader createV3Loader(final Map<String, URI> extraPackages) {
+	public static MetamodelLoader createCurrentLoader(final Map<String, URI> extraPackages) {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
@@ -181,6 +132,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario/model/scenario.ecore", true), ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 
 		hookSerializableObjectConvertor(typesPackage);
 
