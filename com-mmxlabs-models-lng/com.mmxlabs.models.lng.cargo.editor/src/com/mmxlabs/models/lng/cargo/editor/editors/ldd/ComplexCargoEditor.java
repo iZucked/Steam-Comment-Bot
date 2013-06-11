@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -315,8 +316,21 @@ public class ComplexCargoEditor extends Dialog {
 
 		viewer.setComparator(new ViewerComparator() {
 			@Override
-			public int compare(Viewer viewer, Object e1, Object e2) {
-				// TODO Auto-generated method stub
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+
+				if (e1 instanceof LoadSlot) {
+					return -1;
+				} else if (e2 instanceof LoadSlot) {
+					return 1;
+				}
+
+				final Slot s1 = (Slot) e1;
+				final Slot s2 = (Slot) e2;
+
+				if (s1.getWindowStart() != null && s2.getWindowStart() != null) {
+					return s1.getWindowStart().compareTo(s2.getWindowStart());
+				}
+
 				return super.compare(viewer, e1, e2);
 			}
 		});
