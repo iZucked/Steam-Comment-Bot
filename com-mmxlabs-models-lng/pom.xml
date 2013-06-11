@@ -28,6 +28,7 @@
 
 	<modules>
 		<module>target-definition</module>
+		<module>com.mmxlabs.models.lng.ui</module>
 		<module>com.mmxlabs.models.lng.cargo</module>
 		<module>com.mmxlabs.models.lng.cargo.edit</module>
 		<module>com.mmxlabs.models.lng.cargo.editor</module>
