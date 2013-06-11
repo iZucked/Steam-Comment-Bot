@@ -1,5 +1,6 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -26,13 +27,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -71,7 +70,7 @@ public class CargoPropertiesReport extends ViewPart {
 	/**
 	 * List of dynamically generated columns to be disposed on selection changes
 	 */
-	private final List<GridViewerColumn> dataColumns = new LinkedList<>();
+	private final List<GridViewerColumn> dataColumns = new LinkedList<GridViewerColumn>();
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -167,6 +166,9 @@ public class CargoPropertiesReport extends ViewPart {
 		}
 	}
 
+	static final DecimalFormat MillionsFormat = new DecimalFormat( "##,###,###,###" );
+	static final DecimalFormat DollarsPermmBtuFormat = new DecimalFormat( "###.###" );
+
 	/**
 	 * The {@link FieldType} is the row data. Each enum is a different row. Currently there is no table sorter so enum order is display order
 	 * 
@@ -174,20 +176,23 @@ public class CargoPropertiesReport extends ViewPart {
 	private static enum FieldType {
 
 		// @formatter:off
-		BUY_COST_TOTAL("Buy Cost", "$"), 
-		BUY_VOLUME_IN_MMBTU("Buy: Volume", "MMBTu"),
-		SHIPPING_COST_TOTAL("Shipping: Cost", "$"),
-		SHIPPING_BUNKERS_COST_TOTAL("Shipping: Bunkers", "$"), 
-		SHIPPING_BOIL_OFF_COST_TOTAL("Shipping: Boil Off", "$"), 
-		SHIPPING_CHARTER_COST_TOTAL("Shipping: Charter Cost", "$"), 
-		SELL_REVENUE_TOTAL("Sell: Revenue", "$"),
-		SELL_VOLUME_IN_MMBTU("Sell: Volume", "$"),
-		PNL_TOTAL("P&L", "$"),
-		PNL_PER_MMBTU("P&L", "$/MMBTu");
+		BUY_COST_TOTAL("Buy Cost", "$", MillionsFormat), 
+		BUY_VOLUME_IN_MMBTU("Volume", "mmBTu", MillionsFormat),
+		SHIPPING_COST_TOTAL("Shipping Cost", "$", MillionsFormat),
+		SHIPPING_BUNKERS_COST_TOTAL("- Bunkers", "$", MillionsFormat), 
+		SHIPPING_BOIL_OFF_COST_TOTAL("- Boil Off", "$", MillionsFormat), 
+		SHIPPING_CHARTER_COST_TOTAL("- Charter Cost", "$", MillionsFormat), 
+		SELL_REVENUE_TOTAL("Sell: Revenue", "$", MillionsFormat),
+		SELL_VOLUME_IN_MMBTU("Sell: Volume", "$", MillionsFormat),
+		PNL_TOTAL("P&L", "$", MillionsFormat),
+		PNL_PER_MMBTU("P&L", "$/mmBTu", DollarsPermmBtuFormat);
 		// @formatter:on
 
 		private final String name;
 		private final String unit;
+		
+		private final DecimalFormat df;
+
 
 		public String getName() {
 			return name;
@@ -197,9 +202,14 @@ public class CargoPropertiesReport extends ViewPart {
 			return unit;
 		}
 
-		private FieldType(final String name, final String unit) {
+		public DecimalFormat getDf() {
+			return df;
+		}
+
+		private FieldType(final String name, final String unit, DecimalFormat df) {
 			this.name = name;
 			this.unit = unit;
+			this.df = df;
 		}
 	}
 
@@ -239,7 +249,7 @@ public class CargoPropertiesReport extends ViewPart {
 
 		@Override
 		public Object getObject(final FieldType fieldType) {
-
+			
 			switch (fieldType) {
 			case BUY_COST_TOTAL: {
 				final double volumeInMMBTu = (Double) getObject(FieldType.BUY_VOLUME_IN_MMBTU);
@@ -314,7 +324,7 @@ public class CargoPropertiesReport extends ViewPart {
 			final Object obj = getObject(fieldType);
 			if (obj != null) {
 				// TODO: Format appropriately, maybe have a format specifier on the enum?
-				return obj.toString();
+				return fieldType.getDf().format(obj);
 			}
 
 			return null;
@@ -336,7 +346,7 @@ public class CargoPropertiesReport extends ViewPart {
 		public String getText(final Object element) {
 			if (element instanceof FieldType) {
 				final FieldType fieldType = (FieldType) element;
-				return fieldType.getName();
+				return fieldType.getName() + " (" + fieldType.getUnit() + ")";
 			}
 			return null;
 		}
