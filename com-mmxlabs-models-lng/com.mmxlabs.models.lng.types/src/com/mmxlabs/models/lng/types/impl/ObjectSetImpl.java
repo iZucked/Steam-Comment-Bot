@@ -5,14 +5,10 @@
 package com.mmxlabs.models.lng.types.impl;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -126,7 +122,6 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
