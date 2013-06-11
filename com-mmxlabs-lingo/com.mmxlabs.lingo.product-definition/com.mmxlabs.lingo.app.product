@@ -54,8 +54,6 @@ Build: {1}
    <configurations>
       <plugin id="com.mmxlabs.datasources.atobviac" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.lingo.extensions" autoStart="true" startLevel="0" />
-      <plugin id="com.mmxlabs.models.lng.analytics.editor" autoStart="true" startLevel="0" />
-      <plugin id="com.mmxlabs.models.lng.assignment.editor" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.liveevaluator" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.transformer" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.transformer.ui" autoStart="true" startLevel="0" />
