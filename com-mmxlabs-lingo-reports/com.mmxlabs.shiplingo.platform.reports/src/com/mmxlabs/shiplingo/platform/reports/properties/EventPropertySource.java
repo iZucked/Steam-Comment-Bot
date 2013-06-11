@@ -231,7 +231,7 @@ public class EventPropertySource implements IPropertySource {
 			}
 		}
 
-		// Find the path to a ProfieAndLossContainer
+		// Find the path to a ProfitAndLossContainer
 		final List<Object> featureList = new ArrayList<Object>();
 		ProfitAndLossContainer container = null;
 		if (event instanceof ProfitAndLossContainer) {
