@@ -13,14 +13,14 @@ properties.1.value=false
 
 instructions.configure=\
 org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/eclipsec.exe);\
-org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/lingo/,name:Lingo, enabled:true);\
-org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/lingo/,name:Lingo, enabled:true);\
-org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/testing/lingo/,name:Lingo Testing, enabled:false);\
-org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/testing/lingo/,name:Lingo Testing, enabled:false);
+org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo, enabled:true);\
+org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo, enabled:true);\
+org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/testing/LiNGO/,name:Lingo Testing, enabled:false);\
+org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/testing/LiNGO/,name:Lingo Testing, enabled:false);
 
 instructions.unconfigure=\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/lingo/,name:Lingo);\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/lingo/,name:Lingo);\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/testing/lingo/,name:Lingo Testing);\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/testing/lingo/,name:Lingo Testing);
+org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo);\
+org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo);\
+org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/testing/LiNGO/,name:Lingo Testing);\
+org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/testing/LiNGO/,name:Lingo Testing);
 
