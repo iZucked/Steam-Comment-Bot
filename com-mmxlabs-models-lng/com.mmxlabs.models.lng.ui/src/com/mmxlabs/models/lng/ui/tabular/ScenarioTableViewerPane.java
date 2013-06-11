@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.ui.tabular;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -480,11 +482,14 @@ public class ScenarioTableViewerPane extends ViewerPane {
 								// Copy selection
 								final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
 
+								// Ensure a unique collection of objects - no duplicates
+								final Set<Object> uniqueObjects = new HashSet<Object>(objects);
+
 								// Clear current selection
 								selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
 
 								// Execute command
-								final Command deleteCommand = DeleteCommand.create(ed, objects);
+								final Command deleteCommand = DeleteCommand.create(ed, uniqueObjects);
 								ed.getCommandStack().execute(deleteCommand);
 							}
 						} finally {

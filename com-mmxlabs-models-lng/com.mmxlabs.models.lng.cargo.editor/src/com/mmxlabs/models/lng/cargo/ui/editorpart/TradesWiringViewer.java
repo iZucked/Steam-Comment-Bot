@@ -41,6 +41,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -109,6 +110,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -132,6 +134,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
@@ -643,8 +646,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}, new RowDataEMFPath(false, Type.DISCHARGE));
 		dischargeDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.DISCHARGE_OR_LOAD));
-		
-		
+
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		addTradesColumn(dischargeColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
 				editingDomain) {
@@ -698,11 +700,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override
-			protected void wiringChanged(final Map<RowData, RowData> newWiring) {
+			protected void wiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed) {
 				if (locked) {
 					return;
 				}
-				doWiringChanged(newWiring);
+				doWiringChanged(newWiring, ctrlPressed);
 			}
 
 			@Override
@@ -942,7 +944,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 	}
 
-	protected void doWiringChanged(final Map<RowData, RowData> newWiring) {
+	protected void doWiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed) {
 
 		final List<Command> setCommands = new LinkedList<Command>();
 		final List<Command> deleteCommands = new LinkedList<Command>();
