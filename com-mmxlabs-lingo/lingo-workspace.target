@@ -98,9 +98,20 @@
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/jre" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.scheduler.optimiser.feature.feature.group" version="4.0.8.RELEASE"/>
-<unit id="com.mmxlabs.scheduler.optimiser.feature.source.feature.group" version="4.0.8.RELEASE"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/4.0.8.RELEASE/com.mmxlabs.scheduler.p2-4.0.8.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.common.common-util.source" version="2.1.0.201211271403"/>
+<unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.1.0.RELEASE/com.mmxlabs.common.util.p2-2.1.0.RELEASE-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.optimiser.optimiser-common.source" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core.source" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga.source" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso.source" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201212131159"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/optimiser/optimiser-p2/1.1.1.RELEASE/optimiser-p2-1.1.1.RELEASE-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.1.RELEASE"/>
@@ -108,7 +119,11 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/1.0.1.RELEASE/com.mmxlabs.jobmanager.p2-1.0.1.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-updateExistingDistances
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="4.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="4.0.0.RELEASE"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/4.0.0.RELEASE/com.mmxlabs.models.mmxcore.p2-4.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.RELEASE"/>
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.source" version="1.0.1.RELEASE"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
