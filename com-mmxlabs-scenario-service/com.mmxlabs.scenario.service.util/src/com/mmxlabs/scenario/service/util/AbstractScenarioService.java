@@ -203,12 +203,10 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
-		final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker = Activator.getDefault().getCommandProviderTracker();
-
 		// Create the editing domain with a special command stack.
 		final MMXRootObject mmxRootObject = (MMXRootObject) rootObject;
 
-		final CommandProviderAwareEditingDomain editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, commandProviderTracker, resourceSet);
+		final CommandProviderAwareEditingDomain editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, resourceSet);
 
 		commandStack.setEditingDomain(editingDomain);
 
@@ -321,7 +319,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			dup.getMetadata().setCreated(cpy.getMetadata().getCreated());
 			dup.getMetadata().setLastModified(new Date());
 			dup.setName(cpy.getName());
-			
+
 			// Copy version context information
 			dup.setVersionContext(cpy.getVersionContext());
 			dup.setScenarioVersion(cpy.getScenarioVersion());

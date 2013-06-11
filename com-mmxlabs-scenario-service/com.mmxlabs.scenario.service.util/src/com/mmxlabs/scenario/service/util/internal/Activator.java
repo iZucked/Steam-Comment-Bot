@@ -21,8 +21,6 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker;
-
 	/**
 	 * The constructor
 	 */
@@ -38,9 +36,6 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		commandProviderTracker = new ServiceTracker<IModelCommandProvider, IModelCommandProvider>(context, IModelCommandProvider.class, null);
-		commandProviderTracker.open();
-
 	}
 
 	/*
@@ -50,9 +45,6 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-
-		commandProviderTracker.close();
-		commandProviderTracker = null;
 
 		plugin = null;
 		super.stop(context);
@@ -67,7 +59,4 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public ServiceTracker<IModelCommandProvider, IModelCommandProvider> getCommandProviderTracker() {
-		return commandProviderTracker;
-	}
 }
