@@ -148,4 +148,11 @@
           subModelClass="com.mmxlabs.models.lng.schedule.ScheduleModel">
     </jointModelEditor>
  </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelCommandProvider"
+          id="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelCommandProvider">
+    </ModelCommandProvider>
+ </extension>
 </plugin>

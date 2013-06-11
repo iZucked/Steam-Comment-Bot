@@ -187,4 +187,15 @@
           restorable="true">
     </view>
  </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider"
+          id="com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider"
+          id="com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider">
+    </ModelCommandProvider>
+ </extension>
 </plugin>

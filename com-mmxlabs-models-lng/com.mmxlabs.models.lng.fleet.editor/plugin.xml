@@ -268,4 +268,11 @@
           restorable="true">
     </view>
  </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.VesselAvailabilityCommandProvider"
+          id="com.mmxlabs.models.lng.fleet.editor.commands.VesselAvailabilityCommandProvider">
+    </ModelCommandProvider>
+ </extension>
 </plugin>

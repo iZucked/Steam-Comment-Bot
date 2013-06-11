@@ -188,4 +188,11 @@
        </FeatureAnyOf>
     </editorFactory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.port.ui.commands.RoutePortCommandProvider"
+          id="com.mmxlabs.models.lng.port.ui.commands.RoutePortCommandProvider">
+    </ModelCommandProvider>
+ </extension>
 </plugin>
