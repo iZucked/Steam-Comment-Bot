@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.SAXParser;
@@ -24,9 +23,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -202,91 +199,6 @@ public class EcoreHelper {
 			assert f != null;
 			// Copy data
 			copyEObjectFeature(source, destination, f);
-		}
-	}
-
-	/**
-	 * This method updates the stored MMXProxy references to point to the new reference. As we move a class from one metamodel to another one, the persisted reference will store the ecore model
-	 * reference to the old model definition. This method will load the reference and locate the equivalent on the new model class.
-	 * 
-	 * @since 2.0
-	 */
-	public static void updateMMXProxy(@NonNull final EObject mmxProxy, @NonNull final EPackage mmxcorePackage, @NonNull final EClass containerClass) {
-		final EClass class_MMXProxy = MetamodelUtils.getEClass(mmxcorePackage, "MMXProxy");
-		final EStructuralFeature feature_reference = MetamodelUtils.getStructuralFeature(class_MMXProxy, "reference");
-
-		if (mmxProxy.eIsSet(feature_reference)) {
-			// Initial reference will be a "proxy"...
-			EReference reference = (EReference) mmxProxy.eGet(feature_reference);
-			// ... so we need to "resolve" it to load in the types from our metamodels.
-			reference = (EReference) EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
-
-			final EClass class_OldContainingClass = reference.getEContainingClass();
-			final String feature_name = class_OldContainingClass.getEStructuralFeature(reference.getFeatureID()).getName();
-
-			// This bit gets the new model reference. However it will be match against the platform URI rather than namespace URI.
-			final EStructuralFeature newReference = MetamodelUtils.getStructuralFeature(containerClass, feature_name);
-
-			// Here we attempt to reconstruct the real reference URI using the namespace rather than the platform URI.
-			// Note: This depends upon the internal structure of the EMF serialisation
-			// Note: This may not work for sub packages in the EMF metamodel
-			final String nsURI = containerClass.getEPackage().getNsURI();
-			final URI newURI = URI.createURI(nsURI).appendFragment("//" + containerClass.getName() + "/" + reference.getName());
-			((InternalEObject) newReference).eSetProxyURI(newURI);
-
-			// Store the new reference
-			mmxProxy.eSet(feature_reference, newReference);
-		}
-	}
-
-	/**
-	 * @since 2.0
-	 */
-	public static void updateMMXProxy(@NonNull final EObject containerClass, @NonNull final EPackage mmxcorePackage) {
-
-		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
-		if (class_MMXObject.isInstance(containerClass)) {
-			final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
-			final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(containerClass, feature_proxies);
-			if (proxies != null) {
-				for (final EObject proxy : proxies) {
-					assert proxy != null;
-					final EClass containerEClass = containerClass.eClass();
-					assert containerEClass != null;
-					updateMMXProxy(proxy, mmxcorePackage, containerEClass);
-				}
-			}
-
-		}
-	}
-
-	/**
-	 * This method updates the stored MMXProxy references to point to the new references for all objects in a model tree. See {@link #updateMMXProxy(EObject, EPackage)} for more details.
-	 * 
-	 * @param modelRoot
-	 *            The root node in the model tree.
-	 * @param mmxcorePackage
-	 *            The MMXCore {@link EPackage} instance to use to find the MMXProxy EClass and related features.
-	 * @since 2.0
-	 */
-	public static void updateAllMMXProxies(@NonNull final EObject modelRoot, @NonNull final EPackage mmxcorePackage) {
-
-		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
-		final Iterator<EObject> itr = modelRoot.eAllContents();
-		while (itr.hasNext()) {
-			final EObject containerClass = itr.next();
-			if (class_MMXObject.isInstance(containerClass)) {
-				final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
-				final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(containerClass, feature_proxies);
-				if (proxies != null) {
-					for (final EObject proxy : proxies) {
-						assert proxy != null;
-						EClass containerEClass = containerClass.eClass();
-						assert containerEClass != null;
-						updateMMXProxy(proxy, mmxcorePackage, containerEClass);
-					}
-				}
-			}
 		}
 	}
 }
