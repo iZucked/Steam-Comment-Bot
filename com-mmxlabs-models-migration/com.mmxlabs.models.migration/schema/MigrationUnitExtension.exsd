@@ -65,7 +65,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.MigrationUnit/MigrationUnit/@id" deprecated="true"/>
+                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.MigrationUnit/MigrationUnit/@id"/>
                </appinfo>
             </annotation>
          </attribute>
