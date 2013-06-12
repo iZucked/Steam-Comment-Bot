@@ -82,15 +82,23 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 
 						PortCapability capability = null;
 						
-						// If FOB or DES, then only one port is permitted - this should be set by the CargoTypeUpdatingCommandProvider
-						if (target instanceof LoadSlot) {
-							if (!((LoadSlot) target).isDESPurchase()) {
-								capability = PortCapability.LOAD;
-							}
+						final boolean isTransferSlot = (target instanceof LoadSlot && ((LoadSlot) target).getTransferFrom() != null) 
+								|| (target instanceof DischargeSlot && ((DischargeSlot) target).getTransferTo() != null);
+								
+						if (isTransferSlot) {
+							capability = PortCapability.TRANSFER;
 						}
-						if (target instanceof DischargeSlot) {
-							if (!((DischargeSlot) target).isFOBSale()) {
-								capability = PortCapability.DISCHARGE;
+						else {
+							// If FOB or DES, then only one port is permitted - this should be set by the CargoTypeUpdatingCommandProvider
+							if (target instanceof LoadSlot) {
+								if (!((LoadSlot) target).isDESPurchase()) {
+									capability = PortCapability.LOAD;
+								}
+							}
+							if (target instanceof DischargeSlot) {
+								if (!((DischargeSlot) target).isFOBSale()) {
+									capability = PortCapability.DISCHARGE;
+								}
 							}
 						}
 						final ArrayList<Pair<String, EObject>> filterOne = new ArrayList<Pair<String, EObject>>();
