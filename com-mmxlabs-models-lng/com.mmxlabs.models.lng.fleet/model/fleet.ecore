@@ -28,7 +28,7 @@
         eType="#//VesselClass"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+        <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" lowerBound="1"
@@ -53,7 +53,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="VesselClass">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+        <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuel" lowerBound="1"
@@ -178,7 +178,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselClassRouteParameters" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="route" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="route" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="extraTransitTime" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenConsumptionRate" lowerBound="1"
@@ -202,7 +202,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="startAt" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+        <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAfter" lowerBound="1"
@@ -211,7 +211,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="endAt" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+        <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endAfter" lowerBound="1"
@@ -229,7 +229,7 @@
         <eTypeArguments eClassifier="#//Vessel"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAfter" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startBy" lowerBound="1"
@@ -238,9 +238,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="MaintenanceEvent" eSuperTypes="#//VesselEvent"/>
   <eClassifiers xsi:type="ecore:EClass" name="DryDockEvent" eSuperTypes="#//VesselEvent"/>
   <eClassifiers xsi:type="ecore:EClass" name="CharterOutEvent" eSuperTypes="#//VesselEvent">
-    <eOperations name="getEndPort" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eOperations name="getEndPort" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="relocateTo" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="heelOptions" lowerBound="1"
         eType="#//HeelOptions" containment="true"/>

@@ -24,11 +24,11 @@
         eType="#//LegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedPorts" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+        <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPort" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" lowerBound="1"
@@ -39,7 +39,7 @@
         eType="#//Contract"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedPorts" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+        <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="priceInfo" eType="#//LNGPriceCalculatorParameters"

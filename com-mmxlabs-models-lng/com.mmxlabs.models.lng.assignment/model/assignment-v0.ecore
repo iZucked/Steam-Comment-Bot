@@ -11,7 +11,7 @@
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="assignment">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+        <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" lowerBound="1"

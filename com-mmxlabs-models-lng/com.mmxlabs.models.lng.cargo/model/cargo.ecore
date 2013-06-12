@@ -8,7 +8,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
-        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+        <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1"
@@ -22,9 +22,9 @@
     <eOperations name="getWindowStartWithSlotOrPortTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eOperations name="getSlotOrPortWindowSize" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
       <eAnnotations source="http://www.mmxlabs.com/models/lng/ui/datetime">
@@ -77,7 +77,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="SpotSlot" abstract="true" interface="true"
       eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="market" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotLoadSlot" eSuperTypes="#//LoadSlot #//SpotSlot"/>
   <eClassifiers xsi:type="ecore:EClass" name="SpotDischargeSlot" eSuperTypes="#//DischargeSlot #//SpotSlot"/>
