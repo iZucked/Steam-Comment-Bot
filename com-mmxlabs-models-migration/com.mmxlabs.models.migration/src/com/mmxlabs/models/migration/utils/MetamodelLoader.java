@@ -7,6 +7,8 @@ package com.mmxlabs.models.migration.utils;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.impl.EPackageRegistryImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -28,9 +30,14 @@ public class MetamodelLoader {
 		ecoreResourceFactory = new XMIResourceFactoryImpl();
 
 		factoryRegistry.getExtensionToFactoryMap().put("ecore", ecoreResourceFactory);
-		factoryRegistry.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+		factoryRegistry.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
+		// Create empty package registry to manipulate and register default ecore package
 		resourceSet = new ResourceSetImpl();
+		final EPackageRegistryImpl packageRegistry = new EPackageRegistryImpl();
+		packageRegistry.put("http://www.eclipse.org/emf/2002/Ecore", EcorePackage.eINSTANCE);
+		resourceSet.setPackageRegistry(packageRegistry);
+
 		resourceSet.setResourceFactoryRegistry(factoryRegistry);
 	}
 
@@ -46,11 +53,17 @@ public class MetamodelLoader {
 		final Resource rs = resourceSet.getResource(location, true);
 		final EPackage ePackage = (EPackage) rs.getContents().get(0);
 
+		if (ePackage == null) {
+			throw new RuntimeException("Unable to load package");
+		}
+
 		if (nsURI != null) {
 			resourceSet.getPackageRegistry().put(nsURI, ePackage);
 		}
 		resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
 		return ePackage;
+
+		// return null;
 	}
 
 	public EPackage getPackageByNSURI(final String nsURI) {
