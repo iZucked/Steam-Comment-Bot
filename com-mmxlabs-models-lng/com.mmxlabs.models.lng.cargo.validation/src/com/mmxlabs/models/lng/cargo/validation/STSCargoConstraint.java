@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -38,51 +39,70 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof Slot) {
 			// final SeriesParser parser = getParser();
 			final Slot slot = (Slot) target;
+			DischargeSlot transferFrom = null;
+			LoadSlot transferTo = null;
+			Cargo cargo = null;
 
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (loadSlot.getTransferFrom() != null) {
-					final DischargeSlot transferFrom = loadSlot.getTransferFrom();
-					validateAttributes(ctx, loadSlot, transferFrom, failures, severity);
-					validateSlotPlacements(ctx, loadSlot, transferFrom, failures, severity);
-
-					final Cargo cargo = ((DischargeSlot) extraValidationContext.getOriginal(transferFrom)).getCargo();
-					if (cargo != null) {
-						final Slot s = cargo.getSortedSlots().get(0);
-						if (s instanceof LoadSlot) {
-							final double cv = ((LoadSlot) s).getSlotOrPortCV();
-							if (cv != loadSlot.getSlotOrPortCV()) {
-								final String failureMessage = String.format("Ship to Ship %s must be in sync", "CV");
-								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-								dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
-								dsd.addEObjectAndFeature(s, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
-								failures.add(dsd);
-							}
-						}
-					}
+					transferFrom = loadSlot.getTransferFrom();
+					transferTo = loadSlot;					
+					cargo = ((DischargeSlot) extraValidationContext.getOriginal(transferFrom)).getCargo();
 				}
 			} else if (slot instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 				if (dischargeSlot.getTransferTo() != null) {
-					final LoadSlot transferTo = dischargeSlot.getTransferTo();
-					validateAttributes(ctx, transferTo, dischargeSlot, failures, severity);
-					validateSlotPlacements(ctx, transferTo, dischargeSlot, failures, severity);
+					transferTo = dischargeSlot.getTransferTo();
+					transferFrom = dischargeSlot;
+					cargo = dischargeSlot.getCargo();
+				}
+			}
+			
+			if (transferFrom != null && transferTo != null) {
+				validateAttributes(ctx, transferTo, transferFrom, failures, severity);
+				validateSlotPlacements(ctx, transferTo, transferFrom, failures, severity);
 
-					final Cargo cargo = dischargeSlot.getCargo();
-					if (cargo != null) {
-						final Slot s = cargo.getSortedSlots().get(0);
-						if (s instanceof LoadSlot) {
-							final double cv = ((LoadSlot) s).getSlotOrPortCV();
-							if (cv != transferTo.getSlotOrPortCV()) {
-								final String failureMessage = String.format("Ship to Ship %s must be in sync", "CV");
-								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-								dsd.addEObjectAndFeature(transferTo, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
-								dsd.addEObjectAndFeature(s, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
-								failures.add(dsd);
-							}
+				if (cargo != null) {
+					final Slot s = cargo.getSortedSlots().get(0);
+					if (s instanceof LoadSlot) {
+						final double cv = ((LoadSlot) s).getSlotOrPortCV();
+						if (cv != transferTo.getSlotOrPortCV()) {
+							final String failureMessage = String.format("Ship to Ship %s must be in sync", "CV");
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
+							dsd.addEObjectAndFeature(transferTo, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
+							dsd.addEObjectAndFeature(s, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
+							failures.add(dsd);
 						}
 					}
+					
+					// make sure cargo is assigned to a vessel
+					final LNGScenarioModel model = (LNGScenarioModel) extraValidationContext.getRootObject();
+					final AssignmentModel assignmentModel = model.getPortfolioModel().getAssignmentModel();
+					
+					boolean isAssigned = false;
+					
+					for (ElementAssignment assignment: assignmentModel.getElementAssignments()) {
+						if (assignment.getAssignedObject().equals(slot.getCargo()) && assignment.getAssignment() != null) {
+							isAssigned = true; 
+							break;
+						}
+					}
+					
+					if (!isAssigned) {
+						final String failureMessage = String.format("Cargo '%s' must be assigned a vessel", cargo.getName());
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
+						failures.add(dsd);					
+					}
 				}
+				
+				else {
+					final String failureMessage = String.format("Ship to Ship '%s' must be part of a cargo", slot.getName());
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
+					dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CARGO);
+					failures.add(dsd);					
+				}
+				
 			}
 
 		}
@@ -90,7 +110,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private void validateAttributes(final IValidationContext ctx, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final List<IStatus> failures, final int severity) {
-
+		
 		if (loadSlot.isOptional()) {
 			final String failureMessage = String.format("Ship to Ship slot cannot be optional");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
@@ -105,38 +125,21 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 			failures.add(dsd);
 		}
 
-		if (!Equality.isEqual(loadSlot.getWindowStart(), dischargeSlot.getWindowStart())) {
-			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Window Start");
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-			dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-			failures.add(dsd);
+		final EStructuralFeature [] features = { 
+				CargoPackage.Literals.SLOT__WINDOW_START, CargoPackage.Literals.SLOT__WINDOW_START_TIME, CargoPackage.Literals.SLOT__DURATION, 
+				CargoPackage.Literals.SLOT__PORT
+			};
+		
+		for (EStructuralFeature feature: features) {
+			if (!Equality.isEqual(loadSlot.eGet(feature), dischargeSlot.eGet(feature))) {
+				final String failureMessage = String.format("Ship to Ship %s must be in sync", feature.getName());
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
+				dsd.addEObjectAndFeature(loadSlot, feature);
+				dsd.addEObjectAndFeature(dischargeSlot, feature);
+				failures.add(dsd);
+			}
 		}
-
-		if (!Equality.isEqual(loadSlot.getWindowStartTime(), dischargeSlot.getWindowStartTime())) {
-			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Window Start Time");
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime());
-			dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime());
-			failures.add(dsd);
-		}
-
-		if (!Equality.isEqual(loadSlot.getDuration(), dischargeSlot.getDuration())) {
-			final String failureMessage = String.format("Ship to Ship %s must be in sync", "duration");
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Duration());
-			dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Duration());
-			failures.add(dsd);
-		}
-
-		if (!Equality.isEqual(loadSlot.getPort(), dischargeSlot.getPort())) {
-			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Port");
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
-			dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
-			failures.add(dsd);
-		}
-
+		
 		if (!Equality.isEqual(loadSlot.getSlotOrContractMaxQuantity(), dischargeSlot.getSlotOrContractMaxQuantity())) {
 			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Max Quantity");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
