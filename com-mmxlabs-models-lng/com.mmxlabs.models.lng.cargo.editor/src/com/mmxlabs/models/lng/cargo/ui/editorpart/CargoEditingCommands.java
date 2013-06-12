@@ -109,9 +109,10 @@ public class CargoEditingCommands {
 	}
 
 	/**
+	 * @param transferPort 
 	 * @since 4.0
 	 */
-	public void insertShipToShipSlots(final List<Command> setCommands, final Slot sourceSlot, final CargoModel cargoModel) {
+	public void insertShipToShipSlots(final List<Command> setCommands, final Slot sourceSlot, final CargoModel cargoModel, final Port transferPort) {
 
 		final Cargo sourceCargo = sourceSlot.getCargo();
 
@@ -130,11 +131,13 @@ public class CargoEditingCommands {
 		final LoadSlot transferLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 		transferLoad.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
 		transferLoad.setWindowStart(sourceSlot.getWindowStart());
+		transferLoad.setPort(transferPort);
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, transferLoad));
 
 		final DischargeSlot transferDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 		transferDischarge.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
 		transferDischarge.setWindowStart(sourceSlot.getWindowStart());
+		transferDischarge.setPort(transferPort);
 		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, transferDischarge));
 
 		// Bind STS Slots

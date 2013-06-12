@@ -855,7 +855,7 @@ public class CargoEditorMenuHelper {
 
 			// when we create a ship to ship linked slot, we don't rewire the cargoes
 			if (shipToShipPort != null) {
-				cec.insertShipToShipSlots(setCommands, source, cargoModel);
+				cec.insertShipToShipSlots(setCommands, source, cargoModel, shipToShipPort);
 			}
 			// when we create another slot, we rewire the cargoes
 			else {
