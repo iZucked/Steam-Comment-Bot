@@ -63,6 +63,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * @since 3.0
@@ -102,14 +103,15 @@ public class CargoEditorMenuHelper {
 		public void run() {
 
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(shell, scenarioEditingLocation.getDefaultCommandHandler());
+			ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 			try {
-				scenarioEditingLocation.getEditorLock().claim();
+				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
 
 				dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(target), scenarioEditingLocation.isLocked());
 			} finally {
 				scenarioEditingLocation.setDisableUpdates(false);
-				scenarioEditingLocation.getEditorLock().release();
+				editorLock.release();
 			}
 		}
 	}
@@ -996,8 +998,9 @@ public class CargoEditorMenuHelper {
 	 * @since 4.0
 	 */
 	public void editLDDCargo(final Cargo cargo) {
+		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 		try {
-			scenarioEditingLocation.getEditorLock().claim();
+			editorLock.claim();
 			scenarioEditingLocation.setDisableUpdates(true);
 
 			final ComplexCargoEditor editor = new ComplexCargoEditor(shell, scenarioEditingLocation);
@@ -1038,7 +1041,7 @@ public class CargoEditorMenuHelper {
 			}
 		} finally {
 			scenarioEditingLocation.setDisableUpdates(false);
-			scenarioEditingLocation.getEditorLock().release();
+			editorLock.release();
 		}
 	}
 }
