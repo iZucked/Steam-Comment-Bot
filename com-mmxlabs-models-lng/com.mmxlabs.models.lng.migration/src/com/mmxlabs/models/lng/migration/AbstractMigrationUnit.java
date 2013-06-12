@@ -12,12 +12,10 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
@@ -140,10 +138,6 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
 		for (final Resource r : resourceSet.getResources()) {
 			if (r.isLoaded() && r.isModified()) {
-				// For modified models, we need to update the proxy references otherwise wrong package URI's can be saved.
-				final EPackage mmxcorePackage = destinationLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
-				EcoreHelper.updateAllMMXProxies(r.getContents().get(0), mmxcorePackage);
-
 				// Save the changed scenarios
 				r.save(saveOptions);
 			}
