@@ -36,6 +36,8 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	private EJobState currentState = EJobState.UNKNOWN;
 
+	private ScenarioLock scenarioLock;
+
 	public LNGSchedulerEvaluationJobControl(final LNGSchedulerJobDescriptor descriptor) {
 		this.jobDescriptor = descriptor;
 	}
@@ -55,8 +57,8 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
-		final ScenarioLock lock = scenarioInstance.getLock(jobDescriptor.getLockKey());
-		lock.awaitClaim();
+		scenarioLock = scenarioInstance.getLock(jobDescriptor.getLockKey());
+		scenarioLock.awaitClaim();
 		try {
 			final LNGScenarioModel scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
@@ -75,7 +77,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			setJobState(EJobState.CANCELLED);
 			throw new RuntimeException(e);
 		} finally {
-			lock.release();
+			scenarioLock.release();
 		}
 	}
 
@@ -129,11 +131,9 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 	@Override
 	public void dispose() {
 
-		if (jobDescriptor != null) {
-			// Release the lock should it still be claimed at this point
-			final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
-			final ScenarioLock lock = scenarioInstance.getLock(jobDescriptor.getLockKey());
-			lock.release();
+		if (scenarioLock != null) {
+			scenarioLock.release();
+			scenarioLock = null;
 		}
 
 		jobDescriptor = null;

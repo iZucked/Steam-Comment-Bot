@@ -124,7 +124,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 							return;
 						}
 
-						if (instance.getLock(ScenarioLock.EVALUATOR).claim()) {
+						final ScenarioLock evaluatorLock = instance.getLock(ScenarioLock.EVALUATOR);
+						if (evaluatorLock.claim()) {
 							try {
 								// Submit request to queue
 								executor.submit(new Callable<Object>() {
@@ -156,7 +157,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 							} catch (final Throwable th) {
 
 							} finally {
-								instance.getLock(ScenarioLock.EVALUATOR).release();
+								evaluatorLock.release();
 							}
 						} else {
 							// log.debug("Didn't get lock, spinning");
