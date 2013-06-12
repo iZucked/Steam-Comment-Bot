@@ -16,8 +16,11 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -65,15 +68,19 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 
 		final MetamodelLoader destinationLoader = getDestinationMetamodelLoader(extraPackages);
 
-		final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
-
 		// Load all the current model versions
 		final ResourceSet resourceSet = destinationLoader.getResourceSet();
 
-		// Record features which have no meta-model equivalent so we can perform migration
-		loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+		// Standard options
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
 
+		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
+
+		// Record features which have no meta-model equivalent so we can perform migration
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+
 		// Pass in URI Convertor to help URI resolution
 		resourceSet.setURIConverter(uc);
 
@@ -87,8 +94,11 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 			}
 
 			final XMIResource r = (XMIResource) resourceSet.createResource(uri);
+			if (r instanceof ResourceImpl) {
+				((ResourceImpl) r).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
+			}
 			r.setTrackingModification(true);
-			r.load(loadOptions);
+			r.load(resourceSet.getLoadOptions());
 
 			final EObject eObject = r.getContents().get(0);
 			assert eObject != null;
