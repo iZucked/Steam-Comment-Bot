@@ -71,7 +71,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			LNGSchedulerJobUtils.exportSolution(injector, scenario, editingDomain, transformer.getEntities(), solution, 0);
 
 			setJobState(EJobState.COMPLETED);
-		} catch (final Exception e) {
+		} catch (final Throwable e) {
 			setJobState(EJobState.CANCELLED);
 			throw new RuntimeException(e);
 		} finally {
