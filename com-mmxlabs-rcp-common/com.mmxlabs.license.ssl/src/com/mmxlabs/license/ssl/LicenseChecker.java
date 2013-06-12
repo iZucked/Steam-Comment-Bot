@@ -38,8 +38,11 @@ public final class LicenseChecker {
 			// TODO: Load from bundle resource
 			final URL keyStoreUrl = Activator.getDefault().getBundle().getResource("keystore.jks");
 			final InputStream astream = keyStoreUrl.openStream();
-			keyStore.load(astream, password.toCharArray());
-			astream.close();
+			try {
+				keyStore.load(astream, password.toCharArray());
+			} finally {
+				astream.close();
+			}
 
 			final Certificate rootCertificate = keyStore.getCertificate("rootca");
 			if (rootCertificate == null) {
@@ -81,6 +84,7 @@ public final class LicenseChecker {
 					stream = new FileOutputStream(keyStoreFile);
 					licenseKeystore.store(stream, password.toCharArray());
 					stream.close();
+					
 					stream = new FileOutputStream(trustStoreFile);
 					keyStore.store(stream, password.toCharArray());
 					System.setProperty("javax.net.ssl.keyStore", keyStoreFile.toString());
