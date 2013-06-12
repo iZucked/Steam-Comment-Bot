@@ -29,8 +29,7 @@ public class ScenarioInstanceMigratorTest {
 
 		final IMigrationRegistry migrationRegistry = Mockito.mock(IMigrationRegistry.class);
 
-		@SuppressWarnings("unchecked")
-		final List<URI> tmpURIs = mock(List.class);
+		final URI tmpURI = URI.createURI("migration");
 
 		final String context = "Context";
 		final int scenarioVersion = 1;
@@ -50,13 +49,12 @@ public class ScenarioInstanceMigratorTest {
 
 		when(migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion)).thenReturn(units);
 
-		final URIConverter uc = mock(URIConverter.class);
 		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry);
-		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
+		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURI);
 
 		final InOrder order = inOrder(unit1, unit2);
-		order.verify(unit1).migrate(tmpURIs, uc, Collections.<String, URI>emptyMap());
-		order.verify(unit2).migrate(tmpURIs, uc, Collections.<String, URI>emptyMap());
+		order.verify(unit1).migrate(tmpURI, Collections.<String, URI> emptyMap());
+		order.verify(unit2).migrate(tmpURI, Collections.<String, URI> emptyMap());
 
 	}
 }

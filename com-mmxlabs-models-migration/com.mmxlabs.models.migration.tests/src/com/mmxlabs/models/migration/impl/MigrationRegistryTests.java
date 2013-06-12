@@ -135,7 +135,7 @@ public class MigrationRegistryTests {
 
 		final IMigrationUnitExtension ext1 = new AbstractMigrationUnitExtension() {
 			@Override
-			public void migrate(@NonNull final List<URI> uris, @NonNull final URIConverter uc, @Nullable final Map<String, URI> extraPackages) throws Exception {
+			public void migrate(@NonNull final URI uri, @Nullable final Map<String, URI> extraPackages) throws Exception {
 				// TODO Auto-generated method stub
 
 			}

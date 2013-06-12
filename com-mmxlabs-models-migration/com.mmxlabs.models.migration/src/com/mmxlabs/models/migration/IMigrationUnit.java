@@ -4,11 +4,9 @@
  */
 package com.mmxlabs.models.migration;
 
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -42,15 +40,14 @@ public interface IMigrationUnit {
 	int getDestinationVersion();
 
 	/**
-	 * Perform the migration. The {@link List} or {@link URI}s specify all of the ecore model instances in the scenario. These are likely to be different to the original location. The
-	 * {@link URIConverter} will "normalize" convert between original URI and the new temporary URI. See {@link URIConverter#getURIMap()}. Extra packages can be passed into the process. This is
-	 * intended for situations where the migration units only know of a subset of packages required to load a scenario.
+	 * Perform the migration. The {@link URI} specifies the ecore model instance for the scenario. Extra packages can be passed into the process. This is intended for situations where the migration
+	 * units only know of a subset of packages required to load a scenario.
 	 * 
-	 * @param uris
+	 * @param uri
 	 * @param uc
 	 * @param extraPackages
 	 * @throws Exception
-	 * @since 2.0
+	 * @since 3.0
 	 */
-	void migrate(@NonNull List<URI> uris, @NonNull URIConverter uc, @Nullable Map<String, URI> extraPackages) throws Exception;
+	void migrate(@NonNull URI uri, @Nullable Map<String, URI> extraPackages) throws Exception;
 }

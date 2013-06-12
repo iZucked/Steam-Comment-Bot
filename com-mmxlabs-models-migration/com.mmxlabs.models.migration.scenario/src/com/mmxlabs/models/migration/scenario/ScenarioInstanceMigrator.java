@@ -67,27 +67,19 @@ public class ScenarioInstanceMigrator {
 		final List<File> tmpFiles = new ArrayList<File>();
 		try {
 			// Copy data files for manipulation
-			final List<URI> tmpURIs = new ArrayList<URI>();
-			{
-				assert originalURI != null;
-				final File f = File.createTempFile("migration", ".xmi");
-				// Create a temp file and generate a URI to it to pass into migration code.
-				final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
-				assert tmpURI != null;
-				copyURIData(uc, originalURI, tmpURI);
+			assert originalURI != null;
+			final File f = File.createTempFile("migration", ".xmi");
+			// Create a temp file and generate a URI to it to pass into migration code.
+			final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
+			assert tmpURI != null;
+			copyURIData(uc, originalURI, tmpURI);
 
-				// Store the URI
-				tmpURIs.add(tmpURI);
-				// Add a mapping between the original URI and the temp URI. This should permit internal references to resolve to the new data file.
-				// TODO: Check to see whether or not the URI is the original URI or the "resolved" uri.
-				uc.getURIMap().put(originalURI, tmpURI);
-			}
 			if (scenarioVersion < 0) {
 				int lastReleaseVersion = migrationRegistry.getLastReleaseVersion(context);
 				scenarioVersion = lastReleaseVersion;
 			}
 			// Apply Migration Chain
-			final int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
+			final int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURI);
 
 			// Sanity check - can we load the new scenario without error?
 			{
@@ -98,16 +90,14 @@ public class ScenarioInstanceMigrator {
 				Map<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 				try {
 					// Create a sample instance object
-					for (final URI uri : tmpURIs) {
-						final Resource r = resourceSet.createResource(uri);
-						if (r instanceof ResourceImpl) {
-							((ResourceImpl) r).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
-						}
-						r.load(null);
-						final Object submodel = r.getContents().get(0);
-						if (submodel == null) {
-							throw new RuntimeException("Error loading migrated scenario model. Aborting");
-						}
+					final Resource r = resourceSet.createResource(tmpURI);
+					if (r instanceof ResourceImpl) {
+						((ResourceImpl) r).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
+					}
+					r.load(null);
+					final Object submodel = r.getContents().get(0);
+					if (submodel == null) {
+						throw new RuntimeException("Error loading migrated scenario model. Aborting");
 					}
 
 				} catch (final Exception e) {
@@ -117,7 +107,6 @@ public class ScenarioInstanceMigrator {
 
 			// Copy back over original data
 			{
-				final URI tmpURI = tmpURIs.get(0);
 				assert tmpURI != null;
 				final URI uri = originalURI;
 				assert uri != null;
@@ -146,16 +135,16 @@ public class ScenarioInstanceMigrator {
 	 * @param uc
 	 * @return
 	 * @throws Exception
+	 * @since 3.0
 	 */
-	public int applyMigrationChain(@NonNull final String context, final int scenarioVersion, final int latestVersion, @NonNull final List<URI> tmpURIs, @NonNull final URIConverter uc)
-			throws Exception {
+	public int applyMigrationChain(@NonNull final String context, final int scenarioVersion, final int latestVersion, @NonNull final URI tmpURI) throws Exception {
 
 		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion);
 
 		int version = scenarioVersion;
 		for (final IMigrationUnit unit : chain) {
 
-			unit.migrate(tmpURIs, uc, Collections.<String, URI> emptyMap());
+			unit.migrate(tmpURI, Collections.<String, URI> emptyMap());
 
 			// Only return real version numbers - ignore snapshot versions
 			if (unit.getDestinationVersion() >= 0) {

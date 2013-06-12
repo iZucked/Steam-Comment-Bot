@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageRegistryImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
@@ -23,12 +24,13 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 public class MetamodelLoader {
 
 	private final Resource.Factory ecoreResourceFactory;
-	private final Resource.Factory.Registry factoryRegistry = Resource.Factory.Registry.INSTANCE;
+	private final Resource.Factory.Registry factoryRegistry;
 	private final ResourceSet resourceSet;
 
 	public MetamodelLoader() {
 		ecoreResourceFactory = new XMIResourceFactoryImpl();
-
+		factoryRegistry = new ResourceFactoryRegistryImpl();
+		
 		factoryRegistry.getExtensionToFactoryMap().put("ecore", ecoreResourceFactory);
 		factoryRegistry.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 

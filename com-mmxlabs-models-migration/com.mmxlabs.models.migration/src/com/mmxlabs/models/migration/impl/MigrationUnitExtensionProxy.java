@@ -4,11 +4,9 @@
  */
 package com.mmxlabs.models.migration.impl;
 
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -32,12 +30,12 @@ class MigrationUnitExtensionProxy implements IMigrationUnitExtension {
 	}
 
 	@Override
-	public void migrate(final @NonNull List<URI> uris, final @NonNull URIConverter uc, @Nullable final Map<String, URI> extraPackages) throws Exception {
+	public void migrate(final @NonNull URI uri, @Nullable final Map<String, URI> extraPackages) throws Exception {
 		if (unitExtension == null) {
 			unitExtension = ext.createMigrationUnitExtension();
 			unitExtension.setMigrationUnit(migrationUnit);
 		}
-		unitExtension.migrate(uris, uc, extraPackages);
+		unitExtension.migrate(uri, extraPackages);
 	}
 
 	@Override

@@ -50,11 +50,11 @@ class MigrationUnitProxy implements IMigrationUnit {
 	}
 
 	@Override
-	public void migrate(final @NonNull List<URI> uris, final @NonNull URIConverter uc, @Nullable final Map<String, URI> extraPackages) throws Exception {
+	public void migrate(final @NonNull URI uri, @Nullable final Map<String, URI> extraPackages) throws Exception {
 		if (unit == null) {
 			unit = ext.createMigrationUnit();
 		}
-		unit.migrate(uris, uc, extraPackages);
+		unit.migrate(uri, extraPackages);
 	}
 
 }

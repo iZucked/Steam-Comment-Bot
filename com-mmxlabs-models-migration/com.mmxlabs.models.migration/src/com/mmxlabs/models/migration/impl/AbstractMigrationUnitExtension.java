@@ -4,11 +4,9 @@
  */
 package com.mmxlabs.models.migration.impl;
 
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -34,7 +32,7 @@ public abstract class AbstractMigrationUnitExtension implements IMigrationUnitEx
 	}
 
 	@Override
-	public abstract void migrate(@NonNull List<URI> uris, @NonNull URIConverter uc, @Nullable Map<String, URI> extraPackages) throws Exception;
+	public abstract void migrate(@NonNull URI uri, @Nullable Map<String, URI> extraPackages) throws Exception;
 
 	@Override
 	public IMigrationUnit getMigrationUnit() {
