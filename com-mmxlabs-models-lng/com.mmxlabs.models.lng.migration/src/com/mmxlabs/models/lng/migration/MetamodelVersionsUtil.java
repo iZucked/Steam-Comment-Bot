@@ -7,10 +7,6 @@ package com.mmxlabs.models.lng.migration;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EFactory;
-import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
