@@ -70,9 +70,9 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/lng/types/com.mmxlabs.models.lng.types.p2/5.0.0.RELEASE/com.mmxlabs.models.lng.types.p2-5.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/3.0.0-SNAPSHOT/com.mmxlabs.rcp.common.p2-3.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="3.0.0.RELEASE"/>
+<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="3.0.0.RELEASE"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/3.0.0.RELEASE/com.mmxlabs.rcp.common.p2-3.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.RELEASE"/>
