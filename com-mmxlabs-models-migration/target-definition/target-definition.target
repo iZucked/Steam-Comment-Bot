@@ -8,20 +8,11 @@
 <repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.rcp.source.feature.group" version="3.7.2.v20120120-1424-9DB5FmnFq5JCf1UA38R-kz0S0272"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.1.R37x_v20110907-7M7W8i8eNV4WsRkue-4Vq4J6pCyW"/>
-<repository location="http://download.eclipse.org/releases/indigo"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="javax.activation" version="1.1.0.v201108011116"/>
-<unit id="javax.activation.source" version="1.1.0.v201108011116"/>
 <unit id="org.aopalliance" version="1.0.0.v201105210816"/>
 <unit id="com.google.inject.source" version="3.0.0.v201203062045"/>
 <unit id="com.google.inject" version="3.0.0.v201203062045"/>
 <unit id="javax.inject" version="1.0.0.v20091030"/>
 <unit id="javax.inject.source" version="1.0.0.v20091030"/>
-<unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
-<unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
 <unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
 <unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
 <unit id="ch.qos.logback.classic" version="1.0.0.v20111214-2030"/>
@@ -67,9 +58,9 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/lng/types/com.mmxlabs.models.lng.types.p2/5.0.0.RELEASE/com.mmxlabs.models.lng.types.p2-5.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/2.3.0-SNAPSHOT/com.mmxlabs.rcp.common.p2-2.3.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="3.0.0.RELEASE"/>
+<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="3.0.0.RELEASE"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/3.0.0.RELEASE/com.mmxlabs.rcp.common.p2-3.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="0.0.0"/>
