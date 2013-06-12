@@ -19,8 +19,8 @@ public class ModelsLNGMigrationConstants {
 	public static final String NSURI_CargoModel = "http://www.mmxlabs.com/models/lng/cargo/1/";
 	public static final String NSURI_CommercialModel = "http://www.mmxlabs.com/models/lng/commercial/1/";
 	public static final String NSURI_FleetModel = "http://www.mmxlabs.com/models/lng/fleet/1/";
-	public static final String NSURI_InputModel = "http://www.mmxlabs.com/models/lng/input/1/";
-	public static final String NSURI_OptimiserModel = "http://www.mmxlabs.com/models/lng/optimiser/1/";
+	public static final String NSURI_AssignmentModel = "http://www.mmxlabs.com/models/lng/assignment/1/";
+	public static final String NSURI_ParametersModel = "http://www.mmxlabs.com/models/lng/parameters/1/";
 	public static final String NSURI_PricingModel = "http://www.mmxlabs.com/models/lng/pricing/1/";
 	public static final String NSURI_PortModel = "http://www.mmxlabs.com/models/lng/port/1/";
 	public static final String NSURI_ScheduleModel = "http://www.mmxlabs.com/models/lng/schedule/1/";
