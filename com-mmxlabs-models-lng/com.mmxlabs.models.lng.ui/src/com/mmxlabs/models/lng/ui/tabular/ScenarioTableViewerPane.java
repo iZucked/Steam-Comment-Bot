@@ -268,26 +268,27 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 					if (structuredSelection.isEmpty() == false) {
+						ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 						if (structuredSelection.size() == 1) {
 							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
 							try {
-								scenarioEditingLocation.getEditorLock().claim();
+								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
 								dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
 							} finally {
 								scenarioEditingLocation.setDisableUpdates(false);
-								scenarioEditingLocation.getEditorLock().release();
+								editorLock.release();
 							}
 						} else {
 							try {
-								scenarioEditingLocation.getEditorLock().claim();
+								editorLock.claim();
 								if (scenarioViewer.isLocked() == false) {
 									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
 											.getDefaultCommandHandler());
 									mdd.open(scenarioEditingLocation, structuredSelection.toList());
 								}
 							} finally {
-								scenarioEditingLocation.getEditorLock().release();
+								editorLock.release();
 							}
 						}
 					}
