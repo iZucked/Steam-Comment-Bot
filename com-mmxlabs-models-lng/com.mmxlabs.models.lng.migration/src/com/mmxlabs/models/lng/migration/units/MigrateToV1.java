@@ -52,7 +52,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void doMigration(final Map<ModelsLNGSet_v1, EObject> models) {
+	protected void doMigration(EObject model) {
 		// Null Migration step
 	}
 

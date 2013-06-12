@@ -890,8 +890,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						}
 						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
+							ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 							try {
-								scenarioEditingLocation.getEditorLock().claim();
+								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
 								if (editorTargets.size() > 1) {
 									if (!mixedContent) {
@@ -908,7 +909,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								}
 							} finally {
 								scenarioEditingLocation.setDisableUpdates(false);
-								scenarioEditingLocation.getEditorLock().release();
+								editorLock.release();
 							}
 						}
 					}
@@ -1314,8 +1315,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		@Override
 		public void run() {
 
+			ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 			try {
-				scenarioEditingLocation.getEditorLock().claim();
+				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
 
 				final ComplexCargoEditor editor = new ComplexCargoEditor(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation);
@@ -1363,7 +1365,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			} finally {
 				scenarioEditingLocation.setDisableUpdates(false);
-				scenarioEditingLocation.getEditorLock().release();
+				editorLock.release();
 			}
 		}
 	}
