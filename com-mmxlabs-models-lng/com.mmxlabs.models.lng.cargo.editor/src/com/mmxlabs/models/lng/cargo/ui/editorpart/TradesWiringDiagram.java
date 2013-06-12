@@ -237,7 +237,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				graphics.drawOval(ca.x + terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
 				if (row.loadSlot.isOptional()) {
 					graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-					graphics.fillOval(ca.x + terminalSize + 3, (int) midpoint - (terminalSize / 2) + 3, 3, 3);
+					graphics.fillOval(ca.x + terminalSize + 3, (int) midpoint - (terminalSize / 2) + 3, 4, 4);
 				}
 			}
 
