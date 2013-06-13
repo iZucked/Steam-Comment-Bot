@@ -126,13 +126,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
 						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
 					}
-					// Port Costs
-					{
-						final long cost = portCostProvider.getPortCost(currentPortSlot.getPort(), vessel, currentPortSlot.getPortType());
-
-						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
-
-					}
 
 				} else if (currentPortSlot instanceof IDischargeSlot) {
 					final DischargeEventImpl discharge = new DischargeEventImpl();
@@ -176,6 +169,14 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					}
 
 					visit = new PortVisitEventImpl();
+				}
+
+				// Port Costs
+				{
+					final long cost = portCostProvider.getPortCost(currentPortSlot.getPort(), vessel, currentPortSlot.getPortType());
+
+					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
+
 				}
 
 				final long consumption = details.getFuelConsumption(FuelComponent.Base);
