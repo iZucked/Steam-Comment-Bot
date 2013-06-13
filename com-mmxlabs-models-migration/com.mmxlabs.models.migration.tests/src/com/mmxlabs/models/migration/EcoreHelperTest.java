@@ -35,10 +35,10 @@ public class EcoreHelperTest {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
-		final EPackage pkgA = loader.loadEPackage(uriModelA, "");
+		final EPackage pkgA = loader.loadEPackage(uriModelA, "", "");
 		Assert.assertNotNull(pkgA);
 
-		final EPackage pkgB = loader.loadEPackage(uriModelB, "");
+		final EPackage pkgB = loader.loadEPackage(uriModelB, "", "");
 		Assert.assertNotNull(pkgB);
 
 		// Create the test model A instance.

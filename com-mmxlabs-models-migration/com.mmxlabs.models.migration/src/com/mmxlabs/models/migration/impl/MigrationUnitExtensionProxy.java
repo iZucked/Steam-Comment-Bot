@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationUnitExtension;
+import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionExtensionPoint;
 
 /**
@@ -30,7 +31,7 @@ class MigrationUnitExtensionProxy implements IMigrationUnitExtension {
 	}
 
 	@Override
-	public void migrate(final @NonNull URI uri, @Nullable final Map<String, URI> extraPackages) throws Exception {
+	public void migrate(final @NonNull URI uri, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
 		if (unitExtension == null) {
 			unitExtension = ext.createMigrationUnitExtension();
 			unitExtension.setMigrationUnit(migrationUnit);

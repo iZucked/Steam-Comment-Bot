@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
+import com.mmxlabs.models.migration.PackageData;
+
 /**
  * A class to manage loading a set of ecore models into {@link EPackage} instances.
  * 
@@ -30,7 +32,7 @@ public class MetamodelLoader {
 	public MetamodelLoader() {
 		ecoreResourceFactory = new XMIResourceFactoryImpl();
 		factoryRegistry = new ResourceFactoryRegistryImpl();
-		
+
 		factoryRegistry.getExtensionToFactoryMap().put("ecore", ecoreResourceFactory);
 		factoryRegistry.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
@@ -83,5 +85,36 @@ public class MetamodelLoader {
 	 */
 	public ResourceSet getResourceSet() {
 		return resourceSet;
+	}
+
+	/**
+	 * Similar to {@link #loadEPackage(URI, String)} but also stores package under a resourceURI i.e. the string used in the ecore models to refrence classifiers in other ecore model.
+	 * 
+	 * @since 3.0
+	 */
+	public EPackage loadEPackage(final URI location, final String nsURI, final String resourceURI) {
+		final EPackage pkg = loadEPackage(location, nsURI);
+
+		// TODO: Do we need both of these?
+		resourceSet.getPackageRegistry().put(resourceURI, pkg);
+		resourceSet.getURIConverter().getURIMap().put(URI.createURI(nsURI), URI.createURI(pkg.getNsURI()));
+
+		return pkg;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public EPackage loadEPackage(final URI location, final PackageData packageData) {
+		final EPackage pkg = loadEPackage(location, packageData.getNsURI());
+
+		// TODO: Do need both of these?
+		resourceSet.getURIConverter().getURIMap().put(URI.createURI(packageData.getNsURI()), URI.createURI(pkg.getNsURI()));
+
+		for (final String resourceURI : packageData.getResourceURIs()) {
+			resourceSet.getPackageRegistry().put(resourceURI, pkg);
+		}
+
+		return pkg;
 	}
 }

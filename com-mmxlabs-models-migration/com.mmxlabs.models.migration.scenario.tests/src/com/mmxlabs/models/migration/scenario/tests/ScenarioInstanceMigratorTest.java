@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
+import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.scenario.ScenarioInstanceMigrator;
 
 public class ScenarioInstanceMigratorTest {
@@ -53,8 +54,8 @@ public class ScenarioInstanceMigratorTest {
 		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURI);
 
 		final InOrder order = inOrder(unit1, unit2);
-		order.verify(unit1).migrate(tmpURI, Collections.<String, URI> emptyMap());
-		order.verify(unit2).migrate(tmpURI, Collections.<String, URI> emptyMap());
+		order.verify(unit1).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
+		order.verify(unit2).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
 
 	}
 }

@@ -39,7 +39,7 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 
 				final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry());
 				// Disable for now, fix up later
-				// migrator.performMigration(scenarioService, scenarioInstance);
+				 migrator.performMigration(scenarioService, scenarioInstance);
 			}
 		}
 	}

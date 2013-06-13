@@ -29,6 +29,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
+import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -144,7 +145,7 @@ public class ScenarioInstanceMigrator {
 		int version = scenarioVersion;
 		for (final IMigrationUnit unit : chain) {
 
-			unit.migrate(tmpURI, Collections.<String, URI> emptyMap());
+			unit.migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
 
 			// Only return real version numbers - ignore snapshot versions
 			if (unit.getDestinationVersion() >= 0) {

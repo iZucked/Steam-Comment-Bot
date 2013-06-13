@@ -44,10 +44,9 @@ public interface IMigrationUnit {
 	 * units only know of a subset of packages required to load a scenario.
 	 * 
 	 * @param uri
-	 * @param uc
 	 * @param extraPackages
 	 * @throws Exception
 	 * @since 3.0
 	 */
-	void migrate(@NonNull URI uri, @Nullable Map<String, URI> extraPackages) throws Exception;
+	void migrate(@NonNull URI uri, @Nullable Map<URI, PackageData> extraPackages) throws Exception;
 }
