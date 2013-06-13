@@ -18,6 +18,7 @@ import com.mmxlabs.lingo.models.migration.internal.MigratorInjectionModule;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
+import com.mmxlabs.models.migration.PackageData;
 
 /**
  * Migration Unit delegating to Models LNG migration
@@ -49,7 +50,7 @@ public class LingoMigrateToV1 implements IMigrationUnit {
 	}
 
 	@Override
-	public void migrate(@NonNull final URI baseURI, @Nullable final Map<String, URI> extraPackagesOrig) throws Exception {
+	public void migrate(@NonNull final URI baseURI, @Nullable final Map<URI, PackageData> extraPackagesOrig) throws Exception {
 
 		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, 0, 1);
 		for (final IMigrationUnit unit : chain) {
