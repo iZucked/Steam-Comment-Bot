@@ -4,28 +4,20 @@
  */
 package com.mmxlabs.models.lng.migration;
 
-import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.migration.IMigrationUnit;
-import com.mmxlabs.models.migration.utils.EcoreHelper;
+import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 /**
@@ -42,7 +34,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader getSourceMetamodelLoader(Map<String, URI> extraPackages);
+	protected abstract MetamodelLoader getSourceMetamodelLoader(Map<URI, PackageData> extraPackages);
 
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getDestinationVersion()}
@@ -51,7 +43,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader getDestinationMetamodelLoader(Map<String, URI> extraPackages);
+	protected abstract MetamodelLoader getDestinationMetamodelLoader(Map<URI, PackageData> extraPackages);
 
 	/**
 	 * Perform the migration. Root object instance references are not expected to be changed.
@@ -61,26 +53,24 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	protected abstract void doMigration(EObject model);
 
 	@Override
-	public void migrate(final @NonNull URI baseURI, @Nullable final Map<String, URI> extraPackages) throws Exception {
-
-		final Map<MetamodelVersionsUtil.ModelsLNGSet_v1, EObject> models = new HashMap<MetamodelVersionsUtil.ModelsLNGSet_v1, EObject>();
+	public void migrate(final @NonNull URI baseURI, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
 
 		final MetamodelLoader destinationLoader = getDestinationMetamodelLoader(extraPackages);
 
 		// Load all the current model versions
 		final ResourceSet resourceSet = destinationLoader.getResourceSet();
 
-		// Standard options
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_ATTACHMENT, true);
-
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
+//		// Standard options
+//		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_ATTACHMENT, true);
+//
+//		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+//		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
+//		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
 
 		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 
 		// Record features which have no meta-model equivalent so we can perform migration
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+		// resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
 
 		final XMIResource modelResource = (XMIResource) resourceSet.createResource(baseURI);
 		if (modelResource instanceof ResourceImpl) {

@@ -11,8 +11,8 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
-import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 public class MigrateToV1 extends AbstractMigrationUnit {
@@ -36,7 +36,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<String, URI> extraPackages) {
+	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (sourceLoader == null) {
 			sourceLoader = MetamodelVersionsUtil.createV0Loader(extraPackages);
 		}
@@ -44,7 +44,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<String, URI> extraPackages) {
+	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (destiniationLoader == null) {
 			destiniationLoader = MetamodelVersionsUtil.createV1Loader(extraPackages);
 		}
