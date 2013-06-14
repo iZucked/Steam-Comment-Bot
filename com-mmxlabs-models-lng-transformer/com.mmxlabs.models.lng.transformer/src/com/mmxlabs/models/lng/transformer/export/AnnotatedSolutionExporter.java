@@ -393,26 +393,16 @@ public class AnnotatedSolutionExporter {
 						final SlotVisit visit = (SlotVisit) event;
 						allocation = visit.getSlotAllocation().getCargoAllocation();
 						allocation.setSequence(eSequence);
+						allocation.getEvents().add(event);
+
 					} else {
 						allocation = null;
 					}
 				} else if (event instanceof Journey && allocation != null) {
 					allocation.getEvents().add(event);
-					// if (allocation.getLadenLeg() == null) {
-					// allocation.setLadenLeg((Journey) event);
-					// } else if (allocation.getBallastLeg() == null) {
-					// allocation.setBallastLeg((Journey) event);
-					// }
 				} else if (event instanceof Idle && allocation != null) {
 					allocation.getEvents().add(event);
-					// if (allocation.getLadenIdle() == null) {
-					// allocation.setLadenIdle((Idle) event);
-					// } else if (allocation.getBallastIdle() == null) {
-					// allocation.setBallastIdle((Idle) event);
-					// }
 				}
-				// if (allocation != null && allocation.getBallastLeg() != null && allocation.getLadenLeg() != null && allocation.getLadenIdle() != null && allocation.getBallastIdle() != null)
-				// allocation = null;
 			}
 		}
 
