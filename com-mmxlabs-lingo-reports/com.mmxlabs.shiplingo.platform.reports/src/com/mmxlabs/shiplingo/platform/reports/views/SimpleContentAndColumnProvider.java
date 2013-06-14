@@ -72,7 +72,7 @@ public abstract class SimpleContentAndColumnProvider<T> implements IStructuredCo
 	abstract public List<ColumnManager<T>> getColumnManagers();
 
 	/**
-	 * @since 3.0
+	 * @since 4.0
 	 */
 	abstract protected List<T> createData(final Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel);
 

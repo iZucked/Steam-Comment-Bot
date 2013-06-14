@@ -216,6 +216,9 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		return false;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	@Override
 	public Object getElementDependency(final Object element) {
 
