@@ -14,8 +14,7 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
- * A device for finding things relative to an EObject; it can follow a sequence
- * of EReferences and EOperations from a root object.
+ * A device for finding things relative to an EObject; it can follow a sequence of EReferences and EOperations from a root object.
  * 
  * @author hinton
  * 
@@ -23,7 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 public class EMFPath {
 	final Object[] path;
 	final boolean failSilently;
-	
+
 	public EMFPath(boolean failSilently, final Iterable<?> path) {
 		final ArrayList<Object> scratch = new ArrayList<Object>();
 
@@ -44,8 +43,7 @@ public class EMFPath {
 
 	private void checkPathIsValid() {
 		for (final Object object : path) {
-			assert object instanceof EStructuralFeature
-					|| object instanceof EOperation;
+			assert object instanceof EStructuralFeature || object instanceof EOperation;
 		}
 	}
 
@@ -77,20 +75,28 @@ public class EMFPath {
 	}
 
 	private Object actuallyGet(EObject root, int depth) throws InvocationTargetException {
-		if (depth == path.length) return root;
-		for (int i = 0; i < path.length - (1+depth); i++) {
+		if (depth == path.length)
+			return root;
+		for (int i = 0; i < path.length - (1 + depth); i++) {
 			final Object el = path[i];
 			root = (EObject) chase(root, el);
 		}
 		if (path.length > 0) {
-			return chase(root, path[path.length - (1+depth)]);
+			return chase(root, path[path.length - (1 + depth)]);
 		} else {
 			return root;
 		}
 	}
 
-	private Object chase(final EObject root, final Object el)
-			throws InvocationTargetException {
+	private Object chase(final EObject root, final Object el) throws InvocationTargetException {
+
+		if (root == null) {
+			if (failSilently) {
+				return null;
+			} else {
+				throw new NullPointerException();
+			}
+		}
 		if (el instanceof EOperation) {
 			return root.eInvoke((EOperation) el, null);
 		} else {
@@ -112,18 +118,19 @@ public class EMFPath {
 	 * @return
 	 */
 	public Object getPathComponent(int i) {
-		return path[path.length - (i+1)];
+		return path[path.length - (i + 1)];
 	}
-	
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		for (final Object el : path) {
-			if (sb.length() > 0) sb.append(".");
+			if (sb.length() > 0)
+				sb.append(".");
 			if (el instanceof EOperation) {
-				sb.append(((EOperation)el).getName());
+				sb.append(((EOperation) el).getName());
 			} else {
-				sb.append(((EStructuralFeature)el).getName());
+				sb.append(((EStructuralFeature) el).getName());
 			}
 		}
 		return sb.toString();
