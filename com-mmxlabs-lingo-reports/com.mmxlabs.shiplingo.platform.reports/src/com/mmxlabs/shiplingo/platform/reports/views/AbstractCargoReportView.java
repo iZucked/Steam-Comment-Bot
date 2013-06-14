@@ -119,7 +119,12 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 	 * @since 1.1
 	 */
 	@Override
-	protected String getElementKey(final EObject element) {
+	protected String getElementKey(EObject element) {
+		
+		if (element.eIsSet(cargoAllocationRef)) {
+			element = (EObject) element.eGet(cargoAllocationRef);
+		}
+		
 		if (element instanceof CargoAllocation) {
 			return ((CargoAllocation) element).getName();
 		}

@@ -486,7 +486,14 @@ public class SchedulePnLReport extends EMFReportView {
 	 * @since 1.1
 	 */
 	@Override
-	protected String getElementKey(final EObject element) {
+	protected String getElementKey(EObject element) {
+
+		if (element.eIsSet(cargoAllocationRef)) {
+			element = (EObject) element.eGet(cargoAllocationRef);
+		} else if (element.eIsSet(targetObjectRef)) {
+			element = (EObject) element.eGet(targetObjectRef);
+		}
+
 		if (element instanceof CargoAllocation) {
 			return ((CargoAllocation) element).getName();
 		} else if (element instanceof Event) {
