@@ -945,6 +945,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	protected void doWiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed) {
 
 		final List<Command> setCommands = new LinkedList<Command>();

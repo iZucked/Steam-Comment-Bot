@@ -49,9 +49,13 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * Perform the migration. Root object instance references are not expected to be changed.
 	 * 
 	 * @param models
+	 * @since 4.0
 	 */
 	protected abstract void doMigration(EObject model);
 
+	/**
+	 * @since 4.0
+	 */
 	@Override
 	public void migrate(final @NonNull URI baseURI, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
 

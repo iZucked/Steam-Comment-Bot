@@ -423,6 +423,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 * A> (representing the disconnected discharge on A) and <B, null> (representing the disconnected load on B).
 	 * 
 	 * @param ctrlPressed
+	 * @since 4.0
 	 */
 	protected abstract void wiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed);
 

@@ -26,7 +26,18 @@ public class MetamodelVersionsUtil {
 	 * 
 	 */
 	public enum ModelsLNGSet_v1 {
-		Scenario, Analytics, Cargo, Commercial, Fleet, Assignment, Parameters, Port, Pricing, Schedule, SpotMarkets
+		/**
+		 * @since 4.0
+		 */
+		Scenario, Analytics, Cargo, Commercial, Fleet,
+		/**
+		 * @since 4.0
+		 */
+		Assignment,
+		/**
+		 * @since 4.0
+		 */
+		Parameters, Port, Pricing, Schedule, SpotMarkets
 	}
 
 	public static ModelsLNGSet_v1 getTypeFromNS(final String nsURI) {
