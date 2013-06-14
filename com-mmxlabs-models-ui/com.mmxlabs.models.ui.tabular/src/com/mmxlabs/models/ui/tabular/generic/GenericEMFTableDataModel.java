@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
  * {@link ViewerComparator} for the table to provide the group binding. The {@link EPackage} created by this class is not "frozen" and can be modified or extended as required.
  * 
  * @author Simon Goodall
+ * @since 4.0
  * 
  */
 
@@ -142,6 +143,13 @@ public class GenericEMFTableDataModel {
 		return factory.create(rootClass);
 	}
 
+	/**
+	 * Create a new "Group" object and add it to the data model
+	 * 
+	 * @param dataModel
+	 * @param dataModelInstance
+	 * @return
+	 */
 	public static EObject createGroup(final EPackage dataModel, final EObject dataModelInstance) {
 		final EFactory factory = dataModel.getEFactoryInstance();
 		final EClass groupClass = (EClass) dataModel.getEClassifier(CLASS_NAME_GROUP);
@@ -162,6 +170,14 @@ public class GenericEMFTableDataModel {
 		return group;
 	}
 
+	/**
+	 * Create a new "Row" object and add it to the data model. If the "Group" object is not null, then add this "Row" to the "Group"
+	 * 
+	 * @param dataModel
+	 * @param dataModelInstance
+	 * @param group
+	 * @return
+	 */
 	public static EObject createRow(final EPackage dataModel, final EObject dataModelInstance, final EObject group) {
 		final EFactory factory = dataModel.getEFactoryInstance();
 		final EClass nodeClass = (EClass) dataModel.getEClassifier(CLASS_NAME_ROW);
@@ -187,10 +203,25 @@ public class GenericEMFTableDataModel {
 		return node;
 	}
 
+	/**
+	 * Set the reference value for the given "Row" object.
+	 * 
+	 * @param dataModel
+	 * @param row
+	 * @param value
+	 * @param obj
+	 */
 	public static void setRowValue(final EPackage dataModel, final EObject row, final String value, final Object obj) {
 		row.eSet(getRowFeature(dataModel, value), obj);
 	}
 
+	/**
+	 * Creates a wrapper {@link ViewerComparator} to keep "Row" objects with the same "Group" together.
+	 * 
+	 * @param vc
+	 * @param dataModel
+	 * @return
+	 */
 	public static ViewerComparator createGroupComparator(final ViewerComparator vc, final EPackage dataModel) {
 
 		final EClass rowClass = (EClass) dataModel.getEClassifier(CLASS_NAME_ROW);

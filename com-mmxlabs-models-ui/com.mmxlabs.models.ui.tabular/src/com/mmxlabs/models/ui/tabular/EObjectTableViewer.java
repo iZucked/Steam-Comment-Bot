@@ -60,6 +60,9 @@ public class EObjectTableViewer extends GridTableViewer {
 	protected static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
 	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
+	/**
+	 * @since 4.0
+	 */
 	public static final String COLUMN_SORT_PATH = "COLUMN_SORT_PATH";
 
 	private CommandStack currentCommandStack;
