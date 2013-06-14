@@ -88,9 +88,9 @@
 <repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/2.0"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.scheduler.optimiser.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.scheduler.optimiser.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/5.0.0-SNAPSHOT/com.mmxlabs.scheduler.p2-5.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.scheduler.optimiser.feature.feature.group" version="5.0.0.RELEASE"/>
+<unit id="com.mmxlabs.scheduler.optimiser.feature.source.feature.group" version="5.0.0.RELEASE"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/5.0.0.RELEASE/com.mmxlabs.scheduler.p2-5.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.1.RELEASE"/>
@@ -113,19 +113,19 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/3.0.0.RELEASE/com.mmxlabs.rcp.common.p2-3.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.scenario.service.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/4.0.0-SNAPSHOT/com.mmxlabs.scenario.service.p2-4.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.scenario.service.feature.feature.group" version="4.0.0.RELEASE"/>
+<unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="4.0.0.RELEASE"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/4.0.0.RELEASE/com.mmxlabs.scenario.service.p2-4.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.models.migration.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.migration.feature.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/migration/com.mmxlabs.models.migration.p2/3.0.0-SNAPSHOT/com.mmxlabs.models.migration.p2-3.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.models.migration.feature.source.feature.group" version="3.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.migration.feature.feature.group" version="3.0.0.RELEASE"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/migration/com.mmxlabs.models.migration.p2/3.0.0.RELEASE/com.mmxlabs.models.migration.p2-3.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/4.0.0-SNAPSHOT/com.mmxlabs.models.ui.p2-4.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="4.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="4.0.0.RELEASE"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/4.0.0.RELEASE/com.mmxlabs.models.ui.p2-4.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.lng.feature.feature.group" version="0.0.0"/>
