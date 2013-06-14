@@ -10,13 +10,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
@@ -36,6 +40,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -51,14 +56,26 @@ public class SchedulePnLReport extends EMFReportView {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
 	final List<String> entityColumnNames = new ArrayList<String>();
 
+	private final EPackage tableDataModel;
+	private final EStructuralFeature targetObjectRef;
+	private final EStructuralFeature cargoAllocationRef;
+	private final EStructuralFeature loadAllocationRef;
+	private final EStructuralFeature dischargeAllocationRef;
+
 	public SchedulePnLReport() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
+
+		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge");
+		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
+		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
+		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
+		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "discharge");
 
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", objectFormatter, s.getEvent__Name());
+		addColumn("ID", objectFormatter, targetObjectRef, s.getEvent__Name());
 
 		// add the total (aggregate) P&L column
 		addPNLColumn();
@@ -68,89 +85,89 @@ public class SchedulePnLReport extends EMFReportView {
 		// addPNLColumn("Asia");
 		// addPNLColumn("Europe");
 		//
-		// addColumn("Discharge Port", new BaseFormatter() {
-		// @Override
-		// public String format(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPort().getName();
-		// }
-		// return null;
-		// }
-		//
-		// @Override
-		// public Comparable<?> getComparable(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPort().getName();
-		// }
-		// return "";
-		// }
-		// });
-		// addColumn("Sales Contract", new BaseFormatter() {
-		// @Override
-		// public String format(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// final AContract contract = slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getContract();
-		// if (contract != null) {
-		// return contract.getName();
-		// }
-		// }
-		// return null;
-		// }
-		//
-		// @Override
-		// public Comparable<?> getComparable(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// final AContract contract = slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getContract();
-		// if (contract != null) {
-		// return contract.getName();
-		// }
-		// }
-		// return "";
-		// }
-		// });
-		//
-		// addColumn("Purchase Price", new BaseFormatter() {
-		// @Override
-		// public String format(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// return super.format(slotVisit.getSlotAllocation().getPrice());
-		// }
-		// return null;
-		// }
-		//
-		// @Override
-		// public Comparable getComparable(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// return slotVisit.getSlotAllocation().getPrice();
-		// }
-		// return 0.0;
-		// }
-		// });
-		// addColumn("Sales Price", new BaseFormatter() {
-		// @Override
-		// public String format(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// return super.format(slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPrice());
-		// }
-		// return null;
-		// }
-		//
-		// @Override
-		// public Comparable getComparable(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPrice();
-		// }
-		// return 0.0;
-		// }
-		// });
+		addColumn("Discharge Port", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					return slotAllocation.getPort().getName();
+				}
+				return null;
+			}
+
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					return slotAllocation.getPort().getName();
+				}
+				return "";
+			}
+		}, dischargeAllocationRef);
+		addColumn("Sales Contract", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					final Contract contract = slotAllocation.getContract();
+					if (contract != null) {
+						return contract.getName();
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					final Contract contract = slotAllocation.getContract();
+					if (contract != null) {
+						return contract.getName();
+					}
+				}
+				return "";
+			}
+		}, dischargeAllocationRef);
+
+		addColumn("Purchase Price", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					return super.format(slotAllocation.getPrice());
+				}
+				return null;
+			}
+
+			@Override
+			public Comparable getComparable(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					return slotAllocation.getPrice();
+				}
+				return 0.0;
+			}
+		}, loadAllocationRef);
+		addColumn("Sales Price", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					return super.format(slotAllocation.getPrice());
+				}
+				return null;
+			}
+
+			@Override
+			public Comparable getComparable(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					return slotAllocation.getPrice();
+				}
+				return 0.0;
+			}
+		}, dischargeAllocationRef);
 		// addColumn("Shipping Cost", new BaseFormatter() {
 		//
 		// Double getValue(final SlotVisit visit) {
@@ -234,26 +251,27 @@ public class SchedulePnLReport extends EMFReportView {
 				}
 				return "Unknown";
 			}
-		});
+		}, targetObjectRef);
 
 	}
 
-	@Override
-	protected boolean handleSelections() {
-		return true;
-	}
-
-	@Override
-	protected Class<?> getSelectionAdaptionClass() {
-		return Event.class;
-	}
+	//
+	// @Override
+	// protected boolean handleSelections() {
+	// return true;
+	// }
+	//
+	// @Override
+	// protected Class<?> getSelectionAdaptionClass() {
+	// return Event.class;
+	// }
 
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity) {
 		if (container == null) {
 			return null;
 		}
 
-		GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
 		if (groupProfitAndLoss == null) {
 			return null;
 		}
@@ -266,7 +284,7 @@ public class SchedulePnLReport extends EMFReportView {
 		else {
 			int groupTotal = 0;
 			boolean foundValue = false;
-			for (EntityProfitAndLoss ePnl : groupProfitAndLoss.getEntityProfitAndLosses()) {
+			for (final EntityProfitAndLoss ePnl : groupProfitAndLoss.getEntityProfitAndLosses()) {
 				if (ePnl.getEntity().getName().equals(entity)) {
 
 					groupTotal += ePnl.getProfitAndLoss();
@@ -313,7 +331,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 				return getEntityPNLEntry(container, entityKey);
 			}
-		});
+		}, targetObjectRef);
 	}
 
 	@Override
@@ -370,134 +388,64 @@ public class SchedulePnLReport extends EMFReportView {
 
 	@Override
 	protected void processInputs(final Object[] result) {
-		for (final Object a : result) {
-			// map to events
-			if (a instanceof CargoAllocation) {
-				final CargoAllocation allocation = (CargoAllocation) a;
+		for (final Object row : result) {
 
-				final List<Object> equivalents = new LinkedList<Object>();
-				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-					equivalents.add(slotAllocation.getSlot());
-					equivalents.add(slotAllocation.getSlotVisit());
+			// Map our "Node" data to the CargoAllocation object
+			if (row instanceof EObject) {
+				final EObject eObj = (EObject) row;
+				if (eObj.eIsSet(targetObjectRef)) {
+
+					final Object a = eObj.eGet(targetObjectRef);
+
+					// map to events
+					if (a instanceof CargoAllocation) {
+						final CargoAllocation allocation = (CargoAllocation) a;
+
+						final List<Object> equivalents = new LinkedList<Object>();
+						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+							equivalents.add(slotAllocation.getSlot());
+							equivalents.add(slotAllocation.getSlotVisit());
+						}
+						equivalents.addAll(allocation.getEvents());
+						equivalents.add(allocation.getInputCargo());
+						setInputEquivalents(row, equivalents);
+					} else if (a instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) a;
+
+						final CargoAllocation allocation = slotVisit.getSlotAllocation().getCargoAllocation();
+
+						final List<Object> equivalents = new LinkedList<Object>();
+						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+							equivalents.add(slotAllocation.getSlot());
+							equivalents.add(slotAllocation.getSlotVisit());
+						}
+						equivalents.addAll(allocation.getEvents());
+						equivalents.add(allocation.getInputCargo());
+						setInputEquivalents(row, equivalents);
+					} else if (a instanceof VesselEventVisit) {
+						final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
+						setInputEquivalents(row, Lists.<Object> newArrayList(vesselEventVisit.getVesselEvent()));
+					} else if (a instanceof StartEvent) {
+						final StartEvent startEvent = (StartEvent) a;
+						setInputEquivalents(row, Lists.<Object> newArrayList(startEvent.getSequence().getVesselAvailability().getVessel()));
+					}
 				}
-				equivalents.addAll(allocation.getEvents());
-				equivalents.add(allocation.getInputCargo());
-				setInputEquivalents(allocation, equivalents);
-			} else if (a instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) a;
-
-				final CargoAllocation allocation = slotVisit.getSlotAllocation().getCargoAllocation();
-
-				final List<Object> equivalents = new LinkedList<Object>();
-				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-					equivalents.add(slotAllocation.getSlot());
-					equivalents.add(slotAllocation.getSlotVisit());
-				}
-				equivalents.addAll(allocation.getEvents());
-				equivalents.add(allocation.getInputCargo());
-				setInputEquivalents(allocation, equivalents);
-			} else if (a instanceof VesselEventVisit) {
-				final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
-				setInputEquivalents(vesselEventVisit, Lists.<Object> newArrayList(vesselEventVisit.getVesselEvent()));
-			} else if (a instanceof StartEvent) {
-				final StartEvent startEvent = (StartEvent) a;
-				setInputEquivalents(startEvent, Lists.<Object> newArrayList(startEvent.getSequence().getVesselAvailability().getVessel()));
 			}
 		}
 	}
-
-	//
-	// @Override
-	// protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-	//
-	// if (pinnedObject == null || otherObject == null) {
-	// return true;
-	// }
-	//
-	// if (pinnedObject instanceof GeneratedCharterOut || otherObject instanceof GeneratedCharterOut) {
-	// // Specific to each scenario/schedule so always mark as different.
-	// return true;
-	// }
-	//
-	// if (pinnedObject instanceof CargoAllocation && otherObject instanceof CargoAllocation) {
-	// CargoAllocation ref = null;
-	// CargoAllocation ca = null;
-	// ref = (CargoAllocation) pinnedObject;
-	//
-	// ca = (CargoAllocation) otherObject;
-	//
-	// // Check vessel
-	// if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
-	// return true;
-	// } else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
-	// return true;
-	// } else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
-	// return true;
-	// } else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
-	// return true;
-	// }
-	//
-	// if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
-	// return true;
-	// }
-	// if (!ca.getLoadAllocation().getContract().getName().equals(ref.getLoadAllocation().getContract().getName())) {
-	// return true;
-	// }
-	// if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
-	// return true;
-	// }
-	// if (!ca.getDischargeAllocation().getContract().getName().equals(ref.getDischargeAllocation().getContract().getName())) {
-	// return true;
-	// }
-	// } else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
-	// SlotVisit ref = null;
-	// SlotVisit ca = null;
-	// ref = (SlotVisit) pinnedObject;
-	//
-	// ca = (SlotVisit) otherObject;
-	//
-	// if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
-	// return true;
-	// } else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
-	// return true;
-	// } else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
-	// return true;
-	// } else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
-	// return true;
-	// }
-	//
-	// if (!ca.getPort().getName().equals(ref.getPort().getName())) {
-	// return true;
-	// }
-	// if (!ca.getSlotAllocation().getContract().getName().equals(ref.getSlotAllocation().getContract().getName())) {
-	// return true;
-	// }
-	// return isElementDifferent(ref.getSlotAllocation().getCargoAllocation(), ca.getSlotAllocation().getCargoAllocation());
-	// } else if (pinnedObject instanceof Event && otherObject instanceof Event) {
-	// final Event vev = (Event) otherObject;
-	// final Event ref = (Event) pinnedObject;
-	//
-	// final int refTime = getEventDuration(ref);
-	// final int vevTime = getEventDuration(vev);
-	//
-	// // 3 Days
-	// if (Math.abs(refTime - vevTime) > 3 * 24) {
-	// return true;
-	// }
-	//
-	// }
-	//
-	// return false;
-	// }
 
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduleElementCollector() {
 
+			private EObject dataModelInstance;
+
 			@Override
 			public void beginCollecting() {
 				super.beginCollecting();
 				SchedulePnLReport.this.clearPinModeData();
+				dataModelInstance = GenericEMFTableDataModel.createRootInstance(tableDataModel);
+
 			}
 
 			@Override
@@ -521,9 +469,11 @@ public class SchedulePnLReport extends EMFReportView {
 					}
 				}
 
-				SchedulePnLReport.this.collectPinModeElements(interestingEvents, isPinned);
+				final List<EObject> nodes = generateNodes(dataModelInstance, interestingEvents);
 
-				return interestingEvents;
+				SchedulePnLReport.this.collectPinModeElements(nodes, isPinned);
+
+				return nodes;
 			}
 		};
 	}
@@ -548,5 +498,69 @@ public class SchedulePnLReport extends EMFReportView {
 	@Override
 	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 		return ScheduleDiffUtils.isElementDifferent(pinnedObject, otherObject);
+	}
+
+	@Override
+	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
+		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size());
+		for (final Object obj : selection) {
+			if (obj instanceof EObject) {
+				adaptedSelection.add(((EObject) obj).eGet(targetObjectRef));
+			}
+		}
+
+		return adaptedSelection;
+	}
+
+	private List<EObject> generateNodes(final EObject dataModelInstance, final List<Event> interestingElements) {
+		final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
+
+		for (Object element : interestingElements) {
+
+			if (element instanceof SlotVisit) {
+				SlotVisit slotVisit = (SlotVisit) element;
+				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+
+				// Build up list of slots assigned to cargo, sorting into loads and discharges
+				final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
+				final List<SlotAllocation> dischargeSlots = new ArrayList<SlotAllocation>();
+				for (final SlotAllocation slot : cargoAllocation.getSlotAllocations()) {
+					if (slot.getSlot() instanceof LoadSlot) {
+						loadSlots.add(slot);
+					} else if (slot.getSlot() instanceof DischargeSlot) {
+						dischargeSlots.add(slot);
+					} else {
+						// Assume some kind of discharge?
+						// dischargeSlots.add((Slot) slot);
+					}
+
+				}
+
+				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
+				// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
+				for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
+
+					final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "cargo", cargoAllocation);
+					if (i < loadSlots.size()) {
+						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "load", loadSlots.get(i));
+					}
+					if (i < dischargeSlots.size()) {
+						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "discharge", dischargeSlots.get(i));
+					}
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", element);
+
+					nodes.add(node);
+				}
+			} else {
+				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
+
+				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", element);
+
+				nodes.add(node);
+			}
+		}
+		return nodes;
 	}
 }

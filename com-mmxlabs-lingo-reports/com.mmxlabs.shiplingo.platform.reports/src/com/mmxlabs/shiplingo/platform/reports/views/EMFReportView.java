@@ -33,7 +33,6 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -248,7 +247,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			return getComparable(object);
 		}
 	}
-	
+
+	/**
+	 * @since 4.0
+	 */
 	public class CostFormatter implements IFormatter {
 		public Integer getIntValue(final Object object) {
 			if (object == null) {
@@ -284,6 +286,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	public class PriceFormatter implements IFormatter {
 		public Double getDoubleValue(final Object object) {
 			if (object == null) {
@@ -363,18 +368,21 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected final IFormatter timePartFormatter = new CalendarFormatter(DateFormat.getTimeInstance(DateFormat.SHORT), false);
 
 	protected final IntegerFormatter integerFormatter = new IntegerFormatter();
-//
-//	protected final IFormatter costFormatter = new IntegerFormatter() {
-//		@Override
-//		public Integer getIntValue(final Object object) {
-//			if (object == null) {
-//				return null;
-//			}
-//			return -super.getIntValue(object);
-//		}
-//	};
+	//
+	// protected final IFormatter costFormatter = new IntegerFormatter() {
+	// @Override
+	// public Integer getIntValue(final Object object) {
+	// if (object == null) {
+	// return null;
+	// }
+	// return -super.getIntValue(object);
+	// }
+	// };
 
-	private EObjectTableViewer viewer;
+	/**
+	 * @since 4.0
+	 */
+	protected EObjectTableViewer viewer;
 
 	private Action packColumnsAction;
 
@@ -462,6 +470,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 				return result;
 			}
+
 		};
 	}
 
@@ -490,6 +499,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @param formatter
 	 * @param path
 	 * @return
+	 * @since 4.0
 	 */
 	protected ColumnHandler addColumn(final String title, final String tooltip, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(formatter, path, title, tooltip);
@@ -541,6 +551,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					// }
 				}
 			};
+
+			@Override
+			protected List<?> getSelectionFromWidget() {
+
+				List<?> list = super.getSelectionFromWidget();
+
+				return adaptSelectionFromWidget(list);
+			}
 		};
 
 		filterField.setFilterSupport(viewer.getFilterSupport());
@@ -673,16 +691,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		viewer.setSelection(selection, true);
 	}
 
-	protected void handleAdaptedSelection(final List<Object> adaptedSelection) {
-		viewer.setSelection(new StructuredSelection(adaptedSelection), true);
-	}
-
 	protected boolean handleSelections() {
 		return false;
-	}
-
-	protected Class<?> getSelectionAdaptionClass() {
-		return null;
 	}
 
 	public void removeColumn(final String title) {
@@ -694,7 +704,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				break;
 			}
 		}
-
 	}
 
 	@Override
@@ -793,5 +802,15 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 */
 	protected void processInputs(final Object[] result) {
 
+	}
+
+	/**
+	 * 
+	 * Callback to convert the raw data coming out of the table into something usable externally. This is useful when the table data model is custom for the table rather from the real data model.
+	 * 
+	 * @since 4.0
+	 */
+	protected List<?> adaptSelectionFromWidget(List<?> selection) {
+		return selection;
 	}
 }

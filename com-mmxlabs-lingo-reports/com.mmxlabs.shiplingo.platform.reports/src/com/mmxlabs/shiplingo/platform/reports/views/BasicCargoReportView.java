@@ -4,12 +4,16 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -27,7 +31,7 @@ import com.mmxlabs.shiplingo.platform.reports.utils.ScheduleDiffUtils;
  * @author hinton
  * 
  */
-public class BasicCargoReportView extends EMFReportView {
+public class BasicCargoReportView extends AbstractCargoReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -44,89 +48,18 @@ public class BasicCargoReportView extends EMFReportView {
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
 		// TODO cargo id not slot id.
-		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName());
+		addColumn("ID", objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName());
 
-//		addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
-//
-//		addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
-//		addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-//		addColumn("Purchase Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
-//
-//		addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
-//		addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
-//		addColumn("Sales Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
+		addColumn("Type", objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), c.getCargo__GetCargoType());
 
-		addColumn("Vessel", objectFormatter, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
+		addColumn("Load Port", objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Load Date", datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Purchase Contract", objectFormatter, loadAllocationRef, s.getSlotAllocation__GetContract(), name);
 
-	}
+		addColumn("Discharge Port", objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Discharge Date", datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Sales Contract", objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetContract(), name);
 
-	@Override
-	protected boolean handleSelections() {
-		return true;
-	}
-
-	@Override
-	protected Class<?> getSelectionAdaptionClass() {
-		return CargoAllocation.class;
-	}
-
-	@Override
-	protected void processInputs(final Object[] result) {
-		for (final Object a : result) {
-			// map to events
-			if (a instanceof CargoAllocation) {
-				final CargoAllocation allocation = (CargoAllocation) a;
-
-				final List<Object> equivalents = new LinkedList<Object>();
-				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-					equivalents.add(slotAllocation.getSlot());
-					equivalents.add(slotAllocation.getSlotVisit());
-				}
-				equivalents.addAll(allocation.getEvents());
-				equivalents.add(allocation.getInputCargo());
-				setInputEquivalents(allocation, equivalents);
-			}
-		}
-	}
-
-	@Override
-	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-		return ScheduleDiffUtils.isElementDifferent(pinnedObject, otherObject);
-	}
-
-	@Override
-	protected IScenarioInstanceElementCollector getElementCollector() {
-		return new ScheduleElementCollector() {
-
-			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
-				BasicCargoReportView.this.clearPinModeData();
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
-
-				final List<CargoAllocation> cargoAllocations = schedule.getCargoAllocations();
-
-				BasicCargoReportView.this.collectPinModeElements(cargoAllocations, isPinned);
-
-				return cargoAllocations;
-			}
-		};
-	}
-
-	/**
-	 * Returns a key of some kind for the element
-	 * 
-	 * @param element
-	 * @return
-	 * @since 1.1
-	 */
-	protected String getElementKey(final EObject element) {
-		if (element instanceof CargoAllocation) {
-			return ((CargoAllocation) element).getName();
-		}
-		return super.getElementKey(element);
+		addColumn("Vessel", objectFormatter, cargoAllocationRef, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
 	}
 }

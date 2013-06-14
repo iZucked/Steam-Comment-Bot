@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -20,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -31,7 +34,7 @@ import com.mmxlabs.shiplingo.platform.reports.utils.ScheduleDiffUtils;
  * @author hinton
  * 
  */
-public class CargoReportView extends EMFReportView {
+public class CargoReportView extends AbstractCargoReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -46,9 +49,9 @@ public class CargoReportView extends EMFReportView {
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName());
+		addColumn("ID", objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName());
 
-		addColumn("Type", objectFormatter, s.getCargoAllocation_InputCargo(), CargoPackage.eINSTANCE.getCargo__GetCargoType());
+		addColumn("Type", objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), CargoPackage.eINSTANCE.getCargo__GetCargoType());
 
 		addColumn("Vessel", new BaseFormatter() {
 			@Override
@@ -65,88 +68,38 @@ public class CargoReportView extends EMFReportView {
 
 				return super.format(object);
 			}
-		}, s.getCargoAllocation_Sequence());
-		//
-		// addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
-		//
-		// addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
-		//
-		// addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-		// addColumn("Load Time", timePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-		//
-		// addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalEnd());
-		// addColumn("Discharge Time", timePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalEnd());
-		//
-		// addColumn("Load Volume", integerFormatter, s.getCargoAllocation_LoadVolume());
-		//
-		// // addColumn("Fuel Volume", integerFormatter, s.getCargoAllocation_FuelVolume());
-		//
-		// addColumn("Discharge Volume", integerFormatter, s.getCargoAllocation_DischargeVolume());
-		//
-		// addColumn("Laden Cost", new IntegerFormatter() {
-		// @Override
-		// public Integer getIntValue(final Object object) {
-		//
-		// if (object instanceof CargoAllocation) {
-		// final CargoAllocation allocation = (CargoAllocation) object;
-		//
-		// int total = 0;
-		// final SlotAllocation slotAllocation = allocation.getLoadAllocation();
-		// total += slotAllocation.getSlotVisit().getFuelCost();
-		// total += slotAllocation.getSlotVisit().getHireCost();
-		// total += slotAllocation.getSlotVisit().getPortCost();
-		//
-		// final Journey journey = allocation.getLadenLeg();
-		// if (journey != null) {
-		// total += journey.getFuelCost();
-		// total += journey.getHireCost();
-		// total += journey.getToll();
-		// }
-		//
-		// final Idle idle = allocation.getLadenIdle();
-		// if (idle != null) {
-		// total += idle.getFuelCost();
-		// total += idle.getHireCost();
-		// }
-		// return total;
-		// }
-		// return null;
-		// }
-		//
-		// });
-		//
-		// addColumn("Ballast Cost", new IntegerFormatter() {
-		// @Override
-		// public Integer getIntValue(final Object object) {
-		//
-		// if (object instanceof CargoAllocation) {
-		// final CargoAllocation allocation = (CargoAllocation) object;
-		//
-		// int total = 0;
-		//
-		// final SlotAllocation slotAllocation = allocation.getDischargeAllocation();
-		// total += slotAllocation.getSlotVisit().getFuelCost();
-		// total += slotAllocation.getSlotVisit().getHireCost();
-		// total += slotAllocation.getSlotVisit().getPortCost();
-		//
-		// final Journey journey = allocation.getBallastLeg();
-		// if (journey != null) {
-		// total += journey.getFuelCost();
-		// total += journey.getHireCost();
-		// total += journey.getToll();
-		// }
-		//
-		// final Idle idle = allocation.getBallastIdle();
-		// if (idle != null) {
-		// total += idle.getFuelCost();
-		// total += idle.getHireCost();
-		// }
-		//
-		// return total;
-		// }
-		// return null;
-		// }
-		// });
+		}, cargoAllocationRef, s.getCargoAllocation_Sequence());
+
+		addColumn("Load Port", objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
+
+		addColumn("Discharge Port", objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
+
+		addColumn("Load Date", datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Load Time", timePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+
+		addColumn("Discharge Date", datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
+		addColumn("Discharge Time", timePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
+
+		addColumn("Load Volume", integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeTransferred());
+
+		addColumn("Discharge Volume", integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred());
+
+		addColumn("Laden Cost", new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+
+				return calculateLegCost(object, loadAllocationRef);
+			}
+
+		});
+
+		addColumn("Ballast Cost", new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+
+				return calculateLegCost(object, dischargeAllocationRef);
+			}
+		});
 
 		addColumn("Total Cost", new IntegerFormatter() {
 			@Override
@@ -155,22 +108,20 @@ public class CargoReportView extends EMFReportView {
 					final CargoAllocation allocation = (CargoAllocation) object;
 
 					int total = 0;
-					for (SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-						// final SlotAllocation slotAllocation = allocation.getLoadAllocation();
-						total += slotAllocation.getSlotVisit().getFuelCost();
-						total += slotAllocation.getSlotVisit().getHireCost();
-						total += slotAllocation.getSlotVisit().getPortCost();
-					}
-					for (Event event : allocation.getEvents()) {
+					for (final Event event : allocation.getEvents()) {
 
-						if (event instanceof Journey) {
-							Journey journey = (Journey) event;
+						if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							total += slotVisit.getFuelCost();
+							total += slotVisit.getHireCost();
+							total += slotVisit.getPortCost();
+						} else if (event instanceof Journey) {
+							final Journey journey = (Journey) event;
 							total += journey.getFuelCost();
 							total += journey.getHireCost();
 							total += journey.getToll();
 						} else if (event instanceof Idle) {
-
-							Idle idle = (Idle) event;
+							final Idle idle = (Idle) event;
 							total += idle.getFuelCost();
 							total += idle.getHireCost();
 						}
@@ -180,78 +131,55 @@ public class CargoReportView extends EMFReportView {
 				return null;
 
 			}
-		});
+		}, cargoAllocationRef);
 	}
 
-	@Override
-	protected boolean handleSelections() {
-		return true;
-	}
+	private Integer calculateLegCost(final Object object, EStructuralFeature allocationRef) {
+		if (object instanceof EObject) {
+			final EObject eObject = (EObject) object;
+			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
+			final SlotAllocation allocation = (SlotAllocation) eObject.eGet(allocationRef);
+			if (allocation != null && cargoAllocation != null) {
 
-	@Override
-	protected Class<?> getSelectionAdaptionClass() {
-		return CargoAllocation.class;
-	}
+				boolean collecting = false;
+				int total = 0;
+				for (final Event event : cargoAllocation.getEvents()) {
+					if (event instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) event;
+						if (allocation.getSlotVisit() == event) {
+							collecting = true;
+						} else {
+							if (collecting) {
+								// Finished!
+								break;
+							}
+						}
+						if (collecting) {
+							total += slotVisit.getFuelCost();
+							total += slotVisit.getHireCost();
+							total += slotVisit.getPortCost();
+						}
 
-	@Override
-	protected void processInputs(final Object[] result) {
-		for (final Object a : result) {
-			// map to events
-			if (a instanceof CargoAllocation) {
-				final CargoAllocation allocation = (CargoAllocation) a;
-
-				final List<Object> equivalents = new LinkedList<Object>();
-				for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-					equivalents.add(slotAllocation.getSlot());
-					equivalents.add(slotAllocation.getSlotVisit());
+					} else if (event instanceof Journey) {
+						final Journey journey = (Journey) event;
+						if (collecting) {
+							total += journey.getFuelCost();
+							total += journey.getHireCost();
+							total += journey.getToll();
+						}
+					} else if (event instanceof Idle) {
+						final Idle idle = (Idle) event;
+						if (collecting) {
+							total += idle.getFuelCost();
+							total += idle.getHireCost();
+						}
+					}
 				}
-				equivalents.addAll(allocation.getEvents());
-				equivalents.add(allocation.getInputCargo());
-				setInputEquivalents(allocation, equivalents);
+
+				return total;
 			}
+
 		}
+		return null;
 	}
-
-	@Override
-	protected boolean isElementDifferent(EObject pinnedObject, EObject otherObject) {
-		return ScheduleDiffUtils.isElementDifferent(pinnedObject, otherObject);
-	}
-
-	@Override
-	protected IScenarioInstanceElementCollector getElementCollector() {
-		return new ScheduleElementCollector() {
-
-			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
-				CargoReportView.this.clearPinModeData();
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
-
-				final List<CargoAllocation> cargoAllocations = schedule.getCargoAllocations();
-
-				CargoReportView.this.collectPinModeElements(cargoAllocations, isPinned);
-
-				return cargoAllocations;
-			}
-		};
-	}
-
-	/**
-	 * Returns a key of some kind for the element
-	 * 
-	 * @param element
-	 * @return
-	 * @since 1.1
-	 */
-	@Override
-	protected String getElementKey(final EObject element) {
-		if (element instanceof CargoAllocation) {
-			return ((CargoAllocation) element).getName();
-		}
-		return super.getElementKey(element);
-	}
-
 }
