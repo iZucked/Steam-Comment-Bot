@@ -310,7 +310,6 @@ public class CargoEconsReport extends ViewPart {
 						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 
 						// TODO: Avg CV
-						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
 						cv = loadSlot.getSlotOrPortCV();
 						break;
 					}
@@ -318,8 +317,6 @@ public class CargoEconsReport extends ViewPart {
 				long revenue = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlot() instanceof DischargeSlot) {
-						final DischargeSlot dischareSlot = (DischargeSlot) allocation.getSlot();
-
 						final int dischargeVolumeInM3 = allocation.getVolumeTransferred();
 						final double volumeInMMBTu = (dischargeVolumeInM3 * cv);
 						revenue += volumeInMMBTu * allocation.getPrice();
@@ -335,7 +332,6 @@ public class CargoEconsReport extends ViewPart {
 						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 
 						// TODO: Avg CV
-						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
 						cv = loadSlot.getSlotOrPortCV();
 						break;
 					}
@@ -343,8 +339,6 @@ public class CargoEconsReport extends ViewPart {
 				long dischargeVolume = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlot() instanceof DischargeSlot) {
-						final DischargeSlot dischareSlot = (DischargeSlot) allocation.getSlot();
-
 						final int dischargeVolumeInM3 = allocation.getVolumeTransferred();
 						final double volumeInMMBTu = (dischargeVolumeInM3 * cv);
 						dischargeVolume += volumeInMMBTu;
@@ -457,33 +451,6 @@ public class CargoEconsReport extends ViewPart {
 		// public void update(final ViewerCell cell) {
 		// cell.setText(getText(cell.getElement()));
 		//
-		// }
-
-	}
-
-	/**
-	 * A label provider for the "Units" column
-	 * 
-	 */
-	private static class FieldTypeUnitLabelProvider extends ColumnLabelProvider {
-
-		@Override
-		public Image getImage(final Object element) {
-			return null;
-		}
-
-		@Override
-		public String getText(final Object element) {
-			if (element instanceof FieldType) {
-				final FieldType fieldType = (FieldType) element;
-				return fieldType.getUnit();
-			}
-			return null;
-		}
-
-		// @Override
-		// public void update(final ViewerCell cell) {
-		// cell.setText(getText(cell.getElement()));
 		// }
 
 	}
