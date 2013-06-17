@@ -64,7 +64,7 @@ public class ScenarioRunner {
 	// return intialSchedule;
 	// }
 
-	protected final MMXRootObject getScenario() {
+	protected final LNGScenarioModel getScenario() {
 		return scenario;
 	}
 
