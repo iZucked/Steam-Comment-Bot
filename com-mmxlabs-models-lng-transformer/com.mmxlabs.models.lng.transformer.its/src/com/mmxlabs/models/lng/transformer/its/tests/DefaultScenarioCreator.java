@@ -188,7 +188,8 @@ public class DefaultScenarioCreator {
 
 			cargo = cargoCreator.createDefaultCargo(null, ports[1], ports[2], null, duration);
 
-			final Date loadDate = cargo.getSlots().get(0).getWindowStart();
+			final Slot loadSlot = cargo.getSlots().get(0);
+			final Date loadDate = loadSlot.getWindowStartWithSlotOrPortTime();
 			final Date dischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 			final Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
@@ -215,6 +216,7 @@ public class DefaultScenarioCreator {
 
 			pricingModel.getCooldownPrices().add(price);
 		}
+		
 	}
 
 	/**

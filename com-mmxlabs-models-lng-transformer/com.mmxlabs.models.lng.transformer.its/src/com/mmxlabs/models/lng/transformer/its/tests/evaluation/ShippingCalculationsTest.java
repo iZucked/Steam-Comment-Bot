@@ -70,6 +70,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.LddScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 
 public class ShippingCalculationsTest {
 
@@ -1204,8 +1205,9 @@ public class ShippingCalculationsTest {
 		final Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 
 		// start 3 hrs before load window begins
-		final Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
+		final Date startDate = dsc.addHours(startLoad, -3);
 		av.setStartBy(startDate);
+		av.setStartAfter(dsc.addHours(startDate, -5));
 		System.err.println("Vessel to start before: " + startDate);
 
 		final SequenceTester checker = getDefaultTester();
@@ -1637,8 +1639,9 @@ public class ShippingCalculationsTest {
 		final Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 
 		// start 3 hrs before load window begins
-		final Date startDate = new Date(startLoad.getTime() - 3 * 3600 * 1000);
+		final Date startDate = dsc.addHours(startLoad, -3);
 		vesselAvailability.setStartBy(startDate);
+		vesselAvailability.setStartAfter(dsc.addHours(startLoad, -5));
 		System.err.println("Vessel to start before: " + startDate);
 
 		final SequenceTester checker = getDefaultTester();
@@ -1852,6 +1855,65 @@ public class ShippingCalculationsTest {
 
 		checker.check(sequence);
 		
+	}
+	
+	@Test
+	public void testStartDateChosenForLeastIdleTime() {
+		System.err.println("\n\nStart time should be chosen to minimise idle time at first visit.");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+
+		final Slot loadSlot = mss.cargo.getSlots().get(0);
+		final Date loadDate = loadSlot.getWindowStartWithSlotOrPortTime();
+
+		final double maxSpeed = mss.vc.getMaxSpeed();
+		final int firstIdle = 1;
+		final Date startAfterDate = dsc.addHours(loadDate, -5 * dsc.getTravelTime(mss.originPort, mss.loadPort, null, (int) maxSpeed));
+		final Date startByDate = dsc.addHours(loadDate, - dsc.getTravelTime(mss.originPort, mss.loadPort, null, (int) maxSpeed) - firstIdle);
+
+		mss.vesselAvailability.setStartAfter(startAfterDate);
+		mss.vesselAvailability.setStartBy(startByDate);
+
+		SequenceTester checker = getDefaultTester();
+		
+		// force idle time
+		checker.setExpectedValue(firstIdle, Expectations.DURATIONS, Idle.class, 0);
+		checker.setExpectedValue(5 * firstIdle, Expectations.BF_USAGE, Idle.class, 0); 
+		checker.setupOrdinaryFuelCosts();		
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);		
+	}
+
+	@Test
+	public void testUseDefaultFinalIdlingWhenEndTimeUnspecified() {
+		System.err.println("\n\nUnspecified end time should result in idling due to a defined minimum time between last event and end.");
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+
+		mss.vesselAvailability.unsetEndAfter();
+		mss.vesselAvailability.unsetEndBy();
+
+		SequenceTester checker = getDefaultTester();
+		
+		final int lastIdleHours = SchedulerBuilder.minDaysFromLastEventToEnd * 24 - checker.getExpectedValues(Expectations.DURATIONS, Journey.class)[2];
+;
+		checker.setExpectedValue(lastIdleHours, Expectations.DURATIONS, Idle.class, 2);
+		checker.setExpectedValue(lastIdleHours * 5, Expectations.BF_USAGE, Idle.class, 2);
+		checker.setupOrdinaryFuelCosts();
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);		
 	}
 
 	@Test
