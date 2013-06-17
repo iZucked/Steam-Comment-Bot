@@ -271,6 +271,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IShortCargoReturnElementProviderEditor shortCargoReturnElementProviderEditor;
+	
+	public static int minDaysFromLastEventToEnd = 10;
 
 	/**
 	 * Fake vessel class for virtual elements.
@@ -914,7 +916,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			maxFastReturnTime = 0;
 			latestDischarge = 0;
 		}
-		final int latestTime = Math.max(endOfLatestWindow + (24 * 10), maxFastReturnTime + latestDischarge);
+		final int latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (35 * 24));
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
