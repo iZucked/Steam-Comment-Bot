@@ -363,6 +363,9 @@ public class ScenarioTools {
 
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final ExpressionPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		// Set a default value
+		purchaseParams.setPriceExpression("0");
+
 		pc.setPriceInfo(purchaseParams);
 
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
@@ -617,6 +620,8 @@ public class ScenarioTools {
 
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final ExpressionPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		// Set a default value
+		purchaseParams.setPriceExpression("0");
 		pc.setPriceInfo(purchaseParams);
 
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();

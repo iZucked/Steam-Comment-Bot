@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 /**
  * 
@@ -31,7 +32,7 @@ public class SimpleCargoAllocation {
 		// Simple processing - assuming single load/discharge pairing
 		final EList<Event> events = cargoAllocation.getEvents();
 
-		if (events.size() > 4) {
+		if (events.size() > 6) {
 			throw new IllegalStateException("Expects Simple Cargo Allocation - single load, single discharge  plug Journey and Idle times");
 		}
 		if (cargoAllocation.getSlotAllocations().size() != 2) {
@@ -61,6 +62,9 @@ public class SimpleCargoAllocation {
 					processedEvents[currentIndex + 1] = e;
 					currentIndex++;
 				}
+			} else if (e instanceof SlotVisit) {
+				// Ignore as already looked up
+				continue;
 			} else {
 				throw new IllegalStateException("Unexpected event type");
 			}

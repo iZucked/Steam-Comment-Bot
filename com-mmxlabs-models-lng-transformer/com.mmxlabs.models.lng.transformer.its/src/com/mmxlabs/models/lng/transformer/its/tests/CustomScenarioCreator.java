@@ -104,7 +104,7 @@ public class CustomScenarioCreator {
 		commercialModel = scenario.getCommercialModel();
 		spotMarketsModel = scenario.getSpotMarketsModel();
 		parametersModel = scenario.getParametersModel();
-		
+
 		portfolioModel = scenario.getPortfolioModel();
 		cargoModel = portfolioModel.getCargoModel();
 		scenarioFleetModel = portfolioModel.getScenarioFleetModel();
@@ -253,7 +253,6 @@ public class CustomScenarioCreator {
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			vessel.setVesselClass(vc);
 			vessel.setName(i + " (class " + vesselClassName + ")");
-
 
 			final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 
@@ -549,8 +548,8 @@ public class CustomScenarioCreator {
 	 * @return
 	 * @since 3.0
 	 */
-	public static void createCanalAndCost(final LNGScenarioModel scenario, final String canalName, final Port A, final Port B, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
-			final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
+	public static void createCanalAndCost(final LNGScenarioModel scenario, final String canalName, final Port A, final Port B, final int distanceAToB, final int distanceBToA,
+			final int canalLadenCost, final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
 		canal.setCanal(true);
@@ -691,6 +690,9 @@ public class CustomScenarioCreator {
 	public PurchaseContract addPurchaseContract(final String name) {
 		final PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final ExpressionPriceParameters params = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+
+		// Set a default value
+		params.setPriceExpression("0");
 
 		result.setName(name);
 
