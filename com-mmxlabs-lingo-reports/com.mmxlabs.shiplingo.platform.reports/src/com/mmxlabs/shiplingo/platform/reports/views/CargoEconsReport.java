@@ -12,13 +12,9 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -39,6 +35,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -46,24 +43,25 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
-import com.mmxlabs.scheduler.optimiser.TradingConstants;
 
 /**
  * The {@link CargoEconsReport} is a vertical report similar in concept to the Properties View. This table is the transpose of most other tables. Columns represent the input data and rows are
  * pre-defined.
  * 
  * @author Simon Goodall
+ * @since 4.0
  * 
  */
 public class CargoEconsReport extends ViewPart {
@@ -92,13 +90,13 @@ public class CargoEconsReport extends ViewPart {
 			gvc.getColumn().setWidth(100);
 		}
 
-//		// Add the unit column
-//		{
-//			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-//			gvc.getColumn().setText("Unit");
-//			gvc.setLabelProvider(new FieldTypeUnitLabelProvider());
-//			gvc.getColumn().setWidth(70);
-//		}
+		// // Add the unit column
+		// {
+		// final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+		// gvc.getColumn().setText("Unit");
+		// gvc.setLabelProvider(new FieldTypeUnitLabelProvider());
+		// gvc.getColumn().setWidth(70);
+		// }
 
 		// All other columns dynamically added.
 
@@ -174,9 +172,9 @@ public class CargoEconsReport extends ViewPart {
 		}
 	}
 
-	static final DecimalFormat DollarsFormat = new DecimalFormat( "$##,###,###,###" );
-	static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat( "##,###,###,###mmBtu" );
-	static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat( "$###.###/mmBtu" );
+	static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");
+	static final DecimalFormat VolumeMMBtuFormat = new DecimalFormat("##,###,###,###mmBtu");
+	static final DecimalFormat DollarsPerMMBtuFormat = new DecimalFormat("$###.###/mmBtu");
 
 	/**
 	 * The {@link FieldType} is the row data. Each enum is a different row. Currently there is no table sorter so enum order is display order
@@ -201,9 +199,8 @@ public class CargoEconsReport extends ViewPart {
 
 		private final String name;
 		private final String unit;
-		
-		private final DecimalFormat df;
 
+		private final DecimalFormat df;
 
 		public String getName() {
 			return name;
@@ -217,7 +214,7 @@ public class CargoEconsReport extends ViewPart {
 			return df;
 		}
 
-		private FieldType(final String name, final String unit, DecimalFormat df) {
+		private FieldType(final String name, final String unit, final DecimalFormat df) {
 			this.name = name;
 			this.unit = unit;
 			this.df = df;
@@ -262,16 +259,37 @@ public class CargoEconsReport extends ViewPart {
 
 		@Override
 		public Object getObject(final FieldType fieldType) {
-			
+
 			switch (fieldType) {
 			case BUY_COST_TOTAL: {
-				final double volumeInMMBTu = (Double) getObject(FieldType.BUY_VOLUME_IN_MMBTU);
-				return volumeInMMBTu * cargoAllocation.getLoadAllocation().getPrice();
+
+				long cost = 0;
+				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlot() instanceof LoadSlot) {
+						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
+
+						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
+						final double cv = loadSlot.getSlotOrPortCV();
+						final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
+						cost += volumeInMMBTu * allocation.getPrice();
+					}
+				}
+				return cost;
+
 			}
 			case BUY_VOLUME_IN_MMBTU: {
-				final int loadVolumeVolumeInM3 = cargoAllocation.getLoadVolume();
-				final double cv = ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
-				return ((double) loadVolumeVolumeInM3 * cv);
+				long cost = 0;
+				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlot() instanceof LoadSlot) {
+						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
+
+						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
+						final double cv = loadSlot.getSlotOrPortCV();
+						final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
+						cost += volumeInMMBTu;
+					}
+				}
+				return cost;
 			}
 			case PNL_PER_MMBTU: {
 				final Integer pnl = CargoEconsReport.getPNLValue(cargoAllocation);
@@ -285,56 +303,108 @@ public class CargoEconsReport extends ViewPart {
 				return CargoEconsReport.getPNLValue(cargoAllocation);
 			}
 			case SELL_REVENUE_TOTAL: {
-				final double volumeInMMBTu = (Double) getObject(FieldType.SELL_VOLUME_IN_MMBTU);
-				return volumeInMMBTu * cargoAllocation.getDischargeAllocation().getPrice();
+				double cv = 0.0;
+				// Find the CV
+				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlot() instanceof LoadSlot) {
+						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
+
+						// TODO: Avg CV
+						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
+						cv = loadSlot.getSlotOrPortCV();
+						break;
+					}
+				}
+				long revenue = 0;
+				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlot() instanceof DischargeSlot) {
+						final DischargeSlot dischareSlot = (DischargeSlot) allocation.getSlot();
+
+						final int dischargeVolumeInM3 = allocation.getVolumeTransferred();
+						final double volumeInMMBTu = (dischargeVolumeInM3 * cv);
+						revenue += volumeInMMBTu * allocation.getPrice();
+					}
+				}
+				return revenue;
 			}
 			case SELL_VOLUME_IN_MMBTU: {
-				final int dischargeVolumeInM3 = cargoAllocation.getDischargeVolume();
-				final double cv = ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
-				return ((double) dischargeVolumeInM3 * cv);
+				double cv = 0.0;
+				// Find the CV
+				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlot() instanceof LoadSlot) {
+						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
+
+						// TODO: Avg CV
+						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
+						cv = loadSlot.getSlotOrPortCV();
+						break;
+					}
+				}
+				long dischargeVolume = 0;
+				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
+					if (allocation.getSlot() instanceof DischargeSlot) {
+						final DischargeSlot dischareSlot = (DischargeSlot) allocation.getSlot();
+
+						final int dischargeVolumeInM3 = allocation.getVolumeTransferred();
+						final double volumeInMMBTu = (dischargeVolumeInM3 * cv);
+						dischargeVolume += volumeInMMBTu;
+					}
+				}
+				return dischargeVolume;
 			}
 			case SHIPPING_BOIL_OFF_COST_TOTAL: {
 				int cost = 0;
-				cost += getFuelCost(cargoAllocation.getLoadAllocation().getSlotVisit(), Fuel.NBO, Fuel.FBO);
-				cost += cargoAllocation.getLadenLeg() == null ? 0 : getFuelCost(cargoAllocation.getLadenLeg(), Fuel.NBO, Fuel.FBO);
-				cost += cargoAllocation.getLadenIdle() == null ? 0 : getFuelCost(cargoAllocation.getLadenIdle(), Fuel.NBO, Fuel.FBO);
-				cost += getFuelCost(cargoAllocation.getDischargeAllocation().getSlotVisit(), Fuel.NBO, Fuel.FBO);
-				cost += cargoAllocation.getBallastLeg() == null ? 0 : getFuelCost(cargoAllocation.getBallastLeg(), Fuel.NBO, Fuel.FBO);
-				cost += cargoAllocation.getBallastIdle() == null ? 0 : getFuelCost(cargoAllocation.getBallastIdle(), Fuel.NBO, Fuel.FBO);
+				for (final Event event : cargoAllocation.getEvents()) {
+					if (event instanceof FuelUsage) {
+						FuelUsage fuelUsage = (FuelUsage) event;
+						cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
+					}
+				}
 				return cost;
 			}
 			case SHIPPING_BUNKERS_COST_TOTAL: {
 				int cost = 0;
-				cost += getFuelCost(cargoAllocation.getLoadAllocation().getSlotVisit(), Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-				cost += cargoAllocation.getLadenLeg() == null ? 0 : getFuelCost(cargoAllocation.getLadenLeg(), Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-				cost += cargoAllocation.getLadenIdle() == null ? 0 : getFuelCost(cargoAllocation.getLadenIdle(), Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-				cost += getFuelCost(cargoAllocation.getDischargeAllocation().getSlotVisit(), Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-				cost += cargoAllocation.getBallastLeg() == null ? 0 : getFuelCost(cargoAllocation.getBallastLeg(), Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-				cost += cargoAllocation.getBallastIdle() == null ? 0 : getFuelCost(cargoAllocation.getBallastIdle(), Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+
+				for (final Event event : cargoAllocation.getEvents()) {
+					if (event instanceof FuelUsage) {
+						FuelUsage fuelUsage = (FuelUsage) event;
+						cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+					}
+				}
+
 				return cost;
 			}
 			case SHIPPING_PORT_COST_TOTAL: {
 				int cost = 0;
-				cost += cargoAllocation.getLoadAllocation().getSlotVisit().getPortCost();
-				cost += cargoAllocation.getDischargeAllocation().getSlotVisit().getPortCost();
+				for (final Event event : cargoAllocation.getEvents()) {
+					if (event instanceof PortVisit) {
+						final PortVisit portVisit = (PortVisit) event;
+						cost += portVisit.getPortCost();
+					}
+				}
+
 				return cost;
 			}
 			case SHIPPING_CANAL_COST_TOTAL: {
 				int cost = 0;
-				cost += cargoAllocation.getLadenLeg() == null ? 0 : cargoAllocation.getLadenLeg().getToll();
-				cost += cargoAllocation.getBallastLeg()== null ? 0: cargoAllocation.getBallastLeg().getToll();
+				for (final Event event : cargoAllocation.getEvents()) {
+					if (event instanceof Journey) {
+						final Journey journey = (Journey) event;
+						cost += journey.getToll();
+					}
+				}
+
 				return cost;
 			}
 			case SHIPPING_CHARTER_COST_TOTAL:
-				if(cargoAllocation.getSequence().getDailyHireRate() == 0) return 0;
+				if (cargoAllocation.getSequence().getDailyHireRate() == 0) {
+					return 0;
+				}
 				int duration = 0;
-				duration += cargoAllocation.getLoadAllocation().getSlot().getDuration();
-				duration += cargoAllocation.getLadenLeg() == null ? 0 : cargoAllocation.getLadenLeg().getDuration();
-				duration += cargoAllocation.getLadenIdle() == null ? 0 : cargoAllocation.getLadenIdle().getDuration();
-				duration += cargoAllocation.getDischargeAllocation().getSlot().getDuration();
-				duration += cargoAllocation.getBallastLeg() == null ? 0 : cargoAllocation.getBallastLeg().getDuration();
-				duration += cargoAllocation.getBallastIdle() == null ? 0 : cargoAllocation.getBallastIdle().getDuration();
-				return duration * cargoAllocation.getSequence().getDailyHireRate()/24;
+				for (final Event event : cargoAllocation.getEvents()) {
+					duration += event.getDuration();
+				}
+				return duration * cargoAllocation.getSequence().getDailyHireRate() / 24;
 			case SHIPPING_COST_TOTAL:
 				return CargoEconsReport.getShippingCost(cargoAllocation) - ((Integer) getObject(FieldType.SHIPPING_BOIL_OFF_COST_TOTAL)).doubleValue();
 			default:
@@ -344,13 +414,12 @@ public class CargoEconsReport extends ViewPart {
 			return null;
 		}
 
-		
 		@Override
-		public boolean isSpot(){
-			
+		public boolean isSpot() {
+
 			return cargoAllocation.getSequence().isSpotVessel();
 		}
-		
+
 		@Override
 		public String getText(final FieldType fieldType) {
 
@@ -384,11 +453,11 @@ public class CargoEconsReport extends ViewPart {
 			return null;
 		}
 
-//		@Override
-//		public void update(final ViewerCell cell) {
-//			cell.setText(getText(cell.getElement()));
-//
-//		}
+		// @Override
+		// public void update(final ViewerCell cell) {
+		// cell.setText(getText(cell.getElement()));
+		//
+		// }
 
 	}
 
@@ -412,10 +481,10 @@ public class CargoEconsReport extends ViewPart {
 			return null;
 		}
 
-//		@Override
-//		public void update(final ViewerCell cell) {
-//			cell.setText(getText(cell.getElement()));
-//		}
+		// @Override
+		// public void update(final ViewerCell cell) {
+		// cell.setText(getText(cell.getElement()));
+		// }
 
 	}
 
@@ -444,18 +513,18 @@ public class CargoEconsReport extends ViewPart {
 			return null;
 		}
 
-//		@Override
-//		public void update(final ViewerCell cell) {
-//			cell.setText(getText(cell.getElement()));
-//
-//		}
-//
+		// @Override
+		// public void update(final ViewerCell cell) {
+		// cell.setText(getText(cell.getElement()));
+		//
+		// }
+		//
 		@Override
-		public Color getForeground(Object element) {
-			if(element instanceof FieldType){
-				FieldType ft = ((FieldType) element);
-				if(ft==FieldType.SHIPPING_BOIL_OFF_COST_TOTAL || (ft==FieldType.SHIPPING_CHARTER_COST_TOTAL && !fieldTypeMapper.isSpot())){
-					return  Display.getDefault().getSystemColor(SWT.COLOR_GRAY); 
+		public Color getForeground(final Object element) {
+			if (element instanceof FieldType) {
+				final FieldType ft = ((FieldType) element);
+				if (ft == FieldType.SHIPPING_BOIL_OFF_COST_TOTAL || (ft == FieldType.SHIPPING_CHARTER_COST_TOTAL && !fieldTypeMapper.isSpot())) {
+					return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 				}
 			}
 			return null;
@@ -511,9 +580,9 @@ public class CargoEconsReport extends ViewPart {
 								final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 								final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
 								final EObject instance = scenarioInstance.getInstance();
-								if (instance instanceof MMXRootObject) {
-									final MMXRootObject rootObject = (MMXRootObject) instance;
-									final ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
+								if (instance instanceof LNGScenarioModel) {
+									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+									final ScheduleModel scheduleModel = lngScenarioModel.getPortfolioModel().getScheduleModel();
 									if (scheduleModel != null) {
 										final Schedule schedule = scheduleModel.getSchedule();
 										if (schedule != null) {
@@ -588,33 +657,31 @@ public class CargoEconsReport extends ViewPart {
 	 * @param entity
 	 * @return
 	 */
-	protected static Integer getPNLValue(final ExtraDataContainer container) {
+	protected static Integer getPNLValue(final ProfitAndLossContainer container) {
 		if (container == null) {
 			return null;
 		}
 
-		// supplying null for the entity name indicates that the total group P&L should be returned
-		final ExtraData data = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
-		if (data == null) {
+		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+		if (groupProfitAndLoss == null) {
 			return null;
 		}
-
-		return data.getValueAs(Integer.class);
-
+		// Rounding!
+		return (int) groupProfitAndLoss.getProfitAndLoss();
 	}
 
-	protected static Integer getShippingCost(final ExtraDataContainer container) {
+	protected static Integer getShippingCost(final ProfitAndLossContainer container) {
 
 		if (container == null) {
 			return null;
 		}
 
-		final ExtraData data = container.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
-		if (data == null) {
-			return null;
-		}
+		// TODO!
+		// final ExtraData data = container.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
+		// if (data == null) {
+		// }
 
-		return data.getValueAs(Integer.class);
+		return null;
 	}
 
 	protected static int getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
