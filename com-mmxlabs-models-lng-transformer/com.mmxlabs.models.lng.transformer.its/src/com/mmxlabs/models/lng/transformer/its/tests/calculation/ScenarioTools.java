@@ -840,10 +840,15 @@ public class ScenarioTools {
 				final String description = (slot instanceof LoadSlot ? "load: " : "discharge: ");
 				final int volume = slotAllocation.getVolumeTransferred();
 				System.err.println("\tDuration: " + sv.getDuration() + ", " + description + volume);
-			} else if (e instanceof SlotVisit) {
-				final SlotVisit pv = (SlotVisit) e;
-				System.err.println("SlotVisit:");
-				System.err.println("\tDuration: " + pv.getDuration());
+				ScenarioTools.printFuel(sv.getFuels());
+				if (sv.getPortCost() > 0) {
+					System.err.println("\tPort cost: " + sv.getPortCost());
+					
+				}
+				if (sv.getHireCost() > 0) {
+					System.err.println("\tHire cost: " + sv.getHireCost());
+					
+				}
 			} else if (e instanceof Cooldown) {
 				final Cooldown cd = (Cooldown) e;
 				System.err.println("Cooldown:");

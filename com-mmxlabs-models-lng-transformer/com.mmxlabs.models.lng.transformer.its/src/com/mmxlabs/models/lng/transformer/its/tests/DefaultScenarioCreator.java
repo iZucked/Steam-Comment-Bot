@@ -70,6 +70,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -781,6 +782,33 @@ public class DefaultScenarioCreator {
 			marketModel.getCharteringSpotMarkets().add(result);
 
 			return result;
+		}
+		
+		public PortCost setPortCost(Port port, PortCapability activity, int cost) {
+			final PricingModel pricingModel = scenario.getPricingModel();
+
+			/*
+			 * // abortive code checking for an existing port cost based on the port specified
+			for (PortCost pc: pricingModel.getPortCosts()) {
+				final EList<APortSet<Port>> ports = pc.getPorts();
+				if (ports.size() == 1) {
+					final APortSet<Port> set = ports.get(0);
+					if (set)
+				}
+			}
+			*/
+			final PortCost result = PricingFactory.eINSTANCE.createPortCost();
+			pricingModel.getPortCosts().add(result);
+			
+			final PortCostEntry entry = PricingFactory.eINSTANCE.createPortCostEntry();
+			
+			entry.setActivity(activity);
+			entry.setCost(cost);
+			
+			result.getEntries().add(entry);
+			
+			return result;
+			
 		}
 	}
 

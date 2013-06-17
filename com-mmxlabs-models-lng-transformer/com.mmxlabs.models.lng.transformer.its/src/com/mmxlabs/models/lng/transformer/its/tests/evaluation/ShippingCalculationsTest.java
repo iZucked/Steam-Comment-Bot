@@ -6,12 +6,15 @@ package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import junit.framework.AssertionFailedError;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -130,6 +133,9 @@ public class ShippingCalculationsTest {
 				return ((Journey) event).getToll();
 			else if (event instanceof Cooldown)
 				return ((Cooldown) event).getCost();
+			else if (event instanceof SlotVisit) {
+				return ((SlotVisit) event).getPortCost();
+			}
 			else
 				// TODO: extract the overhead costs or revenue for drydock events, charter outs etc.
 				return null;
@@ -139,18 +145,34 @@ public class ShippingCalculationsTest {
 		}
 	}
 
-	public void checkValues(final Expectations field, final List<? extends Event> events, final Integer[] values) {
+	/**
+	 *  Checks the values of a particular expectation field against the expected values, returning a list of failure messages if any of them are not equal.
+	 *  If the expected or computed value of a field is null, ignore the comparison and do not produce a failure message.
+	 *  
+	 * @param field The field to check
+	 * @param events The events whose field values need checking
+	 * @param values The values of the given field for the list of events (in the same order as the events)
+	 * @return A 
+	 */
+	public List<String> checkValues(final Expectations field, final List<? extends Event> events, final Integer[] values) {
 		Assert.assertEquals(values.length, events.size());
 
+		List<String> result = new ArrayList<String>();
+		
 		for (int i = 0; i < values.length; i++) {
 			final Event event = events.get(i);
 			final Integer expected = values[i];
 			final Integer actual = getValue(field, event);
+			// null values are a "not applicable" or "ignore this"
 			if (expected != null && actual != null) {
-				final String message = String.format("%s %s", field.name(), event.toString());
-				Assert.assertEquals(message, expected, actual);
+				final String message = String.format("%s expected %d was %d for [%d] %s", field.name(), expected, actual, i, event.toString());
+				if (!expected.equals(actual)) {
+					result.add(message);
+				}
 			}
 		}
+		
+		return result;
 	}
 
 	public int getFuelConsumption(final Event event, final Fuel fuel) {
@@ -179,15 +201,7 @@ public class ShippingCalculationsTest {
 			container = ((SlotVisit) event).getSlotAllocation().getCargoAllocation();
 		}
 
-		if (event instanceof StartEvent) {
-			container = (ProfitAndLossContainer) event;
-		}
-
-		if (event instanceof VesselEventVisit) {
-			container = (ProfitAndLossContainer) event;
-		}
-
-		if (event instanceof GeneratedCharterOut) {
+		if (event instanceof ProfitAndLossContainer) {
 			container = (ProfitAndLossContainer) event;
 		}
 
@@ -201,7 +215,9 @@ public class ShippingCalculationsTest {
 		return null;
 	}
 
-	public void checkPnlValues(final List<? extends Event> events, final PnlChunkIndexData[] indices, final Integer[] pnls) {
+	public List<String> checkPnlValues(final List<? extends Event> events, final PnlChunkIndexData[] indices, final Integer[] pnls) {
+		final List<String> failures = new ArrayList<String>();
+		
 		if (pnls != null) {
 			Assert.assertEquals(indices.length, pnls.length);
 			// each pnl value corresponds to a particular cargo
@@ -211,13 +227,17 @@ public class ShippingCalculationsTest {
 						Event event = events.get(j);
 						Long pnl = getEventPnl(event);
 						if (pnl != null && pnls[i] != null) {
-							Assert.assertEquals("PnL for " + event, (int) pnls[i], pnl.intValue());
+							if ((int) pnls[i] != pnl.intValue()) {
+								failures.add(String.format("PnL expected %d was %d for [%d] %s",  pnls[i], pnl.intValue(), j, event.toString()));
+							}
 							continue;
 						}
 					}
 				}
 			}
 		}
+		
+		return failures;
 	}
 
 	private int getLoadDischarge(final Event event) {
@@ -335,7 +355,7 @@ public class ShippingCalculationsTest {
 		public float salesPricePerM3 = 21;
 
 		public int hireCostPerHour = 0;
-
+		
 		public SequenceTester(final Class<?>[] classes, final PnlChunkIndexData[] cargoIndices) {
 			setClasses(classes);
 			setCargoIndices(cargoIndices);
@@ -433,13 +453,15 @@ public class ShippingCalculationsTest {
 		public void setExpectedPnlValues(final Integer[] pnl) {
 			expectedPnlValues = pnl;
 		}
-
+		
 		public void additionalChecks() {
 		}
 
 		@SuppressWarnings("unchecked")
 		public void check(final Sequence sequence) {
 			final EList<Event> events = sequence.getEvents();
+			final List<String> failures = new ArrayList<String>();
+
 			checkClasses(events, classes);
 
 			setupExpectedHireCosts(hireCostPerHour);
@@ -448,14 +470,22 @@ public class ShippingCalculationsTest {
 				final List<?> objects = extractObjectsOfClass(events, clazz);
 
 				for (final Expectations field : Expectations.values()) {
-					checkValues(field, (List<? extends Event>) objects, getExpectedValues(field, clazz));
+					failures.addAll(checkValues(field, (List<? extends Event>) objects, getExpectedValues(field, clazz)));
 				}
 
 			}
 
 			setupExpectedPnl(purchasePricePerM3, salesPricePerM3, baseFuelPricePerM3);
 
-			checkPnlValues(events, cargoIndices, expectedPnlValues);
+			failures.addAll(checkPnlValues(events, cargoIndices, expectedPnlValues));
+			
+			if (!failures.isEmpty()) {
+				String error = failures.get(0);
+				for (int i = 1; i < failures.size(); i++) {
+					error += "\n" + failures.get(i);
+				}
+				throw new AssertionFailedError(error);
+			}
 		}
 
 		private void setupExpectedHireCosts(final int hireRatePerHour) {
@@ -503,7 +533,7 @@ public class ShippingCalculationsTest {
 
 				final Integer routeCost = expectedArrays.get(Expectations.OVERHEAD_COSTS)[i];
 				result -= routeCost;
-
+				
 				final Integer loadDischargeVolume = expectedArrays.get(Expectations.LOAD_DISCHARGE)[i];
 				// Oops! test fails if there is a capacity violation causing a negative load or discharge volume....
 				// discharge
@@ -1754,6 +1784,74 @@ public class ShippingCalculationsTest {
 
 		checker.check(sequence);
 
+	}
+
+	@Test
+	public void testFixedPortCosts() {
+		System.err.println("\n\nTest fixed port costs are added to the itinerary cost appropriately.");
+
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+
+		SequenceTester checker = getDefaultTester();
+
+		int loadPortCost = 30;
+		dsc.pricingCreator.setPortCost(mss.loadPort, PortCapability.LOAD, loadPortCost);
+		
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, SlotVisit.class, new Integer [] { loadPortCost, 0 });
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+		
+	}
+
+	@Test
+	public void testPortFuelCosts() {
+		System.err.println("\n\nTest port fuel costs are added to the itinerary cost appropriately.");
+
+		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
+		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+
+		SequenceTester checker = getDefaultTester();
+
+		int ladenBaseConsumption = 30;
+		int ballastBaseConsumption = 40;
+		Integer [] portDurations = new Integer [] { 24, 48 };
+		
+		// set the in-port laden fuel consumption for the vessel class
+		mss.vc.getLadenAttributes().setInPortBaseRate(ladenBaseConsumption);
+		mss.vc.getBallastAttributes().setInPortBaseRate(ballastBaseConsumption);
+		// set the durations of the load visit & discharge visit
+		for (int i = 0; i < portDurations.length; i++) {
+			mss.cargo.getSortedSlots().get(i).setDuration(portDurations[i]);
+		}
+		
+		// change from default: base fuel usage at ports, and duration spent there
+		checker.setExpectedValues(Expectations.BF_USAGE, SlotVisit.class, new Integer [] { portDurations[0] * ladenBaseConsumption / 24, portDurations[1] * ballastBaseConsumption / 24 });
+		checker.setExpectedValues(Expectations.DURATIONS, SlotVisit.class, portDurations);
+
+		// change from default: idle times at discharge port and end port are now zero (and fuel consumptions zero accordingly)
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer [] { 0, 0, 0 });
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] { 0, 0, 0 });
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer [] { 0, 0, 0 });
+		checker.setupOrdinaryFuelCosts();
+		
+		// less base fuel usage on idle means higher discharge at discharge port
+		checker.setExpectedValue(-9980, Expectations.LOAD_DISCHARGE, SlotVisit.class, 1);
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+		
 	}
 
 	@Test
