@@ -798,6 +798,7 @@ public class DefaultScenarioCreator {
 			}
 			*/
 			final PortCost result = PricingFactory.eINSTANCE.createPortCost();
+			result.getPorts().add(port);
 			pricingModel.getPortCosts().add(result);
 			
 			final PortCostEntry entry = PricingFactory.eINSTANCE.createPortCostEntry();
