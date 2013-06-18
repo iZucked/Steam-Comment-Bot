@@ -94,7 +94,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					}
 					
 					if (!isAssigned) {
-						final String failureMessage = String.format("Cargo '%s' must be assigned a vessel", slot.getCargo().getName());
+						final String failureMessage = String.format("Cargo '%s' must be assigned a vessel", cargo.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 						failures.add(dsd);					
 					}
