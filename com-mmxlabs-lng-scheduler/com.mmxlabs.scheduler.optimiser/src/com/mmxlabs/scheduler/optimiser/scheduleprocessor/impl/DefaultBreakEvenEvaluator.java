@@ -77,7 +77,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
 				final List<Integer> arrivalTimes = new ArrayList<Integer>();
-				int idx = -1;
+				int idx = 0;
 				int dischargeIdx = -1;
 				arrivalTimes.add(currentTime);
 				final Object[] currentSequence = vp.getSequence();
@@ -93,7 +93,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
 							arrivalTimes.add(currentTime);
-							++idx;
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
 								ILoadOption loadOption = (ILoadOption) details.getOptions().getPortSlot();
@@ -116,7 +115,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 									}
 									missingSalesPrice = true;
 									originalDischarge = dischargeOption;
-									dischargeIdx = idx - 1;
+									dischargeIdx = idx ;
 								}
 							}
 						}
@@ -124,8 +123,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 						final VoyageDetails details = (VoyageDetails) obj;
 						currentTime += details.getOptions().getAvailableTime();
 						arrivalTimes.add(currentTime);
-						++idx;
 					}
+					++idx;
 				}
 
 				if (!isCargoPlan || (!missingPurchasePrice && !missingSalesPrice)) {
