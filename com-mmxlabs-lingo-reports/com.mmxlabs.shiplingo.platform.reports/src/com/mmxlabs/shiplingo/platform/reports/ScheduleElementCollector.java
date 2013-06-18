@@ -56,10 +56,12 @@ public abstract class ScheduleElementCollector implements IScenarioInstanceEleme
 		return null;
 	}
 
+	@Override
 	public void beginCollecting() {
 
 	}
 
+	@Override
 	public void endCollecting() {
 
 	}

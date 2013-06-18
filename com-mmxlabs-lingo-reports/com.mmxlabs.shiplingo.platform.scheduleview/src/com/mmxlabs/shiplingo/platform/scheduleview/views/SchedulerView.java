@@ -264,10 +264,12 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				return false;
 			}
 
+			@Override
 			public int getEventsTopSpacer() {
 				return 5;
 			}
 
+			@Override
 			public int getEventsBottomSpacer() {
 				return 5;
 			}
@@ -653,6 +655,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			viewer.setInput(viewer.getInput());
 		};
 
+		@Override
 		protected void createMenuItems(final Menu menu) {
 
 			for (final ScenarioViewerComparator.Mode mode : ScenarioViewerComparator.Mode.values()) {

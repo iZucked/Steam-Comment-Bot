@@ -70,10 +70,12 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
 
 				result.add(new ColumnManager<IndexExposureData>("Index") {
+					@Override
 					public String getColumnText(IndexExposureData data) {
 						return data.indexName;
 					}
 
+					@Override
 					public int compare(IndexExposureData o1, IndexExposureData o2) {
 						return o1.indexName.compareTo(o2.indexName);
 					}
@@ -81,11 +83,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 				for (final MonthYear date : dateRange()) {
 					result.add(new ColumnManager<IndexExposureData>(String.format("%d-%02d", date.getYear(), date.getMonth())) {
+						@Override
 						public String getColumnText(IndexExposureData data) {
 							double result = data.exposures.containsKey(date) ? data.exposures.get(date) : 0;
 							return String.format("%,.01f", result);
 						}
 
+						@Override
 						public int compare(IndexExposureData o1, IndexExposureData o2) {
 							double result1 = o1.exposures.containsKey(date) ? o1.exposures.get(date) : 0;
 							double result2 = o2.exposures.containsKey(date) ? o2.exposures.get(date) : 0;

@@ -40,6 +40,7 @@ class HighlightAction extends SchedulerViewAction {
 //		schedulerView.redraw();
 //	}
 
+	@Override
 	protected void createMenuItems(final Menu menu) {
 		
 		final List<IScheduleViewColourScheme> highlighters = lp.getHighlighters();

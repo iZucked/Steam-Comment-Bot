@@ -41,6 +41,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 		schedulerView.redraw();
 	}
 
+	@Override
 	protected void createMenuItems(final Menu menu) {
 		
 		final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
