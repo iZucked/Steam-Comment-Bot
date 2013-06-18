@@ -271,7 +271,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IShortCargoReturnElementProviderEditor shortCargoReturnElementProviderEditor;
-	
+
+	/**
+	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
+	 * 
+	 * @since 5.1
+	 */
 	public static int minDaysFromLastEventToEnd = 10;
 
 	/**
@@ -612,7 +617,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if (start > end) {
 			throw new IllegalArgumentException("Start time is greater than end time!");
 		}
-		
+
 		final TimeWindow window = new TimeWindow(start, end);
 
 		if (end > endOfLatestWindow) {
@@ -694,7 +699,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vessel.setVesselInstanceType(vesselInstanceType);
 
 		vessel.setHourlyCharterInPrice(hourlyCharterInRate);
-		
+
 		vessel.setCargoCapacity(cargoCapacity);
 
 		vessels.add(vessel);
@@ -1037,7 +1042,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private IVessel createVirtualVessel(final ISequenceElement element, final VesselInstanceType type) {
 		assert type == VesselInstanceType.DES_PURCHASE || type == VesselInstanceType.FOB_SALE;
 		// create a new resource for each of these guys, and bind them to their resources
-		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, ZeroCurve.getInstance(), type, createStartEndRequirement(), createStartEndRequirement(), 0l, 0, 0, virtualClass.getCargoCapacity());
+		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, ZeroCurve.getInstance(), type, createStartEndRequirement(), createStartEndRequirement(), 0l, 0, 0,
+				virtualClass.getCargoCapacity());
 		// Bind every slot to its vessel
 		constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
 
