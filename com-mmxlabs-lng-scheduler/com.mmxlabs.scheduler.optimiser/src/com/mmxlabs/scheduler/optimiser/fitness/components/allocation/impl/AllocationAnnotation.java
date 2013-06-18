@@ -31,7 +31,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	private final Map<IPortSlot, SlotAllocationAnnotation> slotAllocations = new HashMap<IPortSlot, SlotAllocationAnnotation>();
-	private List<IPortSlot> slots = new ArrayList<IPortSlot>(2);
+	private final List<IPortSlot> slots = new ArrayList<IPortSlot>(2);
 
 	private long fuelVolumeInM3;
 
@@ -52,24 +52,24 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		String slotFormat = "%s@%d (%s %d)";
+		final StringBuilder builder = new StringBuilder();
+		final String slotFormat = "%s@%d (%s %d)";
 		boolean firstLoop = true;
-		for (IPortSlot slot : slots) {
-			SlotAllocationAnnotation slotAllocation = slotAllocations.get(slot);
+		for (final IPortSlot slot : slots) {
+			final SlotAllocationAnnotation slotAllocation = slotAllocations.get(slot);
 			if (!firstLoop) {
 				builder.append(" to ");
 			} else {
 				firstLoop = false;
 			}
 
-			String action = (slot instanceof IDischargeOption) ? "discharged" : (slot instanceof ILoadOption ? "loaded" : "???");
-			long volume = getSlotVolumeInM3(slot);
+			final String action = (slot instanceof IDischargeOption) ? "discharged" : (slot instanceof ILoadOption ? "loaded" : "???");
+			final long volume = getSlotVolumeInM3(slot);
 			// long volume = (slot instanceof IDischargeOption) ? getDischargeVolumeInM3() : (slot instanceof ILoadOption ? getLoadVolumeInM3() : -1);
 			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.startTime, action, volume));
 		}
 
-		String endFormat = ", used %d for fuel, remaining heel %d";
+		final String endFormat = ", used %d for fuel, remaining heel %d";
 		builder.append(String.format(endFormat, getFuelVolumeInM3(), getRemainingHeelVolumeInM3()));
 		return builder.toString();
 	}
@@ -91,7 +91,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return slots;
 	}
 
-	private SlotAllocationAnnotation getOrCreateSlotAllocation(IPortSlot slot) {
+	private SlotAllocationAnnotation getOrCreateSlotAllocation(final IPortSlot slot) {
 		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation == null) {
 			allocation = new SlotAllocationAnnotation();
@@ -104,8 +104,8 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	 * @since 5.0
 	 */
 	@Override
-	public int getSlotTime(IPortSlot slot) {
-		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+	public int getSlotTime(final IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {
 			return allocation.startTime;
 		}
@@ -116,7 +116,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	/**
 	 * @since 5.0
 	 */
-	public void setSlotTime(IPortSlot slot, int time) {
+	public void setSlotTime(final IPortSlot slot, final int time) {
 		getOrCreateSlotAllocation(slot).startTime = time;
 	}
 
@@ -124,8 +124,8 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	 * @since 5.0
 	 */
 	@Override
-	public int getSlotPricePerM3(IPortSlot slot) {
-		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+	public int getSlotPricePerM3(final IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {
 			return allocation.pricePerM3;
 		}
@@ -136,7 +136,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	/**
 	 * @since 5.0
 	 */
-	public void setSlotPricePerM3(IPortSlot slot, int price) {
+	public void setSlotPricePerM3(final IPortSlot slot, final int price) {
 		getOrCreateSlotAllocation(slot).pricePerM3 = price;
 	}
 
@@ -144,12 +144,12 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	 * @since 5.0
 	 */
 	@Override
-	public long getSlotVolumeInM3(IPortSlot slot) {
+	public long getSlotVolumeInM3(final IPortSlot slot) {
 		// TODO: remove this horrible hack!
 		if (slot instanceof ILoadOption) {
 			// assume just one load option, and assume it is the first slot in the itinerary
 			long result = remainingHeelVolumeInM3 + fuelVolumeInM3;
-			for (Entry<IPortSlot, SlotAllocationAnnotation> entry : slotAllocations.entrySet()) {
+			for (final Entry<IPortSlot, SlotAllocationAnnotation> entry : slotAllocations.entrySet()) {
 				if (entry.getKey() instanceof IDischargeOption) {
 					result += entry.getValue().volumeInM3;
 				}
@@ -157,7 +157,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 			return result;
 		}
 
-		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {
 			return allocation.volumeInM3;
 		}
@@ -168,7 +168,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	/**
 	 * @since 5.0
 	 */
-	public void setSlotVolumeInM3(IPortSlot slot, long volume) {
+	public void setSlotVolumeInM3(final IPortSlot slot, final long volume) {
 		getOrCreateSlotAllocation(slot).volumeInM3 = volume;
 	}
 
