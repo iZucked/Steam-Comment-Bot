@@ -13,6 +13,7 @@ import com.mmxlabs.shiplingo.platform.reports.views.CargoPnLReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CargoReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView;
+import com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.KPIReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView;
@@ -26,17 +27,22 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
 
-//		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.5f, IPageLayout.ID_EDITOR_AREA);
-		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.7f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.65f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, "reportsFolder");
+		// final IFolderLayout KPIBannerFolder = layout.createFolder("KPIBannerFolder", IPageLayout.TOP, 0.05f, "IPageLayout.ID_EDITOR_AREA");
+		// final IFolderLayout cargoEconsFolder = layout.createFolder("cargoEconsFolder", IPageLayout.LEFT, 0.25f, "IPageLayout.ID_EDITOR_AREA");
 
 		miscFolder.addView("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
 		miscFolder.addView("org.eclipse.pde.runtime.LogView");
-		miscFolder.addPlaceholder(TotalsHierarchyView.ID);		
-		
-//		reportsFolder.addView(KPIReportView.ID);
+		miscFolder.addPlaceholder(TotalsHierarchyView.ID);
+
+		layout.addPlaceholder(HorizontalKPIReportView.ID, IPageLayout.TOP, 0.05f, "IPageLayout.ID_EDITOR_AREA");
+
+		// KPIBannerFolder.addPlaceholder(HorizontalKPIReportView.ID);
+
+		// reportsFolder.addView(KPIReportView.ID);
 		reportsFolder.addView(SchedulerView.ID);
-//		reportsFolder.addView(CargoPnLReportView.ID);
+		// reportsFolder.addView(CargoPnLReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
 		reportsFolder.addPlaceholder(TotalsReportView.ID);
 		reportsFolder.addPlaceholder(BasicCargoReportView.ID);
@@ -45,6 +51,8 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		reportsFolder.addPlaceholder(LatenessReportView.ID);
 		reportsFolder.addPlaceholder(CooldownReportView.ID);
 		reportsFolder.addPlaceholder(FitnessReportView.ID);
+
+		// layout.addView(CargoEconsReport.ID, IPageLayout.RIGHT, 0.85f, IPageLayout.ID_EDITOR_AREA);
 
 		layout.addShowViewShortcut(KPIReportView.ID);
 		layout.addShowViewShortcut(CargoReportView.ID);
