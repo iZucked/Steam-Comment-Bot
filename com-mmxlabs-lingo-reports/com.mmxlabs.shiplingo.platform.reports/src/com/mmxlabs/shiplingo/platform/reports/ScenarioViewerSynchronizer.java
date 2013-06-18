@@ -135,7 +135,10 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 		}
 	};
 
-	private void refreshViewer() {
+	/**
+	 * @since 3.1
+	 */
+	public void refreshViewer() {
 		synchronized (this) {
 			needsRefresh = true;
 			Display.getDefault().asyncExec(refresh);
