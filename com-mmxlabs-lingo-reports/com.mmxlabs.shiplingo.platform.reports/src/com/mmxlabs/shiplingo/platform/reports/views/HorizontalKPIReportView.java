@@ -29,10 +29,9 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
@@ -58,7 +57,7 @@ public class HorizontalKPIReportView extends ViewPart {
 	private ScenarioViewerSynchronizer viewerSynchronizer;
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
-		
+
 		private final Font boldFont;
 
 		public ViewLabelProvider() {
@@ -127,24 +126,24 @@ public class HorizontalKPIReportView extends ViewPart {
 		public void update(final ViewerCell cell) {
 
 		}
-		
+
 		@Override
-		public Font getFont(final Object element) {					
+		public Font getFont(final Object element) {
 			return boldFont;
 		}
 
 		@Override
 		public Color getForeground(final Object element, final int columnIndex) {
-			
+
 			if (element instanceof RowData) {
 				int color = SWT.COLOR_DARK_GRAY;
-				switch(columnIndex){
+				switch (columnIndex) {
 				case 0:
 					color = SWT.COLOR_BLACK;
 					break;
 				case 1:
 					final RowData pinD = contentProvider.getPinnedData();
-					if(pinD == null){
+					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
 						final RowData d = (RowData) element;
@@ -188,7 +187,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		for (int i = 0; i < 2 * 3; ++i) {
 			final GridViewerColumn tvc = new GridViewerColumn(viewer, SWT.NONE);
 			int width = 100;
-			switch(i){
+			switch (i) {
 			case 0:
 				width = 33; // "P&L"
 				break;
@@ -231,7 +230,7 @@ public class HorizontalKPIReportView extends ViewPart {
 					// Active editor changed
 					activeEditorChange((IEditorPart) part);
 				}
-				viewer.refresh();
+				viewerSynchronizer.refreshViewer();
 			}
 
 			@Override
@@ -240,7 +239,7 @@ public class HorizontalKPIReportView extends ViewPart {
 					// Active editor changed
 					activeEditorChange((IEditorPart) part);
 				}
-				viewer.refresh();
+				viewerSynchronizer.refreshViewer();
 			}
 		};
 		getSite().getPage().addPartListener(partListener);
@@ -312,18 +311,20 @@ public class HorizontalKPIReportView extends ViewPart {
 				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
 				if (scenarioInstance != null) {
 					final EObject instance = scenarioInstance.getInstance();
-					if (instance instanceof LNGScenarioModel) {
-						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-						final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-						if (portfolioModel != null) {
-							scheduleModel = portfolioModel.getScheduleModel();
-						}
+					if (instance instanceof MMXRootObject) {
+						MMXRootObject rootObject = (MMXRootObject) instance;
+						scheduleModel = rootObject.getSubModel(ScheduleModel.class);
 					}
 				}
 			}
 		}
 		// this.activeEditor = activeEditor;
 		this.scheduleModel = scheduleModel;
+	}
+
+	@Deprecated
+	public void setInput(Object input) {
+		viewer.setInput(input);
 	}
 
 }
