@@ -53,6 +53,7 @@ Build: {1}
 
    <configurations>
       <plugin id="com.mmxlabs.datasources.atobviac" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.datasources.dataloy" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.lingo.extensions" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.liveevaluator" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.transformer" autoStart="true" startLevel="0" />
