@@ -30,6 +30,16 @@
                showTitle="false"
                standalone="true">
          </view>
+         <view
+               closeable="true"
+               id="com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport"
+               minimized="true"
+               ratio="0.85"
+               relationship="right"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false"
+               standalone="false">
+         </view>
 <!--         <view
                closeable="false"
                id="com.mmxlabs.shiplingo.platform.reports.views.KPIReportView"
