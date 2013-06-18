@@ -48,6 +48,7 @@ public class UnconstrainedCargoAllocator extends BaseCargoAllocator {
 			}
 			// multiple load/discharge case
 			else {
+				// Note this currently does nothing as the next() method in the allocator iterator (BaseCargoAllocator) ignores this data and looks directly on the discharge slot.
 				result[i] = ((IDischargeOption) (slots[1])).getMaxDischargeVolume();
 			}
 		}
