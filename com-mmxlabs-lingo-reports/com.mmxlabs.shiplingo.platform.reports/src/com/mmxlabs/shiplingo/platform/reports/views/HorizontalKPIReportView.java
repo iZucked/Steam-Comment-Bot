@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIContentProvider.RowData;
@@ -211,15 +212,13 @@ public class HorizontalKPIReportView extends ViewPart {
 
 		partListener = new IPartListener() {
 
-			@Override
-			public void partOpened(final IWorkbenchPart part) {
-			}
 
 			@Override
 			public void partDeactivated(final IWorkbenchPart part) {
 			}
 
 			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
 			public void partClosed(final IWorkbenchPart part) {
 
 			}
@@ -230,7 +229,7 @@ public class HorizontalKPIReportView extends ViewPart {
 					// Active editor changed
 					activeEditorChange((IEditorPart) part);
 				}
-				viewer.refresh();
+				viewerSynchronizer.refreshViewer();
 			}
 
 			@Override
@@ -239,7 +238,7 @@ public class HorizontalKPIReportView extends ViewPart {
 					// Active editor changed
 					activeEditorChange((IEditorPart) part);
 				}
-				viewer.refresh();
+				viewerSynchronizer.refreshViewer();
 			}
 		};
 		getSite().getPage().addPartListener(partListener);
@@ -323,6 +322,8 @@ public class HorizontalKPIReportView extends ViewPart {
 		}
 		// this.activeEditor = activeEditor;
 		this.scheduleModel = scheduleModel;
+	public void setInput(Object input) {
+		viewer.setInput(input);
 	}
 
 }
