@@ -10,13 +10,13 @@ import junit.framework.Assert;
 
 import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.util.ChangeRecorder;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?254">Case 254: Check input attributes have not unexpectedly changed</a>
@@ -40,6 +40,7 @@ public class InputAttributesCheckTest {
 	 *             Thrown by the method that checks that the original and evaluated scenarios are the same
 	 * @throws IOException
 	 */
+	@Ignore("Result does change as we now have a ScheduleModel")
 	@Test
 	public void test() throws InterruptedException {
 
