@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -89,14 +90,6 @@ public class CargoEconsReport extends ViewPart {
 			gvc.setLabelProvider(new FieldTypeNameLabelProvider());
 			gvc.getColumn().setWidth(100);
 		}
-
-		// // Add the unit column
-		// {
-		// final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-		// gvc.getColumn().setText("Unit");
-		// gvc.setLabelProvider(new FieldTypeUnitLabelProvider());
-		// gvc.getColumn().setWidth(70);
-		// }
 
 		// All other columns dynamically added.
 
@@ -198,16 +191,11 @@ public class CargoEconsReport extends ViewPart {
 		// @formatter:on
 
 		private final String name;
-		private final String unit;
 
 		private final DecimalFormat df;
 
 		public String getName() {
 			return name;
-		}
-
-		public String getUnit() {
-			return unit;
 		}
 
 		public DecimalFormat getDf() {
@@ -216,7 +204,6 @@ public class CargoEconsReport extends ViewPart {
 
 		private FieldType(final String name, final String unit, final DecimalFormat df) {
 			this.name = name;
-			this.unit = unit;
 			this.df = df;
 		}
 	}
@@ -294,7 +281,7 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_PER_MMBTU: {
 				final Integer pnl = CargoEconsReport.getPNLValue(cargoAllocation);
 				if (pnl != null) {
-					final double dischargeVolumeInMMBTu = (Double) getObject(FieldType.SELL_VOLUME_IN_MMBTU);
+					final double dischargeVolumeInMMBTu = ((Number) getObject(FieldType.SELL_VOLUME_IN_MMBTU)).doubleValue();
 					return (double) pnl / dischargeVolumeInMMBTu;
 				}
 				break;
@@ -312,7 +299,7 @@ public class CargoEconsReport extends ViewPart {
 						// TODO: Avg CV
 						cv = loadSlot.getSlotOrPortCV();
 						break;
-					}
+					}// cooldowncooldownviolationsCountviolationsCountviolationsCount violationsCount += cc;
 				}
 				long revenue = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
@@ -350,7 +337,7 @@ public class CargoEconsReport extends ViewPart {
 				int cost = 0;
 				for (final Event event : cargoAllocation.getEvents()) {
 					if (event instanceof FuelUsage) {
-						FuelUsage fuelUsage = (FuelUsage) event;
+						final FuelUsage fuelUsage = (FuelUsage) event;
 						cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 					}
 				}
@@ -361,7 +348,7 @@ public class CargoEconsReport extends ViewPart {
 
 				for (final Event event : cargoAllocation.getEvents()) {
 					if (event instanceof FuelUsage) {
-						FuelUsage fuelUsage = (FuelUsage) event;
+						final FuelUsage fuelUsage = (FuelUsage) event;
 						cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 					}
 				}
@@ -400,7 +387,7 @@ public class CargoEconsReport extends ViewPart {
 				}
 				return duration * cargoAllocation.getSequence().getDailyHireRate() / 24;
 			case SHIPPING_COST_TOTAL:
-				return CargoEconsReport.getShippingCost(cargoAllocation) - ((Integer) getObject(FieldType.SHIPPING_BOIL_OFF_COST_TOTAL)).doubleValue();
+				return CargoEconsReport.getShippingCost(cargoAllocation);
 			default:
 				break;
 
@@ -561,16 +548,11 @@ public class CargoEconsReport extends ViewPart {
 											}
 										}
 									}
-
 								}
 							}
-
 						}
-
 					}
-
 				}
-
 			}
 			// Remove invalid items
 			validObjects.remove(null);
@@ -637,18 +619,48 @@ public class CargoEconsReport extends ViewPart {
 		return (int) groupProfitAndLoss.getProfitAndLoss();
 	}
 
-	protected static Integer getShippingCost(final ProfitAndLossContainer container) {
+	protected static Integer getShippingCost(final CargoAllocation cargoAllocation) {
 
-		if (container == null) {
+		if (cargoAllocation == null) {
 			return null;
 		}
 
-		// TODO!
-		// final ExtraData data = container.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
-		// if (data == null) {
-		// }
+		// Bit of a double count here, but need to decide what to add to the model
+		int shippingCost = 0;
+		int duration = 0;
+		for (final Event event : cargoAllocation.getEvents()) {
+			if (event instanceof SlotVisit) {
+				final SlotVisit slotVisit = (SlotVisit) event;
+				// Port Costs
+				shippingCost += slotVisit.getPortCost();
+			}
 
-		return null;
+			if (event instanceof Journey) {
+				final Journey journey = (Journey) event;
+				// Canal Costs
+				shippingCost += journey.getToll();
+			}
+
+			if (event instanceof FuelUsage) {
+				final FuelUsage fuelUsage = (FuelUsage) event;
+				// Base fuel costs
+				shippingCost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+			}
+
+			if (event instanceof Cooldown) {
+				final Cooldown cooldown = (Cooldown) event;
+				shippingCost += cooldown.getCost();
+			}
+
+			duration += event.getDuration();
+		}
+
+		// Add on chartering costs
+		if (cargoAllocation.getSequence().isSpotVessel()) {
+			shippingCost += duration * cargoAllocation.getSequence().getDailyHireRate() / 24;
+		}
+		return shippingCost;
+
 	}
 
 	protected static int getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
