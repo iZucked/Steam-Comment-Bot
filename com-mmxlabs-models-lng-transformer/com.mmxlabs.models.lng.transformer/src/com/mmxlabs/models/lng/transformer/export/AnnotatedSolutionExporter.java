@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -401,6 +402,8 @@ public class AnnotatedSolutionExporter {
 				} else if (event instanceof Journey && allocation != null) {
 					allocation.getEvents().add(event);
 				} else if (event instanceof Idle && allocation != null) {
+					allocation.getEvents().add(event);
+				} else if (event instanceof Cooldown && allocation != null) {
 					allocation.getEvents().add(event);
 				}
 			}
