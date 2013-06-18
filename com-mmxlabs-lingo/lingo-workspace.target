@@ -116,7 +116,7 @@
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.scheduler.optimiser.feature.feature.group" version="5.0.1.RELEASE"/>
-<unit id="com.mmxlabs.scheduler.optimiser.feature.source.feature.group" version="5.0.1RELEASE"/>
+<unit id="com.mmxlabs.scheduler.optimiser.feature.source.feature.group" version="5.0.1.RELEASE"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/5.0.1.RELEASE/com.mmxlabs.scheduler.p2-5.0.1.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
