@@ -856,26 +856,29 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// vessel capacity.
 		final long upperLoadLimitInM3 = Math.min(cargoCapacityInM3, loadSlot.getMaxLoadVolume());
 
+		// This is the smallest amount of gas we can load
 		if (minLoadVolumeInM3 - lngCommitmentInM3 > maxDischargeVolumeInM3) {
+			
 			if (minLoadVolumeInM3 - lngCommitmentInM3 < 0) {
-				// discharge breach
+				// discharge breach -- need to discharge more than we are permitted
 				dischargeDetails.setCapacityViolation(CapacityViolationType.MAX_DISCHARGE, (minLoadVolumeInM3 - lngCommitmentInM3) - maxDischargeVolumeInM3);
 				++violationsCount;
 			} else {
-				// load breach
+				// load breach -- need to load less than we are permitted
 				loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngCommitmentInM3));
 				++violationsCount;
 			}
 		}
 
+		// This is the smallest amount we can discharge..
 		if (minDischargeVolumeInM3 + lngCommitmentInM3 > upperLoadLimitInM3) {
 
 			if (upperLoadLimitInM3 - lngCommitmentInM3 < 0) {
-				// load breach
+				// load breach -- need to load more than we are permitted (note - we are still within vessel capacity otherwise we would not have reached this point.)
 				loadDetails.setCapacityViolation(CapacityViolationType.MAX_LOAD, lngCommitmentInM3 - upperLoadLimitInM3);
 				++violationsCount;
 			} else {
-				// discharge breach
+				// discharge breach -- need to discharge less than we are permitted
 				dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - lngCommitmentInM3);
 				++violationsCount;
 			}
