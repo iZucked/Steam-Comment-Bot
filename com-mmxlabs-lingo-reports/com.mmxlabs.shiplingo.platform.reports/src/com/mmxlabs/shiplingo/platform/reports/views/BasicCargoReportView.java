@@ -4,26 +4,11 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
-import com.mmxlabs.shiplingo.platform.reports.utils.ScheduleDiffUtils;
 
 /**
  * 
