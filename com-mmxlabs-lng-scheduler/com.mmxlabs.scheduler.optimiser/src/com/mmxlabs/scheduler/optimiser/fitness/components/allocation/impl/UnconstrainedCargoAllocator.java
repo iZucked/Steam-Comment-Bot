@@ -26,11 +26,11 @@ public class UnconstrainedCargoAllocator extends BaseCargoAllocator {
 		for (int i = 0; i < result.length; i++) {
 			// Total volume required for basic travel
 			final long flv = forcedLoadVolumeInM3.get(i) + remainingHeelVolumeInM3.get(i);
-			
+
 			IPortSlot[] slots = listedSlots.get(i);
 
-			//assert(slots.length == 2);
-			
+			// assert(slots.length == 2);
+
 			// load/discharge case
 			if (slots.length == 2) {
 				long maxLoadVolume = ((ILoadOption) (slots[0])).getMaxLoadVolume();
@@ -39,11 +39,12 @@ public class UnconstrainedCargoAllocator extends BaseCargoAllocator {
 				}
 				long maxDischargeVolume = ((IDischargeOption) (slots[1])).getMaxDischargeVolume();
 				if (maxDischargeVolume == 0) {
-					maxDischargeVolume =vesselCapacityInM3.get(i) - flv;
-				}else {
+					maxDischargeVolume = vesselCapacityInM3.get(i) - flv;
+				} else {
 					maxDischargeVolume = Math.min(maxDischargeVolume, vesselCapacityInM3.get(i) - flv);
 				}
-				result[i] = Math.min(maxLoadVolume - flv, maxDischargeVolume);
+				// Work out how much extra we can load on top of forced load volume within constraints, but ensure min value is zero.
+				result[i] = Math.max(0, Math.min(maxLoadVolume - flv, maxDischargeVolume));
 			}
 			// multiple load/discharge case
 			else {
