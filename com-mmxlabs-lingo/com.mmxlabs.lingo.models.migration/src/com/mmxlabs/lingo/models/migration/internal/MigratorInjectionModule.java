@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.models.migration.internal;
 
 import org.ops4j.peaberry.Peaberry;
