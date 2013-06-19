@@ -148,6 +148,22 @@
                      class="ElementAssignment">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.CargoOverlapConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.CargoOverlapConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Cargo Overlap"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ElementAssignment">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
