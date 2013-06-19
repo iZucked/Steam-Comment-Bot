@@ -47,7 +47,7 @@ public class DialogEcoreCopier {
 			newCopies.add(copy(original));
 		}
 
-		return copies;
+		return newCopies;
 	}
 
 	public void record() {
