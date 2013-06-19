@@ -57,6 +57,7 @@ public class SchedulePnLReport extends EMFReportView {
 	final List<String> entityColumnNames = new ArrayList<String>();
 
 	private final EPackage tableDataModel;
+	private final EStructuralFeature nameObjectRef;
 	private final EStructuralFeature targetObjectRef;
 	private final EStructuralFeature cargoAllocationRef;
 	private final EStructuralFeature loadAllocationRef;
@@ -65,7 +66,8 @@ public class SchedulePnLReport extends EMFReportView {
 	public SchedulePnLReport() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
 
-		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge");
+		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "name", "cargo", "load", "discharge");
+		nameObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
 		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
@@ -75,7 +77,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", objectFormatter, targetObjectRef, s.getEvent__Name());
+		addColumn("ID", objectFormatter, nameObjectRef, s.getEvent__Name());
 
 		// add the total (aggregate) P&L column
 		addPNLColumn();
@@ -555,8 +557,8 @@ public class SchedulePnLReport extends EMFReportView {
 					if (i < dischargeSlots.size()) {
 						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "discharge", dischargeSlots.get(i));
 					}
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", element);
-
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", cargoAllocation);
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", element);
 					nodes.add(node);
 				}
 			} else {
@@ -564,10 +566,15 @@ public class SchedulePnLReport extends EMFReportView {
 
 				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
 				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", element);
-
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", element);
 				nodes.add(node);
 			}
 		}
 		return nodes;
+	}
+	
+	@Override
+	protected boolean handleSelections() {
+		return true;
 	}
 }
