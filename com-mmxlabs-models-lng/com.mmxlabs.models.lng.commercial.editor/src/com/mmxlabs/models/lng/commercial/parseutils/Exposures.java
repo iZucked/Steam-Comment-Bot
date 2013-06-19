@@ -312,8 +312,10 @@ public class Exposures {
 			}
 		}
 
-		if (priceExpression != null) {
-			return getExposureCoefficient(priceExpression, index);
+		if (priceExpression != null && !priceExpression.isEmpty()) {
+			if (!priceExpression.equals("?")) {
+				return getExposureCoefficient(priceExpression, index);
+			}
 		}
 
 		return 0;
