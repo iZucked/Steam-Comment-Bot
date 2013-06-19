@@ -1741,6 +1741,18 @@ public class LNGScenarioTransformer {
 
 			entities.addModelObject(vesselAvailability, vessel);
 			allVessels.add(vessel);
+			
+			/*
+			 * set up inaccessible ports by applying resource allocation constraints
+			 */
+			final Set<IPort> inaccessiblePorts = new HashSet<IPort>();
+			for (final Port ePort : SetUtils.getObjects(eV.getInaccessiblePorts())) {
+				inaccessiblePorts.add(portAssociation.lookup((Port) ePort));
+			}
+
+			if (inaccessiblePorts.isEmpty() == false) {
+				builder.setVesselInaccessiblePorts(vessel, inaccessiblePorts);
+			}
 		}
 
 		{
