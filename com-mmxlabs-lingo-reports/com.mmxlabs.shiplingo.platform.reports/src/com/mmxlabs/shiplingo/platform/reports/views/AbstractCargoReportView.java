@@ -24,7 +24,7 @@ import com.mmxlabs.shiplingo.platform.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.shiplingo.platform.reports.utils.ScheduleDiffUtils;
 
 /**
- * Abstact base class for the various reports based off CargoAllocations. We use the {@link GenericEMFTableDataModel} to create a table model where each "Node" or row contains references to the
+ * Abstract base class for the various reports based off CargoAllocations. We use the {@link GenericEMFTableDataModel} to create a table model where each "Node" or row contains references to the
  * CargoAllocation, and SlotAllocations for the load and discharge. For cargoes with more that one load or discharge, there will be multiple Node elements created - with the same CargoAllocation and
  * "Group" reference
  * 
