@@ -82,6 +82,7 @@ import org.eclipse.ui.menus.IMenuService;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -360,6 +361,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return source;
 				} else if (source instanceof Cargo) {
 					return source;
+				} else if (source instanceof ElementAssignment) {
+					return ((ElementAssignment) source).getAssignedObject();
 				}
 
 				return super.getElementForNotificationTarget(source);
