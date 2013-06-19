@@ -110,7 +110,7 @@ public class CargoEditingCommands {
 	}
 
 	/**
-	 * @param transferPort 
+	 * @param transferPort
 	 * @since 4.0
 	 */
 	public void insertShipToShipSlots(final List<Command> setCommands, final Slot sourceSlot, final CargoModel cargoModel, final Port transferPort) {
@@ -118,7 +118,7 @@ public class CargoEditingCommands {
 		final Cargo sourceCargo = sourceSlot.getCargo();
 
 		// when adding a STS transfer, we detach the original slot and connect it to a new STS transfer which replaces the source slot in the original cargo (if any)
-		
+
 		// Create STS pair
 		final LoadSlot transferLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 		transferLoad.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
@@ -141,10 +141,10 @@ public class CargoEditingCommands {
 		final Slot newCargoLoad;
 		final Slot newCargoDischarge;
 		final Slot sourceReplacementSlot;
-		
+
 		final String sourceSlotName = sourceSlot.getName();
 		final String sourceRelationName; // string describing the transfer relation to the source slot
-		
+
 		if (sourceSlot instanceof LoadSlot) {
 			sourceIsLoad = true;
 			sourceRelationName = "from";
@@ -176,17 +176,13 @@ public class CargoEditingCommands {
 		// add the new load and discharge slots to the cargo
 		setCommands.add(SetCommand.create(editingDomain, newCargoLoad, CargoPackage.Literals.SLOT__CARGO, newCargo));
 		setCommands.add(SetCommand.create(editingDomain, newCargoDischarge, CargoPackage.Literals.SLOT__CARGO, newCargo));
+		// Link cargo ID to slot ID
+		setCommands.add(SetCommand.create(editingDomain, newCargo, MMXCorePackage.Literals.NAMED_OBJECT__NAME, newCargoLoad.getName()));
 
 		// if the original source slot had a cargo already, we need its replacement to be attached to the cargo
 		if (sourceCargo != null) {
 			// replace the target slot in its original cargo with the corresponding transfer slot
 			setCommands.add(SetCommand.create(editingDomain, sourceReplacementSlot, CargoPackage.Literals.SLOT__CARGO, sourceCargo));
-			// name the new cargo after the original cargo
-			setCommands.add(SetCommand.create(editingDomain, newCargo, MMXCorePackage.Literals.NAMED_OBJECT__NAME, sourceCargo.getName() + "-transfer"));
-		} 
-		else if (sourceIsLoad) {
-			// if we just created a cargo where there was none before, name it after the source slot if it was a load slot
-			setCommands.add(SetCommand.create(editingDomain, newCargo, MMXCorePackage.Literals.NAMED_OBJECT__NAME, sourceSlot.getName()));			
 		}
 	}
 
