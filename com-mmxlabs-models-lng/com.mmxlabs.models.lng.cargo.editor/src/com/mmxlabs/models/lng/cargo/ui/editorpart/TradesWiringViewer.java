@@ -41,7 +41,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -110,7 +109,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -166,8 +164,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final CargoEditorMenuHelper menuHelper;
 
 	private final Image lockedImage;
-
-	private final Object updateLock = new Object();
 
 	private IStatusChangedListener statusChangedListener;
 
@@ -295,7 +291,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				setComparator(new ViewerComparator() {
 					@Override
 					public int compare(final Viewer viewer, final Object e1, final Object e2) {
-						final int comparison = 0;
 						GroupData g1 = null;
 						GroupData g2 = null;
 						if (e1 instanceof RowData) {
@@ -309,15 +304,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						} else {
 							final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
 							final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
-							// if (g1 == null || g1.getRows().isEmpty()) {
-							// comparison = -1;
-							// } else if (g2 == null || g2.getRows().isEmpty()) {
-							// comparison = 1;
-							// } else {
 							return vc.compare(viewer, rd1, rd2);
-							// }
 						}
-						// return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
 					}
 				});
 			}
@@ -801,7 +789,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		final ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
 			@Override
-			public Comparable getComparable(final Object element) {
+			public Comparable<?> getComparable(final Object element) {
 				final Object object = path.get((EObject) element);
 				if (object instanceof ProfitAndLossContainer) {
 					final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
@@ -917,32 +905,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 		});
-	}
-
-	private void performControlUpdate(final boolean rowAdded) {
-
-		// if (getScenarioViewer() == null || getScenarioViewer().getGrid().isDisposed()) {
-		// return;
-		// }
-		synchronized (updateLock) {
-			// Re-set the input to trigger full update as we push a load of stuff into the content provider which probably should not be there....
-
-			final Object oldInput = getScenarioViewer().getInput();
-			// Attempt to grab the current sort order and pass into the viewer so input changes do not alter the default ordering.
-			final ViewerComparator comparator = getScenarioViewer().getComparator();
-			Object[] sortedElements = null;
-			if (comparator != null) {
-
-				final Object[] elements = ((IStructuredContentProvider) getScenarioViewer().getContentProvider()).getElements(oldInput);
-				comparator.sort(getScenarioViewer(), elements);
-				sortedElements = elements;
-
-				// getScenarioViewer().getSortingSupport().setFixedSortOrder(Arrays.asList(sortedElements));
-			}
-
-			getScenarioViewer().setInput(null);
-			getScenarioViewer().setInput(oldInput);
-		}
 	}
 
 	/**
