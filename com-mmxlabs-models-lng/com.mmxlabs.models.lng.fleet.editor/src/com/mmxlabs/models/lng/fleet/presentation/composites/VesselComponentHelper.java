@@ -80,10 +80,10 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the inaccessiblePorts feature on Vessel
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_inaccessiblePortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__INACCESSIBLE_PORTS));
 	}
 	/**
 	 * Create the editor for the capacity feature on Vessel
