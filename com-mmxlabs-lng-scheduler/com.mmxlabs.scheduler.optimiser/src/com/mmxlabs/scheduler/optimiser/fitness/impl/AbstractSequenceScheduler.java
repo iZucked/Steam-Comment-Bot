@@ -553,6 +553,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		optimiser.setArrivalTimes(arrivalTimes);
 		optimiser.init();
 		final VoyagePlan result = optimiser.optimise();
+		if (result == null) {
+			return null;
+		}
 
 		final Object[] sequence = result.getSequence();
 		for (int i = 0; i < sequence.length; ++i) {
