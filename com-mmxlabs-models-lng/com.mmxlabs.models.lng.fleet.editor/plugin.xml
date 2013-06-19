@@ -274,5 +274,9 @@
           commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.VesselAvailabilityCommandProvider"
           id="com.mmxlabs.models.lng.fleet.editor.commands.VesselAvailabilityCommandProvider">
     </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider">
+    </ModelCommandProvider>
  </extension>
 </plugin>
