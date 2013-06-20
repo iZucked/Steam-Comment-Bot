@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -108,39 +110,80 @@ public class CargoEditingCommands {
 	}
 
 	/**
+	 * @param transferPort
 	 * @since 4.0
 	 */
-	public LoadSlot createNewShipToShipLoad(final List<Command> setCommands, final DischargeSlot linkedSlot, final CargoModel cargoModel) {
-		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-		newLoad.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
+	public void insertShipToShipSlots(final List<Command> setCommands, final Slot sourceSlot, final CargoModel cargoModel, final Port transferPort) {
 
-		// Note: Keep in sync with SlotShipToShipBindingCommandProvider
-		if (linkedSlot.isSetPriceExpression()) {
-			newLoad.setPriceExpression(linkedSlot.getPriceExpression());
+		final Cargo sourceCargo = sourceSlot.getCargo();
+
+		// when adding a STS transfer, we detach the original slot and connect it to a new STS transfer which replaces the source slot in the original cargo (if any)
+
+		// Create STS pair
+		final LoadSlot transferLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+		transferLoad.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
+		transferLoad.setWindowStart(sourceSlot.getWindowStart());
+		transferLoad.setPriceExpression("0");
+		transferLoad.setPort(transferPort);
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, transferLoad));
+
+		final DischargeSlot transferDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
+		transferDischarge.eSet(MMXCorePackage.Literals.UUID_OBJECT__UUID, EcoreUtil.generateUUID());
+		transferDischarge.setWindowStart(sourceSlot.getWindowStart());
+		transferDischarge.setPriceExpression("0");
+		transferDischarge.setPort(transferPort);
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, transferDischarge));
+
+		// Bind STS Slots
+		transferLoad.setTransferFrom(transferDischarge);
+
+		final boolean sourceIsLoad;
+		final Slot newCargoLoad;
+		final Slot newCargoDischarge;
+		final Slot sourceReplacementSlot;
+
+		final String sourceSlotName = sourceSlot.getName();
+		final String sourceRelationName; // string describing the transfer relation to the source slot
+
+		if (sourceSlot instanceof LoadSlot) {
+			sourceIsLoad = true;
+			sourceRelationName = "from";
+			newCargoLoad = sourceSlot;
+			newCargoDischarge = transferDischarge;
+			sourceReplacementSlot = transferLoad;
+
+		} else if (sourceSlot instanceof DischargeSlot) {
+			sourceIsLoad = false;
+			sourceRelationName = "to";
+			newCargoLoad = transferLoad;
+			newCargoDischarge = sourceSlot;
+			sourceReplacementSlot = transferDischarge;
 		} else {
-			newLoad.setPriceExpression("0");
+			// ?
+			throw new ClassCastException("Unexpected slot type");
 		}
-		if (linkedSlot.isSetMinQuantity()) {
-			newLoad.setMinQuantity(linkedSlot.getMinQuantity());
-		}
-		if (linkedSlot.isSetMaxQuantity()) {
-			newLoad.setMaxQuantity(linkedSlot.getMaxQuantity());
-		}
-		if (linkedSlot.isSetDuration()) {
-			newLoad.setDuration(linkedSlot.getDuration());
-		}
-		if (linkedSlot.isSetWindowStartTime()) {
-			newLoad.setWindowStartTime(linkedSlot.getWindowStartTime());
-		}
-		newLoad.setWindowStart(linkedSlot.getWindowStart());
-		newLoad.setPort(linkedSlot.getPort());
-		newLoad.setTransferFrom(linkedSlot);
 
-		newLoad.setName(linkedSlot.getName() + "-transfer");
+		// give the newly created slots sensible default names
+		if (!"".equals(sourceSlotName)) {
+			transferLoad.setName(String.format("load-%s-%s", sourceRelationName, sourceSlotName));
+			transferDischarge.setName(String.format("discharge-%s-%s", sourceRelationName, sourceSlotName));
+		}
 
-		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, newLoad));
+		// create a new cargo for the target slot and bind it to the appropriate transfer slot
+		final Cargo newCargo = createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
+		newCargo.getSlots().clear();
+		setCommands.add(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES, newCargo));
+		// add the new load and discharge slots to the cargo
+		setCommands.add(SetCommand.create(editingDomain, newCargoLoad, CargoPackage.Literals.SLOT__CARGO, newCargo));
+		setCommands.add(SetCommand.create(editingDomain, newCargoDischarge, CargoPackage.Literals.SLOT__CARGO, newCargo));
+		// Link cargo ID to slot ID
+		setCommands.add(SetCommand.create(editingDomain, newCargo, MMXCorePackage.Literals.NAMED_OBJECT__NAME, newCargoLoad.getName()));
 
-		return newLoad;
+		// if the original source slot had a cargo already, we need its replacement to be attached to the cargo
+		if (sourceCargo != null) {
+			// replace the target slot in its original cargo with the corresponding transfer slot
+			setCommands.add(SetCommand.create(editingDomain, sourceReplacementSlot, CargoPackage.Literals.SLOT__CARGO, sourceCargo));
+		}
 	}
 
 	public LoadSlot createNewLoad(final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase) {

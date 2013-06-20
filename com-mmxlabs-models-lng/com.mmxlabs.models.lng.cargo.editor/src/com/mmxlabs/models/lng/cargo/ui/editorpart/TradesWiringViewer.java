@@ -60,6 +60,9 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -67,6 +70,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -78,6 +82,7 @@ import org.eclipse.ui.menus.IMenuService;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -112,6 +117,7 @@ import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -127,6 +133,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
@@ -158,8 +165,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final CargoEditorMenuHelper menuHelper;
 
 	private final Image lockedImage;
-
-	private final Object updateLock = new Object();
 
 	private IStatusChangedListener statusChangedListener;
 
@@ -287,7 +292,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				setComparator(new ViewerComparator() {
 					@Override
 					public int compare(final Viewer viewer, final Object e1, final Object e2) {
-						int comparison = 0;
 						GroupData g1 = null;
 						GroupData g2 = null;
 						if (e1 instanceof RowData) {
@@ -299,17 +303,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						if (g1 == g2) {
 							return vc.compare(viewer, e1, e2);
 						} else {
-							Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
-							Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
-							// if (g1 == null || g1.getRows().isEmpty()) {
-							// comparison = -1;
-							// } else if (g2 == null || g2.getRows().isEmpty()) {
-							// comparison = 1;
-							// } else {
+							final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
+							final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
 							return vc.compare(viewer, rd1, rd2);
-							// }
 						}
-						// return getScenarioViewer().getSortingSupport().isSortDescending() ? -comparison : comparison;
 					}
 				});
 			}
@@ -364,6 +361,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return source;
 				} else if (source instanceof Cargo) {
 					return source;
+				} else if (source instanceof ElementAssignment) {
+					return ((ElementAssignment) source).getAssignedObject();
 				}
 
 				return super.getElementForNotificationTarget(source);
@@ -621,10 +620,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return super.getComparable(object);
 			}
 		}, new RowDataEMFPath(false, Type.LOAD));
+		loadDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.LOAD_OR_DISCHARGE));
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
-		addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+		GridViewerColumn dischargeDateColumn = addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable<?> getComparable(final Object object) {
 				if (object instanceof RowData) {
@@ -636,6 +636,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return super.getComparable(object);
 			}
 		}, new RowDataEMFPath(false, Type.DISCHARGE));
+		dischargeDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.DISCHARGE_OR_LOAD));
+
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		addTradesColumn(dischargeColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
 				editingDomain) {
@@ -689,11 +691,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override
-			protected void wiringChanged(final Map<RowData, RowData> newWiring) {
+			protected void wiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed) {
 				if (locked) {
 					return;
 				}
-				doWiringChanged(newWiring);
+				doWiringChanged(newWiring, ctrlPressed);
 			}
 
 			@Override
@@ -779,13 +781,18 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		};
 		wiringDiagram.setSortOrder(rootData, sortedIndices, reverseSortedIndices);
+
+		// Hook in a listener to notify mouse events
+		final WiringDiagramMouseListener listener = new WiringDiagramMouseListener();
+		getScenarioViewer().getGrid().addMouseMoveListener(listener);
+		getScenarioViewer().getGrid().addMouseListener(listener);
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final T manipulator, final EMFPath path) {
 
 		final ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
 			@Override
-			public Comparable getComparable(final Object element) {
+			public Comparable<?> getComparable(final Object element) {
 				final Object object = path.get((EObject) element);
 				if (object instanceof ProfitAndLossContainer) {
 					final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
@@ -874,8 +881,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						}
 						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
+							ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 							try {
-								scenarioEditingLocation.getEditorLock().claim();
+								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
 								if (editorTargets.size() > 1) {
 									if (!mixedContent) {
@@ -892,7 +900,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								}
 							} finally {
 								scenarioEditingLocation.setDisableUpdates(false);
-								scenarioEditingLocation.getEditorLock().release();
+								editorLock.release();
 							}
 						}
 					}
@@ -902,33 +910,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		});
 	}
 
-	private void performControlUpdate(final boolean rowAdded) {
-
-		// if (getScenarioViewer() == null || getScenarioViewer().getGrid().isDisposed()) {
-		// return;
-		// }
-		synchronized (updateLock) {
-			// Re-set the input to trigger full update as we push a load of stuff into the content provider which probably should not be there....
-
-			final Object oldInput = getScenarioViewer().getInput();
-			// Attempt to grab the current sort order and pass into the viewer so input changes do not alter the default ordering.
-			final ViewerComparator comparator = getScenarioViewer().getComparator();
-			Object[] sortedElements = null;
-			if (comparator != null) {
-
-				final Object[] elements = ((IStructuredContentProvider) getScenarioViewer().getContentProvider()).getElements(oldInput);
-				comparator.sort(getScenarioViewer(), elements);
-				sortedElements = elements;
-
-				// getScenarioViewer().getSortingSupport().setFixedSortOrder(Arrays.asList(sortedElements));
-			}
-
-			getScenarioViewer().setInput(null);
-			getScenarioViewer().setInput(oldInput);
-		}
-	}
-
-	protected void doWiringChanged(final Map<RowData, RowData> newWiring) {
+	/**
+	 * @since 4.0
+	 */
+	protected void doWiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed) {
 
 		final List<Command> setCommands = new LinkedList<Command>();
 		final List<Command> deleteCommands = new LinkedList<Command>();
@@ -1062,7 +1047,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * @param newYPos
 	 */
 	protected void requestScrollTo(final int newXPos, final int newYPos) {
-
 	}
 
 	private GridViewerColumn addWiringColumn() {
@@ -1149,9 +1133,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			final CargoModel cargoModel = getPortfolioModel().getCargoModel();
 
 			RowData discoveredRowData = null;
-			ISelection selection = getScenarioViewer().getSelection();
+			final ISelection selection = getScenarioViewer().getSelection();
 			if (selection instanceof IStructuredSelection) {
-				Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+				final Object firstElement = ((IStructuredSelection) selection).getFirstElement();
 				if (firstElement instanceof RowData) {
 					discoveredRowData = (RowData) firstElement;
 				}
@@ -1299,8 +1283,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		@Override
 		public void run() {
 
+			ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 			try {
-				scenarioEditingLocation.getEditorLock().claim();
+				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
 
 				final ComplexCargoEditor editor = new ComplexCargoEditor(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation);
@@ -1348,8 +1333,102 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			} finally {
 				scenarioEditingLocation.setDisableUpdates(false);
-				scenarioEditingLocation.getEditorLock().release();
+				editorLock.release();
 			}
+		}
+	}
+
+	/**
+	 * A combined {@link MouseListener} and {@link MouseMoveListener} to scroll the table during wiring operations.
+	 * 
+	 */
+	private class WiringDiagramMouseListener implements MouseListener, MouseMoveListener {
+
+		private boolean dragging = false;
+
+		@Override
+		public void mouseMove(final MouseEvent e) {
+			if (dragging) {
+				final Grid grid = getScenarioViewer().getGrid();
+
+				// Get table area
+				Rectangle bounds = getScenarioViewer().getGrid().getClientArea();
+				// Clip for column headers
+				final int headerheight = grid.getHeaderVisible() ? grid.getHeaderHeight() : 0;
+				bounds = new Rectangle(bounds.x, bounds.y + headerheight, bounds.width, bounds.height - headerheight);
+
+				GridItem item = null;
+				// X/Y pos to use to find current selection to scroll from
+				int x = e.x;
+				int y = e.y;
+
+				// Is the mouse out-side of the table area?
+				if (!bounds.contains(e.x, e.y)) {
+					int vScroll = 0;
+					int hScroll = 0;
+
+					// Determine where the cursor is and move the x/y to inside the table
+					if (e.x < bounds.x) {
+						hScroll = -1;
+						x = bounds.x + 1;
+					} else if (e.x > bounds.x + bounds.width) {
+						hScroll = 1;
+						x = bounds.x + bounds.width - 1;
+					}
+
+					if (e.y < bounds.y) {
+						vScroll = -1;
+						y = bounds.y + 1;
+					} else if (e.y > bounds.y + bounds.height) {
+						vScroll = 1;
+						y = bounds.y + bounds.height - 1;
+					}
+
+					// Get the current item!
+					item = grid.getItem(new Point(x, y));
+
+					// Check for h scroll
+					if (hScroll != 0) {
+						final ScrollBar horizontalBar = grid.getHorizontalBar();
+						final int selection = horizontalBar.getSelection();
+						horizontalBar.setSelection(selection + hScroll);
+					}
+
+					// V Scroll using the showItem API
+					if (item != null) {
+						GridItem item2 = null;
+						if (vScroll > 0) {
+							item2 = getScenarioViewer().getGrid().getNextVisibleItem(item);
+						} else {
+							item2 = getScenarioViewer().getGrid().getPreviousVisibleItem(item);
+
+						}
+						if (item2 != null) {
+							if (vScroll != 0) {
+								// Almost! it will show part of the item, but it may be obscured by the h.scroll bar
+								getScenarioViewer().getGrid().showItem(item2);
+							}
+						}
+						getScenarioViewer().refresh();
+					}
+				}
+			}
+		}
+
+		@Override
+		public void mouseDoubleClick(final MouseEvent e) {
+
+		}
+
+		@Override
+		public void mouseDown(final MouseEvent e) {
+			dragging = true;
+
+		}
+
+		@Override
+		public void mouseUp(final MouseEvent e) {
+			dragging = false;
 		}
 	}
 }

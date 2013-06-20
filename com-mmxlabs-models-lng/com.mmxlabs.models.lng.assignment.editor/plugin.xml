@@ -66,4 +66,11 @@
           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
     </valueProvider>
  </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.assignment.commands.ElementAssignmentCommandProvider"
+          id="com.mmxlabs.models.lng.assignment.commands.ElementAssignmentCommandProvider">
+    </ModelCommandProvider>
+ </extension>
 </plugin>

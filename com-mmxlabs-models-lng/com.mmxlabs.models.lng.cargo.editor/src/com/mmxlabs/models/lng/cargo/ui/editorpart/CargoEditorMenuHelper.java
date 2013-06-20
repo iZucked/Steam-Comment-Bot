@@ -57,11 +57,13 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * @since 3.0
@@ -101,14 +103,15 @@ public class CargoEditorMenuHelper {
 		public void run() {
 
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(shell, scenarioEditingLocation.getDefaultCommandHandler());
+			ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 			try {
-				scenarioEditingLocation.getEditorLock().claim();
+				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
 
 				dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(target), scenarioEditingLocation.isLocked());
 			} finally {
 				scenarioEditingLocation.setDisableUpdates(false);
-				scenarioEditingLocation.getEditorLock().release();
+				editorLock.release();
 			}
 		}
 	}
@@ -163,7 +166,7 @@ public class CargoEditorMenuHelper {
 		manager.add(subMenu);
 	}
 
-	private void buildSwapMenu(final IMenuManager manager, final String name, final Slot source, final Map<String, Set<Slot>> targets, boolean isLoad, final boolean includeContract,
+	private void buildSwapMenu(final IMenuManager manager, final String name, final Slot source, final Map<String, Set<Slot>> targets, final boolean isLoad, final boolean includeContract,
 			final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
 
@@ -642,25 +645,57 @@ public class CargoEditorMenuHelper {
 
 	void createNewSlotMenu(final IMenuManager menuManager, final Slot source) {
 
+		final List<Port> transferPorts = new LinkedList<Port>();
+		for (final Port p : scenarioModel.getPortModel().getPorts()) {
+			if (p.getCapabilities().contains(PortCapability.TRANSFER)) {
+				transferPorts.add(p);
+			}
+		}// Sort by name
+		Collections.sort(transferPorts, new Comparator<Port>() {
+
+			@Override
+			public int compare(final Port o1, final Port o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+
 		if (source instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) source;
 			if (loadSlot.isDESPurchase()) {
 				// Only create new Discharge
-				menuManager.add(new CreateSlotAction("Discharge", source, null, false, false));
+				menuManager.add(new CreateSlotAction("Discharge", source, null, false, null));
 			} else {
 				//
-				menuManager.add(new CreateSlotAction("Discharge", source, null, false, false));
-				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, false));
+				menuManager.add(new CreateSlotAction("Discharge", source, null, false, null));
+				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, null));
+
+				if (loadSlot.getTransferFrom() == null) {
+					if (!transferPorts.isEmpty()) {
+						final MenuManager subMenu = new MenuManager("Ship to Ship", null);
+
+						for (final Port p : transferPorts) {
+							subMenu.add(new CreateSlotAction(p.getName(), source, null, false, p));
+						}
+						menuManager.add(subMenu);
+					}
+				}
 			}
 		} else {
 			final DischargeSlot dischargeSlot = (DischargeSlot) source;
-			menuManager.add(new CreateSlotAction("Load", source, null, false, false));
+			menuManager.add(new CreateSlotAction("Load", source, null, false, null));
 			if (!dischargeSlot.isFOBSale()) {
-				menuManager.add(new CreateSlotAction("DES Purchase", source, null, true, false));
+				menuManager.add(new CreateSlotAction("DES Purchase", source, null, true, null));
 			}
-			
+
 			if (dischargeSlot.getTransferTo() == null) {
-				menuManager.add(new CreateSlotAction("Ship to Ship", source, null, false, true));
+				if (!transferPorts.isEmpty()) {
+					final MenuManager subMenu = new MenuManager("Ship to Ship", null);
+
+					for (final Port p : transferPorts) {
+						subMenu.add(new CreateSlotAction(p.getName(), source, null, false, p));
+					}
+					menuManager.add(subMenu);
+				}
 			}
 		}
 	}
@@ -716,7 +751,7 @@ public class CargoEditorMenuHelper {
 		final MenuManager subMenu = new MenuManager("New " + menuName + " Market Slot", null);
 
 		for (final SpotMarket market : validMarkets) {
-			subMenu.add(new CreateSlotAction("Create " + market.getName() + " slot", source, market, isSpecial, false));
+			subMenu.add(new CreateSlotAction("Create " + market.getName() + " slot", source, market, isSpecial, null));
 		}
 
 		manager.add(subMenu);
@@ -802,14 +837,14 @@ public class CargoEditorMenuHelper {
 		private final SpotMarket market;
 		private final boolean sourceIsLoad;
 		private final boolean isDesPurchaseOrFobSale;
-		private final boolean isShipToShip;
+		private final Port shipToShipPort;
 
-		public CreateSlotAction(final String name, final Slot source, final SpotMarket market, final boolean isDesPurchaseOrFobSale, final boolean isShipToShip) {
+		public CreateSlotAction(final String name, final Slot source, final SpotMarket market, final boolean isDesPurchaseOrFobSale, final Port shipToShipPort) {
 			super(name);
 			this.source = source;
 			this.market = market;
 			this.sourceIsLoad = source instanceof LoadSlot;
-			this.isShipToShip = isShipToShip;
+			this.shipToShipPort = shipToShipPort;
 			this.isDesPurchaseOrFobSale = isDesPurchaseOrFobSale;
 		}
 
@@ -821,8 +856,8 @@ public class CargoEditorMenuHelper {
 			final List<Command> deleteCommands = new LinkedList<Command>();
 
 			// when we create a ship to ship linked slot, we don't rewire the cargoes
-			if (isShipToShip && !sourceIsLoad) {
-				cec.createNewShipToShipLoad(setCommands, (DischargeSlot) source, cargoModel);
+			if (shipToShipPort != null) {
+				cec.insertShipToShipSlots(setCommands, source, cargoModel, shipToShipPort);
 			}
 			// when we create another slot, we rewire the cargoes
 			else {
@@ -835,28 +870,28 @@ public class CargoEditorMenuHelper {
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 					}
-				dischargeSlot.setWindowStart(source.getWindowStart());
-				if (loadSlot.isDESPurchase()) {
-					dischargeSlot.setPort(source.getPort());
-				}
+					dischargeSlot.setWindowStart(source.getWindowStart());
+					if (loadSlot.isDESPurchase()) {
+						dischargeSlot.setPort(source.getPort());
+					}
 				} else {
-				dischargeSlot = (DischargeSlot) source;
+					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {
 						loadSlot = cec.createNewLoad(setCommands, cargoModel, isDesPurchaseOrFobSale);
-					loadSlot.setWindowStart(source.getWindowStart());
+						loadSlot.setWindowStart(source.getWindowStart());
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
-					loadSlot.setWindowStart(source.getWindowStart());
-				}
-				if (dischargeSlot.isFOBSale()) {
-					loadSlot.setPort(source.getPort());
+						loadSlot.setWindowStart(source.getWindowStart());
+					}
+					if (dischargeSlot.isFOBSale()) {
+						loadSlot.setPort(source.getPort());
 					}
 				}
 				cec.runWiringUpdate(setCommands, deleteCommands, loadSlot, dischargeSlot);
 			}
 
-			// make a compound command which adds and sets values before deleting anything 
-			
+			// make a compound command which adds and sets values before deleting anything
+
 			final CompoundCommand currentWiringCommand = new CompoundCommand("Rewire Cargoes");
 			// Process set before delete
 			for (final Command c : setCommands) {
@@ -931,12 +966,12 @@ public class CargoEditorMenuHelper {
 
 			// Quick hacky bit to change cargo ID to match new defining load slot id
 			if (target instanceof LoadSlot) {
-				LoadSlot loadSlot = (LoadSlot) target;
+				final LoadSlot loadSlot = (LoadSlot) target;
 				if (loadSlot.getWindowStart() != null && !c.getSlots().isEmpty()) {
-					EList<Slot> sortedSlots = c.getSortedSlots();
-					Iterator<Slot> iterator = sortedSlots.iterator();
+					final EList<Slot> sortedSlots = c.getSortedSlots();
+					final Iterator<Slot> iterator = sortedSlots.iterator();
 					while (iterator.hasNext()) {
-						Slot slot = iterator.next();
+						final Slot slot = iterator.next();
 						// This is the slot we are replacing!
 						if (slot == source) {
 							continue;
@@ -945,7 +980,7 @@ public class CargoEditorMenuHelper {
 						// if (slot instanceof DischargeSlot) {
 						// continue;
 						// }
-						Date slotDate = slot.getWindowStartWithSlotOrPortTime();
+						final Date slotDate = slot.getWindowStartWithSlotOrPortTime();
 						if (slotDate == null || target.getWindowEndWithSlotOrPortTime().before(slotDate)) {
 							currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, MMXCorePackage.eINSTANCE.getNamedObject_Name(), target.getName()));
 						} else {
@@ -963,8 +998,9 @@ public class CargoEditorMenuHelper {
 	 * @since 4.0
 	 */
 	public void editLDDCargo(final Cargo cargo) {
+		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 		try {
-			scenarioEditingLocation.getEditorLock().claim();
+			editorLock.claim();
 			scenarioEditingLocation.setDisableUpdates(true);
 
 			final ComplexCargoEditor editor = new ComplexCargoEditor(shell, scenarioEditingLocation);
@@ -1005,7 +1041,7 @@ public class CargoEditorMenuHelper {
 			}
 		} finally {
 			scenarioEditingLocation.setDisableUpdates(false);
-			scenarioEditingLocation.getEditorLock().release();
+			editorLock.release();
 		}
 	}
 }

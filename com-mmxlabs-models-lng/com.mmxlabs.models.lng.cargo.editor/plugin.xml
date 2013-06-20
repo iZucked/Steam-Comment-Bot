@@ -227,4 +227,27 @@
        </OwnerAnyOf>
     </editorFactory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotNameUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.SlotNameUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider">
+    </ModelCommandProvider>
+ </extension>
 </plugin>

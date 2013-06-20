@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.assignment.editor;singleton:=true
-Bundle-Version: 4.0.0.qualifier
+Bundle-Version: 4.0.2.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.assignment.presentation.AssignmentEditorPlugin$Implementation
 Bundle-Vendor: %providerName
@@ -22,5 +22,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.model;bundle-version="[4.0.0,5.0.0)",
  com.mmxlabs.models.common;bundle-version="[3.0.0,4.0.0)"
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/*.xml
 Import-Package: com.mmxlabs.common;version="2.0.0"

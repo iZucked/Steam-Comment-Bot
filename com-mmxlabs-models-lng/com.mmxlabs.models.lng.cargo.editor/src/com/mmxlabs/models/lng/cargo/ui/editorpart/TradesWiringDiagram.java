@@ -340,6 +340,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		if (dragging) {
 			dragging = false;
 
+			boolean ctrlPressed = (e.stateMask & SWT.CTRL) != 0;
+
 			final List<Float> positions = getTerminalPositions(rootData);
 
 			int terminal = 0;
@@ -384,18 +386,22 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 					// arrived in left column from right
 					newWiring.put(fromRowData, null);
 					newWiring.put(toRowData, fromRowData);
-					newWiring.put(null, toRowData);
+					if (!ctrlPressed) {
+						newWiring.put(null, toRowData);
+					}
 				} else if (!draggedToNowhere && draggingFromLeft && (e.x >= ca.x + ca.width - terminalSize * 2 && e.x <= ca.x + ca.width - terminalSize)) {
 					// arrived in right column
 					newWiring.put(fromRowData, toRowData);
 					newWiring.put(toRowData, null);
 					newWiring.put(null, fromRowData);
+					// No multi-load handling
+					ctrlPressed = false;
 				} else {
 					// clear wire
 					newWiring.put(fromRowData, null);
 					newWiring.put(null, fromRowData);
 				}
-				wiringChanged(newWiring);
+				wiringChanged(newWiring, ctrlPressed);
 			}
 		}
 
@@ -415,8 +421,11 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 * called to tell subclasses wiring has changed. Probably should use listener pattern really. The format of the map is the new mapping between left and right side based on the {@link RowData}
 	 * instances. For example, given two rows, A and B - rewiring Load A to discharge B will give a map with a <key,value> pair of <A,B> (the new link) and two additional <key,value> pairs of <null,
 	 * A> (representing the disconnected discharge on A) and <B, null> (representing the disconnected load on B).
+	 * 
+	 * @param ctrlPressed
+	 * @since 4.0
 	 */
-	protected abstract void wiringChanged(final Map<RowData, RowData> newWiring);
+	protected abstract void wiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed);
 
 	public void setLocked(final boolean locked) {
 		this.locked = locked;

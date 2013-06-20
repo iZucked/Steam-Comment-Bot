@@ -82,7 +82,6 @@ public final class PortEditorPlugin extends EMFPlugin {
 	 * @generated NO
 	 */
 	public static class Implementation extends EclipseUIPlugin {
-		private ServiceRegistration<IModelCommandProvider> routeCommandProviderRegistration;
 
 		/**
 		 * Creates an instance.
@@ -104,7 +103,6 @@ public final class PortEditorPlugin extends EMFPlugin {
 		@Override
 		public void start(BundleContext context) throws Exception {
 			super.start(context);
-			routeCommandProviderRegistration = context.registerService(IModelCommandProvider.class, new RoutePortCommandProvider(), null);
 			
 		}
 
@@ -113,7 +111,6 @@ public final class PortEditorPlugin extends EMFPlugin {
 		 */
 		@Override
 		public void stop(BundleContext context) throws Exception {
-			routeCommandProviderRegistration.unregister();
 			super.stop(context);
 		}
 		

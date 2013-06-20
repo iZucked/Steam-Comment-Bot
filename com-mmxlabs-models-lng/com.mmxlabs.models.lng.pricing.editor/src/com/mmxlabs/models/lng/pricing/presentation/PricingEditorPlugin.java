@@ -101,23 +101,14 @@ public final class PricingEditorPlugin extends EMFPlugin {
 			plugin = this;
 		}
 
-		private ServiceRegistration<IModelCommandProvider> routeCostProviderRegistration;
-		private ServiceRegistration<IModelCommandProvider> fuelCostProviderRegistration;
-		
 		@Override
 		public void start(BundleContext context) throws Exception {
 			super.start(context);
-			routeCostProviderRegistration = context.registerService(IModelCommandProvider.class, 
-					new RouteCostModelCommandProvider()
-					, null);
-			fuelCostProviderRegistration = context.registerService(IModelCommandProvider.class, new BaseFuelCostModelCommandProvider(), null);
 			
 		}
 
 		@Override
 		public void stop(BundleContext context) throws Exception {
-			routeCostProviderRegistration.unregister();
-			fuelCostProviderRegistration.unregister();
 			super.stop(context);
 		}
 	}

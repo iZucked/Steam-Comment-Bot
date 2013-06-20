@@ -4,26 +4,20 @@
  */
 package com.mmxlabs.models.lng.migration;
 
-import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.migration.IMigrationUnit;
-import com.mmxlabs.models.migration.utils.EcoreHelper;
+import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 /**
@@ -40,7 +34,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader getSourceMetamodelLoader(Map<String, URI> extraPackages);
+	protected abstract MetamodelLoader getSourceMetamodelLoader(Map<URI, PackageData> extraPackages);
 
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getDestinationVersion()}
@@ -49,95 +43,53 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader getDestinationMetamodelLoader(Map<String, URI> extraPackages);
+	protected abstract MetamodelLoader getDestinationMetamodelLoader(Map<URI, PackageData> extraPackages);
 
 	/**
 	 * Perform the migration. Root object instance references are not expected to be changed.
 	 * 
 	 * @param models
+	 * @since 4.0
 	 */
-	protected abstract void doMigration(Map<ModelsLNGSet_v1, EObject> models);
+	protected abstract void doMigration(EObject model);
 
+	/**
+	 * @since 4.0
+	 */
 	@Override
-	public void migrate(final @NonNull List<URI> baseURIs, final @NonNull URIConverter uc, @Nullable final Map<String, URI> extraPackages) throws Exception {
-
-		final Map<MetamodelVersionsUtil.ModelsLNGSet_v1, EObject> models = new HashMap<MetamodelVersionsUtil.ModelsLNGSet_v1, EObject>();
+	public void migrate(final @NonNull URI baseURI, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
 
 		final MetamodelLoader destinationLoader = getDestinationMetamodelLoader(extraPackages);
-
-		final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
 
 		// Load all the current model versions
 		final ResourceSet resourceSet = destinationLoader.getResourceSet();
 
+//		// Standard options
+//		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_ATTACHMENT, true);
+//
+//		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+//		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
+//		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
+
+		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
+
 		// Record features which have no meta-model equivalent so we can perform migration
-		loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+		// resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
 
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
-		// Pass in URI Convertor to help URI resolution
-		resourceSet.setURIConverter(uc);
-
-		// For models known by this migrator, load them and add to a map.
-		for (final URI uri : baseURIs) {
-			final String nsURI = EcoreHelper.getPackageNS(uri);
-			final ModelsLNGSet_v1 type = MetamodelVersionsUtil.getTypeFromNS(nsURI);
-			// This could potentially happen if we load the wrong type of scenario in the application...
-			if (type == null) {
-				throw new RuntimeException("Unknown namespace: " + nsURI);
-			}
-
-			final XMIResource r = (XMIResource) resourceSet.createResource(uri);
-			r.setTrackingModification(true);
-			r.load(loadOptions);
-
-			final EObject eObject = r.getContents().get(0);
-			assert eObject != null;
-
-			models.put(type, eObject);
+		final XMIResource modelResource = (XMIResource) resourceSet.createResource(baseURI);
+		if (modelResource instanceof ResourceImpl) {
+			((ResourceImpl) modelResource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
 		}
+		modelResource.load(resourceSet.getLoadOptions());
 
-		// Request new model instances should they be needed
-		final Map<ModelsLNGSet_v1, EObject> newModels = new HashMap<ModelsLNGSet_v1, EObject>();
-		hookInNewModels(destinationLoader, models, newModels);
-
-		// For new models, we need to create a resource object for persistence
-		for (final Map.Entry<ModelsLNGSet_v1, EObject> e : newModels.entrySet()) {
-
-			// Generate a tmp file
-			// TODO: This file is *NOT* cleaned up
-			final File f = File.createTempFile("new-migration", ".xmi");
-			// Create a temp file and generate a URI to it to pass into migration code.
-			final URI uri = URI.createFileURI(f.getCanonicalPath());
-			assert uri != null;
-			// Create new resource
-			final Resource r = resourceSet.createResource(uri);
-			// Add model to resource
-			r.getContents().add(e.getValue());
-			// Peform an initial save
-			r.save(Collections.emptyMap());
-			// Add into main model map
-			models.put(e.getKey(), e.getValue());
-			// Add to input URI's list, calling code should detect change in size
-			baseURIs.add(uri);
-			// Track modifications so we can save again if needed.
-			r.setTrackingModification(true);
-		}
+		final EObject eObject = modelResource.getContents().get(0);
+		assert eObject != null;
 
 		// Migrate!
-		doMigration(Collections.unmodifiableMap(models));
+		doMigration(eObject);
 
-		// Save the models. We check isModified as we cannot save metamodels which are also listed as resources here
-		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
-		for (final Resource r : resourceSet.getResources()) {
-			if (r.isLoaded() && r.isModified()) {
-				// For modified models, we need to update the proxy references otherwise wrong package URI's can be saved.
-				final EPackage mmxcorePackage = destinationLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
-				EcoreHelper.updateAllMMXProxies(r.getContents().get(0), mmxcorePackage);
-
-				// Save the changed scenarios
-				r.save(saveOptions);
-			}
-		}
+		// Save the model.
+		modelResource.save(null);
 	}
 
 	/**

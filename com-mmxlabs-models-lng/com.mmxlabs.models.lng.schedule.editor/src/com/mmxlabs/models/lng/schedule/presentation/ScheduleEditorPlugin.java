@@ -94,7 +94,6 @@ public final class ScheduleEditorPlugin extends EMFPlugin {
 	 * @generated NOT
 	 */
 	public static class Implementation extends EclipseUIPlugin {
-		private ServiceRegistration<IModelCommandProvider> scheduleClearingRegistration;
 
 		/**
 		 * Creates an instance.
@@ -116,7 +115,6 @@ public final class ScheduleEditorPlugin extends EMFPlugin {
 		@Override
 		public void start(BundleContext context) throws Exception {
 			super.start(context);
-			scheduleClearingRegistration = context.registerService(IModelCommandProvider.class, new ScheduleModelCommandProvider(), null);
 		}
 
 		/* (non-Javadoc)
@@ -124,7 +122,6 @@ public final class ScheduleEditorPlugin extends EMFPlugin {
 		 */
 		@Override
 		public void stop(BundleContext context) throws Exception {
-			scheduleClearingRegistration.unregister();
 			super.stop(context);
 		}
 	}

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.editor.editors.ldd;
 
 import java.util.ArrayList;
@@ -30,6 +34,9 @@ import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -53,6 +60,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -309,6 +317,27 @@ public class ComplexCargoEditor extends Dialog {
 				}
 			});
 		}
+
+		viewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+
+				if (e1 instanceof LoadSlot) {
+					return -1;
+				} else if (e2 instanceof LoadSlot) {
+					return 1;
+				}
+
+				final Slot s1 = (Slot) e1;
+				final Slot s2 = (Slot) e2;
+
+				if (s1.getWindowStart() != null && s2.getWindowStart() != null) {
+					return s1.getWindowStart().compareTo(s2.getWindowStart());
+				}
+
+				return super.compare(viewer, e1, e2);
+			}
+		});
 
 		return c;
 	}
