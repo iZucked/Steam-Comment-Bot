@@ -1,2 +1,2 @@
-uuid,name,otherNames,equivalenceFactor,price,kind
-_g10Ms23kEeGoB9CX9jdaHQ,MDO,,0.5,1000.0,BaseFuel
+name,equivalenceFactor,price,kind
+MDO,0.5,1000.0,BaseFuel

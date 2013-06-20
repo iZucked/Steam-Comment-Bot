@@ -1,5 +1,5 @@
-uuid,name,otherNames,minQuantity,maxQuantity,priceInfo.uuid,priceInfo.priceExpression,entity,allowedPorts,priceInfo.kind,kind
-_g2QRkG3kEeGoB9CX9jdaHQ,HH Sales,,0,0,_ngJo4XnREeKJe_KFGcd0PA,7,US,,ExpressionPriceParameters,SalesContract
-_g2QRkW3kEeGoB9CX9jdaHQ,NBP Sales,,0,0,_ngJo4XnREeKJe_KFGcd1PA,7,Europe,,ExpressionPriceParameters,SalesContract
-_g2QRkm3kEeGoB9CX9jdaHQ,TTF Sales,,0,0,_ngJo4XnREeKJe_KFGcd2PA,7,Europe,,ExpressionPriceParameters,SalesContract
-_g2QRk23kEeGoB9CX9jdaHQ,JCC Sales,,0,0,_ngJo4XnREeKJe_KFGcd3PA,7,Asia,,ExpressionPriceParameters,SalesContract
+name,minQuantity,maxQuantity,restrictedListsArePermissive,minCvValue,maxCvValue,entity,allowedPorts,restrictedContracts,restrictedPorts,priceInfo.priceExpression,priceInfo.kind,kind
+HH Sales,0,0,false,,,US,,,,7,ExpressionPriceParameters,SalesContract
+NBP Sales,0,0,false,,,Europe,,,,7,ExpressionPriceParameters,SalesContract
+TTF Sales,0,0,false,,,Europe,,,,7,ExpressionPriceParameters,SalesContract
+JCC Sales,0,0,false,,,Asia,,,,7,ExpressionPriceParameters,SalesContract

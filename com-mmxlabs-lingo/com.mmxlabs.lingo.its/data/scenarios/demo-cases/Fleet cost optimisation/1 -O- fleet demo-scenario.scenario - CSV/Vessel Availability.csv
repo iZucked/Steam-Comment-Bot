@@ -1,12 +1,12 @@
-vessel,startAfter,startBy,endAfter,endBy,startAt,endAt,kind,startHeel.volumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind
-LNG Kano,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG Lagos,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG Lokoja,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG Ogun,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG Ondo,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG Oyo,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG Port Harcourt,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG River Niger,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG River Orashi,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG Rivers,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
-LNG Sokoto,2010-11-01 00:00,,2010-11-02 00:00,,,,VesselAvailability,,0,0,HeelOptions
+timeCharterRate,startAfter,startBy,endAfter,endBy,vessel,startAt,endAt,startHeel.volumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind,kind
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Kano,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Lagos,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Lokoja,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Ogun,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Ondo,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Oyo,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Port Harcourt,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG River Niger,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG River Orashi,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Rivers,,,,0.0,0.0,HeelOptions,VesselAvailability
+,2010-11-01 00:00,,2010-11-02 00:00,,LNG Sokoto,,,,0.0,0.0,HeelOptions,VesselAvailability

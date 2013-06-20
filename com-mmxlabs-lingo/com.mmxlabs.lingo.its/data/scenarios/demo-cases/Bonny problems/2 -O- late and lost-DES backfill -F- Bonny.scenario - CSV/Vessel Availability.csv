@@ -1,8 +1,8 @@
-vessel,startAfter,startBy,endAfter,endBy,startAt,endAt,kind,startHeel.volumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind,timeCharterRate
-Bluesky,2011-01-02 00:00,2011-01-02 00:00,,,Point Fortin,,VesselAvailability,,0,0,HeelOptions,100000
-Methane Becki Anne,,2010-12-20 05:00,,,,,VesselAvailability,,0,0,HeelOptions,
-Methane Heather Sally,,2010-11-29 05:00,,,,,VesselAvailability,,0,0,HeelOptions,
-Methane Julia Louise,,2010-12-30 05:00,,,,,VesselAvailability,,0,0,HeelOptions,
-Methane Lydon Volney,,2010-12-08 05:00,,,,,VesselAvailability,,0,0,HeelOptions,
-Methane Princess,2010-12-01 11:00,2010-12-01 11:00,,,Point Fortin,,VesselAvailability,,0,0,HeelOptions,100000
-Charter Ship,,2010-11-20 12:00,,,,,VesselAvailability,10000,22.5,0,HeelOptions,150000
+timeCharterRate,startAfter,startBy,endAfter,endBy,vessel,startAt,endAt,startHeel.volumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind,kind
+100000,2011-01-02 00:00,2011-01-02 00:00,,,Bluesky,Point Fortin,,,0.0,0.0,HeelOptions,VesselAvailability
+,,2010-12-20 05:00,,,Methane Becki Anne,,,,0.0,0.0,HeelOptions,VesselAvailability
+,,2010-11-29 05:00,,,Methane Heather Sally,,,,0.0,0.0,HeelOptions,VesselAvailability
+,,2010-12-30 05:00,,,Methane Julia Louise,,,,0.0,0.0,HeelOptions,VesselAvailability
+,,2010-12-08 05:00,,,Methane Lydon Volney,,,,0.0,0.0,HeelOptions,VesselAvailability
+100000,2010-12-01 11:00,2010-12-01 11:00,,,Methane Princess,Point Fortin,,,0.0,0.0,HeelOptions,VesselAvailability
+150000,,2010-11-20 12:00,,,Charter Ship,,,10000,22.5,7.5,HeelOptions,VesselAvailability

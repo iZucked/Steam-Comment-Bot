@@ -1,6 +1,6 @@
-uuid,name,otherNames,kind
-_g2Pqgm3kEeGoB9CX9jdaHQ,Europe,,LegalEntity
-_g2Pqg23kEeGoB9CX9jdaHQ,US,,LegalEntity
-_g2PqhG3kEeGoB9CX9jdaHQ,Asia,,LegalEntity
-_g2PqhW3kEeGoB9CX9jdaHQ,Third-parties,,LegalEntity
-_g2Pqhm3kEeGoB9CX9jdaHQ,Shipping,,LegalEntity
+name,taxRates,kind,shipping,1970-01-01
+Europe,,LegalEntity,,0.0000
+US,,LegalEntity,,0.0000
+Asia,,LegalEntity,,0.0000
+Third-parties,,LegalEntity,,0.0000
+Shipping,,LegalEntity,Y,0.0000

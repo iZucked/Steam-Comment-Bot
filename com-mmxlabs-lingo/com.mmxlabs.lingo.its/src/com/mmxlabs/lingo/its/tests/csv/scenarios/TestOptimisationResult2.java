@@ -20,7 +20,7 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 	public void testOptimisationResult() throws IOException, InterruptedException, IncompleteScenarioException, URISyntaxException {
 
 		// Load the scenario to test
-		final URL url = getClass().getResource("/csv-import/des-cargo/");
+		final URL url = getClass().getResource("/scenarios/des-cargo/");
 
 		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 
