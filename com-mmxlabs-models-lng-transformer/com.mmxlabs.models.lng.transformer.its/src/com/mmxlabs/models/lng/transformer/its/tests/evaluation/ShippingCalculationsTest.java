@@ -2024,10 +2024,11 @@ public class ShippingCalculationsTest {
 		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
 		CharterOutEvent event = makeCharterOut(dsc, mss, scenario, mss.loadPort, mss.originPort);
 
-		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class, Idle.class,
-				EndEvent.class };
-		SequenceTester checker = getDefaultTester();
-		checker.setClasses(classes);
+		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
+		// works.
+		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,
+				VesselEventVisit.class, Idle.class, EndEvent.class };
+		SequenceTester checker = getDefaultTester(classes);
 
 		// expected durations of journeys
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2 });
@@ -2053,21 +2054,21 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 300 });
 
 		// expected durations of idles
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0 });
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0, 0, 0 });
 
 		// expected base idle consumptions
 		// 0 = no idle (start)
 		// 0 = no idle (idle on NBO)
 		// 0 = no idle (end)
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0 });
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0, 0 });
 
 		// expected NBO idle consumptions
 		// 10 = 2 { idle duration } * 5 { idle NBO rate }
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0 });
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0, 0, 0 });
 
 		// idle costs
 		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0 });
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0, 0, 0 });
 
 		// expected charter out duration
 		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
