@@ -1824,8 +1824,8 @@ public class ShippingCalculationsTest {
 
 		SequenceTester checker = getDefaultTester();
 
-		int ladenBaseConsumption = 30;
-		int ballastBaseConsumption = 40;
+		int ladenBaseConsumption = 72;
+		int ballastBaseConsumption = 48;
 		Integer[] portDurations = new Integer[] { 24, 48 };
 
 		// set the in-port laden fuel consumption for the vessel class
