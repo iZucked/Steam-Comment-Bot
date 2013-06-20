@@ -10,15 +10,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 
 public class HashMapPortExclusionProvider implements IPortExclusionProviderEditor {
-	private HashMap<IVesselClass, Set<IPort>> exclusions = new HashMap<IVesselClass, Set<IPort>>();
+	private HashMap<IVesselClass, Set<IPort>> exclusionsByVesselClass = new HashMap<IVesselClass, Set<IPort>>();
+	private HashMap<IVessel, Set<IPort>> exclusionsByVessel = new HashMap<IVessel, Set<IPort>>();
 
 	private final String name;
 
-	private boolean isEmpty = true;
+	private boolean isVesselExclusionsEmpty = true;
+	private boolean isVesselClassExclusionsEmpty = true;
 	private static final Set<IPort> EMPTY = Collections.emptySet();
 
 	public HashMapPortExclusionProvider(final String name) {
@@ -27,7 +30,20 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 
 	@Override
 	public Set<IPort> getExcludedPorts(final IVesselClass vesselClass) {
-		final Set<IPort> ports = exclusions.get(vesselClass);
+		final Set<IPort> ports = exclusionsByVesselClass.get(vesselClass);
+		if (ports == null) {
+			return EMPTY;
+		} else {
+			return ports;
+		}
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public Set<IPort> getExcludedPorts(final IVessel vessel) {
+		final Set<IPort> ports = exclusionsByVessel.get(vessel);
 		if (ports == null) {
 			return EMPTY;
 		} else {
@@ -42,29 +58,49 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 
 	@Override
 	public void dispose() {
-		exclusions.clear();
-		exclusions = null;
+		exclusionsByVesselClass.clear();
+		exclusionsByVesselClass = null;
+		exclusionsByVesselClass.clear();
+		exclusionsByVesselClass = null;
 	}
 
 	@Override
 	public void setExcludedPorts(final IVesselClass vesselClass, final Set<IPort> excludedPorts) {
-		exclusions.put(vesselClass, new HashSet<IPort>(excludedPorts));
+		exclusionsByVesselClass.put(vesselClass, new HashSet<IPort>(excludedPorts));
 		if (excludedPorts.isEmpty() == false) {
-			isEmpty = false;
+			isVesselClassExclusionsEmpty = false;
 		} else {
-			for (final Set<IPort> ex : exclusions.values()) {
+			for (final Set<IPort> ex : exclusionsByVesselClass.values()) {
 				if (ex.isEmpty() == false) {
-					isEmpty = false;
+					isVesselClassExclusionsEmpty = false;
 					return;
 				}
 			}
-			isEmpty = true;
+			isVesselClassExclusionsEmpty = true;
+		}
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public void setExcludedPorts(final IVessel vessel, final Set<IPort> excludedPorts) {
+		exclusionsByVessel.put(vessel, new HashSet<IPort>(excludedPorts));
+		if (excludedPorts.isEmpty() == false) {
+			isVesselExclusionsEmpty = false;
+		} else {
+			for (final Set<IPort> ex : exclusionsByVessel.values()) {
+				if (ex.isEmpty() == false) {
+					isVesselExclusionsEmpty = false;
+					return;
+				}
+			}
+			isVesselExclusionsEmpty = true;
 		}
 	}
 
 	@Override
 	public boolean hasNoExclusions() {
-		return isEmpty;
+		return isVesselExclusionsEmpty && isVesselClassExclusionsEmpty;
 	}
-
 }

@@ -1185,6 +1185,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
+	 * @since 6.0
+	 */
+	@Override
+	public void setVesselInaccessiblePorts(final IVessel vessel, final Set<IPort> inaccessiblePorts) {
+		this.portExclusionProvider.setExcludedPorts(vessel, inaccessiblePorts);
+	}
+
+	/**
 	 * @since 2.0
 	 */
 	@Override

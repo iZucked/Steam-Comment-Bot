@@ -498,6 +498,21 @@ public interface ISchedulerBuilder {
 	 */
 	IVessel createSpotVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInPrice);
 
+	/**
+	 * Set the list of ports this vessel is not permitted to travel to.
+	 * 
+	 * @param vessel
+	 * @param inaccessiblePorts
+	 * @since 6.0
+	 */
+	void setVesselInaccessiblePorts(IVessel vessel, Set<IPort> inaccessiblePorts);
+
+	/**
+	 * Set the list of ports vessels of this class are not permitted to travel to.
+	 * 
+	 * @param vessel
+	 * @param inaccessiblePorts
+	 */
 	void setVesselClassInaccessiblePorts(IVesselClass vc, Set<IPort> inaccessiblePorts);
 
 	/**
