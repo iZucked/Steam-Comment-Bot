@@ -811,9 +811,9 @@ public class CargoImportActionTest {
 
 		Cargo importedCargo = cargoModel.getCargoes().get(0);
 
-		// Failure - most likely we need to null a slot reference that was normally done automatically in the 2 slot case
 		Assert.assertEquals(2, importedCargo.getSlots().size());
-		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(0)));
+
+		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getLoadSlots().get(0)));
 		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(1)));
 
 		// Assert.assertEquals(100, importedCargo.getLoadSlot().getDuration());

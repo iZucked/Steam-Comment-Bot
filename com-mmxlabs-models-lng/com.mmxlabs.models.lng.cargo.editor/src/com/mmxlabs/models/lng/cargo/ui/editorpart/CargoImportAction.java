@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.change.util.ChangeRecorder;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -352,12 +353,27 @@ public final class CargoImportAction extends SimpleImportAction {
 			final Cargo cargo = nameToCargo.containsKey(newCargo.getName()) ? nameToCargo.get(newCargo.getName()) : newCargo;
 			for (final Slot newSlot : newCargo.getSlots()) {
 				if (newSlot instanceof LoadSlot) {
+
+					if (nameToLoad.containsKey(newSlot.getName())) {
+						final Slot oldSlot = nameToLoad.get(newSlot.getName());
+						if (cargo.getSlots().contains(newSlot)) {
+							mergeCommand.append(ReplaceCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_Slots(), newSlot, Collections.singleton(oldSlot)));
+							continue;
+						}
+					}
 					// Look up original slot, unless this is a new slot
 					final LoadSlot slot = nameToLoad.containsKey(newSlot.getName()) ? nameToLoad.get(newSlot.getName()) : (LoadSlot) newSlot;
 					if (cargo.getSlots().contains(slot) == false) {
 						mergeCommand.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 					}
 				} else if (newSlot instanceof DischargeSlot) {
+					if (nameToDischarge.containsKey(newSlot.getName())) {
+						final Slot oldSlot = nameToDischarge.get(newSlot.getName());
+						if (cargo.getSlots().contains(newSlot)) {
+							mergeCommand.append(ReplaceCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_Slots(), newSlot, Collections.singleton(oldSlot)));
+							continue;
+						}
+					}
 					// Look up original slot, unless this is a new slot
 					final DischargeSlot slot = nameToDischarge.containsKey(newSlot.getName()) ? nameToDischarge.get(newSlot.getName()) : (DischargeSlot) newSlot;
 					if (cargo.getSlots().contains(slot) == false) {
