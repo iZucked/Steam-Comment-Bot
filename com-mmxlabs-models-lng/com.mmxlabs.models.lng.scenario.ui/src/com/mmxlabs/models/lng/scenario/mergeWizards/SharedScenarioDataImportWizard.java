@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.lng.scenario.mergeWizards;
 
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
@@ -25,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.scenario.mergeWizards.SharedDataScenariosSelectionPage.DataOptions;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.merge.EMFModelMergeTools;
 import com.mmxlabs.models.ui.merge.IMappingDescriptor;
@@ -54,7 +57,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 	@Override
 	public boolean performFinish() {
 
-		final UpdateJob job = new UpdateJob(sourcePage.getScenarioInstance(), destinationPage.getSelectedScenarios());
+		final UpdateJob job = new UpdateJob(sourcePage.getSelectedDataOptions(), sourcePage.getScenarioInstance(), destinationPage.getSelectedScenarios());
 
 		try {
 			getContainer().run(true, true, job);
@@ -104,8 +107,10 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 
 		private final ScenarioInstance sourceScenario;
 		private final List<ScenarioInstance> destinationScenarios;
+		private final Set<DataOptions> dataOptions;
 
-		public UpdateJob(final ScenarioInstance sourceScenario, final List<ScenarioInstance> destinationScenarios) {
+		public UpdateJob(final Set<DataOptions> enumSet, final ScenarioInstance sourceScenario, final List<ScenarioInstance> destinationScenarios) {
+			this.dataOptions = enumSet;
 			this.sourceScenario = sourceScenario;
 			this.destinationScenarios = destinationScenarios;
 		}
@@ -172,8 +177,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 						continue;
 					}
 
-					mergeScenarioData(sourceRoot, destRoot, (EditingDomain) destScenario.getAdapters().get(EditingDomain.class) /** , DATA OPTIONS **/
-					);
+					mergeScenarioData(sourceRoot, destRoot, (EditingDomain) destScenario.getAdapters().get(EditingDomain.class), dataOptions);
 
 					// Unload if required
 					if (unloadDestScenario) {
@@ -200,7 +204,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 		}
 	}
 
-	public void mergeScenarioData(final EObject sourceRoot, final EObject destRoot, final EditingDomain destEditingDomain) {
+	public void mergeScenarioData(final EObject sourceRoot, final EObject destRoot, final EditingDomain destEditingDomain, final Set<DataOptions> dataOptions) {
 		final LNGScenarioModel sourceScenarioModel;
 		if (sourceRoot instanceof LNGScenarioModel) {
 			sourceScenarioModel = (LNGScenarioModel) sourceRoot;
@@ -228,9 +232,8 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			commandProviderAwareEditingDomain.setAdaptersEnabled(false);
 		}
 
-		// IF TYPE == PORT MODEL
-		final boolean includePortData = true;
-		final boolean includeFleetData = true;
+		final boolean includePortData = dataOptions.contains(DataOptions.PortData);
+		final boolean includeFleetData = dataOptions.contains(DataOptions.FleetDatabase);
 
 		try {
 			final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();

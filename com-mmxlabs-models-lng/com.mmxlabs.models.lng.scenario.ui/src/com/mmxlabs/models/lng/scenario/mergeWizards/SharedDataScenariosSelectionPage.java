@@ -4,12 +4,18 @@
  */
 package com.mmxlabs.models.lng.scenario.mergeWizards;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -30,9 +36,25 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
  */
 public class SharedDataScenariosSelectionPage extends WizardPage {
 
+	public enum DataOptions {
+		PortData("Port Data"), FleetDatabase("Fleet");
+
+		private DataOptions(final String name) {
+			this.name = name;
+		}
+
+		private final String name;
+
+		public String getName() {
+			return name;
+		}
+	}
+
 	private ScenarioServiceSelectionGroup scenarioServiceSelectionGroup;
 
 	private final ISelection selection;
+
+	private final Set<DataOptions> selectedDataOptions = EnumSet.noneOf(DataOptions.class);
 
 	protected SharedDataScenariosSelectionPage(final ISelection selection) {
 		super("Select shared scenario");
@@ -69,12 +91,33 @@ public class SharedDataScenariosSelectionPage extends WizardPage {
 		gd.horizontalSpan = 2;
 		scenarioServiceSelectionGroup.setLayoutData(gd);
 
-		final Group destination = new Group(container, SWT.NONE);
-		destination.setText("Destination Directory");
+		final Group dataOptions = new Group(container, SWT.NONE);
+		dataOptions.setText("Data Options");
 		final GridLayout layout2 = new GridLayout();
-		destination.setLayout(layout2);
-		destination.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
-		destination.setFont(parent.getFont());
+		dataOptions.setLayout(layout2);
+		dataOptions.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
+		dataOptions.setFont(parent.getFont());
+
+		for (final DataOptions option : DataOptions.values()) {
+			final Button btn = new Button(dataOptions, SWT.CHECK);
+			btn.setText(option.getName());
+			btn.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					if (btn.getSelection()) {
+						selectedDataOptions.add(option);
+					} else {
+						selectedDataOptions.remove(option);
+					}
+					dialogChanged();
+				}
+
+				@Override
+				public void widgetDefaultSelected(final SelectionEvent e) {
+				}
+			});
+		}
 
 		initialize();
 		dialogChanged();
@@ -112,6 +155,11 @@ public class SharedDataScenariosSelectionPage extends WizardPage {
 			return;
 		}
 
+		if (getSelectedDataOptions().isEmpty()) {
+			updateStatus("At least one data option should be selected");
+			return;
+		}
+
 		updateStatus(null);
 	}
 
@@ -122,5 +170,9 @@ public class SharedDataScenariosSelectionPage extends WizardPage {
 
 	public ScenarioInstance getScenarioInstance() {
 		return (ScenarioInstance) scenarioServiceSelectionGroup.getSelectedContainer();
+	}
+
+	public Set<DataOptions> getSelectedDataOptions() {
+		return selectedDataOptions;
 	}
 }
