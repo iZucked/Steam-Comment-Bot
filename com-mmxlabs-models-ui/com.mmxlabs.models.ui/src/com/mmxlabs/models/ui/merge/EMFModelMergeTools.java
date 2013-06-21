@@ -11,9 +11,11 @@ import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -80,6 +82,148 @@ public class EMFModelMergeTools {
 	}
 
 	/**
+	 * The {@link IMappingDescriptor} may have object which in turn reference data from the source model that is not being transferred over. These references should be updated to map to equivalent
+	 * objects in the destination. Note this *will* change the source data outside of a {@link Command}.
+	 * 
+	 * @param descriptors
+	 * @param sourceRoot
+	 * @param destinationRoot
+	 */
+	public static void rewriteMappingDescriptors(final List<IMappingDescriptor> descriptors, final EObject sourceRoot, final EObject destinationRoot) {
+
+		// Find the set of source object references are going to be transferred.
+		final Set<EObject> transferredObjects = new HashSet<EObject>();
+		final Set<EObject> remainingObjects = new HashSet<EObject>();
+
+		final Map<EObject, EObject> sourceToDestinationMapping = new HashMap<EObject, EObject>();
+
+		for (final IMappingDescriptor descriptor : descriptors) {
+			// These are all the directly transferred objects
+			for (final EObject eObj : descriptor.getAddedObjects()) {
+				transferredObjects.add(eObj);
+
+				// Process indirectly transferred objects
+				processObject(eObj, transferredObjects, remainingObjects);
+			}
+			for (final EObject eObj : descriptor.getDestinationToSourceMap().values()) {
+				transferredObjects.add(eObj);
+				// Process indirectly transferred objects
+				processObject(eObj, transferredObjects, remainingObjects);
+			}
+		}
+
+		// Make sure remaining objects are really the remaining objects
+		remainingObjects.removeAll(transferredObjects);
+
+		while (!remainingObjects.isEmpty()) {
+			final EObject eObj = remainingObjects.iterator().next();
+			final List<EReference> path = new LinkedList<EReference>();
+
+			// Find containment path from object to root
+			{
+				EObject tmpObj = eObj.eContainer();
+				while (tmpObj != sourceRoot && tmpObj != null) {
+					path.add(0, tmpObj.eContainmentFeature());
+					tmpObj = tmpObj.eContainer();
+				}
+				if (tmpObj == null) {
+					throw new IllegalStateException("Object is not contained under sourceRoot");
+				}
+			}
+
+			// Find destination equivalent container
+			EObject destContainer = destinationRoot;
+			for (final EReference ref : path) {
+				destContainer = (EObject) destContainer.eGet(ref);
+				if (destContainer == null) {
+					// TODO: We could also just create a null mapping
+					throw new IllegalStateException("Destination does not have correct containment structure. Missing shared data? [" + eObj.eClass().getName() + "]");
+				}
+			}
+
+			// Build up equivalence mapping (including nulls);
+			final Set<EObject> sourcesJustFound = new HashSet<EObject>();
+
+			if (eObj.eContainingFeature().isMany()) {
+				@SuppressWarnings("unchecked")
+				final List<EObject> eObjectContainerObjects = (List<EObject>) eObj.eContainer().eGet(eObj.eContainingFeature());
+				@SuppressWarnings("unchecked")
+				final List<EObject> destObjectContainerObjects = (List<EObject>) destContainer.eGet(eObj.eContainingFeature());
+
+				LOOP_SOURCE: for (final EObject sourceObject : eObjectContainerObjects) {
+					for (final EObject destObject : destObjectContainerObjects) {
+						if (MMXObjectEquivalance.equivalent(sourceObject, destObject)) {
+							sourceToDestinationMapping.put(sourceObject, destObject);
+							sourcesJustFound.add(sourceObject);
+							continue LOOP_SOURCE;
+						}
+					}
+					sourceToDestinationMapping.put(sourceObject, null);
+					sourcesJustFound.add(sourceObject);
+				}
+
+			} else {
+				final EObject sourceObject = (EObject) eObj.eContainer().eGet(eObj.eContainingFeature());
+				final EObject destObject = (EObject) destContainer.eContainer().eGet(eObj.eContainingFeature());
+
+				// Only object - assume they are equivalent, what ever they are
+				sourceToDestinationMapping.put(sourceObject, destObject);
+				sourcesJustFound.add(sourceObject);
+			}
+
+			final Map<EObject, Collection<Setting>> usagesBySource = EcoreUtil.UsageCrossReferencer.findAll(sourcesJustFound, transferredObjects);
+			// Perform replacements
+			for (final EObject source : sourcesJustFound) {
+				// Update cross-references
+				final Collection<EStructuralFeature.Setting> usages = usagesBySource.get(source);
+				if (usages != null) {
+					for (final EStructuralFeature.Setting setting : usages) {
+						EcoreUtil.replace(setting.getEObject(), setting.getEStructuralFeature(), source, sourceToDestinationMapping.get(source));
+					}
+				}
+			}
+			// This ensures we eventually terminate the main loop
+			assert sourcesJustFound.contains(eObj);
+			remainingObjects.removeAll(sourcesJustFound);
+		}
+
+	}
+
+	private static void processObject(final EObject eObj, final Set<EObject> transferredObjects, final Set<EObject> remainingObjects) {
+		final EClass eClass = eObj.eClass();
+		for (final EReference ref : eClass.getEAllReferences()) {
+			if (eObj.eIsSet(ref)) {
+				if (ref.isMany()) {
+					final List<?> objects = (List<?>) eObj.eGet(ref);
+					for (final Object obj : objects) {
+						if (obj instanceof EObject) {
+							if (ref.isContainment()) {
+								transferredObjects.add((EObject) obj);
+								processObject((EObject) obj, transferredObjects, remainingObjects);
+							} else {
+								remainingObjects.add((EObject) obj);
+							}
+						}
+					}
+				} else {
+					final Object obj = eObj.eGet(ref);
+					if (obj instanceof EObject) {
+						if (ref.isContainment()) {
+							transferredObjects.add((EObject) obj);
+							processObject((EObject) obj, transferredObjects, remainingObjects);
+						} else {
+							remainingObjects.add((EObject) obj);
+						}
+					}
+				}
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Take a {@link List} of {@link IMappingDescriptor}s and "apply" them to the rootObject (this should be the same as the {@link IMappingDescriptor#getDestinationContainer()} generating a
 	 * {@link Command} to perform the actual changes required. This will move the contents of the source container into the destination container. If the source data is not to be changed, consider
 	 * copying the data first. See {@link EcoreUtil#copyAll(Collection)}.
@@ -89,7 +233,7 @@ public class EMFModelMergeTools {
 	 * @param descriptors
 	 * @return
 	 */
-	public static Command patchInMappingDescriptors(final EditingDomain domain, final EObject rootObject, final List<IMappingDescriptor> descriptors) {
+	public static Command applyMappingDescriptors(final EditingDomain domain, final EObject rootObject, final List<IMappingDescriptor> descriptors) {
 		final Collection<EObject> emfObjectsToSearch = Collections.singleton(rootObject);
 
 		final Set<EObject> objectsOfInterest = new HashSet<EObject>();
