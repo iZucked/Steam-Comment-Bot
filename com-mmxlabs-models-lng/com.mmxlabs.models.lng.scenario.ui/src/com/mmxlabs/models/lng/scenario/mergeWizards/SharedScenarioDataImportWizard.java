@@ -177,7 +177,13 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 
 					// Unload if required
 					if (unloadDestScenario) {
-						destScenario.getScenarioService().unload(destScenario);
+						// Auto save the scenario
+						try {
+							destScenario.getScenarioService().save(destScenario);
+							destScenario.getScenarioService().unload(destScenario);
+						} catch (final IOException e) {
+							log.error("Error saving scenario: " + destScenario.getName());
+						}
 					}
 
 					monitor.worked(1);
@@ -213,18 +219,18 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 
 		if (destEditingDomain instanceof CommandProviderAwareEditingDomain) {
 			final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) destEditingDomain;
-			
+
 			// Normally we disable command providers, but in this can we will not. Specifically for canal cost maintenance. The user can not add or remove these objects should the number of vessel
 			// classes or the number of route change. These are intended to be maintained by a command provider.
-			
+
 			// commandProviderAwareEditingDomain.setCommandProvidersDisabled(true);
-			
+
 			commandProviderAwareEditingDomain.setAdaptersEnabled(false);
 		}
 
 		// IF TYPE == PORT MODEL
-		boolean includePortData = true;
-		boolean includeFleetData = true;
+		final boolean includePortData = true;
+		final boolean includeFleetData = true;
 
 		try {
 			final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();
