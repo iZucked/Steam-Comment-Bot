@@ -637,8 +637,8 @@ public class LNGScenarioTransformer {
 			allDates.add(s.getWindowEndWithSlotOrPortTime());
 		}
 
-		earliestTime = Collections.min(allDates);
-		latestTime = Collections.max(allDates);
+		earliestTime = allDates.isEmpty() ? new Date(0) : Collections.min(allDates);
+		latestTime = allDates.isEmpty() ? new Date(0) : Collections.max(allDates);
 	}
 
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
