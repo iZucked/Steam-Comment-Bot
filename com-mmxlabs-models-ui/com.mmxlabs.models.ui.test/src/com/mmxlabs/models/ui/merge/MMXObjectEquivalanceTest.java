@@ -1,14 +1,16 @@
 package com.mmxlabs.models.ui.merge;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -230,6 +232,60 @@ public class MMXObjectEquivalanceTest {
 
 		// OtherNames over Names - Named route will be false, but OtherNames will be true
 		Assert.assertTrue(MMXObjectEquivalance.equivalent(on4, on5));
+
+	}
+
+	@Ignore("Test currently fail due to dynamic eobject usage. Waiting for response on EMF mailing list. - SG 2013-06-21")
+	@Test
+	public void testEquivalent_CombinedObject() {
+
+		EPackage ePackage = EcoreFactory.eINSTANCE.createEPackage();
+		EClass cls = EcoreFactory.eINSTANCE.createEClass();
+		cls.setName("TestClass");
+		// Inherit both named and uuid objects
+		cls.getESuperTypes().add(MMXCorePackage.eINSTANCE.getNamedObject());
+		cls.getESuperTypes().add(MMXCorePackage.eINSTANCE.getUUIDObject());
+
+		ePackage.getEClassifiers().add(cls);
+
+		EObject e1 = ePackage.getEFactoryInstance().create(cls);
+		EObject e2 = ePackage.getEFactoryInstance().create(cls);
+		EObject e3 = ePackage.getEFactoryInstance().create(cls);
+		EObject e4 = ePackage.getEFactoryInstance().create(cls);
+		EObject e5 = ePackage.getEFactoryInstance().create(cls);
+		EObject e6 = ePackage.getEFactoryInstance().create(cls);
+
+		e1.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name1");
+		e1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid1");
+
+		Assert.assertEquals("name1", e1.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		Assert.assertEquals("uuid1", e1.eGet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()));
+		
+		// Same as e1
+		e2.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name1");
+		e2.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid1");
+
+		// Same uuid as e1, but different name
+		e3.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name2");
+		e3.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid1");
+
+		// Same names, no uuid
+		e4.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name2");
+		e5.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name2");
+
+		// Different name & uuid
+		e6.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name3");
+		e6.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid3");
+
+		Assert.assertTrue(MMXObjectEquivalance.equivalent(e1, e2));
+		Assert.assertTrue(MMXObjectEquivalance.equivalent(e1, e3));
+
+		Assert.assertFalse(MMXObjectEquivalance.equivalent(e1, e4));
+		Assert.assertFalse(MMXObjectEquivalance.equivalent(e1, e5));
+		Assert.assertTrue(MMXObjectEquivalance.equivalent(e3, e4));
+		Assert.assertTrue(MMXObjectEquivalance.equivalent(e4, e5));
+
+		Assert.assertFalse(MMXObjectEquivalance.equivalent(e1, e6));
 
 	}
 }
