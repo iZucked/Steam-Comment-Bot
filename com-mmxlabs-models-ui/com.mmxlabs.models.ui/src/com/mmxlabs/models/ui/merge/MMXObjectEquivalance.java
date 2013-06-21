@@ -44,7 +44,8 @@ public class MMXObjectEquivalance {
 				return true;
 			}
 			// Compare OtherNamesObject first as this extends NamedObject
-		} else if (o1 instanceof OtherNamesObject && o2 instanceof OtherNamesObject) {
+		}
+		if (o1 instanceof OtherNamesObject && o2 instanceof OtherNamesObject) {
 			final OtherNamesObject u1 = (OtherNamesObject) o1;
 			final OtherNamesObject u2 = (OtherNamesObject) o2;
 			if (equivalentOtherNamesObject(u1, u2)) {
