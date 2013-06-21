@@ -141,6 +141,15 @@
                   style="push">
             </command>
          </menuContribution>
+          <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=additions">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
+                  label="Shared Scenario Data Import (Port Data)"
+                  style="push">
+            </command>
+         </menuContribution>
 
      </extension>
       <extension
@@ -159,6 +168,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
                id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
                name="Bulk Import from CSV">
+         </command>
+           <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImportWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
+               name="Shared Scenario Data Import">
          </command>
       </extension>
 </plugin>

@@ -11,11 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.databinding.observable.Observables;
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -42,9 +46,8 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 	private final Map<ScenarioInstance, ModelAdapter> adapterMap = new HashMap<ScenarioInstance, ModelAdapter>();
 
 	private class ModelAdapter extends MMXAdapterImpl {
-
-		private final EMFDataBindingContext dbc = new EMFDataBindingContext();
 		private final ObservablesManager manager = new ObservablesManager();
+		private final EMFDataBindingContext dbc = new EMFDataBindingContext(SWTObservables.getRealm(Display.getDefault()));
 
 		private final ScenarioInstance scenarioInstance;
 		private AnalyticsModel analyticsModel;
