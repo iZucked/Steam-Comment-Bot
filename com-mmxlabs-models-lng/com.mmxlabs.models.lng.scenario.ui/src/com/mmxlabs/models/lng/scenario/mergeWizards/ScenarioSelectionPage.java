@@ -272,10 +272,34 @@ public class ScenarioSelectionPage extends WizardPage {
 		return scenarioModel.getScenarioServices();
 	}
 
+	/**
+	 * Ensures that both text fields are set.
+	 */
+	private void dialogChanged() {
+
+		if (scenarioSelectionGroup.selectedIndex == -1) {
+			updateStatus("Please select a scenario option");
+			return;
+		}
+
+		else if (scenarioSelectionGroup.selectedIndex == CHOICE_SELECTED_SCENARIOS) {
+
+			if (getCheckedScenariosFromTree().isEmpty()) {
+				updateStatus("Please select a scenario");
+				return;
+			}
+		}
+		updateStatus(null);
+	}
+
+	private void updateStatus(final String message) {
+		setErrorMessage(message);
+		setPageComplete(message == null);
+	}
+
 	/*
 	 * Is there *really* no standard JFace way to bind a radio button group to a single variable?
 	 */
-
 	class RadioSelectionGroup extends Composite {
 		int selectedIndex = -1;
 		final ArrayList<Button> buttons = new ArrayList<Button>();
@@ -310,6 +334,7 @@ public class ScenarioSelectionPage extends WizardPage {
 					if (button.getSelection()) {
 						RadioSelectionGroup.this.selectedIndex = index;
 					}
+					dialogChanged();
 				}
 
 				@Override
@@ -352,7 +377,7 @@ public class ScenarioSelectionPage extends WizardPage {
 		String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
 		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" }, new int[] { CHOICE_ALL_SCENARIOS,
 				CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
-		scenarioSelectionGroup.setSelectedIndex(0);
+		// scenarioSelectionGroup.setSelectedIndex(0);
 
 		// create a container for the scenario tree control (so we can hide it)
 		final Composite viewerComposite = new Composite(container, SWT.BORDER);
@@ -383,6 +408,7 @@ public class ScenarioSelectionPage extends WizardPage {
 				if (!(element instanceof ScenarioInstance)) {
 					scenarioTreeViewer.setSubtreeChecked(element, event.getChecked());
 				}
+				dialogChanged();
 			}
 		});
 
@@ -393,6 +419,7 @@ public class ScenarioSelectionPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
+				dialogChanged();
 			}
 
 			@Override
@@ -402,6 +429,8 @@ public class ScenarioSelectionPage extends WizardPage {
 
 		setControl(container);
 		control = container;
+		
+		dialogChanged();
 	}
 
 	@Override
