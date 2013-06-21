@@ -146,7 +146,7 @@
                locationURI="menu:data?after=additions">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
-                  label="Shared Scenario Data Import (Port Data)"
+                  label="Shared Scenario Data Import (Port and Fleet Data)"
                   style="push">
             </command>
          </menuContribution>
