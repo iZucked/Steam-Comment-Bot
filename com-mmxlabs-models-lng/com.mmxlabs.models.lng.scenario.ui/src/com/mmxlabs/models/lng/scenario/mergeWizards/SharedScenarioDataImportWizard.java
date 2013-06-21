@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.merge.EMFModelMergeTools;
@@ -212,19 +213,40 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 
 		if (destEditingDomain instanceof CommandProviderAwareEditingDomain) {
 			final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) destEditingDomain;
-			commandProviderAwareEditingDomain.setCommandProvidersDisabled(true);
+			
+			// Normally we disable command providers, but in this can we will not. Specifically for canal cost maintenance. The user can not add or remove these objects should the number of vessel
+			// classes or the number of route change. These are intended to be maintained by a command provider.
+			
+			// commandProviderAwareEditingDomain.setCommandProvidersDisabled(true);
+			
 			commandProviderAwareEditingDomain.setAdaptersEnabled(false);
 		}
 
 		// IF TYPE == PORT MODEL
+		boolean includePortData = true;
+		boolean includeFleetData = true;
+
 		try {
 			final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();
-			final EObject copiedModel = EcoreUtil.copy(sourceScenarioModel.getPortModel());
-			descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel, destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Ports()));
-			descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel, destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Routes()));
+			final LNGScenarioModel copiedModel = EcoreUtil.copy(sourceScenarioModel);
+
+			if (includePortData) {
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Ports()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Routes()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()));
+			}
+
+			if (includeFleetData) {
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselGroups()));
+			}
+
+			// Fix up the descriptor data references to point to destination objects in the cases where the source is not being transferred across
+			EMFModelMergeTools.rewriteMappingDescriptors(descriptors, copiedModel, destScenarioModel);
 
 			// TODO: If multiple stages, then add into a compound command
-			final Command cmd = EMFModelMergeTools.patchInMappingDescriptors(destEditingDomain, destScenarioModel, descriptors);
+			final Command cmd = EMFModelMergeTools.applyMappingDescriptors(destEditingDomain, destScenarioModel, descriptors);
 			if (cmd != null) {
 				if (cmd.canExecute()) {
 
@@ -236,7 +258,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 		} finally {
 			if (destEditingDomain instanceof CommandProviderAwareEditingDomain) {
 				final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) destEditingDomain;
-				commandProviderAwareEditingDomain.setCommandProvidersDisabled(false);
+				// commandProviderAwareEditingDomain.setCommandProvidersDisabled(false);
 				commandProviderAwareEditingDomain.setAdaptersEnabled(true);
 			}
 		}
