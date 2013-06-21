@@ -15,6 +15,8 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -38,29 +40,35 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, commandStack);
 
 		final EditingDomain ed = getEditingDomain();
-		
+
 		final NonEditableColumn vesselManipulator = new NonEditableColumn() {
 			@Override
 			public String render(final Object object) {
 				if (object instanceof RouteCost) {
-					return ((RouteCost) object).getVesselClass().getName();
+					final VesselClass vesselClass = ((RouteCost) object).getVesselClass();
+					if (vesselClass != null) {
+						return vesselClass.getName();
+					}
 				}
 				return "Unknown";
 			}
 
 		};
-		
+
 		final NonEditableColumn routeManipulator = new NonEditableColumn() {
 			@Override
 			public String render(final Object object) {
 				if (object instanceof RouteCost) {
-					return ((RouteCost) object).getRoute().getName();
+					final Route route = ((RouteCost) object).getRoute();
+					if (route != null) {
+						return route.getName();
+					}
 				}
 				return "Unknown";
 			}
 
 		};
-		
+
 		addTypicalColumn("Route", routeManipulator);
 		addTypicalColumn("Vessel Class", vesselManipulator);
 		addTypicalColumn("Laden Toll", new NumericAttributeManipulator(PricingPackage.Literals.ROUTE_COST__LADEN_COST, ed));
