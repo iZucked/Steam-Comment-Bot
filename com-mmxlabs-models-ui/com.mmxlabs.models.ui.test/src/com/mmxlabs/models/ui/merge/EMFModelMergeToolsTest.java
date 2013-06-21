@@ -1,6 +1,7 @@
 package com.mmxlabs.models.ui.merge;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,9 +158,134 @@ public class EMFModelMergeToolsTest {
 	 * This test check to see that we can handle multiple mapping descriptors and update references to object not in a mapping update. We create three object sets. The first is a simple
 	 * {@link UUIDObject} which will be replaced. The second are {@link NamedObject}s with a reference to the {@link UUIDObject}s. These objects will also be replaced. A third set of objects
 	 * referencing the UUIDObjects are also created. These are not replaced, but expect to have references updated (including set to null as appropriate).
+	 * 
+	 * In this test case, there is no existing data
 	 */
 	@Test
-	public void testModelUpdate() {
+	public void testModelUpdate_NoDestData() {
+
+		final ComplexModelBuilder builder = new ComplexModelBuilder();
+
+		// Create three containment structures;
+		// one a list of "UUIDObject"
+		// second a list of NamedObject sub classes (called data1) with a reference to the UUIDObjects
+		// third a list of EObject sub classes (called data2) with a reference to the UUIDObjects
+		// the UUIDObjects and dataA list will be subject to the "merge" will dataB should only have references updated
+		final Pair<EClass, EReference> dataPairA = builder.createReferencingType(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.eINSTANCE.getUUIDObject(), "dataA");
+		final Pair<EClass, EReference> dataPairB = builder.createReferencingType(EcorePackage.eINSTANCE.getEObject(), MMXCorePackage.eINSTANCE.getUUIDObject(), "dataB");
+
+		final EClass cls_container1 = builder.createContainerClass("container1", MMXCorePackage.eINSTANCE.getUUIDObject());
+		final EClass cls_container2 = builder.createContainerClass("container2", dataPairA.getFirst());
+		final EClass cls_container3 = builder.createContainerClass("container3", dataPairB.getFirst());
+
+		// Create data model instances - these will be pre-created with the above container class instances.
+		final EObject sourceRoot = builder.createRootModel();
+		final EObject destinationRoot = builder.createRootModel();
+
+		// //// Create source data model
+		final UUIDObject sourceUUID1 = MMXCoreFactory.eINSTANCE.createUUIDObject();
+		sourceUUID1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid1");
+
+		final UUIDObject sourceUUID2 = MMXCoreFactory.eINSTANCE.createUUIDObject();
+		sourceUUID2.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid2");
+
+		final EObject sourceDataA1 = dataPairA.getFirst().getEPackage().getEFactoryInstance().create(dataPairA.getFirst());
+		sourceDataA1.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name1");
+		sourceDataA1.eSet(dataPairA.getSecond(), sourceUUID1);
+
+		final EObject sourceDataA2 = dataPairA.getFirst().getEPackage().getEFactoryInstance().create(dataPairA.getFirst());
+		sourceDataA2.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name2");
+		sourceDataA2.eSet(dataPairA.getSecond(), sourceUUID2);
+
+		// Add objects to relevant containers
+		final List<Object> sourceContainer1Objects = Lists.<Object> newArrayList(sourceUUID1, sourceUUID2);
+		final List<Object> sourceContainer2Objects = Lists.<Object> newArrayList(sourceDataA1, sourceDataA2);
+		((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))).eSet(builder.getContainerReference(cls_container1), sourceContainer1Objects);
+		((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))).eSet(builder.getContainerReference(cls_container2), sourceContainer2Objects);
+
+		// Add objects to relevant containers
+		final List<Object> destContainer1Objects = Collections.emptyList();
+		final List<Object> destContainer2Objects = Collections.emptyList();
+		final List<Object> destContainer3Objects = Collections.emptyList();
+		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))).eSet(builder.getContainerReference(cls_container1), destContainer1Objects);
+		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))).eSet(builder.getContainerReference(cls_container2), destContainer2Objects);
+		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container3))).eSet(builder.getContainerReference(cls_container3), destContainer3Objects);
+
+		// Generate the mapping descriptors
+		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
+				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))), builder.getContainerReference(cls_container1));
+
+		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
+				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))), builder.getContainerReference(cls_container2));
+
+		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2);
+
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		// Add a reflective item provider for our dynamic metamodel - delete command will not work otherwise
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+
+		final EditingDomain domain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+
+		// Create a resource in the editing domain and attach model so the DeleteCommand can find cross-referencing objects
+		final Resource r = new ResourceImpl();
+		r.getContents().add(destinationRoot);
+		domain.getResourceSet().getResources().add(r);
+
+		// Generate the command to patch in the model
+		final Command cmd = EMFModelMergeTools.patchInMappingDescriptors(domain, destinationRoot, descriptors);
+		Assert.assertNotNull(cmd);
+
+		Assert.assertTrue(cmd.canExecute());
+
+		// Execute command to modify the model state
+		domain.getCommandStack().execute(cmd);
+
+		// Check our destination has been correctly updated.
+
+		final EObject destContainer1 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container1));
+		final EObject destContainer2 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container2));
+		final EObject destContainer3 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container3));
+
+		Assert.assertNotNull(destContainer1);
+		Assert.assertNotNull(destContainer2);
+		Assert.assertNotNull(destContainer3);
+
+		final List<Object> newDestContainer1Objects = (List<Object>) destContainer1.eGet(builder.getContainerReference(cls_container1));
+		final List<Object> newDestContainer2Objects = (List<Object>) destContainer2.eGet(builder.getContainerReference(cls_container2));
+		final List<Object> newDestContainer3Objects = (List<Object>) destContainer3.eGet(builder.getContainerReference(cls_container3));
+
+		// New data switched owner
+		Assert.assertSame(destContainer1, sourceUUID1.eContainer());
+		Assert.assertSame(destContainer1, sourceUUID2.eContainer());
+		Assert.assertSame(destContainer2, sourceDataA1.eContainer());
+		Assert.assertSame(destContainer2, sourceDataA2.eContainer());
+		// This data no change
+
+		// Have UUID objects been replaced?
+		Assert.assertEquals(2, newDestContainer1Objects.size());
+		Assert.assertTrue(newDestContainer1Objects.contains(sourceUUID1));
+		Assert.assertTrue(newDestContainer1Objects.contains(sourceUUID2));
+
+		// Have dataA objects been replaced?
+		Assert.assertEquals(2, newDestContainer2Objects.size());
+		Assert.assertTrue(newDestContainer2Objects.contains(sourceDataA1));
+		Assert.assertTrue(newDestContainer2Objects.contains(sourceDataA2));
+
+		// Are dataA objects still pointing to correct refs?
+		Assert.assertSame(sourceUUID1, sourceDataA1.eGet(dataPairA.getSecond()));
+		Assert.assertSame(sourceUUID2, sourceDataA2.eGet(dataPairA.getSecond()));
+
+		// Make sure container 3 objects are still the same
+		Assert.assertEquals(0, newDestContainer3Objects.size());
+	}
+
+	/**
+	 * This test check to see that we can handle multiple mapping descriptors and update references to object not in a mapping update. We create three object sets. The first is a simple
+	 * {@link UUIDObject} which will be replaced. The second are {@link NamedObject}s with a reference to the {@link UUIDObject}s. These objects will also be replaced. A third set of objects
+	 * referencing the UUIDObjects are also created. These are not replaced, but expect to have references updated (including set to null as appropriate).
+	 */
+	@Test
+	public void testModelUpdate_Replace() {
 
 		final ComplexModelBuilder builder = new ComplexModelBuilder();
 
@@ -312,6 +438,142 @@ public class EMFModelMergeToolsTest {
 
 		// Make sure container 3 references are correctly updated
 		Assert.assertSame(sourceUUID1, destDataB1.eGet(dataPairB.getSecond()));
+		Assert.assertNull(destDataB2.eGet(dataPairB.getSecond()));
+	}
+
+	/**
+	 * This test check to see that we can handle multiple mapping descriptors and update references to object not in a mapping update. We create three object sets. The first is a simple
+	 * {@link UUIDObject} which will be replaced. The second are {@link NamedObject}s with a reference to the {@link UUIDObject}s. These objects will also be replaced. A third set of objects
+	 * referencing the UUIDObjects are also created. These are not replaced, but expect to have references updated (including set to null as appropriate).
+	 * 
+	 * In this case there is no source data, so destination data will be removed
+	 */
+	@Test
+	public void testModelUpdate_NoSourceData() {
+
+		final ComplexModelBuilder builder = new ComplexModelBuilder();
+
+		// Create three containment structures;
+		// one a list of "UUIDObject"
+		// second a list of NamedObject sub classes (called data1) with a reference to the UUIDObjects
+		// third a list of EObject sub classes (called data2) with a reference to the UUIDObjects
+		// the UUIDObjects and dataA list will be subject to the "merge" will dataB should only have references updated
+		final Pair<EClass, EReference> dataPairA = builder.createReferencingType(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.eINSTANCE.getUUIDObject(), "dataA");
+		final Pair<EClass, EReference> dataPairB = builder.createReferencingType(EcorePackage.eINSTANCE.getEObject(), MMXCorePackage.eINSTANCE.getUUIDObject(), "dataB");
+
+		final EClass cls_container1 = builder.createContainerClass("container1", MMXCorePackage.eINSTANCE.getUUIDObject());
+		final EClass cls_container2 = builder.createContainerClass("container2", dataPairA.getFirst());
+		final EClass cls_container3 = builder.createContainerClass("container3", dataPairB.getFirst());
+
+		// Create data model instances - these will be pre-created with the above container class instances.
+		final EObject sourceRoot = builder.createRootModel();
+		final EObject destinationRoot = builder.createRootModel();
+
+		// Add objects to relevant containers
+		final List<Object> sourceContainer1Objects = Collections.emptyList();
+		final List<Object> sourceContainer2Objects = Collections.emptyList();
+		((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))).eSet(builder.getContainerReference(cls_container1), sourceContainer1Objects);
+		((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))).eSet(builder.getContainerReference(cls_container2), sourceContainer2Objects);
+
+		// //// Create dest data model
+		final UUIDObject destUUID1 = MMXCoreFactory.eINSTANCE.createUUIDObject();
+		destUUID1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid1");
+
+		final UUIDObject destUUID2 = MMXCoreFactory.eINSTANCE.createUUIDObject();
+		destUUID2.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid3");
+
+		final EObject destDataA1 = dataPairA.getFirst().getEPackage().getEFactoryInstance().create(dataPairA.getFirst());
+		destDataA1.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name1");
+		destDataA1.eSet(dataPairA.getSecond(), destUUID1);
+
+		final EObject destDataA2 = dataPairA.getFirst().getEPackage().getEFactoryInstance().create(dataPairA.getFirst());
+		destDataA2.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "name3");
+		destDataA2.eSet(dataPairA.getSecond(), destUUID2);
+
+		// This data should stay the same, but references updated
+		final EObject destDataB1 = dataPairB.getFirst().getEPackage().getEFactoryInstance().create(dataPairB.getFirst());
+		destDataB1.eSet(dataPairB.getSecond(), destUUID1);
+
+		final EObject destDataB2 = dataPairB.getFirst().getEPackage().getEFactoryInstance().create(dataPairB.getFirst());
+		destDataB2.eSet(dataPairB.getSecond(), destUUID2);
+
+		// Add objects to relevant containers
+		final List<Object> destContainer1Objects = Lists.<Object> newArrayList(destUUID1, destUUID2);
+		final List<Object> destContainer2Objects = Lists.<Object> newArrayList(destDataA1, destDataA2);
+		final List<Object> destContainer3Objects = Lists.<Object> newArrayList(destDataB1, destDataB2);
+		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))).eSet(builder.getContainerReference(cls_container1), destContainer1Objects);
+		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))).eSet(builder.getContainerReference(cls_container2), destContainer2Objects);
+		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container3))).eSet(builder.getContainerReference(cls_container3), destContainer3Objects);
+
+		// Generate the mapping descriptors
+		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
+				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))), builder.getContainerReference(cls_container1));
+
+		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
+				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))), builder.getContainerReference(cls_container2));
+
+		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2);
+
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		// Add a reflective item provider for our dynamic metamodel - delete command will not work otherwise
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+
+		final EditingDomain domain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+
+		// Create a resource in the editing domain and attach model so the DeleteCommand can find cross-referencing objects
+		final Resource r = new ResourceImpl();
+		r.getContents().add(destinationRoot);
+		domain.getResourceSet().getResources().add(r);
+
+		// Generate the command to patch in the model
+		final Command cmd = EMFModelMergeTools.patchInMappingDescriptors(domain, destinationRoot, descriptors);
+		Assert.assertNotNull(cmd);
+
+		Assert.assertTrue(cmd.canExecute());
+
+		// Execute command to modify the model state
+		domain.getCommandStack().execute(cmd);
+
+		// Check our destination has been correctly updated.
+
+		final EObject destContainer1 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container1));
+		final EObject destContainer2 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container2));
+		final EObject destContainer3 = (EObject) destinationRoot.eGet(builder.getRootReference(cls_container3));
+
+		Assert.assertNotNull(destContainer1);
+		Assert.assertNotNull(destContainer2);
+		Assert.assertNotNull(destContainer3);
+
+		final List<Object> newDestContainer1Objects = (List<Object>) destContainer1.eGet(builder.getContainerReference(cls_container1));
+		final List<Object> newDestContainer2Objects = (List<Object>) destContainer2.eGet(builder.getContainerReference(cls_container2));
+		final List<Object> newDestContainer3Objects = (List<Object>) destContainer3.eGet(builder.getContainerReference(cls_container3));
+
+		// Check containership -- old data no longer contained
+		Assert.assertNull(destUUID1.eContainer());
+		Assert.assertNull(destUUID2.eContainer());
+		Assert.assertNull(destDataA1.eContainer());
+		Assert.assertNull(destDataA2.eContainer());
+		// This data no change
+		Assert.assertSame(destContainer3, destDataB1.eContainer());
+		Assert.assertSame(destContainer3, destDataB2.eContainer());
+
+		// Have UUID objects been replaced?
+		Assert.assertEquals(0, newDestContainer1Objects.size());
+		Assert.assertFalse(newDestContainer1Objects.contains(destUUID1));
+		Assert.assertFalse(newDestContainer1Objects.contains(destUUID2));
+
+		// Have dataA objects been replaced?
+		Assert.assertEquals(0, newDestContainer2Objects.size());
+		Assert.assertFalse(newDestContainer2Objects.contains(destDataA1));
+		Assert.assertFalse(newDestContainer2Objects.contains(destDataA2));
+
+		// Make sure container 3 objects are still the same
+		Assert.assertEquals(2, newDestContainer3Objects.size());
+		Assert.assertTrue(newDestContainer3Objects.contains(destDataB1));
+		Assert.assertTrue(newDestContainer3Objects.contains(destDataB2));
+
+		// Make sure container 3 references are correctly updated
+		Assert.assertNull(destDataB1.eGet(dataPairB.getSecond()));
 		Assert.assertNull(destDataB2.eGet(dataPairB.getSecond()));
 	}
 

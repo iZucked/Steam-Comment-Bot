@@ -127,12 +127,18 @@ public class EMFModelMergeTools {
 
 		// Perform additions
 		for (final IMappingDescriptor descriptor : descriptors) {
-			cmd.append(AddCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), descriptor.getAddedObjects()));
+			final List<EObject> addedObjects = descriptor.getAddedObjects();
+			if (!addedObjects.isEmpty()) {
+				cmd.append(AddCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), addedObjects));
+			}
 		}
 
 		// Perform deletions
 		for (final IMappingDescriptor descriptor : descriptors) {
-			cmd.append(DeleteCommand.create(domain, descriptor.getRemovedObjects()));
+			final Collection<EObject> removedObjects = descriptor.getRemovedObjects();
+			if (!removedObjects.isEmpty()) {
+				cmd.append(DeleteCommand.create(domain, removedObjects));
+			}
 		}
 
 		return cmd;
