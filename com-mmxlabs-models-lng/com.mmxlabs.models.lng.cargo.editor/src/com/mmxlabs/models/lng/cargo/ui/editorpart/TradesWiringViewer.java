@@ -624,7 +624,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
-		GridViewerColumn dischargeDateColumn = addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+		final GridViewerColumn dischargeDateColumn = addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable<?> getComparable(final Object object) {
 				if (object instanceof RowData) {
@@ -691,7 +691,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override
-			protected void wiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed) {
+			protected void wiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed) {
 				if (locked) {
 					return;
 				}
@@ -881,7 +881,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						}
 						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
-							ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+							final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 							try {
 								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
@@ -913,7 +913,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	/**
 	 * @since 4.0
 	 */
-	protected void doWiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed) {
+	protected void doWiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed) {
 
 		final List<Command> setCommands = new LinkedList<Command>();
 		final List<Command> deleteCommands = new LinkedList<Command>();
@@ -1142,6 +1142,38 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 			final RowData referenceRowData = discoveredRowData;
 			{
+				final Action newLoad = new Action("Cargo") {
+					public void run() {
+
+						final CompoundCommand cmd = new CompoundCommand("Cargo");
+
+						final Cargo newCargo = cec.createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
+						for (final Slot slot : newCargo.getSlots()) {
+							if (slot instanceof LoadSlot) {
+								final LoadSlot newLoad = (LoadSlot) slot;
+								initialiseSlot(newLoad, true, referenceRowData);
+								newLoad.setDESPurchase(false);
+								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+							} else if (slot instanceof DischargeSlot) {
+								final DischargeSlot newDischarge = (DischargeSlot) slot;
+								initialiseSlot(newDischarge, false, referenceRowData);
+								newDischarge.setFOBSale(false);
+								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+							} else {
+								throw new IllegalStateException("Unexpected slot type");
+							}
+						}
+						newCargo.setAllowRewiring(true);
+						newCargo.setName("");
+
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
+
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+				addActionToMenu(newLoad, menu);
+			}
+			{
 				final Action newLoad = new Action("FOB purchase") {
 					public void run() {
 
@@ -1149,21 +1181,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						final LoadSlot newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 						newLoad.setDESPurchase(false);
-						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-						newLoad.setOptional(true);
-						newLoad.setName("");
-
-						if (referenceRowData != null) {
-							if (referenceRowData.loadSlot != null) {
-								newLoad.setWindowStart(referenceRowData.loadSlot.getWindowStart());
-								newLoad.setPort(referenceRowData.loadSlot.getPort());
-							} else if (referenceRowData.dischargeSlot != null) {
-								newLoad.setWindowStart(referenceRowData.dischargeSlot.getWindowStart());
-							}
-						}
-
+						initialiseSlot(newLoad, true, referenceRowData);
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1177,21 +1196,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						final LoadSlot newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 						newLoad.setDESPurchase(true);
-						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-						newLoad.setOptional(true);
-						newLoad.setName("");
-
-						if (referenceRowData != null) {
-							if (referenceRowData.dischargeSlot != null) {
-								newLoad.setWindowStart(referenceRowData.dischargeSlot.getWindowStart());
-								newLoad.setPort(referenceRowData.dischargeSlot.getPort());
-							} else if (referenceRowData.loadSlot != null) {
-								newLoad.setWindowStart(referenceRowData.getLoadSlot().getWindowStart());
-							}
-						}
-
+						initialiseSlot(newLoad, true, referenceRowData);
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1205,21 +1211,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						final DischargeSlot newDischarge = cec.createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 						newDischarge.setFOBSale(false);
-						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-						newDischarge.setOptional(true);
-						newDischarge.setName("");
-
-						if (referenceRowData != null) {
-							if (referenceRowData.dischargeSlot != null) {
-								newDischarge.setWindowStart(referenceRowData.dischargeSlot.getWindowStart());
-								newDischarge.setPort(referenceRowData.dischargeSlot.getPort());
-							} else if (referenceRowData.loadSlot != null) {
-								newDischarge.setWindowStart(referenceRowData.loadSlot.getWindowStart());
-							}
-						}
-
+						initialiseSlot(newDischarge, false, referenceRowData);
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1234,21 +1227,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 						final DischargeSlot newDischarge = cec.createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 						newDischarge.setFOBSale(true);
-						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-						newDischarge.setOptional(true);
-						newDischarge.setName("");
-
-						if (referenceRowData != null) {
-							if (referenceRowData.loadSlot != null) {
-								newDischarge.setWindowStart(referenceRowData.loadSlot.getWindowStart());
-								newDischarge.setPort(referenceRowData.loadSlot.getPort());
-							} else if (referenceRowData.dischargeSlot != null) {
-								newDischarge.setWindowStart(referenceRowData.dischargeSlot.getWindowStart());
-							}
-						}
-
+						initialiseSlot(newDischarge, false, referenceRowData);
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1257,6 +1237,23 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			{
 				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo");
 				addActionToMenu(newComplexCargo, menu);
+			}
+		}
+
+		private final void initialiseSlot(final Slot newSlot, final boolean isLoad, final RowData referenceRowData) {
+			newSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+			newSlot.setOptional(false);
+			newSlot.setName("");
+			// Set window so that via default sorting inserts new slot at current table position
+			if (referenceRowData != null) {
+				final Slot primarySortSlot = isLoad ? referenceRowData.loadSlot : referenceRowData.dischargeSlot;
+				final Slot secondarySortSlot = isLoad ? referenceRowData.dischargeSlot : referenceRowData.loadSlot;
+				if (primarySortSlot != null) {
+					newSlot.setWindowStart(primarySortSlot.getWindowStart());
+					newSlot.setPort(primarySortSlot.getPort());
+				} else if (secondarySortSlot != null) {
+					newSlot.setWindowStart(secondarySortSlot.getWindowStart());
+				}
 			}
 		}
 
@@ -1283,7 +1280,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		@Override
 		public void run() {
 
-			ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 			try {
 				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
