@@ -123,7 +123,11 @@ public class EMFModelMergeTools {
 			{
 				EObject tmpObj = eObj.eContainer();
 				while (tmpObj != sourceRoot && tmpObj != null) {
-					path.add(0, tmpObj.eContainmentFeature());
+					EReference eContainmentFeature = tmpObj.eContainmentFeature();
+					if (eContainmentFeature.isMany()) {
+						throw new IllegalStateException("Unable to handle multiple containments in path to sourceRoot.");
+					}
+					path.add(0, eContainmentFeature);
 					tmpObj = tmpObj.eContainer();
 				}
 				if (tmpObj == null) {
