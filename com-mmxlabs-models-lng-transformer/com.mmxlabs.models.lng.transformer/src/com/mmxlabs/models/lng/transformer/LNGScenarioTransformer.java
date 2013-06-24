@@ -637,8 +637,8 @@ public class LNGScenarioTransformer {
 			allDates.add(s.getWindowEndWithSlotOrPortTime());
 		}
 
-		earliestTime = Collections.min(allDates);
-		latestTime = Collections.max(allDates);
+		earliestTime = allDates.isEmpty() ? new Date(0) : Collections.min(allDates);
+		latestTime = allDates.isEmpty() ? new Date(0) : Collections.max(allDates);
 	}
 
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
@@ -1741,6 +1741,18 @@ public class LNGScenarioTransformer {
 
 			entities.addModelObject(vesselAvailability, vessel);
 			allVessels.add(vessel);
+
+			/*
+			 * set up inaccessible ports by applying resource allocation constraints
+			 */
+			final Set<IPort> inaccessiblePorts = new HashSet<IPort>();
+			for (final Port ePort : SetUtils.getObjects(eV.getInaccessiblePorts())) {
+				inaccessiblePorts.add(portAssociation.lookup((Port) ePort));
+			}
+
+			if (inaccessiblePorts.isEmpty() == false) {
+				builder.setVesselInaccessiblePorts(vessel, inaccessiblePorts);
+			}
 		}
 
 		{
