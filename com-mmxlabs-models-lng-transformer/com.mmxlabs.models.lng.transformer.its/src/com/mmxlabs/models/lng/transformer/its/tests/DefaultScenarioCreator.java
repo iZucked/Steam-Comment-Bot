@@ -646,7 +646,7 @@ public class DefaultScenarioCreator {
 			loadCalendar.set(Calendar.MILLISECOND, 0);
 			slot.setWindowStart(loadCalendar.getTime());
 		}
-
+		
 		public Cargo createDefaultCargo(String name, final Port loadPort, final Port dischargePort, Date loadTime, final int travelTimeInHours) {
 			final Cargo result = CargoFactory.eINSTANCE.createCargo();
 			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
