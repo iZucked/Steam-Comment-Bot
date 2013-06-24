@@ -48,6 +48,9 @@
                <target
                      class="VesselEvent">
                </target>
+               <target
+                     class="VesselClassRouteParameters">
+               </target>
             </constraint>
           
             <constraint
