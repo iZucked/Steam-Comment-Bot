@@ -571,6 +571,10 @@ public class DetailCompositeDialog extends Dialog {
 							selectedObjectIndex--;
 						}
 
+						if (selectedObjectIndex < 0) {
+							selectedObjectIndex = 0;
+						}
+						
 						deletedInputs.add((EObject) element);
 
 						// remove from change map
@@ -587,7 +591,7 @@ public class DetailCompositeDialog extends Dialog {
 
 						ranges.remove(element);
 						inputs.remove(elementIndex);
-						if (inputs.size() > 0) {
+						if (selectedObjectIndex >= 0 && inputs.size() > 0) {
 							selectionViewer.setSelection(new StructuredSelection(inputs.get(selectedObjectIndex)));
 						} else {
 							selectionViewer.setSelection(StructuredSelection.EMPTY);
