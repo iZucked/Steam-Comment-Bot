@@ -23,6 +23,7 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -35,32 +36,17 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 
 /**
- * Custom import logic for loading a data index.
+ * Custom import logic for loading a {@link CharterIndex}.
  * 
- * @author hinton
- * @since 2.0
+ * @author Simon Goodall, hinton
+ * @since 5.0
  * 
  */
-public class DataIndexImporter implements IClassImporter {
+public class CharterIndexImporter implements IClassImporter {
+	private static final String NAME = "name";
 	private static final String EXPRESSION = "expression";
-	boolean parseAsInt = false;
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
-
-	/**
-	 * @return the parseAsInt
-	 */
-	public boolean isParseAsInt() {
-		return parseAsInt;
-	}
-
-	/**
-	 * @param parseAsInt
-	 *            the parseAsInt to set
-	 */
-	public void setParseAsInt(final boolean parseAsInt) {
-		this.parseAsInt = parseAsInt;
-	}
 
 	@Override
 	public Collection<EObject> importObjects(final EClass targetClass, final CSVReader reader, final IImportContext context) {
@@ -83,21 +69,30 @@ public class DataIndexImporter implements IClassImporter {
 
 	@Override
 	public Collection<EObject> importObject(final EClass targetClass, final Map<String, String> row, final IImportContext context) {
-		final Index<Number> result;
+		CharterIndex result = PricingFactory.eINSTANCE.createCharterIndex();
+
+		final Index<Integer> indexData;
 		if (row.containsKey(EXPRESSION)) {
 			if (row.get(EXPRESSION).isEmpty() == false) {
-				final DerivedIndex<Number> di = PricingFactory.eINSTANCE.createDerivedIndex();
-				result = di;
+				final DerivedIndex<Integer> di = PricingFactory.eINSTANCE.createDerivedIndex();
+				indexData = di;
 				di.setExpression(row.get(EXPRESSION));
 			} else {
-				result = PricingFactory.eINSTANCE.createDataIndex();
+				indexData = PricingFactory.eINSTANCE.createDataIndex();
 			}
 		} else {
-			result = PricingFactory.eINSTANCE.createDataIndex();
+			indexData = PricingFactory.eINSTANCE.createDataIndex();
+		}
+		result.setData(indexData);
+
+		if (row.containsKey(NAME)) {
+			result.setName(row.get(NAME));
+		} else {
+			context.addProblem(context.createProblem("CharterIndex name is missing", true, true, true));
 		}
 
-		if (result instanceof DataIndex) {
-			final DataIndex<Number> data = (DataIndex<Number>) result;
+		if (indexData instanceof DataIndex) {
+			final DataIndex<Integer> data = (DataIndex<Integer>) indexData;
 			for (final String s : row.keySet()) {
 				try {
 					final Date date = dateParser.parseDate(s);
@@ -113,19 +108,10 @@ public class DataIndexImporter implements IClassImporter {
 					if (row.get(s).isEmpty())
 						continue;
 					try {
-						final Number n;
-						// This used to be a ? : statement, but for some reason the int (or even Integer) was always stored as a Double
-						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.25
-						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2
-						if (parseAsInt) {
-							final int value = Integer.parseInt(row.get(s));
-							n = value;
-						} else {
-							final double value = Double.parseDouble(row.get(s));
-							n = value;
-						}
+						final int value = Integer.parseInt(row.get(s));
+						final Integer n = value;
 
-						final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
+						final IndexPoint<Integer> point = PricingFactory.eINSTANCE.createIndexPoint();
 						point.setDate(date);
 						point.setValue(n);
 						data.getPoints().add(point);
@@ -133,7 +119,7 @@ public class DataIndexImporter implements IClassImporter {
 						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
 					}
 				} catch (final ParseException ex) {
-					if (s.equals(EXPRESSION) == false) {
+					if (s.equals(NAME) == false && s.equals(EXPRESSION) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
 					}
 				}
@@ -151,37 +137,51 @@ public class DataIndexImporter implements IClassImporter {
 			}
 		}
 
+		context.registerNamedObject(result);
+
 		return Collections.singleton((EObject) result);
 	}
 
 	@Override
 	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-		for (final EObject o : objects) {
-			if (o instanceof DataIndex) {
-				final DataIndex<Number> i = (DataIndex) o;
-				// Date sort columns
+		for (final EObject obj : objects) {
+
+			CharterIndex charterIndex = (CharterIndex) obj;
+			Index<Integer> index = charterIndex.getData();
+
+			if (index instanceof DataIndex) {
+				final DataIndex<Integer> i = (DataIndex<Integer>) index;
+				// Date sort columns, nut keep "name" column at start
 				final Map<String, String> row = new TreeMap<String, String>(new Comparator<String>() {
 
 					@Override
 					public int compare(final String o1, final String o2) {
 
+						// Always sort name column first
+						if (NAME.equals(o1) && NAME.equals(o2)) {
+							return 0;
+						}
+						if (NAME.equals(o1)) {
+							return -1;
+						} else if (NAME.equals(o2)) {
+							return 1;
+						}
+
 						return o1.compareTo(o2);
 					}
 				});
-				for (final IndexPoint<Number> pt : i.getPoints()) {
-					final Number n = pt.getValue();
+				row.put(NAME, charterIndex.getName());
+				for (final IndexPoint<Integer> pt : i.getPoints()) {
+					final Integer n = pt.getValue();
 					final Date dt = pt.getDate();
-					if (n instanceof Integer) {
-						row.put(shortDate.format(dt), String.format("%d", n));
-					} else {
-						row.put(shortDate.format(dt), n.toString());
-					}
+					row.put(shortDate.format(dt), String.format("%d", n));
 				}
 				result.add(row);
-			} else if (o instanceof DerivedIndex) {
-				final DerivedIndex<Number> derived = (DerivedIndex<Number>) o;
+			} else if (obj instanceof DerivedIndex) {
+				final DerivedIndex<Integer> derived = (DerivedIndex<Integer>) obj;
 				final Map<String, String> row = new LinkedHashMap<String, String>();
+				row.put(NAME, charterIndex.getName());
 				row.put(EXPRESSION, derived.getExpression());
 				result.add(row);
 			}

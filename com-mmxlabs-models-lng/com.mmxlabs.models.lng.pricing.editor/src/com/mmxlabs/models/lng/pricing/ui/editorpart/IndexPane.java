@@ -60,8 +60,11 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	private boolean useIntegers;
 
-	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+	private final EReference indexFeature;
+
+	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars, final EReference indexFeature) {
 		super(page, part, location, actionBars);
+		this.indexFeature = indexFeature;
 
 	}
 
@@ -80,7 +83,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					return "Data";
 				}
 			}
-		});
+		}, indexFeature);
 		addNameManipulator("Name");
 
 		// addTypicalColumn("Content", new IndexValueManipulator());
@@ -182,7 +185,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		ScenarioTableViewer result = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
+		final ScenarioTableViewer result = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
@@ -196,11 +199,19 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 
 					if (obj instanceof List) {
-						final List<Index<?>> indexCurve = (List<Index<?>>) obj;
+						final List<EObject> indexObjects = (List<EObject>) obj;
 
 						Date minDate = null;
 						Date maxDate = null;
-						for (final Index<?> idx : indexCurve) {
+
+						for (final EObject indexObject : indexObjects) {
+
+							if (!indexObject.eIsSet(indexFeature)) {
+								continue;
+							}
+
+							final Index<?> idx = (Index<?>) indexObject.eGet(indexFeature);
+
 							if (!(idx instanceof DataIndex<?>)) {
 								continue;
 							}
@@ -216,10 +227,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 						}
 
 						if (minDate != null && maxDate != null) {
-							Grid grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
-							int columnCount = grid.getColumnCount();
+							final Grid grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+							final int columnCount = grid.getColumnCount();
 							for (int i = columnCount - 1; i > 1; i--) {
-								GridColumn column = grid.getColumn(i);
+								final GridColumn column = grid.getColumn(i);
 								column.dispose();
 							}
 							final Calendar c = Calendar.getInstance();
@@ -272,7 +283,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 
 					@Override
-					public Comparable getComparable(final Object element) {
+					public Comparable getComparable(Object element) {
+
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eIsSet(indexFeature)) {
+								element = eObject.eGet(indexFeature);
+							}
+						}
+
 						if (element instanceof DataIndex) {
 							final DataIndex<?> idx = (DataIndex<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");
@@ -293,8 +313,14 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 					@SuppressWarnings("unchecked")
 					@Override
-					public void setValue(final Object element, final Object value) {
-
+					public void setValue(Object element, final Object value) {
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eIsSet(indexFeature)) {
+								element = eObject.eGet(indexFeature);
+							}
+						}
 						if (element instanceof DataIndex) {
 							final Date colDate = (Date) col.getColumn().getData("date");
 
@@ -341,7 +367,15 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 
 					@Override
-					public Object getValue(final Object element) {
+					public Object getValue(Object element) {
+
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eIsSet(indexFeature)) {
+								element = eObject.eGet(indexFeature);
+							}
+						}
 						if (element instanceof DataIndex) {
 							final DataIndex<?> idx = (DataIndex<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");
@@ -375,7 +409,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 
 					@Override
-					public boolean canEdit(final Object element) {
+					public boolean canEdit(Object element) {
+
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eIsSet(indexFeature)) {
+								element = eObject.eGet(indexFeature);
+							}
+						}
+
 						return (element instanceof DataIndex<?>);
 					}
 				};
@@ -411,8 +454,14 @@ public class IndexPane extends ScenarioTableViewerPane {
 				col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
 
 					@Override
-					public String getText(final Object element) {
-
+					public String getText(Object element) {
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eIsSet(indexFeature)) {
+								element = eObject.eGet(indexFeature);
+							}
+						}
 						if (element instanceof DataIndex) {
 							final DataIndex<?> idx = (DataIndex<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");

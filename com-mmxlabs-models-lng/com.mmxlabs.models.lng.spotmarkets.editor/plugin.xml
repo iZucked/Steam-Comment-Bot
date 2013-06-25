@@ -150,7 +150,7 @@
           factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
           id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.CharterCostModel"
-          referenceEClass="com.mmxlabs.models.lng.pricing.Index">
+          referenceEClass="com.mmxlabs.models.lng.pricing.CharterIndex">
     </valueProvider>
  </extension>
  <extension

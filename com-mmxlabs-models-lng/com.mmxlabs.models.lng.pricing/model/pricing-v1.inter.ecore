@@ -4,9 +4,11 @@
     nsPrefix="lng.pricing">
   <eClassifiers xsi:type="ecore:EClass" name="PricingModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="commodityIndices" upperBound="-1"
-        eType="#//CommodityIndex" containment="true"/>
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterIndices" upperBound="-1"
-        eType="#//CharterIndex" containment="true"/>
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fleetCost" lowerBound="1"
         eType="#//FleetCostModel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="routeCosts" upperBound="-1"
@@ -43,7 +45,7 @@
       <eGenericType eTypeParameter="#//IndexPoint/Value"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true">
+  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eTypeParameters name="Value"/>
     <eOperations name="getValueForMonth" lowerBound="1">
       <eGenericType eTypeParameter="#//Index/Value"/>
@@ -105,7 +107,7 @@
         <eTypeArguments eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1" eType="#//CommodityIndex"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommodityIndex" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="data" containment="true">

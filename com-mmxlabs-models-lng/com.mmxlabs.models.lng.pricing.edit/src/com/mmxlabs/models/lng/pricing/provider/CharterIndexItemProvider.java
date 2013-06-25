@@ -1,36 +1,43 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
+
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.DataIndex} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.CharterIndex} object.
  * <!-- begin-user-doc -->
+ * @since 5.0
  * <!-- end-user-doc -->
  * @generated
  */
-public class DataIndexItemProvider
-	extends IndexItemProvider
+public class CharterIndexItemProvider
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -43,7 +50,7 @@ public class DataIndexItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DataIndexItemProvider(AdapterFactory adapterFactory) {
+	public CharterIndexItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -58,8 +65,31 @@ public class DataIndexItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addUuidPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Uuid feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUuidPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UUIDObject_uuid_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UUIDObject_uuid_feature", "_UI_UUIDObject_type"),
+				 MMXCorePackage.Literals.UUID_OBJECT__UUID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -74,7 +104,7 @@ public class DataIndexItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.DATA_INDEX__POINTS);
+			childrenFeatures.add(PricingPackage.Literals.CHARTER_INDEX__DATA);
 		}
 		return childrenFeatures;
 	}
@@ -93,14 +123,14 @@ public class DataIndexItemProvider
 	}
 
 	/**
-	 * This returns DataIndex.gif.
+	 * This returns CharterIndex.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/DataIndex"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CharterIndex"));
 	}
 
 	/**
@@ -111,7 +141,10 @@ public class DataIndexItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_DataIndex_type");
+		String label = ((CharterIndex)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_CharterIndex_type") :
+			getString("_UI_CharterIndex_type") + " " + label;
 	}
 
 	/**
@@ -125,8 +158,11 @@ public class DataIndexItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(DataIndex.class)) {
-			case PricingPackage.DATA_INDEX__POINTS:
+		switch (notification.getFeatureID(CharterIndex.class)) {
+			case PricingPackage.CHARTER_INDEX__UUID:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case PricingPackage.CHARTER_INDEX__DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -146,8 +182,13 @@ public class DataIndexItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.DATA_INDEX__POINTS,
-				 PricingFactory.eINSTANCE.createIndexPoint()));
+				(PricingPackage.Literals.CHARTER_INDEX__DATA,
+				 PricingFactory.eINSTANCE.createDataIndex()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.CHARTER_INDEX__DATA,
+				 PricingFactory.eINSTANCE.createDerivedIndex()));
 	}
 
 }

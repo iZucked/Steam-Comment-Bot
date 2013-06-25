@@ -18,9 +18,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInPrice" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.pricing/model/pricing.ecore#//CharterIndex"/>
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutPrice" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.pricing/model/pricing.ecore#//CharterIndex"/>
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotCharterCount" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCharterOutDuration"

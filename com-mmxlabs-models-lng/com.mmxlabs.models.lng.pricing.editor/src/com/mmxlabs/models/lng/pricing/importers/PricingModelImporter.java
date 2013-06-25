@@ -18,6 +18,8 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -57,15 +59,12 @@ public class PricingModelImporter implements ISubmodelImporter {
 	@Inject
 	private IImporterRegistry importerRegistry;
 
-	private IClassImporter dataIndexImporter;
+	private IClassImporter commodityIndexImporter;
+	private IClassImporter charterIndexImporter;
 
 	private IClassImporter cooldownPriceImporter;
 
 	private IClassImporter portCostImporter;
-
-	private IClassImporter spotCargoMarketImporter;
-
-	private IClassImporter spotCargoMarketAvailabilityImporter;
 
 	/**
 	 * @since 2.0
@@ -82,7 +81,8 @@ public class PricingModelImporter implements ISubmodelImporter {
 	@Inject
 	private void registryInit() {
 		if (importerRegistry != null) {
-			dataIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getDataIndex());
+			commodityIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCommodityIndex());
+			charterIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCharterIndex());
 			cooldownPriceImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
 			portCostImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPortCost());
 		}
@@ -172,24 +172,18 @@ public class PricingModelImporter implements ISubmodelImporter {
 	}
 
 	private void importCommodityCurves(final PricingModel pricing, final CSVReader csvReader, final IImportContext context) {
-		if (dataIndexImporter instanceof DataIndexImporter) {
-			((DataIndexImporter) dataIndexImporter).setParseAsInt(false);
-		}
-		pricing.getCommodityIndices().addAll((Collection<? extends Index<Double>>) dataIndexImporter.importObjects(PricingPackage.eINSTANCE.getDataIndex(), csvReader, context));
+		pricing.getCommodityIndices().addAll((Collection<? extends CommodityIndex>) commodityIndexImporter.importObjects(PricingPackage.eINSTANCE.getCommodityIndex(), csvReader, context));
 	}
 
 	private void importCharterCurves(final PricingModel pricing, final CSVReader csvReader, final IImportContext context) {
-		if (dataIndexImporter instanceof DataIndexImporter) {
-			((DataIndexImporter) dataIndexImporter).setParseAsInt(true);
-		}
-		pricing.getCharterIndices().addAll((Collection<? extends Index<Integer>>) dataIndexImporter.importObjects(PricingPackage.eINSTANCE.getDataIndex(), csvReader, context));
+		pricing.getCharterIndices().addAll((Collection<? extends CharterIndex>) charterIndexImporter.importObjects(PricingPackage.eINSTANCE.getCharterIndex(), csvReader, context));
 	}
 
 	@Override
 	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
 		final PricingModel pricing = (PricingModel) model;
-		output.put(PRICE_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCommodityIndices(), root));
-		output.put(CHARTER_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCharterIndices(), root));
+		output.put(PRICE_CURVE_KEY, commodityIndexImporter.exportObjects(pricing.getCommodityIndices(), root));
+		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterIndices(), root));
 		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(pricing.getCooldownPrices(), root));
 		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(pricing.getPortCosts(), root));
 	}

@@ -127,6 +127,14 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createCooldownPriceAdapter();
 			}
 			@Override
+			public Adapter caseCommodityIndex(CommodityIndex object) {
+				return createCommodityIndexAdapter();
+			}
+			@Override
+			public Adapter caseCharterIndex(CharterIndex object) {
+				return createCharterIndexAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -309,6 +317,36 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCooldownPriceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CommodityIndex <em>Commodity Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CommodityIndex
+	 * @generated
+	 */
+	public Adapter createCommodityIndexAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CharterIndex <em>Charter Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CharterIndex
+	 * @generated
+	 */
+	public Adapter createCharterIndexAdapter() {
 		return null;
 	}
 

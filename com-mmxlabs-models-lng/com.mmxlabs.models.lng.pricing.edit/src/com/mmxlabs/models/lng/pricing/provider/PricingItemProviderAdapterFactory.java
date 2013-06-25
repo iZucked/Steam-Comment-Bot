@@ -318,6 +318,54 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CommodityIndex} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommodityIndexItemProvider commodityIndexItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CommodityIndex}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommodityIndexAdapter() {
+		if (commodityIndexItemProvider == null) {
+			commodityIndexItemProvider = new CommodityIndexItemProvider(this);
+		}
+
+		return commodityIndexItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CharterIndex} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterIndexItemProvider charterIndexItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CharterIndex}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterIndexAdapter() {
+		if (charterIndexItemProvider == null) {
+			charterIndexItemProvider = new CharterIndexItemProvider(this);
+		}
+
+		return charterIndexItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -456,6 +504,8 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (portCostItemProvider != null) portCostItemProvider.dispose();
 		if (portCostEntryItemProvider != null) portCostEntryItemProvider.dispose();
 		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();
+		if (commodityIndexItemProvider != null) commodityIndexItemProvider.dispose();
+		if (charterIndexItemProvider != null) charterIndexItemProvider.dispose();
 	}
 
 }

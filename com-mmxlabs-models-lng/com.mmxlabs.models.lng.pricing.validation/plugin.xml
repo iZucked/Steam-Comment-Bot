@@ -56,7 +56,7 @@
                   {0}
                </message>
                <target
-                     class="Index">
+                     class="CommodityIndex">
                </target>
             </constraint>
             <constraint
