@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.MonthYear;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -106,11 +107,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				final List<IndexExposureData> output = new ArrayList<IndexExposureData>();
 
 				PricingModel pm = rootObject.getPricingModel();
-				EList<Index<Double>> indices = pm.getCommodityIndices();
+				EList<CommodityIndex> indices = pm.getCommodityIndices();
 
 				overallExposures.clear();
 
-				for (Index<Double> index : indices) {
+				for (CommodityIndex index : indices) {
 					Map<MonthYear, Double> exposures = Exposures.getExposuresByMonth(schedule, index);
 					overallExposures.put(index.getName(), exposures);
 					output.add(new IndexExposureData(index.getName(), exposures));

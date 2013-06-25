@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 
 /**
@@ -26,14 +27,14 @@ import com.mmxlabs.models.lng.pricing.Index;
 public class ExposuresTest {
 	public void testPriceExpressionExposureCoefficient(String expression, String indexName, double expected) {
 		@SuppressWarnings("rawtypes")
-		Index index = mock(Index.class);
+		CommodityIndex index = mock(CommodityIndex.class);
 		when(index.getName()).thenReturn(indexName);
 
 		double actual = Exposures.getExposureCoefficient(expression, index);
 		Assert.assertEquals(expected, actual, 0.000000001);
 	}
 
-	public void testSlotExposureCoefficient(String slotPriceExpression, LNGPriceCalculatorParameters priceInfo, Index index, double expected) {
+	public void testSlotExposureCoefficient(String slotPriceExpression, LNGPriceCalculatorParameters priceInfo, CommodityIndex index, double expected) {
 		Slot slot = mock(Slot.class);
 		Contract contract = mock(Contract.class);
 		when(slot.getContract()).thenReturn(contract);
@@ -70,9 +71,9 @@ public class ExposuresTest {
 		String slotPriceExpression = String.format("%f * %s + 2 * %s - 2", slotCoefficient, indexName, redHerringName);
 
 		// set up mock indices
-		Index index = mock(Index.class);
+		CommodityIndex index = mock(CommodityIndex.class);
 		when(index.getName()).thenReturn(indexName);
-		Index otherIndex = mock(Index.class);
+		CommodityIndex otherIndex = mock(CommodityIndex.class);
 		when(otherIndex.getName()).thenReturn(redHerringName);
 
 		// set up mock contracts
