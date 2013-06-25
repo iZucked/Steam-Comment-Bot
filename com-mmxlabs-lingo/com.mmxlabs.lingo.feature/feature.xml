@@ -60,10 +60,6 @@
          version="0.0.0"/>
 
    <includes
-         id="com.mmxlabs.models.lng.types.feature"
-         version="0.0.0"/>
-
-   <includes
          id="com.mmxlabs.models.migration.feature"
          version="0.0.0"/>
 
