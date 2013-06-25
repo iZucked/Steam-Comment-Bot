@@ -231,6 +231,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			// commandProviderAwareEditingDomain.setCommandProvidersDisabled(true);
 
 			commandProviderAwareEditingDomain.setAdaptersEnabled(false);
+			commandProviderAwareEditingDomain.startBatchCommand();
 		}
 
 		try {
@@ -282,6 +283,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			if (destEditingDomain instanceof CommandProviderAwareEditingDomain) {
 				final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) destEditingDomain;
 				// commandProviderAwareEditingDomain.setCommandProvidersDisabled(false);
+				commandProviderAwareEditingDomain.endBatchCommand();
 				commandProviderAwareEditingDomain.setAdaptersEnabled(true);
 			}
 		}
