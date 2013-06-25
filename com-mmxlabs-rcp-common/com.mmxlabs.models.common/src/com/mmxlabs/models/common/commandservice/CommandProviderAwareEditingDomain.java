@@ -100,6 +100,33 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		}
 	}
 
+	/**
+	 * Notify command providers that a new set of related command is about to be executed. Normally this is invoked as part of a command creation call along with a matching call to
+	 * {@link #endBatchCommand()}. External clients can manually invoked this pair of methods when multiple related commands are being created. The {@link BaseModelCommandProvider} keeps track of the
+	 * depth of these calls and will clear caches when the depth returns to zero. Clients can call this pair of method to avoid early cache clearing.
+	 * 
+	 * @since 3.1
+	 * 
+	 */
+	public void startBatchCommand() {
+		final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
+		for (final IModelCommandProvider provider : providers) {
+			provider.startCommandProvision();
+		}
+	}
+
+	/**
+	 * To be called after command creation as part of a pair of calls with {@link #startBatchCommand()}
+	 * 
+	 * @since 3.1
+	 */
+	public void endBatchCommand() {
+		final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
+		for (final IModelCommandProvider provider : providers) {
+			provider.endCommandProvision();
+		}
+	}
+
 	@Override
 	public Command createCommand(final Class<? extends Command> commandClass, final CommandParameter commandParameter) {
 		final Command normal = super.createCommand(commandClass, commandParameter);
@@ -108,11 +135,9 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 			final CompoundCommand wrapper = new CompoundCommand();
 			wrapper.append(normal);
 
-			final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
-			for (final IModelCommandProvider provider : providers) {
-				provider.startCommandProvision();
-			}
+			startBatchCommand();
 
+			final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
 			for (final IModelCommandProvider provider : providers) {
 				final Command addition = provider.provideAdditionalCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
 				if (addition != null) {
@@ -125,9 +150,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				}
 			}
 
-			for (final IModelCommandProvider provider : providers) {
-				provider.endCommandProvision();
-			}
+			endBatchCommand();
 
 			return wrapper.unwrap();
 		} else {
