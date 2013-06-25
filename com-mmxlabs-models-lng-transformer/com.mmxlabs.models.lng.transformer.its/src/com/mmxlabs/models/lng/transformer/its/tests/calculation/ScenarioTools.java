@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
@@ -369,12 +370,14 @@ public class ScenarioTools {
 		pc.setPriceInfo(purchaseParams);
 
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
-		final DataIndex<Double> sales = PricingFactory.eINSTANCE.createDataIndex();
+		final CommodityIndex sales = PricingFactory.eINSTANCE.createCommodityIndex();
+		final DataIndex<Double> salesData = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
 		IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
 		pt.setDate(new Date(0));
 		pt.setValue(0.0);
-		sales.getPoints().add(pt);
+		salesData.getPoints().add(pt);
+		sales.setData(salesData);
 		pricingModel.getCommodityIndices().add(sales);
 
 		sc.setEntity(e);
@@ -625,12 +628,14 @@ public class ScenarioTools {
 		pc.setPriceInfo(purchaseParams);
 
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
-		final DataIndex<Double> sales = PricingFactory.eINSTANCE.createDataIndex();
+		final CommodityIndex sales = PricingFactory.eINSTANCE.createCommodityIndex();
+		final DataIndex<Double> salesData = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
 		IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
 		pt.setDate(new Date(0));
 		pt.setValue(0.0);
-		sales.getPoints().add(pt);
+		salesData.getPoints().add(pt);
+		sales.setData(salesData);
 		pricingModel.getCommodityIndices().add(sales);
 
 		sc.setEntity(e);
@@ -789,7 +794,7 @@ public class ScenarioTools {
 			// FIXME: Update for API changes
 
 			for (final FuelAmount fa : fq.getAmounts()) {
-				System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost()  + " (unit price: " + fa.getUnitPrice() + ")");
+				System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost() + " (unit price: " + fa.getUnitPrice() + ")");
 			}
 			// System.err.println("\t" + fq.getFuel() + " " + fq.getAmounts(). + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 		}
@@ -848,11 +853,11 @@ public class ScenarioTools {
 				ScenarioTools.printFuel(sv.getFuels());
 				if (sv.getPortCost() > 0) {
 					System.err.println("\tPort cost: " + sv.getPortCost());
-					
+
 				}
 				if (sv.getHireCost() > 0) {
 					System.err.println("\tHire cost: " + sv.getHireCost());
-					
+
 				}
 			} else if (e instanceof Cooldown) {
 				final Cooldown cd = (Cooldown) e;
@@ -866,17 +871,16 @@ public class ScenarioTools {
 				System.err.println("\t" + e.getClass());
 				System.err.println("\tStart: " + e.getStart() + ", End: " + e.getEnd());
 			}
-			
+
 			// show any capacity violations
 			if (e instanceof CapacityViolationsHolder) {
 				EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) e).getViolations();
 				if (violations != null && !violations.isEmpty()) {
 					String violationString = null;
-					for (Map.Entry<CapacityViolationType, Long> entry: violations) {
+					for (Map.Entry<CapacityViolationType, Long> entry : violations) {
 						if (violationString == null) {
 							violationString = "\tCapacity violations: ";
-						}
-						else {
+						} else {
 							violationString += ", ";
 						}
 						violationString += String.format("%s (%d m3)", entry.getKey().getLiteral(), entry.getValue());
@@ -923,7 +927,7 @@ public class ScenarioTools {
 		manifestResource.getContents().add(manifest);
 
 		final URI relativeURI = URI.createURI("/rootObject.xmi");
-		
+
 		manifest.getModelURIs().add(relativeURI.toString());
 		final URI resolved = relativeURI.resolve(manifestURI);
 		final Resource r2 = resourceSet.createResource(resolved);

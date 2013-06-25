@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Assert;
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,8 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
@@ -205,7 +208,7 @@ public class DefaultScenarioCreator {
 			final PricingModel pricingModel = scenario.getPricingModel();
 			final PortModel portModel = scenario.getPortModel();
 
-			final DataIndex<Double> cooldownIndex = pricingCreator.createDefaultCommodityIndex("cooldown", value);
+			final CommodityIndex cooldownIndex = pricingCreator.createDefaultCommodityIndex("cooldown", value);
 
 			final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
 			price.setIndex(cooldownIndex);
@@ -216,7 +219,7 @@ public class DefaultScenarioCreator {
 
 			pricingModel.getCooldownPrices().add(price);
 		}
-		
+
 	}
 
 	/**
@@ -746,16 +749,20 @@ public class DefaultScenarioCreator {
 	}
 
 	public class DefaultPricingCreator {
-		public DataIndex<Double> createDefaultCommodityIndex(final String name, final Double value) {
-			final DataIndex<Double> result = createIndex(name, value);
+		public CommodityIndex createDefaultCommodityIndex(final String name, final Double value) {
+			final DataIndex<Double> result = createIndex(value);
 			final PricingModel pricingModel = scenario.getPricingModel();
 
-			pricingModel.getCommodityIndices().add(result);
+			CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
+			index.setName(name);
+			index.setData(result);
 
-			return result;
+			pricingModel.getCommodityIndices().add(index);
+
+			return index;
 		}
 
-		private <T> DataIndex<T> createIndex(final String name, final T value) {
+		private <T> DataIndex<T> createIndex(final T value) {
 			final IndexPoint<T> startPoint = PricingFactory.eINSTANCE.createIndexPoint();
 			final IndexPoint<T> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
 
@@ -778,40 +785,37 @@ public class DefaultScenarioCreator {
 			result.getVesselClasses().add(vc);
 			result.setMinCharterOutDuration(minDuration);
 			final String indexName = String.format("Charter-out cost for vessel class %s", vc.getName());
-			result.setCharterOutPrice(createIndex(indexName, price));
+			CharterIndex charterIndex = PricingFactory.eINSTANCE.createCharterIndex();
+			charterIndex.setName(indexName);
+			charterIndex.setData(createIndex(price));
+			result.setCharterOutPrice(charterIndex);
 
 			final SpotMarketsModel marketModel = scenario.getSpotMarketsModel();
 			marketModel.getCharteringSpotMarkets().add(result);
 
 			return result;
 		}
-		
+
 		public PortCost setPortCost(Port port, PortCapability activity, int cost) {
 			final PricingModel pricingModel = scenario.getPricingModel();
 
 			/*
-			 * // abortive code checking for an existing port cost based on the port specified
-			for (PortCost pc: pricingModel.getPortCosts()) {
-				final EList<APortSet<Port>> ports = pc.getPorts();
-				if (ports.size() == 1) {
-					final APortSet<Port> set = ports.get(0);
-					if (set)
-				}
-			}
-			*/
+			 * // abortive code checking for an existing port cost based on the port specified for (PortCost pc: pricingModel.getPortCosts()) { final EList<APortSet<Port>> ports = pc.getPorts(); if
+			 * (ports.size() == 1) { final APortSet<Port> set = ports.get(0); if (set) } }
+			 */
 			final PortCost result = PricingFactory.eINSTANCE.createPortCost();
 			result.getPorts().add(port);
 			pricingModel.getPortCosts().add(result);
-			
+
 			final PortCostEntry entry = PricingFactory.eINSTANCE.createPortCostEntry();
-			
+
 			entry.setActivity(activity);
 			entry.setCost(cost);
-			
+
 			result.getEntries().add(entry);
-			
+
 			return result;
-			
+
 		}
 	}
 
