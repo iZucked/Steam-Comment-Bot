@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="1"
+            latestVersion="-2"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -22,6 +22,13 @@
             context="com.mmxlabs.lingo"
             from="0"
             to="1">
+      </MigrationUnit>
+            <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV2"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV2"
+            context="com.mmxlabs.lingo"
+            from="1"
+            to="-2">
       </MigrationUnit>
    </extension>
    <extension
