@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
@@ -158,6 +159,27 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 			if (fobSaleGroup != null) {
 				fobSaleGroup.getMarkets().addAll(fobSaleMarkets);
 			}
+		}
+
+		if (spotMarketsModel.getDesPurchaseSpotMarket() == null) {
+			final SpotMarketGroup group = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+			group.setType(SpotType.DES_PURCHASE);
+			spotMarketsModel.setDesPurchaseSpotMarket(group);
+		}
+		if (spotMarketsModel.getDesSalesSpotMarket() == null) {
+			final SpotMarketGroup group = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+			group.setType(SpotType.DES_SALE);
+			spotMarketsModel.setDesSalesSpotMarket(group);
+		}
+		if (spotMarketsModel.getFobPurchasesSpotMarket() == null) {
+			final SpotMarketGroup group = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+			group.setType(SpotType.FOB_PURCHASE);
+			spotMarketsModel.setFobPurchasesSpotMarket(group);
+		}
+		if (spotMarketsModel.getFobSalesSpotMarket() == null) {
+			final SpotMarketGroup group = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+			group.setType(SpotType.FOB_SALE);
+			spotMarketsModel.setFobSalesSpotMarket(group);
 		}
 
 		return spotMarketsModel;
