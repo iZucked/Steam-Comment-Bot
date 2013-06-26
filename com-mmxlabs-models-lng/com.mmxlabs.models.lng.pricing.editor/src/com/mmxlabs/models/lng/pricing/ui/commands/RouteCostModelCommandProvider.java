@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.ui.commands;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,6 +64,10 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 		if (pricing == null) {
 			return null;
 		}
+
+		final Set<Object> objects = getAddedObjects();
+		objects.add(addedObject);
+
 		final List<RouteCost> extraCosts = new ArrayList<RouteCost>();
 		if (addedObject instanceof Route) {
 			if (((Route) addedObject).isCanal() == false)
@@ -75,6 +80,18 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 				}
 				extraCosts.add(createRouteCost((Route) addedObject, vesselClass));
 			}
+			// CHCEK
+			add_costs_for_new_route: for (final Object obj : objects) {
+				if (obj instanceof VesselClass) {
+					final VesselClass vesselClass = (VesselClass) obj;
+					for (final RouteCost routeCost : pricing.getRouteCosts()) {
+						if (routeCost.getVesselClass() == vesselClass && routeCost.getRoute() == addedObject)
+							continue add_costs_for_new_route;
+					}
+					extraCosts.add(createRouteCost((Route) addedObject, vesselClass));
+				}
+			}
+
 		} else if (addedObject instanceof VesselClass) {
 			final PortModel portModel = scenarioModel.getPortModel();
 			add_costs_for_new_vc: for (final Route route : portModel.getRoutes()) {
@@ -85,6 +102,20 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 				if (route.isCanal())
 					extraCosts.add(createRouteCost(route, (VesselClass) addedObject));
 			}
+
+			// CHCEK
+			add_costs_for_new_vc: for (final Object obj : objects) {
+				if (obj instanceof Route) {
+					final Route route = (Route) obj;
+					for (final RouteCost routeCost : pricing.getRouteCosts()) {
+						if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)
+							continue add_costs_for_new_vc;
+					}
+					if (route.isCanal())
+						extraCosts.add(createRouteCost(route, (VesselClass) addedObject));
+				}
+			}
+
 		}
 		if (extraCosts.isEmpty()) {
 			return null;
@@ -118,4 +149,13 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 			return DeleteCommand.create(domain, deletedCosts);
 	}
 
+	private Set<Object> getAddedObjects() {
+		final Object obj = getContext();
+		if (obj instanceof Set) {
+			return (Set<Object>) obj;
+		}
+		final Set<Object> objects = new HashSet<Object>();
+		setContext(objects);
+		return objects;
+	}
 }

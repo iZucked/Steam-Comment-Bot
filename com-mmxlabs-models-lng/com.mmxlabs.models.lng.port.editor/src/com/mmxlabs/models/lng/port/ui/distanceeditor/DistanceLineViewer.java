@@ -76,7 +76,7 @@ public class DistanceLineViewer extends GridTableViewer {
 		setContentProvider(new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				
+
 			}
 
 			@Override
@@ -237,15 +237,15 @@ public class DistanceLineViewer extends GridTableViewer {
 					return true;
 				}
 			});
-
-			setRowHeaderLabelProvider(new CellLabelProvider() {
-				@Override
-				public void update(final ViewerCell cell) {
-					final Object element = cell.getElement();
-					cell.setText(((Pair<Port, Map<Port, RouteLine>>) element).getFirst().getName());
-
-				}
-			});
 		}
+
+		setRowHeaderLabelProvider(new CellLabelProvider() {
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText(((Pair<Port, Map<Port, RouteLine>>) element).getFirst().getName());
+
+			}
+		});
 	}
 }

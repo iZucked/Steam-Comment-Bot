@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -247,7 +248,7 @@ public class Exposures {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static double getExposureCoefficient(final Node node, final Index index) {
+	private static double getExposureCoefficient(final Node node, final CommodityIndex index) {
 		final String indexToken = index.getName();
 
 		if (node.token.equals("+")) {
@@ -278,7 +279,10 @@ public class Exposures {
 
 	}
 
-	public static double getExposureCoefficient(final String priceExpression, final Index<?> index) {
+	/**
+	 * @since 5.0
+	 */
+	public static double getExposureCoefficient(final String priceExpression, final CommodityIndex index) {
 		final RawTreeParser parser = new RawTreeParser();
 		try {
 			final IExpression<Node> parsed = parser.parse(priceExpression);
@@ -294,8 +298,9 @@ public class Exposures {
 	 * @param contract
 	 * @param index
 	 * @return
+	 * @since 5.0
 	 */
-	public static double getExposureCoefficient(final Slot slot, final Index<?> index) {
+	public static double getExposureCoefficient(final Slot slot, final CommodityIndex index) {
 		String priceExpression = null;
 		if (slot.isSetPriceExpression()) {
 			priceExpression = slot.getPriceExpression();
@@ -328,8 +333,9 @@ public class Exposures {
 	 * @param schedule
 	 * @param index
 	 * @return
+	 * @since 5.0
 	 */
-	public static Map<MonthYear, Double> getExposuresByMonth(final Schedule schedule, final Index<?> index) {
+	public static Map<MonthYear, Double> getExposuresByMonth(final Schedule schedule, final CommodityIndex index) {
 		final CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();
 
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {

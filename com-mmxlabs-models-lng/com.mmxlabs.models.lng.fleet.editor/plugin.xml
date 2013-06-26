@@ -278,5 +278,9 @@
           commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider"
           id="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider">
     </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider"
+          id="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider">
+    </ModelCommandProvider>
  </extension>
 </plugin>

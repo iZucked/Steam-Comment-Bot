@@ -262,7 +262,7 @@ public class CargoEditorMenuHelper {
 			if (cargo.getSlots().size() > 2) {
 				newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
 			}
-			newMenuManager.add(new EditAction("Edit Cargo", cargo));
+			// newMenuManager.add(new EditAction("Edit Cargo", cargo));
 		}
 	}
 

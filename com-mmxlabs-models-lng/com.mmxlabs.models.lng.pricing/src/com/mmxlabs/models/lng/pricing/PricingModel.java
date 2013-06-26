@@ -31,7 +31,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public interface PricingModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Commodity Indices</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.Index}&lt;java.lang.Double>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CommodityIndex}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Commodity Indices</em>' containment reference list isn't clear,
@@ -40,14 +40,14 @@ public interface PricingModel extends UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Commodity Indices</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CommodityIndices()
-	 * @model type="com.mmxlabs.models.lng.pricing.Index<org.eclipse.emf.ecore.EDoubleObject>" containment="true"
+	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Index<Double>> getCommodityIndices();
+	EList<CommodityIndex> getCommodityIndices();
 
 	/**
 	 * Returns the value of the '<em><b>Charter Indices</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.Index}&lt;java.lang.Integer>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.CharterIndex}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Charter Indices</em>' containment reference list isn't clear,
@@ -56,10 +56,10 @@ public interface PricingModel extends UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Indices</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_CharterIndices()
-	 * @model type="com.mmxlabs.models.lng.pricing.Index<org.eclipse.emf.ecore.EIntegerObject>" containment="true"
+	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Index<Integer>> getCharterIndices();
+	EList<CharterIndex> getCharterIndices();
 
 	/**
 	 * Returns the value of the '<em><b>Fleet Cost</b></em>' containment reference.

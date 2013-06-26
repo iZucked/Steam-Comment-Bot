@@ -66,13 +66,13 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
 		final SashForm sash2 = new SashForm(sash, SWT.VERTICAL);
 
-		commodityPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		commodityPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), PricingPackage.eINSTANCE.getCommodityIndex_Data());
 		commodityPane.createControl(sash2);
 		commodityPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 		commodityPane.getViewer().setInput(modelObject);
 		commodityPane.defaultSetTitle("Commodity Indices");
 
-		charterIndicesPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		charterIndicesPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), PricingPackage.eINSTANCE.getCharterIndex_Data());
 		charterIndicesPane.setUseIntegers(true);
 		charterIndicesPane.createControl(sash2);
 		charterIndicesPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CharterIndices()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());

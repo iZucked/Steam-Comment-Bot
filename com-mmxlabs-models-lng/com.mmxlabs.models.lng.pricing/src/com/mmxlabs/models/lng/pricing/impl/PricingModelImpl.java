@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -50,7 +52,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Index<Double>> commodityIndices;
+	protected EList<CommodityIndex> commodityIndices;
 
 	/**
 	 * The cached value of the '{@link #getCharterIndices() <em>Charter Indices</em>}' containment reference list.
@@ -60,7 +62,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Index<Integer>> charterIndices;
+	protected EList<CharterIndex> charterIndices;
 
 	/**
 	 * The cached value of the '{@link #getFleetCost() <em>Fleet Cost</em>}' containment reference.
@@ -126,9 +128,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Index<Double>> getCommodityIndices() {
+	public EList<CommodityIndex> getCommodityIndices() {
 		if (commodityIndices == null) {
-			commodityIndices = new EObjectContainmentEList<Index<Double>>(Index.class, this, PricingPackage.PRICING_MODEL__COMMODITY_INDICES);
+			commodityIndices = new EObjectContainmentEList<CommodityIndex>(CommodityIndex.class, this, PricingPackage.PRICING_MODEL__COMMODITY_INDICES);
 		}
 		return commodityIndices;
 	}
@@ -138,9 +140,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Index<Integer>> getCharterIndices() {
+	public EList<CharterIndex> getCharterIndices() {
 		if (charterIndices == null) {
-			charterIndices = new EObjectContainmentEList<Index<Integer>>(Index.class, this, PricingPackage.PRICING_MODEL__CHARTER_INDICES);
+			charterIndices = new EObjectContainmentEList<CharterIndex>(CharterIndex.class, this, PricingPackage.PRICING_MODEL__CHARTER_INDICES);
 		}
 		return charterIndices;
 	}
@@ -283,11 +285,11 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 		switch (featureID) {
 			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
 				getCommodityIndices().clear();
-				getCommodityIndices().addAll((Collection<? extends Index<Double>>)newValue);
+				getCommodityIndices().addAll((Collection<? extends CommodityIndex>)newValue);
 				return;
 			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
 				getCharterIndices().clear();
-				getCharterIndices().addAll((Collection<? extends Index<Integer>>)newValue);
+				getCharterIndices().addAll((Collection<? extends CharterIndex>)newValue);
 				return;
 			case PricingPackage.PRICING_MODEL__FLEET_COST:
 				setFleetCost((FleetCostModel)newValue);

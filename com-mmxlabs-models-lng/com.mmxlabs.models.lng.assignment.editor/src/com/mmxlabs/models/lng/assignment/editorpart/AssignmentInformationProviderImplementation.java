@@ -126,7 +126,11 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 				} else {
 					secondLine += " to ";
 				}
-				secondLine += slot.getPort().getName();
+				if (slot.getPort() != null) {
+					secondLine += slot.getPort().getName();
+				} else {
+					secondLine += "(Not Specified)";
+				}
 				first = false;
 			}
 		} else if (task instanceof VesselEvent) {

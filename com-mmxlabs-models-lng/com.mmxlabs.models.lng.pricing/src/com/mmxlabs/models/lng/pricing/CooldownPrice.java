@@ -50,24 +50,26 @@ public interface CooldownPrice extends MMXObject {
 	 * If the meaning of the '<em>Index</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Index</em>' reference.
-	 * @see #setIndex(Index)
+	 * @see #setIndex(CommodityIndex)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCooldownPrice_Index()
-	 * @model type="com.mmxlabs.models.lng.pricing.Index<org.eclipse.emf.ecore.EDoubleObject>" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
-	Index<Double> getIndex();
+	CommodityIndex getIndex();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getIndex <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Index</em>' reference.
 	 * @see #getIndex()
 	 * @generated
 	 */
-	void setIndex(Index<Double> value);
+	void setIndex(CommodityIndex value);
 
 } // end of  CooldownPrice
 

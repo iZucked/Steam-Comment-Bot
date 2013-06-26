@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -91,18 +92,19 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 			final MMXRootObject rootObject = extraValidationContext.getRootObject();
 
 			if (rootObject instanceof LNGScenarioModel) {
-				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final SeriesParser indices = new SeriesParser();
 
 				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
-				for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+				for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
+					final Index<Double> index = commodityIndex.getData();
 					if (index instanceof DataIndex) {
 						// For this validation, we do not need real times or values
 						final int[] times = new int[1];
 						final Number[] nums = new Number[1];
-						indices.addSeriesData(index.getName(), times, nums);
+						indices.addSeriesData(commodityIndex.getName(), times, nums);
 					} else if (index instanceof DerivedIndex) {
-						indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+						indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
 					}
 				}
 				return indices;

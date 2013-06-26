@@ -37,7 +37,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
 public class SharedDataScenariosSelectionPage extends WizardPage {
 
 	public enum DataOptions {
-		PortData("Port Data"), FleetDatabase("Fleet");
+		PortData("Port"), FleetDatabase("Fleet"), CommercialData("Commercial"), PricingData("Price Curves");
 
 		private DataOptions(final String name) {
 			this.name = name;

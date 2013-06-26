@@ -85,6 +85,10 @@ public class CargoOverlapConstraint extends AbstractModelMultiConstraint {
 					final Date otherStartDate = getDate(elementAssignment.getAssignedObject(), true);
 					final Date otherEndDate = getDate(elementAssignment.getAssignedObject(), false);
 
+					if (otherEndDate == null || otherStartDate == null) {
+						continue;
+					}
+					
 					boolean overlap = false;
 					if (startDate.after(otherStartDate) && endDate.before(otherEndDate)) {
 						overlap = true;

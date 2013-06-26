@@ -4,17 +4,9 @@
     nsPrefix="lng.pricing">
   <eClassifiers xsi:type="ecore:EClass" name="PricingModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="commodityIndices" upperBound="-1"
-        containment="true">
-      <eGenericType eClassifier="#//Index">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
-      </eGenericType>
-    </eStructuralFeatures>
+        eType="#//CommodityIndex" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterIndices" upperBound="-1"
-        containment="true">
-      <eGenericType eClassifier="#//Index">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
-      </eGenericType>
-    </eStructuralFeatures>
+        eType="#//CharterIndex" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fleetCost" lowerBound="1"
         eType="#//FleetCostModel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="routeCosts" upperBound="-1"
@@ -51,7 +43,7 @@
       <eGenericType eTypeParameter="#//IndexPoint/Value"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eTypeParameters name="Value"/>
     <eOperations name="getValueForMonth" lowerBound="1">
       <eGenericType eTypeParameter="#//Index/Value"/>
@@ -113,9 +105,19 @@
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1" eType="#//CommodityIndex"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommodityIndex" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="data" containment="true">
       <eGenericType eClassifier="#//Index">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterIndex" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="data" containment="true">
+      <eGenericType eClassifier="#//Index">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>

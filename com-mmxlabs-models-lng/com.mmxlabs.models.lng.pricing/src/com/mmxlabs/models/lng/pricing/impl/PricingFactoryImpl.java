@@ -78,6 +78,8 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORT_COST: return createPortCost();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
+			case PricingPackage.COMMODITY_INDEX: return createCommodityIndex();
+			case PricingPackage.CHARTER_INDEX: return createCharterIndex();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -181,6 +183,28 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public CooldownPrice createCooldownPrice() {
 		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
 		return cooldownPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CommodityIndex createCommodityIndex() {
+		CommodityIndexImpl commodityIndex = new CommodityIndexImpl();
+		return commodityIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterIndex createCharterIndex() {
+		CharterIndexImpl charterIndex = new CharterIndexImpl();
+		return charterIndex;
 	}
 
 	/**

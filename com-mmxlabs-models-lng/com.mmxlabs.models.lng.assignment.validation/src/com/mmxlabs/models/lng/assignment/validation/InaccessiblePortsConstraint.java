@@ -48,7 +48,10 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 					final Vessel vessel = (Vessel) assignment;
 					inaccessiblePorts = vessel.getInaccessiblePorts();
 					if (inaccessiblePorts.isEmpty()) {
-						inaccessiblePorts = vessel.getVesselClass().getInaccessiblePorts();
+						final VesselClass vesselClass = vessel.getVesselClass();
+						if (vesselClass != null) {
+							inaccessiblePorts = vesselClass.getInaccessiblePorts();
+						}
 					}
 				} else if (assignment instanceof VesselClass) {
 					final VesselClass vesselClass = (VesselClass) assignment;
