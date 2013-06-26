@@ -64,4 +64,9 @@ public class MarkToMarketLoadOption implements ILoadOption {
 		return markToMarket.getLoadPriceCalculator();
 	}
 
+	@Override
+	public int getPricingDate() {
+		return dischargeOption.getPricingDate();
+	}
+
 }
