@@ -248,11 +248,14 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselGroups()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels()));
 			}
 
 			if (dataOptions.contains(DataOptions.CommercialData)) {
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
 						CommercialPackage.eINSTANCE.getCommercialModel_Entities()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+						CommercialPackage.eINSTANCE.getCommercialModel_ShippingEntity()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
 						CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
