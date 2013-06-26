@@ -42,4 +42,6 @@ public interface IDischargeOption extends IPortSlot {
 	long getMaxCvValue();
 
 	ISalesPriceCalculator getDischargePriceCalculator();
+
+	int getPricingDate();
 }

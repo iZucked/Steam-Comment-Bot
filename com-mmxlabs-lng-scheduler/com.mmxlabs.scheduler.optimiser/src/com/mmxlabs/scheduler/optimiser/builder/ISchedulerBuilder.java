@@ -424,12 +424,12 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet,
-			boolean cooldownForbidden, boolean slotIsOptional);
+			boolean cooldownForbidden, int pricingDate, boolean slotIsOptional);
 
 	/**
 	 * @since 2.0
 	 */
-	ILoadOption createDESPurchaseLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, boolean slotIsOptional);
+	ILoadOption createDESPurchaseLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int pricingDate, boolean slotIsOptional);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -447,7 +447,7 @@ public interface ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue, ISalesPriceCalculator pricePerMMBTu,
-			int durationHours, boolean optional);
+			int durationHours, int pricingDate, boolean optional);
 
 	/**
 	 * 
