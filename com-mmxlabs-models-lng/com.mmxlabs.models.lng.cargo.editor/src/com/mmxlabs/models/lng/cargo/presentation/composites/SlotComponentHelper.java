@@ -92,6 +92,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
 		add_optionalEditor(detailComposite, topClass);
+		add_pricingDateEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -108,6 +109,19 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		} else {
 			editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START);
 		}
+		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
+	}
+
+	/**
+	 * Create the editor for the pricingDate feature on Slot
+	 * 
+	 * @generated NOT
+	 */
+	protected void add_pricingDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+
+		final IInlineEditor editor;
+		editor = new DateInlineEditor(CargoPackage.Literals.SLOT__PRICING_DATE, new DateTimeFormatter("MM/yyyy"));
 		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
