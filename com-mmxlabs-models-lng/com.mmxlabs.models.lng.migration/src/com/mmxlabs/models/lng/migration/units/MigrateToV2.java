@@ -12,15 +12,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xml.type.AnyType;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
@@ -73,6 +73,9 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 
 		// This should get the cached loader instance
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+
+		fixSpotMarketGroups(loader, model);
+
 		// Update commodity indicies
 		updateIndices(loader, model, "CommodityIndex", "commodityIndices");
 		// Update charter indicies
@@ -80,6 +83,50 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 
 		// Clear all Index objects name and UUID fields
 		clearIndexFields(loader, model);
+
+	}
+
+	private void fixSpotMarketGroups(MetamodelLoader loader, EObject model) {
+
+		final EPackage scenarioModelPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EClass lngScenarioModel_Class = MetamodelUtils.getEClass(scenarioModelPackage, "LNGScenarioModel");
+		final EReference lngScenarioModel_spotMarketsModel_Reference = MetamodelUtils.getReference(lngScenarioModel_Class, "spotMarketsModel");
+
+		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+
+		final EClass spotMarketsModel_Class = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketsModel");
+		final EClass SpotMarketGroup_Class = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketGroup");
+		final EEnum SpotType_Enum = MetamodelUtils.getEEnum(spotMarketsPackage, "SpotType");
+
+		final EReference spotMarketsModel_desPurchases_group = MetamodelUtils.getReference(spotMarketsModel_Class, "desPurchaseSpotMarket");
+		final EReference spotMarketsModel_desSales_group = MetamodelUtils.getReference(spotMarketsModel_Class, "desSalesSpotMarket");
+		final EReference spotMarketsModel_fobPurchases_group = MetamodelUtils.getReference(spotMarketsModel_Class, "fobPurchasesSpotMarket");
+		final EReference spotMarketsModel_fobSales_group = MetamodelUtils.getReference(spotMarketsModel_Class, "fobSalesSpotMarket");
+
+		final EAttribute spotMarketsGroup_type = MetamodelUtils.getAttribute(SpotMarketGroup_Class, "type");
+
+		EObject spotMarketsModel = (EObject) model.eGet(lngScenarioModel_spotMarketsModel_Reference);
+
+		if (spotMarketsModel.eGet(spotMarketsModel_desPurchases_group) == null) {
+			EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
+			group.eSet(spotMarketsGroup_type, MetamodelUtils.getEEnum_Literal(SpotType_Enum, "DESPurchase"));
+			spotMarketsModel.eSet(spotMarketsModel_desPurchases_group, group);
+		}
+		if (spotMarketsModel.eGet(spotMarketsModel_desSales_group) == null) {
+			EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
+			group.eSet(spotMarketsGroup_type, MetamodelUtils.getEEnum_Literal(SpotType_Enum, "DESSale"));
+			spotMarketsModel.eSet(spotMarketsModel_desSales_group, group);
+		}
+		if (spotMarketsModel.eGet(spotMarketsModel_fobPurchases_group) == null) {
+			EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
+			group.eSet(spotMarketsGroup_type, MetamodelUtils.getEEnum_Literal(SpotType_Enum, "FOBPurchase"));
+			spotMarketsModel.eSet(spotMarketsModel_fobPurchases_group, group);
+		}
+		if (spotMarketsModel.eGet(spotMarketsModel_fobSales_group) == null) {
+			EObject group = spotMarketsPackage.getEFactoryInstance().create(SpotMarketGroup_Class);
+			group.eSet(spotMarketsGroup_type, MetamodelUtils.getEEnum_Literal(SpotType_Enum, "FOBSale"));
+			spotMarketsModel.eSet(spotMarketsModel_fobSales_group, group);
+		}
 
 	}
 
