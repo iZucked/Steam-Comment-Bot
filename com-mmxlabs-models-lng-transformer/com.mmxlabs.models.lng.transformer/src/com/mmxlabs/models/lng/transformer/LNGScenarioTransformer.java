@@ -77,6 +77,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -281,10 +282,11 @@ public class LNGScenarioTransformer {
 		 * First, create all the market curves (should these come through the builder?)
 		 */
 
-		final Association<Index<?>, ICurve> indexAssociation = new Association<Index<?>, ICurve>();
+		final Association<CommodityIndex, ICurve> commodityIndexAssociation = new Association<CommodityIndex, ICurve>();
 
 		final PricingModel pricingModel = rootObject.getPricingModel();
-		for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+		for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
+			Index<Double> index = commodityIndex.getData();
 			if (index instanceof DataIndex) {
 				final DataIndex<Double> di = (DataIndex<Double>) index;
 				final SortedSet<Pair<Date, Number>> vals = new TreeSet<Pair<Date, Number>>(new Comparator<Pair<Date, ?>>() {
@@ -303,13 +305,13 @@ public class LNGScenarioTransformer {
 					times[k] = convertTime(e.getFirst());
 					nums[k++] = e.getSecond();
 				}
-				indices.addSeriesData(index.getName(), times, nums);
+				indices.addSeriesData(commodityIndex.getName(), times, nums);
 			} else if (index instanceof DerivedIndex) {
-				indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+				indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
 			}
 		}
 
-		for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+		for (final CommodityIndex index : pricingModel.getCommodityIndices()) {
 			try {
 				final ISeries parsed = indices.getSeries(index.getName());
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
@@ -318,7 +320,7 @@ public class LNGScenarioTransformer {
 					curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 				}
 				entities.addModelObject(index, curve);
-				indexAssociation.add(index, curve);
+				commodityIndexAssociation.add(index, curve);
 			} catch (final Exception exception) {
 				log.warn("Error evaluating series " + index.getName(), exception);
 			}
@@ -349,7 +351,7 @@ public class LNGScenarioTransformer {
 
 		final Map<Port, ICooldownPriceCalculator> cooldownCalculators = new HashMap<Port, ICooldownPriceCalculator>();
 		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
-			final ICooldownPriceCalculator cooldownCalculator = new PriceExpressionContract(indexAssociation.lookup(price.getIndex()));
+			final ICooldownPriceCalculator cooldownCalculator = new PriceExpressionContract(commodityIndexAssociation.lookup(price.getIndex()));
 
 			for (final Port port : SetUtils.getObjects(price.getPorts())) {
 				cooldownCalculators.put(port, cooldownCalculator);
@@ -436,11 +438,11 @@ public class LNGScenarioTransformer {
 
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst(), entities);
 
-		buildCargoes(builder, portAssociation, indexAssociation, vesselAssociations.getSecond(), contractTransformers, entities, getOptimisationSettings().isRewire());
+		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, entities, getOptimisationSettings().isRewire());
 
 		buildVesselEvents(builder, portAssociation, vesselAssociations.getFirst(), vesselAssociations.getSecond(), entities);
 
-		buildSpotCargoMarkets(builder, portAssociation, indexAssociation, contractTransformers, entities);
+		buildSpotCargoMarkets(builder, portAssociation, contractTransformers, entities);
 		// buildDiscountCurves(builder);
 
 		// freezeStartSequences(builder, entities);
@@ -697,8 +699,8 @@ public class LNGScenarioTransformer {
 	 * @param entities
 	 * @param defaultRewiring
 	 */
-	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Index<?>, ICurve> indexAssociation,
-			final Association<Vessel, IVessel> vesselAssociation, final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
+	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
+			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
 
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
@@ -1094,8 +1096,8 @@ public class LNGScenarioTransformer {
 		return load;
 	}
 
-	private void buildSpotCargoMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Index<?>, ICurve> indexAssociation,
-			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities) {
+	private void buildSpotCargoMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
+			final ModelEntityMap entities) {
 
 		final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
 		if (spotMarketsModel == null) {
@@ -1778,7 +1780,7 @@ public class LNGScenarioTransformer {
 					if (charterCost.getCharterInPrice() == null) {
 						charterInCurve = new ConstantValueCurve(0);
 					} else {
-						charterInCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f, false);
+						charterInCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterInPrice().getData(), 1.0f / 24.0f, false);
 					}
 
 					charterCount = charterCost.getSpotCharterCount();
@@ -1789,7 +1791,7 @@ public class LNGScenarioTransformer {
 					}
 
 					if (charterCost.getCharterOutPrice() != null) {
-						final ICurve charterOutCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterOutPrice(), 1.0f / 24.0f, false);
+						final ICurve charterOutCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterOutPrice().getData(), 1.0f / 24.0f, false);
 						final int minDuration = 24 * charterCost.getMinCharterOutDuration();
 						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve, minDuration);
 					}

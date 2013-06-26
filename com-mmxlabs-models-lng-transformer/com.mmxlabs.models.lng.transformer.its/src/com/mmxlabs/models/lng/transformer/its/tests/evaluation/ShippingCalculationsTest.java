@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -1476,8 +1477,10 @@ public class ShippingCalculationsTest {
 
 		// Set up a charter index curve
 		final int charterRatePerDay = 240;
-		final DerivedIndex<Integer> spotMarketRate = PricingFactory.eINSTANCE.createDerivedIndex();
-		spotMarketRate.setExpression("" + charterRatePerDay);
+		final CharterIndex spotMarketRate = PricingFactory.eINSTANCE.createCharterIndex();
+		final DerivedIndex<Integer> spotMarketRateData = PricingFactory.eINSTANCE.createDerivedIndex();
+		spotMarketRateData.setExpression("" + charterRatePerDay);
+		spotMarketRate.setData(spotMarketRateData);
 
 		final PricingModel pricingModel = scenario.getPricingModel();
 		pricingModel.getCharterIndices().add(spotMarketRate);
