@@ -194,7 +194,9 @@ public class Exposures {
 					switch (a) {
 					case '*':
 						return true;
-					case '/':
+					case '%':
+						return b == '/' || b =='+' || b == '-';
+ 					case '/':
 						return b == '+' || b == '-';
 					case '+':
 						return b == '-';
@@ -206,7 +208,7 @@ public class Exposures {
 
 				@Override
 				public boolean isInfixOperator(final char operator) {
-					return operator == '*' || operator == '/' || operator == '+' || operator == '-';
+					return operator == '*' || operator == '/' || operator == '+' || operator == '-' || operator == '%';
 				}
 
 			});
@@ -250,28 +252,40 @@ public class Exposures {
 	@SuppressWarnings("rawtypes")
 	private static double getExposureCoefficient(final Node node, final CommodityIndex index) {
 		final String indexToken = index.getName();
+		final String token = node.token;
 
-		if (node.token.equals("+")) {
+		// addition: add coefficients of summands
+		if (token.equals("+")) {
 			return getExposureCoefficient(node.children[0], index) + getExposureCoefficient(node.children[1], index);
-		} else if (node.token.equals("*")) {
+		} 
+		// multiplication: check for index token and return the other value if appropriate
+		else if (token.equals("*") || token.equals("%")) {
 			if (node.children[0].children.length > 0 || node.children[1].children.length > 0) {
 				throw new RuntimeException("Expression too complex");
 			}
 
 			for (int i = 0; i < 2; i++) {
 				if (node.children[i].token.equals(indexToken)) {
-					return Double.parseDouble(node.children[1 - i].token);
+					// divide by 100 for % symbol
+					double multiplier = token.equals("%") ? 0.01 : 1;
+					return multiplier * Double.parseDouble(node.children[1 - i].token);
 				}
 			}
 
-		} else if (node.token.equals("-")) {
+		} 
+		// subtraction: subtract coefficients
+		else if (node.token.equals("-")) {
 			return getExposureCoefficient(node.children[0], index) - getExposureCoefficient(node.children[1], index);
-		} else if (node.token.equals("/")) {
+		}
+		// division: check for index token and return reciprocal of other parameter
+		else if (node.token.equals("/")) {
 			if (!node.children[0].token.equals(indexToken) || node.children[1].children.length > 0) {
 				throw new RuntimeException("Expression too complex");
 			}
 			return 1 / Double.parseDouble(node.children[1].token);
-		} else if (node.token.equals(indexToken)) {
+		}
+		// index token alone has coefficient of 1
+		else if (node.token.equals(indexToken)) {
 			return 1;
 		}
 
