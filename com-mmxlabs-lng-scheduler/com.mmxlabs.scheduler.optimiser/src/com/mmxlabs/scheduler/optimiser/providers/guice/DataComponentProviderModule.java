@@ -267,6 +267,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapShipToShipBindingProviderEditor shipToShipProviderEditor = new HashMapShipToShipBindingProviderEditor(SchedulerConstants.DCP_shipToShipElementProvider);
 		bind(IShipToShipBindingProvider.class).toInstance(shipToShipProviderEditor);
 		bind(IShipToShipBindingProviderEditor.class).toInstance(shipToShipProviderEditor);
+		
+		final HashMapShipToShipBindingProviderEditor markToMarketEditor = new HashMapShipToShipBindingProviderEditor(SchedulerConstants.DCP_shipToShipElementProvider);
+		bind(IShipToShipBindingProvider.class).toInstance(shipToShipProviderEditor);
+		bind(IShipToShipBindingProviderEditor.class).toInstance(shipToShipProviderEditor);
 	
 	}
 
