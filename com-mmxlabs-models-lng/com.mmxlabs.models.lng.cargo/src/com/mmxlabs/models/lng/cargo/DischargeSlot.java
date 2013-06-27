@@ -54,7 +54,7 @@ public interface DischargeSlot extends Slot {
 
 	/**
 	 * Returns the value of the '<em><b>Purchase Delivery Type</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
+	 * The default value is <code>"Any"</code>.
 	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.CargoDeliveryType}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -69,7 +69,7 @@ public interface DischargeSlot extends Slot {
 	 * @see #unsetPurchaseDeliveryType()
 	 * @see #setPurchaseDeliveryType(CargoDeliveryType)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot_PurchaseDeliveryType()
-	 * @model default="false" unsettable="true"
+	 * @model default="Any" unsettable="true"
 	 * @generated
 	 */
 	CargoDeliveryType getPurchaseDeliveryType();
