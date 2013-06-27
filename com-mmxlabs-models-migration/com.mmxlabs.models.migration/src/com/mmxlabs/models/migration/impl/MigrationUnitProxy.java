@@ -22,7 +22,6 @@ import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
  */
 class MigrationUnitProxy implements IMigrationUnit {
 	private final MigrationUnitExtensionPoint ext;
-	private IMigrationUnit unit;
 
 	private final int sourceVersion;
 	private final int destinationVersion;
@@ -50,8 +49,9 @@ class MigrationUnitProxy implements IMigrationUnit {
 
 	@Override
 	public void migrate(final @NonNull URI uri, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
+		final IMigrationUnit unit = ext.createMigrationUnit();
 		if (unit == null) {
-			unit = ext.createMigrationUnit();
+			throw new NullPointerException("Unable to create migration unit instance");
 		}
 		unit.migrate(uri, extraPackages);
 	}
