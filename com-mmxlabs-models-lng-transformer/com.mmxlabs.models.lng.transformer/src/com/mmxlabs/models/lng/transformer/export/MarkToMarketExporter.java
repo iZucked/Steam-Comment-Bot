@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.transformer.export;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.inject.Inject;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -115,6 +117,32 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			}
 
+			{
+				// /// Get the "fake" mtm slot data
+				// Get all the allocation slots
+				final Set<IPortSlot> slots = new HashSet<IPortSlot>(allocation.getSlots());
+				if (slots.size() != 2) {
+					throw new IllegalStateException("Expected 2 slots - got " + slots.size());
+				}
+				// Remove the real slot to leave the fake slot
+				slots.remove(slot);
+				if (slots.size() != 1) {
+					throw new IllegalStateException("Expected slot to be part of allocation slots");
+				}
+
+				// Look up price and add to MarketAllocation.
+				final IPortSlot mtmSlot = slots.iterator().next();
+				if (mtmSlot instanceof ILoadOption) {
+					final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(mtmSlot), ((ILoadOption) mtmSlot).getCargoCVValue());
+					eAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
+
+				} else {
+					final int cargoCV = market.getCVValue();
+					final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(mtmSlot), cargoCV);
+					eAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
+				}
+
+			}
 			sv.setStart(entities.getDateFromHours(allocation.getSlotTime(slot)));
 			sv.setEnd(entities.getDateFromHours(allocation.getSlotTime(slot)));
 
