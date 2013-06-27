@@ -30,6 +30,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}</li>
  * </ul>
  * </p>
  *
@@ -550,6 +551,59 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	void setCargo(Cargo value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pricing Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Date</em>' attribute.
+	 * @see #isSetPricingDate()
+	 * @see #unsetPricingDate()
+	 * @see #setPricingDate(Date)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PricingDate()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	Date getPricingDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Date</em>' attribute.
+	 * @see #isSetPricingDate()
+	 * @see #unsetPricingDate()
+	 * @see #getPricingDate()
+	 * @generated
+	 */
+	void setPricingDate(Date value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPricingDate()
+	 * @see #getPricingDate()
+	 * @see #setPricingDate(Date)
+	 * @generated
+	 */
+	void unsetPricingDate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pricing Date</em>' attribute is set.
+	 * @see #unsetPricingDate()
+	 * @see #getPricingDate()
+	 * @see #setPricingDate(Date)
+	 * @generated
+	 */
+	boolean isSetPricingDate();
 
 	/**
 	 * <!-- begin-user-doc -->

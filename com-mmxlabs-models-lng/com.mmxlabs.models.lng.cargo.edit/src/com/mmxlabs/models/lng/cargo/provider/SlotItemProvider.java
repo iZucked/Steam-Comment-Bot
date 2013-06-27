@@ -72,6 +72,7 @@ public class SlotItemProvider
 			addOptionalPropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
 			addCargoPropertyDescriptor(object);
+			addPricingDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -344,6 +345,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Pricing Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_pricingDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_pricingDate_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PRICING_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -389,6 +412,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__MAX_QUANTITY:
 			case CargoPackage.SLOT__OPTIONAL:
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
+			case CargoPackage.SLOT__PRICING_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
