@@ -52,7 +52,7 @@ public class MetamodelLoader {
 	 *            Location to read ecore model from
 	 * @param string
 	 * @return
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public EPackage loadEPackage(final URI location) {
 
