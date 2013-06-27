@@ -67,6 +67,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator.MinimalScenarioSetup;
 import com.mmxlabs.models.lng.transformer.its.tests.LddScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.StsScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -345,6 +346,73 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValuesIfMatching(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9970 });
 
 		return checker;
+	}
+	
+	private SequenceTester getStsTesterLoad() {
+		Class<?>[] expectedClasses = {  StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
+		
+		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 8, true) };
+		final SequenceTester checker = new SequenceTester(expectedClasses, chunkIndices);
+
+		// set default expected values to zero
+		for (final Expectations field : Expectations.values()) {
+			checker.setAllExpectedValues(field, 0);
+		}
+
+		// expected durations of journeys
+		checker.setExpectedValuesIfMatching(Expectations.DURATIONS, Journey.class, new Integer[] { 2, 2 });
+
+		// don't care what the duration of the end event is
+		checker.setExpectedValuesIfMatching(Expectations.DURATIONS, EndEvent.class, new Integer[] { null });
+
+		// don't care what the duration of the start event is
+		checker.setExpectedValuesIfMatching(Expectations.DURATIONS, StartEvent.class, new Integer[] { null });
+
+		// expected FBO consumptions of journeys
+		// none (not economical in default)
+		checker.setExpectedValuesIfMatching(Expectations.FBO_USAGE, Journey.class, new Integer[] { 0, 0 });
+
+		// expected NBO consumptions of journeys
+		// 0 (no start heel)
+		// 20 = 2 { duration in hours } * 10 { NBO rate }
+		// 0 (vessel empty)
+		checker.setExpectedValuesIfMatching(Expectations.NBO_USAGE, Journey.class, new Integer[] { 20, 0 });
+
+		// expected base consumptions
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Journey.class, new Integer[] { 10, 30 });
+
+		// expected costs of journeys
+		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
+		// 300 = 30 { base fuel unit cost } * 15 { base fuel consumption }
+		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 520, 300 });
+
+		// expected durations of idles
+		checker.setExpectedValuesIfMatching(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0 });
+
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		checker.setExpectedValuesIfMatching(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0 });
+
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		checker.setExpectedValuesIfMatching(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0 });
+
+		// idle costs
+		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
+		checker.setExpectedValuesIfMatching(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0 });
+
+		// expected load / discharge volumes
+		// 10000 (load) = vessel capacity
+		// 9970 (discharge) = 10000 - 20 { NBO journey consumption } - 10 { NBO idle consumption }
+		checker.setExpectedValuesIfMatching(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9970 });
+
+		return checker;
+		
 	}
 
 	public class SequenceTester {
@@ -1840,7 +1908,7 @@ public class ShippingCalculationsTest {
 		}
 
 		// change from default: base fuel usage at ports, and duration spent there
-		checker.setExpectedValues(Expectations.BF_USAGE, SlotVisit.class, new Integer[] { portDurations[0] * ladenBaseConsumption / 24, portDurations[1] * ballastBaseConsumption / 24 });
+		checker.setExpectedValues(Expectations.BF_USAGE, SlotVisit.class, new Integer [] { ladenBaseConsumption * portDurations[0]  / 24, portDurations[1] * ballastBaseConsumption / 24 });
 		checker.setExpectedValues(Expectations.DURATIONS, SlotVisit.class, portDurations);
 
 		// change from default: idle times at discharge port and end port are now zero (and fuel consumptions zero accordingly)
@@ -2152,6 +2220,22 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);
 	}
 
+	// test doesn't work yet
+	public void testStsVoyage() {
+		System.err.println("\n\nSTS journey");
+		final DefaultScenarioCreator dsc = new StsScenarioCreator();
+		final LNGScenarioModel scenario = dsc.buildScenario();
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+		
+		SequenceTester checker = getStsTesterLoad();
+		checker.check(sequence);
+	}
+	
+	
 	/**
 	 * Tests a simple load / discharge / discharge cargo to make sure the figures are correct.
 	 */

@@ -253,6 +253,8 @@ public class AnnotatedSolutionExporter {
 			} else {
 				events = eSequence.getEvents();
 			}
+			
+			// create a comparator to allow sorting of events
 			final Comparator<Event> eventComparator = new Comparator<Event>() {
 				@Override
 				public int compare(final Event arg0, final Event arg1) {
