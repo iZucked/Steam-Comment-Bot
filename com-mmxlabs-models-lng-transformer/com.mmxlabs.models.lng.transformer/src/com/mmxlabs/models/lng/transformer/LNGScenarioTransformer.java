@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
@@ -144,9 +143,6 @@ public class LNGScenarioTransformer {
 
 	private LNGScenarioModel rootObject;
 
-	@Inject
-	private OptimiserSettings optimiserSettings;
-
 	private Date earliestTime;
 	private Date latestTime;
 
@@ -161,9 +157,6 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private ISchedulerBuilder builder;
-
-	@Inject
-	private Injector injector;
 
 	@Inject
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
