@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 import java.util.Collection;
@@ -18,10 +19,13 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.MarketAllocation} object.
  * <!-- begin-user-doc -->
+ * @since 5.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -57,6 +61,7 @@ public class MarketAllocationItemProvider
 			addSlotPropertyDescriptor(object);
 			addMarketPropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
+			addPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -128,6 +133,28 @@ public class MarketAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketAllocation_price_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MarketAllocation_price_feature", "_UI_MarketAllocation_type"),
+				 SchedulePackage.Literals.MARKET_ALLOCATION__PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns MarketAllocation.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -146,7 +173,8 @@ public class MarketAllocationItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_MarketAllocation_type");
+		MarketAllocation marketAllocation = (MarketAllocation)object;
+		return getString("_UI_MarketAllocation_type") + " " + marketAllocation.getPrice();
 	}
 
 	/**
@@ -159,6 +187,12 @@ public class MarketAllocationItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(MarketAllocation.class)) {
+			case SchedulePackage.MARKET_ALLOCATION__PRICE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

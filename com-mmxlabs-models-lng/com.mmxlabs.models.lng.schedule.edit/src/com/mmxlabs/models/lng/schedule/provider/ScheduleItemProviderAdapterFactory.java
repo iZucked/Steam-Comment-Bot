@@ -396,6 +396,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.MarketAllocation} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

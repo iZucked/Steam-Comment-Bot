@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl#getMarket <em>Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl#getPrice <em>Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -64,6 +65,26 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * @ordered
 	 */
 	protected SlotAllocation slotAllocation;
+
+	/**
+	 * The default value of the '{@link #getPrice() <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double PRICE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getPrice() <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double price = PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -225,6 +246,27 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getPrice() {
+		return price;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPrice(double newPrice) {
+		double oldPrice = price;
+		price = newPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.MARKET_ALLOCATION__PRICE, oldPrice, price));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -267,6 +309,8 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 			case SchedulePackage.MARKET_ALLOCATION__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
+			case SchedulePackage.MARKET_ALLOCATION__PRICE:
+				return getPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -287,6 +331,9 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 				return;
 			case SchedulePackage.MARKET_ALLOCATION__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
+				return;
+			case SchedulePackage.MARKET_ALLOCATION__PRICE:
+				setPrice((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -309,6 +356,9 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 			case SchedulePackage.MARKET_ALLOCATION__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
+			case SchedulePackage.MARKET_ALLOCATION__PRICE:
+				setPrice(PRICE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -327,8 +377,26 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 				return market != null;
 			case SchedulePackage.MARKET_ALLOCATION__SLOT_ALLOCATION:
 				return slotAllocation != null;
+			case SchedulePackage.MARKET_ALLOCATION__PRICE:
+				return price != PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (price: ");
+		result.append(price);
+		result.append(')');
+		return result.toString();
 	}
 
 } //MarketAllocationImpl

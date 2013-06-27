@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getMarket <em>Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotAllocation <em>Slot Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getPrice <em>Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -105,5 +106,31 @@ public interface MarketAllocation extends ProfitAndLossContainer {
 	 * @generated
 	 */
 	void setSlotAllocation(SlotAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price</em>' attribute.
+	 * @see #setPrice(double)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getMarketAllocation_Price()
+	 * @model
+	 * @generated
+	 */
+	double getPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getPrice <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price</em>' attribute.
+	 * @see #getPrice()
+	 * @generated
+	 */
+	void setPrice(double value);
 
 } // MarketAllocation
