@@ -142,7 +142,7 @@ public interface SalesContract extends Contract {
 
 	/**
 	 * Returns the value of the '<em><b>Purchase Delivery Type</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
+	 * The default value is <code>"Any"</code>.
 	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.CargoDeliveryType}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -155,7 +155,7 @@ public interface SalesContract extends Contract {
 	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
 	 * @see #setPurchaseDeliveryType(CargoDeliveryType)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract_PurchaseDeliveryType()
-	 * @model default="false"
+	 * @model default="Any"
 	 * @generated
 	 */
 	CargoDeliveryType getPurchaseDeliveryType();
