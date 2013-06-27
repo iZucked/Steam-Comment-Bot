@@ -34,7 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  * Exporter for getting out the details of Mark to market details
  * 
  * @author Simon Goodall
- * @since 4.0
+ * @since 4.1
  * 
  */
 public class MarkToMarketExporter extends BaseAnnotationExporter {
