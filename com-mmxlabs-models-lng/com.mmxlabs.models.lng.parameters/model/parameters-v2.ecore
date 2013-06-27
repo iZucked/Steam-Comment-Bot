@@ -2,13 +2,13 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="parameters" nsURI="http://www.mmxlabs.com/models/lng/parameters/1/"
     nsPrefix="lng.parameters">
-  <eClassifiers xsi:type="ecore:EClass" name="ParametersModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ParametersModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="settings" upperBound="-1"
         eType="#//OptimiserSettings" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="activeSetting" lowerBound="1"
         eType="#//OptimiserSettings"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OptimiserSettings" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="OptimiserSettings" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="objectives" upperBound="-1"
         eType="#//Objective" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
@@ -23,13 +23,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="rewire" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>

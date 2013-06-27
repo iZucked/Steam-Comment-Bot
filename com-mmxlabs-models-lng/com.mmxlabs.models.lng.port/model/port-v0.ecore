@@ -6,7 +6,7 @@
       <details key="showOtherNames" value="true"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capabilities" upperBound="-1"
-        eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadDuration" lowerBound="1"
@@ -30,7 +30,7 @@
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//OtherNamesObject"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lines" upperBound="-1"
         eType="#//RouteLine" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canal" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -47,13 +47,13 @@
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RouteLine" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="RouteLine" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PortModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="PortModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
         eType="#//Port" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portGroups" upperBound="-1"
@@ -65,7 +65,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CapabilityGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capability" lowerBound="1"
-        eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>

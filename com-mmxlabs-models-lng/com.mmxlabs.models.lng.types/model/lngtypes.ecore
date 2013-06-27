@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="types" nsURI="http://www.mmxlabs.com/models/lng/types/1/" nsPrefix="lng.types">
-  <eClassifiers xsi:type="ecore:EClass" name="ObjectSet" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectSet" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eTypeParameters name="T">
       <eBounds eClassifier="#//ObjectSet">
         <eTypeArguments eTypeParameter="#//ObjectSet/T"/>

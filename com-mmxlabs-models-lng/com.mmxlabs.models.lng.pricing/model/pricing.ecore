@@ -43,7 +43,7 @@
       <eGenericType eTypeParameter="#//IndexPoint/Value"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eTypeParameters name="Value"/>
     <eOperations name="getValueForMonth" lowerBound="1">
       <eGenericType eTypeParameter="#//Index/Value"/>
@@ -107,14 +107,14 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1" eType="#//CommodityIndex"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CommodityIndex" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="CommodityIndex" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="data" containment="true">
       <eGenericType eClassifier="#//Index">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterIndex" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="CharterIndex" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="data" containment="true">
       <eGenericType eClassifier="#//Index">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
