@@ -281,7 +281,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private IMarkToMarketProviderEditor markToMarketProviderEditor;
 
 	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> desSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
 	private final Map<IPort, MarkToMarket> fobSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> fobPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
 	/**
 	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
 	 * 
@@ -1754,13 +1756,46 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return mtm;
 	}
 
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator) {
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue);
+
+		for (final IPort port : marketPorts) {
+			fobPurchaseMTMPortMap.put(port, mtm);
+		}
+		return mtm;
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator) {
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator);
+
+		for (final IPort port : marketPorts) {
+			desSaleMTMPortMap.put(port, mtm);
+		}
+
+		return mtm;
+	}
+
 	private void linkMarkToMarkets() {
 		for (final ISequenceElement element : sequenceElements) {
 			if (element != null) {
 				final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
 				final IPort port = portSlot.getPort();
+
 				if (portSlot instanceof ILoadSlot) {
 					final IMarkToMarket market = fobSaleMTMPortMap.get(port);
+					if (market != null) {
+						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
+					}
+				} else if (portSlot instanceof ILoadOption) {
+					final IMarkToMarket market = desSaleMTMPortMap.get(port);
 					if (market != null) {
 						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
 					}
@@ -1769,9 +1804,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					if (market != null) {
 						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
 					}
+				} else if (portSlot instanceof IDischargeOption) {
+					final IMarkToMarket market = fobPurchaseMTMPortMap.get(port);
+					if (market != null) {
+						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
+					}
 				}
 			}
 		}
 	}
-
 }

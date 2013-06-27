@@ -687,4 +687,20 @@ public interface ISchedulerBuilder {
 	 */
 	IMarkToMarket createFOBSaleMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
 
+	/**
+	 * Create a Mark-To-Market market for FOB Purchases valid against the given set of {@link IPort}s
+	 * 
+	 * @param cargoCVValue
+	 * 
+	 * @since 6.0
+	 */
+	IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator);
+
+	/**
+	 * Create a Mark-To-Market market for DES sales valid against the given set of {@link IPort}s
+	 * 
+	 * @since 6.0
+	 */
+	IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
+
 }

@@ -31,7 +31,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -239,14 +241,22 @@ public class ScheduleCalculator {
 				final int time;
 
 				final IVessel vessel;
-				if (portSlot instanceof ILoadSlot) {
+				if (portSlot instanceof ILoadOption) {
 					loadOption = (ILoadOption) portSlot;
-					dischargeOption = new MarkToMarketDischargeOption(market, loadOption);
+					if (loadOption instanceof ILoadSlot) {
+						dischargeOption = new MarkToMarketDischargeOption(market, loadOption);
+					} else {
+						dischargeOption = new MarkToMarketDischargeSlot(market, loadOption);
+					}
 					time = loadOption.getTimeWindow().getStart();
 					vessel = new MarkToMarketVessel(market, loadOption);
-				} else if (portSlot instanceof IDischargeSlot) {
+				} else if (portSlot instanceof IDischargeOption) {
 					dischargeOption = (IDischargeOption) portSlot;
-					loadOption = new MarkToMarketLoadOption(market, dischargeOption);
+					if (dischargeOption instanceof IDischargeSlot) {
+						loadOption = new MarkToMarketLoadOption(market, dischargeOption);
+					} else {
+						loadOption = new MarkToMarketLoadSlot(market, dischargeOption);
+					}
 					time = dischargeOption.getTimeWindow().getStart();
 					vessel = new MarkToMarketVessel(market, dischargeOption);
 				} else {
