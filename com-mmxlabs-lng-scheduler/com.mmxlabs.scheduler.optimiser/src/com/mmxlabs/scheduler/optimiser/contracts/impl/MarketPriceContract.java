@@ -29,8 +29,8 @@ public class MarketPriceContract extends SimpleContract {
 	 * @see com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator#calculateSimpleLoadUnitPrice(int)
 	 */
 	@Override
-	public int calculateSimpleUnitPrice(final int loadTime) {
-		int valueAtPoint = market.getValueAtPoint(loadTime);
+	public int calculateSimpleUnitPrice(final int time) {
+		int valueAtPoint = market.getValueAtPoint(time);
 		int shareOfPrice = Calculator.getShareOfPrice(multiplier, valueAtPoint);
 		return offset + shareOfPrice;
 	}

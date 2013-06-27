@@ -33,6 +33,13 @@ public interface ILoadOption extends IPortSlot {
 	 * @return
 	 */
 	int getCargoCVValue();
+	
+	/**
+	 * Returns the date on which the slot pricing should be based.
+	 * 
+	 * @return
+	 */
+	int getPricingDate();
 
 	/**
 	 * Returns the {@link com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator} which should be used to determine the unit cost of LNG at this slot.

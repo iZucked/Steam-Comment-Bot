@@ -52,8 +52,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -86,7 +84,6 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementP
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
@@ -271,9 +268,9 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IShipToShipBindingProvider.class).toInstance(shipToShipProviderEditor);
 		bind(IShipToShipBindingProviderEditor.class).toInstance(shipToShipProviderEditor);
 		
-		final HashMapMarkToMarketProviderEditor markToMarketEditor = new HashMapMarkToMarketProviderEditor(SchedulerConstants.DCP_markToMarketElementProvider);
-		bind(IMarkToMarketProvider.class).toInstance(markToMarketEditor);
-		bind(IMarkToMarketProviderEditor.class).toInstance(markToMarketEditor);
+		final HashMapShipToShipBindingProviderEditor markToMarketEditor = new HashMapShipToShipBindingProviderEditor(SchedulerConstants.DCP_shipToShipElementProvider);
+		bind(IShipToShipBindingProvider.class).toInstance(shipToShipProviderEditor);
+		bind(IShipToShipBindingProviderEditor.class).toInstance(shipToShipProviderEditor);
 	
 	}
 

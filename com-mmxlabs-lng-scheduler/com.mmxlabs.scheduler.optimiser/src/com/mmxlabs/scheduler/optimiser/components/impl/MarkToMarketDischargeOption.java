@@ -69,4 +69,9 @@ public class MarkToMarketDischargeOption implements IDischargeOption {
 		return markToMarket.getSalesPriceCalculator();
 	}
 
+	@Override
+	public int getPricingDate() {
+		return loadOption.getPricingDate();
+	}
+
 }

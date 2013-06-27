@@ -18,8 +18,8 @@ public class PriceExpressionContract extends SimpleContract {
 	}
 	
 	@Override
-	protected int calculateSimpleUnitPrice(int loadTime) {
-		return expressionCurve.getValueAtPoint(loadTime);
+	protected int calculateSimpleUnitPrice(int time) {
+		return expressionCurve.getValueAtPoint(time);
 	}
 
 }
