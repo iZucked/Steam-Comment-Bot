@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
@@ -27,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
@@ -667,5 +670,19 @@ public interface ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	void setPortCV(IPort port, int convertToInternalConversionFactor);
+
+	/**
+	 * Create a Mark-To-Market market for DES Purchases valid against the given set of {@link IPort}s
+	 * 
+	 * @since 6.0
+	 */
+	IMarkToMarket createDESPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator);
+
+	/**
+	 * Create a Mark-To-Market market for FOB sales valid against the given set of {@link IPort}s
+	 * 
+	 * @since 6.0
+	 */
+	IMarkToMarket createFOBSaleMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
 
 }
