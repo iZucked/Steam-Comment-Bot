@@ -165,7 +165,6 @@ public class ScheduleCalculator {
 			return;
 		}
 
-		final Set<ISequenceElement> seenElements = annotatedSolution == null ? null : new HashSet<ISequenceElement>();
 		for (final ScheduledSequence sequence : scheduledSequences) {
 			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
 
