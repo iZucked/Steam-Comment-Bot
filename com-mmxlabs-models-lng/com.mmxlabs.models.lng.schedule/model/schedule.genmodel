@@ -50,7 +50,7 @@
           ecoreFeature="ecore:EReference schedule.ecore#//Schedule/cargoAllocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/slotAllocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/fitnesses"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="The unused element is intended as tempory storage to indicate the elements that are no longer used. For example optional FOB/DES slots may be placed in this list. It is intended that an export process will process this list. It is not intended to be persisted."
+      <genFeatures notify="false" createChild="false" propertyDescription="The unused element is intended as temporary storage to indicate the elements that are no longer used. For example optional FOB/DES slots may be placed in this list. It is intended that an export process will process this list. It is not intended to be persisted."
           propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/unusedElements"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Fitness">
