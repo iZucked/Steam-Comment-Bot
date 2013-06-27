@@ -336,6 +336,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0);
 	}
 
+	/**
+	 * @since 6.0
+	 */
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator loadContract,
 			final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, int pricingDate, final boolean optional) {
@@ -359,7 +362,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	@Override
 	public ILoadOption createDESPurchaseLoadSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator,
@@ -418,11 +421,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	@Override
 	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final long minCvValue, final long maxCvValue,
-			final ISalesPriceCalculator priceCalculator, final boolean slotIsOptional) {
+			final ISalesPriceCalculator priceCalculator, int pricingDate, final boolean slotIsOptional) {
 
 		if (port == null) {
 			port = ANYWHERE;
@@ -430,7 +433,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final DischargeOption slot = new DischargeOption();
 
-		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, IPortSlot.NO_PRICING_DATE, slotIsOptional);
+		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, pricingDate, slotIsOptional);
 
 		unshippedElements.add(element);
 
@@ -477,7 +480,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final long minCvValue,
@@ -1756,13 +1759,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			if (element != null) {
 				final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
 				final IPort port = portSlot.getPort();
-				if (portSlot instanceof ILoadOption) {
-					final IMarkToMarket market = desPurchaseMTMPortMap.get(port);
+				if (portSlot instanceof ILoadSlot) {
+					final IMarkToMarket market = fobSaleMTMPortMap.get(port);
 					if (market != null) {
 						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
 					}
-				} else if (portSlot instanceof IDischargeOption) {
-					final IMarkToMarket market = fobSaleMTMPortMap.get(port);
+				} else if (portSlot instanceof IDischargeSlot) {
+					final IMarkToMarket market = desPurchaseMTMPortMap.get(port);
 					if (market != null) {
 						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
 					}

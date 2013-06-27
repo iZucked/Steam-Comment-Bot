@@ -425,14 +425,16 @@ public interface ISchedulerBuilder {
 	 * @param cargoCVValue
 	 *            Scaled conversion factor to convert from M3 to MMBTU of LNG
 	 * @return
+	 * @since 6.0
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet,
 			boolean cooldownForbidden, int pricingDate, boolean slotIsOptional);
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
-	ILoadOption createDESPurchaseLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int pricingDate, boolean slotIsOptional);
+	ILoadOption createDESPurchaseLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int pricingDate,
+			boolean slotIsOptional);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -447,7 +449,7 @@ public interface ISchedulerBuilder {
 	 * @param price
 	 *            Scaled sales price in $/MMBTu
 	 * @return
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue, ISalesPriceCalculator pricePerMMBTu,
 			int durationHours, int pricingDate, boolean optional);
@@ -462,10 +464,10 @@ public interface ISchedulerBuilder {
 	 * @param priceCalculator
 	 * @param slotIsOptional
 	 * @return
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	IDischargeOption createFOBSaleDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue, ISalesPriceCalculator priceCalculator,
-			boolean slotIsOptional);
+			int pricingDate, boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
