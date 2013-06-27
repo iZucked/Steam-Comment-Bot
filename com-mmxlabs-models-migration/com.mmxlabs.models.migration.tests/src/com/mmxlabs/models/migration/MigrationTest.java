@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xml.type.AnyType;
@@ -35,18 +36,18 @@ public class MigrationTest {
 		final MetamodelLoader v1Loader = new MetamodelLoader();
 		final EPackage v1Pkg = v1Loader.loadEPackage(URI.createURI(getClass().getResource("/models/model-v1.ecore").toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
 		Assert.assertNotNull(v1Pkg);
-		final EPackage v1SubPkg = v1Loader.loadEPackage(URI.createURI(getClass().getResource("/models/sub-model-v1.ecore").toString()),
-				"platform:/plugin/com.mmxlabs.models.migration.tests/models/submodel.ecore");
+		final EPackage v1SubPkg = v1Loader.loadEPackage(URI.createURI(getClass().getResource("/models/sub-model-v1.ecore").toString()));//, "platform:/plugin/com.mmxlabs.models.migration.tests/models/submodel.ecore");
 		Assert.assertNotNull(v1SubPkg);
 
 		// Create a V2 loader
 		final MetamodelLoader v2Loader = new MetamodelLoader();
 		final EPackage v2Pkg = v2Loader.loadEPackage(URI.createURI(getClass().getResource("/models/model-v2.ecore").toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
 		Assert.assertNotNull(v2Pkg);
-		final EPackage v2SubPkg = v2Loader.loadEPackage(URI.createURI(getClass().getResource("/models/sub-model-v2.ecore").toString()),
-				"platform:/plugin/com.mmxlabs.models.migration.tests/models/submodel.ecore");
+		final EPackage v2SubPkg = v2Loader.loadEPackage(URI.createURI(getClass().getResource("/models/sub-model-v2.ecore").toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/submodel.ecore");
 		Assert.assertNotNull(v2SubPkg);
 
+		
+		EcoreUtil.resolveAll(v1Loader.getResourceSet());
 		// Initialise a V1 model instance
 		final EObject v1Object = createV1Model(v1SubPkg, v1Pkg, 1, 2, 3);
 

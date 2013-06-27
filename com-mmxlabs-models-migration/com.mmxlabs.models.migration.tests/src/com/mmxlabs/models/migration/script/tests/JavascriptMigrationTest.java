@@ -40,7 +40,8 @@ public class JavascriptMigrationTest {
 
 		// Create a V1 loader
 		final MetamodelLoader v1Loader = new MetamodelLoader();
-		final EPackage v1Pkg = v1Loader.loadEPackage(URI.createURI(getClass().getResource("/models/model-v1.ecore").toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+		final EPackage v1Pkg = v1Loader.loadEPackage(URI.createURI(getClass().getResource("/models/model-v1.ecore").toString()),
+				"platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
 		Assert.assertNotNull(v1Pkg);
 		final EPackage v1SubPkg = v1Loader.loadEPackage(URI.createURI(getClass().getResource("/models/sub-model-v1.ecore").toString()),
 				"platform:/plugin/com.mmxlabs.models.migration.tests/models/submodel.ecore");
@@ -52,7 +53,8 @@ public class JavascriptMigrationTest {
 
 		// Create a V2 loader
 		final MetamodelLoader v2Loader = new MetamodelLoader();
-		final EPackage v2Pkg = v2Loader.loadEPackage(URI.createURI(getClass().getResource("/models/model-v2.ecore").toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+		final EPackage v2Pkg = v2Loader.loadEPackage(URI.createURI(getClass().getResource("/models/model-v2.ecore").toString()),
+				"platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
 		Assert.assertNotNull(v2Pkg);
 		final EPackage v2SubPkg = v2Loader.loadEPackage(URI.createURI(getClass().getResource("/models/sub-model-v2.ecore").toString()),
 				"platform:/plugin/com.mmxlabs.models.migration.tests/models/submodel.ecore");
@@ -104,7 +106,7 @@ public class JavascriptMigrationTest {
 			engine.eval(reader);
 		}
 
-//		v2Object = (EObject) engine.get("v2Object");
+		// v2Object = (EObject) engine.get("v2Object");
 		// Check our new attribute has required value.
 		// TODO: Should we persist and reload?
 		Assert.assertEquals(1, ((Integer) v2Object.eGet(v2Object.eClass().getEStructuralFeature("attributeA"))).intValue());

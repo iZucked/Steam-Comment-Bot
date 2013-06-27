@@ -26,11 +26,11 @@ public class MetamodelLoaderTest {
 
 		// Test load
 		final URL resourceURL = getClass().getResource("/models/model-v1.ecore");
-		final EPackage pkg1 = loader.loadEPackage(URI.createURI(resourceURL.toString()), "");
+		final EPackage pkg1 = loader.loadEPackage(URI.createURI(resourceURL.toString()));
 		Assert.assertNotNull(pkg1);
 
 		// Test re-used reference
-		final EPackage pkg2 = loader.loadEPackage(URI.createURI(resourceURL.toString()), "");
+		final EPackage pkg2 = loader.loadEPackage(URI.createURI(resourceURL.toString()));
 		Assert.assertNotNull(pkg2);
 
 		Assert.assertSame(pkg1, pkg2);
@@ -44,23 +44,23 @@ public class MetamodelLoaderTest {
 		// Test load
 
 		final URL resourceURL_V1 = getClass().getResource("/models/model-v1.ecore");
-		final EPackage v1_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V1.toString()), "");
+		final EPackage v1_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V1.toString()));
 		Assert.assertNotNull(v1_pkg1);
 		final URL resourceURL_V2 = getClass().getResource("/models/model-v2.ecore");
-		final EPackage v2_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V2.toString()), "");
+		final EPackage v2_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V2.toString()));
 		Assert.assertNotNull(v2_pkg1);
 		final URL resourceURL_V3 = getClass().getResource("/models/model-v3.ecore");
-		final EPackage v3_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V3.toString()), "");
+		final EPackage v3_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V3.toString()));
 		Assert.assertNotNull(v3_pkg1);
 
 		// Test re-used reference
-		final EPackage v1_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V1.toString()), "");
+		final EPackage v1_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V1.toString()));
 		Assert.assertNotNull(v1_pkg2);
 
-		final EPackage v2_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V2.toString()), "");
+		final EPackage v2_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V2.toString()));
 		Assert.assertNotNull(v2_pkg2);
 
-		final EPackage v3_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V3.toString()), "");
+		final EPackage v3_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V3.toString()));
 		Assert.assertNotNull(v3_pkg2);
 
 		Assert.assertSame(v1_pkg1, v1_pkg2);
@@ -78,7 +78,7 @@ public class MetamodelLoaderTest {
 
 		// Test load
 		final URL subResourceURL = getClass().getResource("/models/sub-model-v1.ecore");
-		final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()), "");
+		final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()));
 		Assert.assertNotNull(subPackage);
 
 		// Test re-used reference
@@ -113,7 +113,7 @@ public class MetamodelLoaderTest {
 
 			// Test load
 			final URL subResourceURL = getClass().getResource("/models/sub-model-v1.ecore");
-			final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()), "");
+			final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()));
 			Assert.assertNotNull(subPackage);
 
 			// Test re-used reference
@@ -144,7 +144,7 @@ public class MetamodelLoaderTest {
 
 			// Test load
 			final URL subResourceURL = getClass().getResource("/models/sub-model-v2.ecore");
-			final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()), "");
+			final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()));
 			Assert.assertNotNull(subPackage);
 
 			// Test re-used reference

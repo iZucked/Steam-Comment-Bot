@@ -46,13 +46,15 @@ public class MetamodelLoader {
 	}
 
 	/**
+	 * Load an EPackage from the given location and register it under it's nsURI in the package registry
 	 * 
 	 * @param location
 	 *            Location to read ecore model from
 	 * @param string
 	 * @return
+	 * @since 3.0
 	 */
-	public EPackage loadEPackage(final URI location, final String nsURI) {
+	public EPackage loadEPackage(final URI location) {
 
 		final Resource rs = resourceSet.getResource(location, true);
 		final EPackage ePackage = (EPackage) rs.getContents().get(0);
@@ -61,13 +63,13 @@ public class MetamodelLoader {
 			throw new RuntimeException("Unable to load package");
 		}
 
-		if (nsURI != null) {
-			resourceSet.getPackageRegistry().put(nsURI, ePackage);
-		}
+		// Register the package
 		resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
-		return ePackage;
 
-		// return null;
+		// Map this package name space to the underlying location
+		resourceSet.getURIConverter().getURIMap().put(URI.createURI(ePackage.getNsURI()), location);
+
+		return ePackage;
 	}
 
 	public EPackage getPackageByNSURI(final String nsURI) {
@@ -88,33 +90,51 @@ public class MetamodelLoader {
 	}
 
 	/**
-	 * Similar to {@link #loadEPackage(URI, String)} but also stores package under a resourceURI i.e. the string used in the ecore models to refrence classifiers in other ecore model.
+	 * Loads and registers an ePackage from the given location. Use the {@link PackageData#getResourceURIs()} list as extra paths to map to the package location.
 	 * 
-	 * @since 3.0
+	 * @param location
+	 * @param packageData
+	 * @return
 	 */
-	public EPackage loadEPackage(final URI location, final String nsURI, final String resourceURI) {
-		final EPackage pkg = loadEPackage(location, nsURI);
+	public EPackage loadEPackage(final URI location, final PackageData packageData) {
+		final EPackage pkg = loadEPackage(location);
 
-		// TODO: Do we need both of these?
-		resourceSet.getPackageRegistry().put(resourceURI, pkg);
-		resourceSet.getURIConverter().getURIMap().put(URI.createURI(nsURI), URI.createURI(pkg.getNsURI()));
+		// Add in extra resource mappings
+		for (final String resourceURI : packageData.getResourceURIs()) {
+			resourceSet.getURIConverter().getURIMap().put(URI.createURI(resourceURI), location);
+		}
 
 		return pkg;
 	}
 
 	/**
-	 * @since 3.0
+	 * Loads and registers an ePackage from the given location. Use the resourceURI as an extra path to map to the package location.
+	 * 
+	 * @param location
+	 * @param resourceURI
+	 * @return
 	 */
-	public EPackage loadEPackage(final URI location, final PackageData packageData) {
-		final EPackage pkg = loadEPackage(location, packageData.getNsURI());
+	public EPackage loadEPackage(final URI location, final String resourceURI) {
+		final EPackage pkg = loadEPackage(location);
 
-		// TODO: Do need both of these?
-		resourceSet.getURIConverter().getURIMap().put(URI.createURI(packageData.getNsURI()), URI.createURI(pkg.getNsURI()));
-
-		for (final String resourceURI : packageData.getResourceURIs()) {
-			resourceSet.getPackageRegistry().put(resourceURI, pkg);
-		}
+		// Add in extra resource mapping
+		resourceSet.getURIConverter().getURIMap().put(URI.createURI(resourceURI), location);
 
 		return pkg;
+	}
+
+	/**
+	 * Loads and registers an ePackage from the given location. Use the resourceURI as an extra path to map to the package location. nsURI is ignored
+	 * 
+	 * @param location
+	 * @param nsURI
+	 *            - ignored
+	 * @param resourceURI
+	 * @return
+	 * @deprecated - Use {@link #loadEPackage(URI, String)} instead
+	 */
+	@Deprecated
+	public EPackage loadEPackage(final URI location, final String nsURI, final String resourceURI) {
+		return loadEPackage(location, resourceURI);
 	}
 }
