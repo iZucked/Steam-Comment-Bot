@@ -2,7 +2,7 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ModelA" nsURI="http://com.mmxlabs.models.migration.tests/proxyModelA"
     nsPrefix="ModelA">
-  <eClassifiers xsi:type="ecore:EClass" name="ClassA" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ClassA" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="referenceA" eType="#//ClassB"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ClassB">
