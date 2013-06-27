@@ -347,6 +347,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Pricing Date feature.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

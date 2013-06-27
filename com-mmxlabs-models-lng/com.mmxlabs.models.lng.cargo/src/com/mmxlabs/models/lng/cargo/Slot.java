@@ -559,6 +559,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * If the meaning of the '<em>Pricing Date</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Pricing Date</em>' attribute.
 	 * @see #isSetPricingDate()
@@ -573,7 +574,8 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * @since 5.0
+ 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Pricing Date</em>' attribute.
 	 * @see #isSetPricingDate()
 	 * @see #unsetPricingDate()
@@ -585,6 +587,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetPricingDate()
 	 * @see #getPricingDate()
@@ -596,6 +599,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Pricing Date</em>' attribute is set.
 	 * @see #unsetPricingDate()
