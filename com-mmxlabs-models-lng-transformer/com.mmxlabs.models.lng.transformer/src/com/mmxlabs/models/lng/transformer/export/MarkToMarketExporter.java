@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -71,7 +72,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			// return null;
 		}
 
-		if (slot instanceof IDischargeSlot || slot instanceof ILoadSlot) {
+		if (slot instanceof IDischargeOption || slot instanceof ILoadOption) {
 
 			final IMarkToMarket market = marketProvider.getMarketForElement(element);
 			if (market == null) {

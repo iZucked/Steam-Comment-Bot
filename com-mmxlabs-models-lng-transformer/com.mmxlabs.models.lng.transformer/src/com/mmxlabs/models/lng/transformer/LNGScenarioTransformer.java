@@ -1602,7 +1602,9 @@ public class LNGScenarioTransformer {
 		}
 
 		buildDESPurchaseMarkToMarket(builder, portAssociation, contractTransformers, entities, spotMarketsModel.getDesPurchaseSpotMarket());
+		buildDESSalesMarkToMarket(builder, portAssociation, contractTransformers, entities, spotMarketsModel.getDesSalesSpotMarket());
 		buildFOBSalesMarkToMarket(builder, portAssociation, contractTransformers, entities, spotMarketsModel.getFobSalesSpotMarket());
+		buildFOBPurchasesMarkToMarket(builder, portAssociation, contractTransformers, entities, spotMarketsModel.getFobPurchasesSpotMarket());
 	}
 
 	private void buildDESPurchaseMarkToMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
@@ -1639,6 +1641,38 @@ public class LNGScenarioTransformer {
 		}
 	}
 
+	private void buildDESSalesMarkToMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
+			final ModelEntityMap entities, final SpotMarketGroup marketGroup) {
+		if (marketGroup != null) {
+
+			for (final SpotMarket market : marketGroup.getMarkets()) {
+				assert market instanceof DESSalesMarket;
+				if (market instanceof DESSalesMarket) {
+					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+					final Set<Port> portSet = Collections.singleton(desSalesMarket.getNotionalPort());
+
+					final Set<IPort> marketPorts = new HashSet<IPort>();
+					for (final Port ap : portSet) {
+						final IPort ip = portAssociation.lookup((Port) ap);
+						if (ip != null) {
+							marketPorts.add(ip);
+						}
+					}
+
+					final IContractTransformer transformer = contractTransformersByEClass.get(desSalesMarket.getPriceInfo().eClass());
+					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(desSalesMarket.getPriceInfo());
+					if (priceCalculator == null) {
+						throw new IllegalStateException("No valid price calculator found");
+					}
+
+					final IMarkToMarket optMarket = builder.createDESSalesMTM(marketPorts, priceCalculator);
+					entities.addModelObject(market, optMarket);
+
+				}
+			}
+		}
+	}
+
 	private void buildFOBSalesMarkToMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
 			final ModelEntityMap entities, final SpotMarketGroup marketGroup) {
 		if (marketGroup != null) {
@@ -1663,6 +1697,38 @@ public class LNGScenarioTransformer {
 						throw new IllegalStateException("No valid price calculator found");
 					}
 					final IMarkToMarket optMarket = builder.createFOBSaleMTM(marketPorts, priceCalculator);
+					entities.addModelObject(market, optMarket);
+				}
+			}
+		}
+	}
+
+	private void buildFOBPurchasesMarkToMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
+			final ModelEntityMap entities, final SpotMarketGroup marketGroup) {
+		if (marketGroup != null) {
+
+			for (final SpotMarket market : marketGroup.getMarkets()) {
+				assert market instanceof FOBPurchasesMarket;
+				if (market instanceof FOBPurchasesMarket) {
+					final FOBSalesMarket fobPurchaseMarket = (FOBSalesMarket) market;
+					final Set<Port> portSet = Collections.singleton(fobPurchaseMarket.getLoadPort());
+
+					final Set<IPort> marketPorts = new HashSet<IPort>();
+					for (final Port ap : portSet) {
+						final IPort ip = portAssociation.lookup((Port) ap);
+						if (ip != null) {
+							marketPorts.add(ip);
+						}
+					}
+
+					final IContractTransformer transformer = contractTransformersByEClass.get(fobPurchaseMarket.getPriceInfo().eClass());
+					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(fobPurchaseMarket.getPriceInfo());
+					if (priceCalculator == null) {
+						throw new IllegalStateException("No valid price calculator found");
+					}
+					final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getLoadPort().getCvValue());
+
+					final IMarkToMarket optMarket = builder.createFOBPurchaseMTM(marketPorts, cargoCVValue, priceCalculator);
 					entities.addModelObject(market, optMarket);
 				}
 			}
