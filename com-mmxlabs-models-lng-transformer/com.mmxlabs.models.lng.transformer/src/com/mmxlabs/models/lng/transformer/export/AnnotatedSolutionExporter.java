@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
@@ -69,6 +70,9 @@ public class AnnotatedSolutionExporter {
 	@Inject
 	private List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
 
+	@Inject
+	private Injector injector;
+
 	private boolean exportRuntimeAndFitness = false;
 
 	public boolean isExportRuntimeAndFitness() {
@@ -110,11 +114,21 @@ public class AnnotatedSolutionExporter {
 
 		// prepare exporters
 		for (final IAnnotationExporter exporter : exporters) {
+			//injector.injectMembers(exporter);
 			exporter.setOutput(output);
 			exporter.setModelEntityMap(entities);
 			exporter.setAnnotatedSolution(annotatedSolution);
 
 			exporter.init();
+		}
+
+		// TODO: Generate an unused element exporter inteface etc.
+		MarkToMarketExporter mtmExporter = new MarkToMarketExporter();
+		{
+			injector.injectMembers(mtmExporter);
+			mtmExporter.setOutput(output);
+			mtmExporter.setModelEntityMap(entities);
+			mtmExporter.setAnnotatedSolution(annotatedSolution);
 		}
 
 		final List<Sequence> sequences = output.getSequences();
@@ -253,7 +267,7 @@ public class AnnotatedSolutionExporter {
 			} else {
 				events = eSequence.getEvents();
 			}
-			
+
 			// create a comparator to allow sorting of events
 			final Comparator<Event> eventComparator = new Comparator<Event>() {
 				@Override
@@ -417,6 +431,8 @@ public class AnnotatedSolutionExporter {
 			if (slot != null) {
 				output.getUnusedElements().add(modelSlot);
 			}
+			final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
+			mtmExporter.export(element, annotations);
 		}
 
 		@SuppressWarnings("unchecked")
