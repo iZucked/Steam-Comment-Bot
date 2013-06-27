@@ -37,8 +37,8 @@ public class ModelsLNGMigrationConstants {
 	/**
 	 * @since 4.0
 	 */
-	public static final PackageData PKG_DATA_AnalyticsModel = new PackageData(NSURI_AnalyticsModel, "platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore",
-			"../../com.mmxlabs.models.lng.port/model/port.ecore");
+	public static final PackageData PKG_DATA_AnalyticsModel = new PackageData(NSURI_AnalyticsModel, "platform:/plugin/com.mmxlabs.models.lng.analytics/model/analytics.ecore",
+			"../../com.mmxlabs.models.lng.port/model/analytics.ecore");
 
 	/**
 	 * @since 4.0
