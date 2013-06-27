@@ -89,13 +89,18 @@ public class HorizontalKPIReportView extends ViewPart {
 					rtn = (d.pnl != null ? d.pnl - (pinD != null ? pinD.pnl : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
 				case 2:
-					return "Shipping Cost";
+					return "P&L (MtM)";
 				case 3:
-					rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
+					rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
 				case 4:
-					return "Idle Time";
+					return "Shipping Cost";
 				case 5:
+					rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
+					return format(rtn, KPIContentProvider.TYPE_COST);
+				case 6:
+					return "Idle Time";
+				case 7:
 					rtn = (d.idleTime != null ? d.idleTime - (pinD != null ? pinD.idleTime : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_TIME);
 				}
@@ -184,7 +189,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		// SG: 2013-04-17
 		viewer.setAutoPreferredHeight(true);
 		// KPI columns - two per KPI - name, value
-		for (int i = 0; i < 2 * 3; ++i) {
+		for (int i = 0; i < 2 * 4; ++i) {
 			final GridViewerColumn tvc = new GridViewerColumn(viewer, SWT.NONE);
 			int width = 100;
 			switch (i) {
@@ -192,9 +197,12 @@ public class HorizontalKPIReportView extends ViewPart {
 				width = 33; // "P&L"
 				break;
 			case 2:
-				width = 85; // "Shipping Cost"
+				width = 70; // "P&L (MtM)"
 				break;
 			case 4:
+				width = 85; // "Shipping Cost"
+				break;
+			case 6:
 				width = 61; // "Idle time"
 				break;
 			}

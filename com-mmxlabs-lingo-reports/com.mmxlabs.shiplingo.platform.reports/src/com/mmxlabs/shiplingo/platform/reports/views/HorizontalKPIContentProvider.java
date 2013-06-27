@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -50,16 +51,18 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 	private Viewer currentViewer;
 
 	public static class RowData {
-		public RowData(final String scheduleName, final Long pnl, final Long shippingCost, final Long idleTime) {
+		public RowData(final String scheduleName, final Long pnl, final Long mtmPnl, final Long shippingCost, final Long idleTime) {
 			super();
 			this.scheduleName = scheduleName;
 			this.pnl = pnl;
+			this.mtmPnl = mtmPnl;
 			this.shippingCost = shippingCost;
 			this.idleTime = idleTime;
 		}
 
 		public final String scheduleName;
 		public final Long pnl;
+		public final Long mtmPnl;
 		public final Long shippingCost;
 		public final Long idleTime;
 	}
@@ -75,6 +78,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 
 		long totalCost = 0l;
 		long totalPNL = 0l;
+		long totalMtMPNL = 0l;
 		long totalIdleHours = 0l;
 
 		for (final Sequence seq : schedule.getSequences()) {
@@ -112,6 +116,10 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 					totalPNL += getElementPNL((ProfitAndLossContainer) evt);
 				}
 			}
+
+		}
+		for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+			totalMtMPNL += getElementPNL(marketAllocation);
 		}
 
 		EObject object = schedule.eContainer();
@@ -119,7 +127,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			object = object.eContainer();
 		}
 
-		return new RowData(scenarioInstance.getName(), totalPNL, totalCost, totalIdleHours);
+		return new RowData(scenarioInstance.getName(), totalPNL, totalMtMPNL, totalCost, totalIdleHours);
 	}
 
 	private long getElementPNL(final ProfitAndLossContainer container) {
@@ -158,12 +166,12 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		}
 
 		if (rowData.length == 0) {
-			rowData = new RowData[] { new RowData("", null, null, null) };
+			rowData = new RowData[] { new RowData("", null, null, null, null) };
 		}
 
 	}
 
-	private RowData pinnedData = new RowData("", null, null, null);
+	private RowData pinnedData = new RowData("", null, null, null, null);
 
 	public RowData getPinnedData() {
 		return pinnedData;

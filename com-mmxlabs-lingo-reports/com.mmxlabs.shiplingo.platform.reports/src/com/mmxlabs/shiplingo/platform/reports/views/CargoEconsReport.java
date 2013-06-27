@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -58,6 +59,9 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -140,6 +144,16 @@ public class CargoEconsReport extends ViewPart {
 						dataColumns.add(gvc);
 						gvc.getColumn().setText(cargoAllocation.getName());
 						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(new CargoAllocationFieldTypeMapper(cargoAllocation)));
+
+						gvc.getColumn().setWidth(100);
+					} else if (selectedObject instanceof MarketAllocation) {
+						final MarketAllocation cargoAllocation = (MarketAllocation) selectedObject;
+
+						final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+						// Mark column for disposal on selection change
+						dataColumns.add(gvc);
+						gvc.getColumn().setText(cargoAllocation.getSlot().getName());
+						gvc.setLabelProvider(new FieldTypeMapperLabelProvider(new MarketAllocationFieldTypeMapper(cargoAllocation)));
 
 						gvc.getColumn().setWidth(100);
 					}
@@ -419,6 +433,148 @@ public class CargoEconsReport extends ViewPart {
 	}
 
 	/**
+	 * A {@link IFieldTypeMapper} implementation for {@link MarketAllocation} objects
+	 */
+	private static class MarketAllocationFieldTypeMapper implements IFieldTypeMapper {
+
+		private final MarketAllocation marketAllocation;
+
+		MarketAllocationFieldTypeMapper(final MarketAllocation marketAllocation) {
+			this.marketAllocation = marketAllocation;
+		}
+
+		@Override
+		public Object getObject(final FieldType fieldType) {
+
+			switch (fieldType) {
+			case BUY_COST_TOTAL: {
+				// Find the CV & price
+				final double cv;
+				final double price;
+				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
+				if (allocation.getSlot() instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
+					cv = loadSlot.getSlotOrPortCV();
+					price = allocation.getPrice();
+					break;
+				} else {
+					cv = getMarketCV(marketAllocation.getMarket());
+					price = marketAllocation.getPrice();
+				}
+
+				final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
+				final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
+				return volumeInMMBTu * price;
+			}
+			case BUY_VOLUME_IN_MMBTU: {
+				// / Find the CV
+				final double cv;
+				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
+				if (allocation.getSlot() instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
+					cv = loadSlot.getSlotOrPortCV();
+					break;
+				} else {
+					cv = getMarketCV(marketAllocation.getMarket());
+				}
+
+				final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
+				final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
+				return volumeInMMBTu;
+			}
+			case PNL_PER_MMBTU: {
+				final Integer pnl = CargoEconsReport.getPNLValue(marketAllocation);
+				if (pnl != null) {
+					final double dischargeVolumeInMMBTu = ((Number) getObject(FieldType.SELL_VOLUME_IN_MMBTU)).doubleValue();
+					return (double) pnl / dischargeVolumeInMMBTu;
+				}
+				break;
+			}
+			case PNL_TOTAL: {
+				return CargoEconsReport.getPNLValue(marketAllocation);
+			}
+			case SELL_REVENUE_TOTAL: {
+				// Find the CV & price
+				final double cv;
+				final double price;
+				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
+				if (allocation.getSlot() instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
+					cv = loadSlot.getSlotOrPortCV();
+					price = marketAllocation.getPrice();
+					break;
+				} else {
+					cv = getMarketCV(marketAllocation.getMarket());
+					price = allocation.getPrice();
+				}
+
+				final int volumeInM3 = allocation.getVolumeTransferred();
+				final double volumeInMMBTu = (volumeInM3 * cv);
+				return volumeInMMBTu * price;
+			}
+			case SELL_VOLUME_IN_MMBTU: {
+				double cv = 0.0;
+				// Find the CV
+				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
+				if (allocation.getSlot() instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
+					// TODO: Avg CV
+					cv = loadSlot.getSlotOrPortCV();
+					break;
+				} else {
+					cv = getMarketCV(marketAllocation.getMarket());
+				}
+				long dischargeVolume = 0;
+				if (allocation.getSlot() instanceof DischargeSlot) {
+					final int dischargeVolumeInM3 = allocation.getVolumeTransferred();
+					final double volumeInMMBTu = (dischargeVolumeInM3 * cv);
+					dischargeVolume += volumeInMMBTu;
+				}
+				return dischargeVolume;
+			}
+			case SHIPPING_BOIL_OFF_COST_TOTAL:
+			case SHIPPING_BUNKERS_COST_TOTAL:
+			case SHIPPING_PORT_COST_TOTAL:
+			case SHIPPING_CANAL_COST_TOTAL:
+			case SHIPPING_CHARTER_COST_TOTAL:
+			case SHIPPING_COST_TOTAL:
+			default:
+				break;
+
+			}
+			return null;
+		}
+
+		@Override
+		public boolean isSpot() {
+			return true;
+		}
+
+		@Override
+		public String getText(final FieldType fieldType) {
+
+			final Object obj = getObject(fieldType);
+			if (obj != null) {
+				// TODO: Format appropriately, maybe have a format specifier on the enum?
+				return fieldType.getDf().format(obj);
+			}
+
+			return null;
+		}
+
+		private double getMarketCV(SpotMarket market) {
+			if (market instanceof DESPurchaseMarket) {
+				return ((DESPurchaseMarket) market).getCv();
+			}
+			if (market instanceof FOBPurchasesMarket) {
+				return ((FOBPurchasesMarket) market).getCv();
+			}
+			return 0.0;
+
+		}
+	}
+
+	/**
 	 * A label provider for the "Name" column
 	 * 
 	 */
@@ -510,11 +666,18 @@ public class CargoEconsReport extends ViewPart {
 				if (obj instanceof CargoAllocation) {
 					validObjects.add(obj);
 				} else if (obj instanceof SlotAllocation) {
-					validObjects.add(((SlotAllocation) obj).getCargoAllocation());
+					SlotAllocation slotAllocation = (SlotAllocation) obj;
+					if (slotAllocation.getCargoAllocation() != null) {
+						validObjects.add(slotAllocation.getCargoAllocation());
+					}
+					if (slotAllocation.getMarketAllocation() != null) {
+						validObjects.add(slotAllocation.getMarketAllocation());
+					}
 				} else if (obj instanceof SlotVisit) {
 					validObjects.add((((SlotVisit) obj).getSlotAllocation().getCargoAllocation()));
 				} else if (obj instanceof Cargo || obj instanceof Slot) {
 					Cargo cargo = null;
+					Slot slot = null;
 					if (obj instanceof Cargo) {
 						cargo = (Cargo) obj;
 					} else {
@@ -522,8 +685,10 @@ public class CargoEconsReport extends ViewPart {
 						assert obj instanceof Slot;
 						if (obj instanceof LoadSlot) {
 							cargo = ((LoadSlot) obj).getCargo();
+							slot = (LoadSlot) obj;
 						} else if (obj instanceof DischargeSlot) {
 							cargo = ((DischargeSlot) obj).getCargo();
+							slot = (DischargeSlot) obj;
 						}
 					}
 
@@ -547,6 +712,34 @@ public class CargoEconsReport extends ViewPart {
 											for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 												if (cargo == cargoAllocation.getInputCargo()) {
 													validObjects.add(cargoAllocation);
+													break;
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					} else if (slot != null) {
+
+						// TODO: Look up ScheduleModel somehow....
+
+						if (part instanceof IEditorPart) {
+							final IEditorPart editorPart = (IEditorPart) part;
+							final IEditorInput editorInput = editorPart.getEditorInput();
+							if (editorInput instanceof IScenarioServiceEditorInput) {
+								final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
+								final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
+								final EObject instance = scenarioInstance.getInstance();
+								if (instance instanceof LNGScenarioModel) {
+									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+									final ScheduleModel scheduleModel = lngScenarioModel.getPortfolioModel().getScheduleModel();
+									if (scheduleModel != null) {
+										final Schedule schedule = scheduleModel.getSchedule();
+										if (schedule != null) {
+											for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+												if (slot == marketAllocation.getSlot()) {
+													validObjects.add(marketAllocation);
 													break;
 												}
 											}
@@ -680,4 +873,5 @@ public class CargoEconsReport extends ViewPart {
 		}
 		return sum;
 	}
+
 }
