@@ -129,6 +129,13 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.MARKET_ALLOCATION: {
+				MarketAllocation marketAllocation = (MarketAllocation)theEObject;
+				T result = caseMarketAllocation(marketAllocation);
+				if (result == null) result = caseProfitAndLossContainer(marketAllocation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case SchedulePackage.SLOT_ALLOCATION: {
 				SlotAllocation slotAllocation = (SlotAllocation)theEObject;
 				T result = caseSlotAllocation(slotAllocation);
@@ -497,6 +504,22 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCargoAllocation(CargoAllocation object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Market Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Market Allocation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarketAllocation(MarketAllocation object) {
 		return null;
 	}
 

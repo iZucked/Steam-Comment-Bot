@@ -70,7 +70,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 */
 	public static ScheduleFactory init() {
 		try {
-			ScheduleFactory theScheduleFactory = (ScheduleFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/schedule/1/"); 
+			ScheduleFactory theScheduleFactory = (ScheduleFactory)EPackage.Registry.INSTANCE.getEFactory(SchedulePackage.eNS_URI);
 			if (theScheduleFactory != null) {
 				return theScheduleFactory;
 			}
@@ -103,6 +103,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.SCHEDULE: return createSchedule();
 			case SchedulePackage.FITNESS: return createFitness();
 			case SchedulePackage.CARGO_ALLOCATION: return createCargoAllocation();
+			case SchedulePackage.MARKET_ALLOCATION: return createMarketAllocation();
 			case SchedulePackage.SLOT_ALLOCATION: return createSlotAllocation();
 			case SchedulePackage.SEQUENCE: return createSequence();
 			case SchedulePackage.EVENT: return createEvent();
@@ -311,6 +312,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public CargoAllocation createCargoAllocation() {
 		CargoAllocationImpl cargoAllocation = new CargoAllocationImpl();
 		return cargoAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MarketAllocation createMarketAllocation() {
+		MarketAllocationImpl marketAllocation = new MarketAllocationImpl();
+		return marketAllocation;
 	}
 
 	/**

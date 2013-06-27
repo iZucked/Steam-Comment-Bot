@@ -394,6 +394,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.MarketAllocation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketAllocationItemProvider marketAllocationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.MarketAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketAllocationAdapter() {
+		if (marketAllocationItemProvider == null) {
+			marketAllocationItemProvider = new MarketAllocationItemProvider(this);
+		}
+
+		return marketAllocationItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.SlotAllocation} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -784,6 +807,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (scheduleItemProvider != null) scheduleItemProvider.dispose();
 		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
 		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
+		if (marketAllocationItemProvider != null) marketAllocationItemProvider.dispose();
 		if (slotAllocationItemProvider != null) slotAllocationItemProvider.dispose();
 		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
 		if (eventItemProvider != null) eventItemProvider.dispose();
@@ -880,8 +904,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		 */
 		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
 			ArrayList<Object> result = new ArrayList<Object>();
-		   new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
-		   return result;
+			new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
+			return result;
 		}
 
 		/**

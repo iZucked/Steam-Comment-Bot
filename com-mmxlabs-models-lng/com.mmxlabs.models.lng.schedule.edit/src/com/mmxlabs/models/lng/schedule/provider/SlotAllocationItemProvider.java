@@ -64,6 +64,7 @@ public class SlotAllocationItemProvider
 			addSlotPropertyDescriptor(object);
 			addSpotMarketPropertyDescriptor(object);
 			addCargoAllocationPropertyDescriptor(object);
+			addMarketAllocationPropertyDescriptor(object);
 			addSlotVisitPropertyDescriptor(object);
 			addPricePropertyDescriptor(object);
 			addVolumeTransferredPropertyDescriptor(object);
@@ -129,6 +130,29 @@ public class SlotAllocationItemProvider
 				 getString("_UI_SlotAllocation_cargoAllocation_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_cargoAllocation_feature", "_UI_SlotAllocation_type"),
 				 SchedulePackage.Literals.SLOT_ALLOCATION__CARGO_ALLOCATION,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Market Allocation feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarketAllocationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotAllocation_marketAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_marketAllocation_feature", "_UI_SlotAllocation_type"),
+				 SchedulePackage.Literals.SLOT_ALLOCATION__MARKET_ALLOCATION,
 				 true,
 				 false,
 				 true,

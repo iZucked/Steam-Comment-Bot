@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSpotMarket <em>Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getMarketAllocation <em>Market Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlotVisit <em>Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getVolumeTransferred <em>Volume Transferred</em>}</li>
@@ -91,6 +93,17 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected CargoAllocation cargoAllocation;
+
+	/**
+	 * The cached value of the '{@link #getMarketAllocation() <em>Market Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getMarketAllocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected MarketAllocation marketAllocation;
 
 	/**
 	 * The cached value of the '{@link #getSlotVisit() <em>Slot Visit</em>}' reference.
@@ -364,6 +377,70 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MarketAllocation getMarketAllocation() {
+		if (marketAllocation != null && marketAllocation.eIsProxy()) {
+			InternalEObject oldMarketAllocation = (InternalEObject)marketAllocation;
+			marketAllocation = (MarketAllocation)eResolveProxy(oldMarketAllocation);
+			if (marketAllocation != oldMarketAllocation) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION, oldMarketAllocation, marketAllocation));
+			}
+		}
+		return marketAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MarketAllocation basicGetMarketAllocation() {
+		return marketAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMarketAllocation(MarketAllocation newMarketAllocation, NotificationChain msgs) {
+		MarketAllocation oldMarketAllocation = marketAllocation;
+		marketAllocation = newMarketAllocation;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION, oldMarketAllocation, newMarketAllocation);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMarketAllocation(MarketAllocation newMarketAllocation) {
+		if (newMarketAllocation != marketAllocation) {
+			NotificationChain msgs = null;
+			if (marketAllocation != null)
+				msgs = ((InternalEObject)marketAllocation).eInverseRemove(this, SchedulePackage.MARKET_ALLOCATION__SLOT_ALLOCATION, MarketAllocation.class, msgs);
+			if (newMarketAllocation != null)
+				msgs = ((InternalEObject)newMarketAllocation).eInverseAdd(this, SchedulePackage.MARKET_ALLOCATION__SLOT_ALLOCATION, MarketAllocation.class, msgs);
+			msgs = basicSetMarketAllocation(newMarketAllocation, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION, newMarketAllocation, newMarketAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -607,6 +684,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				if (cargoAllocation != null)
 					msgs = ((InternalEObject)cargoAllocation).eInverseRemove(this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, CargoAllocation.class, msgs);
 				return basicSetCargoAllocation((CargoAllocation)otherEnd, msgs);
+			case SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION:
+				if (marketAllocation != null)
+					msgs = ((InternalEObject)marketAllocation).eInverseRemove(this, SchedulePackage.MARKET_ALLOCATION__SLOT_ALLOCATION, MarketAllocation.class, msgs);
+				return basicSetMarketAllocation((MarketAllocation)otherEnd, msgs);
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				if (slotVisit != null)
 					msgs = ((InternalEObject)slotVisit).eInverseRemove(this, SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION, SlotVisit.class, msgs);
@@ -625,6 +706,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 		switch (featureID) {
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				return basicSetCargoAllocation(null, msgs);
+			case SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION:
+				return basicSetMarketAllocation(null, msgs);
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				return basicUnsetSlotVisit(msgs);
 		}
@@ -648,6 +731,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				if (resolve) return getCargoAllocation();
 				return basicGetCargoAllocation();
+			case SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION:
+				if (resolve) return getMarketAllocation();
+				return basicGetMarketAllocation();
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				if (resolve) return getSlotVisit();
 				return basicGetSlotVisit();
@@ -675,6 +761,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION:
+				setMarketAllocation((MarketAllocation)newValue);
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				setSlotVisit((SlotVisit)newValue);
@@ -706,6 +795,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)null);
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION:
+				setMarketAllocation((MarketAllocation)null);
+				return;
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				unsetSlotVisit();
 				return;
@@ -733,6 +825,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return isSetSpotMarket();
 			case SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION:
 				return cargoAllocation != null;
+			case SchedulePackage.SLOT_ALLOCATION__MARKET_ALLOCATION:
+				return marketAllocation != null;
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				return isSetSlotVisit();
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:

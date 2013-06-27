@@ -181,6 +181,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -190,6 +191,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
