@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -36,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.annotations.IShippingCostAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -95,7 +97,33 @@ public class TradingExporterExtension implements IExporterExtension {
 							setPandLentries(profitAndLoss, cargoAllocation);
 							setShippingCosts(shippingCost, cargoAllocation, false);
 							setShippingCosts(shippingCostWithBoilOff, cargoAllocation, true);
+						} else {
+
+							MarketAllocation marketAllocation = null;
+							for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
+								if (allocation.getSlot() == modelSlot) {
+									marketAllocation = allocation;
+									break;
+								}
+							}
+							if (marketAllocation != null) {
+								setPandLentries(profitAndLoss, marketAllocation);
+							}
 						}
+					} else if (slot instanceof IDischargeOption) {
+						final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+
+						MarketAllocation marketAllocation = null;
+						for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
+							if (allocation.getSlot() == modelSlot) {
+								marketAllocation = allocation;
+								break;
+							}
+						}
+						if (marketAllocation != null) {
+							setPandLentries(profitAndLoss, marketAllocation);
+						}
+
 					} else if (slot instanceof IVesselEventPortSlot) {
 						final com.mmxlabs.models.lng.fleet.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.fleet.VesselEvent.class);
 						VesselEventVisit visit = null;
@@ -156,7 +184,7 @@ public class TradingExporterExtension implements IExporterExtension {
 					// CargoAllocation cargoAllocation = null;
 					SlotVisit slotVisit = null;
 					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-						for (SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 							if (slotAllocation.getSlot() == modelSlot) {
 								slotVisit = slotAllocation.getSlotVisit();
 								break;
