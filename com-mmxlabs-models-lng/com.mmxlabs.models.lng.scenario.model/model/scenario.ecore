@@ -3,31 +3,31 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.mmxlabs.com/models/lng/scenario/1/"
     nsPrefix="lng.scenario.model">
   <eClassifiers xsi:type="ecore:EClass" name="LNGScenarioModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXRootObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="portModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.port/model/port.ecore#//PortModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//PortModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fleetModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.fleet/model/fleet.ecore#//FleetModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fleetModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//FleetModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pricingModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.pricing/model/pricing.ecore#//PricingModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pricingModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//PricingModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="commercialModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.commercial/model/commercial.ecore#//CommercialModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commercialModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//CommercialModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="spotMarketsModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarketsModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="spotMarketsModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarketsModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parametersModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.parameters/model/parameters.ecore#//ParametersModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parametersModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.parameters/model/parameters.ecore#//ParametersModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="analyticsModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.analytics/model/analytics.ecore#//AnalyticsModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="analyticsModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.analytics/model/analytics.ecore#//AnalyticsModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portfolioModel" eType="#//LNGPortfolioModel"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LNGPortfolioModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioFleetModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.fleet/model/fleet.ecore#//ScenarioFleetModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioFleetModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//ScenarioFleetModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CargoModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CargoModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="assignmentModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.assignment/model/assignment.ecore#//AssignmentModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignmentModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.assignment/model/assignment.ecore#//AssignmentModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
         containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

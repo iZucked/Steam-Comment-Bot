@@ -49,7 +49,7 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -2;
+		return 2;
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV2Loader(extraPackages);
+			destiniationLoader = MetamodelVersionsUtil.createV1_V2_IntermediateLoader(extraPackages);
 		}
 		return destiniationLoader;
 	}

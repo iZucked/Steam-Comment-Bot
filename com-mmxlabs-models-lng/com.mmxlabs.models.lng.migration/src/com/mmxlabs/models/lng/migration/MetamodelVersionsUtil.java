@@ -126,7 +126,7 @@ public class MetamodelVersionsUtil {
 	/**
 	 * @since 5.0
 	 */
-	public static MetamodelLoader createV2Loader(final Map<URI, PackageData> extraPackages) {
+	public static MetamodelLoader createV1_V2_IntermediateLoader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
 
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
@@ -150,6 +150,66 @@ public class MetamodelVersionsUtil {
 		EcoreUtil.resolveAll(loader.getResourceSet());
 
 		return loader;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public static MetamodelLoader createV2Loader(final Map<URI, PackageData> extraPackages) {
+		final MetamodelLoader loader = new MetamodelLoader();
+
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PricingModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_FleetModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_CommercialModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_SpotMarketsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_CargoModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.assignment/model/assignment-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AssignmentModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
+		if (extraPackages != null) {
+			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
+				loader.loadEPackage(e.getKey(), e.getValue());
+			}
+		}
+		EcoreUtil.resolveAll(loader.getResourceSet());
+
+		return loader;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public static MetamodelLoader createV3Loader(final Map<URI, PackageData> extraPackages) {
+		// final MetamodelLoader loader = new MetamodelLoader();
+		//
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PricingModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_FleetModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_CommercialModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_SpotMarketsModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_CargoModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.assignment/model/assignment-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AssignmentModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScheduleModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
+		// loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v3.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
+		// if (extraPackages != null) {
+		// for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
+		// loader.loadEPackage(e.getKey(), e.getValue());
+		// }
+		// }
+		// EcoreUtil.resolveAll(loader.getResourceSet());
+		//
+		// return loader;
+
+		return createCurrentLoader(extraPackages);
 	}
 
 	/**

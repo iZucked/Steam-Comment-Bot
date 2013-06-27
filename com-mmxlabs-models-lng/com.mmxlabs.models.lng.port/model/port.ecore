@@ -25,10 +25,10 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="atobviacCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataloyCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
-    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//OtherNamesObject"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//OtherNamesObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="lines" upperBound="-1"
@@ -39,11 +39,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortGroup">
     <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1">
-      <eGenericType eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
         <eTypeArguments eClassifier="#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -66,7 +66,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="CapabilityGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capability" lowerBound="1"
         eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
-    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>
   </eClassifiers>
