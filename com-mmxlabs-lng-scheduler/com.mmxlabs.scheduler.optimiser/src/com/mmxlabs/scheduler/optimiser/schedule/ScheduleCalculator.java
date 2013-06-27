@@ -23,13 +23,16 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -225,24 +228,28 @@ public class ScheduleCalculator {
 				if (element == null) {
 					continue;
 				}
+				final IMarkToMarket market = markToMarketProvider.getMarketForElement(element);
+				if (market == null) {
+					continue;
+				}
 
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 
 				final ILoadOption loadOption;
 				final IDischargeOption dischargeOption;
 				final int time;
-				final IMarkToMarket market = markToMarketProvider.getMarketForElement(element);
-				final long volume;
-				if (portSlot instanceof ILoadOption) {
+
+				final IVessel vessel;
+				if (portSlot instanceof ILoadSlot) {
 					loadOption = (ILoadOption) portSlot;
 					dischargeOption = new MarkToMarketDischargeOption(market, loadOption);
 					time = loadOption.getTimeWindow().getStart();
-					volume = loadOption.getMaxLoadVolume();
-				} else if (portSlot instanceof IDischargeOption) {
+					vessel = new MarkToMarketVessel(market, loadOption);
+				} else if (portSlot instanceof IDischargeSlot) {
 					dischargeOption = (IDischargeOption) portSlot;
 					loadOption = new MarkToMarketLoadOption(market, dischargeOption);
 					time = dischargeOption.getTimeWindow().getStart();
-					volume = dischargeOption.getMaxDischargeVolume();
+					vessel = new MarkToMarketVessel(market, dischargeOption);
 				} else {
 					continue;
 				}
@@ -260,27 +267,18 @@ public class ScheduleCalculator {
 					final PortDetails dischargeDetails = new PortDetails();
 					dischargeDetails.setOptions(dischargeOptions);
 					dischargeOptions.setVisitDuration(0);
-					dischargeOptions.setPortSlot(loadOption);
+					dischargeOptions.setPortSlot(dischargeOption);
 
 					voyagePlan.setSequence(new Object[] { loadDetails, dischargeDetails });
 				}
 
 				// Create an allocation annotation.
-				IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(null, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
-				// final AllocationAnnotation allocationAnnotation = new AllocationAnnotation();
-				// allocationAnnotation.setFuelVolumeInM3(0);
-				// allocationAnnotation.setRemainingHeelVolumeInM3(0);
-				// allocationAnnotation.setSlotPricePerM3(loadOption, loadPricePerM3);
-				// allocationAnnotation.setSlotPricePerM3(dischargeOption, dischargePricePerM3);
-				// allocationAnnotation.setSlotTime(loadOption, time);
-				// allocationAnnotation.setSlotTime(dischargeOption, time);
-				// allocationAnnotation.setSlotVolumeInM3(loadOption, volume);
-				// allocationAnnotation.setSlotVolumeInM3(dischargeOption, volume);
+				IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
 
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 
 				// Calculate P&L
-				entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, null, time, annotatedSolution);
+				entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vessel, time, annotatedSolution);
 			}
 
 		}
