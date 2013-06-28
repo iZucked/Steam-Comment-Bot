@@ -182,9 +182,9 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @generated
-	 * <!-- end-user-doc -->
 	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	public CharterIndex getCharterOutPrice() {

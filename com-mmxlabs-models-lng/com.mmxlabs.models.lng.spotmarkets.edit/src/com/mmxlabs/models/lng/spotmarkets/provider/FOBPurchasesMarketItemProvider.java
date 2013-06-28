@@ -60,6 +60,7 @@ public class FOBPurchasesMarketItemProvider
 
 			addNotionalPortPropertyDescriptor(object);
 			addCvPropertyDescriptor(object);
+			addMarketPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -104,6 +105,29 @@ public class FOBPurchasesMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Market Ports feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarketPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FOBPurchasesMarket_marketPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FOBPurchasesMarket_marketPorts_feature", "_UI_FOBPurchasesMarket_type"),
+				 SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET__MARKET_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

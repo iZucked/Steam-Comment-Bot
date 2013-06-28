@@ -409,6 +409,16 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDESSalesMarket_MarketPorts() {
+		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -436,6 +446,16 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFOBPurchasesMarket_MarketPorts() {
+		return (EReference)fobPurchasesMarketEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -450,6 +470,16 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	public EReference getFOBSalesMarket_LoadPort() {
 		return (EReference)fobSalesMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFOBSalesMarket_OriginPorts() {
+		return (EReference)fobSalesMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -547,13 +577,16 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		desSalesMarketEClass = createEClass(DES_SALES_MARKET);
 		createEReference(desSalesMarketEClass, DES_SALES_MARKET__NOTIONAL_PORT);
+		createEReference(desSalesMarketEClass, DES_SALES_MARKET__MARKET_PORTS);
 
 		fobPurchasesMarketEClass = createEClass(FOB_PURCHASES_MARKET);
 		createEReference(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__NOTIONAL_PORT);
 		createEAttribute(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__CV);
+		createEReference(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__MARKET_PORTS);
 
 		fobSalesMarketEClass = createEClass(FOB_SALES_MARKET);
 		createEReference(fobSalesMarketEClass, FOB_SALES_MARKET__LOAD_PORT);
+		createEReference(fobSalesMarketEClass, FOB_SALES_MARKET__ORIGIN_PORTS);
 
 		spotAvailabilityEClass = createEClass(SPOT_AVAILABILITY);
 		createEAttribute(spotAvailabilityEClass, SPOT_AVAILABILITY__CONSTANT);
@@ -644,13 +677,25 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		initEClass(desSalesMarketEClass, DESSalesMarket.class, "DESSalesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDESSalesMarket_NotionalPort(), thePortPackage.getPort(), null, "notionalPort", null, 1, 1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getDESSalesMarket_MarketPorts(), g1, null, "marketPorts", null, 0, -1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fobPurchasesMarketEClass, FOBPurchasesMarket.class, "FOBPurchasesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFOBPurchasesMarket_NotionalPort(), thePortPackage.getPort(), null, "notionalPort", null, 1, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFOBPurchasesMarket_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getFOBPurchasesMarket_MarketPorts(), g1, null, "marketPorts", null, 0, -1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fobSalesMarketEClass, FOBSalesMarket.class, "FOBSalesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFOBSalesMarket_LoadPort(), thePortPackage.getPort(), null, "loadPort", null, 1, 1, FOBSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getFOBSalesMarket_OriginPorts(), g1, null, "originPorts", null, 0, -1, FOBSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spotAvailabilityEClass, SpotAvailability.class, "SpotAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpotAvailability_Constant(), ecorePackage.getEInt(), "constant", null, 0, 1, SpotAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
