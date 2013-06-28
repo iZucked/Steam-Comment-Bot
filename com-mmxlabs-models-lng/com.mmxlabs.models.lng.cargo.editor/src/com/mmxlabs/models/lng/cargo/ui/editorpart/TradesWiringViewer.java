@@ -104,6 +104,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -468,6 +469,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 						aSet.add(slotAllocation.getSlot());
 					}
+				} else if (a instanceof MarketAllocation) {
+					final MarketAllocation marketAllocation = (MarketAllocation) a;
+					aSet.add(marketAllocation.getSlot());
 				} else if (a instanceof SlotAllocation) {
 					final SlotAllocation slotAllocation = (SlotAllocation) a;
 					aSet.add(slotAllocation.getSlot());
@@ -687,7 +691,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}
 
-		addPNLColumn("P&L", new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_ALLOCATION));
+		addPNLColumn("P&L", new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_ALLOCATION));
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override

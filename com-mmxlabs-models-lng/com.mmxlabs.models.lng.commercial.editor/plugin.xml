@@ -174,4 +174,16 @@
        </FeatureAnyOf>
     </editorFactory>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated commercial -->
+      <editor
+            id="com.mmxlabs.models.lng.commercial.presentation.CommercialEditorID"
+            name="%_UI_CommercialEditor_label"
+            icon="icons/full/obj16/CommercialModelFile.gif"
+            extensions="commercial"
+            class="com.mmxlabs.models.lng.commercial.presentation.CommercialEditor"
+            contributorClass="com.mmxlabs.models.lng.commercial.presentation.CommercialActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>

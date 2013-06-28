@@ -94,9 +94,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				DataIndex<?> dataIndex = (DataIndex<?>)theEObject;
 				T result = caseDataIndex(dataIndex);
 				if (result == null) result = caseIndex(dataIndex);
-				if (result == null) result = caseUUIDObject(dataIndex);
-				if (result == null) result = caseNamedObject(dataIndex);
-				if (result == null) result = caseMMXObject(dataIndex);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -104,9 +101,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				DerivedIndex<?> derivedIndex = (DerivedIndex<?>)theEObject;
 				T result = caseDerivedIndex(derivedIndex);
 				if (result == null) result = caseIndex(derivedIndex);
-				if (result == null) result = caseUUIDObject(derivedIndex);
-				if (result == null) result = caseNamedObject(derivedIndex);
-				if (result == null) result = caseMMXObject(derivedIndex);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -119,9 +113,6 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.INDEX: {
 				Index<?> index = (Index<?>)theEObject;
 				T result = caseIndex(index);
-				if (result == null) result = caseUUIDObject(index);
-				if (result == null) result = caseNamedObject(index);
-				if (result == null) result = caseMMXObject(index);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -163,6 +154,24 @@ public class PricingSwitch<T> extends Switch<T> {
 				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
 				T result = caseCooldownPrice(cooldownPrice);
 				if (result == null) result = caseMMXObject(cooldownPrice);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.COMMODITY_INDEX: {
+				CommodityIndex commodityIndex = (CommodityIndex)theEObject;
+				T result = caseCommodityIndex(commodityIndex);
+				if (result == null) result = caseNamedObject(commodityIndex);
+				if (result == null) result = caseUUIDObject(commodityIndex);
+				if (result == null) result = caseMMXObject(commodityIndex);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.CHARTER_INDEX: {
+				CharterIndex charterIndex = (CharterIndex)theEObject;
+				T result = caseCharterIndex(charterIndex);
+				if (result == null) result = caseNamedObject(charterIndex);
+				if (result == null) result = caseUUIDObject(charterIndex);
+				if (result == null) result = caseMMXObject(charterIndex);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -332,6 +341,38 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCooldownPrice(CooldownPrice object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Commodity Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Commodity Index</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommodityIndex(CommodityIndex object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Index</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterIndex(CharterIndex object) {
 		return null;
 	}
 

@@ -13,7 +13,7 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -27,8 +27,8 @@ public class IndexNameConstraint extends AbstractModelConstraint {
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Index<?>) {
-			final Index<?> index = (Index<?>) target;
+		if (target instanceof CommodityIndex) {
+			final CommodityIndex index = (CommodityIndex) target;
 
 			// Only check commodity indicies
 			final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();

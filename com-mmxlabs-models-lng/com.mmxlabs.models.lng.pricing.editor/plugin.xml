@@ -80,14 +80,31 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityIndexComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityIndexComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CharterIndexComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.CharterIndexComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.CharterIndex">
+  </componentHelper>
 		
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
-          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.IndexReferenceValueProviderFactory"
-          id="com.mmxlabs.models.lng.pricing.editor.indexProvider"
-          referenceEClass="com.mmxlabs.models.lng.pricing.Index">
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CharterIndexReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CharterIndexReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.CharterIndex">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CommodityIndexReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CommodityIndexReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
     </valueProvider>
  </extension>
  <extension
@@ -113,6 +130,18 @@
           ID="com.mmxlabs.models.lng.pricing.editor.dataIndexImporter"
           classImporterClass="com.mmxlabs.models.lng.pricing.importers.DataIndexImporter"
           eClassName="com.mmxlabs.models.lng.pricing.DataIndex"
+          inheritable="false">
+    </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.importers.CommodityIndexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.CommodityIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          inheritable="false">
+    </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.CharterIndex"
           inheritable="false">
     </classImporter>
  </extension>

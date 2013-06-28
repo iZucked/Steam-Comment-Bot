@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -54,7 +55,7 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * @generated
 	 * @ordered
 	 */
-	protected Index<Integer> charterInPrice;
+	protected CharterIndex charterInPrice;
 
 	/**
 	 * The cached value of the '{@link #getCharterOutPrice() <em>Charter Out Price</em>}' reference.
@@ -64,7 +65,7 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * @generated
 	 * @ordered
 	 */
-	protected Index<Integer> charterOutPrice;
+	protected CharterIndex charterOutPrice;
 
 	/**
 	 * The default value of the '{@link #getSpotCharterCount() <em>Spot Charter Count</em>}' attribute.
@@ -139,14 +140,15 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public Index<Integer> getCharterInPrice() {
+	public CharterIndex getCharterInPrice() {
 		if (charterInPrice != null && charterInPrice.eIsProxy()) {
 			InternalEObject oldCharterInPrice = (InternalEObject)charterInPrice;
-			charterInPrice = (Index<Integer>)eResolveProxy(oldCharterInPrice);
+			charterInPrice = (CharterIndex)eResolveProxy(oldCharterInPrice);
 			if (charterInPrice != oldCharterInPrice) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE, oldCharterInPrice, charterInPrice));
@@ -157,20 +159,22 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index<Integer> basicGetCharterInPrice() {
+	public CharterIndex basicGetCharterInPrice() {
 		return charterInPrice;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCharterInPrice(Index<Integer> newCharterInPrice) {
-		Index<Integer> oldCharterInPrice = charterInPrice;
+	public void setCharterInPrice(CharterIndex newCharterInPrice) {
+		CharterIndex oldCharterInPrice = charterInPrice;
 		charterInPrice = newCharterInPrice;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE, oldCharterInPrice, charterInPrice));
@@ -178,14 +182,15 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public Index<Integer> getCharterOutPrice() {
+	public CharterIndex getCharterOutPrice() {
 		if (charterOutPrice != null && charterOutPrice.eIsProxy()) {
 			InternalEObject oldCharterOutPrice = (InternalEObject)charterOutPrice;
-			charterOutPrice = (Index<Integer>)eResolveProxy(oldCharterOutPrice);
+			charterOutPrice = (CharterIndex)eResolveProxy(oldCharterOutPrice);
 			if (charterOutPrice != oldCharterOutPrice) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_OUT_PRICE, oldCharterOutPrice, charterOutPrice));
@@ -196,20 +201,22 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index<Integer> basicGetCharterOutPrice() {
+	public CharterIndex basicGetCharterOutPrice() {
 		return charterOutPrice;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCharterOutPrice(Index<Integer> newCharterOutPrice) {
-		Index<Integer> oldCharterOutPrice = charterOutPrice;
+	public void setCharterOutPrice(CharterIndex newCharterOutPrice) {
+		CharterIndex oldCharterOutPrice = charterOutPrice;
 		charterOutPrice = newCharterOutPrice;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_OUT_PRICE, oldCharterOutPrice, charterOutPrice));
@@ -295,10 +302,10 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
 				return;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE:
-				setCharterInPrice((Index<Integer>)newValue);
+				setCharterInPrice((CharterIndex)newValue);
 				return;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_OUT_PRICE:
-				setCharterOutPrice((Index<Integer>)newValue);
+				setCharterOutPrice((CharterIndex)newValue);
 				return;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
 				setSpotCharterCount((Integer)newValue);
@@ -322,10 +329,10 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 				getVesselClasses().clear();
 				return;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE:
-				setCharterInPrice((Index<Integer>)null);
+				setCharterInPrice((CharterIndex)null);
 				return;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_OUT_PRICE:
-				setCharterOutPrice((Index<Integer>)null);
+				setCharterOutPrice((CharterIndex)null);
 				return;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
 				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);

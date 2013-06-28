@@ -6,23 +6,19 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
@@ -32,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -247,9 +244,13 @@ public class CargoModelRowTransformer {
 
 		final Map<Cargo, CargoAllocation> cargoAllocationMap = new HashMap<Cargo, CargoAllocation>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<Slot, SlotAllocation>();
+		final Map<Slot, MarketAllocation> marketAllocationMap = new HashMap<Slot, MarketAllocation>();
 		if (schedule != null) {
 			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 				cargoAllocationMap.put(cargoAllocation.getInputCargo(), cargoAllocation);
+			}
+			for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+				marketAllocationMap.put(marketAllocation.getSlot(), marketAllocation);
 			}
 			for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 				slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
@@ -290,6 +291,7 @@ public class CargoModelRowTransformer {
 
 			// Hook up allocation objects
 			rd.cargoAllocation = cargoAllocationMap.get(rd.cargo);
+			rd.marketAllocation = marketAllocationMap.get((rd.loadSlot == null) ? rd.dischargeSlot : rd.loadSlot);
 			rd.loadAllocation = slotAllocationMap.get(rd.loadSlot);
 			rd.dischargeAllocation = slotAllocationMap.get(rd.dischargeSlot);
 
@@ -307,6 +309,7 @@ public class CargoModelRowTransformer {
 		GroupData group;
 		Cargo cargo;
 		CargoAllocation cargoAllocation;
+		MarketAllocation marketAllocation;
 		LoadSlot loadSlot;
 		SlotAllocation loadAllocation;
 		DischargeSlot dischargeSlot;
@@ -330,7 +333,7 @@ public class CargoModelRowTransformer {
 			if (obj instanceof RowData) {
 				final RowData other = (RowData) obj;
 				return Equality.isEqual(cargo, other.cargo) && Equality.isEqual(loadSlot, other.loadSlot) && Equality.isEqual(dischargeSlot, other.dischargeSlot)
-						&& Equality.isEqual(elementAssignment, other.elementAssignment);
+						&& Equality.isEqual(elementAssignment, other.elementAssignment) && Equality.isEqual(marketAllocation, other.marketAllocation);
 			}
 
 			return false;
@@ -672,6 +675,10 @@ public class CargoModelRowTransformer {
 					return super.get(rowData.loadSlot, depth);
 				case CARGO_ALLOCATION:
 					return showRecord ? super.get(rowData.cargoAllocation, depth) : null;
+				case MARKET_ALLOCATION:
+					return super.get(rowData.marketAllocation, depth);
+				case CARGO_OR_MARKET_ALLOCATION:
+					return (rowData.cargoAllocation != null) ? (showRecord ? super.get(rowData.cargoAllocation, depth) : null) : super.get(rowData.marketAllocation, depth);
 				case DISCHARGE_ALLOCATION:
 					return super.get(rowData.dischargeAllocation, depth);
 				case LOAD_ALLOCATION:
@@ -703,7 +710,16 @@ public class CargoModelRowTransformer {
 		/**
 		 * @since 4.0
 		 */
-		LOAD_OR_DISCHARGE
+		LOAD_OR_DISCHARGE,
+
+		/**
+		 * @since 5.0
+		 */
+		MARKET_ALLOCATION,
+		/**
+		 * @since 5.0
+		 */
+		CARGO_OR_MARKET_ALLOCATION
 	}
 
 	/**

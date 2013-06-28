@@ -9,9 +9,16 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -64,6 +71,7 @@ public class FOBSalesMarketComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_loadPortEditor(detailComposite, topClass);
+		add_originPortsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the loadPort feature on FOBSalesMarket
@@ -72,5 +80,14 @@ public class FOBSalesMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_loadPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.FOB_SALES_MARKET__LOAD_PORT));
+	}
+
+	/**
+	 * Create the editor for the originPorts feature on FOBSalesMarket
+	 *
+	 * @generated
+	 */
+	protected void add_originPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.FOB_SALES_MARKET__ORIGIN_PORTS));
 	}
 }
