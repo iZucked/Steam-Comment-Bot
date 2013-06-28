@@ -35,7 +35,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 * The CV value of gas at this option.
 	 */
 	private int cargoCVValue;
-	
+
 	/**
 	 * The date which LNG price indices should be based on.
 	 */
@@ -138,12 +138,18 @@ public class LoadOption extends PortSlot implements ILoadOption {
 		return false;
 	}
 
+	/**
+	 * @since 6.0
+	 */
 	@Override
 	public int getPricingDate() {
 		return pricingDate;
 	}
 
-	public void setPricingDate(int value) {
+	/**
+	 * @since 6.0
+	 */
+	public void setPricingDate(final int value) {
 		pricingDate = value;
 	}
 

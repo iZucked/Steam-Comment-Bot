@@ -41,7 +41,15 @@ public interface IDischargeOption extends IPortSlot {
 	 */
 	long getMaxCvValue();
 
+	/**
+	 * Returns the {@link ISalesPriceCalculator} used to calculate the sales price for this slot
+	 * 
+	 * @return
+	 */
 	ISalesPriceCalculator getDischargePriceCalculator();
 
+	/**
+	 * @since 6.0
+	 */
 	int getPricingDate();
 }
