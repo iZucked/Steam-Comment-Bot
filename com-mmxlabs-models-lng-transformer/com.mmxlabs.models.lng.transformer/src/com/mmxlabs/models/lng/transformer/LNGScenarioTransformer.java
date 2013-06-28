@@ -1261,7 +1261,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
 					assert market instanceof FOBSalesMarket;
-					if (market instanceof FOBSalesMarket) {
+					if (market instanceof FOBPurchasesMarket) {
 						final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) market;
 						final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
 						final Set<IPort> marketPorts = new HashSet<IPort>();
