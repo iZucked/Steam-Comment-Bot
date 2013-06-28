@@ -796,7 +796,7 @@ public class LNGScenarioTransformer {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					if (dischargeSlot.isFOBSale()) {
 						for (final IPortSlot load : loadOptions) {
-							builder.bindLoadSlotsToFOBSale((IDischargeOption) slotMap.get(dischargeSlot), load.getPort());
+							builder.bindLoadSlotsToFOBSale((IDischargeOption) slotMap.get(dischargeSlot), Collections.singleton(load.getPort()));
 						}
 					}
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
@@ -910,7 +910,7 @@ public class LNGScenarioTransformer {
 			}
 			// Bind FOB/DES slots to resource
 			if (dischargeSlot.isFOBSale()) {
-				builder.bindLoadSlotsToFOBSale(discharge, discharge.getPort());
+				builder.bindLoadSlotsToFOBSale(discharge, Collections.singleton(discharge.getPort()));
 			}
 
 		}
@@ -1318,7 +1318,7 @@ public class LNGScenarioTransformer {
 									contractTransformer.slotTransformed(fobSlot, fobSaleSlot);
 								}
 
-								builder.bindLoadSlotsToFOBSale(fobSaleSlot, loadIPort);
+								builder.bindLoadSlotsToFOBSale(fobSaleSlot, marketPorts);
 
 								marketSlots.add(fobSaleSlot);
 								marketGroupSlots.add(fobSaleSlot);
