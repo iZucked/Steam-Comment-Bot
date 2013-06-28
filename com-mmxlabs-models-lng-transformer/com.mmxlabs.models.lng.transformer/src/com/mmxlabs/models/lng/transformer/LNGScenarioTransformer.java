@@ -1263,8 +1263,14 @@ public class LNGScenarioTransformer {
 					assert market instanceof FOBSalesMarket;
 					if (market instanceof FOBSalesMarket) {
 						final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) market;
-						final Port loadPort = (Port) fobSaleMarket.getLoadPort();
-						final IPort loadIPort = portAssociation.lookup(loadPort);
+						final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
+						final Set<IPort> marketPorts = new HashSet<IPort>();
+						for (final Port ap : portSet) {
+							final IPort ip = portAssociation.lookup((Port) ap);
+							if (ip != null) {
+								marketPorts.add(ip);
+							}
+						}
 
 						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_SALE, getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
@@ -1683,7 +1689,7 @@ public class LNGScenarioTransformer {
 				assert market instanceof FOBSalesMarket;
 				if (market instanceof FOBSalesMarket) {
 					final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
-					final Set<Port> portSet = Collections.singleton(fobSalesMarket.getLoadPort());
+					final Set<Port> portSet = SetUtils.getObjects(fobSalesMarket.getOriginPorts());
 
 					final Set<IPort> marketPorts = new HashSet<IPort>();
 					for (final Port ap : portSet) {
@@ -1712,8 +1718,8 @@ public class LNGScenarioTransformer {
 			for (final SpotMarket market : marketGroup.getMarkets()) {
 				assert market instanceof FOBPurchasesMarket;
 				if (market instanceof FOBPurchasesMarket) {
-					final FOBSalesMarket fobPurchaseMarket = (FOBSalesMarket) market;
-					final Set<Port> portSet = Collections.singleton(fobPurchaseMarket.getLoadPort());
+					final FOBPurchasesMarket fobPurchaseMarket = (FOBPurchasesMarket) market;
+					final Set<Port> portSet = SetUtils.getObjects(fobPurchaseMarket.getMarketPorts());
 
 					final Set<IPort> marketPorts = new HashSet<IPort>();
 					for (final Port ap : portSet) {
