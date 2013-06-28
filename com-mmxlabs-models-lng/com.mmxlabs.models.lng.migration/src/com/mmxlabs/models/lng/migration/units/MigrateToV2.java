@@ -86,7 +86,7 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 
 	}
 
-	private void fixSpotMarketGroups(MetamodelLoader loader, EObject model) {
+	protected void fixSpotMarketGroups(MetamodelLoader loader, EObject model) {
 
 		final EPackage scenarioModelPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EClass lngScenarioModel_Class = MetamodelUtils.getEClass(scenarioModelPackage, "LNGScenarioModel");
@@ -130,7 +130,7 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 
 	}
 
-	private void clearIndexFields(final MetamodelLoader loader, final EObject model) {
+	protected void clearIndexFields(final MetamodelLoader loader, final EObject model) {
 		final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
 		final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
 		final EClass namedObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "NamedObject");
@@ -148,7 +148,6 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 				obj.eUnset(namedObject_name_attribute);
 			}
 		}
-
 	}
 
 	/**
