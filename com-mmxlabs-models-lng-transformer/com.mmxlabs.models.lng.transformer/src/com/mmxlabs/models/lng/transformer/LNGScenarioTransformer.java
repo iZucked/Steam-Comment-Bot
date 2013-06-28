@@ -780,12 +780,14 @@ public class LNGScenarioTransformer {
 								// Redirection contracts can go to anywhere
 								builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
 							} else {
-								// Bind to this port -- TODO: Fix to discharge?
-								final Set<IPort> ports = new LinkedHashSet<IPort>();
-								for (final IDischargeOption discharge : dischargeOptions) {
-									ports.add(discharge.getPort());
-								}
+//								final Set<IPort> ports = new LinkedHashSet<IPort>();
+//								for (final IDischargeOption discharge : dischargeOptions) {
+//									ports.add(discharge.getPort());
+//								}
+								final Set<IPort> ports = Collections.singleton(load.getPort());
 								builder.bindDischargeSlotsToDESPurchase(load, ports);
+//								// Bind to this port -- TODO: Fix to discharge?
+//								builder.constrainSlotAdjacency(load, secondSlot);
 							}
 						}
 					}
