@@ -1606,8 +1606,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
+	/**
+	 * @since 6.0
+	 */
 	@Override
-	public void bindLoadSlotsToFOBSale(final IDischargeOption fobSale, final IPort loadPort) {
+	public void bindLoadSlotsToFOBSale(final IDischargeOption fobSale, final Collection<IPort> loadPorts) {
 
 		final ISequenceElement desElement = portSlotsProvider.getElement(fobSale);
 
@@ -1622,7 +1625,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			if (option instanceof LoadSlot) {
 
-				if (loadPort == option.getPort()) {
+				if (loadPorts.contains(option.getPort())) {
 					// Get current allocation
 
 					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
