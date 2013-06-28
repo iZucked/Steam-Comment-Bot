@@ -1303,14 +1303,13 @@ public class LNGScenarioTransformer {
 								final long minCv = 0;
 								final long maxCv = Long.MAX_VALUE;
 
-								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, loadIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
+								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, null, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, IPortSlot.NO_PRICING_DATE, true);
 
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
 								fobSlot.setFOBSale(true);
 								fobSlot.setName(id);
-								fobSlot.setPort(loadPort);
 								fobSlot.setWindowStart(new Date(startTime.getTime()));
 								// fobSlot.setContract(fobSaleMarket.getContract());
 								fobSlot.setOptional(true);
@@ -1734,7 +1733,7 @@ public class LNGScenarioTransformer {
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
-					final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getLoadPort().getCvValue());
+					final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getNotionalPort().getCvValue());
 
 					final IMarkToMarket optMarket = builder.createFOBPurchaseMTM(marketPorts, cargoCVValue, priceCalculator);
 					entities.addModelObject(market, optMarket);
