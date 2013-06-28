@@ -5,6 +5,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -66,7 +67,7 @@ public class MarkToMarketLoadOption implements ILoadOption {
 
 	@Override
 	public int getPricingDate() {
-		return dischargeOption.getPricingDate();
+		return IPortSlot.NO_PRICING_DATE;
 	}
 
 }
