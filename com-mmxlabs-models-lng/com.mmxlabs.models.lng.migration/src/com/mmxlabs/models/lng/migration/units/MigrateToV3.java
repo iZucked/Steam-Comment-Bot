@@ -69,35 +69,35 @@ public class MigrateToV3 extends AbstractMigrationUnit {
 		migrateFOBSales(loader, model);
 	}
 
-	private void migrateFOBSales(MetamodelLoader loader, EObject model) {
+	protected void migrateFOBSales(final MetamodelLoader loader, final EObject model) {
 
-		final EPackage scenarioModelPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
-		final EClass lngScenarioModel_Class = MetamodelUtils.getEClass(scenarioModelPackage, "LNGScenarioModel");
-		final EReference lngScenarioModel_spotMarketsModel_Reference = MetamodelUtils.getReference(lngScenarioModel_Class, "spotMarketsModel");
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EReference reference_LNGScenarioModel_spotMarketsModel = MetamodelUtils.getReference(class_LNGScenarioModel, "spotMarketsModel");
 
-		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		final EPackage package_SpotMarketsModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
 
-		final EClass spotMarketsModel_Class = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketsModel");
-		final EClass SpotMarketGroup_Class = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketGroup");
-		final EClass FOBSalesMarket_Class = MetamodelUtils.getEClass(spotMarketsPackage, "FOBSalesMarket");
+		final EClass class_SpotMarketsModel = MetamodelUtils.getEClass(package_SpotMarketsModel, "SpotMarketsModel");
+		final EClass class_SpotMarketGroup = MetamodelUtils.getEClass(package_SpotMarketsModel, "SpotMarketGroup");
+		final EClass class_FOBSalesMarket = MetamodelUtils.getEClass(package_SpotMarketsModel, "FOBSalesMarket");
 
-		final EReference FOBSalesMarket_loadPort = MetamodelUtils.getReference(FOBSalesMarket_Class, "loadPort");
-		final EReference FOBSalesMarket_originPorts = MetamodelUtils.getReference(FOBSalesMarket_Class, "originPorts");
+		final EReference reference_FOBSalesMarket_loadPort = MetamodelUtils.getReference(class_FOBSalesMarket, "loadPort");
+		final EReference reference_FOBSalesMarket_originPorts = MetamodelUtils.getReference(class_FOBSalesMarket, "originPorts");
 
-		final EReference spotMarketsModel_fobSales_group = MetamodelUtils.getReference(spotMarketsModel_Class, "fobSalesSpotMarket");
-		final EReference spotMarketsGroup_markets = MetamodelUtils.getReference(SpotMarketGroup_Class, "markets");
+		final EReference reference_SpotMarketsModel_fobSalesSpotMarket = MetamodelUtils.getReference(class_SpotMarketsModel, "fobSalesSpotMarket");
+		final EReference reference_SpotMarketsGroup_markets = MetamodelUtils.getReference(class_SpotMarketGroup, "markets");
 
-		EObject spotMarketsModel = (EObject) model.eGet(lngScenarioModel_spotMarketsModel_Reference);
-		EObject group = (EObject) spotMarketsModel.eGet(spotMarketsModel_fobSales_group);
+		final EObject spotMarketsModel = (EObject) model.eGet(reference_LNGScenarioModel_spotMarketsModel);
+		final EObject group = (EObject) spotMarketsModel.eGet(reference_SpotMarketsModel_fobSalesSpotMarket);
 		if (group != null) {
-			List<EObject> markets = MetamodelUtils.getValueAsTypedList(group, spotMarketsGroup_markets);
+			final List<EObject> markets = MetamodelUtils.getValueAsTypedList(group, reference_SpotMarketsGroup_markets);
 			if (markets != null) {
-				for (EObject market : markets) {
-					if (market.eIsSet(FOBSalesMarket_loadPort)) {
-						List<EObject> originPorts = new ArrayList<EObject>(1);
-						originPorts.add((EObject) market.eGet(FOBSalesMarket_loadPort));
-						market.eSet(FOBSalesMarket_originPorts, originPorts);
-						market.eUnset(FOBSalesMarket_loadPort);
+				for (final EObject market : markets) {
+					if (market.eIsSet(reference_FOBSalesMarket_loadPort)) {
+						final List<EObject> originPorts = new ArrayList<EObject>(1);
+						originPorts.add((EObject) market.eGet(reference_FOBSalesMarket_loadPort));
+						market.eSet(reference_FOBSalesMarket_originPorts, originPorts);
+						market.eUnset(reference_FOBSalesMarket_loadPort);
 					}
 				}
 			}
