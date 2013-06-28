@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Models LNG Migration Tests
 Bundle-SymbolicName: com.mmxlabs.models.lng.migration.tests
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 5.0.2.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Fragment-Host: com.mmxlabs.models.lng.migration;bundle-version="3.0.0"
+Fragment-Host: com.mmxlabs.models.lng.migration;bundle-version="5.0.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit;bundle-version="4.8.2",
  com.google.guava;bundle-version="13.0.1"
