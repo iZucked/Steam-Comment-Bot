@@ -251,8 +251,8 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 		long maximumDischargeVolumeInM3 = 0;
 		int idx = -1;
 		for (final Object object : plan.getSequence()) {
-			++idx;
 			if (object instanceof PortDetails) {
+				++idx;
 				final PortDetails pd = (PortDetails) object;
 				final IPortSlot slot = pd.getOptions().getPortSlot();
 				if (slot instanceof ILoadOption) {
