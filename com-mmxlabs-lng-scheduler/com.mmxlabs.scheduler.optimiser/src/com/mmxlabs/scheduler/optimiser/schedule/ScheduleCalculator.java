@@ -289,12 +289,13 @@ public class ScheduleCalculator {
 			}
 
 			// Create an allocation annotation.
-			IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
+			if (allocationAnnotation != null) {
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 
-			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
-
-			// Calculate P&L
-			entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vessel, time, annotatedSolution);
+				// Calculate P&L
+				entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vessel, time, annotatedSolution);
+			}
 		}
 	}
 
