@@ -75,6 +75,22 @@
                      class="PricingModel">
                </target>
             </constraint>
+             <constraint
+                  class="com.mmxlabs.models.lng.pricing.validation.LNGPriceConstraint"
+                  id="com.mmxlabs.models.lng.pricing.validation.LNGPriceConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cooldown Pricing"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CommodityIndex">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
