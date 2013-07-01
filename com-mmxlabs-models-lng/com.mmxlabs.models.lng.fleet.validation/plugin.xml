@@ -322,10 +322,28 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  BaseFuel|{0}: Equivalence factor must be non-zero
+                  {0}
                </message>
                <description>
                   Check for valid base fuel equivalence factor
+               </description>
+               <target
+                     class="BaseFuel">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.BaseFuelPriceConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.BaseFuelPriceConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Base Fuel Price Constraints"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Check for valid base fuel price
                </description>
                <target
                      class="BaseFuel">
