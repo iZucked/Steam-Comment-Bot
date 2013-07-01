@@ -146,6 +146,11 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
+							<id>com.mmxlabs.models.lng.transformer.its</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
 							<id>com.mmxlabs.scheduler.optimiser</id>
 							<level>4</level>
 							<autoStart>true</autoStart>

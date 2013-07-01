@@ -6,14 +6,14 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.runtime.Platform;
+import org.ops4j.peaberry.activation.util.ServiceBinder;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
-import com.google.inject.Module;
+import com.google.inject.Key;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
@@ -45,13 +45,9 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraint
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerComponentsInjectorService;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.DefaultGeneratedCharterOutEvaluator;
 
 public class TransformerExtensionTestModule extends AbstractModule {
 
@@ -76,7 +72,7 @@ public class TransformerExtensionTestModule extends AbstractModule {
 			final List<ITransformerExtensionFactory> transformerExtensionFactories = new ArrayList<ITransformerExtensionFactory>();
 			transformerExtensionFactories.add(new EntityTransformerExtensionFactory());
 			transformerExtensionFactories.add(new SimpleContractTransformerFactory());
-//			 transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
+			// transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 			transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 			transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
 			bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
@@ -151,24 +147,6 @@ public class TransformerExtensionTestModule extends AbstractModule {
 	}
 
 	private IOptimiserInjectorService createTradingInjectorService() {
-		return new IOptimiserInjectorService() {
-
-			@Override
-			public Map<ModuleType, List<Module>> requestModuleOverrides(String... hints) {
-				return null;
-			}
-
-			@Override
-			public Module requestModule(String... hints) {
-				return new AbstractModule() {
-
-					@Override
-					protected void configure() {
-						bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
-						bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
-					}
-				};
-			}
-		};
+		return new TransformerITSOptimiserInjectorService();
 	}
 }

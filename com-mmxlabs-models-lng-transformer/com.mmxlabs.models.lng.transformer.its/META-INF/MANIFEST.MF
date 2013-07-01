@@ -38,3 +38,5 @@ Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Export-Package: com.mmxlabs.models.lng.transformer.its.tests,
  com.mmxlabs.models.lng.transformer.its.tests.calculation
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.mmxlabs.models.lng.transformer.its.internal.Activator

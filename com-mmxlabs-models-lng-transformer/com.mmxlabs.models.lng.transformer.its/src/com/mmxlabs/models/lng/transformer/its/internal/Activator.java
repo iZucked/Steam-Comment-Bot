@@ -6,12 +6,10 @@ package com.mmxlabs.models.lng.transformer.its.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
-import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerITSOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -24,8 +22,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	@Inject
-	IImporterRegistry importerRegistry;
+	private ServiceRegistration<?> reg;
 
 	/**
 	 * The constructor
@@ -43,8 +40,8 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		Injector injector = Guice.createInjector(new ExtensionConfigurationModule(getBundle().getBundleContext()));
-		injector.injectMembers(this);
+
+		reg = context.registerService(new String[] { IOptimiserInjectorService.class.getCanonicalName() }, new TransformerITSOptimiserInjectorService(), null);
 	}
 
 	/*
@@ -55,6 +52,7 @@ public class Activator extends AbstractUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		reg.unregister();
 		super.stop(context);
 	}
 
@@ -65,9 +63,5 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
-	}
-
-	public IImporterRegistry getImporterRegistry() {
-		return importerRegistry;
 	}
 }
