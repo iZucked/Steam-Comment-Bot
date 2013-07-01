@@ -350,6 +350,42 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.EventDurationConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.EventDurationConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Event Duration Constraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Check for sensible event duration
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.EventWindowConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.EventWindowConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Event Window Constraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Check for sensible event window size
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.fleet.validation.HeelOptionsConstraint"
                   id="com.mmxlabs.models.lng.fleet.validation.HeelOptionsConstraint"
                   lang="Java"
