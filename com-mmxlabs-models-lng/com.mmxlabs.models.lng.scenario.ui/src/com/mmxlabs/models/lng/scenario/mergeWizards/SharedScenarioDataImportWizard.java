@@ -258,6 +258,9 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 						CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
 						CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()));
+				
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+						CommercialPackage.eINSTANCE.getCommercialModel_ShippingEntity()));
 			}
 
 			if (dataOptions.contains(DataOptions.PricingData)) {
