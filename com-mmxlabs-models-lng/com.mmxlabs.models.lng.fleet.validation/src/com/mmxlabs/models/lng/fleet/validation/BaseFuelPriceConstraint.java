@@ -10,8 +10,8 @@ import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class BaseFuelPriceConstraint  extends AbstractModelConstraint {
-	final double min = 2000;
-	final double max = 10000;
+	final double min = 0;
+	final double max = 5000;
 
 	@Override
 	public IStatus validate(IValidationContext ctx) {
