@@ -45,9 +45,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 
 	@Override
 	public int calculateSalesUnitPrice(final IDischargeOption option, final int time) {
-		if (option != null && option.getPricingDate() != IPortSlot.NO_PRICING_DATE) {
-			option.getPricingDate();
-		}
 		final int dischargePricingDate = option == null ? IPortSlot.NO_PRICING_DATE : option.getPricingDate();
 		final int pricingDate = (dischargePricingDate == IPortSlot.NO_PRICING_DATE ? time : dischargePricingDate);
 		return calculateSimpleUnitPrice(pricingDate);
