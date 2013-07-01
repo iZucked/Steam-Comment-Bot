@@ -59,8 +59,18 @@ public final class CargoEditorPlugin extends EMFPlugin {
 	public static final String IMAGE_CARGO_SWAP_DISABLED = "cargo.swap.disabled";
 
 	/**
-	 * Keep track of the singleton.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @since 5.0
+	 */
+	public static final String IMAGE_CARGO_WIRING = "cargo.wiring";
+
+	/**
+	 * @since 5.0
+	 */
+	public static final String IMAGE_CARGO_WIRING_DISABLED = "cargo.wiring.disabled";
+
+	/**
+	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static final CargoEditorPlugin INSTANCE = new CargoEditorPlugin();
@@ -186,17 +196,24 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		private void initImageRegistry(final ImageRegistry imageRegistry) {
 			imageRegistry.put(IMAGE_CARGO_LINK, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/wired.gif"));
 			imageRegistry.put(IMAGE_CARGO_LOCK, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/assigned.gif"));
-			ImageDescriptor swapImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/swap.gif");
-			imageRegistry.put(IMAGE_CARGO_SWAP, swapImageDescriptor);
-			imageRegistry.put(IMAGE_CARGO_SWAP_DISABLED, ImageDescriptor.createWithFlags(swapImageDescriptor, SWT.IMAGE_DISABLE));
+			{
+				final ImageDescriptor swapImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/swap.gif");
+				imageRegistry.put(IMAGE_CARGO_SWAP, swapImageDescriptor);
+				imageRegistry.put(IMAGE_CARGO_SWAP_DISABLED, ImageDescriptor.createWithFlags(swapImageDescriptor, SWT.IMAGE_DISABLE));
+			}
 
+			{
+				final ImageDescriptor swapImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/rewire_icon.png");
+				imageRegistry.put(IMAGE_CARGO_WIRING, swapImageDescriptor);
+				imageRegistry.put(IMAGE_CARGO_WIRING_DISABLED, ImageDescriptor.createWithFlags(swapImageDescriptor, SWT.IMAGE_DISABLE));
+			}
 			imageRegistryInited = true;
 		}
 
 		/**
 		 * @since 2.0
 		 */
-		public synchronized Color getColor(String key) {
+		public synchronized Color getColor(final String key) {
 			if (colorRegistry == null) {
 				colorRegistry = new ColorRegistry();
 

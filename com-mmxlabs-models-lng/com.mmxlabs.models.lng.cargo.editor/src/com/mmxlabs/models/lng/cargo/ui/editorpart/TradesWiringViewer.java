@@ -151,6 +151,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private TradesWiringDiagram wiringDiagram;
 
 	protected RootData rootData;
+	/**
+	 * A reference {@link RootData} object. This is used by a {@link CargoModelRowTransformer} to retain load/discharge row pairings but allow wires to cross rows. Initially null until the first
+	 * rootData object is created. May be "nulled" again to reset state by an action.
+	 * @since 5.0
+	 */
+	protected RootData referenceRootData;
 
 	private final Set<GridColumn> loadColumns = new HashSet<GridColumn>();
 	private final Set<GridColumn> dischargeColumns = new HashSet<GridColumn>();
@@ -169,6 +175,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private IStatusChangedListener statusChangedListener;
 
+	private Action resetSortOrder;
+
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
 		super(page, part, scenarioEditingLocation, actionBars);
 
@@ -182,6 +190,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	public void dispose() {
 
 		this.rootData = null;
+		this.referenceRootData = null;
 
 		super.dispose();
 	}
@@ -274,9 +283,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						final AssignmentModel assignmentModel = getPortfolioModel().getAssignmentModel();
 						final ScheduleModel scheduleModel = getPortfolioModel().getScheduleModel();
 
-						final RootData root = setCargoes(assignmentModel, cargoModel, scheduleModel);
+						final RootData root = setCargoes(assignmentModel, cargoModel, scheduleModel, referenceRootData);
 
 						TradesWiringViewer.this.rootData = root;
+
+						if (TradesWiringViewer.this.referenceRootData == null) {
+							TradesWiringViewer.this.referenceRootData = root;
+						}
+						resetSortOrder.setEnabled(TradesWiringViewer.this.referenceRootData != null);
 
 						return rootData.getRows().toArray();
 					}
@@ -586,6 +600,23 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			toolbar.add(copyToClipboardAction);
 		}
 
+		// Reset sort order
+		{
+			resetSortOrder = new Action() {
+
+				public void run() {
+					TradesWiringViewer.this.referenceRootData = null;
+					TradesWiringViewer.this.viewer.refresh();
+					this.setEnabled(false);
+				}
+			};
+			resetSortOrder.setText("Reset Wiring");
+			resetSortOrder.setImageDescriptor(CargoEditorPlugin.getPlugin().getImageRegistry().getDescriptor(CargoEditorPlugin.IMAGE_CARGO_WIRING));
+			resetSortOrder.setDisabledImageDescriptor(CargoEditorPlugin.getPlugin().getImageRegistry().getDescriptor(CargoEditorPlugin.IMAGE_CARGO_WIRING_DISABLED));
+			toolbar.add(resetSortOrder);
+
+		}
+
 		if (actionBars != null) {
 			actionBars.updateActionBars();
 		}
@@ -834,11 +865,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * Set the cargoes, and reset the wiring to match these cargoes.
 	 * 
 	 * @param newCargoes
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	public RootData setCargoes(final AssignmentModel assignmentModel, final CargoModel cargoModel, final ScheduleModel scheduleModel) {
+	public RootData setCargoes(final AssignmentModel assignmentModel, final CargoModel cargoModel, final ScheduleModel scheduleModel, final RootData existingData) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
-		return transformer.transform(assignmentModel, cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors());
+		return transformer.transform(assignmentModel, cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors(), existingData);
 	}
 
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack) {
