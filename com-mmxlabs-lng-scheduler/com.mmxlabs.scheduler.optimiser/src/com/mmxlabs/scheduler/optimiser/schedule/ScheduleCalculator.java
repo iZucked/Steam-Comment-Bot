@@ -221,73 +221,80 @@ public class ScheduleCalculator {
 		}
 
 		if (annotatedSolution != null && markToMarketProvider != null) {
-			// Mark-to-Market Calculations
+			calculateMarkToMarketPNL(sequences, annotatedSolution);
 
-			for (final ISequenceElement element : sequences.getUnusedElements()) {
-				if (element == null) {
-					continue;
-				}
-				final IMarkToMarket market = markToMarketProvider.getMarketForElement(element);
-				if (market == null) {
-					continue;
-				}
+		}
+	}
 
-				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+	/**
+	 * @since 6.0
+	 */
+	protected void calculateMarkToMarketPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
+		// Mark-to-Market Calculations
 
-				final ILoadOption loadOption;
-				final IDischargeOption dischargeOption;
-				final int time;
-
-				final IVessel vessel;
-				if (portSlot instanceof ILoadOption) {
-					loadOption = (ILoadOption) portSlot;
-					if (loadOption instanceof ILoadSlot) {
-						dischargeOption = new MarkToMarketDischargeOption(market, loadOption);
-					} else {
-						dischargeOption = new MarkToMarketDischargeSlot(market, loadOption);
-					}
-					time = loadOption.getTimeWindow().getStart();
-					vessel = new MarkToMarketVessel(market, loadOption);
-				} else if (portSlot instanceof IDischargeOption) {
-					dischargeOption = (IDischargeOption) portSlot;
-					if (dischargeOption instanceof IDischargeSlot) {
-						loadOption = new MarkToMarketLoadOption(market, dischargeOption);
-					} else {
-						loadOption = new MarkToMarketLoadSlot(market, dischargeOption);
-					}
-					time = dischargeOption.getTimeWindow().getStart();
-					vessel = new MarkToMarketVessel(market, dischargeOption);
-				} else {
-					continue;
-				}
-
-				// Create voyage plan
-				final VoyagePlan voyagePlan = new VoyagePlan();
-				{
-					final PortOptions loadOptions = new PortOptions();
-					final PortDetails loadDetails = new PortDetails();
-					loadDetails.setOptions(loadOptions);
-					loadOptions.setVisitDuration(0);
-					loadOptions.setPortSlot(loadOption);
-
-					final PortOptions dischargeOptions = new PortOptions();
-					final PortDetails dischargeDetails = new PortDetails();
-					dischargeDetails.setOptions(dischargeOptions);
-					dischargeOptions.setVisitDuration(0);
-					dischargeOptions.setPortSlot(dischargeOption);
-
-					voyagePlan.setSequence(new Object[] { loadDetails, dischargeDetails });
-				}
-
-				// Create an allocation annotation.
-				IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
-
-				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
-
-				// Calculate P&L
-				entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vessel, time, annotatedSolution);
+		for (final ISequenceElement element : sequences.getUnusedElements()) {
+			if (element == null) {
+				continue;
+			}
+			final IMarkToMarket market = markToMarketProvider.getMarketForElement(element);
+			if (market == null) {
+				continue;
 			}
 
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+
+			final ILoadOption loadOption;
+			final IDischargeOption dischargeOption;
+			final int time;
+
+			final IVessel vessel;
+			if (portSlot instanceof ILoadOption) {
+				loadOption = (ILoadOption) portSlot;
+				if (loadOption instanceof ILoadSlot) {
+					dischargeOption = new MarkToMarketDischargeOption(market, loadOption);
+				} else {
+					dischargeOption = new MarkToMarketDischargeSlot(market, loadOption);
+				}
+				time = loadOption.getTimeWindow().getStart();
+				vessel = new MarkToMarketVessel(market, loadOption);
+			} else if (portSlot instanceof IDischargeOption) {
+				dischargeOption = (IDischargeOption) portSlot;
+				if (dischargeOption instanceof IDischargeSlot) {
+					loadOption = new MarkToMarketLoadOption(market, dischargeOption);
+				} else {
+					loadOption = new MarkToMarketLoadSlot(market, dischargeOption);
+				}
+				time = dischargeOption.getTimeWindow().getStart();
+				vessel = new MarkToMarketVessel(market, dischargeOption);
+			} else {
+				continue;
+			}
+
+			// Create voyage plan
+			final VoyagePlan voyagePlan = new VoyagePlan();
+			{
+				final PortOptions loadOptions = new PortOptions();
+				final PortDetails loadDetails = new PortDetails();
+				loadDetails.setOptions(loadOptions);
+				loadOptions.setVisitDuration(0);
+				loadOptions.setPortSlot(loadOption);
+
+				final PortOptions dischargeOptions = new PortOptions();
+				final PortDetails dischargeDetails = new PortDetails();
+				dischargeDetails.setOptions(dischargeOptions);
+				dischargeOptions.setVisitDuration(0);
+				dischargeOptions.setPortSlot(dischargeOption);
+
+				voyagePlan.setSequence(new Object[] { loadDetails, dischargeDetails });
+			}
+
+			// Create an allocation annotation.
+			IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
+
+			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
+
+			// Calculate P&L
+			entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vessel, time, annotatedSolution);
 		}
 	}
 
