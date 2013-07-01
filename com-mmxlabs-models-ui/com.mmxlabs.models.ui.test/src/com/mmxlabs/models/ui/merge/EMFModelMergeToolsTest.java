@@ -40,7 +40,7 @@ public class EMFModelMergeToolsTest {
 	 * Make sure the {@link IMappingDescriptor} is correct computed
 	 */
 	@Test
-	public void testGenerateMappingDescriptor() {
+	public void testGenerateMappingDescriptorManyContainment() {
 
 		// Create dynamic metamodel with a class that contains UUIDObjects
 		final SimpleModelBuilder builder = new SimpleModelBuilder(MMXCorePackage.eINSTANCE.getUUIDObject());
@@ -81,7 +81,7 @@ public class EMFModelMergeToolsTest {
 		sourceContainer.eSet(containerReference, sourceObjects);
 		destinationContainer.eSet(containerReference, destObjects);
 
-		final IMappingDescriptor descriptor = EMFModelMergeTools.generateMappingDescriptor(sourceContainer, destinationContainer, containerReference);
+		final IMappingDescriptor descriptor = EMFModelMergeTools.generateMappingDescriptorManyContainment(sourceContainer, destinationContainer, containerReference);
 
 		Assert.assertNotNull(descriptor);
 
@@ -216,10 +216,10 @@ public class EMFModelMergeToolsTest {
 		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container3))).eSet(builder.getContainerReference(cls_container3), destContainer3Objects);
 
 		// Generate the mapping descriptors
-		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
+		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))), builder.getContainerReference(cls_container1));
 
-		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
+		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))), builder.getContainerReference(cls_container2));
 
 		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2);
@@ -361,10 +361,10 @@ public class EMFModelMergeToolsTest {
 		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container3))).eSet(builder.getContainerReference(cls_container3), destContainer3Objects);
 
 		// Generate the mapping descriptors
-		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
+		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))), builder.getContainerReference(cls_container1));
 
-		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
+		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))), builder.getContainerReference(cls_container2));
 
 		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2);
@@ -510,10 +510,10 @@ public class EMFModelMergeToolsTest {
 		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container3))).eSet(builder.getContainerReference(cls_container3), destContainer3Objects);
 
 		// Generate the mapping descriptors
-		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
+		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))), builder.getContainerReference(cls_container1));
 
-		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptor(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
+		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))), builder.getContainerReference(cls_container2));
 
 		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2);

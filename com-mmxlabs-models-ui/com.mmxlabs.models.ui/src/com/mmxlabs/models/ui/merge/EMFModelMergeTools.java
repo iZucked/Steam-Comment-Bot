@@ -38,6 +38,23 @@ import com.google.common.base.Preconditions;
  */
 public class EMFModelMergeTools {
 
+	public static IMappingDescriptor generateMappingDescriptor(final EObject sourceContainer, final EObject destinationContainer, final EReference ref) {
+
+		if (ref.isContainment()) {
+			if (ref.isMany()) {
+				return generateMappingDescriptorManyContainment(sourceContainer, destinationContainer, ref);
+			}
+		} else {
+			if (ref.isMany()) {
+
+			} else {
+				return generateMappingDescriptorSingleNonContainment(sourceContainer, destinationContainer, ref);
+			}
+		}
+		
+		throw new IllegalArgumentException("Reference must be many containment or single non-containment");
+	}
+
 	/**
 	 * Compare two EMF container objects which share the same containment feature and analyse the differences. Generate a {@link IMappingDescriptor} to describe these differences.
 	 * 
@@ -46,7 +63,7 @@ public class EMFModelMergeTools {
 	 * @param ref
 	 * @return
 	 */
-	public static IMappingDescriptor generateMappingDescriptor(final EObject sourceContainer, final EObject destinationContainer, final EReference ref) {
+	public static IMappingDescriptor generateMappingDescriptorManyContainment(final EObject sourceContainer, final EObject destinationContainer, final EReference ref) {
 
 		// Assuming a containment list of EObjects
 		Preconditions.checkArgument(ref.isMany());
@@ -83,6 +100,25 @@ public class EMFModelMergeTools {
 		}
 
 		return new MappingDescriptorImpl(sourceContainer, destinationContainer, ref, destinationToSourceMap, objectsAdded, objectsRemoved);
+	}
+
+	/**
+	 * Compare the single EObject reference between two objects and update
+	 * 
+	 * @param sourceContainer
+	 * @param destinationContainer
+	 * @param ref
+	 * @return
+	 */
+	public static IMappingDescriptor generateMappingDescriptorSingleNonContainment(final EObject sourceContainer, final EObject destinationContainer, final EReference ref) {
+		Preconditions.checkState(!ref.isContainment());
+		Preconditions.checkState(!ref.isMany());
+
+		final EObject sourceObject = (EObject) sourceContainer.eGet(ref);
+
+		return new MappingDescriptorImpl(sourceContainer, destinationContainer, ref, Collections.<EObject, EObject> emptyMap(), Collections.singletonList(sourceObject),
+				Collections.<EObject> emptyList());
+
 	}
 
 	/**
@@ -127,7 +163,7 @@ public class EMFModelMergeTools {
 			{
 				EObject tmpObj = eObj.eContainer();
 				while (tmpObj != sourceRoot && tmpObj != null) {
-					EReference eContainmentFeature = tmpObj.eContainmentFeature();
+					final EReference eContainmentFeature = tmpObj.eContainmentFeature();
 					if (eContainmentFeature.isMany()) {
 						throw new IllegalStateException("Unable to handle multiple containments in path to sourceRoot.");
 					}
@@ -279,20 +315,42 @@ public class EMFModelMergeTools {
 
 		// Perform additions
 		for (final IMappingDescriptor descriptor : descriptors) {
-			final List<EObject> addedObjects = descriptor.getAddedObjects();
-			if (!addedObjects.isEmpty()) {
-				cmd.append(AddCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), addedObjects));
+
+			final EReference ref = descriptor.getReference();
+			if (ref.isContainment() && ref.isMany()) {
+				final List<EObject> addedObjects = descriptor.getAddedObjects();
+				if (!addedObjects.isEmpty()) {
+					cmd.append(AddCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), addedObjects));
+				}
 			}
 		}
 
 		// Perform deletions
 		for (final IMappingDescriptor descriptor : descriptors) {
-			final Collection<EObject> removedObjects = descriptor.getRemovedObjects();
-			if (!removedObjects.isEmpty()) {
-				cmd.append(DeleteCommand.create(domain, removedObjects));
+
+			final EReference ref = descriptor.getReference();
+			if (ref.isContainment() && ref.isMany()) {
+				final Collection<EObject> removedObjects = descriptor.getRemovedObjects();
+				if (!removedObjects.isEmpty()) {
+					cmd.append(DeleteCommand.create(domain, removedObjects));
+				}
+			}
+		}
+
+		// Update other refs
+		for (final IMappingDescriptor descriptor : descriptors) {
+			final EReference ref = descriptor.getReference();
+			if (!ref.isContainment() && !ref.isMany()) {
+				if (descriptor.getAddedObjects().isEmpty()) {
+					cmd.append(SetCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), SetCommand.UNSET_VALUE));
+				} else {
+					Preconditions.checkState(descriptor.getAddedObjects().size() == 1);
+					cmd.append(SetCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), descriptor.getAddedObjects().get(0)));
+				}
 			}
 		}
 
 		return cmd;
 	}
+
 }
