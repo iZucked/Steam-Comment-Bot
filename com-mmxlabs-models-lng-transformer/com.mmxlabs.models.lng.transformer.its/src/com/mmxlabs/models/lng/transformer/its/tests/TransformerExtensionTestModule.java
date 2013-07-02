@@ -8,12 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
-import org.ops4j.peaberry.activation.util.ServiceBinder;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
-import com.google.inject.Key;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
