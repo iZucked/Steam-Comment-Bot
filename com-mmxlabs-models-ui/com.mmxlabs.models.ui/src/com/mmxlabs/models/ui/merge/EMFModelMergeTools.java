@@ -43,15 +43,17 @@ public class EMFModelMergeTools {
 		if (ref.isContainment()) {
 			if (ref.isMany()) {
 				return generateMappingDescriptorManyContainment(sourceContainer, destinationContainer, ref);
+			} else {
+				// TODO
 			}
 		} else {
 			if (ref.isMany()) {
-
+				// TODO
 			} else {
 				return generateMappingDescriptorSingleNonContainment(sourceContainer, destinationContainer, ref);
 			}
 		}
-		
+
 		throw new IllegalArgumentException("Reference must be many containment or single non-containment");
 	}
 
