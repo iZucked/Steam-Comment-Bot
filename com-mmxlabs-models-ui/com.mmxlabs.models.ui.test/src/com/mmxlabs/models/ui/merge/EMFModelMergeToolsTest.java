@@ -262,6 +262,8 @@ public class EMFModelMergeToolsTest {
 		final EClass cls_container2 = builder.createContainerClass("container2", dataPairA.getFirst());
 		final EClass cls_container3 = builder.createContainerClass("container3", dataPairB.getFirst());
 
+		final EReference nonContainmentRef = builder.createSingleNonContainmentReferencingType(MMXCorePackage.eINSTANCE.getUUIDObject(), "uuidRef");
+
 		// Create data model instances - these will be pre-created with the above container class instances.
 		final EObject sourceRoot = builder.createRootModel();
 		final EObject destinationRoot = builder.createRootModel();
@@ -295,6 +297,9 @@ public class EMFModelMergeToolsTest {
 		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))).eSet(builder.getContainerReference(cls_container2), destContainer2Objects);
 		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container3))).eSet(builder.getContainerReference(cls_container3), destContainer3Objects);
 
+		sourceRoot.eSet(nonContainmentRef, sourceUUID1);
+		destinationRoot.eSet(nonContainmentRef, null);
+
 		// Generate the mapping descriptors
 		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))), builder.getContainerReference(cls_container1));
@@ -302,7 +307,9 @@ public class EMFModelMergeToolsTest {
 		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))), builder.getContainerReference(cls_container2));
 
-		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2);
+		final IMappingDescriptor descriptor3 = EMFModelMergeTools.generateMappingDescriptorSingleNonContainment(sourceRoot, destinationRoot, nonContainmentRef);
+
+		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2, descriptor3);
 
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		// Add a reflective item provider for our dynamic metamodel - delete command will not work otherwise
@@ -361,6 +368,9 @@ public class EMFModelMergeToolsTest {
 
 		// Make sure container 3 objects are still the same
 		Assert.assertEquals(0, newDestContainer3Objects.size());
+		
+		// Check single non-containment ref update
+		Assert.assertSame(sourceUUID1, destinationRoot.eGet(nonContainmentRef));
 	}
 
 	/**
@@ -384,6 +394,8 @@ public class EMFModelMergeToolsTest {
 		final EClass cls_container1 = builder.createContainerClass("container1", MMXCorePackage.eINSTANCE.getUUIDObject());
 		final EClass cls_container2 = builder.createContainerClass("container2", dataPairA.getFirst());
 		final EClass cls_container3 = builder.createContainerClass("container3", dataPairB.getFirst());
+
+		final EReference nonContainmentRef = builder.createSingleNonContainmentReferencingType(MMXCorePackage.eINSTANCE.getUUIDObject(), "uuidRef");
 
 		// Create data model instances - these will be pre-created with the above container class instances.
 		final EObject sourceRoot = builder.createRootModel();
@@ -432,6 +444,9 @@ public class EMFModelMergeToolsTest {
 		final EObject destDataB2 = dataPairB.getFirst().getEPackage().getEFactoryInstance().create(dataPairB.getFirst());
 		destDataB2.eSet(dataPairB.getSecond(), destUUID2);
 
+		sourceRoot.eSet(nonContainmentRef, sourceUUID1);
+		destinationRoot.eSet(nonContainmentRef, destUUID1);
+
 		// Add objects to relevant containers
 		final List<Object> destContainer1Objects = Lists.<Object> newArrayList(destUUID1, destUUID2);
 		final List<Object> destContainer2Objects = Lists.<Object> newArrayList(destDataA1, destDataA2);
@@ -447,7 +462,9 @@ public class EMFModelMergeToolsTest {
 		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))), builder.getContainerReference(cls_container2));
 
-		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2);
+		final IMappingDescriptor descriptor3 = EMFModelMergeTools.generateMappingDescriptorSingleNonContainment(sourceRoot, destinationRoot, nonContainmentRef);
+
+		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2, descriptor3);
 
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		// Add a reflective item provider for our dynamic metamodel - delete command will not work otherwise
@@ -523,6 +540,9 @@ public class EMFModelMergeToolsTest {
 		// Make sure container 3 references are correctly updated
 		Assert.assertSame(sourceUUID1, destDataB1.eGet(dataPairB.getSecond()));
 		Assert.assertNull(destDataB2.eGet(dataPairB.getSecond()));
+		
+		// Check single non-containment ref update
+		Assert.assertSame(sourceUUID1, destinationRoot.eGet(nonContainmentRef));
 	}
 
 	/**
@@ -548,6 +568,8 @@ public class EMFModelMergeToolsTest {
 		final EClass cls_container1 = builder.createContainerClass("container1", MMXCorePackage.eINSTANCE.getUUIDObject());
 		final EClass cls_container2 = builder.createContainerClass("container2", dataPairA.getFirst());
 		final EClass cls_container3 = builder.createContainerClass("container3", dataPairB.getFirst());
+
+		final EReference nonContainmentRef = builder.createSingleNonContainmentReferencingType(MMXCorePackage.eINSTANCE.getUUIDObject(), "uuidRef");
 
 		// Create data model instances - these will be pre-created with the above container class instances.
 		final EObject sourceRoot = builder.createRootModel();
@@ -589,6 +611,9 @@ public class EMFModelMergeToolsTest {
 		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))).eSet(builder.getContainerReference(cls_container2), destContainer2Objects);
 		((EObject) destinationRoot.eGet(builder.getRootReference(cls_container3))).eSet(builder.getContainerReference(cls_container3), destContainer3Objects);
 
+		sourceRoot.eSet(nonContainmentRef, null);
+		destinationRoot.eSet(nonContainmentRef, destUUID1);
+
 		// Generate the mapping descriptors
 		final IMappingDescriptor descriptor1 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container1))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container1))), builder.getContainerReference(cls_container1));
@@ -596,7 +621,9 @@ public class EMFModelMergeToolsTest {
 		final IMappingDescriptor descriptor2 = EMFModelMergeTools.generateMappingDescriptorManyContainment(((EObject) sourceRoot.eGet(builder.getRootReference(cls_container2))),
 				((EObject) destinationRoot.eGet(builder.getRootReference(cls_container2))), builder.getContainerReference(cls_container2));
 
-		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2);
+		final IMappingDescriptor descriptor3 = EMFModelMergeTools.generateMappingDescriptorSingleNonContainment(sourceRoot, destinationRoot, nonContainmentRef);
+
+		final List<IMappingDescriptor> descriptors = Lists.newArrayList(descriptor1, descriptor2, descriptor3);
 
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		// Add a reflective item provider for our dynamic metamodel - delete command will not work otherwise
@@ -659,6 +686,9 @@ public class EMFModelMergeToolsTest {
 		// Make sure container 3 references are correctly updated
 		Assert.assertNull(destDataB1.eGet(dataPairB.getSecond()));
 		Assert.assertNull(destDataB2.eGet(dataPairB.getSecond()));
+		
+		// Check single non-containment ref update
+		Assert.assertNull(destinationRoot.eGet(nonContainmentRef));
 	}
 
 	/**
@@ -689,6 +719,36 @@ public class EMFModelMergeToolsTest {
 			rootClass.setName("root");
 			// Register class with the package.
 			ePkg.getEClassifiers().add(rootClass);
+		}
+
+		/**
+		 * Create a new single non-containment reference on the rootObject
+		 * 
+		 * @param superClass
+		 * @param referencingClass
+		 * @param name
+		 * @return
+		 */
+		EReference createSingleNonContainmentReferencingType(final EClass referencingClass, final String name) {
+
+			final EReference reference = EcoreFactory.eINSTANCE.createEReference();
+			reference.setName(name);
+
+			// Changeable
+			reference.setChangeable(true);
+			// Turn into many
+			reference.setUpperBound(1);
+			// Contain contents
+			reference.setContainment(false);
+
+			// Set the type of objects in this reference
+			reference.setEType(referencingClass);
+
+			// Add the reference to the container class
+			rootClass.getEStructuralFeatures().add(reference);
+
+			return reference;
+
 		}
 
 		/**
