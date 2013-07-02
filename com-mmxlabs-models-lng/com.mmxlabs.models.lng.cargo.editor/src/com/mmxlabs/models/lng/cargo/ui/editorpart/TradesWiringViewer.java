@@ -894,9 +894,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 										// Currently unable to edit mixed content!
 									}
 								} else {
-									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX);
 									dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), editorTargets, scenarioViewer.isLocked());
-
 								}
 							} finally {
 								scenarioEditingLocation.setDisableUpdates(false);
