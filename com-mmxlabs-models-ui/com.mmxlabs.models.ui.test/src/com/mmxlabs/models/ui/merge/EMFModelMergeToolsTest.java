@@ -111,11 +111,71 @@ public class EMFModelMergeToolsTest {
 		Assert.assertSame(source2, destinationToSourceMap.get(dest2));
 	}
 
+	/**
+	 * Make sure the {@link IMappingDescriptor} is correct computed
+	 */
+	@Test
+	public void testGenerateMappingDescriptorSingleNonContainment() {
+
+		// Create dynamic metamodel with a class that contains UUIDObjects
+		final SimpleModelBuilder builder = new SimpleModelBuilder(MMXCorePackage.eINSTANCE.getUUIDObject());
+
+		// Create the containers
+		final EObject sourceContainer = builder.createContainer();
+		final EObject destinationContainer = builder.createContainer();
+
+		// Create somedata
+		final UUIDObject source1 = MMXCoreFactory.eINSTANCE.createUUIDObject();
+
+		final UUIDObject dest1 = MMXCoreFactory.eINSTANCE.createUUIDObject();
+
+		// Matching uuids
+		source1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid1");
+		dest1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "uuid1");
+
+		// Add objects to container
+		final List<UUIDObject> sourceObjects = Lists.newArrayList(source1);
+		final List<UUIDObject> destObjects = Lists.newArrayList(dest1);
+
+		final EReference containerReference = builder.getContainerReference();
+		sourceContainer.eSet(containerReference, sourceObjects);
+		destinationContainer.eSet(containerReference, destObjects);
+
+		final EReference nonContainerReference = builder.getNonContainerReference();
+		sourceContainer.eSet(nonContainerReference, source1);
+		destinationContainer.eSet(nonContainerReference, dest1);
+
+		final IMappingDescriptor descriptor = EMFModelMergeTools.generateMappingDescriptorSingleNonContainment(sourceContainer, destinationContainer, nonContainerReference);
+
+		Assert.assertNotNull(descriptor);
+
+		// Check basic inputs
+		Assert.assertSame(nonContainerReference, descriptor.getReference());
+		Assert.assertSame(sourceContainer, descriptor.getSourceContainer());
+		Assert.assertSame(destinationContainer, descriptor.getDestinationContainer());
+
+		// // Check derived data.
+
+		// Check objects added
+		final List<EObject> objectsAdded = descriptor.getAddedObjects();
+		Assert.assertEquals(1, objectsAdded.size());
+		Assert.assertTrue(objectsAdded.contains(source1));
+
+		// Check objects removed
+		final Collection<EObject> objectsRemoved = descriptor.getRemovedObjects();
+		Assert.assertTrue(objectsRemoved.isEmpty());
+
+		// Check Mapping
+		final Map<EObject, EObject> destinationToSourceMap = descriptor.getDestinationToSourceMap();
+		Assert.assertTrue(destinationToSourceMap.isEmpty());
+	}
+
 	private class SimpleModelBuilder {
 
 		private EPackage ePkg;
 		private EClass containerClass;
 		private EReference containerReference;
+		private EReference nonContainerReference;
 		private final EClass referenceType;
 
 		public SimpleModelBuilder(final EClass referenceType) {
@@ -144,6 +204,22 @@ public class EMFModelMergeToolsTest {
 			// Add the reference to the container class
 			containerClass.getEStructuralFeatures().add(containerReference);
 
+			nonContainerReference = EcoreFactory.eINSTANCE.createEReference();
+			nonContainerReference.setName("ref");
+
+			// Changeable
+			nonContainerReference.setChangeable(true);
+			// Turn into many
+			nonContainerReference.setUpperBound(1);
+			// Contain contents
+			nonContainerReference.setContainment(false);
+
+			// Set the type of objects in this reference
+			nonContainerReference.setEType(referenceType);
+
+			// Add the reference to the container class
+			containerClass.getEStructuralFeatures().add(nonContainerReference);
+
 			// Register class with the package.
 			ePkg.getEClassifiers().add(containerClass);
 		}
@@ -154,6 +230,10 @@ public class EMFModelMergeToolsTest {
 
 		public EReference getContainerReference() {
 			return containerReference;
+		}
+
+		public EReference getNonContainerReference() {
+			return nonContainerReference;
 		}
 
 	}
