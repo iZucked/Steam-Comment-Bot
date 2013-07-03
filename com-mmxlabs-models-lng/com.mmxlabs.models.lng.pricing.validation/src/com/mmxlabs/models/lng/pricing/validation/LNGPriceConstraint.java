@@ -26,8 +26,8 @@ public class LNGPriceConstraint  extends AbstractModelConstraint {
 			for (Date date: data.getDates()) {
 				final Double price = data.getValueForMonth(date);
 				if (price < min || price > max) {
-					String message = String.format("Index '%s' has price %f for date '%s' (should be between %.2f and %.2f)", index.getName(), price, date.toString(), min, max);
-					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					//String message = String.format("Index '%s' has price %f for date '%s' (should be between %.2f and %.2f)", index.getName(), price, date.toString(), min, max);
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(index.getName(), price, date.toString(), min, max));
 					return dcsd;
 				}
 			}
