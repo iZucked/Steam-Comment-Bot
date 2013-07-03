@@ -7,7 +7,6 @@ import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -21,7 +20,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface Index<Value> extends EObject {
+public interface Index<Value> extends UUIDObject, NamedObject {
 
 	/**
 	 * <!-- begin-user-doc -->
