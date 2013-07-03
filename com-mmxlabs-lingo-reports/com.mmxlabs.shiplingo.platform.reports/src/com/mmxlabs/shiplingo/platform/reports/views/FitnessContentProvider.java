@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.Viewer;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -81,35 +82,37 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 
 					final LNGScenarioModel lngScenarioModel = svso.getLNGScenarioModel(o);
 
-					final ParametersModel optimiserModel = lngScenarioModel.getParametersModel();
-					final OptimiserSettings settings = optimiserModel.getActiveSetting();
-					final Map<String, Double> weightsMap = new HashMap<String, Double>();
-					if (settings != null) {
-						for (final Objective objective : settings.getObjectives()) {
-							weightsMap.put(objective.getName(), objective.getWeight());
+					final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
+					if (portfolioModel != null) {
+						final OptimiserSettings settings = portfolioModel.getParameters();
+						final Map<String, Double> weightsMap = new HashMap<String, Double>();
+						if (settings != null) {
+							for (final Objective objective : settings.getObjectives()) {
+								weightsMap.put(objective.getName(), objective.getWeight());
+							}
 						}
-					}
 
-					final boolean isPinned = svso.isPinned(o);
-					final List<RowData> destination = isPinned ? pinnedData : rowDataList;
+						final boolean isPinned = svso.isPinned(o);
+						final List<RowData> destination = isPinned ? pinnedData : rowDataList;
 
-					final Schedule schedule = (Schedule) o;
+						final Schedule schedule = (Schedule) o;
 
-					long total = 0l;
-					for (final Fitness f : schedule.getFitnesses()) {
-						final Double weightObj = weightsMap.get(f.getName());
-						final double weight = weightObj == null ? 0.0 : weightObj.doubleValue();
-						final long raw = f.getFitnessValue();
-						final long fitness = (long) (weight * (double) raw);
-						destination.add(new RowData(svso.getScenarioInstance(o).getName(), f.getName(), raw, weight, fitness));
-						if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
-							total += fitness;
+						long total = 0l;
+						for (final Fitness f : schedule.getFitnesses()) {
+							final Double weightObj = weightsMap.get(f.getName());
+							final double weight = weightObj == null ? 0.0 : weightObj.doubleValue();
+							final long raw = f.getFitnessValue();
+							final long fitness = (long) (weight * (double) raw);
+							destination.add(new RowData(svso.getScenarioInstance(o).getName(), f.getName(), raw, weight, fitness));
+							if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
+								total += fitness;
+							}
 						}
-					}
-					destination.add(new RowData(svso.getScenarioInstance(o).getName(), "Total", null, null, total));
+						destination.add(new RowData(svso.getScenarioInstance(o).getName(), "Total", null, null, total));
 
-					if (isPinned) {
-						rowDataList.addAll(pinnedData);
+						if (isPinned) {
+							rowDataList.addAll(pinnedData);
+						}
 					}
 				}
 			}
