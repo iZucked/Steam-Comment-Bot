@@ -25,6 +25,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -35,6 +37,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.IMessage;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -140,6 +144,14 @@ public class ParameterModesDialog extends FormDialog {
 
 		// Initially collapsed
 		advanced.setExpanded(false);
+		advanced.addExpansionListener(new ExpansionAdapter() {
+
+			@Override
+			public void expansionStateChanged(ExpansionEvent e) {
+				resize();
+			}
+
+		});
 
 		// Link up form validation to the error message bar at the top
 		final AggregateValidationStatus aggregateStatus = new AggregateValidationStatus(dbc.getValidationStatusProviders(), AggregateValidationStatus.MAX_SEVERITY);
@@ -148,6 +160,9 @@ public class ParameterModesDialog extends FormDialog {
 			@Override
 			public void handleValueChange(final ValueChangeEvent event) {
 				handleStateChange((IStatus) event.diff.getNewValue(), dbc);
+				if (!event.diff.getNewValue().equals(event.diff.getOldValue())) {
+					resize();
+				}
 			}
 		});
 		observablesManager.addObservable(aggregateStatus);
@@ -297,6 +312,17 @@ public class ParameterModesDialog extends FormDialog {
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 
 		return area;
+	}
+
+	protected void resize() {
+		final Shell shell = getShell();
+		if (shell != null) {
+			shell.layout(true);
+			shell.setSize(shell.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			final Rectangle shellBounds = getParentShell().getBounds();
+			final Point dialogSize = shell.getSize();
+			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
+		}
 	}
 
 	public boolean isCharterOutGenerationEnabled() {
