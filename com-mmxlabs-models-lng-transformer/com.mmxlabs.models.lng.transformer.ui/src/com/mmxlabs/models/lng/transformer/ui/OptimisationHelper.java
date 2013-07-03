@@ -2,9 +2,17 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.EMFPlugin;
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
@@ -23,21 +31,30 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersModel;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
+import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
+import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataType;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.extensions.IInlineEditorFactoryExtension.IFeatureMatcher;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
+import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public final class OptimisationHelper {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationHelper.class);
 
-	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, boolean promptForOptimiserSettings, final boolean optimising, final String k) {
+	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean promptForOptimiserSettings, final boolean optimising,
+			final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
@@ -47,7 +64,10 @@ public final class OptimisationHelper {
 				if (object instanceof LNGScenarioModel) {
 					final LNGScenarioModel root = (LNGScenarioModel) object;
 
-					OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, promptForOptimiserSettings);
+					final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, promptForOptimiserSettings);
+					if (optimiserSettings == null) {
+						return null;
+					}
 
 					final String uuid = instance.getUuid();
 
@@ -235,26 +255,70 @@ public final class OptimisationHelper {
 		return true;
 	}
 
-	public static OptimiserSettings getOptimiserSettings(LNGScenarioModel scenario, boolean forEvaluation, boolean promptUser) {
+	public static OptimiserSettings getOptimiserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser) {
 
-		OptimiserSettings currentSettings = null;
+		OptimiserSettings previousSettings = null;
 		if (scenario != null) {
-			ParametersModel parameterModel = scenario.getParametersModel();
+			final ParametersModel parameterModel = scenario.getParametersModel();
 			if (parameterModel != null) {
-				currentSettings = parameterModel.getActiveSetting();
+				previousSettings = parameterModel.getActiveSetting();
 			}
 		}
 
-		if (currentSettings == null) {
-			currentSettings = ScenarioUtils.createDefaultSettings();
+		final OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
+		if (previousSettings == null) {
+			previousSettings = defaultSettings;
 		}
 
+		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
 
+			final Display display = Display.getDefault();
+
+			final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+			adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
+			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+			final EditingDomain editingDomian = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+
 			// Fire up a dialog
+			final ParameterModesDialog dialog = new ParameterModesDialog(display.getActiveShell());
+
+			final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
+
+			dialog.addOption(DataSection.Main, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+			dialog.addOption(DataSection.Main, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+
+			if (!forEvaluation) {
+				dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
+						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+			}
+
+			final int[] ret = new int[1];
+			display.syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					ret[0] = dialog.open();
+				}
+			});
+
+			if (ret[0] != Window.OK) {
+				return null;
+			}
+
+			previousSettings = copy;
 		}
 
-		return currentSettings;
+		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
+		mergeFields(previousSettings, defaultSettings);
 
+		return defaultSettings;
+	}
+
+	private static void mergeFields(final OptimiserSettings from, final OptimiserSettings to) {
+
+		to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
+		to.setShippingOnly(from.isShippingOnly());
+		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 	}
 }
