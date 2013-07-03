@@ -208,11 +208,33 @@ public interface ParametersPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Rewire</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
+	@Deprecated
 	int OPTIMISER_SETTINGS__REWIRE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Generate Charter Outs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Only</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISER_SETTINGS__SHIPPING_ONLY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Optimiser Settings</em>' class.
@@ -221,7 +243,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -565,13 +587,39 @@ public interface ParametersPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isRewire <em>Rewire</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Rewire</em>'.
 	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isRewire()
 	 * @see #getOptimiserSettings()
 	 * @generated
 	 */
+	@Deprecated
 	EAttribute getOptimiserSettings_Rewire();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Generate Charter Outs</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts()
+	 * @see #getOptimiserSettings()
+	 * @generated
+	 */
+	EAttribute getOptimiserSettings_GenerateCharterOuts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Shipping Only</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly()
+	 * @see #getOptimiserSettings()
+	 * @generated
+	 */
+	EAttribute getOptimiserSettings_ShippingOnly();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
@@ -857,6 +905,24 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute OPTIMISER_SETTINGS__REWIRE = eINSTANCE.getOptimiserSettings_Rewire();
+
+		/**
+		 * The meta object literal for the '<em><b>Generate Charter Outs</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 5.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS = eINSTANCE.getOptimiserSettings_GenerateCharterOuts();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Only</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 5.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISER_SETTINGS__SHIPPING_ONLY = eINSTANCE.getOptimiserSettings_ShippingOnly();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.

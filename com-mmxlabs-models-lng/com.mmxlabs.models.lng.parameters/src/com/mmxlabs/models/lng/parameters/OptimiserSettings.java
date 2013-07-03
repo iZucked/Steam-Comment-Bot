@@ -23,6 +23,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSeed <em>Seed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getArguments <em>Arguments</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isRewire <em>Rewire</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}</li>
  * </ul>
  * </p>
  *
@@ -182,6 +184,62 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setRewire(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Generate Charter Outs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Generate Charter Outs</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Generate Charter Outs</em>' attribute.
+	 * @see #setGenerateCharterOuts(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings_GenerateCharterOuts()
+	 * @model
+	 * @generated
+	 */
+	boolean isGenerateCharterOuts();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Generate Charter Outs</em>' attribute.
+	 * @see #isGenerateCharterOuts()
+	 * @generated
+	 */
+	void setGenerateCharterOuts(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Shipping Only</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Shipping Only</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Shipping Only</em>' attribute.
+	 * @see #setShippingOnly(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings_ShippingOnly()
+	 * @model
+	 * @generated
+	 */
+	boolean isShippingOnly();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Shipping Only</em>' attribute.
+	 * @see #isShippingOnly()
+	 * @generated
+	 */
+	void setShippingOnly(boolean value);
 
 } // end of  OptimiserSettings
 

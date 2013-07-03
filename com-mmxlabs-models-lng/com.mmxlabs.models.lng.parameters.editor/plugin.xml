@@ -107,4 +107,16 @@
           restorable="true">
     </view>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated parameters -->
+      <editor
+            id="com.mmxlabs.models.lng.parameters.presentation.ParametersEditorID"
+            name="%_UI_ParametersEditor_label"
+            icon="icons/full/obj16/ParametersModelFile.gif"
+            extensions="parameters"
+            class="com.mmxlabs.models.lng.parameters.presentation.ParametersEditor"
+            contributorClass="com.mmxlabs.models.lng.parameters.presentation.ParametersActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>
