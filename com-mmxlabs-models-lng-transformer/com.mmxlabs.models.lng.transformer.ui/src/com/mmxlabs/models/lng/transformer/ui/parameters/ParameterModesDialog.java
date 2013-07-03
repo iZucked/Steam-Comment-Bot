@@ -162,6 +162,7 @@ public class ParameterModesDialog extends FormDialog {
 						to.eSet(f, from.eGet(f));
 
 					}
+					dbc.updateTargets();
 				}
 			}
 		});
