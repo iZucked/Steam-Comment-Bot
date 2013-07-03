@@ -19,6 +19,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -58,17 +59,17 @@ public class LNGTransformer {
 	/**
 	 * @param scenario
 	 * @param hints
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, String... hints) {
-		this(scenario, null, null, hints);
+	public LNGTransformer(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings, String... hints) {
+		this(scenario, optimiserSettings,  null, null, hints);
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
-		this(scenario, null, localOverrides, hints);
+	public LNGTransformer(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
+		this(scenario, optimiserSettings, null, localOverrides, hints);
 	}
 
 	/**
@@ -76,16 +77,16 @@ public class LNGTransformer {
 	 * @param scenario
 	 * @param module
 	 * @param hints
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, final Module module, String... hints) {
-		this(scenario, module, null, hints);
+	public LNGTransformer(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings, final Module module, String... hints) {
+		this(scenario, optimiserSettings,  module, null, hints);
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, final Module module, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
+	public LNGTransformer(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings, final Module module, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
 		this.scenario = scenario;
 
 		boolean performOptimisation = false;
@@ -170,7 +171,7 @@ public class LNGTransformer {
 		// Install standard module with optional overrides
 		installModuleOverrides(modules, new DataComponentProviderModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule);
 
-		installModuleOverrides(modules, new LNGTransformerModule(scenario), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
+		installModuleOverrides(modules, new LNGTransformerModule(scenario, optimiserSettings), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
 
 		installModuleOverrides(modules, new OptimiserSettingsModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_ParametersModule);
 

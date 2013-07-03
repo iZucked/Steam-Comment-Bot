@@ -472,8 +472,6 @@ public class ScenarioTools {
 		cargoModel.getLoadSlots().add(load);
 		cargoModel.getDischargeSlots().add(dis);
 
-		ScenarioUtils.addDefaultSettings(scenario);
-
 		return scenario;
 	}
 
@@ -681,8 +679,6 @@ public class ScenarioTools {
 		// add to scenario's fleet model
 		scenarioFleetModel.getVesselEvents().add(dryDockJourney);
 
-		ScenarioUtils.addDefaultSettings(scenario);
-
 		return scenario;
 	}
 
@@ -700,7 +696,7 @@ public class ScenarioTools {
 		// hints= new String[] { LNGTransformer.HINT_OPTIMISE_LSO}
 		// }
 		//
-		final LNGTransformer transformer = new LNGTransformer(scenario, new TransformerExtensionTestModule());
+		final LNGTransformer transformer = new LNGTransformer(scenario,ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
 
 		// Code to dump out the scenario to disk
 		if (false) {

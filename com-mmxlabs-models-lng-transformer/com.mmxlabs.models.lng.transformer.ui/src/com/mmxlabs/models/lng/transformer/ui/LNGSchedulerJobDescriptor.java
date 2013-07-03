@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.io.Serializable;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -22,13 +23,16 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 
 	private ScenarioInstance scenarioInstance;
 
-	private boolean optimise;
-	
+	private final OptimiserSettings optimiserSettings;
+
+	private final boolean optimise;
+
 	private final String lockKey;
 
-	public LNGSchedulerJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final boolean optimise, final String lockKey) {
+	public LNGSchedulerJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final OptimiserSettings optimiserSettings, final boolean optimise, final String lockKey) {
 		this.name = name;
 		this.scenarioInstance = scenarioInstance;
+		this.optimiserSettings = optimiserSettings;
 		this.optimise = optimise;
 		this.lockKey = lockKey;
 	}
@@ -64,5 +68,9 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 
 	public boolean isOptimising() {
 		return optimise;
+	}
+
+	public OptimiserSettings getOptimiserSettings() {
+		return optimiserSettings;
 	}
 }

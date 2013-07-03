@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
@@ -96,7 +97,7 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 								log.error(e.getMessage(), e);
 							}
 
-							return evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
+							return OptimisationHelper.evaluateScenarioInstance(jobManager, fork, true, optimising, ScenarioLock.OPTIMISER);
 						}
 					} catch (final IOException e) {
 						throw new ExecutionException("Unable to fork scenario", e);

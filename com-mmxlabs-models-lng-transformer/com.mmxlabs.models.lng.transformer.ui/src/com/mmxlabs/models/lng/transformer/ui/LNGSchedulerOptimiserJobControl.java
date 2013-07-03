@@ -73,7 +73,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		scenarioInstance.getLock(lockKey).awaitClaim();
 		startTimeMillis = System.currentTimeMillis();
 
-		final LNGTransformer transformer = new LNGTransformer(scenario, LNGTransformer.HINT_OPTIMISE_LSO);
+		final LNGTransformer transformer = new LNGTransformer(scenario, jobDescriptor.getOptimiserSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
 
 		injector = transformer.getInjector();
 

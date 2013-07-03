@@ -51,11 +51,14 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final LNGScenarioModel scenario;
 
+	private final OptimiserSettings optimiserSettings;
+
 	/**
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	public LNGTransformerModule(final LNGScenarioModel scenario) {
+	public LNGTransformerModule(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings) {
 		this.scenario = scenario;
+		this.optimiserSettings = optimiserSettings;
 	}
 
 	@Override
@@ -66,6 +69,7 @@ public class LNGTransformerModule extends AbstractModule {
 		install(new SchedulerModule());
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
+		bind(OptimiserSettings.class).toInstance(optimiserSettings);
 
 		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
@@ -106,30 +110,30 @@ public class LNGTransformerModule extends AbstractModule {
 		return optimisationData;
 	}
 
-	@Provides
-	@Singleton
-	/**
-	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
-	 * 
-	 * @return
-	 */
-	OptimiserSettings getOptimisationSettings(LNGScenarioModel rootObject) {
-		final ParametersModel om = rootObject.getParametersModel();
-		if (om != null) {
-			// select settings
-			final OptimiserSettings x = om.getActiveSetting();
-			if (x != null)
-				return x;
-		}
-		// if (defaultSettings == null) {
-		OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
-		if (om != null) {
-			om.getSettings().add(defaultSettings);
-			om.setActiveSetting(defaultSettings);
-		}
-		// }
-		return defaultSettings;
-	}
+//	@Provides
+//	@Singleton
+//	/**
+//	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
+//	 * 
+//	 * @return
+//	 */
+//	OptimiserSettings getOptimisationSettings(LNGScenarioModel rootObject) {
+//		final ParametersModel om = rootObject.getParametersModel();
+//		if (om != null) {
+//			// select settings
+//			final OptimiserSettings x = om.getActiveSetting();
+//			if (x != null)
+//				return x;
+//		}
+//		// if (defaultSettings == null) {
+//		OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
+//		if (om != null) {
+//			om.getSettings().add(defaultSettings);
+//			om.setActiveSetting(defaultSettings);
+//		}
+//		// }
+//		return defaultSettings;
+//	}
 
 	@Provides
 	@Singleton

@@ -54,8 +54,8 @@ public class ManifestJointModel {
 	private static final String SCHEDULE_MODEL_KEY = "schedule-model";
 	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
 	private static final String ROOT_MODEL_KEY = "root-model";
-	private static final String PARAMETERS_MODEL_KEY = "parameters-model";
-	private static final String ANALYTICS_MODEL_KEY = "analytics-model";
+//	private static final String PARAMETERS_MODEL_KEY = "parameters-model";
+//	private static final String ANALYTICS_MODEL_KEY = "analytics-model";
 	private static final String SPOT_MARKETS_MODEL_KEY = "spot-markets-model";
 
 	/**
@@ -72,7 +72,7 @@ public class ManifestJointModel {
 		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
 		modelClassKeys.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), ASSIGNMENT_MODEL_KEY);
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
-		modelClassKeys.put(ParametersPackage.eINSTANCE.getParametersModel(), PARAMETERS_MODEL_KEY);
+//		modelClassKeys.put(ParametersPackage.eINSTANCE.getParametersModel(), PARAMETERS_MODEL_KEY);
 		// modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
 		modelClassKeys.put(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel(), SPOT_MARKETS_MODEL_KEY);
 
@@ -93,7 +93,7 @@ public class ManifestJointModel {
 		rootObject.setPricingModel(PricingFactory.eINSTANCE.createPricingModel());
 		rootObject.getPricingModel().setFleetCost(PricingFactory.eINSTANCE.createFleetCostModel());
 		rootObject.setCommercialModel(CommercialFactory.eINSTANCE.createCommercialModel());
-		rootObject.setParametersModel(ParametersFactory.eINSTANCE.createParametersModel());
+//		rootObject.setParametersModel(ParametersFactory.eINSTANCE.createParametersModel());
 		rootObject.setSpotMarketsModel(SpotMarketsFactory.eINSTANCE.createSpotMarketsModel());
 
 		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();

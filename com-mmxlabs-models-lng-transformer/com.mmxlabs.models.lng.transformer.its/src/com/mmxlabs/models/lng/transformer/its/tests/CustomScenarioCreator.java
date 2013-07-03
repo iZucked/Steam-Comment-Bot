@@ -79,7 +79,6 @@ public class CustomScenarioCreator {
 	private final FleetModel fleetModel;
 	private final ScenarioFleetModel scenarioFleetModel;
 	private final PricingModel pricingModel;
-	private final ParametersModel parametersModel;
 	private final SpotMarketsModel spotMarketsModel;
 	private final LNGPortfolioModel portfolioModel;
 
@@ -103,7 +102,6 @@ public class CustomScenarioCreator {
 		pricingModel = scenario.getPricingModel();
 		commercialModel = scenario.getCommercialModel();
 		spotMarketsModel = scenario.getSpotMarketsModel();
-		parametersModel = scenario.getParametersModel();
 
 		portfolioModel = scenario.getPortfolioModel();
 		cargoModel = portfolioModel.getCargoModel();

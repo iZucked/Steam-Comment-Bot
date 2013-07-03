@@ -69,7 +69,6 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -99,7 +98,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
-import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -180,7 +178,7 @@ public class LNGScenarioTransformer {
 
 	private final ArrayList<IVessel> allVessels = new ArrayList<IVessel>();
 
-	private OptimiserSettings defaultSettings = null;
+	// private OptimiserSettings defaultSettings = null;
 
 	/**
 	 * The {@link Set} of ID strings already used. The UI should restrict user entered data items from clashing, but generated ID's may well clash with user ones.
@@ -196,24 +194,27 @@ public class LNGScenarioTransformer {
 
 	private final Map<Vessel, VesselAvailability> vesselAvailabiltyMap = new HashMap<Vessel, VesselAvailability>();
 
+	private OptimiserSettings optimiserParameters;
+
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
 	 * @param scenario
-	 * @since 4.0
+	 * @since 5.0
 	 */
 	@Inject
-	public LNGScenarioTransformer(final LNGScenarioModel rootObject) {
+	public LNGScenarioTransformer(final LNGScenarioModel rootObject, OptimiserSettings optimiserParameters) {
 
-		init(rootObject);
+		init(rootObject, optimiserParameters);
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	protected void init(final LNGScenarioModel rootObject) {
+	protected void init(final LNGScenarioModel rootObject, OptimiserSettings optimiserParameters) {
 
 		this.rootObject = rootObject;
+		this.optimiserParameters = optimiserParameters;
 	}
 
 	/**
@@ -432,7 +433,7 @@ public class LNGScenarioTransformer {
 
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst(), entities);
 
-		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, entities, getOptimisationSettings().isRewire());
+		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, entities, optimiserParameters.isRewire());
 
 		buildVesselEvents(builder, portAssociation, vesselAssociations.getFirst(), vesselAssociations.getSecond(), entities);
 
@@ -459,15 +460,9 @@ public class LNGScenarioTransformer {
 	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
 
 		Date freezeDate = null;
-		final ParametersModel optimiserModel = rootObject.getParametersModel();
-		if (optimiserModel != null) {
-			final OptimiserSettings settings = optimiserModel.getActiveSetting();
-			if (settings != null) {
-				final OptimisationRange range = settings.getRange();
-				if (range != null) {
-					freezeDate = range.getOptimiseAfter();
-				}
-			}
+		final OptimisationRange range = optimiserParameters.getRange();
+		if (range != null) {
+			freezeDate = range.getOptimiseAfter();
 		}
 
 		final AssignmentModel assignmentModel = rootObject.getPortfolioModel().getAssignmentModel();
@@ -643,7 +638,7 @@ public class LNGScenarioTransformer {
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
 			final Association<Vessel, IVessel> vessels, final ModelEntityMap entities) {
 
-		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
+		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
 
 		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
 
@@ -699,7 +694,7 @@ public class LNGScenarioTransformer {
 	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
 			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
 
-		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
+		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
 
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
@@ -780,14 +775,14 @@ public class LNGScenarioTransformer {
 								// Redirection contracts can go to anywhere
 								builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
 							} else {
-//								final Set<IPort> ports = new LinkedHashSet<IPort>();
-//								for (final IDischargeOption discharge : dischargeOptions) {
-//									ports.add(discharge.getPort());
-//								}
+								// final Set<IPort> ports = new LinkedHashSet<IPort>();
+								// for (final IDischargeOption discharge : dischargeOptions) {
+								// ports.add(discharge.getPort());
+								// }
 								final Set<IPort> ports = Collections.singleton(load.getPort());
 								builder.bindDischargeSlotsToDESPurchase(load, ports);
-//								// Bind to this port -- TODO: Fix to discharge?
-//								builder.constrainSlotAdjacency(load, secondSlot);
+								// // Bind to this port -- TODO: Fix to discharge?
+								// builder.constrainSlotAdjacency(load, secondSlot);
 							}
 						}
 					}
@@ -1102,8 +1097,8 @@ public class LNGScenarioTransformer {
 		if (spotMarketsModel == null) {
 			return;
 		}
-		final Date earliestDate = getOptimisationSettings().getRange().isSetOptimiseAfter() ? getOptimisationSettings().getRange().getOptimiseAfter() : earliestTime;
-		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
+		final Date earliestDate = optimiserParameters.getRange().isSetOptimiseAfter() ? optimiserParameters.getRange().getOptimiseAfter() : earliestTime;
+		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
 
 		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, spotMarketsModel.getDesPurchaseSpotMarket());
 		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket());
@@ -2023,30 +2018,6 @@ public class LNGScenarioTransformer {
 		}
 
 		return builder.createStartEndRequirement();
-	}
-
-	/**
-	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
-	 * 
-	 * @return
-	 * @since 4.0
-	 */
-	public OptimiserSettings getOptimisationSettings() {
-		final ParametersModel om = rootObject.getParametersModel();
-		if (om != null) {
-			// select settings
-			final OptimiserSettings x = om.getActiveSetting();
-			if (x != null)
-				return x;
-		}
-		if (defaultSettings == null) {
-			defaultSettings = ScenarioUtils.createDefaultSettings();
-			if (om != null) {
-				om.getSettings().add(defaultSettings);
-				om.setActiveSetting(defaultSettings);
-			}
-		}
-		return defaultSettings;
 	}
 
 	/**

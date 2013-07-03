@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -18,7 +17,6 @@ import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.IConstraintDescriptor;
 import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -28,18 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobControlListener;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
-import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -83,7 +75,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof ScenarioInstance) {
-					return evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, optimising, ScenarioLock.OPTIMISER);
+					return OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, true, optimising, ScenarioLock.OPTIMISER);
 				}
 
 			}
@@ -92,133 +84,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		return null;
 	}
 
-	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean optimising, final String k) {
-
-		final IScenarioService service = instance.getScenarioService();
-		if (service != null) {
-			try {
-				final EObject object = service.load(instance);
-
-				if (object instanceof MMXRootObject) {
-					final MMXRootObject root = (MMXRootObject) object;
-
-					final String uuid = instance.getUuid();
-
-					IJobDescriptor job = jobManager.findJobForResource(uuid);
-					if (job == null) {
-						// create a new job
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimising, k);
-					}
-
-					IJobControl control = jobManager.getControlForJob(job);
-					// If there is a job, but it is terminated, then we need to create a new one
-					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
-						jobManager.removeJob(job);
-						control = null;
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimising, k);
-
-					}
-
-					if (control == null) {
-
-						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(root)) {
-							return null;
-						}
-
-						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-						control = jobManager.submitJob(job, uuid);
-					}
-
-					// if (!jobManager.getSelectedJobs().contains(job)) {
-					// // Clean up when job is removed from manager
-					// jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-					// control = jobManager.submitJob(job, uuid);
-					// }
-
-					if (control.getJobState() == EJobState.CREATED) {
-						try {
-							final IJobDescriptor desc = job;
-							// Add listener to unlock scenario when it stops optimising
-							control.addListener(new IJobControlListener() {
-
-								@Override
-								public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
-
-									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-										// instance.setLocked(false);
-										instance.getLock(k).release();
-										jobManager.removeJob(desc);
-										return false;
-									}
-									return true;
-								}
-
-								@Override
-								public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
-									return true;
-								}
-							});
-							// Set initial state.
-							// instance.setLocked(true);
-							instance.getLock(k).awaitClaim();
-							control.prepare();
-							control.start();
-						} catch (final Throwable ex) {
-							log.error(ex.getMessage(), ex);
-							control.cancel();
-							// instance.setLocked(false);
-							instance.getLock(k).release();
-
-							final Display display = Display.getDefault();
-							if (display != null) {
-								display.asyncExec(new Runnable() {
-
-									@Override
-									public void run() {
-										MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", ex.getMessage());
-									}
-								});
-							}
-						}
-						// Resume if paused
-					} else if (control.getJobState() == EJobState.PAUSED) {
-						// instance.setLocked(true);
-						instance.getLock(k).awaitClaim();
-						control.resume();
-					} else {
-						// Add listener to unlock scenario when it stops optimising
-						control.addListener(new IJobControlListener() {
-
-							@Override
-							public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
-
-								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-									// instance.setLocked(false);
-									instance.getLock(k).release();
-									return false;
-								}
-								return true;
-							}
-
-							@Override
-							public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
-								return true;
-							}
-						});
-						// instance.setLocked(true);
-						instance.getLock(k).awaitClaim();
-						control.start();
-					}
-				}
-			} catch (final IOException e) {
-				log.error(e.getMessage(), e);
-			}
-
-		}
-
-		return null;
-	}
 
 	public static boolean validateScenario(final MMXRootObject root) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);

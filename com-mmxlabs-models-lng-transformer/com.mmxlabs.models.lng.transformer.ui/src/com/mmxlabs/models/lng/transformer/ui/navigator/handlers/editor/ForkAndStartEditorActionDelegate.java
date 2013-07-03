@@ -22,6 +22,7 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -80,7 +81,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 							log.error(e.getMessage(), e);
 						}
 
-						evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
+						OptimisationHelper.evaluateScenarioInstance(jobManager, fork, true, optimising, ScenarioLock.OPTIMISER);
 					}
 				} catch (final IOException e) {
 					throw new RuntimeException("Unable to fork scenario", e);
@@ -131,7 +132,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				} else {
 
 					// New optimisation, so check there are no validation errors.
-					if (!validateScenario(root)) {
+					if (!OptimisationHelper.validateScenario(root)) {
 						action.setEnabled(false);
 						return;
 					}

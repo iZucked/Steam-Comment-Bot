@@ -64,7 +64,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
 			// Create the transformer and object reference to the data objects
-			final LNGTransformer transformer = new LNGTransformer(scenario);
+			final LNGTransformer transformer = new LNGTransformer(scenario, jobDescriptor.getOptimiserSettings());
 
 			final Injector injector = transformer.getInjector();
 			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);

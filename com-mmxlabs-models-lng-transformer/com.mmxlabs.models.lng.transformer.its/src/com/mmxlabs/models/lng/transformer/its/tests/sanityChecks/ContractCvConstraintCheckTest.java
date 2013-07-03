@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
@@ -215,7 +217,7 @@ public class ContractCvConstraintCheckTest {
 		 */
 		// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
 		public void testConstraintChecker(boolean expectedResult, AbstractPairwiseConstraintChecker checker) {
-			final LNGTransformer transformer = new LNGTransformer(scenario, new TransformerExtensionTestModule());
+			final LNGTransformer transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
 			final IOptimisationData data = transformer.getOptimisationData();
 
 			transformer.getInjector().injectMembers(checker);

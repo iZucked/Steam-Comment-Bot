@@ -9,7 +9,10 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.omg.PortableInterceptor.SUCCESSFUL;
+
 import com.google.inject.Injector;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
@@ -18,6 +21,7 @@ import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
@@ -70,8 +74,9 @@ public class ScenarioRunner {
 	}
 
 	public void init() throws IncompleteScenarioException {
+		OptimiserSettings optimiserSettings = scenario.getParametersModel().getActiveSetting() == null ? ScenarioUtils.createDefaultSettings() : scenario.getParametersModel().getActiveSetting();
 
-		final LNGTransformer transformer = new LNGTransformer(scenario, new TransformerExtensionTestModule(), LNGTransformer.HINT_OPTIMISE_LSO);
+		final LNGTransformer transformer = new LNGTransformer(scenario, optimiserSettings, new TransformerExtensionTestModule(), LNGTransformer.HINT_OPTIMISE_LSO);
 
 		injector = transformer.getInjector();
 
