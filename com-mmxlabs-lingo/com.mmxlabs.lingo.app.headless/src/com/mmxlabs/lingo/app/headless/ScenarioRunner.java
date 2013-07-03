@@ -74,7 +74,7 @@ public class ScenarioRunner {
 	}
 
 	public void initStage1() {
-		OptimiserSettings optimiserSettings = scenario.getParametersModel().getActiveSetting() == null ? ScenarioUtils.createDefaultSettings() : scenario.getParametersModel().getActiveSetting();
+		OptimiserSettings optimiserSettings = scenario.getPortfolioModel().getParameters() == null ? ScenarioUtils.createDefaultSettings() : scenario.getPortfolioModel().getParameters();
 
 		final EnumMap<ModuleType, List<Module>> localOverrides = Maps.newEnumMap(IOptimiserInjectorService.ModuleType.class);
 		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(settings)));
