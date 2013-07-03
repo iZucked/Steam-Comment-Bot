@@ -6,6 +6,9 @@
  */
 package com.mmxlabs.models.lng.scenario.model.provider;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
+import com.mmxlabs.models.lng.analytics.util.AnalyticsSwitch;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -271,6 +274,98 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	}
 
 	/**
+	 * A child creation extender for the {@link AnalyticsPackage}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static class AnalyticsChildCreationExtender implements IChildCreationExtender {
+		/**
+		 * The switch for creating child descriptors specific to each extended class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		protected static class CreationSwitch extends AnalyticsSwitch<Object> {
+			/**
+			 * The child descriptors being populated.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected List<Object> newChildDescriptors;
+
+			/**
+			 * The domain in which to create the children.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected EditingDomain editingDomain;
+
+			/**
+			 * Creates the a switch for populating child descriptors in the given domain.
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			CreationSwitch(List<Object> newChildDescriptors, EditingDomain editingDomain) {
+				this.newChildDescriptors = newChildDescriptors;
+				this.editingDomain = editingDomain;
+			}
+			/**
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			@Override
+			public Object caseProvisionalCargo(ProvisionalCargo object) {
+				newChildDescriptors.add
+					(createChildParameter
+						(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+						 LNGScenarioFactory.eINSTANCE.createLNGScenarioModel()));
+
+				newChildDescriptors.add
+					(createChildParameter
+						(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+						 LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel()));
+
+				return null;
+			}
+ 
+			/**
+			 * <!-- begin-user-doc -->
+			 * <!-- end-user-doc -->
+			 * @generated
+			 */
+			protected CommandParameter createChildParameter(Object feature, Object child) {
+				return new CommandParameter(null, feature, child);
+			}
+
+		}
+
+		/**
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
+			ArrayList<Object> result = new ArrayList<Object>();
+			new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
+			return result;
+		}
+
+		/**
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public ResourceLocator getResourceLocator() {
+			return LNGScenarioEditPlugin.INSTANCE;
+		}
+	}
+
+	/**
 	 * A child creation extender for the {@link CommercialPackage}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -348,8 +443,8 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 		 */
 		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
 			ArrayList<Object> result = new ArrayList<Object>();
-		   new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
-		   return result;
+			new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
+			return result;
 		}
 
 		/**

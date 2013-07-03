@@ -243,6 +243,16 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getLNGPortfolioModel_Parameters() {
+		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -284,6 +294,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__CARGO_MODEL);
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL);
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL);
+		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__PARAMETERS);
 	}
 
 	/**
@@ -346,6 +357,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGPortfolioModel_CargoModel(), theCargoPackage.getCargoModel(), null, "cargoModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGPortfolioModel_AssignmentModel(), theAssignmentPackage.getAssignmentModel(), null, "assignmentModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGPortfolioModel_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGPortfolioModel_Parameters(), theParametersPackage.getOptimiserSettings(), null, "parameters", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

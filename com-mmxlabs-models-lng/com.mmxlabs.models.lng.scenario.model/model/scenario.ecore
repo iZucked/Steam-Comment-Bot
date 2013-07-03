@@ -29,5 +29,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" eType="ecore:EClass ../../com.mmxlabs.models.lng.parameters/model/parameters.ecore#//OptimiserSettings"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

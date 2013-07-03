@@ -176,6 +176,7 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * If the meaning of the '<em>Parameters Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parameters Model</em>' containment reference.
 	 * @see #setParametersModel(ParametersModel)
@@ -183,16 +184,19 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
+	@Deprecated
 	ParametersModel getParametersModel();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParametersModel <em>Parameters Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Parameters Model</em>' containment reference.
 	 * @see #getParametersModel()
 	 * @generated
 	 */
+	@Deprecated
 	void setParametersModel(ParametersModel value);
 
 	/**

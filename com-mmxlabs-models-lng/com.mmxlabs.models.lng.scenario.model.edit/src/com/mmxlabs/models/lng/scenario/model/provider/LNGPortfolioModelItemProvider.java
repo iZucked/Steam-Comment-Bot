@@ -24,6 +24,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.assignment.AssignmentFactory;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -84,6 +85,7 @@ public class LNGPortfolioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_CargoModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_AssignmentModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ScheduleModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters());
 		}
 		return childrenFeatures;
 	}
@@ -142,6 +144,7 @@ public class LNGPortfolioModelItemProvider
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -178,6 +181,11 @@ public class LNGPortfolioModelItemProvider
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ScheduleModel(),
 				 ScheduleFactory.eINSTANCE.createScheduleModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(),
+				 ParametersFactory.eINSTANCE.createOptimiserSettings()));
 	}
 
 }
