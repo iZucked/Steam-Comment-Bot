@@ -34,6 +34,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public interface Cargo extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allow Rewiring</em>' attribute isn't clear,
@@ -41,11 +42,9 @@ public interface Cargo extends UUIDObject, NamedObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Allow Rewiring</em>' attribute.
-	 * @see #isSetAllowRewiring()
-	 * @see #unsetAllowRewiring()
 	 * @see #setAllowRewiring(boolean)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_AllowRewiring()
-	 * @model unsettable="true" required="true"
+	 * @model default="true" required="true"
 	 * @generated
 	 */
 	boolean isAllowRewiring();
@@ -55,35 +54,10 @@ public interface Cargo extends UUIDObject, NamedObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Allow Rewiring</em>' attribute.
-	 * @see #isSetAllowRewiring()
-	 * @see #unsetAllowRewiring()
 	 * @see #isAllowRewiring()
 	 * @generated
 	 */
 	void setAllowRewiring(boolean value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetAllowRewiring()
-	 * @see #isAllowRewiring()
-	 * @see #setAllowRewiring(boolean)
-	 * @generated
-	 */
-	void unsetAllowRewiring();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Allow Rewiring</em>' attribute is set.
-	 * @see #unsetAllowRewiring()
-	 * @see #isAllowRewiring()
-	 * @see #setAllowRewiring(boolean)
-	 * @generated
-	 */
-	boolean isSetAllowRewiring();
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.

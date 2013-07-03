@@ -69,8 +69,8 @@ public final class CargoEditorPlugin extends EMFPlugin {
 	public static final String IMAGE_CARGO_WIRING_DISABLED = "cargo.wiring.disabled";
 
 	/**
-	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final CargoEditorPlugin INSTANCE = new CargoEditorPlugin();
