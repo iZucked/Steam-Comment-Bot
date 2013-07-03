@@ -433,7 +433,7 @@ public class LNGScenarioTransformer {
 
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst(), entities);
 
-		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, entities, optimiserParameters.isRewire());
+		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, entities, optimiserParameters.isShippingOnly());
 
 		buildVesselEvents(builder, portAssociation, vesselAssociations.getFirst(), vesselAssociations.getSecond(), entities);
 
@@ -692,7 +692,7 @@ public class LNGScenarioTransformer {
 	 * @param defaultRewiring
 	 */
 	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
-			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
+			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean shippingOnly) {
 
 		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
 
@@ -804,7 +804,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			final ICargo cargo = builder.createCargo(slots, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
+			final ICargo cargo = builder.createCargo(slots, shippingOnly ? false : eCargo.isAllowRewiring());
 
 			entities.addModelObject(eCargo, cargo);
 			if (eCargo.getCargoType() == CargoType.FLEET) {
