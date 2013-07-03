@@ -97,16 +97,6 @@
           inheritable="false">
     </displayCompositeFactory>
  </extension>
- <extension
-       point="org.eclipse.ui.views">
-    <view
-          category="com.mmxlabs.models.lng.views.logical"
-          class="com.mmxlabs.models.lng.parameters.editor.views.OptimiserSettingsView"
-          id="com.mmxlabs.models.lng.parameters.editor.views.OptimiserSettingsView"
-          name="Optimiser Settings"
-          restorable="true">
-    </view>
- </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated parameters -->
       <editor
