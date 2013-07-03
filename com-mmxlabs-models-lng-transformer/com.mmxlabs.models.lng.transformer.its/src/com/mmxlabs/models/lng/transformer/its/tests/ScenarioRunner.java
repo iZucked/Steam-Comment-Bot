@@ -74,7 +74,7 @@ public class ScenarioRunner {
 	}
 
 	public void init() throws IncompleteScenarioException {
-		OptimiserSettings optimiserSettings = scenario.getParametersModel().getActiveSetting() == null ? ScenarioUtils.createDefaultSettings() : scenario.getParametersModel().getActiveSetting();
+		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 
 		final LNGTransformer transformer = new LNGTransformer(scenario, optimiserSettings, new TransformerExtensionTestModule(), LNGTransformer.HINT_OPTIMISE_LSO);
 
