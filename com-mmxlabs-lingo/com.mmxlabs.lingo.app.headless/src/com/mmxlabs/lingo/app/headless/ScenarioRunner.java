@@ -11,13 +11,14 @@ import java.util.List;
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
@@ -73,11 +74,12 @@ public class ScenarioRunner {
 	}
 
 	public void initStage1() {
+		OptimiserSettings optimiserSettings = scenario.getParametersModel().getActiveSetting() == null ? ScenarioUtils.createDefaultSettings() : scenario.getParametersModel().getActiveSetting();
 
 		final EnumMap<ModuleType, List<Module>> localOverrides = Maps.newEnumMap(IOptimiserInjectorService.ModuleType.class);
 		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(settings)));
 
-		final LNGTransformer transformer = new LNGTransformer(scenario, localOverrides);
+		final LNGTransformer transformer = new LNGTransformer(scenario, optimiserSettings, localOverrides);
 
 		injector = transformer.getInjector();
 
