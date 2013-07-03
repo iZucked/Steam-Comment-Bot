@@ -573,6 +573,9 @@ public class SchedulePnLReport extends EMFReportView {
 		return nodes;
 	}
 	
+	/**
+	 * @since 4.0
+	 */
 	@Override
 	protected boolean handleSelections() {
 		return true;
