@@ -58,6 +58,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private String lockKey;
 
+	private LNGTransformer transformer;
+
 	public LNGSchedulerOptimiserJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY,
 				(jobDescriptor.isOptimising() ? imgOpti : imgEval)));
@@ -73,7 +75,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		scenarioInstance.getLock(lockKey).awaitClaim();
 		startTimeMillis = System.currentTimeMillis();
 
-		final LNGTransformer transformer = new LNGTransformer(scenario, jobDescriptor.getOptimiserSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
+		transformer = new LNGTransformer(scenario, jobDescriptor.getOptimiserSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
 
 		injector = transformer.getInjector();
 
@@ -90,7 +92,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		optimiser.init();
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
-		LNGSchedulerJobUtils.exportSolution(injector, scenario, editingDomain, entities, startSolution, 0);
+		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, entities, startSolution, 0);
 	}
 
 	/*
@@ -114,7 +116,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			// export final state
 
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(editingDomain, lockKey, 100);
-			LNGSchedulerJobUtils.exportSolution(injector, scenario, editingDomain, entities, optimiser.getBestSolution(true), 100);
+			LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, entities, optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			super.setProgress(100);

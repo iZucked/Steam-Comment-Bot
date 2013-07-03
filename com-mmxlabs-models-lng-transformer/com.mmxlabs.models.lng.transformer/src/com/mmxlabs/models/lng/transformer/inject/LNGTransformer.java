@@ -56,19 +56,22 @@ public class LNGTransformer {
 
 	private Iterable<IOptimiserInjectorService> extraModules;
 
+	private final OptimiserSettings optimiserSettings;
+
 	/**
 	 * @param scenario
 	 * @param hints
 	 * @since 5.0
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings, String... hints) {
-		this(scenario, optimiserSettings,  null, null, hints);
+	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final String... hints) {
+		this(scenario, optimiserSettings, null, null, hints);
 	}
 
 	/**
 	 * @since 5.0
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
+	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides,
+			final String... hints) {
 		this(scenario, optimiserSettings, null, localOverrides, hints);
 	}
 
@@ -79,20 +82,22 @@ public class LNGTransformer {
 	 * @param hints
 	 * @since 5.0
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings, final Module module, String... hints) {
-		this(scenario, optimiserSettings,  module, null, hints);
+	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Module module, final String... hints) {
+		this(scenario, optimiserSettings, module, null, hints);
 	}
 
 	/**
 	 * @since 5.0
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings, final Module module, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
+	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Module module,
+			final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... hints) {
 		this.scenario = scenario;
+		this.optimiserSettings = optimiserSettings;
 
 		boolean performOptimisation = false;
 		// Check hints
 		if (hints != null) {
-			for (String hint : hints) {
+			for (final String hint : hints) {
 				if (HINT_OPTIMISE_LSO.equals(hint)) {
 					performOptimisation = true;
 				}
@@ -253,5 +258,12 @@ public class LNGTransformer {
 	 */
 	public Injector getInjector() {
 		return injector;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public OptimiserSettings getOptimiserSettings() {
+		return optimiserSettings;
 	}
 }

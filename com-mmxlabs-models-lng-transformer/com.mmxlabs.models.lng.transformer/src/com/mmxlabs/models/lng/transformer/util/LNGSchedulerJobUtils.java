@@ -41,8 +41,10 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -99,10 +101,10 @@ public class LNGSchedulerJobUtils {
 	 * @param solutionCurrentProgress
 	 * @param LABEL_PREFIX
 	 * @return
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final EditingDomain editingDomain, final ModelEntityMap entities,
-			final IAnnotatedSolution solution, final int solutionCurrentProgress) {
+	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
+			final ModelEntityMap entities, final IAnnotatedSolution solution, final int solutionCurrentProgress) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		{
@@ -141,6 +143,7 @@ public class LNGSchedulerJobUtils {
 
 			command.append(derive(editingDomain, scenario, schedule, assignmentModel, cargoModel, postExportProcessors));
 			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+			command.append(SetCommand.create(editingDomain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(), optimiserSettings));
 		} finally {
 			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
 				((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
@@ -422,7 +425,6 @@ public class LNGSchedulerJobUtils {
 			}
 		}
 
-		
 		// Create all the new vessel assignment objects.
 		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
 

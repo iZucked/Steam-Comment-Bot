@@ -70,7 +70,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 
 			// Pass annotated solution to utils to create a new Schedule object and update the other data models as required.
-			LNGSchedulerJobUtils.exportSolution(injector, scenario, editingDomain, transformer.getEntities(), solution, 0);
+			LNGSchedulerJobUtils.exportSolution(injector, scenario, jobDescriptor.getOptimiserSettings(), editingDomain, transformer.getEntities(), solution, 0);
 
 			setJobState(EJobState.COMPLETED);
 		} catch (final Throwable e) {

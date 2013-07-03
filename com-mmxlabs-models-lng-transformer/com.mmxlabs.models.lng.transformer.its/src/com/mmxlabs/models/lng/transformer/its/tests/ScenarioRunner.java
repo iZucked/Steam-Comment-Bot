@@ -47,6 +47,8 @@ public class ScenarioRunner {
 
 	private Injector injector;
 
+	private LNGTransformer transformer;
+
 	/**
 	 * @since 3.0
 	 */
@@ -76,7 +78,7 @@ public class ScenarioRunner {
 	public void init() throws IncompleteScenarioException {
 		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 
-		final LNGTransformer transformer = new LNGTransformer(scenario, optimiserSettings, new TransformerExtensionTestModule(), LNGTransformer.HINT_OPTIMISE_LSO);
+		transformer = new LNGTransformer(scenario, optimiserSettings, new TransformerExtensionTestModule(), LNGTransformer.HINT_OPTIMISE_LSO);
 
 		injector = transformer.getInjector();
 
@@ -127,7 +129,7 @@ public class ScenarioRunner {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		LNGSchedulerJobUtils.exportSolution(injector, scenario, ed, entities, optimiser.getBestSolution(true), 0);
+		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, entities, optimiser.getBestSolution(true), 0);
 	}
 
 }
