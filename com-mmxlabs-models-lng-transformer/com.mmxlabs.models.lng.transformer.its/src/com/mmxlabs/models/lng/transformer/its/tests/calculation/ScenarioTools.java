@@ -696,7 +696,7 @@ public class ScenarioTools {
 		// hints= new String[] { LNGTransformer.HINT_OPTIMISE_LSO}
 		// }
 		//
-		final LNGTransformer transformer = new LNGTransformer(scenario,ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
+		final LNGTransformer transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
 
 		// Code to dump out the scenario to disk
 		if (false) {
