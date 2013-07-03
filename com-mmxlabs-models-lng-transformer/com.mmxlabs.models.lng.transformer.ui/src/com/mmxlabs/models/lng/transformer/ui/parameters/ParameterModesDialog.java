@@ -292,8 +292,9 @@ public class ParameterModesDialog extends FormDialog {
 					});
 				}
 			}
-			managedForm.getForm().setMessage("Data invalid", type, list.toArray(new IMessage[0]));
-			getButton(IDialogConstants.OK_ID).setEnabled(true);
+			final String msg = String.format("%d error(s)", list.size());
+			managedForm.getForm().setMessage(msg, type, list.toArray(new IMessage[0]));
+			getButton(IDialogConstants.OK_ID).setEnabled(false);
 		} else {
 			managedForm.getForm().setMessage(null, IMessageProvider.NONE);
 			getButton(IDialogConstants.OK_ID).setEnabled(true);
