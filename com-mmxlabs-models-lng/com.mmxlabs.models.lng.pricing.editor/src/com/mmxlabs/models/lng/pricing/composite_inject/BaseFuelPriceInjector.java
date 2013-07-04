@@ -56,6 +56,7 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass displayedClass) {
+		/*
 		final NumberInlineEditor numberEditor = new NumberInlineEditor(PricingPackage.eINSTANCE.getBaseFuelCost_Price());
 		detailComposite.addInlineEditor(new IInlineEditor() {
 			@Override
@@ -145,6 +146,7 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 
 			}
 		});
+		*/
 	}
 
 	@Override

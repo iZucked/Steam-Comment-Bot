@@ -134,6 +134,24 @@ public interface PricingFactory extends EFactory {
 	CharterIndex createCharterIndex();
 
 	/**
+	 * Returns a new object of class '<em>Base Fuel Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Base Fuel Index</em>'.
+	 * @generated
+	 */
+	BaseFuelIndex createBaseFuelIndex();
+
+	/**
+	 * Returns a new object of class '<em>Named Index Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Named Index Container</em>'.
+	 * @generated
+	 */
+	<Value> NamedIndexContainer<Value> createNamedIndexContainer();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

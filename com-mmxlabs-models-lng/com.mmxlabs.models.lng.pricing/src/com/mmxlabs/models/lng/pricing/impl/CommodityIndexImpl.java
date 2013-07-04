@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,7 +45,6 @@ public class CommodityIndexImpl extends NamedObjectImpl implements CommodityInde
 	 * @ordered
 	 */
 	protected static final String UUID_EDEFAULT = null;
-
 	/**
 	 * The cached value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -54,7 +54,6 @@ public class CommodityIndexImpl extends NamedObjectImpl implements CommodityInde
 	 * @ordered
 	 */
 	protected String uuid = UUID_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getData() <em>Data</em>}' containment reference.
 	 * <!-- begin-user-doc -->

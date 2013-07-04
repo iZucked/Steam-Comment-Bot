@@ -61,6 +61,7 @@ public class PricingModelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortCostsPropertyDescriptor(object);
+			addBaseFuelPricesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -79,6 +80,28 @@ public class PricingModelItemProvider
 				 getString("_UI_PricingModel_portCosts_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PricingModel_portCosts_feature", "_UI_PricingModel_type"),
 				 PricingPackage.Literals.PRICING_MODEL__PORT_COSTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Base Fuel Prices feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBaseFuelPricesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PricingModel_baseFuelPrices_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PricingModel_baseFuelPrices_feature", "_UI_PricingModel_type"),
+				 PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES,
 				 true,
 				 false,
 				 true,

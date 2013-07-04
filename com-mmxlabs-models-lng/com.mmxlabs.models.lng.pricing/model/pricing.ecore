@@ -15,6 +15,8 @@
         eType="#//PortCost" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cooldownPrices" upperBound="-1"
         eType="#//CooldownPrice" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuelPrices" upperBound="-1"
+        eType="#//BaseFuelIndex" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataIndex">
     <eTypeParameters name="Value"/>
@@ -74,7 +76,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFuelCost" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="fuel" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//BaseFuel"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1" eType="#//BaseFuelIndex"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortCost" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getPortCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
@@ -118,6 +121,19 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="data" containment="true">
       <eGenericType eClassifier="#//Index">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BaseFuelIndex">
+    <eGenericSuperTypes eClassifier="#//NamedIndexContainer">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedIndexContainer" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eTypeParameters name="Value"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="data" containment="true">
+      <eGenericType eClassifier="#//Index">
+        <eTypeArguments eTypeParameter="#//NamedIndexContainer/Value"/>
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>

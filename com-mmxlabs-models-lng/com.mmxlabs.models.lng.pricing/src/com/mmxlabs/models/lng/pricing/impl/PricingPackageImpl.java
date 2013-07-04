@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
@@ -24,6 +25,7 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -130,6 +132,20 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass charterIndexEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass baseFuelIndexEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass namedIndexContainerEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -256,6 +272,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EReference getPricingModel_CooldownPrices() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_BaseFuelPrices() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -416,8 +441,17 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getBaseFuelCost_Index() {
+		return (EReference)baseFuelCostEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getBaseFuelCost_Price() {
-		return (EAttribute)baseFuelCostEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)baseFuelCostEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -555,6 +589,33 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getBaseFuelIndex() {
+		return baseFuelIndexEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getNamedIndexContainer() {
+		return namedIndexContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getNamedIndexContainer_Data() {
+		return (EReference)namedIndexContainerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -585,6 +646,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(pricingModelEClass, PRICING_MODEL__ROUTE_COSTS);
 		createEReference(pricingModelEClass, PRICING_MODEL__PORT_COSTS);
 		createEReference(pricingModelEClass, PRICING_MODEL__COOLDOWN_PRICES);
+		createEReference(pricingModelEClass, PRICING_MODEL__BASE_FUEL_PRICES);
 
 		dataIndexEClass = createEClass(DATA_INDEX);
 		createEReference(dataIndexEClass, DATA_INDEX__POINTS);
@@ -609,6 +671,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		baseFuelCostEClass = createEClass(BASE_FUEL_COST);
 		createEReference(baseFuelCostEClass, BASE_FUEL_COST__FUEL);
+		createEReference(baseFuelCostEClass, BASE_FUEL_COST__INDEX);
 		createEAttribute(baseFuelCostEClass, BASE_FUEL_COST__PRICE);
 
 		portCostEClass = createEClass(PORT_COST);
@@ -629,6 +692,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		charterIndexEClass = createEClass(CHARTER_INDEX);
 		createEReference(charterIndexEClass, CHARTER_INDEX__DATA);
+
+		baseFuelIndexEClass = createEClass(BASE_FUEL_INDEX);
+
+		namedIndexContainerEClass = createEClass(NAMED_INDEX_CONTAINER);
+		createEReference(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__DATA);
 	}
 
 	/**
@@ -665,6 +733,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		ETypeParameter derivedIndexEClass_Value = addETypeParameter(derivedIndexEClass, "Value");
 		ETypeParameter indexPointEClass_Value = addETypeParameter(indexPointEClass, "Value");
 		ETypeParameter indexEClass_Value = addETypeParameter(indexEClass, "Value");
+		ETypeParameter namedIndexContainerEClass_Value = addETypeParameter(namedIndexContainerEClass, "Value");
 
 		// Set bounds for type parameters
 
@@ -678,6 +747,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(derivedIndexEClass_Value);
 		g1.getETypeArguments().add(g2);
 		derivedIndexEClass.getEGenericSuperTypes().add(g1);
+		indexEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		indexEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		fleetCostModelEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		routeCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		baseFuelCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -687,6 +758,12 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		commodityIndexEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		charterIndexEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		charterIndexEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		g1 = createEGenericType(this.getNamedIndexContainer());
+		g2 = createEGenericType(ecorePackage.getEDoubleObject());
+		g1.getETypeArguments().add(g2);
+		baseFuelIndexEClass.getEGenericSuperTypes().add(g1);
+		namedIndexContainerEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		namedIndexContainerEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -696,6 +773,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPricingModel_RouteCosts(), this.getRouteCost(), null, "routeCosts", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_PortCosts(), this.getPortCost(), null, "portCosts", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_CooldownPrices(), this.getCooldownPrice(), null, "cooldownPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_BaseFuelPrices(), this.getBaseFuelIndex(), null, "baseFuelPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndexPoint());
@@ -741,7 +819,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		initEClass(baseFuelCostEClass, BaseFuelCost.class, "BaseFuelCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseFuelCost_Fuel(), theFleetPackage.getBaseFuel(), null, "fuel", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getBaseFuelCost_Price(), ecorePackage.getEDouble(), "price", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseFuelCost_Index(), this.getBaseFuelIndex(), null, "index", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseFuelCost_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portCostEClass, PortCost.class, "PortCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -777,6 +856,14 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(ecorePackage.getEIntegerObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getCharterIndex_Data(), g1, null, "data", null, 0, 1, CharterIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(baseFuelIndexEClass, BaseFuelIndex.class, "BaseFuelIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(namedIndexContainerEClass, NamedIndexContainer.class, "NamedIndexContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(this.getIndex());
+		g2 = createEGenericType(namedIndexContainerEClass_Value);
+		g1.getETypeArguments().add(g2);
+		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

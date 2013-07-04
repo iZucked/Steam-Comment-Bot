@@ -366,6 +366,52 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BaseFuelIndexItemProvider baseFuelIndexItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBaseFuelIndexAdapter() {
+		if (baseFuelIndexItemProvider == null) {
+			baseFuelIndexItemProvider = new BaseFuelIndexItemProvider(this);
+		}
+
+		return baseFuelIndexItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.NamedIndexContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NamedIndexContainerItemProvider namedIndexContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.NamedIndexContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNamedIndexContainerAdapter() {
+		if (namedIndexContainerItemProvider == null) {
+			namedIndexContainerItemProvider = new NamedIndexContainerItemProvider(this);
+		}
+
+		return namedIndexContainerItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -506,6 +552,8 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();
 		if (commodityIndexItemProvider != null) commodityIndexItemProvider.dispose();
 		if (charterIndexItemProvider != null) charterIndexItemProvider.dispose();
+		if (baseFuelIndexItemProvider != null) baseFuelIndexItemProvider.dispose();
+		if (namedIndexContainerItemProvider != null) namedIndexContainerItemProvider.dispose();
 	}
 
 }

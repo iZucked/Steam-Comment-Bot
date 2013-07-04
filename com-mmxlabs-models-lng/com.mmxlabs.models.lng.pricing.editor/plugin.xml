@@ -139,6 +139,12 @@
           inheritable="false">
     </classImporter>
     <classImporter
+          ID="com.mmxlabs.models.lng.pricing.importers.BaseFuelIndexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.BaseFuelIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
+          inheritable="false">
+    </classImporter>
+    <classImporter
           ID="com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter"
           classImporterClass="com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter"
           eClassName="com.mmxlabs.models.lng.pricing.CharterIndex"

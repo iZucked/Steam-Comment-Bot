@@ -135,6 +135,14 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createCharterIndexAdapter();
 			}
 			@Override
+			public Adapter caseBaseFuelIndex(BaseFuelIndex object) {
+				return createBaseFuelIndexAdapter();
+			}
+			@Override
+			public <Value> Adapter caseNamedIndexContainer(NamedIndexContainer<Value> object) {
+				return createNamedIndexContainerAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -347,6 +355,34 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCharterIndexAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.BaseFuelIndex <em>Base Fuel Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.BaseFuelIndex
+	 * @generated
+	 */
+	public Adapter createBaseFuelIndexAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer <em>Named Index Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer
+	 * @generated
+	 */
+	public Adapter createNamedIndexContainerAdapter() {
 		return null;
 	}
 

@@ -28,6 +28,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 //	private PortCostPane port;
 	private IndexPane charterIndicesPane;
 	private IndexPane commodityPane;
+	private IndexPane baseFuelPane;
 
 	private int indexPage = -1;
 //	private int costsPage = -1;
@@ -79,6 +80,12 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		charterIndicesPane.getViewer().setInput(modelObject);
 		charterIndicesPane.defaultSetTitle("Chartering Indices");
 
+		baseFuelPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), PricingPackage.eINSTANCE.getNamedIndexContainer_Data());
+		baseFuelPane.createControl(sash2);
+		baseFuelPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		baseFuelPane.getViewer().setInput(modelObject);
+		baseFuelPane.defaultSetTitle("Base Fuel Indices");
+
 		indexPage = editorPart.addPage(sash);
 		editorPart.setPageText(indexPage, "Markets");
 	}
@@ -91,6 +98,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 //		port.setLocked(locked);
 		commodityPane.setLocked(locked);
 		charterIndicesPane.setLocked(locked);
+		baseFuelPane.setLocked(locked);
 	}
 
 	@Override
@@ -147,6 +155,11 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 				if (containingFeature == PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()) {
 					editorPart.setActivePage(indexPage);
 					commodityPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
+					return;
+				}
+				if (containingFeature == PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()) {
+					editorPart.setActivePage(indexPage);
+					baseFuelPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 					return;
 				}
 			}

@@ -80,6 +80,8 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
 			case PricingPackage.COMMODITY_INDEX: return createCommodityIndex();
 			case PricingPackage.CHARTER_INDEX: return createCharterIndex();
+			case PricingPackage.BASE_FUEL_INDEX: return createBaseFuelIndex();
+			case PricingPackage.NAMED_INDEX_CONTAINER: return createNamedIndexContainer();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -205,6 +207,26 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public CharterIndex createCharterIndex() {
 		CharterIndexImpl charterIndex = new CharterIndexImpl();
 		return charterIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuelIndex createBaseFuelIndex() {
+		BaseFuelIndexImpl baseFuelIndex = new BaseFuelIndexImpl();
+		return baseFuelIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <Value> NamedIndexContainer<Value> createNamedIndexContainer() {
+		NamedIndexContainerImpl<Value> namedIndexContainer = new NamedIndexContainerImpl<Value>();
+		return namedIndexContainer;
 	}
 
 	/**

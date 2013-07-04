@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getPortCosts <em>Port Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getCooldownPrices <em>Cooldown Prices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  * </ul>
  * </p>
  *
@@ -134,6 +135,22 @@ public interface PricingModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<CooldownPrice> getCooldownPrices();
+
+	/**
+	 * Returns the value of the '<em><b>Base Fuel Prices</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Base Fuel Prices</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Base Fuel Prices</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_BaseFuelPrices()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<BaseFuelIndex> getBaseFuelPrices();
 
 } // end of  PricingModel
 

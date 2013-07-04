@@ -142,13 +142,22 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__COOLDOWN_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Base Fuel Prices</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__BASE_FUEL_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -161,13 +170,40 @@ public interface PricingPackage extends EPackage {
 	int INDEX = 4;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Index</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_FEATURE_COUNT = 0;
+	int INDEX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -178,6 +214,33 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	int DATA_INDEX = 1;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_INDEX__EXTENSIONS = INDEX__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_INDEX__UUID = INDEX__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_INDEX__NAME = INDEX__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
@@ -206,6 +269,33 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	int DERIVED_INDEX = 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_INDEX__EXTENSIONS = INDEX__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_INDEX__UUID = INDEX__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_INDEX__NAME = INDEX__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Expression</b></em>' attribute.
@@ -392,13 +482,22 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_COST__FUEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_COST__INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_COST__PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int BASE_FUEL_COST__PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Base Fuel Cost</em>' class.
@@ -407,7 +506,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int BASE_FUEL_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl <em>Port Cost</em>}' class.
@@ -561,7 +660,6 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -571,7 +669,6 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -581,7 +678,6 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -670,6 +766,116 @@ public interface PricingPackage extends EPackage {
 	int CHARTER_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl <em>Named Index Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getNamedIndexContainer()
+	 * @generated
+	 */
+	int NAMED_INDEX_CONTAINER = 14;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_INDEX_CONTAINER__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_INDEX_CONTAINER__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_INDEX_CONTAINER__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Data</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_INDEX_CONTAINER__DATA = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Named Index Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_INDEX_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelIndex()
+	 * @generated
+	 */
+	int BASE_FUEL_INDEX = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_INDEX__EXTENSIONS = NAMED_INDEX_CONTAINER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_INDEX__UUID = NAMED_INDEX_CONTAINER__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_INDEX__NAME = NAMED_INDEX_CONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Data</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
+
+	/**
+	 * The number of structural features of the '<em>Base Fuel Index</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -744,6 +950,17 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPricingModel_CooldownPrices();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices <em>Base Fuel Prices</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Base Fuel Prices</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_BaseFuelPrices();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -926,6 +1143,17 @@ public interface PricingPackage extends EPackage {
 	EReference getBaseFuelCost_Fuel();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex()
+	 * @see #getBaseFuelCost()
+	 * @generated
+	 */
+	EReference getBaseFuelCost_Index();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1090,6 +1318,37 @@ public interface PricingPackage extends EPackage {
 	EReference getCharterIndex_Data();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.BaseFuelIndex <em>Base Fuel Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Base Fuel Index</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.BaseFuelIndex
+	 * @generated
+	 */
+	EClass getBaseFuelIndex();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer <em>Named Index Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Named Index Container</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer
+	 * @generated
+	 */
+	EClass getNamedIndexContainer();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData <em>Data</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Data</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData()
+	 * @see #getNamedIndexContainer()
+	 * @generated
+	 */
+	EReference getNamedIndexContainer_Data();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1168,6 +1427,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRICING_MODEL__COOLDOWN_PRICES = eINSTANCE.getPricingModel_CooldownPrices();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Fuel Prices</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__BASE_FUEL_PRICES = eINSTANCE.getPricingModel_BaseFuelPrices();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -1320,6 +1587,14 @@ public interface PricingPackage extends EPackage {
 		EReference BASE_FUEL_COST__FUEL = eINSTANCE.getBaseFuelCost_Fuel();
 
 		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_FUEL_COST__INDEX = eINSTANCE.getBaseFuelCost_Index();
+
+		/**
 		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1452,6 +1727,34 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_INDEX__DATA = eINSTANCE.getCharterIndex_Data();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelIndex()
+		 * @generated
+		 */
+		EClass BASE_FUEL_INDEX = eINSTANCE.getBaseFuelIndex();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl <em>Named Index Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getNamedIndexContainer()
+		 * @generated
+		 */
+		EClass NAMED_INDEX_CONTAINER = eINSTANCE.getNamedIndexContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Data</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NAMED_INDEX_CONTAINER__DATA = eINSTANCE.getNamedIndexContainer_Data();
 
 	}
 

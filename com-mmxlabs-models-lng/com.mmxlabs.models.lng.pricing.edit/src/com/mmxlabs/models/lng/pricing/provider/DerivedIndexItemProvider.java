@@ -104,7 +104,7 @@ public class DerivedIndexItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((DerivedIndex<?>)object).getExpression();
+		String label = ((DerivedIndex<?>)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_DerivedIndex_type") :
 			getString("_UI_DerivedIndex_type") + " " + label;
