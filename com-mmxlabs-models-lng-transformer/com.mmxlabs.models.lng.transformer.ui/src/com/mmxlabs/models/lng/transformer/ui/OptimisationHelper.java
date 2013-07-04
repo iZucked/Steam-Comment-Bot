@@ -2,10 +2,8 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -31,23 +29,20 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataType;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.extensions.IInlineEditorFactoryExtension.IFeatureMatcher;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.ValidationHelper;
+import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
-import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -224,7 +219,7 @@ public final class OptimisationHelper {
 			}
 		});
 
-		final ValidationHelper helper = new ValidationHelper();
+		final IValidationService helper = Activator.getDefault().getValidationService();
 		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
 
 		final IStatus status = helper.runValidation(validator, extraContext, Collections.singleton(root));
