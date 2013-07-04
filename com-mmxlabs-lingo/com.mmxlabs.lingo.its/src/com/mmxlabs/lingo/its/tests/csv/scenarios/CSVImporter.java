@@ -9,12 +9,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.internal.runtime.InternalPlatform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.junit.Assert;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -152,7 +152,7 @@ public class CSVImporter {
 			if (activator != null) {
 				importerRegistry = activator.getImporterRegistry();
 			} else {
-				final BundleContext bundleContext = InternalPlatform.getDefault().getBundleContext();
+				final BundleContext bundleContext = FrameworkUtil.getBundle(CSVImporter.class).getBundleContext();
 				if (bundleContext != null) {
 					// Partial plugin env - its bundle activator does not seem to be started when run from eclipse.
 					final Injector injector = Guice.createInjector(new ExtensionConfigurationModule(bundleContext));
