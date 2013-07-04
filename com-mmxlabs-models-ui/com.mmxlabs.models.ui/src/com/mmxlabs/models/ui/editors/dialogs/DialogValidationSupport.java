@@ -17,11 +17,12 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.models.ui.validation.ValidationHelper;
+import com.mmxlabs.models.ui.validation.IValidationService;
 
 /**
  * A small utility class to manage validation in a {@link Dialog}. Once created, a call {@link IScenarioEditingLocation#pushExtraValidationContext(IExtraValidationContext)} with the output from
@@ -35,7 +36,7 @@ import com.mmxlabs.models.ui.validation.ValidationHelper;
  */
 public class DialogValidationSupport {
 
-	private final ValidationHelper validationHelper = new ValidationHelper();
+	private final IValidationService validationService = Activator.getDefault().getValidationService();
 
 	private final DefaultExtraValidationContext validationContext;
 	/**
@@ -75,7 +76,7 @@ public class DialogValidationSupport {
 	}
 
 	public IStatus validate() {
-		return validationHelper.runValidation(validator, validationContext, validationTargets);
+		return validationService.runValidation(validator, validationContext, validationTargets);
 	}
 
 	public DefaultExtraValidationContext getValidationContext() {

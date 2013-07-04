@@ -18,7 +18,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.models.ui.validation.ValidationHelper;
+import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -26,7 +26,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 
 	private final ScenarioInstance scenarioInstance;
 
-	private final ValidationHelper helper;
+	private IValidationService validationService;
 
 	private IExtraValidationContext extraContext;
 
@@ -36,7 +36,6 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		this.scenarioInstance = scenarioInstance;
 		// Get hold of a reference to the validation lock
 		this.validationLock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
-		helper = new ValidationHelper();
 		final Object instance = scenarioInstance.getInstance();
 		if (instance instanceof MMXRootObject) {
 			final MMXRootObject rootObject = (MMXRootObject) instance;
@@ -56,7 +55,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 
 	public void performValidation() {
 		// Run the validation
-		if (extraContext != null) {
+		if (validationService != null && extraContext != null) {
 
 			Display.getDefault().asyncExec(new Runnable() {
 
@@ -75,8 +74,9 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 					// Perform initial validation
 					if (claimValidationLock()) {
 						try {
-							status = helper.runValidation(createValidator(), extraContext, Collections.singleton(rootObject));
-
+							if (validationService != null) {
+								status = validationService.runValidation(createValidator(), extraContext, Collections.singleton(rootObject));
+							}
 						} finally {
 							releaseValidationLock();
 						}
@@ -127,5 +127,17 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 
 	protected void releaseValidationLock() {
 		validationLock.release();
+	}
+
+	public IValidationService getValidationService() {
+		return validationService;
+	}
+
+	public void bindValidationService(final IValidationService validationService) {
+		this.validationService = validationService;
+	}
+
+	public void unbindValidationService(final IValidationService validationService) {
+		this.validationService = null;
 	}
 }

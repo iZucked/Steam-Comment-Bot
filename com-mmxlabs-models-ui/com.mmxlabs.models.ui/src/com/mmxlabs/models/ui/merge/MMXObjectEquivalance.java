@@ -18,7 +18,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * Utility class to compare our internal EMF objects for equivalence based on UUID then by name
  * 
- * @since 4.1
+ * @since 5.0
  */
 public class MMXObjectEquivalance {
 

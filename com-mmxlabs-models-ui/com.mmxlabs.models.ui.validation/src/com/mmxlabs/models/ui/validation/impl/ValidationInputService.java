@@ -8,18 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.models.ui.validation.IValidationInputService;
 
 /**
- * Very simple service which just holds a threadlocal
+ * Very simple object which just holds a threadlocal
  * 
  * @author hinton
- *
+ * 
  */
-public class ValidationInputService implements IValidationInputService {
+public class ValidationInputService {
 	private static final Logger log = LoggerFactory.getLogger(ValidationInputService.class);
 	final ThreadLocal<IExtraValidationContext> extraContext = new ThreadLocal<IExtraValidationContext>();
-	@Override
+
 	public IExtraValidationContext getExtraContext() {
 		return extraContext.get();
 	}
