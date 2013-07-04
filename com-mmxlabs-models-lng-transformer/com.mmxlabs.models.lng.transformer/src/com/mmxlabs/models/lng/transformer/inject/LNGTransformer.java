@@ -6,8 +6,10 @@ package com.mmxlabs.models.lng.transformer.inject;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
 import org.ops4j.peaberry.Peaberry;
@@ -49,6 +51,10 @@ public class LNGTransformer {
 	 * @since 3.0
 	 */
 	public static final String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
+	/**
+	 * @since 5.0
+	 */
+	public static final String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
 
 	private final LNGScenarioModel scenario;
 
@@ -90,17 +96,25 @@ public class LNGTransformer {
 	 * @since 5.0
 	 */
 	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Module module,
-			final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... hints) {
+			final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... initialHints) {
 		this.scenario = scenario;
 		this.optimiserSettings = optimiserSettings;
 
 		boolean performOptimisation = false;
+
+		Set<String> hints = new HashSet<String>();
 		// Check hints
-		if (hints != null) {
-			for (final String hint : hints) {
+		if (initialHints != null) {
+			for (final String hint : initialHints) {
+				hints.add(hint);
 				if (HINT_OPTIMISE_LSO.equals(hint)) {
 					performOptimisation = true;
 				}
+			}
+		}
+		if (optimiserSettings != null) {
+			if (optimiserSettings.isGenerateCharterOuts()) {
+				hints.add(HINT_GENERATE_CHARTER_OUTS);
 			}
 		}
 
@@ -144,7 +158,7 @@ public class LNGTransformer {
 		// Grab any module overrides
 		if (extraModules != null) {
 			for (final IOptimiserInjectorService service : extraModules) {
-				final Map<ModuleType, List<Module>> m = service.requestModuleOverrides(hints);
+				final Map<ModuleType, List<Module>> m = service.requestModuleOverrides(hints.toArray(new String[0]));
 				if (m != null) {
 					for (final Map.Entry<IOptimiserInjectorService.ModuleType, List<Module>> e : m.entrySet()) {
 						List<Module> overrides;
@@ -187,7 +201,7 @@ public class LNGTransformer {
 		// Insert extra modules into modules list
 		if (extraModules != null) {
 			for (final IOptimiserInjectorService service : extraModules) {
-				final Module requestModule = service.requestModule();
+				final Module requestModule = service.requestModule(hints.toArray(new String[0]));
 				if (requestModule != null) {
 					modules.add(requestModule);
 				}
