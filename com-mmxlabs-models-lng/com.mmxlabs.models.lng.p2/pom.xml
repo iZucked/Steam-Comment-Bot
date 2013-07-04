@@ -12,5 +12,5 @@
 	<packaging>eclipse-repository</packaging>
 	<name>Models: LNG: p2 Repository</name>
 
-				<groupId>org.apache.maven.plugins</groupId>
+				<groupId>com.mmxlabs.models.lng</groupId>
 </project>
