@@ -34,7 +34,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public interface Cargo extends UUIDObject, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
-	 * The default value is <code>"true"</code>.
+	 * The default value is <code>"false"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Allow Rewiring</em>' attribute isn't clear,
@@ -44,7 +44,7 @@ public interface Cargo extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Allow Rewiring</em>' attribute.
 	 * @see #setAllowRewiring(boolean)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_AllowRewiring()
-	 * @model default="true" required="true"
+	 * @model default="false" required="true"
 	 * @generated
 	 */
 	boolean isAllowRewiring();

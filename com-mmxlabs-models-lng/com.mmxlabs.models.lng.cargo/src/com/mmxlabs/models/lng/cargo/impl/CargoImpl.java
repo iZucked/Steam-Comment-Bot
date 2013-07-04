@@ -78,7 +78,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean ALLOW_REWIRING_EDEFAULT = true;
+	protected static final boolean ALLOW_REWIRING_EDEFAULT = false;
 
 	/**
 	 * The cached value of the '{@link #isAllowRewiring() <em>Allow Rewiring</em>}' attribute.
