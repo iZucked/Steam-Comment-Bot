@@ -123,14 +123,17 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 		public void run() {
 			synchronized (this) {
 				while (needsRefresh) {
-					if (viewer != null) {
-						final Control control = viewer.getControl();
-						if (control != null && !control.isDisposed()) {
-							final IScenarioViewerSynchronizerOutput data = collectObjects();
-							viewer.setInput(data);
+					try {
+						if (viewer != null) {
+							final Control control = viewer.getControl();
+							if (control != null && !control.isDisposed()) {
+								final IScenarioViewerSynchronizerOutput data = collectObjects();
+								viewer.setInput(data);
+							}
 						}
+					} finally {
+						needsRefresh = false;
 					}
-					needsRefresh = false;
 				}
 			}
 		}
