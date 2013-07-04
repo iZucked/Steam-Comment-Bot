@@ -4,39 +4,18 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
-import java.io.IOException;
-import java.util.Collections;
-
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.model.Category;
-import org.eclipse.emf.validation.model.EvaluationMode;
-import org.eclipse.emf.validation.service.IBatchValidator;
-import org.eclipse.emf.validation.service.IConstraintDescriptor;
-import org.eclipse.emf.validation.service.IConstraintFilter;
-import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.ValidationHelper;
-import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
-import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;

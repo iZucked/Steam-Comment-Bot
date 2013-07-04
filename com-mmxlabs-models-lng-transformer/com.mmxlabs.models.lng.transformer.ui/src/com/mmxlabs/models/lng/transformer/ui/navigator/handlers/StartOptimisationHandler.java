@@ -37,7 +37,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.ValidationHelper;
+import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -239,7 +239,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 			}
 		});
 
-		final ValidationHelper helper = new ValidationHelper();
+		final IValidationService helper = Activator.getDefault().getValidationService();
 		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
 
 		final IStatus status = helper.runValidation(validator, extraContext, Collections.singleton(root));
