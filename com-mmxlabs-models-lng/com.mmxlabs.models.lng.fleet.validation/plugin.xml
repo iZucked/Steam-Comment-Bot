@@ -178,10 +178,46 @@
                   Vessel {0}'s {1} requirement has inconsistent start and end dates set (the start date is after the end date).
                </message>
                <description>
-                  The start end end window of a vessel event must be set and consistent.
+                  The start and end window of a vessel event must be set and consistent.
                </description>
                <target
                      class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.SensibleAvailabilityDateConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.SensibleAvailabilityDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Sensible Start / End Dates"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel {0}'s {1} date is earlier than {2}.
+               </message>
+               <description>
+                  Vessel availability dates must be within a sensible range.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.SensibleEventDateConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.SensibleEventDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Sensible Start / End Dates"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0} {1} date is earlier than {2}.
+               </message>
+               <description>
+                  Vessel event dates must be within a sensible range.
+               </description>
+               <target
+                     class="VesselEvent">
                </target>
             </constraint>
             <constraint
