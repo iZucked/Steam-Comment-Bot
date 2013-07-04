@@ -27,8 +27,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
-import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -64,8 +62,6 @@ public class HeadlessApplication implements IApplication {
 		final ScenarioRunner runner = new ScenarioRunner(rootObject, settings);
 
 		runner.initStage1();
-
-		final LinearSimulatedAnnealingFitnessEvaluator lsafe = (LinearSimulatedAnnealingFitnessEvaluator) runner.getInjector().getInstance(IFitnessEvaluator.class);
 
 		for (final IRunExporter exporter : exporters) {
 			exporter.setScenarioRunner(runner);
