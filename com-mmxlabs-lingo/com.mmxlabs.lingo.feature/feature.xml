@@ -9,7 +9,8 @@
       id="com.mmxlabs.lingo.feature"
       label="Lingo"
       version="3.0.3.qualifier"
-      provider-name="Minimax Labs Ltd.">
+      provider-name="Minimax Labs Ltd."
+      plugin="com.mmxlabs.lingo.app">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
