@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.its.tests.scenarios;
 
 import java.net.URL;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestDemoCases extends AbstractOptimisationResultTester {

@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.ScenarioFleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselClassImporter;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.importers.ParametersModelImporter;
 import com.mmxlabs.models.lng.port.PortModel;
