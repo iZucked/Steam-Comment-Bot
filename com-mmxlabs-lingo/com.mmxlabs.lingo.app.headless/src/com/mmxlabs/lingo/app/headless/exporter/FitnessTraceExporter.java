@@ -40,6 +40,7 @@ public class FitnessTraceExporter implements IRunExporter {
 
 	}
 
+	@Override
 	public void setScenarioRunner(final ScenarioRunner runner) {
 
 		lsafe = (LinearSimulatedAnnealingFitnessEvaluator) runner.getInjector()
