@@ -118,4 +118,23 @@ public class PauseOptimisationEditorActionDelegate extends AbstractOptimisationE
 		}
 	}
 
+	@Override
+	protected void runLastMode() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected void runWithMode(String mode) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected void runCustomMode() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected void editAndRunCustomMode() {
+		throw new UnsupportedOperationException();
+	}
 }

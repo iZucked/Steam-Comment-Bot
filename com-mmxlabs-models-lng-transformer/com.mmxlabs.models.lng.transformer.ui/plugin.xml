@@ -7,6 +7,7 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="ParameterMode" name="ParameterMode" schema="schema/ParameterMode.exsd"/>
 	<extension
             point="org.eclipse.ui.handlers">
          <handler
@@ -351,7 +352,6 @@
                   icon="icons/evaluate_schedule.gif"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.action3"
                   label="Evaluate"
-                  style="push"
                   toolbarPath="additions"
                   tooltip="Evaluate scenario">
             </action>
@@ -384,7 +384,6 @@
                   icon="icons/elcl16/resume_co.gif"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.play"
                   label="Start/Resume Optimisation"
-                  style="push"
                   toolbarPath="additions"
                   tooltip="Start or Resume optimisation">
             </action>
@@ -394,7 +393,6 @@
                   icon="icons/forkandoptimise.gif"
                   id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
                   label="Fork and Optimise"
-                  style="push"
                   toolbarPath="additions"
                   tooltip="Fork scenario and optimise the fork">
             </action>
@@ -460,4 +458,22 @@
          </constraints>
       </constraintProvider>
    </extension>
+      <extension
+            point="com.mmxlabs.models.lng.transformer.ui.ParameterMode">
+         <ParameterMode
+               class="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.StandardMode"
+               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.StandardMode"
+               name="Standard">
+         </ParameterMode>
+         <ParameterMode
+               class="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.ShippingOnlyMode"
+               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.ShippingOnlyMode"
+               name="Shipping Only">
+         </ParameterMode>
+         <ParameterMode
+               class="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.GenerateCharterOutsMode"
+               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.GenerateCharterOutsMode"
+               name="Charter Out Generation">
+         </ParameterMode>
+      </extension>
 </plugin>

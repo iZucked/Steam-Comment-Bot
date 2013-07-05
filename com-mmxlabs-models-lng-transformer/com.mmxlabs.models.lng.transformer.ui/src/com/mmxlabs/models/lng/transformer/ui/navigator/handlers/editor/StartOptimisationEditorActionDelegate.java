@@ -44,23 +44,11 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 		this(true);
 	}
 
-	/**
-	 * the command has been executed, so extract extract the needed information from the application context.
-	 */
-
 	@Override
 	public void run(final IAction methodAction) {
 
-		if (editor != null) {
-			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
-				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), true, optimising, ScenarioLock.OPTIMISER);
-			}
-		}
+		runLastMode();
 	}
-
-
 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
@@ -143,5 +131,52 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 		if (action != null) {
 			action.setEnabled(enabled);
 		}
+	}
+
+	@Override
+	protected void runLastMode() {
+		if (editor != null) {
+			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), null, true, optimising, ScenarioLock.OPTIMISER);
+			}
+		}
+	}
+
+	@Override
+	protected void runWithMode(final String mode) {
+		if (editor != null) {
+			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), mode, false, optimising, ScenarioLock.OPTIMISER);
+			}
+		}
+	}
+
+	@Override
+	protected void runCustomMode() {
+		if (editor != null) {
+			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), OptimisationHelper.PARAMETER_MODE_CUSTOM, false, optimising,
+						ScenarioLock.OPTIMISER);
+			}
+		}
+	}
+
+	@Override
+	protected void editAndRunCustomMode() {
+		if (editor != null) {
+			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), OptimisationHelper.PARAMETER_MODE_CUSTOM, true, optimising,
+						ScenarioLock.OPTIMISER);
+			}
+		}
+
 	}
 }

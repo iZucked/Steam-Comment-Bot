@@ -35,6 +35,8 @@ import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterF
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataType;
@@ -47,10 +49,13 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public final class OptimisationHelper {
+
+	public static final String PARAMETER_MODE_CUSTOM = "Custom";
+
 	private static final Logger log = LoggerFactory.getLogger(OptimisationHelper.class);
 
-	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean promptForOptimiserSettings, final boolean optimising,
-			final String k) {
+	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, String parameterMode, final boolean promptForOptimiserSettings,
+			final boolean optimising, final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
@@ -60,7 +65,7 @@ public final class OptimisationHelper {
 				if (object instanceof LNGScenarioModel) {
 					final LNGScenarioModel root = (LNGScenarioModel) object;
 
-					final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, promptForOptimiserSettings);
+					final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
 					if (optimiserSettings == null) {
 						return null;
 					}
@@ -251,7 +256,7 @@ public final class OptimisationHelper {
 		return true;
 	}
 
-	public static OptimiserSettings getOptimiserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser) {
+	public static OptimiserSettings getOptimiserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, String parameterMode, final boolean promptUser) {
 
 		OptimiserSettings previousSettings = null;
 		if (scenario != null) {
@@ -264,6 +269,25 @@ public final class OptimisationHelper {
 		final OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
 		if (previousSettings == null) {
 			previousSettings = defaultSettings;
+		}
+
+		if (previousSettings == null) {
+			return null;
+		}
+
+		IParameterModesRegistry parameterModesRegistry = Activator.getDefault().getParameterModesRegistry();
+
+		if (parameterMode != null) {
+
+			if (PARAMETER_MODE_CUSTOM.equals(parameterMode)) {
+				// Nothing...
+			} else {
+
+				IParameterModeCustomiser customiser = parameterModesRegistry.getCustomiser(parameterMode);
+				if (customiser != null) {
+					customiser.customise(previousSettings);
+				}
+			}
 		}
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value

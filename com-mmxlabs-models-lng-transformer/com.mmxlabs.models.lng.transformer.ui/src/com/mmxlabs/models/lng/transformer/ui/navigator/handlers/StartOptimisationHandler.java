@@ -75,7 +75,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof ScenarioInstance) {
-					return OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, true, optimising, ScenarioLock.OPTIMISER);
+					return OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, null, false, optimising, ScenarioLock.OPTIMISER);
 				}
 
 			}
@@ -83,7 +83,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 		return null;
 	}
-
 
 	public static boolean validateScenario(final MMXRootObject root) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);

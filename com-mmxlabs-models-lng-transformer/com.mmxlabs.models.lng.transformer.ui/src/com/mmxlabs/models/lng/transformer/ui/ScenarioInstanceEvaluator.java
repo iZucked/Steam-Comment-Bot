@@ -27,7 +27,7 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 				if (object instanceof LNGScenarioModel) {
 					final LNGScenarioModel root = (LNGScenarioModel) object;
 
-					OptimisationHelper.evaluateScenarioInstance(Activator.getDefault().getJobManager(), instance, false, false, ScenarioLock.EVALUATOR);
+					OptimisationHelper.evaluateScenarioInstance(Activator.getDefault().getJobManager(), instance, null, false, false, ScenarioLock.EVALUATOR);
 				}
 			} catch (final IOException e) {
 

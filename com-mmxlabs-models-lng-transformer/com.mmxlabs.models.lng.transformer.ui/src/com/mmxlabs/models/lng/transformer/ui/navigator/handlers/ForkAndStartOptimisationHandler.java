@@ -97,7 +97,7 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 								log.error(e.getMessage(), e);
 							}
 
-							return OptimisationHelper.evaluateScenarioInstance(jobManager, fork, true, optimising, ScenarioLock.OPTIMISER);
+							return OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, false, optimising, ScenarioLock.OPTIMISER);
 						}
 					} catch (final IOException e) {
 						throw new ExecutionException("Unable to fork scenario", e);

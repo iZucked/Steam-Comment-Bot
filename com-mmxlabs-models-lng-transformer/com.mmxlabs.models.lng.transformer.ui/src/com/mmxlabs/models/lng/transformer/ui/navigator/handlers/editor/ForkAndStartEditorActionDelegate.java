@@ -81,7 +81,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 							log.error(e.getMessage(), e);
 						}
 
-						OptimisationHelper.evaluateScenarioInstance(jobManager, fork, true, optimising, ScenarioLock.OPTIMISER);
+						OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, false, optimising, ScenarioLock.OPTIMISER);
 					}
 				} catch (final IOException e) {
 					throw new RuntimeException("Unable to fork scenario", e);

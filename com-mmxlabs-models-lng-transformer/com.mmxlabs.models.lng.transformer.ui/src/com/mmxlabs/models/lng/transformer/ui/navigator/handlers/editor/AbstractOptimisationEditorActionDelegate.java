@@ -4,12 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.IActionDelegate2;
 import org.eclipse.ui.IEditorActionDelegate;
-import org.eclipse.ui.IEditorPart;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
@@ -21,6 +16,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.jobs.impl.JobControlAdapter;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.actions.ParameterModesActionDelegate;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -31,7 +27,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * @see org.eclipse.ui.IEditorActionDelegate
  * @see org.eclipse.ui.IActionDelegate2
  */
-public abstract class AbstractOptimisationEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2 {
+public abstract class AbstractOptimisationEditorActionDelegate extends ParameterModesActionDelegate {
 
 	/**
 	 * {@link IJobControlListener} to trigger event handler enabled state refresh
@@ -88,13 +84,12 @@ public abstract class AbstractOptimisationEditorActionDelegate implements IEdito
 			control.removeListener(jobListener);
 		}
 	};
-	protected IEditorPart editor;
-	protected IAction action;
 
 	/**
 	 * The constructor.
 	 */
 	public AbstractOptimisationEditorActionDelegate() {
+		super();
 		final IEclipseJobManager jmv = Activator.getDefault().getJobManager();
 		// Hook in a listener to automatically dispose the job once it is no
 		// longer needed
@@ -117,27 +112,8 @@ public abstract class AbstractOptimisationEditorActionDelegate implements IEdito
 			final IJobControl control = jmv.getControlForJob(j);
 			control.removeListener(jobListener);
 		}
+		super.dispose();
 	}
 
-	@Override
-	public void selectionChanged(final IAction action, final ISelection selection) {
-
-	}
-
-	@Override
-	public void init(final IAction action) {
-
-	}
-
-	@Override
-	public void runWithEvent(final IAction action, final Event event) {
-		run(action);
-	}
-
-	@Override
-	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
-		this.editor = targetEditor;
-		this.action = action;
-	}
 
 }
