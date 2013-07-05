@@ -5,7 +5,7 @@
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
     <eOperations name="getSortedSlots" upperBound="-1" eType="#//Slot"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowRewiring" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedVessels" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>

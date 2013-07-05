@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.scenario.model;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -24,6 +25,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getCargoModel <em>Cargo Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getAssignmentModel <em>Assignment Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScheduleModel <em>Schedule Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters <em>Parameters</em>}</li>
  * </ul>
  * </p>
  *
@@ -135,5 +137,33 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @generated
 	 */
 	void setScheduleModel(ScheduleModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Parameters</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Parameters</em>' containment reference.
+	 * @see #setParameters(OptimiserSettings)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_Parameters()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	OptimiserSettings getParameters();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters <em>Parameters</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Parameters</em>' containment reference.
+	 * @see #getParameters()
+	 * @generated
+	 */
+	void setParameters(OptimiserSettings value);
 
 } // LNGPortfolioModel

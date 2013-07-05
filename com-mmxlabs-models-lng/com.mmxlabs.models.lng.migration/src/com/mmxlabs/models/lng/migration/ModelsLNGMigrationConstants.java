@@ -9,7 +9,7 @@ import com.mmxlabs.models.migration.PackageData;
 /**
  * @since 4.0
  */
-public class ModelsLNGMigrationConstants {
+public final class ModelsLNGMigrationConstants {
 
 	// Context under which migration units
 	// DO NOT CHANGE
