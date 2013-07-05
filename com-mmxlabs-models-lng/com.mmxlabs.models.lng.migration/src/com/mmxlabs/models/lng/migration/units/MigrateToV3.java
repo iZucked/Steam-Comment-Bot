@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -55,7 +56,7 @@ public class MigrateToV3 extends AbstractMigrationUnit {
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV3Loader(extraPackages);
+			destiniationLoader = MetamodelVersionsUtil.createV2_V3Loader(extraPackages);
 		}
 		return destiniationLoader;
 	}
@@ -67,6 +68,60 @@ public class MigrateToV3 extends AbstractMigrationUnit {
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
 
 		migrateFOBSales(loader, model);
+		migrateOptimiserSettings(loader, model);
+	}
+
+	protected void migrateOptimiserSettings(final MetamodelLoader loader, final EObject model) {
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EClass class_LNGPortfolioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGPortfolioModel");
+
+		final EPackage package_ParametersModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ParametersModel);
+		final EClass class_ParametersModel = MetamodelUtils.getEClass(package_ParametersModel, "ParametersModel");
+		final EClass class_OptimiserSettings = MetamodelUtils.getEClass(package_ParametersModel, "OptimiserSettings");
+
+		final EPackage package_CargoModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
+		final EClass class_CargoModel = MetamodelUtils.getEClass(package_CargoModel, "CargoModel");
+		final EClass class_Cargo = MetamodelUtils.getEClass(package_CargoModel, "Cargo");
+
+		final EReference reference_LNGScenarioModel_parametersModel = MetamodelUtils.getReference(class_LNGScenarioModel, "parametersModel");
+		final EReference reference_LNGScenarioModel_portfolioModel = MetamodelUtils.getReference(class_LNGScenarioModel, "portfolioModel");
+
+		final EReference reference_LNGPortfolioModel_cargoModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "cargoModel");
+		final EReference reference_LNGPortfolioModel_parameters = MetamodelUtils.getReference(class_LNGPortfolioModel, "parameters");
+		final EReference reference_CargoModel_cargoes = MetamodelUtils.getReference(class_CargoModel, "cargoes");
+		final EReference reference_ParamatersModel_activeSetting = MetamodelUtils.getReference(class_ParametersModel, "activeSetting");
+		final EAttribute attribute_OptimiserSettings_rewire = MetamodelUtils.getAttribute(class_OptimiserSettings, "rewire");
+		final EAttribute attribute_Cargo_allowRewiring = MetamodelUtils.getAttribute(class_Cargo, "allowRewiring");
+
+		if (model.eIsSet(reference_LNGScenarioModel_parametersModel)) {
+			final EObject parametersModel = (EObject) model.eGet(reference_LNGScenarioModel_parametersModel);
+			if (parametersModel != null && parametersModel.eIsSet(reference_ParamatersModel_activeSetting)) {
+				// Move settings to new portfolio location
+				final EObject settings = (EObject) parametersModel.eGet(reference_ParamatersModel_activeSetting);
+				final EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
+				if (portfolioModel != null) {
+					portfolioModel.eSet(reference_LNGPortfolioModel_parameters, settings);
+
+					// Cargo rewire is no longer unsettable, so set the default value here
+					final boolean rewire = (Boolean) settings.eGet(attribute_OptimiserSettings_rewire);
+
+					final EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
+					if (cargoModel != null) {
+						final List<EObject> cargoes = MetamodelUtils.getValueAsTypedList(cargoModel, reference_CargoModel_cargoes);
+						if (cargoes != null) {
+							for (final EObject cargo : cargoes) {
+								if (!cargo.eIsSet(attribute_Cargo_allowRewiring)) {
+									cargo.eSet(attribute_Cargo_allowRewiring, rewire);
+								}
+							}
+						}
+					}
+				}
+			}
+			// No need for parameters model any more
+			model.eUnset(reference_LNGScenarioModel_parametersModel);
+		}
 	}
 
 	protected void migrateFOBSales(final MetamodelLoader loader, final EObject model) {
