@@ -103,8 +103,11 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 						dates.clear();
 						dates.addAll(fixedDates);
 					} else {
-						final Date date = (Date) container.eGet(attribute);
-						container.eSet(attribute, fixDate(date));
+						final Date date = (Date) container.eGet(attribute); 
+						// don't set null dates on unsettable fields
+						if (date != null || !attribute.isUnsettable()) {
+							container.eSet(attribute, fixDate(date));
+						}
 					}
 				}
 
