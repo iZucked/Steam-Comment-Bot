@@ -5,7 +5,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
 
-class GenerateCharterOutsMode implements IParameterModeCustomiser {
+public class GenerateCharterOutsMode implements IParameterModeCustomiser {
 
 	@Override
 	public void customise(@NonNull OptimiserSettings optimiserSettings) {

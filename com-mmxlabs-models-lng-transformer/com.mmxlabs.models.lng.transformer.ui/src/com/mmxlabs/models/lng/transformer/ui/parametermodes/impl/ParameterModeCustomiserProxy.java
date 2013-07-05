@@ -18,7 +18,7 @@ class ParameterModeCustomiserProxy implements IParameterModeCustomiser {
 	@Override
 	public void customise(@NonNull final OptimiserSettings optimiserSettings) {
 
-		if (customiser != null) {
+		if (customiser == null) {
 			customiser = parameterModeExtension.createCustomiser();
 		}
 

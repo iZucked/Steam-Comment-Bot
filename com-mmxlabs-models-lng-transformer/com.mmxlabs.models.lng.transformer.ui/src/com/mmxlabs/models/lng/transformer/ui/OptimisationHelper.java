@@ -35,6 +35,8 @@ import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterF
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataType;
@@ -267,6 +269,25 @@ public final class OptimisationHelper {
 		final OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
 		if (previousSettings == null) {
 			previousSettings = defaultSettings;
+		}
+
+		if (previousSettings == null) {
+			return null;
+		}
+
+		IParameterModesRegistry parameterModesRegistry = Activator.getDefault().getParameterModesRegistry();
+
+		if (parameterMode != null) {
+
+			if (PARAMETER_MODE_CUSTOM.equals(parameterMode)) {
+				// Nothing...
+			} else {
+
+				IParameterModeCustomiser customiser = parameterModesRegistry.getCustomiser(parameterMode);
+				if (customiser != null) {
+					customiser.customise(previousSettings);
+				}
+			}
 		}
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value

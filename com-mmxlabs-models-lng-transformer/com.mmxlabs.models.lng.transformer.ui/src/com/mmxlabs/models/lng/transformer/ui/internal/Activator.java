@@ -165,4 +165,7 @@ public class Activator extends ValidationPlugin {
 		return jobManagerServiceTracker.getService();
 	}
 
+	public IParameterModesRegistry getParameterModesRegistry() {
+		return parameterModesRegistry.get();
+	}
 }
