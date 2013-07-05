@@ -1,15 +1,22 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
+
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -18,20 +25,16 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PricingModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.NamedIndexContainer} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PricingModelItemProvider
+public class NamedIndexContainerItemProvider
 	extends UUIDObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -45,7 +48,7 @@ public class PricingModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PricingModelItemProvider(AdapterFactory adapterFactory) {
+	public NamedIndexContainerItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -60,29 +63,29 @@ public class PricingModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortCostsPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Port Costs feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPortCostsPropertyDescriptor(Object object) {
+	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_PricingModel_portCosts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PricingModel_portCosts_feature", "_UI_PricingModel_type"),
-				 PricingPackage.Literals.PRICING_MODEL__PORT_COSTS,
+				 getString("_UI_NamedObject_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -99,13 +102,7 @@ public class PricingModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__FLEET_COST);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__PORT_COSTS);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
+			childrenFeatures.add(PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
 		}
 		return childrenFeatures;
 	}
@@ -124,14 +121,14 @@ public class PricingModelItemProvider
 	}
 
 	/**
-	 * This returns PricingModel.gif.
+	 * This returns NamedIndexContainer.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PricingModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/NamedIndexContainer"));
 	}
 
 	/**
@@ -142,10 +139,10 @@ public class PricingModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((PricingModel)object).getUuid();
+		String label = ((NamedIndexContainer<?>)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_PricingModel_type") :
-			getString("_UI_PricingModel_type") + " " + label;
+			getString("_UI_NamedIndexContainer_type") :
+			getString("_UI_NamedIndexContainer_type") + " " + label;
 	}
 
 	/**
@@ -159,14 +156,11 @@ public class PricingModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(PricingModel.class)) {
-			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
-			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
-			case PricingPackage.PRICING_MODEL__FLEET_COST:
-			case PricingPackage.PRICING_MODEL__ROUTE_COSTS:
-			case PricingPackage.PRICING_MODEL__PORT_COSTS:
-			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
-			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
+		switch (notification.getFeatureID(NamedIndexContainer.class)) {
+			case PricingPackage.NAMED_INDEX_CONTAINER__NAME:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -186,38 +180,13 @@ public class PricingModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES,
-				 PricingFactory.eINSTANCE.createCommodityIndex()));
+				(PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA,
+				 PricingFactory.eINSTANCE.createDataIndex()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES,
-				 PricingFactory.eINSTANCE.createCharterIndex()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__FLEET_COST,
-				 PricingFactory.eINSTANCE.createFleetCostModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS,
-				 PricingFactory.eINSTANCE.createRouteCost()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__PORT_COSTS,
-				 PricingFactory.eINSTANCE.createPortCost()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES,
-				 PricingFactory.eINSTANCE.createCooldownPrice()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES,
-				 PricingFactory.eINSTANCE.createBaseFuelIndex()));
+				(PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA,
+				 PricingFactory.eINSTANCE.createDerivedIndex()));
 	}
 
 }
