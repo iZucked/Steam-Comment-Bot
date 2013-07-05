@@ -131,10 +131,6 @@
             id="com.mmxlabs.scenario.service.ui.pin"
             name="Pin">
       </command>
-      <command
-            id="com.mmxlabs.scenario.service.ui.diffedit"
-            name="Sandbox">
-      </command>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">
@@ -403,10 +399,6 @@
                </iterate>
             </with>
          </activeWhen>
-      </handler>
-      <handler
-            class="com.mmxlabs.scenario.service.ui.commands.DiffEditScenarioCommandHandler"
-            commandId="com.mmxlabs.scenario.service.ui.diffedit">
       </handler>
       <handler
             class="com.mmxlabs.scenario.service.ui.commands.DeleteScenarioFragmentCommandHandler"
