@@ -23,6 +23,6 @@ public interface BaseFuelIndex extends NamedIndexContainer<Double> {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	double getValue();
+	double getPrice();
 
 } // BaseFuelIndex

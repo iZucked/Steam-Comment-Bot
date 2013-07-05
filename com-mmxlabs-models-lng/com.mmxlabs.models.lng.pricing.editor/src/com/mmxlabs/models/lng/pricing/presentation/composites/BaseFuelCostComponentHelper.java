@@ -65,7 +65,6 @@ public class BaseFuelCostComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_fuelEditor(detailComposite, topClass);
-		add_priceEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fuel feature on BaseFuelCost
@@ -76,12 +75,4 @@ public class BaseFuelCostComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.BASE_FUEL_COST__FUEL));
 	}
 
-	/**
-	 * Create the editor for the price feature on BaseFuelCost
-	 *
-	 * @generated
-	 */
-	protected void add_priceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.BASE_FUEL_COST__PRICE));
-	}
 }

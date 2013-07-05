@@ -61,7 +61,6 @@ public class BaseFuelCostItemProvider
 
 			addFuelPropertyDescriptor(object);
 			addIndexPropertyDescriptor(object);
-			addPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -111,28 +110,6 @@ public class BaseFuelCostItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BaseFuelCost_price_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BaseFuelCost_price_feature", "_UI_BaseFuelCost_type"),
-				 PricingPackage.Literals.BASE_FUEL_COST__PRICE,
-				 true,
-				 false,
-				 true,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns BaseFuelCost.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -151,8 +128,7 @@ public class BaseFuelCostItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		BaseFuelCost baseFuelCost = (BaseFuelCost)object;
-		return getString("_UI_BaseFuelCost_type") + " " + baseFuelCost.getPrice();
+		return getString("_UI_BaseFuelCost_type");
 	}
 
 	/**
