@@ -60,6 +60,7 @@ Build: {1}
       <plugin id="com.mmxlabs.models.lng.transformer.ui" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.migration" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.migration.scenario" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.models.ui.validation" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
@@ -68,6 +69,7 @@ Build: {1}
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.ops4j.peaberry.activation" autoStart="true" startLevel="1" />
+      <property name="org.eclipse.update.reconcile" value="false" />
    </configurations>
 
 </product>
