@@ -33,9 +33,12 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -905,7 +908,9 @@ public class ShippingCalculationsTest {
 
 		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-		fuelPrice.setPrice(100);
+
+		dsc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+
 		// but the vessel's capacity is only 50m3 greater than its minimum heel
 		// and the journeys (after loading) use a total of 40m3 NBO
 		// so only 10m3 is available for FBO, which is not enough for both journeys
@@ -1055,7 +1060,7 @@ public class ShippingCalculationsTest {
 
 		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-		fuelPrice.setPrice(100);
+		dsc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
 		final SequenceTester checker = getDefaultTester();
 		checker.baseFuelPricePerM3 = 100;
@@ -1155,7 +1160,7 @@ public class ShippingCalculationsTest {
 		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
 		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-		fuelPrice.setPrice(100);
+		dsc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
 		// but minimum discharge volume means that it causes a capacity violation
 		mss.cargo.getSlots().get(1).setMinQuantity(9965);

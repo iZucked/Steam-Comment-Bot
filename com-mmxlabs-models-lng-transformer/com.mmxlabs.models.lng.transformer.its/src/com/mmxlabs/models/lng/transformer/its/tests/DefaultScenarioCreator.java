@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.management.timer.Timer;
@@ -17,7 +18,6 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Assert;
-import org.omg.CORBA.PRIVATE_MEMBER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,11 +55,13 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
@@ -73,7 +75,6 @@ import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -332,6 +333,30 @@ public class DefaultScenarioCreator {
 			return result;
 		}
 
+		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price) {
+			BaseFuelIndex bfi = bfc.getIndex();
+			if (bfi == null) {
+				bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
+				bfc.setIndex(bfi);
+			}
+			Index<Double> indexData = bfi.getData();
+			if (indexData == null || (indexData instanceof DataIndex) == false) {
+				indexData = PricingFactory.eINSTANCE.createDataIndex();
+				bfi.setData(indexData);
+			}
+			
+			List<IndexPoint<Double>> points = ((DataIndex<Double>) indexData).getPoints();
+			
+			if (points.isEmpty()) {
+				IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
+				
+				points.add(point);
+			}
+			
+			points.get(0).setValue(price);
+			points.get(0).setDate(new Date());
+		}
+		
 		/**
 		 * Creates a base fuel with default settings.
 		 * 
@@ -349,7 +374,7 @@ public class DefaultScenarioCreator {
 
 			final BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
 			bfc.setFuel(baseFuel);
-			bfc.setPrice(baseFuelUnitPrice);
+			setBaseFuelPrice(bfc, baseFuelUnitPrice);
 			fleetCostModel.getBaseFuelPrices().add(bfc);
 
 			return baseFuel;

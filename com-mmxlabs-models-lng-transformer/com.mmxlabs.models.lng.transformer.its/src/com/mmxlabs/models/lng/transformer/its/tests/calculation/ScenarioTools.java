@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
@@ -247,9 +248,8 @@ public class ScenarioTools {
 		baseFuel.setName("BASE FUEL");
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
 
-		final BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
-		bfc.setFuel(baseFuel);
-		bfc.setPrice(baseFuelUnitPrice);
+		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
+		
 		fleetCostModel.getBaseFuelPrices().add(bfc);
 
 		final FleetModel fleetModel = scenario.getFleetModel();
@@ -512,9 +512,7 @@ public class ScenarioTools {
 		baseFuel.setName("BASE FUEL");
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
 
-		final BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
-		bfc.setFuel(baseFuel);
-		bfc.setPrice(baseFuelUnitPrice);
+		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
 		fleetCostModel.getBaseFuelPrices().add(bfc);
 
 		fleetModel.getBaseFuels().add(baseFuel);
@@ -930,6 +928,21 @@ public class ScenarioTools {
 		r2.getContents().add(instance);
 		r2.save(null);
 		manifestResource.save(null);
+	}
+	
+	public static BaseFuelCost createBaseFuelCost(BaseFuel baseFuel, double price) {
+		BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
+		final BaseFuelIndex bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
+		final DataIndex<Double> indexData = PricingFactory.eINSTANCE.createDataIndex();
+		bfi.setData(indexData);
+		IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
+		point.setValue((double) price);
+		point.setDate(new Date());
+		indexData.getPoints().add(point);
+		bfc.setIndex(bfi);
+		
+		bfc.setFuel(baseFuel);
+		return bfc;
 	}
 
 }

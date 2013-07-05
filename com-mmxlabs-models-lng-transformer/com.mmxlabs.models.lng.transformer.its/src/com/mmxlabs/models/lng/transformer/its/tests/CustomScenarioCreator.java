@@ -42,14 +42,16 @@ import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -181,9 +183,7 @@ public class CustomScenarioCreator {
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
 		fleetModel.getBaseFuels().add(baseFuel);
 
-		final BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
-		bfc.setFuel(baseFuel);
-		bfc.setPrice(baseFuelUnitPrice);
+		final BaseFuelCost bfc = ScenarioTools.createBaseFuelCost(baseFuel, baseFuelUnitPrice);
 		fleetCostModel.getBaseFuelPrices().add(bfc);
 
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();

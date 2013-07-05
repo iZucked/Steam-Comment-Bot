@@ -1829,7 +1829,7 @@ public class LNGScenarioTransformer {
 			double baseFuelPrice = 0;
 			for (final BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
-					baseFuelPrice = baseFuelCost.getPrice();
+					baseFuelPrice = baseFuelCost.getIndex().getPrice();
 					break;
 				}
 			}
