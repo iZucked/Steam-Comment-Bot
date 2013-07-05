@@ -140,7 +140,7 @@ public class ParameterModesDialog extends FormDialog {
 		// Get the form object and set a title
 		final ScrolledForm form = managedForm.getForm();
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
-		form.setText("Options");
+		form.setText("Settings");
 		toolkit.decorateFormHeading(form.getForm());
 
 		// Add option to reset to default values
@@ -183,7 +183,7 @@ public class ParameterModesDialog extends FormDialog {
 
 			// Create an advanced section
 			final Section advanced = toolkit.createSection(form.getBody(), SWT.DEFAULT);
-			advanced.setText("Advanced Settings");
+			advanced.setText("Advanced");
 
 			// Initially collapsed
 			advanced.setExpanded(false);
