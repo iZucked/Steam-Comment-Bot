@@ -133,11 +133,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		return validationService;
 	}
 
-	public void bindValidationService(final IValidationService validationService) {
+	public void setValidationService(final IValidationService validationService) {
 		this.validationService = validationService;
-	}
-
-	public void unbindValidationService(final IValidationService validationService) {
-		this.validationService = null;
 	}
 }
