@@ -47,10 +47,13 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public final class OptimisationHelper {
+
+	public static final String PARAMETER_MODE_CUSTOM = "Custom";
+
 	private static final Logger log = LoggerFactory.getLogger(OptimisationHelper.class);
 
-	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean promptForOptimiserSettings, final boolean optimising,
-			final String k) {
+	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, String parameterMode, final boolean promptForOptimiserSettings,
+			final boolean optimising, final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
@@ -60,7 +63,7 @@ public final class OptimisationHelper {
 				if (object instanceof LNGScenarioModel) {
 					final LNGScenarioModel root = (LNGScenarioModel) object;
 
-					final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, promptForOptimiserSettings);
+					final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
 					if (optimiserSettings == null) {
 						return null;
 					}
@@ -251,7 +254,7 @@ public final class OptimisationHelper {
 		return true;
 	}
 
-	public static OptimiserSettings getOptimiserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser) {
+	public static OptimiserSettings getOptimiserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, String parameterMode, final boolean promptUser) {
 
 		OptimiserSettings previousSettings = null;
 		if (scenario != null) {
