@@ -21,8 +21,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -48,12 +46,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	@Inject
 	private IVolumeAllocator cargoAllocator;
 
-	@Inject
-	private IPortCostProvider portCostProvider;
-
-	@Inject
-	private IPortSlotProvider portSlotProvider;
-
 	@Override
 	public void processSchedule(final ScheduledSequences scheduledSequences) {
 		// Charter Out Optimisation... Detect potential charter out opportunities.
@@ -73,13 +65,10 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				boolean missingPurchasePrice = false;
 				boolean missingSalesPrice = false;
 
-				final int n = vp.getSequence().length;
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
 				final List<Integer> arrivalTimes = new ArrayList<Integer>();
-				int idx = 0;
 				int dischargeIdx = -1;
-				arrivalTimes.add(currentTime);
 				final Object[] currentSequence = vp.getSequence();
 
 				ILoadOption originalLoad = null;
@@ -87,12 +76,14 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				// Note: We do not handle multiple loads correctly!
 				int cvValue = 0;
 
-				for (final Object obj : currentSequence) {
+				for (int idx = 0; idx < currentSequence.length; ++idx) {
+
+					final Object obj = currentSequence[idx];
 					if (obj instanceof PortDetails) {
 						final PortDetails details = (PortDetails) obj;
+						arrivalTimes.add(currentTime);
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
-							arrivalTimes.add(currentTime);
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
 								ILoadOption loadOption = (ILoadOption) details.getOptions().getPortSlot();
@@ -115,16 +106,14 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 									}
 									missingSalesPrice = true;
 									originalDischarge = dischargeOption;
-									dischargeIdx = idx ;
+									dischargeIdx = idx;
 								}
 							}
 						}
 					} else if (obj instanceof VoyageDetails) {
 						final VoyageDetails details = (VoyageDetails) obj;
 						currentTime += details.getOptions().getAvailableTime();
-						arrivalTimes.add(currentTime);
 					}
-					++idx;
 				}
 
 				if (!isCargoPlan || (!missingPurchasePrice && !missingSalesPrice)) {
@@ -150,9 +139,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					long loadVolumeInM3 = 0;
 
 					{
-						idx = 0;
+						for (int idx = 0; idx < currentSequence.length; ++idx) {
 
-						for (final Object obj : currentSequence) {
+							final Object obj = currentSequence[idx];
 							if (obj instanceof PortDetails) {
 								final PortDetails details = (PortDetails) obj;
 								if (idx != (currentSequence.length - 1)) {
@@ -169,7 +158,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 									}
 								}
 							}
-							++idx;
 						}
 					}
 
@@ -191,9 +179,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					// Perform a binary search on sales price
 					// First find a valid interval
 					int minPricePerMMBTu = Integer.MAX_VALUE;
-					idx = 0;
+					for (int idx = 0; idx < currentSequence.length; ++idx) {
 
-					for (final Object obj : currentSequence) {
+						final Object obj = currentSequence[idx];
 						if (obj instanceof PortDetails) {
 							final PortDetails details = (PortDetails) obj;
 							if (idx != (currentSequence.length - 1)) {
@@ -210,7 +198,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 								}
 							}
 						}
-						++idx;
 					}
 					long minPrice_Value = evaluateSalesPrice(seq, vessel, arrivalTimes, dischargeIdx, currentSequence, originalDischarge, newSequence, minPricePerMMBTu);
 					while (minPrice_Value > 0) {

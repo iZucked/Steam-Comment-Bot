@@ -75,7 +75,6 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			for (final VoyagePlan vp : seq.getVoyagePlans()) {
 
 				// First step, find a ballast leg which is long enough to charter-out
-
 				boolean isCargoPlan = false;
 				// Grab the current list of arrival times and update the rolling currentTime
 				final List<Integer> arrivalTimes = new ArrayList<Integer>(3);
@@ -91,7 +90,6 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 						arrivalTimes.add(currentTime);
 						if (idx != (currentSequence.length - 1)) {
 							currentTime += details.getOptions().getVisitDuration();
-						
 
 							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
