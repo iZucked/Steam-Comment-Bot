@@ -36,7 +36,7 @@ public class SensibleAvailabilityDateConstraint  extends AbstractModelMultiConst
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
 			for (EStructuralFeature feature: availabilityDateFields) {
 				final Date date = (Date) object.eGet(feature);
-				if (date.before(earliestDate)) {
+				if (date != null && date.before(earliestDate)) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselAvailability.getVessel().getName(), feature.getName(), earliestDate.toString()));
 					status.addEObjectAndFeature(object, feature);
 					failures.add(status);				
