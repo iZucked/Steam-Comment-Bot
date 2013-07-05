@@ -6,14 +6,23 @@ package com.mmxlabs.models.lng.transformer.ui.internal;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+
 import org.eclipse.ui.progress.IProgressConstants2;
+import org.ops4j.peaberry.Export;
+import org.ops4j.peaberry.Peaberry;
+import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesExtensionModule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.ValidationPlugin;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -33,6 +42,9 @@ public class Activator extends ValidationPlugin {
 
 	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
 	private ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> scenarioServiceSelectionProviderTracker;
+
+	@Inject
+	private Export<IParameterModesRegistry> parameterModesRegistry;
 
 	private final IScenarioServiceSelectionChangedListener scenarioServiceSelectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
@@ -105,6 +117,10 @@ public class Activator extends ValidationPlugin {
 				service.addSelectionChangedListener(scenarioServiceSelectionChangedListener);
 			}
 		}
+
+		// Bind our module together with the hooks to the eclipse registry to get plugin extensions.
+		final Injector inj = Guice.createInjector(Peaberry.osgiModule(context, EclipseRegistry.eclipseRegistry()), new ParameterModesExtensionModule());
+		inj.injectMembers(this);
 	}
 
 	/*
@@ -128,6 +144,9 @@ public class Activator extends ValidationPlugin {
 
 		scenarioServiceSelectionProviderTracker.close();
 		scenarioServiceSelectionProviderTracker = null;
+
+		parameterModesRegistry.unput();
+		parameterModesRegistry = null;
 
 		plugin = null;
 		super.stop(context);

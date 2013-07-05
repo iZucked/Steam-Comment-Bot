@@ -7,6 +7,7 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="ParameterMode" name="ParameterMode" schema="schema/ParameterMode.exsd"/>
 	<extension
             point="org.eclipse.ui.handlers">
          <handler
@@ -351,7 +352,6 @@
                   icon="icons/evaluate_schedule.gif"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.action3"
                   label="Evaluate"
-                  style="push"
                   toolbarPath="additions"
                   tooltip="Evaluate scenario">
             </action>
@@ -460,4 +460,22 @@
          </constraints>
       </constraintProvider>
    </extension>
+      <extension
+            point="com.mmxlabs.models.lng.transformer.ui.ParameterMode">
+         <ParameterMode
+               customiser="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.StandardMode"
+               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.StandardMode"
+               name="Standard">
+         </ParameterMode>
+         <ParameterMode
+               customiser="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.ShippingOnlyMode"
+               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.ShippingOnlyMode"
+               name="Shipping Only">
+         </ParameterMode>
+         <ParameterMode
+               customiser="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.GenerateCharterOutsMode"
+               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.GenerateCharterOutsMode"
+               name="Charter Out Generation">
+         </ParameterMode>
+      </extension>
 </plugin>
