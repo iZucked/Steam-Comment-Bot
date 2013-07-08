@@ -16,8 +16,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,18 +86,24 @@ public class ScenarioStorageUtil {
 		return tempFile.getAbsolutePath();
 	}
 
-	@SuppressWarnings("resource")
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
-		// Store data into scenario archive
-		{
-			final IScenarioService scenarioService = instance.getScenarioService();
-			final URI rootObjectURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/rootObject.xmi");
+		final IScenarioService scenarioService = instance.getScenarioService();
 
+		final URI rootObjectURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/rootObject.xmi");
+
+		final EObject model = instance.getInstance();
+		// Already loaded?
+		if (model != null) {
+			final EObject rootObject = EcoreUtil.copy(model);
+			final XMIResourceImpl r = new XMIResourceImpl(rootObjectURI);
+			r.getContents().add(rootObject);
+			r.save(null);
+		} else {
+			// Store data into scenario archive
 			final URIConverter conv = resourceSet.getURIConverter();
-
 			final URI u = scenarioService.resolveURI(instance.getRootObjectURI());
 
 			OutputStream output = null;
