@@ -45,7 +45,7 @@
       <eGenericType eTypeParameter="#//IndexPoint/Value"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true">
     <eTypeParameters name="Value"/>
     <eOperations name="getValueForMonth" lowerBound="1">
       <eGenericType eTypeParameter="#//Index/Value"/>

@@ -752,8 +752,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(derivedIndexEClass_Value);
 		g1.getETypeArguments().add(g2);
 		derivedIndexEClass.getEGenericSuperTypes().add(g1);
-		indexEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		indexEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		fleetCostModelEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		routeCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		baseFuelCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());

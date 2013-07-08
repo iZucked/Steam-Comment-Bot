@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -97,9 +98,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				DataIndex<?> dataIndex = (DataIndex<?>)theEObject;
 				T result = caseDataIndex(dataIndex);
 				if (result == null) result = caseIndex(dataIndex);
-				if (result == null) result = caseUUIDObject(dataIndex);
-				if (result == null) result = caseNamedObject(dataIndex);
-				if (result == null) result = caseMMXObject(dataIndex);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -107,9 +105,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				DerivedIndex<?> derivedIndex = (DerivedIndex<?>)theEObject;
 				T result = caseDerivedIndex(derivedIndex);
 				if (result == null) result = caseIndex(derivedIndex);
-				if (result == null) result = caseUUIDObject(derivedIndex);
-				if (result == null) result = caseNamedObject(derivedIndex);
-				if (result == null) result = caseMMXObject(derivedIndex);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -122,9 +117,6 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.INDEX: {
 				Index<?> index = (Index<?>)theEObject;
 				T result = caseIndex(index);
-				if (result == null) result = caseUUIDObject(index);
-				if (result == null) result = caseNamedObject(index);
-				if (result == null) result = caseMMXObject(index);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
