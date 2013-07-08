@@ -92,6 +92,18 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.pricing.CharterIndex">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelIndexComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelIndexComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.NamedIndexContainerComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.NamedIndexContainerComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.NamedIndexContainer">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -105,6 +117,11 @@
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CommodityIndexReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CommodityIndexReferenceValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.BaseFuelIndexReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.BaseFuelIndexReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex">
     </valueProvider>
  </extension>
  <extension

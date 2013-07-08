@@ -4,18 +4,30 @@
  */
 package com.mmxlabs.models.lng.pricing.composite_inject;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
+import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 
 public class BaseFuelPriceInjector extends BaseComponentHelper {
 	@Override
@@ -44,8 +56,7 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass displayedClass) {
-		/*
-		final NumberInlineEditor numberEditor = new NumberInlineEditor(PricingPackage.eINSTANCE.getBaseFuelCost_Price());
+		final ReferenceInlineEditor numberEditor = new ReferenceInlineEditor(PricingPackage.eINSTANCE.getBaseFuelCost_Index());
 		detailComposite.addInlineEditor(new IInlineEditor() {
 			@Override
 			public void setLabel(final Label label) {
@@ -134,7 +145,6 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 
 			}
 		});
-		*/
 	}
 
 	@Override
