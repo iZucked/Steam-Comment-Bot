@@ -51,10 +51,10 @@ public class BaseFuelIndexImpl extends NamedIndexContainerImpl<Double> implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public double getPrice() {
-		Index<Double> data = getData();
+		final Index<Double> data = getData();
 		return data.getValueForMonth(data.getDates().get(0));
 	}
 
