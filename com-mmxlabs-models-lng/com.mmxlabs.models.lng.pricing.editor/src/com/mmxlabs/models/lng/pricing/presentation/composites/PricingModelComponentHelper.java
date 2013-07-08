@@ -70,6 +70,7 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 		add_routeCostsEditor(detailComposite, topClass);
 		add_portCostsEditor(detailComposite, topClass);
 		add_cooldownPricesEditor(detailComposite, topClass);
+		add_baseFuelPricesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the commodityIndices feature on PricingModel
@@ -119,5 +120,14 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cooldownPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES));
+	}
+
+	/**
+	 * Create the editor for the baseFuelPrices feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_baseFuelPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES));
 	}
 }

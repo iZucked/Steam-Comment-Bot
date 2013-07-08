@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.pricing.importers;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -24,7 +23,6 @@ import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -49,6 +47,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public static final String PRICE_CURVE_KEY = "PRICE_CURVES";
 	public static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
 	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
+	/**
+	 * @since 5.0
+	 */
 	public static final String BASEFUEL_PRICING_KEY = "BF_PRICING";
 	public static final String PORT_COSTS_KEY = "PORT_COSTS";
 

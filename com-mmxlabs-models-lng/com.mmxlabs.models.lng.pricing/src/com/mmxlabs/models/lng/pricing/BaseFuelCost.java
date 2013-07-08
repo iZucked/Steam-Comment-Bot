@@ -15,6 +15,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getFuel <em>Fuel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
@@ -49,6 +50,36 @@ public interface BaseFuelCost extends MMXObject {
 	 * @generated
 	 */
 	void setFuel(BaseFuel value);
+
+	/**
+	 * Returns the value of the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @deprecated
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price</em>' attribute.
+	 * @see #setPrice(double)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getBaseFuelCost_Price()
+	 * @model required="true"
+	 * @generated
+	 */
+	@Deprecated
+	double getPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @deprecated
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price</em>' attribute.
+	 * @see #getPrice()
+	 * @generated
+	 */
+	@Deprecated
+	void setPrice(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Index</b></em>' reference.

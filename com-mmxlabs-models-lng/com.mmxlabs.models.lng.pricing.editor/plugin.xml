@@ -233,4 +233,16 @@
           id="com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider">
     </ModelCommandProvider>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated pricing -->
+      <editor
+            id="com.mmxlabs.models.lng.pricing.presentation.PricingEditorID"
+            name="%_UI_PricingEditor_label"
+            icon="icons/full/obj16/PricingModelFile.gif"
+            extensions="pricing"
+            class="com.mmxlabs.models.lng.pricing.presentation.PricingEditor"
+            contributorClass="com.mmxlabs.models.lng.pricing.presentation.PricingActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>

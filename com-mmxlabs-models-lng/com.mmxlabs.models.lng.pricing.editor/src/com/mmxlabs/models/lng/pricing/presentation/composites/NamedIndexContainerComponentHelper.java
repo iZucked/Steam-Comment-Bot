@@ -18,11 +18,11 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
- * A component helper for CommodityIndex instances
+ * A component helper for NamedIndexContainer instances
  *
  * @generated
  */
-public class CommodityIndexComponentHelper extends BaseComponentHelper {
+public class NamedIndexContainerComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -30,7 +30,7 @@ public class CommodityIndexComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public CommodityIndexComponentHelper() {
+	public NamedIndexContainerComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -39,20 +39,20 @@ public class CommodityIndexComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public CommodityIndexComponentHelper(IAdapterManager adapterManager) {
+	public NamedIndexContainerComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**
-	 * add editors to a composite, using CommodityIndex as the supertype
+	 * add editors to a composite, using NamedIndexContainer as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.COMMODITY_INDEX);	
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.NAMED_INDEX_CONTAINER);	
 	}
 	
 	/**
@@ -66,11 +66,11 @@ public class CommodityIndexComponentHelper extends BaseComponentHelper {
 		add_dataEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the data feature on CommodityIndex
+	 * Create the editor for the data feature on NamedIndexContainer
 	 *
 	 * @generated
 	 */
 	protected void add_dataEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COMMODITY_INDEX__DATA));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA));
 	}
 }

@@ -2,7 +2,6 @@
  */
 package com.mmxlabs.models.lng.pricing;
 
-import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
