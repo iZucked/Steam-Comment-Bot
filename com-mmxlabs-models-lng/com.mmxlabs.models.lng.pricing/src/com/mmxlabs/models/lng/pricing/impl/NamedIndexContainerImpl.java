@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Named Index Container</b></em>'.
+ * @since 5.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

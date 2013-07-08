@@ -136,6 +136,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Base Fuel Index</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Base Fuel Index</em>'.
 	 * @generated
@@ -145,6 +146,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Named Index Container</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Named Index Container</em>'.
 	 * @generated

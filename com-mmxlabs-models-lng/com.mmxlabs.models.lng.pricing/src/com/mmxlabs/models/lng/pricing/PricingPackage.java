@@ -144,6 +144,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Base Fuel Prices</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -484,6 +485,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -651,6 +653,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -660,6 +663,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -669,6 +673,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -759,6 +764,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl <em>Named Index Container</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getNamedIndexContainer()
@@ -769,6 +775,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -778,6 +785,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -787,6 +795,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -796,6 +805,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Data</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -805,6 +815,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Named Index Container</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -814,6 +825,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelIndex()
@@ -824,6 +836,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -833,6 +846,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -842,6 +856,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -851,6 +866,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Data</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -860,6 +876,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Base Fuel Index</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -945,6 +962,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices <em>Base Fuel Prices</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Base Fuel Prices</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getBaseFuelPrices()
@@ -1136,6 +1154,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Index</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex()
@@ -1300,6 +1319,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.BaseFuelIndex <em>Base Fuel Index</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Base Fuel Index</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.BaseFuelIndex
@@ -1310,6 +1330,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer <em>Named Index Container</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Named Index Container</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer
@@ -1320,6 +1341,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData <em>Data</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Data</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData()
@@ -1411,6 +1433,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Base Fuel Prices</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1569,6 +1592,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1703,6 +1727,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl
 		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBaseFuelIndex()
@@ -1713,6 +1738,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl <em>Named Index Container</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl
 		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getNamedIndexContainer()
@@ -1723,6 +1749,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Data</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

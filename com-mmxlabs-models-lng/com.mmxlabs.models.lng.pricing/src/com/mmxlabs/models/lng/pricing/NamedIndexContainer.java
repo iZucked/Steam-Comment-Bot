@@ -8,6 +8,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Named Index Container</b></em>'.
+ * @since 5.0
  * <!-- end-user-doc -->
  *
  * <p>

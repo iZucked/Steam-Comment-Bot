@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Base Fuel Index</b></em>'.
+ * @since 5.0
  * <!-- end-user-doc -->
  * <p>
  * </p>
