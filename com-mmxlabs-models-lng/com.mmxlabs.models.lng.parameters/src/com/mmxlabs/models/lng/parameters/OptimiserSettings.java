@@ -166,6 +166,7 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Rewire</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Rewire</em>' attribute.
 	 * @see #setRewire(boolean)
@@ -173,16 +174,19 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * @model required="true"
 	 * @generated
 	 */
+	@Deprecated
 	boolean isRewire();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isRewire <em>Rewire</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Rewire</em>' attribute.
 	 * @see #isRewire()
 	 * @generated
 	 */
+	@Deprecated
 	void setRewire(boolean value);
 
 	/**
