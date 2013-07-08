@@ -7,7 +7,9 @@ package com.mmxlabs.models.lng.migration.units;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
@@ -17,7 +19,9 @@ import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -368,6 +372,293 @@ public class MigrateToV3Test {
 				Assert.assertTrue((Boolean) cargo2.eGet(attribute_Cargo_allowRewiring));
 				// Cargo 3 - no change
 				Assert.assertFalse((Boolean) cargo3.eGet(attribute_Cargo_allowRewiring));
+			}
+		} finally {
+			if (tmpFile != null) {
+				tmpFile.delete();
+			}
+		}
+	}
+
+	@Test
+	public void migrateBaseFuelPricingTest() throws IOException {
+
+		final String baseFuel1 = "base1";
+		final String baseFuel2 = "base2";
+
+		// Construct a scenario
+		File tmpFile = null;
+		try {
+			{
+				final MetamodelLoader loader = new MigrateToV3().getSourceMetamodelLoader(null);
+
+				final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+				final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
+				final EClass namedObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "NamedObject");
+				final EStructuralFeature attribute_NamedObject_name = MetamodelUtils.getAttribute(namedObject_Class, "name");
+				final EStructuralFeature attribute_UUIDObject_uuid = MetamodelUtils.getAttribute(uuidObject_Class, "uuid");
+
+				final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+				final EFactory factory_ScenarioModel = package_ScenarioModel.getEFactoryInstance();
+				final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+
+				final EPackage package_FleetModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_FleetModel);
+				final EFactory factory_FleetModel = package_FleetModel.getEFactoryInstance();
+				final EClass class_FleetModel = MetamodelUtils.getEClass(package_FleetModel, "FleetModel");
+				final EClass class_BaseFuel = MetamodelUtils.getEClass(package_FleetModel, "BaseFuel");
+
+				final EPackage package_PricingModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
+				final EFactory factory_PricingModel = package_PricingModel.getEFactoryInstance();
+				final EClass class_PricingModel = MetamodelUtils.getEClass(package_PricingModel, "PricingModel");
+				final EClass class_FleetCostModel = MetamodelUtils.getEClass(package_PricingModel, "FleetCostModel");
+				final EClass class_BaseFuelCost = MetamodelUtils.getEClass(package_PricingModel, "BaseFuelCost");
+
+				final EReference reference_LNGScenarioModel_pricingModel = MetamodelUtils.getReference(class_LNGScenarioModel, "pricingModel");
+				final EReference reference_LNGScenarioModel_fleetModel = MetamodelUtils.getReference(class_LNGScenarioModel, "fleetModel");
+
+				final EReference reference_FleetModel_baseFuels = MetamodelUtils.getReference(class_FleetModel, "baseFuels");
+
+				final EReference reference_PricingModel_fleetCost = MetamodelUtils.getReference(class_PricingModel, "fleetCost");
+				final EReference reference_FleetCostModel_baseFuelPrices = MetamodelUtils.getReference(class_FleetCostModel, "baseFuelPrices");
+
+
+				final EAttribute attribute_BaseFuelCost_price = MetamodelUtils.getAttribute(class_BaseFuelCost, "price");
+				final EReference reference_BaseFuelCost_fuel = MetamodelUtils.getReference(class_BaseFuelCost, "fuel");
+
+				// Create data
+
+				final EObject scenarioModel = factory_ScenarioModel.create(class_LNGScenarioModel);
+				final EObject fleetModel = factory_FleetModel.create(class_FleetModel);
+				final EObject pricingModel = factory_PricingModel.create(class_PricingModel);
+
+				scenarioModel.eSet(reference_LNGScenarioModel_pricingModel, pricingModel);
+				scenarioModel.eSet(reference_LNGScenarioModel_fleetModel, fleetModel);
+
+				final EObject fleetCostModel = factory_PricingModel.create(class_FleetCostModel);
+				pricingModel.eSet(reference_PricingModel_fleetCost, fleetCostModel);
+
+				// Construct base fuels
+				final EObject base1 = factory_FleetModel.create(class_BaseFuel);
+				base1.eSet(attribute_NamedObject_name, baseFuel1);
+				final EObject base2 = factory_FleetModel.create(class_BaseFuel);
+				base2.eSet(attribute_NamedObject_name, baseFuel2);
+
+				// Add to model
+				final List<EObject> baseFuels = Lists.newArrayList(base1, base2);
+				fleetModel.eSet(reference_FleetModel_baseFuels, baseFuels);
+
+				// Create initial base fuel prices
+				final EObject baseFuelCost1 = factory_PricingModel.create(class_BaseFuelCost);
+				baseFuelCost1.eSet(reference_BaseFuelCost_fuel, base1);
+				baseFuelCost1.eSet(attribute_BaseFuelCost_price, 5.0);
+
+				final EObject baseFuelCost2 = factory_PricingModel.create(class_BaseFuelCost);
+				baseFuelCost2.eSet(reference_BaseFuelCost_fuel, base2);
+				baseFuelCost2.eSet(attribute_BaseFuelCost_price, 10.0);
+
+				final List<EObject> baseFuelCosts = Lists.newArrayList(baseFuelCost1, baseFuelCost2);
+				fleetCostModel.eSet(reference_FleetCostModel_baseFuelPrices, baseFuelCosts);
+
+				//
+				// final List<EObject> baseFuelCosts = MetamodelUtils.getValueAsTypedList(fleetCostModel, reference_FleetCostModel_baseFuelPrices);
+				//
+				// final List<EObject> baseFuelIndices = new ArrayList<EObject>(baseFuelCosts.size());
+				// final Date indexDate;
+				// {
+				// final Calendar cal = Calendar.getInstance();
+				// cal.clear();
+				// cal.set(Calendar.YEAR, 2000);
+				// cal.set(Calendar.MONTH, Calendar.JANUARY);
+				// cal.set(Calendar.DAY_OF_MONTH, 1);
+				// indexDate = cal.getTime();
+				// }
+				//
+				// for (final EObject baseFuelCost : baseFuelCosts) {
+				//
+				// if (!baseFuelCost.eIsSet(reference_BaseFuelCost_index) && baseFuelCost.eIsSet(attribute_BaseFuelCost_price)) {
+				// final Number price = (Number) baseFuelCost.eGet(attribute_BaseFuelCost_price);
+				// baseFuelCost.eUnset(attribute_BaseFuelCost_price);
+				//
+				// final EObject baseFuelIndex = factory_PricingModel.create(class_BaseFuelIndex);
+				// baseFuelIndices.add(baseFuelIndex);
+				//
+				// // Copy name
+				// final EObject fuel = (EObject) baseFuelCost.eGet(reference_BaseFuelCost_fuel);
+				// if (fuel != null) {
+				// baseFuelIndex.eSet(attribute_NamedObject_name, fuel.eGet(attribute_NamedObject_name));
+				// }
+				// // Generate a new UUID string
+				// baseFuelIndex.eSet(attribute_UUIDObject_uuid, EcoreUtil.generateUUID());
+				//
+				// // Crate an empty index
+				// final EObject dataIndex = factory_PricingModel.create(class_DataIndex);
+				// baseFuelCost.eSet(reference_BaseFuelCost_index, dataIndex);
+				//
+				// // Copy price across if present
+				// if (price != null) {
+				// final EObject indexPrice = factory_PricingModel.create(class_IndexPoint);
+				// indexPrice.eSet(attribute_IndexPoint_date, indexDate);
+				// indexPrice.eSet(attribute_IndexPoint_value, price.doubleValue());
+				//
+				// dataIndex.eSet(reference_DataIndex_points, Collections.singletonList(indexPrice));
+				//
+				// baseFuelIndex.eSet(reference_NamedIndexContainer_data, dataIndex);
+				// }
+				// }
+				// }
+				//
+				// if (!baseFuelIndices.isEmpty()) {
+				// final List<EObject> existing = MetamodelUtils.getValueAsTypedList(pricingModel, reference_PricingModel_baseFuelPrices);
+				// if (existing != null) {
+				// baseFuelIndices.addAll(existing);
+				// }
+				//
+				// pricingModel.eSet(reference_PricingModel_baseFuelPrices, baseFuelIndices);
+				// }
+				//
+				// // Default rewiring
+				// optmiserSettings.eSet(attribute_OptimiserSettings_rewire, true);
+				//
+				// final List<EObject> settings = Collections.singletonList(optmiserSettings);
+				// parametersModel.eSet(reference_ParamatersModel_settings, settings);
+				//
+				// final EObject cargo1 = factory_CargoModel.create(class_Cargo);
+				// // Leave unset - take default
+				// final EObject cargo2 = factory_CargoModel.create(class_Cargo);
+				// cargo2.eSet(attribute_Cargo_allowRewiring, true);
+				// final EObject cargo3 = factory_CargoModel.create(class_Cargo);
+				// cargo3.eSet(attribute_Cargo_allowRewiring, false);
+				//
+				// final List<EObject> cargoes = Lists.newArrayList(cargo1, cargo2, cargo3);
+				// cargoModel.eSet(reference_CargoModel_cargoes, cargoes);
+
+				// Save to tmp file
+				tmpFile = File.createTempFile("migrationtest", ".xmi");
+
+				final Resource r = loader.getResourceSet().createResource(URI.createFileURI(tmpFile.toString()));
+				r.getContents().add(scenarioModel);
+				r.save(null);
+			}
+
+			// Load v1 metamodels
+			// Load tmp file under v1
+			{
+				final MigrateToV3 migrator = new MigrateToV3();
+
+				final MetamodelLoader loader = migrator.getDestinationMetamodelLoader(null);
+
+				final Resource r = loader.getResourceSet().createResource(URI.createFileURI(tmpFile.toString()));
+
+				r.load(r.getResourceSet().getLoadOptions());
+				final EObject model = r.getContents().get(0);
+
+				// Run migration.
+				migrator.migrateBaseFuelPricing(loader, model);
+
+				r.save(null);
+			}
+
+			// Check output
+			{
+
+				final MetamodelLoader loader = MetamodelVersionsUtil.createV3Loader(null);
+				final Resource r = loader.getResourceSet().createResource(URI.createFileURI(tmpFile.toString()));
+				r.load(null);
+				tmpFile.delete();
+				tmpFile = null;
+
+				final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+				final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
+				final EClass namedObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "NamedObject");
+				final EStructuralFeature attribute_NamedObject_name = MetamodelUtils.getAttribute(namedObject_Class, "name");
+				final EStructuralFeature attribute_UUIDObject_uuid = MetamodelUtils.getAttribute(uuidObject_Class, "uuid");
+
+				final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+				final EFactory factory_ScenarioModel = package_ScenarioModel.getEFactoryInstance();
+				final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+
+				final EPackage package_FleetModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_FleetModel);
+				final EFactory factory_FleetModel = package_FleetModel.getEFactoryInstance();
+				final EClass class_FleetModel = MetamodelUtils.getEClass(package_FleetModel, "FleetModel");
+				final EClass class_BaseFuel = MetamodelUtils.getEClass(package_FleetModel, "BaseFuel");
+
+				final EPackage package_PricingModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
+				final EFactory factory_PricingModel = package_PricingModel.getEFactoryInstance();
+				final EClass class_PricingModel = MetamodelUtils.getEClass(package_PricingModel, "PricingModel");
+				final EClass class_FleetCostModel = MetamodelUtils.getEClass(package_PricingModel, "FleetCostModel");
+				final EClass class_BaseFuelCost = MetamodelUtils.getEClass(package_PricingModel, "BaseFuelCost");
+				final EClass class_BaseFuelIndex = MetamodelUtils.getEClass(package_PricingModel, "BaseFuelIndex");
+				final EClass class_DataIndex = MetamodelUtils.getEClass(package_PricingModel, "DataIndex");
+				final EClass class_IndexPoint = MetamodelUtils.getEClass(package_PricingModel, "IndexPoint");
+				final EClass class_NamedIndexContainer = MetamodelUtils.getEClass(package_PricingModel, "NamedIndexContainer");
+
+				final EReference reference_LNGScenarioModel_pricingModel = MetamodelUtils.getReference(class_LNGScenarioModel, "pricingModel");
+				final EReference reference_LNGScenarioModel_fleetModel = MetamodelUtils.getReference(class_LNGScenarioModel, "fleetModel");
+
+				final EReference reference_FleetModel_baseFuels = MetamodelUtils.getReference(class_FleetModel, "baseFuels");
+
+				final EReference reference_PricingModel_fleetCost = MetamodelUtils.getReference(class_PricingModel, "fleetCost");
+				final EReference reference_PricingModel_baseFuelPrices = MetamodelUtils.getReference(class_PricingModel, "baseFuelPrices");
+				final EReference reference_FleetCostModel_baseFuelPrices = MetamodelUtils.getReference(class_FleetCostModel, "baseFuelPrices");
+
+				final EAttribute attribute_BaseFuelCost_price = MetamodelUtils.getAttribute(class_BaseFuelCost, "price");
+				final EReference reference_BaseFuelCost_index = MetamodelUtils.getReference(class_BaseFuelCost, "index");
+				final EReference reference_BaseFuelCost_fuel = MetamodelUtils.getReference(class_BaseFuelCost, "fuel");
+
+				final EAttribute attribute_IndexPoint_date = MetamodelUtils.getAttribute(class_IndexPoint, "date");
+				final EAttribute attribute_IndexPoint_value = MetamodelUtils.getAttribute(class_IndexPoint, "value");
+
+				final EReference reference_DataIndex_points = MetamodelUtils.getReference(class_DataIndex, "points");
+				final EReference reference_NamedIndexContainer_data = MetamodelUtils.getReference(class_NamedIndexContainer, "data");
+
+				final EObject scenarioModel = r.getContents().get(0);
+				Assert.assertNotNull(scenarioModel);
+
+				final EObject pricingModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_pricingModel);
+				Assert.assertNotNull(pricingModel);
+
+				final EObject fleetCostModel = (EObject) pricingModel.eGet(reference_PricingModel_fleetCost);
+				Assert.assertNotNull(fleetCostModel);
+
+				final List<EObject> baseFuelCosts = MetamodelUtils.getValueAsTypedList(fleetCostModel, reference_FleetCostModel_baseFuelPrices);
+				Assert.assertNotNull(baseFuelCosts);
+				Assert.assertEquals(2, baseFuelCosts.size());
+
+				final List<EObject> baseFuelIndices = MetamodelUtils.getValueAsTypedList(pricingModel, reference_PricingModel_baseFuelPrices);
+				Assert.assertNotNull(baseFuelIndices);
+				Assert.assertEquals(2, baseFuelIndices.size());
+
+				final EObject baseFuelIndex1 = baseFuelIndices.get(0);
+				final EObject baseFuelIndex2 = baseFuelIndices.get(1);
+
+				Assert.assertEquals(baseFuel1, baseFuelIndex1.eGet(attribute_NamedObject_name));
+				Assert.assertEquals(baseFuel2, baseFuelIndex2.eGet(attribute_NamedObject_name));
+
+				final EObject baseFuelCost1 = baseFuelCosts.get(0);
+				final EObject baseFuelCost2 = baseFuelCosts.get(1);
+
+				Assert.assertSame(baseFuelIndex1, baseFuelCost1.eGet(reference_BaseFuelCost_index));
+				Assert.assertSame(baseFuelIndex2, baseFuelCost2.eGet(reference_BaseFuelCost_index));
+
+				final EObject index1 = (EObject) baseFuelIndex1.eGet(reference_NamedIndexContainer_data);
+				Assert.assertNotNull(index1);
+
+				final EObject index2 = (EObject) baseFuelIndex2.eGet(reference_NamedIndexContainer_data);
+				Assert.assertNotNull(index2);
+
+				final List<EObject> points1 = MetamodelUtils.getValueAsTypedList(index1, reference_DataIndex_points);
+				final List<EObject> points2 = MetamodelUtils.getValueAsTypedList(index2, reference_DataIndex_points);
+				Assert.assertNotNull(points1);
+				Assert.assertNotNull(points2);
+
+				Assert.assertEquals(1, points1.size());
+				Assert.assertEquals(1, points2.size());
+
+				final EObject price1 = points1.get(0);
+				final EObject price2 = points2.get(0);
+
+				Assert.assertEquals(Double.valueOf(5.0), price1.eGet(attribute_IndexPoint_value));
+				Assert.assertEquals(Double.valueOf(10.0), price2.eGet(attribute_IndexPoint_value));
 			}
 		} finally {
 			if (tmpFile != null) {

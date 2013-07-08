@@ -5,15 +5,21 @@
 package com.mmxlabs.models.lng.migration.units;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
@@ -69,6 +75,104 @@ public class MigrateToV3 extends AbstractMigrationUnit {
 
 		migrateFOBSales(loader, model);
 		migrateOptimiserSettings(loader, model);
+		migrateBaseFuelPricing(loader, model);
+	}
+
+	protected void migrateBaseFuelPricing(final MetamodelLoader loader, final EObject model) {
+
+		final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+		final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
+		final EClass namedObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "NamedObject");
+		final EStructuralFeature attribute_NamedObject_name = MetamodelUtils.getAttribute(namedObject_Class, "name");
+		final EStructuralFeature attribute_UUIDObject_uuid = MetamodelUtils.getAttribute(uuidObject_Class, "uuid");
+
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+
+		final EPackage package_PricingModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
+		final EFactory factory_PricingModel = package_PricingModel.getEFactoryInstance();
+		final EClass class_PricingModel = MetamodelUtils.getEClass(package_PricingModel, "PricingModel");
+		final EClass class_FleetCostModel = MetamodelUtils.getEClass(package_PricingModel, "FleetCostModel");
+		final EClass class_BaseFuelCost = MetamodelUtils.getEClass(package_PricingModel, "BaseFuelCost");
+		final EClass class_BaseFuelIndex = MetamodelUtils.getEClass(package_PricingModel, "BaseFuelIndex");
+		final EClass class_DataIndex = MetamodelUtils.getEClass(package_PricingModel, "DataIndex");
+		final EClass class_IndexPoint = MetamodelUtils.getEClass(package_PricingModel, "IndexPoint");
+		final EClass class_NamedIndexContainer = MetamodelUtils.getEClass(package_PricingModel, "NamedIndexContainer");
+
+		final EReference reference_LNGScenarioModel_pricingModel = MetamodelUtils.getReference(class_LNGScenarioModel, "pricingModel");
+
+		final EReference reference_PricingModel_fleetCost = MetamodelUtils.getReference(class_PricingModel, "fleetCost");
+		final EReference reference_PricingModel_baseFuelPrices = MetamodelUtils.getReference(class_PricingModel, "baseFuelPrices");
+		final EReference reference_FleetCostModel_baseFuelPrices = MetamodelUtils.getReference(class_FleetCostModel, "baseFuelPrices");
+
+		final EAttribute attribute_BaseFuelCost_price = MetamodelUtils.getAttribute(class_BaseFuelCost, "price");
+		final EReference reference_BaseFuelCost_index = MetamodelUtils.getReference(class_BaseFuelCost, "index");
+		final EReference reference_BaseFuelCost_fuel = MetamodelUtils.getReference(class_BaseFuelCost, "fuel");
+
+		final EAttribute attribute_IndexPoint_date = MetamodelUtils.getAttribute(class_IndexPoint, "date");
+		final EAttribute attribute_IndexPoint_value = MetamodelUtils.getAttribute(class_IndexPoint, "value");
+
+		final EReference reference_DataIndex_points = MetamodelUtils.getReference(class_DataIndex, "points");
+		final EReference reference_NamedIndexContainer_data = MetamodelUtils.getReference(class_NamedIndexContainer, "data");
+
+		final EObject pricingModel = (EObject) model.eGet(reference_LNGScenarioModel_pricingModel);
+
+		final EObject fleetCostModel = (EObject) pricingModel.eGet(reference_PricingModel_fleetCost);
+		final List<EObject> baseFuelCosts = MetamodelUtils.getValueAsTypedList(fleetCostModel, reference_FleetCostModel_baseFuelPrices);
+		
+		final List<EObject> baseFuelIndices = new ArrayList<EObject>(baseFuelCosts.size());
+		final Date indexDate;
+		{
+			final Calendar cal = Calendar.getInstance();
+			cal.clear();
+			cal.set(Calendar.YEAR, 2000);
+			cal.set(Calendar.MONTH, Calendar.JANUARY);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			indexDate = cal.getTime();
+		}
+
+		for (final EObject baseFuelCost : baseFuelCosts) {
+
+			if (!baseFuelCost.eIsSet(reference_BaseFuelCost_index) && baseFuelCost.eIsSet(attribute_BaseFuelCost_price)) {
+				final Number price = (Number) baseFuelCost.eGet(attribute_BaseFuelCost_price);
+				baseFuelCost.eUnset(attribute_BaseFuelCost_price);
+
+				final EObject baseFuelIndex = factory_PricingModel.create(class_BaseFuelIndex);
+				baseFuelIndices.add(baseFuelIndex);
+
+				// Copy name
+				final EObject fuel = (EObject) baseFuelCost.eGet(reference_BaseFuelCost_fuel);
+				if (fuel != null) {
+					baseFuelIndex.eSet(attribute_NamedObject_name, fuel.eGet(attribute_NamedObject_name));
+				}
+				// Generate a new UUID string
+				baseFuelIndex.eSet(attribute_UUIDObject_uuid, EcoreUtil.generateUUID());
+
+				// Crate an empty index
+				baseFuelCost.eSet(reference_BaseFuelCost_index, baseFuelIndex);
+
+				// Copy price across if present
+				final EObject dataIndex = factory_PricingModel.create(class_DataIndex);
+				if (price != null) {
+					final EObject indexPrice = factory_PricingModel.create(class_IndexPoint);
+					indexPrice.eSet(attribute_IndexPoint_date, indexDate);
+					indexPrice.eSet(attribute_IndexPoint_value, price.doubleValue());
+
+					dataIndex.eSet(reference_DataIndex_points, Collections.singletonList(indexPrice));
+					
+					baseFuelIndex.eSet(reference_NamedIndexContainer_data, dataIndex);
+				}
+			}
+		}
+
+		if (!baseFuelIndices.isEmpty()) {
+			final List<EObject> existing = MetamodelUtils.getValueAsTypedList(pricingModel, reference_PricingModel_baseFuelPrices);
+			if (existing != null) {
+				baseFuelIndices.addAll(existing);
+			}
+
+			pricingModel.eSet(reference_PricingModel_baseFuelPrices, baseFuelIndices);
+		}
 	}
 
 	protected void migrateOptimiserSettings(final MetamodelLoader loader, final EObject model) {
