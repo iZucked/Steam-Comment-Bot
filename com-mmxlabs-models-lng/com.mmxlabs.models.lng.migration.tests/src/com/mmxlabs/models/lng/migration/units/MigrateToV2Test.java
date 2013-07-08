@@ -267,7 +267,7 @@ public class MigrateToV2Test {
 			// Check output
 			{
 
-				final MetamodelLoader loader = MetamodelVersionsUtil.createV3Loader(null);
+				final MetamodelLoader loader = MetamodelVersionsUtil.createV2Loader(null);
 				final Resource r = loader.getResourceSet().createResource(URI.createFileURI(tmpFile.toString()));
 				r.load(null);
 				tmpFile.delete();

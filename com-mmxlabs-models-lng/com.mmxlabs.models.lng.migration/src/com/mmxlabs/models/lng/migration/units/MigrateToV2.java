@@ -211,10 +211,13 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 					for (final Setting setting : e.getValue()) {
 						EcoreUtil.replace(setting.getEObject(), setting.getEStructuralFeature(), eObject, oldToNew.get(eObject));
 					}
-					eObject.eUnset(uuidObject_uuid_attribute);
-					eObject.eUnset(namedObject_name_attribute);
 				}
 			}
+
+		}
+		for (final EObject eObject : oldToNew.keySet()) {
+			eObject.eUnset(uuidObject_uuid_attribute);
+			eObject.eUnset(namedObject_name_attribute);
 		}
 
 		return;
