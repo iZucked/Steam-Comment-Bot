@@ -271,6 +271,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOptimiserSettings_ShippingOnly() {
 		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(8);
 	}

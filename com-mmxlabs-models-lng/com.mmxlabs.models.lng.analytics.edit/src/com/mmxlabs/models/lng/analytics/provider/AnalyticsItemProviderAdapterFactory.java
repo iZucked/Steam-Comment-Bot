@@ -652,6 +652,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
 			ArrayList<Object> result = new ArrayList<Object>();
 		   new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
@@ -663,6 +664,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public ResourceLocator getResourceLocator() {
 			return AnalyticsEditPlugin.INSTANCE;
 		}

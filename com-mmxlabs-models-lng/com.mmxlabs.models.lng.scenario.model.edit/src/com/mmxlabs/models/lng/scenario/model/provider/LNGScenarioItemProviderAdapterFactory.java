@@ -149,6 +149,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ComposeableAdapterFactory getRootAdapterFactory() {
 		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
 	}
@@ -159,6 +160,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
 		this.parentAdapterFactory = parentAdapterFactory;
 	}
@@ -215,6 +217,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
 		return childCreationExtenderManager.getNewChildDescriptors(object, editingDomain);
 	}
@@ -224,6 +227,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ResourceLocator getResourceLocator() {
 		return childCreationExtenderManager;
 	}
@@ -234,6 +238,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void addListener(INotifyChangedListener notifyChangedListener) {
 		changeNotifier.addListener(notifyChangedListener);
 	}
@@ -244,6 +249,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void removeListener(INotifyChangedListener notifyChangedListener) {
 		changeNotifier.removeListener(notifyChangedListener);
 	}
@@ -254,6 +260,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void fireNotifyChanged(Notification notification) {
 		changeNotifier.fireNotifyChanged(notification);
 
@@ -268,6 +275,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void dispose() {
 		if (lngScenarioModelItemProvider != null) lngScenarioModelItemProvider.dispose();
 		if (lngPortfolioModelItemProvider != null) lngPortfolioModelItemProvider.dispose();
@@ -349,6 +357,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
 			ArrayList<Object> result = new ArrayList<Object>();
 			new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
@@ -360,6 +369,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public ResourceLocator getResourceLocator() {
 			return LNGScenarioEditPlugin.INSTANCE;
 		}
@@ -441,6 +451,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain) {
 			ArrayList<Object> result = new ArrayList<Object>();
 			new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
@@ -452,6 +463,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Override
 		public ResourceLocator getResourceLocator() {
 			return LNGScenarioEditPlugin.INSTANCE;
 		}

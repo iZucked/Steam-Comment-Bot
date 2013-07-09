@@ -425,6 +425,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isGenerateCharterOuts() {
 		return generateCharterOuts;
 	}
@@ -435,6 +436,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGenerateCharterOuts(boolean newGenerateCharterOuts) {
 		boolean oldGenerateCharterOuts = generateCharterOuts;
 		generateCharterOuts = newGenerateCharterOuts;
@@ -448,6 +450,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isShippingOnly() {
 		return shippingOnly;
 	}
@@ -458,6 +461,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingOnly(boolean newShippingOnly) {
 		boolean oldShippingOnly = shippingOnly;
 		shippingOnly = newShippingOnly;
