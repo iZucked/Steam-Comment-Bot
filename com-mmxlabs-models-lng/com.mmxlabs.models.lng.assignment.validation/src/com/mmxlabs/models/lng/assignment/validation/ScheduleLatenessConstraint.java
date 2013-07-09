@@ -28,6 +28,12 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
+/**
+ * A constraint to problem EMF level support for the TimeSortConstraintChecker to avoid getting scenarios which do not optimise when there is certain kinds of lateness.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 
 	@Override
