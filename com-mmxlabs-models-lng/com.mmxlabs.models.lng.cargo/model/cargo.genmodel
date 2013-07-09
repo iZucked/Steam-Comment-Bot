@@ -23,16 +23,25 @@
       <genOperations ecoreOperation="cargo.ecore#//Cargo/getSortedSlots"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//Slot">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/contract"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The contract, if any, for this deal"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/contract"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/port"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStart"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStartTime"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSize"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/duration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/minQuantity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/maxQuantity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/optional"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/priceExpression"/>
+      <genFeatures createChild="false" propertyDescription="Arrival window start date"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStart"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="Arrival window start time (local time)"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowStartTime"/>
+      <genFeatures createChild="false" propertyDescription="The length of the arrival window in hours"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowSize"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="The duration of the slot in hours"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/duration"/>
+      <genFeatures createChild="false" propertyDescription="Minimum quantity in m3"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/minQuantity"/>
+      <genFeatures createChild="false" propertyDescription="Minimum quantity in m3"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/maxQuantity"/>
+      <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/optional"/>
+      <genFeatures createChild="false" propertyDescription="The price expression, if any, for this deal"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/priceExpression"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/cargo"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortDuration"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractMinQuantity"/>
@@ -45,11 +54,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/cargoCV"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/arriveCold"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/DESPurchase"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//LoadSlot/transferFrom"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrPortCV"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//DischargeSlot">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/FOBSale"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//DischargeSlot/PurchaseDeliveryType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//DischargeSlot/transferTo"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//CargoModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
