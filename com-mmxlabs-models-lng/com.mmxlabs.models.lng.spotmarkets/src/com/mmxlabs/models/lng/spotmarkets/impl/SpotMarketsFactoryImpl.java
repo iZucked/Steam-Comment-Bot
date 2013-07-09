@@ -39,7 +39,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 */
 	public static SpotMarketsFactory init() {
 		try {
-			SpotMarketsFactory theSpotMarketsFactory = (SpotMarketsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/spotmarkets/1/"); 
+			SpotMarketsFactory theSpotMarketsFactory = (SpotMarketsFactory)EPackage.Registry.INSTANCE.getEFactory(SpotMarketsPackage.eNS_URI);
 			if (theSpotMarketsFactory != null) {
 				return theSpotMarketsFactory;
 			}

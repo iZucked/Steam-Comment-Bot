@@ -20,6 +20,8 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
+import com.mmxlabs.models.lng.fleet.VesselType;
+import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -92,6 +94,26 @@ public class FleetModelImporter implements ISubmodelImporter {
 	@Override
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
+
+		// Create Special groups
+		if (fleetModel != null) {
+			for (final VesselType type : VesselType.values()) {
+				boolean found = false;
+				for (final VesselTypeGroup g : fleetModel.getSpecialVesselGroups()) {
+					if (g.getVesselType().equals(type)) {
+						found = true;
+						break;
+					}
+				}
+				if (found == false) {
+					final VesselTypeGroup g = FleetFactory.eINSTANCE.createVesselTypeGroup();
+					g.setName("All " + type.getName().replaceAll("_", " ") + " Vessels");
+					g.setVesselType(type);
+					fleetModel.getSpecialVesselGroups().add(g);
+					context.registerNamedObject(g);
+				}
+			}
+		}
 
 		if (inputs.containsKey(VESSELS_KEY))
 			fleetModel.getVessels().addAll((Collection<? extends Vessel>) vesselImporter.importObjects(FleetPackage.eINSTANCE.getVessel(), inputs.get(VESSELS_KEY), context));

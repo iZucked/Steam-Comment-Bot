@@ -12,11 +12,15 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -39,7 +43,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 */
 	public static PricingFactory init() {
 		try {
-			PricingFactory thePricingFactory = (PricingFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/pricing/1/"); 
+			PricingFactory thePricingFactory = (PricingFactory)EPackage.Registry.INSTANCE.getEFactory(PricingPackage.eNS_URI);
 			if (thePricingFactory != null) {
 				return thePricingFactory;
 			}
@@ -78,6 +82,10 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORT_COST: return createPortCost();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
+			case PricingPackage.COMMODITY_INDEX: return createCommodityIndex();
+			case PricingPackage.CHARTER_INDEX: return createCharterIndex();
+			case PricingPackage.BASE_FUEL_INDEX: return createBaseFuelIndex();
+			case PricingPackage.NAMED_INDEX_CONTAINER: return createNamedIndexContainer();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -181,6 +189,50 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public CooldownPrice createCooldownPrice() {
 		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
 		return cooldownPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CommodityIndex createCommodityIndex() {
+		CommodityIndexImpl commodityIndex = new CommodityIndexImpl();
+		return commodityIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterIndex createCharterIndex() {
+		CharterIndexImpl charterIndex = new CharterIndexImpl();
+		return charterIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuelIndex createBaseFuelIndex() {
+		BaseFuelIndexImpl baseFuelIndex = new BaseFuelIndexImpl();
+		return baseFuelIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <Value> NamedIndexContainer<Value> createNamedIndexContainer() {
+		NamedIndexContainerImpl<Value> namedIndexContainer = new NamedIndexContainerImpl<Value>();
+		return namedIndexContainer;
 	}
 
 	/**

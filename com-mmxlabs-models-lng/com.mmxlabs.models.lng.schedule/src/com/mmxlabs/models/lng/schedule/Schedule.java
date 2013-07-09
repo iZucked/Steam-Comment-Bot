@@ -18,6 +18,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSequences <em>Sequences</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getMarketAllocations <em>Market Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnusedElements <em>Unused Elements</em>}</li>
@@ -60,6 +61,23 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	EList<CargoAllocation> getCargoAllocations();
+
+	/**
+	 * Returns the value of the '<em><b>Market Allocations</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.MarketAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Market Allocations</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Market Allocations</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_MarketAllocations()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<MarketAllocation> getMarketAllocations();
 
 	/**
 	 * Returns the value of the '<em><b>Slot Allocations</b></em>' containment reference list.

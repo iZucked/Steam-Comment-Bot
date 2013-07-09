@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.scenario.model.impl;
 
+import com.mmxlabs.models.lng.scenario.model.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -32,7 +33,7 @@ public class LNGScenarioFactoryImpl extends EFactoryImpl implements LNGScenarioF
 	 */
 	public static LNGScenarioFactory init() {
 		try {
-			LNGScenarioFactory theLNGScenarioFactory = (LNGScenarioFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/scenario/1/"); 
+			LNGScenarioFactory theLNGScenarioFactory = (LNGScenarioFactory)EPackage.Registry.INSTANCE.getEFactory(LNGScenarioPackage.eNS_URI);
 			if (theLNGScenarioFactory != null) {
 				return theLNGScenarioFactory;
 			}

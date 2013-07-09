@@ -150,7 +150,7 @@
           factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
           id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.CharterCostModel"
-          referenceEClass="com.mmxlabs.models.lng.pricing.Index">
+          referenceEClass="com.mmxlabs.models.lng.pricing.CharterIndex">
     </valueProvider>
  </extension>
  <extension
@@ -168,4 +168,16 @@
           id="com.mmxlabs.models.lng.spotmarkets.editor.commands.SpotAvailabilityNameUpdatingCommandProvider">
     </ModelCommandProvider>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated spotmarkets -->
+      <editor
+            id="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditorID"
+            name="%_UI_SpotMarketsEditor_label"
+            icon="icons/full/obj16/SpotMarketsModelFile.gif"
+            extensions="spotmarkets"
+            class="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditor"
+            contributorClass="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>

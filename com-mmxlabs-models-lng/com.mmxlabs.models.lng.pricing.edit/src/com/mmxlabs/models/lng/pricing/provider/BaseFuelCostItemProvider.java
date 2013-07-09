@@ -60,6 +60,7 @@ public class BaseFuelCostItemProvider
 
 			addFuelPropertyDescriptor(object);
 			addPricePropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -104,6 +105,29 @@ public class BaseFuelCostItemProvider
 				 false,
 				 true,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Index feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BaseFuelCost_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BaseFuelCost_index_feature", "_UI_BaseFuelCost_type"),
+				 PricingPackage.Literals.BASE_FUEL_COST__INDEX,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -31,6 +32,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getCargoModel <em>Cargo Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getAssignmentModel <em>Assignment Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getScheduleModel <em>Schedule Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getParameters <em>Parameters</em>}</li>
  * </ul>
  * </p>
  *
@@ -76,6 +78,17 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @ordered
 	 */
 	protected ScheduleModel scheduleModel;
+
+	/**
+	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getParameters()
+	 * @generated
+	 * @ordered
+	 */
+	protected OptimiserSettings parameters;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -362,6 +375,76 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OptimiserSettings getParameters() {
+		if (parameters != null && parameters.eIsProxy()) {
+			InternalEObject oldParameters = (InternalEObject)parameters;
+			parameters = (OptimiserSettings)eResolveProxy(oldParameters);
+			if (parameters != oldParameters) {
+				InternalEObject newParameters = (InternalEObject)parameters;
+				NotificationChain msgs = oldParameters.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS, null, null);
+				if (newParameters.eInternalContainer() == null) {
+					msgs = newParameters.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS, oldParameters, parameters));
+			}
+		}
+		return parameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OptimiserSettings basicGetParameters() {
+		return parameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetParameters(OptimiserSettings newParameters, NotificationChain msgs) {
+		OptimiserSettings oldParameters = parameters;
+		parameters = newParameters;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS, oldParameters, newParameters);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setParameters(OptimiserSettings newParameters) {
+		if (newParameters != parameters) {
+			NotificationChain msgs = null;
+			if (parameters != null)
+				msgs = ((InternalEObject)parameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS, null, msgs);
+			if (newParameters != null)
+				msgs = ((InternalEObject)newParameters).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS, null, msgs);
+			msgs = basicSetParameters(newParameters, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS, newParameters, newParameters));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -376,6 +459,8 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return basicSetAssignmentModel(null, msgs);
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				return basicSetScheduleModel(null, msgs);
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
+				return basicSetParameters(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -400,6 +485,9 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				if (resolve) return getScheduleModel();
 				return basicGetScheduleModel();
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
+				if (resolve) return getParameters();
+				return basicGetParameters();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -423,6 +511,9 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)newValue);
+				return;
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
+				setParameters((OptimiserSettings)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -448,6 +539,9 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)null);
 				return;
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
+				setParameters((OptimiserSettings)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -468,6 +562,8 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return assignmentModel != null;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				return scheduleModel != null;
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
+				return parameters != null;
 		}
 		return super.eIsSet(featureID);
 	}

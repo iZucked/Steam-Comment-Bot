@@ -80,6 +80,8 @@ public class CargoEditorMenuHelper {
 
 	private final LNGScenarioModel scenarioModel;
 
+	private static final boolean enableSTSMenus = true;
+
 	/**
 	 * @since 4.0
 	 */
@@ -262,7 +264,7 @@ public class CargoEditorMenuHelper {
 			if (cargo.getSlots().size() > 2) {
 				newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
 			}
-			newMenuManager.add(new EditAction("Edit Cargo", cargo));
+			// newMenuManager.add(new EditAction("Edit Cargo", cargo));
 		}
 	}
 
@@ -287,15 +289,17 @@ public class CargoEditorMenuHelper {
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 				}
 			}
-			for (final VesselAvailability vesselAvailability : fleetModel.getVesselAvailabilities()) {
-				final Vessel vessel = vesselAvailability.getVessel();
-				if (vessel != elementAssignment.getAssignment()) {
-					reassignMenuManager.add(new AssignAction(vessel));
+			if (elementAssignment != null) {
+				for (final VesselAvailability vesselAvailability : fleetModel.getVesselAvailabilities()) {
+					final Vessel vessel = vesselAvailability.getVessel();
+					if (vessel != elementAssignment.getAssignment()) {
+						reassignMenuManager.add(new AssignAction(vessel));
+					}
 				}
 			}
 		}
 
-		if (elementAssignment.getAssignment() != null) {
+		if (elementAssignment != null && elementAssignment.getAssignment() != null) {
 			if (elementAssignment.isLocked()) {
 				final Action action = new Action("Unlock") {
 					@Override
@@ -669,14 +673,16 @@ public class CargoEditorMenuHelper {
 				menuManager.add(new CreateSlotAction("Discharge", source, null, false, null));
 				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, null));
 
-				if (loadSlot.getTransferFrom() == null) {
-					if (!transferPorts.isEmpty()) {
-						final MenuManager subMenu = new MenuManager("Ship to Ship", null);
+				if (enableSTSMenus ) {
+					if (loadSlot.getTransferFrom() == null) {
+						if (!transferPorts.isEmpty()) {
+							final MenuManager subMenu = new MenuManager("Ship to Ship", null);
 
-						for (final Port p : transferPorts) {
-							subMenu.add(new CreateSlotAction(p.getName(), source, null, false, p));
+							for (final Port p : transferPorts) {
+								subMenu.add(new CreateSlotAction(p.getName(), source, null, false, p));
+							}
+							menuManager.add(subMenu);
 						}
-						menuManager.add(subMenu);
 					}
 				}
 			}
@@ -686,15 +692,17 @@ public class CargoEditorMenuHelper {
 			if (!dischargeSlot.isFOBSale()) {
 				menuManager.add(new CreateSlotAction("DES Purchase", source, null, true, null));
 			}
+			if (enableSTSMenus) {
 
-			if (dischargeSlot.getTransferTo() == null) {
-				if (!transferPorts.isEmpty()) {
-					final MenuManager subMenu = new MenuManager("Ship to Ship", null);
+				if (dischargeSlot.getTransferTo() == null) {
+					if (!transferPorts.isEmpty()) {
+						final MenuManager subMenu = new MenuManager("Ship to Ship", null);
 
-					for (final Port p : transferPorts) {
-						subMenu.add(new CreateSlotAction(p.getName(), source, null, false, p));
+						for (final Port p : transferPorts) {
+							subMenu.add(new CreateSlotAction(p.getName(), source, null, false, p));
+						}
+						menuManager.add(subMenu);
 					}
-					menuManager.add(subMenu);
 				}
 			}
 		}

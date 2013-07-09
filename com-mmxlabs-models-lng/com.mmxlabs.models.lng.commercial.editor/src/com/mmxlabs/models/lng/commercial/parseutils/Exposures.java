@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -193,7 +194,9 @@ public class Exposures {
 					switch (a) {
 					case '*':
 						return true;
-					case '/':
+					case '%':
+						return b == '/' || b =='+' || b == '-';
+ 					case '/':
 						return b == '+' || b == '-';
 					case '+':
 						return b == '-';
@@ -205,7 +208,7 @@ public class Exposures {
 
 				@Override
 				public boolean isInfixOperator(final char operator) {
-					return operator == '*' || operator == '/' || operator == '+' || operator == '-';
+					return operator == '*' || operator == '/' || operator == '+' || operator == '-' || operator == '%';
 				}
 
 			});
@@ -247,30 +250,42 @@ public class Exposures {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static double getExposureCoefficient(final Node node, final Index index) {
+	private static double getExposureCoefficient(final Node node, final CommodityIndex index) {
 		final String indexToken = index.getName();
+		final String token = node.token;
 
-		if (node.token.equals("+")) {
+		// addition: add coefficients of summands
+		if (token.equals("+")) {
 			return getExposureCoefficient(node.children[0], index) + getExposureCoefficient(node.children[1], index);
-		} else if (node.token.equals("*")) {
+		} 
+		// multiplication: check for index token and return the other value if appropriate
+		else if (token.equals("*") || token.equals("%")) {
 			if (node.children[0].children.length > 0 || node.children[1].children.length > 0) {
 				throw new RuntimeException("Expression too complex");
 			}
 
 			for (int i = 0; i < 2; i++) {
 				if (node.children[i].token.equals(indexToken)) {
-					return Double.parseDouble(node.children[1 - i].token);
+					// divide by 100 for % symbol
+					double multiplier = token.equals("%") ? 0.01 : 1;
+					return multiplier * Double.parseDouble(node.children[1 - i].token);
 				}
 			}
 
-		} else if (node.token.equals("-")) {
+		} 
+		// subtraction: subtract coefficients
+		else if (node.token.equals("-")) {
 			return getExposureCoefficient(node.children[0], index) - getExposureCoefficient(node.children[1], index);
-		} else if (node.token.equals("/")) {
+		}
+		// division: check for index token and return reciprocal of other parameter
+		else if (node.token.equals("/")) {
 			if (!node.children[0].token.equals(indexToken) || node.children[1].children.length > 0) {
 				throw new RuntimeException("Expression too complex");
 			}
 			return 1 / Double.parseDouble(node.children[1].token);
-		} else if (node.token.equals(indexToken)) {
+		}
+		// index token alone has coefficient of 1
+		else if (node.token.equals(indexToken)) {
 			return 1;
 		}
 
@@ -278,7 +293,10 @@ public class Exposures {
 
 	}
 
-	public static double getExposureCoefficient(final String priceExpression, final Index<?> index) {
+	/**
+	 * @since 5.0
+	 */
+	public static double getExposureCoefficient(final String priceExpression, final CommodityIndex index) {
 		final RawTreeParser parser = new RawTreeParser();
 		try {
 			final IExpression<Node> parsed = parser.parse(priceExpression);
@@ -294,8 +312,9 @@ public class Exposures {
 	 * @param contract
 	 * @param index
 	 * @return
+	 * @since 5.0
 	 */
-	public static double getExposureCoefficient(final Slot slot, final Index<?> index) {
+	public static double getExposureCoefficient(final Slot slot, final CommodityIndex index) {
 		String priceExpression = null;
 		if (slot.isSetPriceExpression()) {
 			priceExpression = slot.getPriceExpression();
@@ -328,8 +347,9 @@ public class Exposures {
 	 * @param schedule
 	 * @param index
 	 * @return
+	 * @since 5.0
 	 */
-	public static Map<MonthYear, Double> getExposuresByMonth(final Schedule schedule, final Index<?> index) {
+	public static Map<MonthYear, Double> getExposuresByMonth(final Schedule schedule, final CommodityIndex index) {
 		final CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();
 
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {

@@ -115,6 +115,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createCargoAllocationAdapter();
 			}
 			@Override
+			public Adapter caseMarketAllocation(MarketAllocation object) {
+				return createMarketAllocationAdapter();
+			}
+			@Override
 			public Adapter caseSlotAllocation(SlotAllocation object) {
 				return createSlotAllocationAdapter();
 			}
@@ -410,6 +414,21 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCargoAllocationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.MarketAllocation <em>Market Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation
+	 * @generated
+	 */
+	public Adapter createMarketAllocationAdapter() {
 		return null;
 	}
 

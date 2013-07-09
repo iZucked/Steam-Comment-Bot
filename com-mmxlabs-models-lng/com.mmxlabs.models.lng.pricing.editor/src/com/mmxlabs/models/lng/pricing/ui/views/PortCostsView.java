@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -27,9 +28,12 @@ public class PortCostsView extends ScenarioTableViewerView<PortCostPane> {
 
 	@Override
 	protected void initViewerPane(final PortCostPane pane) {
+	EditingDomain domain = getEditingDomain();
+	if (domain != null) {
 		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(), PricingPackage.eINSTANCE.getPricingModel_PortCosts() }), getAdapterFactory(),
-				getEditingDomain().getCommandStack());
+				domain.getCommandStack());
 		pane.getViewer().setInput(getRootObject());
+		}
 	}
 
 	@Override

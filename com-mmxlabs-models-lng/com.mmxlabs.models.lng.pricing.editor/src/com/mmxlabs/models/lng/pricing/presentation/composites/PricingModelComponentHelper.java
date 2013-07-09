@@ -9,10 +9,17 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -70,6 +77,7 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 		add_routeCostsEditor(detailComposite, topClass);
 		add_portCostsEditor(detailComposite, topClass);
 		add_cooldownPricesEditor(detailComposite, topClass);
+		add_baseFuelPricesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the commodityIndices feature on PricingModel
@@ -119,5 +127,14 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cooldownPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES));
+	}
+
+	/**
+	 * Create the editor for the baseFuelPrices feature on PricingModel
+	 *
+	 * @generated
+	 */
+	protected void add_baseFuelPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES));
 	}
 }

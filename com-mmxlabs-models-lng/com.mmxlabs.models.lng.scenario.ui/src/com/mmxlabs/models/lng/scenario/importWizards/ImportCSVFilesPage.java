@@ -258,8 +258,6 @@ public class ImportCSVFilesPage extends WizardPage {
 			scenarioModel.setCommercialModel((CommercialModel) subModel);
 		} else if (subModel instanceof SpotMarketsModel) {
 			scenarioModel.setSpotMarketsModel((SpotMarketsModel) subModel);
-		} else if (subModel instanceof ParametersModel) {
-			scenarioModel.setParametersModel((ParametersModel) subModel);
 		} else if (subModel instanceof AnalyticsModel) {
 			scenarioModel.setAnalyticsModel((AnalyticsModel) subModel);
 		} else if (subModel instanceof ScenarioFleetModel) {

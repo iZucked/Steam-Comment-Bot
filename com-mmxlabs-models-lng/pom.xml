@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.lng</groupId>
 	<artifactId>com.mmxlabs.models.lng.parent</artifactId>
-	<version>4.0.2-SNAPSHOT</version>
+	<version>5.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -28,6 +28,8 @@
 
 	<modules>
 		<module>target-definition</module>
+		<module>com.mmxlabs.models.lng.types</module>
+		<module>com.mmxlabs.models.lng.types.edit</module>
 		<module>com.mmxlabs.models.lng.ui</module>
 		<module>com.mmxlabs.models.lng.cargo</module>
 		<module>com.mmxlabs.models.lng.cargo.edit</module>
@@ -90,7 +92,7 @@
 		<module>com.mmxlabs.models.lng.scenario.ui</module>
 
 		<module>com.mmxlabs.models.lng.migration</module>
-		<!-- <module>com.mmxlabs.models.lng.migration.tests</module> -->
+		<module>com.mmxlabs.models.lng.migration.tests</module>
 
 		<module>com.mmxlabs.models.lng.feature</module>
 		<module>com.mmxlabs.models.lng.p2</module>

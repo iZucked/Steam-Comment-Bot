@@ -18,6 +18,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -125,18 +126,19 @@ public class PriceExpressionUtils {
 			final MMXRootObject rootObject = extraValidationContext.getRootObject();
 
 			if (rootObject instanceof LNGScenarioModel) {
-				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final SeriesParser indices = new SeriesParser();
 
 				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
-				for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+				for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
+					final Index<Double> index = commodityIndex.getData();
 					if (index instanceof DataIndex) {
 						// For this validation, we do not need real times or values
 						final int[] times = new int[1];
 						final Number[] nums = new Number[1];
-						indices.addSeriesData(index.getName(), times, nums);
+						indices.addSeriesData(commodityIndex.getName(), times, nums);
 					} else if (index instanceof DerivedIndex) {
-						indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+						indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
 					}
 				}
 				return indices;

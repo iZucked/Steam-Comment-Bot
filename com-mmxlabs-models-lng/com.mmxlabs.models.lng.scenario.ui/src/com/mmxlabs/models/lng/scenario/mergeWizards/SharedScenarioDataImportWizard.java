@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.scenario.mergeWizards;
 
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -25,8 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.mergeWizards.SharedDataScenariosSelectionPage.DataOptions;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.merge.EMFModelMergeTools;
@@ -230,25 +231,43 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			// commandProviderAwareEditingDomain.setCommandProvidersDisabled(true);
 
 			commandProviderAwareEditingDomain.setAdaptersEnabled(false);
+			commandProviderAwareEditingDomain.startBatchCommand();
 		}
-
-		final boolean includePortData = dataOptions.contains(DataOptions.PortData);
-		final boolean includeFleetData = dataOptions.contains(DataOptions.FleetDatabase);
 
 		try {
 			final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();
 			final LNGScenarioModel copiedModel = EcoreUtil.copy(sourceScenarioModel);
 
-			if (includePortData) {
+			if (dataOptions.contains(DataOptions.PortData)) {
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Ports()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Routes()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()));
 			}
 
-			if (includeFleetData) {
+			if (dataOptions.contains(DataOptions.FleetDatabase)) {
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselGroups()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels()));
+			}
+
+			if (dataOptions.contains(DataOptions.CommercialData)) {
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+						CommercialPackage.eINSTANCE.getCommercialModel_Entities()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+						CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+						CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()));
+				
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+						CommercialPackage.eINSTANCE.getCommercialModel_ShippingEntity()));
+			}
+
+			if (dataOptions.contains(DataOptions.PricingData)) {
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPricingModel(), destScenarioModel.getPricingModel(),
+						PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPricingModel(), destScenarioModel.getPricingModel(),
+						PricingPackage.eINSTANCE.getPricingModel_CharterIndices()));
 			}
 
 			// Fix up the descriptor data references to point to destination objects in the cases where the source is not being transferred across
@@ -268,6 +287,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			if (destEditingDomain instanceof CommandProviderAwareEditingDomain) {
 				final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) destEditingDomain;
 				// commandProviderAwareEditingDomain.setCommandProvidersDisabled(false);
+				commandProviderAwareEditingDomain.endBatchCommand();
 				commandProviderAwareEditingDomain.setAdaptersEnabled(true);
 			}
 		}

@@ -114,6 +114,46 @@ public interface PricingFactory extends EFactory {
 	CooldownPrice createCooldownPrice();
 
 	/**
+	 * Returns a new object of class '<em>Commodity Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Commodity Index</em>'.
+	 * @generated
+	 */
+	CommodityIndex createCommodityIndex();
+
+	/**
+	 * Returns a new object of class '<em>Charter Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Index</em>'.
+	 * @generated
+	 */
+	CharterIndex createCharterIndex();
+
+	/**
+	 * Returns a new object of class '<em>Base Fuel Index</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Base Fuel Index</em>'.
+	 * @generated
+	 */
+	BaseFuelIndex createBaseFuelIndex();
+
+	/**
+	 * Returns a new object of class '<em>Named Index Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Named Index Container</em>'.
+	 * @generated
+	 */
+	<Value> NamedIndexContainer<Value> createNamedIndexContainer();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

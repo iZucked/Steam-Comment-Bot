@@ -91,15 +91,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	protected boolean allowRewiring = ALLOW_REWIRING_EDEFAULT;
 
 	/**
-	 * This is true if the Allow Rewiring attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean allowRewiringESet;
-
-	/**
 	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -179,33 +170,8 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	public void setAllowRewiring(boolean newAllowRewiring) {
 		boolean oldAllowRewiring = allowRewiring;
 		allowRewiring = newAllowRewiring;
-		boolean oldAllowRewiringESet = allowRewiringESet;
-		allowRewiringESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__ALLOW_REWIRING, oldAllowRewiring, allowRewiring, !oldAllowRewiringESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetAllowRewiring() {
-		boolean oldAllowRewiring = allowRewiring;
-		boolean oldAllowRewiringESet = allowRewiringESet;
-		allowRewiring = ALLOW_REWIRING_EDEFAULT;
-		allowRewiringESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.CARGO__ALLOW_REWIRING, oldAllowRewiring, ALLOW_REWIRING_EDEFAULT, oldAllowRewiringESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetAllowRewiring() {
-		return allowRewiringESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__ALLOW_REWIRING, oldAllowRewiring, allowRewiring));
 	}
 
 	/**
@@ -354,7 +320,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				setName(NAME_EDEFAULT);
 				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
-				unsetAllowRewiring();
+				setAllowRewiring(ALLOW_REWIRING_EDEFAULT);
 				return;
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
@@ -377,7 +343,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 			case CargoPackage.CARGO__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case CargoPackage.CARGO__ALLOW_REWIRING:
-				return isSetAllowRewiring();
+				return allowRewiring != ALLOW_REWIRING_EDEFAULT;
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
 			case CargoPackage.CARGO__SLOTS:
@@ -447,7 +413,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", allowRewiring: ");
-		if (allowRewiringESet) result.append(allowRewiring); else result.append("<unset>");
+		result.append(allowRewiring);
 		result.append(')');
 		return result.toString();
 	}

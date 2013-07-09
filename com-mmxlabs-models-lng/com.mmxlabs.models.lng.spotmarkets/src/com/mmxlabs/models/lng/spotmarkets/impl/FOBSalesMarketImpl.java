@@ -4,13 +4,17 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.APortSet;
+import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,6 +24,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl#getLoadPort <em>Load Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl#getOriginPorts <em>Origin Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -35,6 +40,17 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	 * @ordered
 	 */
 	protected Port loadPort;
+
+	/**
+	 * The cached value of the '{@link #getOriginPorts() <em>Origin Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getOriginPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet<Port>> originPorts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -95,6 +111,19 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<APortSet<Port>> getOriginPorts() {
+		if (originPorts == null) {
+			originPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS);
+		}
+		return originPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -104,6 +133,8 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
 				if (resolve) return getLoadPort();
 				return basicGetLoadPort();
+			case SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS:
+				return getOriginPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -113,11 +144,16 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
 				setLoadPort((Port)newValue);
+				return;
+			case SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS:
+				getOriginPorts().clear();
+				getOriginPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -134,6 +170,9 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
 				setLoadPort((Port)null);
 				return;
+			case SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS:
+				getOriginPorts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -148,6 +187,8 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 		switch (featureID) {
 			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
 				return loadPort != null;
+			case SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS:
+				return originPorts != null && !originPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

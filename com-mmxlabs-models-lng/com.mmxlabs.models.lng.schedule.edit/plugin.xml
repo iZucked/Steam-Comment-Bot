@@ -28,4 +28,11 @@
                org.eclipse.emf.edit.provider.IItemPropertySource"/>
    </extension>
 
+   <extension point="org.eclipse.emf.edit.childCreationExtenders">
+      <!-- @generated schedule -->
+      <extender
+            uri="http://www.mmxlabs.com/models/lng/commercial/1/"
+            class="com.mmxlabs.models.lng.schedule.provider.ScheduleItemProviderAdapterFactory$CommercialChildCreationExtender"/>
+   </extension>
+
 </plugin>
