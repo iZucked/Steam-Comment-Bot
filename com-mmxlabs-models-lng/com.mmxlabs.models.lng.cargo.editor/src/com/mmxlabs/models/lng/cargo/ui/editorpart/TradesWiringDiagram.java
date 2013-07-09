@@ -276,7 +276,10 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		// detect whether we have clicked on a terminal
 		final Rectangle ca = getCanvasClientArea();
-
+		if (ca == null) {
+			return;
+		}
+		
 		// determine which row ( if any )
 		int terminal = 0;
 		final List<Float> positions = getTerminalPositions(rootData);
