@@ -265,6 +265,7 @@ public class DetailCompositeDialog extends Dialog {
 	 * Construct a new detail composite dialog, with style.
 	 * 
 	 * @param style - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
+	 * @since 5.0
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, int style) {
 		this(parentShell, commandHandler);
