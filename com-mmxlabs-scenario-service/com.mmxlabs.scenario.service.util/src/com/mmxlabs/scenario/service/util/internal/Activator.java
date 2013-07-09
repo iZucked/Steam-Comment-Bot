@@ -6,9 +6,6 @@ package com.mmxlabs.scenario.service.util.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
-
-import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 
 /**
  * The activator class controls the plug-in life cycle
