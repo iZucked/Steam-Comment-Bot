@@ -166,6 +166,36 @@
             </constraint>
          </constraints>
       </constraintProvider>
+            <category
+            id="com.mmxlabs.models.lng.assignment.validation.optimisation"
+            mandatory="true"
+            name="Assignment Validation (Optimisation)">
+      </category>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/assignment/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.assignment.validation.optimisation">
+            <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.ScheduleLatenessConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.ScheduleLatenessConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Schedule Latenss Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="AssignmentModel">
+               </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
    </extension>
 
 </plugin>
