@@ -163,6 +163,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<String> getModelURIs() {
 		if (modelURIs == null) {
 			modelURIs = new EDataTypeUniqueEList<String>(String.class, this, ManifestPackage.MANIFEST__MODEL_UR_IS);
@@ -175,6 +176,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<String> getDependencyUUIDs() {
 		if (dependencyUUIDs == null) {
 			dependencyUUIDs = new EDataTypeUniqueEList<String>(String.class, this, ManifestPackage.MANIFEST__DEPENDENCY_UUI_DS);
@@ -187,6 +189,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUUID() {
 		return uuid;
 	}
@@ -196,6 +199,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUUID(String newUUID) {
 		String oldUUID = uuid;
 		uuid = newUUID;
@@ -208,6 +212,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getScenarioType() {
 		return scenarioType;
 	}
@@ -217,6 +222,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScenarioType(String newScenarioType) {
 		String oldScenarioType = scenarioType;
 		scenarioType = newScenarioType;
@@ -230,6 +236,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getScenarioVersion() {
 		return scenarioVersion;
 	}
@@ -240,6 +247,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScenarioVersion(int newScenarioVersion) {
 		int oldScenarioVersion = scenarioVersion;
 		scenarioVersion = newScenarioVersion;
@@ -253,6 +261,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVersionContext() {
 		return versionContext;
 	}
@@ -263,6 +272,7 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersionContext(String newVersionContext) {
 		String oldVersionContext = versionContext;
 		versionContext = newVersionContext;

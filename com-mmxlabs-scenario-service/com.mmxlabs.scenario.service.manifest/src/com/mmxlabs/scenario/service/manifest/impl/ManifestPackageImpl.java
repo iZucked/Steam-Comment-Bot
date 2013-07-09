@@ -93,6 +93,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getManifest() {
 		return manifestEClass;
 	}
@@ -102,6 +103,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getManifest_ModelURIs() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(0);
 	}
@@ -111,6 +113,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getManifest_DependencyUUIDs() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(1);
 	}
@@ -120,6 +123,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getManifest_UUID() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(2);
 	}
@@ -129,6 +133,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getManifest_ScenarioType() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(3);
 	}
@@ -139,6 +144,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getManifest_ScenarioVersion() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(4);
 	}
@@ -149,6 +155,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getManifest_VersionContext() {
 		return (EAttribute)manifestEClass.getEStructuralFeatures().get(5);
 	}
@@ -158,6 +165,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ManifestFactory getManifestFactory() {
 		return (ManifestFactory)getEFactoryInstance();
 	}

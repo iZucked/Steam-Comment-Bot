@@ -69,6 +69,7 @@ public class ManifestFactoryImpl extends EFactoryImpl implements ManifestFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Manifest createManifest() {
 		ManifestImpl manifest = new ManifestImpl();
 		return manifest;
@@ -79,6 +80,7 @@ public class ManifestFactoryImpl extends EFactoryImpl implements ManifestFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ManifestPackage getManifestPackage() {
 		return (ManifestPackage)getEPackage();
 	}
