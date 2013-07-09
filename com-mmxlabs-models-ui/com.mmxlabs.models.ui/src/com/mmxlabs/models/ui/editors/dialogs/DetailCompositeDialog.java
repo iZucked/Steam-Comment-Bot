@@ -44,6 +44,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -53,6 +54,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.eventbus.AsyncEventBus;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -258,6 +260,18 @@ public class DetailCompositeDialog extends Dialog {
 //		}
 //	}
 //
+	
+	/**
+	 * Construct a new detail composite dialog, with style.
+	 * 
+	 * @param style - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
+	 */
+	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, int style) {
+		this(parentShell, commandHandler);
+		int currentStyle = getShellStyle();
+		setShellStyle(currentStyle & style);
+	}
+
 	/**
 	 * Construct a new detail composite dialog.
 	 * 
@@ -267,6 +281,8 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler) {
 		super(parentShell);
+		
+		
 		this.commandHandler = new ICommandHandler() {
 			@Override
 			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
@@ -301,6 +317,9 @@ public class DetailCompositeDialog extends Dialog {
 		enableButtons();
 		updateEditor();
 		resizeAndCenter();
+		getShell().getDisplay().asyncExec(new Runnable(){ public void run() {
+			resizeAndCenter();
+		}});
 	}
 
 	private void checkButtonEnablement(final boolean enabled) {
@@ -368,7 +387,8 @@ public class DetailCompositeDialog extends Dialog {
 			errorText.setEditable(false);
 			errorText.setVisible(false);
 		}
-		getShell().layout(true, true); // argh
+
+		getShell().layout(true, true);
 
 		// handle enablement
 		validate();
@@ -415,6 +435,7 @@ public class DetailCompositeDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(final Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
+//c.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		if (displaySidebarList) {
 			sidebarSash = new Composite(c, SWT.NONE);
@@ -484,6 +505,8 @@ public class DetailCompositeDialog extends Dialog {
 			}
 			dialogArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		} else {
+
+			if(false){
 			// Create a toolbar for the copy action.
 			final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
 
@@ -500,7 +523,8 @@ public class DetailCompositeDialog extends Dialog {
 
 			barManager.add(copy);
 			barManager.update(true);
-
+			}
+			
 			dialogArea = c;
 		}
 
