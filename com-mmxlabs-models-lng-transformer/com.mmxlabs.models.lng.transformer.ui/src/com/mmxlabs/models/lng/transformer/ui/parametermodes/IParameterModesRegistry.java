@@ -2,6 +2,9 @@ package com.mmxlabs.models.lng.transformer.ui.parametermodes;
 
 import java.util.Collection;
 
+/**
+ * @since 5.0
+ */
 public interface IParameterModesRegistry {
 
 	IParameterModeCustomiser getCustomiser(String name);
