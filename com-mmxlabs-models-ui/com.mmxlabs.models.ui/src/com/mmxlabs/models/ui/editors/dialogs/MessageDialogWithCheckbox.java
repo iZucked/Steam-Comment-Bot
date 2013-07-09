@@ -102,7 +102,8 @@ public class MessageDialogWithCheckbox extends MessageDialog {
     /**
      * @see Dialog#createDialogArea(Composite)
      */
-    protected Control createDialogArea(Composite parent) {
+    @Override
+	protected Control createDialogArea(Composite parent) {
         Composite dialogAreaComposite = (Composite) super
                 .createDialogArea(parent);
         setToggleButton(createToggleButton(dialogAreaComposite));
@@ -128,7 +129,8 @@ public class MessageDialogWithCheckbox extends MessageDialog {
 
         button.addSelectionListener(new SelectionAdapter() {
 
-            public void widgetSelected(SelectionEvent e) {
+            @Override
+			public void widgetSelected(SelectionEvent e) {
                 toggleState = button.getSelection();
             }
 

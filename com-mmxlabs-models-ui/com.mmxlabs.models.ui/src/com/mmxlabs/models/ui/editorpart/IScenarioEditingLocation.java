@@ -31,6 +31,7 @@ public interface IScenarioEditingLocation extends IEditingDomainProvider {
 
 	public abstract void popExtraValidationContext();
 
+	@Override
 	public abstract EditingDomain getEditingDomain();
 
 	public abstract AdapterFactory getAdapterFactory();

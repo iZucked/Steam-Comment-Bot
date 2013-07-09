@@ -499,6 +499,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		return editorVisible;
 	}
 
+	@Override
 	public EObject getEditorTarget() {
 		return input;
 	}

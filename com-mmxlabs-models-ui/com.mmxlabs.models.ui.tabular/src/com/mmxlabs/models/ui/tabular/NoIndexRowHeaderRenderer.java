@@ -37,7 +37,8 @@ public class NoIndexRowHeaderRenderer extends AbstractRenderer
     /**
      * {@inheritDoc}
      */
-    public void paint(GC gc, Object value)
+    @Override
+	public void paint(GC gc, Object value)
     {
         GridItem item = (GridItem) value;
 
@@ -196,7 +197,8 @@ public class NoIndexRowHeaderRenderer extends AbstractRenderer
     /**
      * {@inheritDoc}
      */
-    public Point computeSize(GC gc, int wHint, int hHint, Object value)
+    @Override
+	public Point computeSize(GC gc, int wHint, int hHint, Object value)
     {
         GridItem item = (GridItem) value;
 
@@ -259,7 +261,8 @@ public class NoIndexRowHeaderRenderer extends AbstractRenderer
             textLayout.setFont(gc.getFont());
             gridItem.getParent().addDisposeListener(new DisposeListener()
             {                
-                public void widgetDisposed(DisposeEvent e)
+                @Override
+				public void widgetDisposed(DisposeEvent e)
                 {
                     textLayout.dispose();
                 }                

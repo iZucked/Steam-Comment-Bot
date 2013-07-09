@@ -68,6 +68,7 @@ public class MultipleContainmentReferenceImpl extends EObjectImpl implements Mul
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SimpleObject> getSimpleObjects() {
 		if (simpleObjects == null) {
 			simpleObjects = new EObjectContainmentEList<SimpleObject>(SimpleObject.class, this, ModelPackage.MULTIPLE_CONTAINMENT_REFERENCE__SIMPLE_OBJECTS);

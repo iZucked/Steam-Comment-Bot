@@ -73,6 +73,7 @@ public class MultipleReferenceImpl extends EObjectImpl implements MultipleRefere
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<SingleReference> getSingleReferences() {
 		if (singleReferences == null) {
 			singleReferences = new EObjectWithInverseResolvingEList<SingleReference>(SingleReference.class, this, ModelPackage.MULTIPLE_REFERENCE__SINGLE_REFERENCES, ModelPackage.SINGLE_REFERENCE__MULTIPLE_REFERENCE);
@@ -85,6 +86,7 @@ public class MultipleReferenceImpl extends EObjectImpl implements MultipleRefere
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ModelRoot getModelRoot() {
 		if (eContainerFeatureID() != ModelPackage.MULTIPLE_REFERENCE__MODEL_ROOT) return null;
 		return (ModelRoot)eContainer();
@@ -105,6 +107,7 @@ public class MultipleReferenceImpl extends EObjectImpl implements MultipleRefere
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setModelRoot(ModelRoot newModelRoot) {
 		if (newModelRoot != eInternalContainer() || (eContainerFeatureID() != ModelPackage.MULTIPLE_REFERENCE__MODEL_ROOT && newModelRoot != null)) {
 			if (EcoreUtil.isAncestor(this, newModelRoot))

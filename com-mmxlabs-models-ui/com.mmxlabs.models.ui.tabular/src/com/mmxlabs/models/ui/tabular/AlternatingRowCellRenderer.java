@@ -59,6 +59,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void paint(GC gc, Object value) {
 
 		Color alternativeColour = new Color(gc.getDevice(), 230, 239, 249);
@@ -192,6 +193,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 			if (textLayout == null) {
 				textLayout = new TextLayout(gc.getDevice());
 				item.getParent().addDisposeListener(new DisposeListener() {
+					@Override
 					public void widgetDisposed(DisposeEvent e) {
 						textLayout.dispose();
 					}
@@ -334,6 +336,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Point computeSize(GC gc, int wHint, int hHint, Object value) {
 		GridItem item = (GridItem) value;
 
@@ -408,6 +411,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean notify(int event, Point point, Object value) {
 
 		GridItem item = (GridItem) value;
@@ -526,6 +530,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setTree(boolean tree) {
 		super.setTree(tree);
 
@@ -541,6 +546,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setCheck(boolean check) {
 		super.setCheck(check);
 
@@ -555,6 +561,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Rectangle getTextBounds(GridItem item, boolean preferred) {
 		int x = leftMargin;
 

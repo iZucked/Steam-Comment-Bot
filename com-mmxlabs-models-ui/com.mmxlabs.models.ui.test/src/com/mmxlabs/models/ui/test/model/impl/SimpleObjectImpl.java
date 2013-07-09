@@ -72,6 +72,7 @@ public class SimpleObjectImpl extends EObjectImpl implements SimpleObject {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getAttribute() {
 		return attribute;
 	}
@@ -81,6 +82,7 @@ public class SimpleObjectImpl extends EObjectImpl implements SimpleObject {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setAttribute(String newAttribute) {
 		String oldAttribute = attribute;
 		attribute = newAttribute;

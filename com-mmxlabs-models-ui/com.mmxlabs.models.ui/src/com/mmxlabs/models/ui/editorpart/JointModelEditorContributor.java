@@ -49,6 +49,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 
 		applyAction = new Action("Apply") {
+			@Override
 			public void run() {
 				if (activeEditor != null) {
 					final IEditorInput editorInput = activeEditor.getEditorInput();
@@ -63,6 +64,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 		};
 
 		cancelAction = new Action("Cancel") {
+			@Override
 			public void run() {
 
 				if (activeEditor != null) {
@@ -226,6 +228,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	// }
 	// }
 
+	@Override
 	public void propertyChanged(final Object source, final int id) {
 		update();
 	}

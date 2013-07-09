@@ -81,6 +81,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ModelRoot createModelRoot() {
 		ModelRootImpl modelRoot = new ModelRootImpl();
 		return modelRoot;
@@ -91,6 +92,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimpleObject createSimpleObject() {
 		SimpleObjectImpl simpleObject = new SimpleObjectImpl();
 		return simpleObject;
@@ -101,6 +103,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SingleReference createSingleReference() {
 		SingleReferenceImpl singleReference = new SingleReferenceImpl();
 		return singleReference;
@@ -111,6 +114,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MultipleReference createMultipleReference() {
 		MultipleReferenceImpl multipleReference = new MultipleReferenceImpl();
 		return multipleReference;
@@ -121,6 +125,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SingleContainmentReference createSingleContainmentReference() {
 		SingleContainmentReferenceImpl singleContainmentReference = new SingleContainmentReferenceImpl();
 		return singleContainmentReference;
@@ -131,6 +136,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MultipleContainmentReference createMultipleContainmentReference() {
 		MultipleContainmentReferenceImpl multipleContainmentReference = new MultipleContainmentReferenceImpl();
 		return multipleContainmentReference;
@@ -141,6 +147,7 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ModelPackage getModelPackage() {
 		return (ModelPackage)getEPackage();
 	}

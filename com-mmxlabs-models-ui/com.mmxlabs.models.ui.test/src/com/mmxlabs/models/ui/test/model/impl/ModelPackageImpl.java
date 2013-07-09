@@ -136,6 +136,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getModelRoot() {
 		return modelRootEClass;
 	}
@@ -145,6 +146,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getModelRoot_SimpleObjects() {
 		return (EReference)modelRootEClass.getEStructuralFeatures().get(0);
 	}
@@ -154,6 +156,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getModelRoot_SingleReferences() {
 		return (EReference)modelRootEClass.getEStructuralFeatures().get(1);
 	}
@@ -163,6 +166,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getModelRoot_MultipleReferences() {
 		return (EReference)modelRootEClass.getEStructuralFeatures().get(2);
 	}
@@ -172,6 +176,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getModelRoot_SingleContainmentReferences() {
 		return (EReference)modelRootEClass.getEStructuralFeatures().get(3);
 	}
@@ -181,6 +186,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getModelRoot_MultipleContainmentReferences() {
 		return (EReference)modelRootEClass.getEStructuralFeatures().get(4);
 	}
@@ -190,6 +196,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSimpleObject() {
 		return simpleObjectEClass;
 	}
@@ -199,6 +206,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSimpleObject_Attribute() {
 		return (EAttribute)simpleObjectEClass.getEStructuralFeatures().get(0);
 	}
@@ -208,6 +216,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSingleReference() {
 		return singleReferenceEClass;
 	}
@@ -217,6 +226,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSingleReference_MultipleReference() {
 		return (EReference)singleReferenceEClass.getEStructuralFeatures().get(0);
 	}
@@ -226,6 +236,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSingleReference_ModelRoot() {
 		return (EReference)singleReferenceEClass.getEStructuralFeatures().get(1);
 	}
@@ -235,6 +246,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMultipleReference() {
 		return multipleReferenceEClass;
 	}
@@ -244,6 +256,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMultipleReference_SingleReferences() {
 		return (EReference)multipleReferenceEClass.getEStructuralFeatures().get(0);
 	}
@@ -253,6 +266,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMultipleReference_ModelRoot() {
 		return (EReference)multipleReferenceEClass.getEStructuralFeatures().get(1);
 	}
@@ -262,6 +276,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSingleContainmentReference() {
 		return singleContainmentReferenceEClass;
 	}
@@ -271,6 +286,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSingleContainmentReference_SimpleObject() {
 		return (EReference)singleContainmentReferenceEClass.getEStructuralFeatures().get(0);
 	}
@@ -280,6 +296,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMultipleContainmentReference() {
 		return multipleContainmentReferenceEClass;
 	}
@@ -289,6 +306,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMultipleContainmentReference_SimpleObjects() {
 		return (EReference)multipleContainmentReferenceEClass.getEStructuralFeatures().get(0);
 	}
@@ -298,6 +316,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ModelFactory getModelFactory() {
 		return (ModelFactory)getEFactoryInstance();
 	}

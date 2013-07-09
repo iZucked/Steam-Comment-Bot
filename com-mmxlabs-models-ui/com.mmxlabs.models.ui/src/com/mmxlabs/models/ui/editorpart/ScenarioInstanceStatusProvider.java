@@ -27,6 +27,7 @@ public class ScenarioInstanceStatusProvider implements IStatusProvider {
 	private final Set<IStatusChangedListener> listeners = new HashSet<IStatusChangedListener>();
 	private ScenarioInstance scenarioInstance;
 	final EContentAdapter validationAdapter = new EContentAdapter() {
+		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {

@@ -68,6 +68,7 @@ public class SingleReferenceImpl extends EObjectImpl implements SingleReference 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MultipleReference getMultipleReference() {
 		if (multipleReference != null && multipleReference.eIsProxy()) {
 			InternalEObject oldMultipleReference = (InternalEObject)multipleReference;
@@ -109,6 +110,7 @@ public class SingleReferenceImpl extends EObjectImpl implements SingleReference 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setMultipleReference(MultipleReference newMultipleReference) {
 		if (newMultipleReference != multipleReference) {
 			NotificationChain msgs = null;
@@ -128,6 +130,7 @@ public class SingleReferenceImpl extends EObjectImpl implements SingleReference 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ModelRoot getModelRoot() {
 		if (eContainerFeatureID() != ModelPackage.SINGLE_REFERENCE__MODEL_ROOT) return null;
 		return (ModelRoot)eContainer();
@@ -148,6 +151,7 @@ public class SingleReferenceImpl extends EObjectImpl implements SingleReference 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setModelRoot(ModelRoot newModelRoot) {
 		if (newModelRoot != eInternalContainer() || (eContainerFeatureID() != ModelPackage.SINGLE_REFERENCE__MODEL_ROOT && newModelRoot != null)) {
 			if (EcoreUtil.isAncestor(this, newModelRoot))

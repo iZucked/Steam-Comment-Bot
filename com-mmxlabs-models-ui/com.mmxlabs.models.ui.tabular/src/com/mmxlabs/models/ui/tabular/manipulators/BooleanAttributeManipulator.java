@@ -32,6 +32,7 @@ public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 		this.falseString = falseString;
 	}
 
+	@Override
 	protected CellEditor createCellEditor(final Composite parent, final Object object) {
 		return new ComboBoxCellEditor(parent, new String[] { trueString, falseString });
 	}
@@ -46,6 +47,7 @@ public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 		}
 	}
 
+	@Override
 	public Object getValue(final Object object) {
 
 		Object object2 = super.getValue(object);

@@ -471,6 +471,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				public void commandStackChanged(final EventObject event) {
 					if (!getContainer().isDisposed()) {
 						getContainer().getDisplay().asyncExec(new Runnable() {
+							@Override
 							public void run() {
 								firePropertyChange(IEditorPart.PROP_DIRTY);
 							}

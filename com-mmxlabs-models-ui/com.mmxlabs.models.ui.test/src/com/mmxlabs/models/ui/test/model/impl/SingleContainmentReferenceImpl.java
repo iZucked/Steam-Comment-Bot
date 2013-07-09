@@ -65,6 +65,7 @@ public class SingleContainmentReferenceImpl extends EObjectImpl implements Singl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimpleObject getSimpleObject() {
 		return simpleObject;
 	}
@@ -89,6 +90,7 @@ public class SingleContainmentReferenceImpl extends EObjectImpl implements Singl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSimpleObject(SimpleObject newSimpleObject) {
 		if (newSimpleObject != simpleObject) {
 			NotificationChain msgs = null;

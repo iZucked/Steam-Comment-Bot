@@ -20,6 +20,7 @@ import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
 public class ModelFactoryRegistry implements IModelFactoryRegistry {
 	@Inject Iterable<IModelFactoryExtension> extensions;
 	
+	@Override
 	public List<IModelFactory> getModelFactories(final EClass targetClass) {
 		final ArrayList<IModelFactory> result = new ArrayList<IModelFactory>();
 		
