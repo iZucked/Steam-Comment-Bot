@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.ui.merge;
 
 import java.util.Collection;
@@ -11,7 +15,7 @@ import org.eclipse.emf.ecore.EReference;
  * The {@link IMappingDescriptor} describes the relationship between two instances of the same containment feature.
  * 
  * @author Simon Goodall
- * @since 4.1
+ * @since 5.0
  */
 public interface IMappingDescriptor {
 

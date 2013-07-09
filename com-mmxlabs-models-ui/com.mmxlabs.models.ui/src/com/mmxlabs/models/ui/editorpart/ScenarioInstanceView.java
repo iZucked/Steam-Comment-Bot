@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.editorpart;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.IStatus;
@@ -28,6 +29,9 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.spi.LoggerFactoryBinder;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -40,11 +44,14 @@ import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider, IValidationStatusGoto {
+
+	private final Logger log = LoggerFactory.getLogger(ScenarioInstanceView.class);
 
 	private ScenarioInstance scenarioInstance;
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
@@ -218,7 +225,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public EditingDomain getEditingDomain() {
-		return (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		final Map<Class<?>, Object> adapters = scenarioInstance.getAdapters();
+		if (adapters != null) {
+			return (EditingDomain) adapters.get(EditingDomain.class);
+		}
+		return null;
 	}
 
 	@Override
@@ -263,9 +274,21 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public MMXRootObject getRootObject() {
+
+		if (scenarioInstance == null) {
+			return null;
+		}
+		final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+		if (scenarioService == null) {
+			// This may or may not be null
+			return (MMXRootObject) scenarioInstance.getInstance();
+		}
+
 		try {
 			return (MMXRootObject) scenarioInstance.getScenarioService().load(scenarioInstance);
-		} catch (final IOException e) {
+
+		} catch (final Exception e) {
+			log.error("Error getting root object", e);
 			return null;
 		}
 	}

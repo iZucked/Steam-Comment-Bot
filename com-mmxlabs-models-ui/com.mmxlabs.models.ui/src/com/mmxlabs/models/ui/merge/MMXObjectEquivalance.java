@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.ui.merge;
 
 import java.util.HashSet;
@@ -14,7 +18,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * Utility class to compare our internal EMF objects for equivalence based on UUID then by name
  * 
- * @since 4.1
+ * @since 5.0
  */
 public class MMXObjectEquivalance {
 

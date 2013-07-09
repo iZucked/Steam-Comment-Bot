@@ -99,7 +99,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/**
 	 * Flag to enable the default EMF tree view editor
 	 */
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
@@ -900,6 +900,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		}
 	}
 
+	@Override
 	public void setActivePage(final int pageIndex) {
 		super.setActivePage(pageIndex);
 	}

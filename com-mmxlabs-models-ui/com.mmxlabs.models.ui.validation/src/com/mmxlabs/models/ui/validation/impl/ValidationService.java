@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.ui.validation;
+package com.mmxlabs.models.ui.validation.impl;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -17,7 +17,8 @@ import org.eclipse.emf.validation.service.IValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.ui.validation.internal.Activator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IValidationService;
 
 /**
  * A helper class for running validations which lets you pass extra data into the validation. Validation constraints can access the extra data using {@link IValidationInputService}, and so long as the
@@ -26,18 +27,21 @@ import com.mmxlabs.models.ui.validation.internal.Activator;
  * @author hinton
  * 
  */
-public class ValidationHelper {
-	private static final Logger log = LoggerFactory.getLogger(ValidationHelper.class);
+public class ValidationService implements IValidationService {
+	private static final Logger log = LoggerFactory.getLogger(ValidationService.class);
 
+	private ValidationInputService validationInputService = new ValidationInputService();
+
+	@Override
 	public IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final Collection<? extends EObject> targets) {
 		final FutureTask<IStatus> validationTask = new FutureTask<IStatus>(new Callable<IStatus>() {
 			@Override
 			public IStatus call() throws Exception {
 				try {
-					Activator.getDefault().getInputService().setExtraContext(extraContext);
+					validationInputService.setExtraContext(extraContext);
 					return validator.validate(targets);
 				} finally {
-					Activator.getDefault().getInputService().setExtraContext(null);
+					validationInputService.setExtraContext(null);
 				}
 			}
 		});
@@ -61,5 +65,10 @@ public class ValidationHelper {
 			// Force executor shutdown
 			executor.shutdownNow();
 		}
+	}
+
+	@Override
+	public IExtraValidationContext getExtraContext() {
+		return validationInputService.getExtraContext();
 	}
 }

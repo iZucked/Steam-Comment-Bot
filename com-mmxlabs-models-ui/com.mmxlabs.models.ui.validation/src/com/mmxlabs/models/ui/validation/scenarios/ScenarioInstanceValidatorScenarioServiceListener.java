@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -28,11 +29,19 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 
 	private final Map<ScenarioInstance, ScenarioInstanceValidator> instanceMap = new HashMap<ScenarioInstance, ScenarioInstanceValidator>();
 
+	private IValidationService validationService;
+
 	public ScenarioInstanceValidatorScenarioServiceListener() {
 	}
 
 	public void hookExisting(final IScenarioService scenarioService) {
 		hookExisting(scenarioService.getServiceModel());
+	}
+
+	public void hookExisting(final IValidationService validationService) {
+		for (final ScenarioInstanceValidator validator : instanceMap.values()) {
+			validator.setValidationService(validationService);
+		}
 	}
 
 	private void hookExisting(final Container container) {
@@ -42,6 +51,7 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 				if (scenarioInstance.getInstance() != null) {
 					final ScenarioInstanceValidator validator = new ScenarioInstanceValidator(scenarioInstance);
 					instanceMap.put(scenarioInstance, validator);
+					validator.setValidationService(validationService);
 					validator.performValidation();
 				}
 			}
@@ -52,6 +62,7 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 	@Override
 	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 		final ScenarioInstanceValidator validator = new ScenarioInstanceValidator(scenarioInstance);
+		validator.setValidationService(validationService);
 		instanceMap.put(scenarioInstance, validator);
 		validator.performValidation();
 	}
@@ -93,4 +104,15 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 		scenarioService.removeScenarioServiceListener(this);
 	}
 
+	public void bindValidationService(final IValidationService validationService) {
+		this.validationService = validationService;
+		hookExisting(this.validationService);
+
+	}
+
+	public void unbindValidationService(final IValidationService validationService) {
+		this.validationService = null;
+		hookExisting(this.validationService);
+
+	}
 }
