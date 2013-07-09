@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -20,8 +19,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;

@@ -10,10 +10,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
@@ -22,17 +18,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;

@@ -6,11 +6,8 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingDeque;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;

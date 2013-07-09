@@ -8,8 +8,6 @@ import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;

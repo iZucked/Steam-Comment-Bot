@@ -7,9 +7,7 @@ package com.mmxlabs.models.lng.migration.units;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
@@ -21,7 +19,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Assert;
 import org.junit.Test;
 

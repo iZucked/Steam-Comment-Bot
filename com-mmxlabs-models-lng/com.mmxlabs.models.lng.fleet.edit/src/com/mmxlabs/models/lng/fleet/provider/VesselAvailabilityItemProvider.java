@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.fleet.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -26,7 +25,6 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.VesselAvailability} object.

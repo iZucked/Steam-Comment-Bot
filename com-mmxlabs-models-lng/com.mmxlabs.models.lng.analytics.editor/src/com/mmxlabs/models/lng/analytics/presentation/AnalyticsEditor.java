@@ -114,14 +114,9 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.models.lng.analytics.provider.AnalyticsItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.assignment.provider.AssignmentItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.cargo.provider.CargoItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.commercial.provider.CommercialItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.fleet.provider.FleetItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.pricing.provider.PricingItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.schedule.provider.ScheduleItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXCoreItemProviderAdapterFactory;
 

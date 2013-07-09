@@ -5,15 +5,12 @@ import java.util.GregorianCalendar;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class SensibleIndexDateConstraint  extends AbstractModelConstraint {
 	private Date earliestDate = new GregorianCalendar(2020,0,1).getTime();

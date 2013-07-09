@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.ObservablesManager;
-import org.eclipse.core.databinding.observable.Observables;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;

@@ -11,7 +11,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;

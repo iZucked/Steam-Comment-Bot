@@ -10,7 +10,6 @@ import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,7 +15,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;

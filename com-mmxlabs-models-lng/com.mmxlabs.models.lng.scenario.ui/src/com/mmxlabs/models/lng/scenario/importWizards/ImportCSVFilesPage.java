@@ -42,7 +42,6 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.internal.Activator;

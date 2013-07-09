@@ -11,10 +11,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 

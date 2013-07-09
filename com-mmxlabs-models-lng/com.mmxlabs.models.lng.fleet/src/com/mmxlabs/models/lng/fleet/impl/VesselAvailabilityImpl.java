@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

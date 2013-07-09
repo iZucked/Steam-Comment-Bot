@@ -5,17 +5,11 @@
 package com.mmxlabs.models.lng.pricing.impl;
 import java.util.Date;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

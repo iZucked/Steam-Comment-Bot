@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
