@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -42,6 +43,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 	public DefaultDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
+		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
 	}
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
@@ -63,10 +65,12 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	public void createControls(MMXRootObject root, EObject object) {
 		for (final IInlineEditor editor : editors) {
 			final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE) : null;
+			label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 			editor.setLabel(label);
 			final Control control = editor.createControl(this);
 			control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
 			control.setData(LABEL_CONTROL_KEY, label);
+			control.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 			if (label != null) {
 				label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
 			}

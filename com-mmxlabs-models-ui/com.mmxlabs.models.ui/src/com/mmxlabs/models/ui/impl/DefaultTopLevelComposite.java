@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -49,6 +50,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	public DefaultTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
 		super(parent, style);
 		this.location = location;
+		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
 	}
 
 	@Override
@@ -58,6 +60,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		g.setText(EditorUtils.unmangle(eClass.getName()));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
+		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
 		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, location);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
