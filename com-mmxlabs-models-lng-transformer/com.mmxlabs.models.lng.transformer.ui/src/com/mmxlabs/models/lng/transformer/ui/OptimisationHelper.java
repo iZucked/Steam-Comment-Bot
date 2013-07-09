@@ -90,7 +90,7 @@ public final class OptimisationHelper {
 					if (control == null) {
 
 						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(root)) {
+						if (!validateScenario(root, optimising)) {
 							return null;
 						}
 
@@ -205,7 +205,7 @@ public final class OptimisationHelper {
 		return null;
 	}
 
-	public static boolean validateScenario(final MMXRootObject root) {
+	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -216,6 +216,10 @@ public final class OptimisationHelper {
 
 				for (final Category cat : constraint.getCategories()) {
 					if (cat.getId().endsWith(".base")) {
+						return true;
+					} else if (optimising && cat.getId().endsWith(".optimisation")) {
+						return true;
+					} else if (!optimising && cat.getId().endsWith(".evaluation")) {
 						return true;
 					}
 				}

@@ -80,7 +80,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				} else {
 
 					// New optimisation, so check there are no validation errors.
-					if (!OptimisationHelper.validateScenario(root)) {
+					if (!OptimisationHelper.validateScenario(root, optimising)) {
 						action.setEnabled(false);
 						return;
 					}
