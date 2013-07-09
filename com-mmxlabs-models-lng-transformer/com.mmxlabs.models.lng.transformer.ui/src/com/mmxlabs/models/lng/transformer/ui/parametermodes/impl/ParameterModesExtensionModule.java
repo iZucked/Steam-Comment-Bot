@@ -3,8 +3,6 @@ package com.mmxlabs.models.lng.transformer.ui.parametermodes.impl;
 import static org.ops4j.peaberry.Peaberry.service;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
-import org.ops4j.peaberry.Peaberry;
-import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;

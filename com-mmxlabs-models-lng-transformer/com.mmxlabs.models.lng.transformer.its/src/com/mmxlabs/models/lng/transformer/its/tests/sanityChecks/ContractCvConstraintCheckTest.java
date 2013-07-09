@@ -11,8 +11,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.omg.PortableInterceptor.SUCCESSFUL;
-
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
