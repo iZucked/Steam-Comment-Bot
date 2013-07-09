@@ -390,10 +390,8 @@ public class MigrateToV3Test {
 				final MetamodelLoader loader = new MigrateToV3().getSourceMetamodelLoader(null);
 
 				final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
-				final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
 				final EClass namedObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "NamedObject");
 				final EStructuralFeature attribute_NamedObject_name = MetamodelUtils.getAttribute(namedObject_Class, "name");
-				final EStructuralFeature attribute_UUIDObject_uuid = MetamodelUtils.getAttribute(uuidObject_Class, "uuid");
 
 				final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 				final EFactory factory_ScenarioModel = package_ScenarioModel.getEFactoryInstance();
@@ -565,44 +563,28 @@ public class MigrateToV3Test {
 				tmpFile = null;
 
 				final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
-				final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
 				final EClass namedObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "NamedObject");
 				final EStructuralFeature attribute_NamedObject_name = MetamodelUtils.getAttribute(namedObject_Class, "name");
-				final EStructuralFeature attribute_UUIDObject_uuid = MetamodelUtils.getAttribute(uuidObject_Class, "uuid");
 
 				final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
-				final EFactory factory_ScenarioModel = package_ScenarioModel.getEFactoryInstance();
 				final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
 
-				final EPackage package_FleetModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_FleetModel);
-				final EFactory factory_FleetModel = package_FleetModel.getEFactoryInstance();
-				final EClass class_FleetModel = MetamodelUtils.getEClass(package_FleetModel, "FleetModel");
-				final EClass class_BaseFuel = MetamodelUtils.getEClass(package_FleetModel, "BaseFuel");
-
 				final EPackage package_PricingModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
-				final EFactory factory_PricingModel = package_PricingModel.getEFactoryInstance();
 				final EClass class_PricingModel = MetamodelUtils.getEClass(package_PricingModel, "PricingModel");
 				final EClass class_FleetCostModel = MetamodelUtils.getEClass(package_PricingModel, "FleetCostModel");
 				final EClass class_BaseFuelCost = MetamodelUtils.getEClass(package_PricingModel, "BaseFuelCost");
-				final EClass class_BaseFuelIndex = MetamodelUtils.getEClass(package_PricingModel, "BaseFuelIndex");
 				final EClass class_DataIndex = MetamodelUtils.getEClass(package_PricingModel, "DataIndex");
 				final EClass class_IndexPoint = MetamodelUtils.getEClass(package_PricingModel, "IndexPoint");
 				final EClass class_NamedIndexContainer = MetamodelUtils.getEClass(package_PricingModel, "NamedIndexContainer");
 
 				final EReference reference_LNGScenarioModel_pricingModel = MetamodelUtils.getReference(class_LNGScenarioModel, "pricingModel");
-				final EReference reference_LNGScenarioModel_fleetModel = MetamodelUtils.getReference(class_LNGScenarioModel, "fleetModel");
-
-				final EReference reference_FleetModel_baseFuels = MetamodelUtils.getReference(class_FleetModel, "baseFuels");
 
 				final EReference reference_PricingModel_fleetCost = MetamodelUtils.getReference(class_PricingModel, "fleetCost");
 				final EReference reference_PricingModel_baseFuelPrices = MetamodelUtils.getReference(class_PricingModel, "baseFuelPrices");
 				final EReference reference_FleetCostModel_baseFuelPrices = MetamodelUtils.getReference(class_FleetCostModel, "baseFuelPrices");
 
-				final EAttribute attribute_BaseFuelCost_price = MetamodelUtils.getAttribute(class_BaseFuelCost, "price");
 				final EReference reference_BaseFuelCost_index = MetamodelUtils.getReference(class_BaseFuelCost, "index");
-				final EReference reference_BaseFuelCost_fuel = MetamodelUtils.getReference(class_BaseFuelCost, "fuel");
 
-				final EAttribute attribute_IndexPoint_date = MetamodelUtils.getAttribute(class_IndexPoint, "date");
 				final EAttribute attribute_IndexPoint_value = MetamodelUtils.getAttribute(class_IndexPoint, "value");
 
 				final EReference reference_DataIndex_points = MetamodelUtils.getReference(class_DataIndex, "points");
