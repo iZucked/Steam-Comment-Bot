@@ -368,6 +368,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -391,6 +392,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.NamedIndexContainer} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
