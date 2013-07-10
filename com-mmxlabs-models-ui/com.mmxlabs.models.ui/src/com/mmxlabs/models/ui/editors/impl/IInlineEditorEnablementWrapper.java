@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.events.DisposeEvent;
@@ -16,6 +17,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
@@ -119,10 +121,13 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 		setEditorEnabled(isEnabled());		
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	public Control createControl(final Composite parent) {
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 
-		final Control c = wrapped.createControl(parent);
+		final Control c = wrapped.createControl(parent, dbc, toolkit);
 		c.addDisposeListener(disposeListener);
 
 		return c;

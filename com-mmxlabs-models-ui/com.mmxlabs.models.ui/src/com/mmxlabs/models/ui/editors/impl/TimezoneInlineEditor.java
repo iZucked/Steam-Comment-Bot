@@ -42,7 +42,8 @@ public class TimezoneInlineEditor extends ValueListInlineEditor {
 
 	@Override
 	protected Control createValueControl(final Composite parent) {
-		final Composite composite = new Composite(parent, parent.getStyle());
+//		final Composite composite = new Composite(parent, parent.getStyle());
+		final Composite composite = toolkit.createComposite(parent, parent.getStyle());
 		composite.setLayout(new GridLayout(2, false));
 		return super.createValueControl(composite);
 	}

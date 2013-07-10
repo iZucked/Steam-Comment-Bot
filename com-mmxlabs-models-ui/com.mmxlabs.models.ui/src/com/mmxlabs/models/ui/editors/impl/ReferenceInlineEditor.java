@@ -75,6 +75,8 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	@Override
 	public Control createValueControl(final Composite parent) {
 		this.combo = new Combo(parent, SWT.READ_ONLY);
+		// this.combo = toolkit.createCombo(parent, SWT.READ_ONLY);
+		toolkit.adapt(combo, true, true);
 
 		combo.setEnabled(isEditorEnabled());
 

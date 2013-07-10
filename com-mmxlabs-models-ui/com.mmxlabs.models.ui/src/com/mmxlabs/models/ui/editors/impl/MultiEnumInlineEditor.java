@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.Enumerator;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.ListSelectionDialog;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 
@@ -33,7 +35,7 @@ import com.mmxlabs.models.ui.editors.util.CommandUtil;
  * An editor for picking multiple values from an enum.
  * 
  * @author hinton
- *
+ * 
  */
 public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 	private Label theLabel;
@@ -42,25 +44,31 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 
 	public MultiEnumInlineEditor(EStructuralFeature feature) {
 		super(feature);
-		myEnum = (EEnum) ((EAttribute)feature).getEAttributeType();
+		myEnum = (EEnum) ((EAttribute) feature).getEAttributeType();
 		enumerators = new Enumerator[myEnum.getELiterals().size()];
-		for (int i = 0; i<enumerators.length; i++) {
+		for (int i = 0; i < enumerators.length; i++) {
 			enumerators[i] = myEnum.getELiterals().get(i).getInstance();
 		}
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	public Control createControl(final Composite parent) {
-		final Composite buttonAndLabel = new Composite(parent, SWT.NONE);
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+		// final Composite buttonAndLabel = new Composite(parent, SWT.NONE);
+		final Composite buttonAndLabel = toolkit.createComposite(parent);
 		final GridLayout gl = new GridLayout(2, false);
 		buttonAndLabel.setLayout(gl);
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
 
-		final Label label = new Label(buttonAndLabel, SWT.NONE);
+		// final Label label = new Label(buttonAndLabel, SWT.NONE);
+		label = toolkit.createLabel(buttonAndLabel, "");
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		final Button button = new Button(buttonAndLabel, SWT.NONE);
-		button.setText("Edit");
+		
+//		final Button button = new Button(buttonAndLabel, SWT.NONE);
+		final Button button = toolkit.createButton(buttonAndLabel, "Edit", SWT.NONE);
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -80,12 +88,10 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected Command createSetCommand(Object value) {
-		final CompoundCommand setter = CommandUtil
-				.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature,
-						(Collection<?>) value);
+		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
 		return setter;
 	}
-	
+
 	@Override
 	protected void updateDisplay(final Object value) {
 		List<Enumerator> selectedValues = (List<Enumerator>) value;
@@ -99,21 +105,19 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	protected List<Object> openDialogBox(Control cellEditorWindow) {
-		ListSelectionDialog dlg = new ListSelectionDialog(
-				cellEditorWindow.getShell(), enumerators,
-				new ArrayContentProvider(), new LabelProvider() {
-					@Override
-					public String getText(Object element) {
-						return ((Enumerator) element).getName();
-					}
-				}, "Select values:");
+		ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), enumerators, new ArrayContentProvider(), new LabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((Enumerator) element).getName();
+			}
+		}, "Select values:");
 		dlg.setTitle("Value Selection");
-		
+
 		dlg.setInitialSelections(((Collection<?>) getValue()).toArray());
 		dlg.setBlockOnOpen(true);
 		dlg.open();
 		Object[] result = dlg.getResult();
-		
+
 		return Arrays.asList(result);
 	}
 }

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
@@ -16,6 +17,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
@@ -25,6 +27,14 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	private Object lastSetValue;
 	private Control inner;
 	private boolean controlEnabled;
+	/**
+	 * @since 5.0
+	 */
+	protected FormToolkit toolkit;
+	/**
+	 * @since 5.0
+	 */
+	protected EMFDataBindingContext dbc;
 
 	public UnsettableInlineEditor(final EStructuralFeature feature) {
 		super(feature);
@@ -56,15 +66,22 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		}
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	public Control createControl(final Composite parent) {
+	public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit) {
 
+		this.dbc = dbc;
+		this.toolkit = toolkit;
 		final Control c;
 		if (feature.isUnsettable()) {
 			this.lastSetValue = getInitialUnsetValue();
-			final Composite sub = new Composite(parent, SWT.NONE);
+//			final Composite sub = new Composite(parent, SWT.NONE);
+			final Composite sub = toolkit.createComposite(parent);
 			sub.setLayout(new GridLayout(2, false));
-			this.setButton = new Button(sub, SWT.CHECK);
+//			this.setButton = new Button(sub, SWT.CHECK);
+			this.setButton = toolkit.createButton(sub, "", SWT.CHECK);
 			this.inner = createValueControl(sub);
 			setButton.addSelectionListener(new SelectionAdapter() {
 				{

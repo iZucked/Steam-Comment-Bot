@@ -23,6 +23,7 @@ public interface IDisplayCompositeFactory {
 	/**
 	 * This is for creating a composite that can be displayed in a properties view or editor dialog
 	 * @param eClass
+	 * @param toolkit 
 	 * @return
 	 */
 	IDisplayComposite createToplevelComposite(Composite composite, EClass eClass, IScenarioEditingLocation location);

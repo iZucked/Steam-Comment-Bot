@@ -12,10 +12,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -25,8 +26,8 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -37,24 +38,22 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.AsyncEventBus;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -68,6 +67,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.util.DialogEcoreCopier;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
+import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -77,7 +77,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  * 
  * @author hinton
  */
-public class DetailCompositeDialog extends Dialog {
+public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
 
 	private IScenarioEditingLocation scenarioEditingLocation;
@@ -181,12 +181,6 @@ public class DetailCompositeDialog extends Dialog {
 
 			final List<EObject> duplicateRange = new ArrayList<EObject>(dialogEcoreCopier.copyAll(reducedRange));
 
-			// fix crossreferences to existing duplicates
-			final TreeIterator<EObject> allDuplicates = EcoreUtil.getAllContents(duplicateRange);
-			// while (allDuplicates.hasNext()) {
-			// pointReferencesToExistingDuplicates(allDuplicates.next());
-			// }
-
 			// re-insert the duplicates back into the range
 			for (final Pair<Integer, EObject> duplicated : alreadyDuplicated) {
 				final EObject duplicate = originalToDuplicate.get(duplicated.getSecond());
@@ -235,36 +229,11 @@ public class DetailCompositeDialog extends Dialog {
 		return originalToDuplicate.get(original);
 	}
 
-//	/**
-//	 * For every EObject in duplicate range or its containment tree, finds any references to any already-duplicated objects and patches them up.
-//	 * 
-//	 * @param duplicateRange
-//	 */
-//	private void pointReferencesToExistingDuplicates(final EObject object) {
-//		for (final EReference ref : object.eClass().getEAllReferences()) {
-//			if (ref.isContainment())
-//				continue;
-//			if (ref.isMany()) {
-//				final List values = (List) object.eGet(ref);
-//				for (int i = 0; i < values.size(); i++) {
-//					if (originalToDuplicate.containsKey(values.get(i))) {
-//						values.set(i, originalToDuplicate.get(values.get(i)));
-//					}
-//				}
-//			} else {
-//				final EObject value = (EObject) object.eGet(ref);
-//				if (originalToDuplicate.containsKey(value)) {
-//					object.eSet(ref, originalToDuplicate.get(value));
-//				}
-//			}
-//		}
-//	}
-//
-	
 	/**
 	 * Construct a new detail composite dialog, with style.
 	 * 
-	 * @param style - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
+	 * @param style
+	 *            - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
 	 * @since 5.0
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, int style) {
@@ -282,8 +251,7 @@ public class DetailCompositeDialog extends Dialog {
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler) {
 		super(parentShell);
-		
-		
+
 		this.commandHandler = new ICommandHandler() {
 			@Override
 			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
@@ -318,19 +286,46 @@ public class DetailCompositeDialog extends Dialog {
 		enableButtons();
 		updateEditor();
 		resizeAndCenter();
-		getShell().getDisplay().asyncExec(new Runnable(){ public void run() {
-			resizeAndCenter();
-		}});
+		getShell().getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				resizeAndCenter();
+			}
+		});
 	}
 
 	private void checkButtonEnablement(final boolean enabled) {
 		getButton(IDialogConstants.OK_ID).setEnabled(enabled && !lockedForEditing);
 	}
 
+	private void updateEditor() {
+
+		if (observablesManager != null) {
+			observablesManager.dispose();
+		}
+		if (dbc != null) {
+			dbc.dispose();
+		}
+
+		this.dbc = new EMFDataBindingContext();
+		this.observablesManager = new ObservablesManager();
+
+		// This call means we do not need to manually manage our databinding objects lifecycle manually.
+		observablesManager.runAndCollect(new Runnable() {
+
+			@Override
+			public void run() {
+				doCreateFormContent();
+			}
+		});
+	}
+
 	/**
 	 * Create an editor view for the selected object and display it.
+	 * 
+	 * @since 5.0
 	 */
-	private void updateEditor() {
+	@Override
+	protected void doCreateFormContent() {
 		if (inputs.isEmpty()) {
 			if (displayComposite != null) {
 				displayComposite.getComposite().dispose();
@@ -376,7 +371,7 @@ public class DetailCompositeDialog extends Dialog {
 
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		displayComposite.display(scenarioEditingLocation, rootObject, duplicate, ranges.get(selection));
+		displayComposite.display(scenarioEditingLocation, rootObject, duplicate, ranges.get(selection), dbc, toolkit);
 
 		if (false) {
 			errorText = new Text(dialogArea, SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
@@ -414,29 +409,47 @@ public class DetailCompositeDialog extends Dialog {
 		}
 	}
 
-	private void resizeAndCenter() {
-		final Shell shell = getShell();
-		if (shell != null) {
-			shell.layout(true);
-
-			shell.setSize(shell.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-			final Rectangle shellBounds = getParentShell().getBounds();
-			final Point dialogSize = shell.getSize();
-
-			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
-		}
-	}
-
 	@Override
 	protected boolean isResizable() {
 		return true;
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	protected Control createDialogArea(final Composite parent) {
-		final Composite c = (Composite) super.createDialogArea(parent);
-//c.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+	protected void createFormContent(final IManagedForm managedForm) {
+
+		this.managedForm = managedForm;
+		this.toolkit = managedForm.getToolkit();
+
+		final ScrolledForm form = managedForm.getForm();
+		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.setText("Settings");
+		toolkit.decorateFormHeading(form.getForm());
+		{
+			final GridLayout layout = new GridLayout(1, true);
+			form.getBody().setLayout(layout);
+		}
+		// this.dbc = new EMFDataBindingContext();
+		// this.observablesManager = new ObservablesManager();
+		//
+		// // This call means we do not need to manually manage our databinding objects lifecycle manually.
+		// observablesManager.runAndCollect(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// createForm();
+		// }
+		// });
+		// }
+		//
+		//
+		// @Override
+		// protected Control createDialogArea(final Composite parent) {
+		final Composite c = managedForm.getForm().getBody();// toolkit.createComposite(managedForm.getForm().getBody());//(Composite) super.createDialogArea(managedForm);
+		// c.setLayout(new FillLayout());
+		// c.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		if (displaySidebarList) {
 			sidebarSash = new Composite(c, SWT.NONE);
@@ -507,29 +520,27 @@ public class DetailCompositeDialog extends Dialog {
 			dialogArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		} else {
 
-			if(false){
-			// Create a toolbar for the copy action.
-			final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
+			if (false) {
+				// Create a toolbar for the copy action.
+				final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
 
-			barManager.createControl(c).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+				barManager.createControl(c).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
-			final Action copy = new Action("Copy") {
-				@Override
-				public void run() {
-					copyDialogToClipboardEditorWrapper.copyToClipboard();
-				}
-			};
+				final Action copy = new Action("Copy") {
+					@Override
+					public void run() {
+						copyDialogToClipboardEditorWrapper.copyToClipboard();
+					}
+				};
 
-			copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/copy.gif"));
+				copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/copy.gif"));
 
-			barManager.add(copy);
-			barManager.update(true);
+				barManager.add(copy);
+				barManager.update(true);
 			}
-			
+
 			dialogArea = c;
 		}
-
-		return c;
 	}
 
 	private Action createAddAction(final IModelFactory factory) {
@@ -599,7 +610,7 @@ public class DetailCompositeDialog extends Dialog {
 						if (selectedObjectIndex < 0) {
 							selectedObjectIndex = 0;
 						}
-						
+
 						deletedInputs.add((EObject) element);
 
 						// remove from change map
@@ -714,17 +725,6 @@ public class DetailCompositeDialog extends Dialog {
 			final int value = open();
 			if (value == OK) {
 				final CompoundCommand cc = new CompoundCommand();
-				// // cc.append(IdentityCommand.INSTANCE);
-				// for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
-				// final EObject original = entry.getKey();
-				// final EObject duplicate = entry.getValue();
-				// if (!original.equals(duplicate)) {
-				// final Command makeEqualizer = makeEqualizer(original, duplicate);
-				// if (makeEqualizer != null) {
-				// cc.append(makeEqualizer);
-				// }
-				// }
-				// }
 
 				final EditingDomain editingDomain = commandHandler.getEditingDomain();
 				if (editingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -765,10 +765,6 @@ public class DetailCompositeDialog extends Dialog {
 						log.error("Cannot execute delete", new RuntimeException());
 					}
 				}
-
-				// for (final EObject duplicate : duplicateToOriginal.keySet()) {
-				// clearReferences(duplicate);
-				// }
 			}
 			return value;
 		} finally {
@@ -828,16 +824,8 @@ public class DetailCompositeDialog extends Dialog {
 					}
 
 				} else {
-					// correctCrossReferences();
 
 					final CompoundCommand cc = new CompoundCommand();
-					// for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
-					// final EObject original = entry.getKey();
-					// final EObject duplicate = entry.getValue();
-					// if (!original.equals(duplicate)) {
-					// cc.append(makeEqualizer(original, duplicate));
-					// }
-					// }
 
 					final EditingDomain editingDomain = commandHandler.getEditingDomain();
 					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -865,10 +853,6 @@ public class DetailCompositeDialog extends Dialog {
 						log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 					}
 				}
-			} else {
-				// for (final EObject duplicate : duplicateToOriginal.keySet()) {
-				// clearReferences(duplicate);
-				// }
 			}
 			return value;
 		} finally {
@@ -892,184 +876,30 @@ public class DetailCompositeDialog extends Dialog {
 		}
 	}
 
-	// /**
-	// * If we are modifying duplicates and then applying the change back to the originals, any internal cross-references will need adjusting back to the originals or the refs won't be valid.
-	// *
-	// * This method takes all non-containment references between duplicates and fixes them
-	// */
-	// private void correctCrossReferences() {
-	// final Map<EObject, Collection<Setting>> xrefs = EcoreUtil.CrossReferencer.find(duplicateToOriginal.keySet());
-	//
-	// for (final Map.Entry<EObject, Collection<Setting>> xref : xrefs.entrySet()) {
-	// final EObject target = xref.getKey();
-	// final EObject original = duplicateToOriginal.get(target);
-	// if (original == null)
-	// continue;
-	// final Collection<Setting> refs = xref.getValue();
-	// for (final Setting setting : refs) {
-	// final EStructuralFeature feature = setting.getEStructuralFeature();
-	// if (feature instanceof EReference) {
-	// final EReference reference = (EReference) feature;
-	// if (reference.isContainment() == false) {
-	// if (reference.isMany()) {
-	// final List l = (List) setting.getEObject().eGet(reference);
-	// int x;
-	// while ((x = l.indexOf(target)) != -1) {
-	// l.set(x, original);
-	// }
-	// } else {
-	// setting.getEObject().eSet(reference, original);
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
-
 	private void executeFinalCommand(final CompoundCommand cc) {
 		commandHandler.getEditingDomain().getCommandStack().execute(cc);
 	}
 
-	//
-	// /**
-	// * Make a command to set the fields on the first argument to be equal to the fields on the second argument. Presumes both arguments have the same eclass
-	// *
-	// * TODO this may be a bit slow, as it just checks at the toplevel; to make it faster, we need to establish a mapping between all objects and their duplicates, including contained objects, and
-	// then
-	// * use the information given to the processor to only generate set commands for changed attributes.
-	// *
-	// * This will do for now.
-	// *
-	// * TODO fix so that references to duplicates are pointed back
-	// *
-	// * @param eObject
-	// * the object to be adjusted
-	// * @param eObject2
-	// * the object from which to copy the adjustment
-	// * @return
-	// */
-	// private Command makeEqualizer(final EObject original, final EObject duplicate) {
-	// if (original == null && duplicate == null) {
-	// return null;// IdentityCommand.INSTANCE;
-	// }
-	// final EditingDomain editingDomain = commandHandler.getEditingDomain();
-	// if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-	// ((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
-	// }
-	// try {
-	//
-	// return workingCopier.createEditCommand();
-	//
-	// // return replaceOriginals(editingDomain, rootObject)
-	// // return makeEqualizer2(original, duplicate, editingDomain);
-	// } finally {
-	// if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-	// ((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
-	// }
-	// }
-	// }
-
-	// /**
-	// * Clear all the ereferences on this object and all its contents
-	// *
-	// * used to prevent opposite references from getting set to point to duplicates after the dialog is cancelled.
-	// *
-	// * @param duplicate
-	// */
-	// private void clearReferences(final EObject duplicate) {
-	// for (final EReference reference : duplicate.eClass().getEAllReferences()) {
-	// if (reference.isMany()) {
-	// final List l = (List) duplicate.eGet(reference);
-	// l.clear();
-	// } else {
-	// duplicate.eSet(reference, null);
-	// }
-	// }
-	// for (final EObject o : duplicate.eContents()) {
-	// clearReferences(o);
-	// }
-	// }
-	//
-	// private Command makeEqualizer2(final EObject original, final EObject duplicate, final EditingDomain editingDomain) {
-	// if (original == null || duplicate == null) {
-	// return null;// IdentityCommand.INSTANCE;
-	// }
-	// final CompoundCommand compound = new CompoundCommand();
-	// // compound.append(new IdentityCommand());
-	// for (final EStructuralFeature feature : original.eClass().getEAllStructuralFeatures()) {
-	// // For containment references, we need to compare the contained
-	// // object, rather than generate a SetCommand.
-	// if (original.eClass().getEAllContainments().contains(feature)) {
-	// if (feature.isMany()) {
-	// // Clone the original list as it will be modified later (e.g by the duplicate object being cleaned up) causing undo() to break
-	// compound.append(SetCommand.create(editingDomain, original, feature, new ArrayList<Object>((Collection<?>) duplicate.eGet(feature))));
-	// } else {
-	// final Command c = makeEqualizer2((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature), editingDomain);
-	// if (c != null) {
-	// compound.append(c);
-	// }
-	// }
-	//
-	// continue;
-	// }
-	// // Skip items which have not changed.
-	// if (Equality.isEqual(original.eGet(feature), duplicate.eGet(feature)) && (!feature.isUnsettable() || (original.eIsSet(feature) == duplicate.eIsSet(feature)))) {
-	// continue;
-	// }
-	// if (feature instanceof EReference && ((EReference) feature).getEOpposite() != null) {
-	// // handle opposite references
-	// // these require a bit more thought than normal ones, because setting the ref on the
-	// // duplicate object will have introduced a ref from the referent back to the duplicate
-	//
-	// // once we copy the duplicate's ref onto the original, that should set up the opposite back-reference
-	// // but what about the dangling opposite refs?
-	//
-	// // why do these pose a problem anyway?
-	//
-	//
-	// // worse for a many relationship
-	//
-	//
-	// } else if (feature.isMany()) {
-	// // final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, new ArrayList<Object>((Collection<?>) duplicate.eGet(feature)), duplicateToOriginal);
-	// // if (mas.canExecute() == false) {
-	// // log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
-	// // "Attempt to set feature which could not be set."));
-	// // }
-	// // compound.append(mas);
-	// } else {
-	// if (duplicateToOriginal.containsKey(duplicate.eGet(feature)))
-	// continue; // do not fix references to copied items
-	// if (feature.isUnsettable() && (duplicate.eIsSet(feature) == false)) {
-	// compound.append(SetCommand.create(editingDomain, original, feature, SetCommand.UNSET_VALUE));
-	// } else {
-	// compound.append(SetCommand.create(editingDomain, original, feature, duplicate.eGet(feature)));
-	// }
-	// }
-	// }
-	// // }
-	// if (!compound.isEmpty()) {
-	// return compound;
-	// } else {
-	// return null;
-	// }
-	// }
-
 	private void validate() {
 		final IStatus status = dialogValidationSupport.validate();
-		
-		if (errorText != null) {
-			if (status.isOK()) {
+
+		if (status.isOK()) {
+			if (errorText != null) {
 				errorText.setText("");
 				errorText.setVisible(false);
 				((GridData) errorText.getLayoutData()).heightHint = 0;
 				getContents().pack();
 				resizeAndCenter();
-			} else {
+			}
 
-				StringBuilder sb = new StringBuilder();
-				processMessages(sb, status);
+			managedForm.getForm().setMessage(null, IMessageProvider.NONE);
+		} else {
 
+			StringBuilder sb = new StringBuilder();
+			processMessages(sb, status);
+
+			managedForm.getForm().setMessage(sb.toString().trim(), convertType(status.getSeverity()));
+			if (errorText != null) {
 				errorText.setText(sb.toString());
 				errorText.setVisible(true);
 				((GridData) errorText.getLayoutData()).heightHint = 50;
@@ -1084,7 +914,7 @@ public class DetailCompositeDialog extends Dialog {
 
 		checkButtonEnablement(!status.matches(IStatus.ERROR));
 	}
-	
+
 	private void processMessages(StringBuilder sb, IStatus status) {
 		if (status.isMultiStatus()) {
 			for (IStatus s : status.getChildren()) {
