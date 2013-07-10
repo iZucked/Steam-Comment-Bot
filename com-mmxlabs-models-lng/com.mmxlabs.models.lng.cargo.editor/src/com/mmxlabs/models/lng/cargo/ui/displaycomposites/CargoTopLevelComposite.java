@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -18,6 +19,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -70,7 +72,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
@@ -95,7 +97,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		// Initialise middle composite
 		middle = new Composite(this, SWT.NONE);
 
-		createChildComposites(root, object, eClass, middle);
+		createChildComposites(root, object, eClass, middle, toolkit);
 		// We know there are n slots, so n columns
 		middle.setLayout(new GridLayout(childObjects.size(), true));
 		middle.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -111,14 +113,14 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 //		bottomLevel.setCommandHandler(commandHandler);
 //		bottomLevel.setEditorWrapper(editorWrapper);
 
-		topLevel.display(location, root, object, range);
+		topLevel.display(location, root, object, range, dbc, toolkit);
 //		bottomLevel.display(location, root, object, range);
 
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			children.next().display(location, root, childObjectsItr.next(), range);
+			children.next().display(location, root, childObjectsItr.next(), range, dbc, toolkit);
 		}
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
@@ -145,7 +147,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 //	}
 
 	@Override
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, final FormToolkit toolkit) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
 			if (value instanceof Slot) {

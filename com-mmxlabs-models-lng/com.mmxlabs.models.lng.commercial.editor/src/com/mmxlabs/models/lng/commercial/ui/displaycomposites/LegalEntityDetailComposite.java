@@ -14,6 +14,7 @@ import java.util.Date;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -48,6 +49,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -338,9 +340,9 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		target = value;
-		delegate.display(location, root, value, range);
+		delegate.display(location, root, value, range, dbc, toolkit);
 		tableViewer.setInput(value);
 		removeAdapter();
 		oldValue = (LegalEntity) value;
