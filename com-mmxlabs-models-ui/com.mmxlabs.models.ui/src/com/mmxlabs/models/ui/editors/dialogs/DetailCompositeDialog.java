@@ -425,31 +425,13 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		final ScrolledForm form = managedForm.getForm();
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
-		form.setText("Settings");
+		form.setText("");
 		toolkit.decorateFormHeading(form.getForm());
 		{
 			final GridLayout layout = new GridLayout(1, true);
 			form.getBody().setLayout(layout);
 		}
-		// this.dbc = new EMFDataBindingContext();
-		// this.observablesManager = new ObservablesManager();
-		//
-		// // This call means we do not need to manually manage our databinding objects lifecycle manually.
-		// observablesManager.runAndCollect(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		// createForm();
-		// }
-		// });
-		// }
-		//
-		//
-		// @Override
-		// protected Control createDialogArea(final Composite parent) {
-		final Composite c = managedForm.getForm().getBody();// toolkit.createComposite(managedForm.getForm().getBody());//(Composite) super.createDialogArea(managedForm);
-		// c.setLayout(new FillLayout());
-		// c.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		final Composite c = managedForm.getForm().getBody();
 
 		if (displaySidebarList) {
 			sidebarSash = new Composite(c, SWT.NONE);

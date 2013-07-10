@@ -31,8 +31,6 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -41,9 +39,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
@@ -123,6 +121,11 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 
 	@Override
 	public void create() {
+		super.create();
+		updateEditor();
+	}
+
+	private void updateEditor() {
 
 		if (observablesManager != null) {
 			observablesManager.dispose();
@@ -130,7 +133,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		if (dbc != null) {
 			dbc.dispose();
 		}
-		super.create();
+
 		this.dbc = new EMFDataBindingContext();
 		this.observablesManager = new ObservablesManager();
 
@@ -153,14 +156,13 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	@Override
 	protected void doCreateFormContent() {
 
-		// super.create();
-		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
-		createProxies();
-
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
 		}
+
+		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
+		createProxies();
 
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, scenarioEditingLocation);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -188,12 +190,26 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		resizeAndCenter();
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	protected Control createDialogArea(final Composite parent) {
-		final Composite c = (Composite) super.createDialogArea(parent);
-		dialogArea = c;
+	protected void createFormContent(final IManagedForm managedForm) {
 
-		return c;
+		this.managedForm = managedForm;
+		this.toolkit = managedForm.getToolkit();
+
+		final ScrolledForm form = managedForm.getForm();
+		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.setText("");
+		toolkit.decorateFormHeading(form.getForm());
+		{
+			final GridLayout layout = new GridLayout(1, true);
+			form.getBody().setLayout(layout);
+		}
+		final Composite c = managedForm.getForm().getBody();
+
+		dialogArea = c;
 	}
 
 	private void createProxies() {
@@ -387,14 +403,14 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 
 				@Override
 				public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit) {
-					final Composite composite = new Composite(parent, SWT.NONE);
+					final Composite composite = toolkit.createComposite(parent);
 
 					final GridLayout layout = new GridLayout(2, false);
 					layout.marginHeight = 0;
 					layout.marginWidth = 0;
 					composite.setLayout(layout);
 
-					final Composite c2 = new Composite(composite, SWT.NONE);
+					final Composite c2 = toolkit.createComposite(composite, SWT.NONE);
 					final GridLayout layout2 = new GridLayout(1, false);
 					layout2.marginHeight = 0;
 					layout2.marginWidth = 0;
@@ -424,7 +440,6 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 							}
 						}
 					});
-
 					if (proxy.getFeature() != null) {
 						if (proxy.getFeature().isMany() && ((proxy.getFeature() instanceof EAttribute) || (((EReference) proxy.getFeature()).isContainment() == false))) {
 							manager.add(new MultiFeatureAction(pair, featuresToSet));
@@ -432,6 +447,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					}
 
 					final ToolBar tb = manager.createControl(composite);
+					toolkit.adapt(tb, true, true);
 					final GridData gd = new GridData();
 					// TODO fix magic number - measure width properly and set everywhere
 					gd.minimumWidth = gd.widthHint = 64;
