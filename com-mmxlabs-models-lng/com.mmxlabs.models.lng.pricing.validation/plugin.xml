@@ -76,22 +76,6 @@
                </target>
             </constraint>
              <constraint
-                  class="com.mmxlabs.models.lng.pricing.validation.LNGPriceConstraint"
-                  id="com.mmxlabs.models.lng.pricing.validation.LNGPriceConstraint"
-                  isEnabledByDefault="true"
-                  lang="Java"
-                  mode="Batch"
-                  name="Commodity Pricing"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  Index {0} has price {1} for date {2} (should be between {3} and {4})
-               </message>
-               <target
-                     class="CommodityIndex">
-               </target>
-            </constraint>
-             <constraint
                   class="com.mmxlabs.models.lng.pricing.validation.SensibleIndexDateConstraint"
                   id="com.mmxlabs.models.lng.pricing.validation.SensibleIndexDateConstraint"
                   isEnabledByDefault="true"
