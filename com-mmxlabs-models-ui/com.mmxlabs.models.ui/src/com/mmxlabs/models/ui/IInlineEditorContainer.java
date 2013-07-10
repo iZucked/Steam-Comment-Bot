@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 
 /**
+ * A container for IInlineEditors
  * 
  * @author hinton
  *
