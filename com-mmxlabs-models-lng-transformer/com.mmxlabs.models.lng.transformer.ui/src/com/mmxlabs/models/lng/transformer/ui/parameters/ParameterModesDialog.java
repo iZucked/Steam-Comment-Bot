@@ -51,13 +51,15 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
+
 /**
  * A Dialog to present options for running an optimisation or evaluation that can be changed.
  * 
  * @author Simon Goodall
  * 
  */
-public class ParameterModesDialog extends FormDialog {
+public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	public enum DataType {
 		Boolean, PositiveInt
@@ -88,13 +90,7 @@ public class ParameterModesDialog extends FormDialog {
 		}
 	}
 
-	private EMFDataBindingContext dbc;
-
-	private ObservablesManager observablesManager;
-
-	private IManagedForm managedForm;
-
-	private FormToolkit toolkit;
+	private final Map<DataSection, List<Option>> optionsMap = new EnumMap<DataSection, List<Option>>(DataSection.class);
 
 	public ParameterModesDialog(final Shell parentShell) {
 		super(parentShell);
@@ -105,38 +101,7 @@ public class ParameterModesDialog extends FormDialog {
 	}
 
 	@Override
-	protected void createFormContent(final IManagedForm managedForm) {
-
-		this.managedForm = managedForm;
-		this.toolkit = managedForm.getToolkit();
-
-		this.dbc = new EMFDataBindingContext();
-		this.observablesManager = new ObservablesManager();
-
-		// This call means we do not need to manually manage our databinding objects lifecycle manually.
-		observablesManager.runAndCollect(new Runnable() {
-
-			@Override
-			public void run() {
-				createForm();
-			}
-		});
-	}
-
-	@Override
-	public boolean close() {
-
-		if (observablesManager != null) {
-			observablesManager.dispose();
-		}
-		if (dbc != null) {
-			dbc.dispose();
-		}
-
-		return super.close();
-	}
-
-	private void createForm() {
+	protected void doCreateFormContent() {
 		// Get the form object and set a title
 		final ScrolledForm form = managedForm.getForm();
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -191,7 +156,7 @@ public class ParameterModesDialog extends FormDialog {
 
 				@Override
 				public void expansionStateChanged(final ExpansionEvent e) {
-					resize();
+					resizeAndCenter();
 				}
 
 			});
@@ -205,19 +170,7 @@ public class ParameterModesDialog extends FormDialog {
 			advanced.setClient(area);
 		}
 
-		// Link up form validation to the error message bar at the top
-		final AggregateValidationStatus aggregateStatus = new AggregateValidationStatus(dbc.getValidationStatusProviders(), AggregateValidationStatus.MAX_SEVERITY);
-		aggregateStatus.addValueChangeListener(new IValueChangeListener() {
-
-			@Override
-			public void handleValueChange(final ValueChangeEvent event) {
-				handleStateChange((IStatus) event.diff.getNewValue(), dbc);
-				if (!event.diff.getNewValue().equals(event.diff.getOldValue())) {
-					resize();
-				}
-			}
-		});
-		observablesManager.addObservable(aggregateStatus);
+		hookAggregatedValidationStatusWithResize();
 	}
 
 	private void createOption(final Composite parent, final Option option) {
@@ -232,97 +185,6 @@ public class ParameterModesDialog extends FormDialog {
 		default:
 			break;
 		}
-	}
-
-	/**
-	 * Method to map the {@link IStatus} to {@link IMessage}.
-	 * 
-	 * @See http://tomsondev.bestsolution.at/2009/06/27/galileo-emf-databinding-part-5/
-	 * 
-	 * @param currentStatus
-	 * @param ctx
-	 */
-	private void handleStateChange(final IStatus currentStatus, final DataBindingContext ctx) {
-
-		final Form form = managedForm.getForm().getForm();
-		if (form.isDisposed() || form.getHead().isDisposed()) {
-			return;
-		}
-
-		if (currentStatus != null && currentStatus.getSeverity() != IStatus.OK) {
-			final int type = convertType(currentStatus.getSeverity());
-
-			final List<IMessage> list = new ArrayList<IMessage>();
-			final Iterator<?> it = ctx.getValidationStatusProviders().iterator();
-
-			while (it.hasNext()) {
-				final ValidationStatusProvider validationStatusProvider = (ValidationStatusProvider) it.next();
-				final IStatus status = (IStatus) validationStatusProvider.getValidationStatus().getValue();
-
-				if (!status.isOK()) {
-					list.add(new IMessage() {
-						@Override
-						public Control getControl() {
-							return null;
-						}
-
-						@Override
-						public Object getData() {
-							return null;
-						}
-
-						@Override
-						public Object getKey() {
-							return null;
-						}
-
-						@Override
-						public String getPrefix() {
-							return null;
-						}
-
-						@Override
-						public String getMessage() {
-							return status.getMessage();
-						}
-
-						@Override
-						public int getMessageType() {
-							return convertType(status.getSeverity());
-						}
-					});
-				}
-			}
-			final String msg = String.format("%d error(s)", list.size());
-			managedForm.getForm().setMessage(msg, type, list.toArray(new IMessage[0]));
-			getButton(IDialogConstants.OK_ID).setEnabled(false);
-		} else {
-			managedForm.getForm().setMessage(null, IMessageProvider.NONE);
-			getButton(IDialogConstants.OK_ID).setEnabled(true);
-		}
-	}
-
-	/**
-	 * Map between IStatus values and {@link IMessageProvider} values
-	 * 
-	 * @param type
-	 * @return
-	 */
-	private int convertType(final int type) {
-
-		if (type == IStatus.ERROR) {
-			return IMessageProvider.ERROR;
-		}
-		if (type == IStatus.WARNING) {
-			return IMessageProvider.WARNING;
-		}
-		if (type == IStatus.INFO) {
-			return IMessageProvider.INFORMATION;
-		}
-		if (type == IStatus.OK) {
-			return IMessageProvider.NONE;
-		}
-		return IMessageProvider.NONE;
 	}
 
 	/**
@@ -380,19 +242,6 @@ public class ParameterModesDialog extends FormDialog {
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 		return area;
 	}
-
-	protected void resize() {
-		final Shell shell = getShell();
-		if (shell != null) {
-			shell.layout(true);
-			shell.setSize(shell.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-			final Rectangle shellBounds = getParentShell().getBounds();
-			final Point dialogSize = shell.getSize();
-			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
-		}
-	}
-
-	private final Map<DataSection, List<Option>> optionsMap = new EnumMap<DataSection, List<Option>>(DataSection.class);
 
 	public void addOption(final DataSection dataSection, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData, final DataType dataType,
 			final EStructuralFeature... features) {
