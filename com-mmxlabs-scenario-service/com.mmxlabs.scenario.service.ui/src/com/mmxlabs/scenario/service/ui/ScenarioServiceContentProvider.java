@@ -5,13 +5,17 @@
 package com.mmxlabs.scenario.service.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.ui.Saveable;
+import org.eclipse.ui.navigator.SaveablesProvider;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
@@ -22,9 +26,39 @@ import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.ui.internal.ScenarioInstanceSavable;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 
-public class ScenarioServiceContentProvider extends AdapterFactoryContentProvider {
+public class ScenarioServiceContentProvider extends AdapterFactoryContentProvider implements IAdaptable {
+
+	private final class InternalSaveablesProvider extends SaveablesProvider {
+		@Override
+		public Saveable[] getSaveables() {
+			return saveablesMap.keySet().toArray(new Saveable[0]);
+		}
+
+		@Override
+		public Saveable getSaveable(final Object element) {
+			for (final Map.Entry<Saveable, ScenarioInstance> e : saveablesMap.entrySet()) {
+				if (e.getValue() == element) {
+					return e.getKey();
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public Object[] getElements(final Saveable saveable) {
+			if (saveablesMap.containsKey(saveable)) {
+				return new Object[] { saveablesMap.get(saveable) };
+			}
+			return null;
+		}
+
+		public void fireOpened(final Saveable... models) {
+			fireSaveablesOpened(models);
+		}
+	}
 
 	private boolean showScenarioServices = true;
 	private boolean showScenarioInstances = true;
@@ -34,6 +68,9 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	private boolean showHiddenElements = false;
 
 	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
+
+	Map<Saveable, ScenarioInstance> saveablesMap = new HashMap<Saveable, ScenarioInstance>();
+	private InternalSaveablesProvider provider;
 
 	public ScenarioServiceContentProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
@@ -94,7 +131,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 			boolean mayBeShow = false;
 			if (e instanceof Container) {
-				Container container = (Container) e;
+				final Container container = (Container) e;
 
 				if (container.isHidden() && isShowHiddenElements()) {
 					mayBeShow = true;
@@ -109,8 +146,14 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 				}
 			}
 			if (e instanceof ScenarioInstance) {
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) e;
 				if (isShowScenarioInstances()) {
 					filtered = !mayBeShow;
+					final ScenarioInstanceSavable savable = new ScenarioInstanceSavable(scenarioInstance);
+					saveablesMap.put(savable, scenarioInstance);
+					if (provider != null) {
+						provider.fireOpened(savable);
+					}
 				}
 			} else if (e instanceof Folder) {
 				if (isShowFolders()) {
@@ -135,6 +178,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 				c.add(e);
 			}
 		}
+
 		return c.toArray();
 	}
 
@@ -203,7 +247,24 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		return showHiddenElements;
 	}
 
-	public void setShowHiddenElements(boolean showHiddenElements) {
+	public void setShowHiddenElements(final boolean showHiddenElements) {
 		this.showHiddenElements = showHiddenElements;
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	@Override
+	public Object getAdapter(final Class adapter) {
+
+		if (SaveablesProvider.class.isAssignableFrom(adapter)) {
+
+			if (provider == null) {
+				provider = new InternalSaveablesProvider();
+			}
+			return provider;
+		}
+
+		return null;
 	}
 }

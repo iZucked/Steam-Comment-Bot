@@ -59,7 +59,8 @@
             contentProvider="com.mmxlabs.scenario.service.ui.ScenarioServiceContentProvider"
             id="com.mmxlabs.scenario.service.ui.navigatorContent"
             labelProvider="com.mmxlabs.scenario.service.ui.ScenarioServiceLabelProvider"
-            name="Scenario Service Content">
+            name="Scenario Service Content"
+            providesSaveables="true">
          <triggerPoints>
             <instanceof
                   value="com.mmxlabs.scenario.service.model.ScenarioModel">
