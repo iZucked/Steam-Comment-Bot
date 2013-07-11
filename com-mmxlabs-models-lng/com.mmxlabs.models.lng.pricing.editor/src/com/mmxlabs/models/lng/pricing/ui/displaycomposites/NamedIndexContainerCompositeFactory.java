@@ -13,8 +13,8 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 
 
-public class CommodityIndexCompositeFactory extends DefaultDisplayCompositeFactory {
-	public CommodityIndexCompositeFactory() {
+public class NamedIndexContainerCompositeFactory extends DefaultDisplayCompositeFactory {
+	public NamedIndexContainerCompositeFactory() {
 
 	}
 

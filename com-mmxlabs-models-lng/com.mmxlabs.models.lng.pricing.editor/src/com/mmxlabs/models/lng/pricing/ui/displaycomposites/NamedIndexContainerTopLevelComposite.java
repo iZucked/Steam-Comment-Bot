@@ -19,9 +19,9 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
  * @author Simon McGregor
  * 
  */
-public class CommodityIndexTopLevelComposite extends DefaultTopLevelComposite {
+public class NamedIndexContainerTopLevelComposite extends DefaultTopLevelComposite {
 
-	public CommodityIndexTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
+	public NamedIndexContainerTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
 		super(parent, style, location);
 	}
 

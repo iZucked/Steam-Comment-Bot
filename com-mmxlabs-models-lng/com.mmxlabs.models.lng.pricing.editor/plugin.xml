@@ -23,8 +23,20 @@
        point="com.mmxlabs.models.ui.displaycompositefactories">
     <displayCompositeFactory
           eClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
-          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.CommodityIndexCompositeFactory"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
           id="com.mmxlabs.models.lng.cargo.editor.CommodityIndexCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
+         id="com.mmxlabs.models.lng.cargo.editor.BaseFuelIndexCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.CharterIndex"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.CharterIndexCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
 </extension>
