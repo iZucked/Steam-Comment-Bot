@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.pricing.ui.displaycomposites;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -28,7 +29,7 @@ public class CommodityIndexTopLevelComposite extends DefaultTopLevelComposite {
 	 * Don't display DataIndex child objects for editing.
 	 */
 	@Override
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, final FormToolkit toolkit) {
 		/*
 		 * Note: the logic is implemented in the #createChildArea method because 
 		 * the #shouldDisplay method does not permit the particular value of
@@ -36,7 +37,7 @@ public class CommodityIndexTopLevelComposite extends DefaultTopLevelComposite {
 		 */
 		
 		if ((value instanceof DataIndex) == false) {		
-			super.createChildArea(root, object, parent, ref, value);
+			super.createChildArea(root, object, parent, ref, value, toolkit);
 		}
 	}
 
