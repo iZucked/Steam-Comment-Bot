@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -18,6 +19,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -42,19 +44,25 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 
 		final EClass eClass = object.eClass();
 
-		final TabFolder tabFolder = new TabFolder(this, SWT.TOP);
+		toolkit.adapt(this);
+		
+		final TabFolder tabFolder = new TabFolder(this, SWT.FLAT|SWT.TOP);
+		toolkit.adapt(tabFolder,true,true);
+		toolkit.paintBordersFor(tabFolder); 
+
 		// tabFolder.setLayout(new FillLayout());
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalIndent = 0;
 		gd.horizontalIndent = 0;
 		tabFolder.setLayoutData(gd);
-		final TabItem mainTabPage = new TabItem(tabFolder, SWT.None);
+		final TabItem mainTabPage = new TabItem(tabFolder, SWT.FLAT);
 		mainTabPage.setText("Contract");//EditorUtils.unmangle(eClass.getName()));
-		final Composite mainTabComposite = new Composite(tabFolder, SWT.NONE);
+//		final Composite mainTabComposite = new Composite(tabFolder, SWT.NONE);
+		final Composite mainTabComposite = toolkit.createComposite(tabFolder, SWT.NONE);
 		mainTabPage.setControl(mainTabComposite);
 		// g.setText(EditorUtils.unmangle(eClass.getName()));
 		mainTabComposite.setLayout(new FillLayout());
@@ -69,7 +77,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		final Composite priceInfoTabComposite = new Composite(tabFolder, SWT.NONE);
 		priceInfoTabPage.setControl(priceInfoTabComposite);
 		priceInfoTabComposite.setLayout(new GridLayout(1, true));
-		createChildComposites(root, object, eClass, priceInfoTabComposite);
+		createChildComposites(root, object, eClass, priceInfoTabComposite, toolkit);
 
 		final TabItem constraintTabPage = new TabItem(tabFolder, SWT.None);
 		constraintTabPage.setText("Restrictions");
@@ -86,15 +94,15 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		bottomLevel.setCommandHandler(commandHandler);
 		bottomLevel.setEditorWrapper(editorWrapper);
 
-		topLevel.display(location, root, object, range);
-		bottomLevel.display(location, root, object, range);
+		topLevel.display(location, root, object, range, dbc, toolkit);
+		bottomLevel.display(location, root, object, range, dbc, toolkit);
 
 
 		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 
 		while (refs.hasNext()) {
-			children.next().display(location, root, (EObject) object.eGet(refs.next()), range);
+			children.next().display(location, root, (EObject) object.eGet(refs.next()), range, dbc, toolkit);
 		}
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row

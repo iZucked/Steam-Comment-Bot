@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
@@ -48,6 +49,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -252,7 +254,8 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		viewer.setContentProvider(createContentProvider());		
 	}
 	
-	public Control createControl(Composite parent) {
+	@Override
+	public Control createControl(Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		final Composite composite = new Composite(parent, SWT.FULL_SELECTION);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(layoutData);

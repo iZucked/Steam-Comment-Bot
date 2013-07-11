@@ -116,6 +116,9 @@ public class PriceExpressionUtils {
 		
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue, final Double maxValue, final Date date, final List<IStatus> failures) {
 		SeriesParser parser = getParser(date);
 		try {
@@ -147,6 +150,7 @@ public class PriceExpressionUtils {
 	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
+	 * @since 5.0
 	 */
 	@SuppressWarnings("rawtypes")
 	public static SeriesParser getParser(Date dateZero) {
@@ -184,6 +188,7 @@ public class PriceExpressionUtils {
 	 * @param name The index name to use.
 	 * @param dateZero Internally, dates are represented for the SeriesParser in offsets from a "date zero" value.
 	 * @param index The index data to use.
+	 * @since 5.0
 	 */
 	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final String name, final Date dateZero, final DataIndex<? extends Number> index) {
 		final int [] times;

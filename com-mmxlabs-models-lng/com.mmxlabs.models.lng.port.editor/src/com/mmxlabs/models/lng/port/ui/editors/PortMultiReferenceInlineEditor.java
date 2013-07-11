@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Location;
@@ -67,7 +69,7 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public Control createControl(final Composite parent) {
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		final Composite buttonAndLabel = new Composite(parent, SWT.NONE);
 		final GridLayout gl = new GridLayout(2, false);
 		buttonAndLabel.setLayout(gl);

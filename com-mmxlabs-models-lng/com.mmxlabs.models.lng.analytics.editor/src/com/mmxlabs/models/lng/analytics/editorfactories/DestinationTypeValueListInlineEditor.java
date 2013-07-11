@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -21,6 +22,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.DestinationType;
@@ -68,7 +70,7 @@ public class DestinationTypeValueListInlineEditor extends BasicAttributeInlineEd
 	}
 
 	@Override
-	public Control createControl(final Composite parent) {
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		combo = new Combo(parent, SWT.READ_ONLY);
 
 		combo.setItems(names.toArray(new String[names.size()]));

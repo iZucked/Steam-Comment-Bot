@@ -9,12 +9,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -89,8 +91,8 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			}
 
 			@Override
-			public Control createControl(final Composite parent) {
-				return numberEditor.createControl(parent);
+			public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+				return numberEditor.createControl(parent, dbc, toolkit);
 			}
 
 			@Override

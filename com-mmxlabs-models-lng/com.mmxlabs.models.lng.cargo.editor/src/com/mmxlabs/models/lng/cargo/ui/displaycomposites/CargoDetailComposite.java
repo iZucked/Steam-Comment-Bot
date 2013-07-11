@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
@@ -15,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -91,9 +93,9 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 	}
 	
 	@Override
-	public void createControls(MMXRootObject root, EObject object) {
+	public void createControls(MMXRootObject root, EObject object, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		// TODO Auto-generated method stub
-		super.createControls(root, object);
+		super.createControls(root, object, dbc, toolkit);
 //		for (final IInlineEditor editor : editors) {
 //			final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE) : null;
 //			editor.setLabel(label);
