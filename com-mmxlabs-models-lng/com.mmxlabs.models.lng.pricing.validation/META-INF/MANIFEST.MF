@@ -14,5 +14,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.lng.pricing.validation.utils
 Import-Package: com.google.inject;version="1.3.0",
  com.mmxlabs.common.parser,
- com.mmxlabs.common.parser.series;version="2.1.0",
- com.mmxlabs.models.lng.transformer.util
+ com.mmxlabs.common.parser.series;version="2.1.0"

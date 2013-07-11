@@ -4,21 +4,23 @@
  */
 package com.mmxlabs.models.lng.pricing.validation.utils;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EmptyStackException;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.management.timer.Timer;
+
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.google.inject.Inject;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -29,7 +31,6 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -43,8 +44,6 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class PriceExpressionUtils {
-	private static DateAndCurveHelper dateHelper = new DateAndCurveHelper();
-
 	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
 
 	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final List<IStatus> failures) {
@@ -208,7 +207,7 @@ public class PriceExpressionUtils {
 			int i = 0;
 			for (Date date: dates) {
 				values[i] = (Number) index.getValueForMonth(date);
-				times[i] = dateHelper.convertTime(dateZero, date);
+				times[i] = convertTime(dateZero, date);
 				i++;
 			}
 			
@@ -216,4 +215,26 @@ public class PriceExpressionUtils {
 		
 		parser.addSeriesData(name, times, values);
 	}
+	
+	 /**
+	  * Code duplication from DateAndCurveHelper.java to avoid circular 
+	  * project dependencies. Keep this method in sync!
+	  * 
+	  * @param earliest
+	  * @param windowStart
+	  * @return
+	  */
+	public static int convertTime(final Date earliest, final Date windowStart) {
+		final TimeZone timezone = TimeZone.getTimeZone("UTC");
+		// I am using two calendars, because the java date objects are all
+		// deprecated; however, timezones should not be a problem because
+		// every Date in the EMF representation is in UTC.
+		final Calendar a = Calendar.getInstance(timezone);
+		a.setTime(earliest);
+		final Calendar b = Calendar.getInstance(timezone);
+		b.setTime(windowStart);
+		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
+		return (int) (difference / Timer.ONE_HOUR);
+	}
+
 }
