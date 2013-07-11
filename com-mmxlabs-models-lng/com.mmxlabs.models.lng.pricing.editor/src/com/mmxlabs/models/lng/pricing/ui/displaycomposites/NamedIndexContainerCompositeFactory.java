@@ -20,7 +20,7 @@ public class NamedIndexContainerCompositeFactory extends DefaultDisplayComposite
 
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
-		return new CommodityIndexTopLevelComposite(composite, SWT.NONE, location);
+		return new NamedIndexContainerTopLevelComposite(composite, SWT.NONE, location);
 	}
 
 }
