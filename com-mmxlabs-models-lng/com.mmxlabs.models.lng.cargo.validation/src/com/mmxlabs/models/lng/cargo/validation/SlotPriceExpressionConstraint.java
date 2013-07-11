@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -20,6 +21,9 @@ import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
  * @since 2.0
  */
 public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint {
+	private static double minExpressionValue = 0.0;
+	private static double maxExpressionValue = 90.0;
+	
 	@Override
 	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
@@ -28,12 +32,16 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 			//final SeriesParser parser = getParser();
 			final Slot slot = (Slot) target;
 
-			String priceExpression = slot.getPriceExpression();
-
 			if (slot.isSetPriceExpression()) {
+				String priceExpression = slot.getPriceExpression();
 				// Permit break even marker
 				if (!"?".equals(priceExpression)) {
 					PriceExpressionUtils.validatePriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression, failures);			
+				}
+				
+				final Date start = slot.getWindowStartWithSlotOrPortTime();
+				if (start != null) {
+					PriceExpressionUtils.constrainPriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression, minExpressionValue, maxExpressionValue, start, failures);
 				}
 			}
 		}

@@ -19,6 +19,15 @@
 
 
 	
+<extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.CommodityIndexCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.CommodityIndexCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+</extension>
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
 		

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.validation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -24,9 +25,9 @@ public class PriceExpressionParametersConstraint extends AbstractModelMultiConst
 		EObject target = ctx.getTarget();
 
 		if (target instanceof ExpressionPriceParameters) {
-			final SeriesParser parser = PriceExpressionUtils.getParser();
+			final SeriesParser parser = PriceExpressionUtils.getParser(null);
 			final ExpressionPriceParameters contract = (ExpressionPriceParameters) target;
-			PriceExpressionUtils.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getExpressionPriceParameters_PriceExpression(), contract.getPriceExpression(), parser, failures);
+			PriceExpressionUtils.validatePriceExpression(ctx, contract, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION, contract.getPriceExpression(), parser, failures);
 		}
 
 		return Activator.PLUGIN_ID;
