@@ -13,7 +13,7 @@ import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 
 public class SensibleIndexDateConstraint  extends AbstractModelConstraint {
-	private Date earliestDate = new GregorianCalendar(2020,0,1).getTime();
+	private Date earliestDate = new GregorianCalendar(2000,0,1).getTime();
 
 	@Override
 	public IStatus validate(IValidationContext ctx) {
