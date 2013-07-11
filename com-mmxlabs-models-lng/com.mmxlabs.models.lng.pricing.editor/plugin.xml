@@ -182,22 +182,56 @@
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Data Index"
-          outputEClass="com.mmxlabs.models.lng.pricing.DataIndex"
-          targetEClass="com.mmxlabs.models.lng.pricing.Index">
+          label="Commodity Data Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.expressionFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Expression"
-          outputEClass="com.mmxlabs.models.lng.pricing.DerivedIndex"
-          targetEClass="com.mmxlabs.models.lng.pricing.Index">
+           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Commodity Expression Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DerivedIndex">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.cooldownPricing"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Cooldown Price"
           targetEClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.charterIndex"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Charter Data Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.CharterIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.charterIndex"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Charter Expression Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.CharterIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DerivedIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.baseFuelIndex"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Base Fuel Data Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.baseFuelIndex"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Base Fuel Expression Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DerivedIndex">
     </factory>
  </extension>
  <extension
