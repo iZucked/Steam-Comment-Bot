@@ -10,6 +10,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 
 public class SensibleIndexDateConstraint  extends AbstractModelConstraint {
@@ -22,10 +23,13 @@ public class SensibleIndexDateConstraint  extends AbstractModelConstraint {
 		if (target instanceof CommodityIndex) {
 			final CommodityIndex index = (CommodityIndex) target;
 			final Index<Double> data = index.getData();
-			for (Date date: data.getDates()) {
-				if (date.before(earliestDate)) {
-					return (IConstraintStatus) ctx.createFailureStatus(index.getName(), earliestDate);
+			if (data instanceof DataIndex) {
+				for (Date date: data.getDates()) {
+					if (date.before(earliestDate)) {
+						return (IConstraintStatus) ctx.createFailureStatus(index.getName(), earliestDate);
+					}
 				}
+				
 			}
 		}
 		
