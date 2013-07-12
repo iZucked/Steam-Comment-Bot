@@ -6,6 +6,19 @@ package com.mmxlabs.lingo.app.intro;
 
 import java.io.IOException;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAccount;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -39,6 +52,8 @@ public class Application implements IApplication {
 			display.dispose();
 			return IApplication.EXIT_OK;
 		}
+
+		initAccessControl();
 
 		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
 
@@ -77,6 +92,48 @@ public class Application implements IApplication {
 			}
 		}
 		return IApplication.EXIT_OK;
+	}
+
+	private void initAccessControl() {
+
+		class MyAuthRealm extends AuthorizingRealm {
+			@Override
+			protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
+				final SimpleAuthorizationInfo sai = new SimpleAuthorizationInfo();
+				sai.addRole("optimise");
+				sai.addStringPermission("ui:*:view");
+				return sai;
+			}
+
+			@Override
+			protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken token) throws AuthenticationException {
+
+				return new SimpleAccount(token.getPrincipal(), token.getCredentials(), "MyAuthRealm");
+			}
+		}
+
+		final MyAuthRealm realm = new MyAuthRealm();
+		// Disable caching for immediate updates
+		realm.setAuthorizationCachingEnabled(false);
+
+		final SecurityManager securityManager = new DefaultSecurityManager(realm);
+		SecurityUtils.setSecurityManager(securityManager);
+
+		final Subject subject = SecurityUtils.getSubject();
+		subject.login(new UsernamePasswordToken("user", "password"));
+		if (SecurityUtils.getSubject().hasRole("optimise")) {
+			System.out.println("optimise ");
+		}
+		if (SecurityUtils.getSubject().hasRole("optimise2")) {
+			System.out.println("optimise2 ");
+		}
+		if (SecurityUtils.getSubject().isPermitted("ui")) {
+			System.out.println("ui ");
+		}
+		if (SecurityUtils.getSubject().isPermitted("ui2:toto:view")) {
+			System.out.println("ui2 ");
+		}
+
 	}
 
 	/*
