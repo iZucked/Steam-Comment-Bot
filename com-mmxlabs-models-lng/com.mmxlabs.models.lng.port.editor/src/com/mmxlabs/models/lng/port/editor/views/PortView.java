@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.port.Location;
@@ -36,13 +37,15 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 
 	@Override
 	protected void initViewerPane(final PortEditorPane pane) {
-		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports() }), null, getEditingDomain()
-				.getCommandStack());
-		pane.getViewer().setInput(getRootObject());
+		final EditingDomain domain = getEditingDomain();
+		if (domain != null) {
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports() }), null, domain.getCommandStack());
+			pane.getViewer().setInput(getRootObject());
 
-		// Add action to create and edit cargo groups
-		pane.getToolBarManager().appendToGroup("edit", new MergePorts(this, pane.getScenarioViewer()));
-		pane.getToolBarManager().update(true);
+			// Add action to create and edit cargo groups
+			pane.getToolBarManager().appendToGroup("edit", new MergePorts(this, pane.getScenarioViewer()));
+			pane.getToolBarManager().update(true);
+		}
 	}
 
 	@Override

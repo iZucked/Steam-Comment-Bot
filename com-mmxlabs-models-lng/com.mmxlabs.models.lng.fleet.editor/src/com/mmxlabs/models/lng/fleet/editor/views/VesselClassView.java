@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -25,9 +26,12 @@ public class VesselClassView extends ScenarioTableViewerView<VesselClassViewerPa
 
 	@Override
 	protected void initViewerPane(final VesselClassViewerPane pane) {
-		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses() }), getAdapterFactory(),
-				getEditingDomain().getCommandStack());
-		pane.getViewer().setInput(getRootObject());
+		final EditingDomain domain = getEditingDomain();
+		if (domain != null) {
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses() }), getAdapterFactory(),
+					domain.getCommandStack());
+			pane.getViewer().setInput(getRootObject());
+		}
 	}
 
 	@Override
