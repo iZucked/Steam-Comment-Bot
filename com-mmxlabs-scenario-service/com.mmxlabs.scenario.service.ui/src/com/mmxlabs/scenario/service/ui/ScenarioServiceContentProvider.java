@@ -252,7 +252,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 4.1
 	 */
 	@Override
 	public Object getAdapter(final Class adapter) {
