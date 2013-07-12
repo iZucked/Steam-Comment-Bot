@@ -131,7 +131,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				} else {
 
 					// New optimisation, so check there are no validation errors.
-					if (!validateScenario(root)) {
+					if (!validateScenario(root, optimising)) {
 						action.setEnabled(false);
 						return;
 					}

@@ -4,18 +4,39 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
+import java.io.IOException;
+import java.util.Collections;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.validation.model.Category;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.IConstraintDescriptor;
+import org.eclipse.emf.validation.service.IConstraintFilter;
+import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IValidationService;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -89,7 +110,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 					if (control == null) {
 
 						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(root)) {
+						if (!validateScenario(root, optimising)) {
 							return null;
 						}
 
@@ -183,7 +204,6 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 							instance.getLock(k).release();
 							control.cancel();
 
-
 							final Display display = Display.getDefault();
 							if (display != null) {
 								display.asyncExec(new Runnable() {
@@ -206,7 +226,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 		return null;
 	}
 
-	public static boolean validateScenario(final MMXRootObject root) {
+	public static boolean validateScenario(final MMXRootObject root, final boolean optimising) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -218,6 +238,10 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				for (final Category cat : constraint.getCategories()) {
 					if (cat.getId().endsWith(".base")) {
 						return true;
+					} else if (optimising && cat.getId().endsWith(".optimisation")) {
+						return true;
+					} else if (!optimising && cat.getId().endsWith(".evaluation")) {
+						return true;
 					}
 				}
 
@@ -225,7 +249,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			}
 		});
 
-		final ValidationHelper helper = new ValidationHelper();
+		final IValidationService helper = Activator.getDefault().getValidationService();
 		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root, false);
 
 		final IStatus status = helper.runValidation(validator, extraContext, Collections.singleton(root));
@@ -287,7 +311,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				} else {
 
 					// New optimisation, so check there are no validation errors.
-					if (!validateScenario(root)) {
+					if (!validateScenario(root, optimising)) {
 						action.setEnabled(false);
 						return;
 					}
