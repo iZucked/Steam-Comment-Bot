@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.mmxlabs.shiplingo.platform</groupId>
 		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
-		<version>4.0.2-SNAPSHOT</version>
+		<version>4.1.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.shiplingo.platform.p2</artifactId>
-	<version>4.0.2-SNAPSHOT</version>
+	<version>4.1.0.RELEASE</version>
 	<packaging>eclipse-repository</packaging>
 	<name>ShipLingo Platform: p2 Repository</name>
 </project>
