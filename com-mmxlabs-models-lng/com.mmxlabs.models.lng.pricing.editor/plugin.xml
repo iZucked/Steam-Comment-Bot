@@ -80,6 +80,12 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.PortCost">
+  </componentHelper>
 		
 	</extension>
  <extension
