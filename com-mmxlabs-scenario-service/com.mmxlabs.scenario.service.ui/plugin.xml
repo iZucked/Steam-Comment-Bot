@@ -593,6 +593,7 @@
                </and>
             </visibleWhen>
          </command>
+         <!--
          <command
                commandId="com.mmxlabs.scenario.service.ui.diffedit"
                label="Sandbox"
@@ -621,6 +622,7 @@
                </and>
             </visibleWhen>
          </command>
+         -->
          <separator
                name="importers">
          </separator>
