@@ -811,9 +811,9 @@ public class CargoImportActionTest {
 
 		Cargo importedCargo = cargoModel.getCargoes().get(0);
 
-		// Failure - most likely we need to null a slot reference that was normally done automatically in the 2 slot case
 		Assert.assertEquals(2, importedCargo.getSlots().size());
-		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(0)));
+
+		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getLoadSlots().get(0)));
 		Assert.assertTrue(importedCargo.getSlots().contains(cargoModel.getDischargeSlots().get(1)));
 
 		// Assert.assertEquals(100, importedCargo.getLoadSlot().getDuration());
@@ -870,11 +870,13 @@ public class CargoImportActionTest {
 			originalCargo1.getSlots().add(originalLoadSlot1);
 			originalCargo1.getSlots().add(originalDischargeSlot1);
 			originalCargo1.setName("Cargo1");
+			originalCargo1.setAllowRewiring(false);
 
 			originalCargo2 = CargoFactory.eINSTANCE.createCargo();
 			originalCargo2.getSlots().add(originalLoadSlot2);
 			originalCargo2.getSlots().add(originalDischargeSlot2);
 			originalCargo2.setName("Cargo2");
+			originalCargo2.setAllowRewiring(false);
 
 			originalLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID1");
 			originalDischargeSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID2");
@@ -953,11 +955,13 @@ public class CargoImportActionTest {
 			newCargo1.getSlots().add(newLoadSlot1);
 			newCargo1.getSlots().add(newDischargeSlot2);
 			newCargo1.setName("Cargo1");
+			newCargo1.setAllowRewiring(false);
 
 			newCargo2 = CargoFactory.eINSTANCE.createCargo();
 			newCargo2.getSlots().add(newLoadSlot2);
 			newCargo2.getSlots().add(newDischargeSlot1);
 			newCargo2.setName("Cargo2");
+			newCargo2.setAllowRewiring(false);
 
 			newLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "newUUID1");
 			newDischargeSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "newUUID2");
@@ -1064,11 +1068,14 @@ public class CargoImportActionTest {
 			originalCargo1.getSlots().add(originalLoadSlot1);
 			originalCargo1.getSlots().add(originalDischargeSlot1);
 			originalCargo1.setName("Cargo1");
+			originalCargo1.setAllowRewiring(false);
 
 			originalCargo2 = CargoFactory.eINSTANCE.createCargo();
 			originalCargo2.getSlots().add(originalLoadSlot2);
 			originalCargo2.getSlots().add(originalDischargeSlot2);
 			originalCargo2.setName("Cargo2");
+			originalCargo2.setAllowRewiring(false);
+
 
 			originalLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID1");
 			originalDischargeSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID2");
@@ -1147,11 +1154,13 @@ public class CargoImportActionTest {
 			newCargo1.getSlots().add(newLoadSlot2);
 			newCargo1.getSlots().add(newDischargeSlot1);
 			newCargo1.setName("Cargo1");
+			newCargo1.setAllowRewiring(false);
 
 			newCargo2 = CargoFactory.eINSTANCE.createCargo();
 			newCargo2.getSlots().add(newLoadSlot1);
 			newCargo2.getSlots().add(newDischargeSlot2);
 			newCargo2.setName("Cargo2");
+			newCargo2.setAllowRewiring(false);
 
 			newLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "newUUID1");
 			newDischargeSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "newUUID2");

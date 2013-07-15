@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSpotMarket <em>Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation <em>Cargo Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getMarketAllocation <em>Market Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotVisit <em>Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}</li>
@@ -168,6 +169,36 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	void setCargoAllocation(CargoAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>Market Allocation</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotAllocation <em>Slot Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Market Allocation</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Market Allocation</em>' reference.
+	 * @see #setMarketAllocation(MarketAllocation)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_MarketAllocation()
+	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotAllocation
+	 * @model opposite="slotAllocation" required="true"
+	 * @generated
+	 */
+	MarketAllocation getMarketAllocation();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getMarketAllocation <em>Market Allocation</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Market Allocation</em>' reference.
+	 * @see #getMarketAllocation()
+	 * @generated
+	 */
+	void setMarketAllocation(MarketAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>Slot Visit</b></em>' reference.

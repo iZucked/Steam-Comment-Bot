@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    copyrightText="Copyright (C) Minimax Labs Ltd., 2010 - 2012&#xD;&#xA;All rights reserved."
+    modelDirectory="/com.mmxlabs.models.lng.types/src" modelPluginID="com.mmxlabs.models.lng.types"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+    dynamicTemplates="true" modelName="LNGTypes" featureMapWrapperInternalInterface=""
+    featureMapWrapperClass="" codeFormatting="true" booleanFlagsField="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" runtimeVersion="2.8" language=""
+    usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore"
+    operationReflection="true">
+  <foreignModel>lngtypes.ecore</foreignModel>
+  <genPackages prefix="Types" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      extensibleProviderFactory="true" childCreationExtenders="true" ecorePackage="lngtypes.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//PortCapability">
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/LOAD"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/DISCHARGE"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/DRYDOCK"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/MAINTENANCE"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PortCapability/TRANSFER"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//CargoDeliveryType">
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//CargoDeliveryType/Any"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//CargoDeliveryType/Shipped"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//CargoDeliveryType/NotShipped"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="lngtypes.ecore#//Iterable">
+      <genTypeParameters ecoreTypeParameter="lngtypes.ecore#//Iterable/T"/>
+    </genDataTypes>
+    <genClasses image="false" ecoreClass="lngtypes.ecore#//ObjectSet">
+      <genTypeParameters ecoreTypeParameter="lngtypes.ecore#//ObjectSet/T"/>
+      <genTypeParameters ecoreTypeParameter="lngtypes.ecore#//ObjectSet/U"/>
+      <genOperations ecoreOperation="lngtypes.ecore#//ObjectSet/collect">
+        <genParameters ecoreParameter="lngtypes.ecore#//ObjectSet/collect/marked"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="lngtypes.ecore#//APortSet">
+      <genTypeParameters ecoreTypeParameter="lngtypes.ecore#//APortSet/U"/>
+    </genClasses>
+    <genClasses ecoreClass="lngtypes.ecore#//AVesselSet">
+      <genTypeParameters ecoreTypeParameter="lngtypes.ecore#//AVesselSet/U"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lngtypes.ecore#//ITimezoneProvider">
+      <genOperations ecoreOperation="lngtypes.ecore#//ITimezoneProvider/getTimeZone">
+        <genParameters ecoreParameter="lngtypes.ecore#//ITimezoneProvider/getTimeZone/attribute"/>
+      </genOperations>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

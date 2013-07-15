@@ -52,10 +52,10 @@ public final class ScheduleEditPlugin extends EMFPlugin {
 		     CommercialEditPlugin.INSTANCE,
 		     FleetEditPlugin.INSTANCE,
 		     LNGTypesEditPlugin.INSTANCE,
-		     MmxcoreEditPlugin.INSTANCE,
 		     PortEditPlugin.INSTANCE,
 		     PricingEditPlugin.INSTANCE,
 		     SpotMarketsEditPlugin.INSTANCE,
+		     MmxcoreEditPlugin.INSTANCE,
 		   });
 	}
 

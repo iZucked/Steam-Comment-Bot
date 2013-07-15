@@ -21,15 +21,20 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * 
  */
 public class BaseFuelEquivalenceConstraint extends AbstractModelConstraint {
+	private double min = 0.1;
+	private double max = 2;
+	
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof BaseFuel) {
 			final BaseFuel baseFuel = (BaseFuel) target;
+			double factor = baseFuel.getEquivalenceFactor();
 
-			if (baseFuel.getEquivalenceFactor() < 0.000001) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'"+baseFuel.getName()+"'"));
+			if (factor < min || factor > max) {
+				String message = String.format("'%s' has equivalence factor %.2f (should be between %.2f and %.2f)", baseFuel.getName(), factor, min, max);
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(baseFuel, FleetPackage.eINSTANCE.getBaseFuel_EquivalenceFactor());
 				return dcsd;
 			}

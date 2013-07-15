@@ -4,13 +4,17 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.APortSet;
+import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +25,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBPurchasesMarketImpl#getNotionalPort <em>Notional Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBPurchasesMarketImpl#getCv <em>Cv</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBPurchasesMarketImpl#getMarketPorts <em>Market Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -56,6 +61,17 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 	 * @ordered
 	 */
 	protected double cv = CV_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getMarketPorts() <em>Market Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getMarketPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet<Port>> marketPorts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -137,6 +153,19 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<APortSet<Port>> getMarketPorts() {
+		if (marketPorts == null) {
+			marketPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.FOB_PURCHASES_MARKET__MARKET_PORTS);
+		}
+		return marketPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -148,6 +177,8 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 				return basicGetNotionalPort();
 			case SpotMarketsPackage.FOB_PURCHASES_MARKET__CV:
 				return getCv();
+			case SpotMarketsPackage.FOB_PURCHASES_MARKET__MARKET_PORTS:
+				return getMarketPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -157,6 +188,7 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -165,6 +197,10 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 				return;
 			case SpotMarketsPackage.FOB_PURCHASES_MARKET__CV:
 				setCv((Double)newValue);
+				return;
+			case SpotMarketsPackage.FOB_PURCHASES_MARKET__MARKET_PORTS:
+				getMarketPorts().clear();
+				getMarketPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -184,6 +220,9 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 			case SpotMarketsPackage.FOB_PURCHASES_MARKET__CV:
 				setCv(CV_EDEFAULT);
 				return;
+			case SpotMarketsPackage.FOB_PURCHASES_MARKET__MARKET_PORTS:
+				getMarketPorts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -200,6 +239,8 @@ public class FOBPurchasesMarketImpl extends SpotMarketImpl implements FOBPurchas
 				return notionalPort != null;
 			case SpotMarketsPackage.FOB_PURCHASES_MARKET__CV:
 				return cv != CV_EDEFAULT;
+			case SpotMarketsPackage.FOB_PURCHASES_MARKET__MARKET_PORTS:
+				return marketPorts != null && !marketPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

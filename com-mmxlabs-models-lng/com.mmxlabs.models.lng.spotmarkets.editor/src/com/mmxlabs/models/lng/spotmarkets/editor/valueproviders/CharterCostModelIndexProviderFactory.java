@@ -12,10 +12,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.pricing.ui.valueproviders.IndexReferenceValueProviderFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 
@@ -30,7 +32,7 @@ public class CharterCostModelIndexProviderFactory implements IReferenceValueProv
 
 	public CharterCostModelIndexProviderFactory() {
 		// TODO: Should really look up from registry - but last attempt caused it to look up this class....recurse...
-		this.delegate = new IndexReferenceValueProviderFactory();
+		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), PricingPackage.eINSTANCE.getCharterIndex());
 	}
 
 	@Override

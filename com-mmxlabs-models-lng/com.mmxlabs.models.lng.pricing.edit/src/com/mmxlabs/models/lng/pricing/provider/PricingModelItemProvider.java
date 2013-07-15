@@ -105,6 +105,7 @@ public class PricingModelItemProvider
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__PORT_COSTS);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
 		}
 		return childrenFeatures;
 	}
@@ -165,6 +166,7 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__ROUTE_COSTS:
 			case PricingPackage.PRICING_MODEL__PORT_COSTS:
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
+			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -185,22 +187,12 @@ public class PricingModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES,
-				 PricingFactory.eINSTANCE.createDataIndex()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES,
-				 PricingFactory.eINSTANCE.createDerivedIndex()));
+				 PricingFactory.eINSTANCE.createCommodityIndex()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES,
-				 PricingFactory.eINSTANCE.createDataIndex()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES,
-				 PricingFactory.eINSTANCE.createDerivedIndex()));
+				 PricingFactory.eINSTANCE.createCharterIndex()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -221,29 +213,11 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES,
 				 PricingFactory.eINSTANCE.createCooldownPrice()));
-	}
 
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES ||
-			childFeature == PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES,
+				 PricingFactory.eINSTANCE.createBaseFuelIndex()));
 	}
 
 }

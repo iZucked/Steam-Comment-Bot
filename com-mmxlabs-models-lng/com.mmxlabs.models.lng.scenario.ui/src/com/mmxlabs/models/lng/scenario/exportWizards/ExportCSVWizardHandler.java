@@ -26,6 +26,7 @@ public class ExportCSVWizardHandler extends AbstractHandler {
 		return selectionToPass;
 	}
 
+	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
 		if (activeWorkbenchWindow == null) {

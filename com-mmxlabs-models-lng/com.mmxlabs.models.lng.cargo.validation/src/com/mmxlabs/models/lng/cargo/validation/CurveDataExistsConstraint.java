@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -138,9 +139,9 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 			final Date date = slot.getWindowStartWithSlotOrPortTime();
 
 			// check market indices
-			for (Index<?> index : pricingModel.getCommodityIndices()) {
+			for (CommodityIndex index : pricingModel.getCommodityIndices()) {
 				if (Exposures.getExposureCoefficient(slot, index) != 0) {
-					if (!curveCovers(date, indexFinder, index, ctx)) {
+					if (!curveCovers(date, indexFinder, index.getData(), ctx)) {
 						String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
 						final String failureMessage = String.format(format, index.getName(), sdf.format(slot.getWindowStart()), slot.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);

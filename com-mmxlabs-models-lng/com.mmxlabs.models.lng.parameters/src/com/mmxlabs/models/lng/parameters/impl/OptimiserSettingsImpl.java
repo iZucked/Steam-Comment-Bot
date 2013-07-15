@@ -11,7 +11,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -41,6 +40,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getSeed <em>Seed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getArguments <em>Arguments</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isRewire <em>Rewire</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isShippingOnly <em>Shipping Only</em>}</li>
  * </ul>
  * </p>
  *
@@ -158,6 +159,50 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	protected boolean rewire = REWIRE_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #isGenerateCharterOuts() <em>Generate Charter Outs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #isGenerateCharterOuts()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean GENERATE_CHARTER_OUTS_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isGenerateCharterOuts() <em>Generate Charter Outs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #isGenerateCharterOuts()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean generateCharterOuts = GENERATE_CHARTER_OUTS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isShippingOnly() <em>Shipping Only</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #isShippingOnly()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SHIPPING_ONLY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isShippingOnly() <em>Shipping Only</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #isShippingOnly()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean shippingOnly = SHIPPING_ONLY_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -181,6 +226,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -190,6 +236,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -374,6 +421,56 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isGenerateCharterOuts() {
+		return generateCharterOuts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setGenerateCharterOuts(boolean newGenerateCharterOuts) {
+		boolean oldGenerateCharterOuts = generateCharterOuts;
+		generateCharterOuts = newGenerateCharterOuts;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS, oldGenerateCharterOuts, generateCharterOuts));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isShippingOnly() {
+		return shippingOnly;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setShippingOnly(boolean newShippingOnly) {
+		boolean oldShippingOnly = shippingOnly;
+		shippingOnly = newShippingOnly;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY, oldShippingOnly, shippingOnly));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -418,6 +515,10 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return getArguments();
 			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
 				return isRewire();
+			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
+				return isGenerateCharterOuts();
+			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
+				return isShippingOnly();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -458,6 +559,12 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
 				setRewire((Boolean)newValue);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
+				setGenerateCharterOuts((Boolean)newValue);
+				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
+				setShippingOnly((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -494,6 +601,12 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
 				setRewire(REWIRE_EDEFAULT);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
+				setGenerateCharterOuts(GENERATE_CHARTER_OUTS_EDEFAULT);
+				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
+				setShippingOnly(SHIPPING_ONLY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -522,6 +635,10 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return arguments != null && !arguments.isEmpty();
 			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
 				return rewire != REWIRE_EDEFAULT;
+			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
+				return generateCharterOuts != GENERATE_CHARTER_OUTS_EDEFAULT;
+			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
+				return shippingOnly != SHIPPING_ONLY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -574,6 +691,10 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		result.append(seed);
 		result.append(", rewire: ");
 		result.append(rewire);
+		result.append(", generateCharterOuts: ");
+		result.append(generateCharterOuts);
+		result.append(", shippingOnly: ");
+		result.append(shippingOnly);
 		result.append(')');
 		return result.toString();
 	}

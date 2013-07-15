@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,6 +17,7 @@ import com.mmxlabs.models.lng.port.Port;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getNotionalPort <em>Notional Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getCv <em>Cv</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getMarketPorts <em>Market Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -74,6 +77,23 @@ public interface FOBPurchasesMarket extends SpotMarket {
 	 * @generated
 	 */
 	void setCv(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Market Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Market Ports</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Market Ports</em>' reference list.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getFOBPurchasesMarket_MarketPorts()
+	 * @model
+	 * @generated
+	 */
+	EList<APortSet<Port>> getMarketPorts();
 
 } // end of  FOBPurchasesMarket
 

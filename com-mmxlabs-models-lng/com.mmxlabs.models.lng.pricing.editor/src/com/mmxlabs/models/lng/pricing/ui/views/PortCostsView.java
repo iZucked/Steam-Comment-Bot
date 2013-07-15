@@ -34,6 +34,7 @@ public class PortCostsView extends ScenarioTableViewerView<PortCostPane> {
 					domain.getCommandStack());
 			pane.getViewer().setInput(getRootObject());
 		}
+		}
 	}
 
 	@Override

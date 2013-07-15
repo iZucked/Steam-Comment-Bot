@@ -16,6 +16,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getFuel <em>Fuel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,9 +55,10 @@ public interface BaseFuelCost extends MMXObject {
 	 * Returns the value of the '<em><b>Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Price</em>' reference isn't clear,
+	 * If the meaning of the '<em>Price</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Price</em>' attribute.
 	 * @see #setPrice(double)
@@ -64,17 +66,48 @@ public interface BaseFuelCost extends MMXObject {
 	 * @model required="true"
 	 * @generated
 	 */
+	@Deprecated
 	double getPrice();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Price</em>' attribute.
 	 * @see #getPrice()
 	 * @generated
 	 */
+	@Deprecated
 	void setPrice(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Index</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Index</em>' reference.
+	 * @see #setIndex(BaseFuelIndex)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getBaseFuelCost_Index()
+	 * @model required="true"
+	 * @generated
+	 */
+	BaseFuelIndex getIndex();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Index</em>' reference.
+	 * @see #getIndex()
+	 * @generated
+	 */
+	void setIndex(BaseFuelIndex value);
 
 } // end of  BaseFuelCost
 

@@ -9,12 +9,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -27,7 +29,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
-import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 
 public class BaseFuelPriceInjector extends BaseComponentHelper {
 	@Override
@@ -56,7 +58,7 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass displayedClass) {
-		final NumberInlineEditor numberEditor = new NumberInlineEditor(PricingPackage.eINSTANCE.getBaseFuelCost_Price());
+		final ReferenceInlineEditor numberEditor = new ReferenceInlineEditor(PricingPackage.eINSTANCE.getBaseFuelCost_Index());
 		detailComposite.addInlineEditor(new IInlineEditor() {
 			@Override
 			public void setLabel(final Label label) {
@@ -89,8 +91,8 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			}
 
 			@Override
-			public Control createControl(final Composite parent) {
-				return numberEditor.createControl(parent);
+			public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+				return numberEditor.createControl(parent, dbc, toolkit);
 			}
 
 			@Override

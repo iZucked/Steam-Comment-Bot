@@ -34,6 +34,7 @@ public class CanalCostsView extends ScenarioTableViewerView<CanalCostsPane> {
 					domain.getCommandStack());
 			pane.getViewer().setInput(getRootObject());
 		}
+		}
 	}
 
 	@Override

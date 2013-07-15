@@ -80,6 +80,8 @@ public class CargoEditorMenuHelper {
 
 	private final LNGScenarioModel scenarioModel;
 
+	private static final boolean enableSTSMenus = true;
+
 	/**
 	 * @since 4.0
 	 */
@@ -671,7 +673,7 @@ public class CargoEditorMenuHelper {
 				menuManager.add(new CreateSlotAction("Discharge", source, null, false, null));
 				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, null));
 
-				if (false) {
+				if (enableSTSMenus ) {
 					if (loadSlot.getTransferFrom() == null) {
 						if (!transferPorts.isEmpty()) {
 							final MenuManager subMenu = new MenuManager("Ship to Ship", null);
@@ -690,7 +692,7 @@ public class CargoEditorMenuHelper {
 			if (!dischargeSlot.isFOBSale()) {
 				menuManager.add(new CreateSlotAction("DES Purchase", source, null, true, null));
 			}
-			if (false) {
+			if (enableSTSMenus) {
 
 				if (dischargeSlot.getTransferTo() == null) {
 					if (!transferPorts.isEmpty()) {
