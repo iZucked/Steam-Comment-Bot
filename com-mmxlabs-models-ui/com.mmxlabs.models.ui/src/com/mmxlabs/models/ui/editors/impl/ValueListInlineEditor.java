@@ -50,6 +50,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected Control createValueControl(final Composite parent) {
 		combo = new Combo(parent, SWT.READ_ONLY);
+		toolkit.adapt(combo, true, true);
 
 		combo.setItems(names.toArray(new String[names.size()]));
 

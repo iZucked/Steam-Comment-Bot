@@ -55,7 +55,7 @@ public class DefaultDisplayCompositeLayoutProvider implements
 			return ((ILabelLayoutDataProvidingEditor) editor).createLabelLayoutData(root, value, control, label);
 		}
 		else {
-			return new GridData(SWT.RIGHT, SWT.CENTER, false, false);
+			return new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		}
 	}
 }

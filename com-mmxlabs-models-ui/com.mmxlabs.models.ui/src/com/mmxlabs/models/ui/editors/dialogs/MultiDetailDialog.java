@@ -12,10 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -28,10 +30,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,6 +39,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
@@ -53,6 +55,7 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
+import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
@@ -70,7 +73,7 @@ enum SetMode {
  * @author hinton
  * 
  */
-public class MultiDetailDialog extends Dialog {
+public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	private IDisplayComposite displayComposite;
 	/**
 	 * The top composite in which we store our detail views
@@ -119,13 +122,47 @@ public class MultiDetailDialog extends Dialog {
 	@Override
 	public void create() {
 		super.create();
-		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
-		createProxies();
+		updateEditor();
+	}
+
+	private void updateEditor() {
+
+		if (observablesManager != null) {
+			observablesManager.dispose();
+		}
+		if (dbc != null) {
+			dbc.dispose();
+		}
+
+		this.dbc = new EMFDataBindingContext();
+		this.observablesManager = new ObservablesManager();
+
+		// This call means we do not need to manually manage our databinding objects lifecycle manually.
+		observablesManager.runAndCollect(new Runnable() {
+
+			@Override
+			public void run() {
+				doCreateFormContent();
+			}
+		});
+
+	}
+
+	/**
+	 * Create an editor view for the selected object and display it.
+	 * 
+	 * @since 5.0
+	 */
+	@Override
+	protected void doCreateFormContent() {
 
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
 		}
+
+		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
+		createProxies();
 
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, scenarioEditingLocation);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -148,17 +185,31 @@ public class MultiDetailDialog extends Dialog {
 			}
 		};
 		displayComposite.setCommandHandler(immediate);
-		displayComposite.display(scenarioEditingLocation, rootObject, proxies.get(proxies.size() - 1), proxies);
+		displayComposite.display(scenarioEditingLocation, rootObject, proxies.get(proxies.size() - 1), proxies, dbc, toolkit);
 		disableControls();
 		resizeAndCenter();
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	protected Control createDialogArea(final Composite parent) {
-		final Composite c = (Composite) super.createDialogArea(parent);
-		dialogArea = c;
+	protected void createFormContent(final IManagedForm managedForm) {
 
-		return c;
+		this.managedForm = managedForm;
+		this.toolkit = managedForm.getToolkit();
+
+		final ScrolledForm form = managedForm.getForm();
+		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.setText("");
+		toolkit.decorateFormHeading(form.getForm());
+		{
+			final GridLayout layout = new GridLayout(1, true);
+			form.getBody().setLayout(layout);
+		}
+		final Composite c = managedForm.getForm().getBody();
+
+		dialogArea = c;
 	}
 
 	private void createProxies() {
@@ -327,20 +378,6 @@ public class MultiDetailDialog extends Dialog {
 		return true;
 	}
 
-	private void resizeAndCenter() {
-		final Shell shell = getShell();
-		if (shell != null) {
-			shell.layout(true);
-
-			shell.setSize(shell.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-			final Rectangle shellBounds = getParentShell().getBounds();
-			final Point dialogSize = shell.getSize();
-
-			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
-		}
-	}
-
 	private class EditorWrapper implements IInlineEditorWrapper {
 		@Override
 		public IInlineEditor wrap(final IInlineEditor proxy) {
@@ -365,15 +402,15 @@ public class MultiDetailDialog extends Dialog {
 				};
 
 				@Override
-				public Control createControl(final Composite parent) {
-					final Composite composite = new Composite(parent, SWT.NONE);
+				public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit) {
+					final Composite composite = toolkit.createComposite(parent);
 
 					final GridLayout layout = new GridLayout(2, false);
 					layout.marginHeight = 0;
 					layout.marginWidth = 0;
 					composite.setLayout(layout);
 
-					final Composite c2 = new Composite(composite, SWT.NONE);
+					final Composite c2 = toolkit.createComposite(composite, SWT.NONE);
 					final GridLayout layout2 = new GridLayout(1, false);
 					layout2.marginHeight = 0;
 					layout2.marginWidth = 0;
@@ -382,7 +419,7 @@ public class MultiDetailDialog extends Dialog {
 
 					c2.setLayout(layout2);
 
-					final Control sub = proxy.createControl(c2);
+					final Control sub = proxy.createControl(c2, dbc, toolkit);
 					sub.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 					// we can't disable here any more, as the later setInput() call will re-enable
@@ -394,7 +431,7 @@ public class MultiDetailDialog extends Dialog {
 					manager.add(new Action("Set", IAction.AS_CHECK_BOX) {
 						@Override
 						public void run() {
-//							ControlUtils.setControlEnabled(sub, isChecked());
+							// ControlUtils.setControlEnabled(sub, isChecked());
 							proxy.setEditorEnabled(isChecked());
 							if (isChecked()) {
 								featuresToSet.put(pair, SetMode.REPLACE);
@@ -403,7 +440,6 @@ public class MultiDetailDialog extends Dialog {
 							}
 						}
 					});
-
 					if (proxy.getFeature() != null) {
 						if (proxy.getFeature().isMany() && ((proxy.getFeature() instanceof EAttribute) || (((EReference) proxy.getFeature()).isContainment() == false))) {
 							manager.add(new MultiFeatureAction(pair, featuresToSet));
@@ -411,6 +447,7 @@ public class MultiDetailDialog extends Dialog {
 					}
 
 					final ToolBar tb = manager.createControl(composite);
+					toolkit.adapt(tb, true, true);
 					final GridData gd = new GridData();
 					// TODO fix magic number - measure width properly and set everywhere
 					gd.minimumWidth = gd.widthHint = 64;
@@ -484,13 +521,13 @@ public class MultiDetailDialog extends Dialog {
 				@Override
 				public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
 					// TODO Auto-generated method stub
-					
+
 				}
 
 				@Override
 				public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			};
 		}

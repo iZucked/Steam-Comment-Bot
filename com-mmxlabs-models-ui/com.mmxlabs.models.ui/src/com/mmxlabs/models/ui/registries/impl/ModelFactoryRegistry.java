@@ -30,9 +30,11 @@ public class ModelFactoryRegistry implements IModelFactoryRegistry {
 			final String extensionID = extension.getID();
 			final String extensionLabel = extension.getLabel();
 			final String outputEClass = extension.getOutputEClass();
+			final String replacementEReference = extension.getReplacementEReference();
+			final String replacementEClass = extension.getReplacementEClass();
 			if (extensionTarget.equals(targetClassName)) {
 				final IModelFactory factory = extension.createInstance();
-				factory.initFromExtension(extensionID, extensionLabel, outputEClass);
+				factory.initFromExtension(extensionID, extensionLabel, outputEClass, replacementEReference, replacementEClass);
 				result.add(factory);
 			}
 		}

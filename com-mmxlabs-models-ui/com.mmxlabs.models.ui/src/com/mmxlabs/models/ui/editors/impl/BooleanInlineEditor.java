@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -13,6 +14,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	private Button button;
@@ -21,10 +23,15 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 		super(feature);
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	public Control createControl(final Composite parent) {
-		final Button button = new Button(parent, SWT.CHECK);
-
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+//		final Button button = new Button(parent, SWT.CHECK);
+		final Button button = toolkit.createButton(parent, "", SWT.CHECK);
+		
+		
 		button.addSelectionListener(new SelectionListener() {
 			{
 				final SelectionListener sl = this;
