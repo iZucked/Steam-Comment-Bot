@@ -13,7 +13,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * 
@@ -58,5 +64,97 @@ public class TestPriceExpressionContract {
 		// check that the returned results are correct
 		Assert.assertEquals(p1, price1);
 		Assert.assertEquals(p2, price2);
+	}
+	
+	@Test
+	public void testCalculateLoadUnitPrice() {
+		// create a PriceExpressionContract with a mocked ICurve object
+		final ICurve curve = mock(ICurve.class);
+		PriceExpressionContract contract = new PriceExpressionContract(curve);
+		
+		// create named test constants
+		final int priceAtLoadTime = (int) OptimiserUnitConvertor.convertToInternalDailyCost(40);
+		final int oriceAtPricingDate = (int) OptimiserUnitConvertor.convertToInternalDailyCost(70);
+		final int loadTime = 120;
+		final int loadPricingDate = 90;
+				
+		// tell the ICurve mock to return specified values at given points
+		when(curve.getValueAtPoint(loadTime)).thenReturn(priceAtLoadTime);
+		when(curve.getValueAtPoint(loadPricingDate)).thenReturn(oriceAtPricingDate);
+		
+		final ILoadSlot loadSlotWithPricingDate = mock(ILoadSlot.class);
+		when(loadSlotWithPricingDate.getPricingDate()).thenReturn(loadPricingDate);
+		
+		final ILoadSlot loadSlotNoPricingDate = mock(ILoadSlot.class);
+		when(loadSlotNoPricingDate.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
+		
+		final IDischargeSlot dischargeSlot = mock(IDischargeSlot.class);
+
+		final int dischargeTime = 170;
+		final int dischargePricePerMMBTu = 40;		
+		final long dischargeVolumeInM3 = 100;
+		final long loadVolumeInM3 = 200;
+		final IVessel vessel = mock(IVessel.class);
+		final VoyagePlan plan = new VoyagePlan();
+		final IDetailTree annotations = mock(IDetailTree.class);
+		
+		final int loadPriceWithPricingDate = contract.calculateLoadUnitPrice(loadSlotWithPricingDate, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu,
+				loadVolumeInM3, dischargeVolumeInM3, vessel, plan, annotations);
+
+		final int loadPriceNoPricingDate = contract.calculateLoadUnitPrice(loadSlotNoPricingDate, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu,
+				loadVolumeInM3, dischargeVolumeInM3, vessel, plan, annotations);
+
+		verify(curve).getValueAtPoint(loadPricingDate);
+		verify(curve).getValueAtPoint(loadTime);
+		verifyNoMoreInteractions(curve);
+		
+		verify(loadSlotWithPricingDate).getPricingDate();
+		verifyNoMoreInteractions(loadSlotWithPricingDate);
+		
+		verify(loadSlotNoPricingDate).getPricingDate();
+		verifyNoMoreInteractions(loadSlotNoPricingDate);
+		
+		// check that the returned results are correct
+		Assert.assertEquals(priceAtLoadTime, loadPriceNoPricingDate);
+		Assert.assertEquals(oriceAtPricingDate, loadPriceWithPricingDate);
+		
+		
+	}
+	
+	@Test
+	public void testCalculateDischargeUnitPrice() {
+		// create a PriceExpressionContract with a mocked ICurve object
+		final ICurve curve = mock(ICurve.class);
+		PriceExpressionContract contract = new PriceExpressionContract(curve);
+		
+		// create named test constants
+		final int priceAtDischargeTime = (int) OptimiserUnitConvertor.convertToInternalDailyCost(40);
+		final int priceAtPricingDate = (int) OptimiserUnitConvertor.convertToInternalDailyCost(70);
+		final int dischargeTime = 120;
+		final int pricingDate = 90;
+				
+		// tell the ICurve mock to return specified values at given points
+		when(curve.getValueAtPoint(dischargeTime)).thenReturn(priceAtDischargeTime);
+		when(curve.getValueAtPoint(pricingDate)).thenReturn(priceAtPricingDate);
+				
+		final IDischargeSlot dischargeSlotWithPricingDate = mock(IDischargeSlot.class);
+		when(dischargeSlotWithPricingDate.getPricingDate()).thenReturn(pricingDate);
+		
+		final IDischargeSlot dischargeSlotNoPricingDate = mock(IDischargeSlot.class);
+		when(dischargeSlotNoPricingDate.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
+		
+		final int salesPriceWithPricingDate = contract.calculateSalesUnitPrice(dischargeSlotWithPricingDate, dischargeTime);
+
+		final int salesPriceNoPricingDate = contract.calculateSalesUnitPrice(dischargeSlotNoPricingDate, dischargeTime);
+
+		verify(curve).getValueAtPoint(pricingDate);
+		verify(curve).getValueAtPoint(dischargeTime);
+		verifyNoMoreInteractions(curve);
+		
+		// check that the returned results are correct
+		Assert.assertEquals(priceAtDischargeTime, salesPriceNoPricingDate);
+		Assert.assertEquals(priceAtPricingDate, salesPriceWithPricingDate);
+		
+		
 	}
 }

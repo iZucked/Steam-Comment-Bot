@@ -61,9 +61,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		if (portExclusionProvider.hasNoExclusions()) {
 			return true;
 		}
-
-		final Set<IPort> excludedPorts = portExclusionProvider.getExcludedPorts(vesselProvider.getVessel(resource).getVesselClass());
-
+		final Set<IPort> excludedPorts = getExclusionsForVessel(vesselProvider.getVessel(resource));
 		if (excludedPorts.isEmpty()) {
 			return true;
 		}
@@ -122,8 +120,8 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		}
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		final Set<IPort> exclusions = portExclusionProvider.getExcludedPorts(vessel.getVesselClass());
-
+		// Get vessel exclusions,
+		final Set<IPort> exclusions = getExclusionsForVessel(vessel);
 		if (exclusions.isEmpty()) {
 			return true;
 		}
@@ -136,4 +134,21 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	/**
+	 * Get the vessel or class port exclusions applicable to this vessel.
+	 * 
+	 * @param vessel
+	 * @return
+	 */
+	private Set<IPort> getExclusionsForVessel(final IVessel vessel) {
+		Set<IPort> exclusions = portExclusionProvider.getExcludedPorts(vessel);
+
+		// If there are non, pick the class exclusions
+		if (exclusions.isEmpty()) {
+			exclusions = portExclusionProvider.getExcludedPorts(vessel.getVesselClass());
+		}
+		return exclusions;
+	}
+
 }

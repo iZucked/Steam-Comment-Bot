@@ -14,6 +14,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  */
 public interface IPortSlot {
+	/**
+	 * @since 6.0
+	 */
+	public static final int NO_PRICING_DATE = -1000;
 
 	String getId();
 

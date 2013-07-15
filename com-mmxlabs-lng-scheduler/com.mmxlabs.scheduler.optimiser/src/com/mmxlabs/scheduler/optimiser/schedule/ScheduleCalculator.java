@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.inject.Provider;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
@@ -19,10 +20,19 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -31,11 +41,13 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -49,7 +61,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class ScheduleCalculator {
 
 	@Inject
-	private IVolumeAllocator cargoAllocator;
+	private IVolumeAllocator volumeAllocator;
 
 	@Inject
 	private ICalculatorProvider calculatorProvider;
@@ -71,6 +83,9 @@ public class ScheduleCalculator {
 
 	@Inject
 	private Provider<VoyagePlanAnnotator> voyagePlanAnnotatorProvider;
+
+	@Inject(optional = true)
+	private IMarkToMarketProvider markToMarketProvider;
 
 	public IAnnotatedSolution calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
@@ -119,7 +134,7 @@ public class ScheduleCalculator {
 		// and then compute the resulting P&L fitness components.
 
 		// Compute load volumes and prices
-		final Map<VoyagePlan, IAllocationAnnotation> allocations = cargoAllocator.allocate(scheduledSequences);
+		final Map<VoyagePlan, IAllocationAnnotation> allocations = volumeAllocator.allocate(scheduledSequences);
 		scheduledSequences.setAllocations(allocations);
 		// Store annotations if required
 		if (annotatedSolution != null) {
@@ -139,11 +154,12 @@ public class ScheduleCalculator {
 			}
 		}
 
-		calculateProfitAndLoss(scheduledSequences, allocations, annotatedSolution);
+		calculateProfitAndLoss(sequences, scheduledSequences, allocations, annotatedSolution);
 	}
 
 	// TODO: Push into entity value calculator?
-	private void calculateProfitAndLoss(final ScheduledSequences scheduledSequences, final Map<VoyagePlan, IAllocationAnnotation> allocations, final IAnnotatedSolution annotatedSolution) {
+	private void calculateProfitAndLoss(final ISequences sequences, final ScheduledSequences scheduledSequences, final Map<VoyagePlan, IAllocationAnnotation> allocations,
+			final IAnnotatedSolution annotatedSolution) {
 
 		if (entityValueCalculator == null) {
 			return;
@@ -200,6 +216,85 @@ public class ScheduleCalculator {
 					firstDetails.setTotalGroupProfitAndLoss(otherGroupValue);
 				}
 				time += getPlanDuration(plan);
+			}
+
+		}
+
+		if (annotatedSolution != null && markToMarketProvider != null) {
+			calculateMarkToMarketPNL(sequences, annotatedSolution);
+
+		}
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	protected void calculateMarkToMarketPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
+		// Mark-to-Market Calculations
+
+		for (final ISequenceElement element : sequences.getUnusedElements()) {
+			if (element == null) {
+				continue;
+			}
+			final IMarkToMarket market = markToMarketProvider.getMarketForElement(element);
+			if (market == null) {
+				continue;
+			}
+
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+
+			final ILoadOption loadOption;
+			final IDischargeOption dischargeOption;
+			final int time;
+
+			final IVessel vessel;
+			if (portSlot instanceof ILoadOption) {
+				loadOption = (ILoadOption) portSlot;
+				if (loadOption instanceof ILoadSlot) {
+					dischargeOption = new MarkToMarketDischargeOption(market, loadOption);
+				} else {
+					dischargeOption = new MarkToMarketDischargeSlot(market, loadOption);
+				}
+				time = loadOption.getTimeWindow().getStart();
+				vessel = new MarkToMarketVessel(market, loadOption);
+			} else if (portSlot instanceof IDischargeOption) {
+				dischargeOption = (IDischargeOption) portSlot;
+				if (dischargeOption instanceof IDischargeSlot) {
+					loadOption = new MarkToMarketLoadOption(market, dischargeOption);
+				} else {
+					loadOption = new MarkToMarketLoadSlot(market, dischargeOption);
+				}
+				time = dischargeOption.getTimeWindow().getStart();
+				vessel = new MarkToMarketVessel(market, dischargeOption);
+			} else {
+				continue;
+			}
+
+			// Create voyage plan
+			final VoyagePlan voyagePlan = new VoyagePlan();
+			{
+				final PortOptions loadOptions = new PortOptions();
+				final PortDetails loadDetails = new PortDetails();
+				loadDetails.setOptions(loadOptions);
+				loadOptions.setVisitDuration(0);
+				loadOptions.setPortSlot(loadOption);
+
+				final PortOptions dischargeOptions = new PortOptions();
+				final PortDetails dischargeDetails = new PortDetails();
+				dischargeDetails.setOptions(dischargeOptions);
+				dischargeOptions.setVisitDuration(0);
+				dischargeOptions.setPortSlot(dischargeOption);
+
+				voyagePlan.setSequence(new Object[] { loadDetails, dischargeDetails });
+			}
+
+			// Create an allocation annotation.
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
+			if (allocationAnnotation != null) {
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
+
+				// Calculate P&L
+				entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vessel, time, annotatedSolution);
 			}
 		}
 	}

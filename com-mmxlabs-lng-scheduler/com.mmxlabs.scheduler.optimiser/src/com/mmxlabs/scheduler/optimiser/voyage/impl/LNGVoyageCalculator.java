@@ -742,7 +742,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 			if (lngCommitmentInM3 > availableHeelinM3) {
 				// TODO: FIXME: Magic constant index 2!
-				final PortDetails portDetails = (PortDetails) sequence[2];
+				final PortDetails portDetails = (PortDetails) sequence[0];
 				portDetails.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngCommitmentInM3 - availableHeelinM3);
 				++violationsCount;
 			}

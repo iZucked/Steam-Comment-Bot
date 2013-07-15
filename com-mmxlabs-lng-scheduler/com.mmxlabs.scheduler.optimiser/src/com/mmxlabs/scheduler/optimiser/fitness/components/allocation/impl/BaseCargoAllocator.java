@@ -300,11 +300,11 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 
 					}
 
-					PortDetails[] portDetails = { loadDetails, dischargeDetails };
-					VoyageDetails[] voyageDetails = { ladenVoyage, ballastVoyage };
-					Integer[] times = { loadTime, dischargeTime };
-
-					addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
+//					PortDetails[] portDetails = { loadDetails, dischargeDetails };
+//					VoyageDetails[] voyageDetails = { ladenVoyage, ballastVoyage };
+//					Integer[] times = { loadTime, dischargeTime };
+//
+//					addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel);
 					loadDetails = null;
 					dischargeDetails = null;
 
