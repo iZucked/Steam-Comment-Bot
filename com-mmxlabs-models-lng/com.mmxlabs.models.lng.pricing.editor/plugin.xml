@@ -138,6 +138,12 @@
           label="Cooldown Price"
           targetEClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.PortCost.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Port Cost"
+          targetEClass="com.mmxlabs.models.lng.pricing.PortCost">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.componenthelpers">
