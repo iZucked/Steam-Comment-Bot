@@ -429,7 +429,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (FleetPackage.eINSTANCE.getVessel_Capacity() == feature) {
 			return new DelegateInformation(FleetPackage.eINSTANCE.getVessel_VesselClass(), FleetPackage.eINSTANCE.getVesselClass_Capacity(), (Integer) 0);
 		} else if (FleetPackage.eINSTANCE.getVessel_FillCapacity() == feature) {
-			return new DelegateInformation(FleetPackage.eINSTANCE.getVessel_VesselClass(), FleetPackage.eINSTANCE.getVesselClass_FillCapacity(), (Double) 100.0);
+			return new DelegateInformation(FleetPackage.eINSTANCE.getVessel_VesselClass(), FleetPackage.eINSTANCE.getVesselClass_FillCapacity(), (Double) 1.0);
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}
