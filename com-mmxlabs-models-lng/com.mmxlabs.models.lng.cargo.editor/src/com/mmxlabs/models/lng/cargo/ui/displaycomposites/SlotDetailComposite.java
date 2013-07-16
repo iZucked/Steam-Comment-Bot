@@ -155,19 +155,19 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			missedFeatures.add(f);
 		}
 
-		System.out.println(f);
-		if (feature2Editor.get(f) == null) {
-			System.out.println("NULL EDITOR!");
-		}
-		if (f == CargoFeatures.getLoadSlot_ArriveCold()) {
-			System.out.println("GOT IT!");
-		}
-
-		// if ( (feature != CargoPackage.eINSTANCE.getSlot_Duration())
-		// && (feature != CargoPackage.eINSTANCE.getSlot_WindowSize())
-		// // && (feature != CargoPackage.eINSTANCE.getSlot_Port())
-		// && (feature != CargoPackage.eINSTANCE.getSlot_Contract()) )
-		// return;
+//		System.out.println(f);
+//		if (feature2Editor.get(f) == null) {
+//			System.out.println("NULL EDITOR!");
+//		}
+//		if (f == CargoFeatures.getLoadSlot_ArriveCold()) {
+//			System.out.println("GOT IT!");
+//		}
+//
+//		// if ( (feature != CargoPackage.eINSTANCE.getSlot_Duration())
+//		// && (feature != CargoPackage.eINSTANCE.getSlot_WindowSize())
+//		// // && (feature != CargoPackage.eINSTANCE.getSlot_Port())
+//		// && (feature != CargoPackage.eINSTANCE.getSlot_Contract()) )
+//		// return;
 
 		super.addInlineEditor(editor);
 	}
