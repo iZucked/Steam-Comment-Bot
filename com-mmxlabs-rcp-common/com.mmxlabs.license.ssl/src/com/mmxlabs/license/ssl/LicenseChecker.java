@@ -47,7 +47,7 @@ public final class LicenseChecker {
 	/**
 	 * @since 4.0
 	 */
-	public LicenseState checkLicense() {
+	public static LicenseState checkLicense() {
 
 		try {
 			// Load keystore
