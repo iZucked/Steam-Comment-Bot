@@ -138,8 +138,8 @@ public class SpotMarketFactory extends DefaultModelFactory {
 	}
 
 	@Override
-	public void initFromExtension(final String ID, final String label, final String prototype) {
-		super.initFromExtension(ID, label, "com.mmxlabs.models.lng.spotmarkets.SpotMarket");
+	public void initFromExtension(final String ID, final String label, final String prototype, final String replacementEReference, final String replacementEClass) {
+		super.initFromExtension(ID, label, "com.mmxlabs.models.lng.spotmarkets.SpotMarket", replacementEReference, replacementEClass);
 		this.priceInfoClassName = prototype;
 	}
 	

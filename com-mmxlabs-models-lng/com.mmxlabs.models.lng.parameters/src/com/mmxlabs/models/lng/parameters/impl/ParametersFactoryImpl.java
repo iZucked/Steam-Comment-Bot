@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
-import com.mmxlabs.models.lng.parameters.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -38,7 +37,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 */
 	public static ParametersFactory init() {
 		try {
-			ParametersFactory theParametersFactory = (ParametersFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/parameters/1/"); 
+			ParametersFactory theParametersFactory = (ParametersFactory)EPackage.Registry.INSTANCE.getEFactory(ParametersPackage.eNS_URI);
 			if (theParametersFactory != null) {
 				return theParametersFactory;
 			}

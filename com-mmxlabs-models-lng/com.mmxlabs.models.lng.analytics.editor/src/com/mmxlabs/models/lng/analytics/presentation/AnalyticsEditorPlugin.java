@@ -9,14 +9,9 @@ import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
 
-import com.mmxlabs.models.lng.assignment.provider.AssignmentEditPlugin;
-import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
 import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
 import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
-import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
-import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
-import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 

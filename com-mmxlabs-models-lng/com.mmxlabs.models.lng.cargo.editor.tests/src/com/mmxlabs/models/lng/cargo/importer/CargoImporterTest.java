@@ -36,7 +36,7 @@ public class CargoImporterTest {
 	@Test
 	public void testLoadSlotImport() {
 		// Build Data structure to import
-		Map<String, String> row = new HashMap<String, String>();
+		final Map<String, String> row = new HashMap<String, String>();
 		{
 
 			row.put("kind", "");
@@ -57,16 +57,16 @@ public class CargoImporterTest {
 			row.put("buy.time", "9");
 			row.put("buy." + CargoPackage.eINSTANCE.getLoadSlot_CargoCV().getName().toLowerCase(), "12.7");
 		}
-		CargoImporter cargoImporter = new CargoImporter();
-		IImportContext context = Mockito.mock(IImportContext.class);
-		Collection<EObject> importedObjects = cargoImporter.importObject(CargoPackage.eINSTANCE.getCargo(), row, context);
+		final CargoImporter cargoImporter = new CargoImporter();
+		final IImportContext context = Mockito.mock(IImportContext.class);
+		final Collection<EObject> importedObjects = cargoImporter.importObject(CargoPackage.eINSTANCE.getCargo(), row, context);
 
 		Assert.assertEquals(2, importedObjects.size());
 
 		boolean foundCargo = false;
 		boolean foundLoadSlot = false;
 
-		for (EObject obj : importedObjects) {
+		for (final EObject obj : importedObjects) {
 			if (obj instanceof Cargo) {
 				Assert.assertFalse(foundCargo);
 				foundCargo = true;
@@ -75,7 +75,7 @@ public class CargoImporterTest {
 				Assert.assertFalse(foundLoadSlot);
 				foundLoadSlot = true;
 
-				LoadSlot loadSlot = (LoadSlot) obj;
+				final LoadSlot loadSlot = (LoadSlot) obj;
 
 				Assert.assertEquals("LoadSlot1", loadSlot.getName());
 				Assert.assertEquals("UUID", loadSlot.getUuid());
@@ -98,9 +98,9 @@ public class CargoImporterTest {
 
 	@Test
 	public void testDischargeSlotImport() {
-		List<Map<String, String>> recordData = new ArrayList<Map<String, String>>(1);
+		final List<Map<String, String>> recordData = new ArrayList<Map<String, String>>(1);
 		// Build Data structure to import
-		Map<String, String> row = new HashMap<String, String>();
+		final Map<String, String> row = new HashMap<String, String>();
 		{
 
 			row.put("kind", "");
@@ -121,16 +121,16 @@ public class CargoImporterTest {
 			row.put("sell.time", "9");
 			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
 		}
-		CargoImporter cargoImporter = new CargoImporter();
-		IImportContext context = Mockito.mock(IImportContext.class);
-		Collection<EObject> importedObjects = cargoImporter.importObject(CargoPackage.eINSTANCE.getCargo(), row, context);
+		final CargoImporter cargoImporter = new CargoImporter();
+		final IImportContext context = Mockito.mock(IImportContext.class);
+		final Collection<EObject> importedObjects = cargoImporter.importObject(CargoPackage.eINSTANCE.getCargo(), row, context);
 
 		Assert.assertEquals(2, importedObjects.size());
 
 		boolean foundCargo = false;
 		boolean foundDischargeSlot = false;
 
-		for (EObject obj : importedObjects) {
+		for (final EObject obj : importedObjects) {
 			if (obj instanceof Cargo) {
 				Assert.assertFalse(foundCargo);
 				foundCargo = true;
@@ -139,7 +139,7 @@ public class CargoImporterTest {
 				Assert.assertFalse(foundDischargeSlot);
 				foundDischargeSlot = true;
 
-				DischargeSlot dischargeSlot = (DischargeSlot) obj;
+				final DischargeSlot dischargeSlot = (DischargeSlot) obj;
 
 				Assert.assertEquals("DischargeSlot1", dischargeSlot.getName());
 				Assert.assertEquals("UUID", dischargeSlot.getUuid());
@@ -163,11 +163,11 @@ public class CargoImporterTest {
 	@Test
 	public void testImportDataDischargeSlotOnly() throws IOException {
 
-		List<Map<String, String>> recordData = new ArrayList<Map<String, String>>(1);
+		final List<Map<String, String>> recordData = new ArrayList<Map<String, String>>(1);
 		// Build Data structure to import
 		{
 
-			Map<String, String> row = new HashMap<String, String>();
+			final Map<String, String> row = new HashMap<String, String>();
 			row.put("kind", "");
 			row.put("name", "");
 
@@ -189,37 +189,46 @@ public class CargoImporterTest {
 			recordData.add(row);
 		}
 
-		File tmp = File.createTempFile("CargoImporterTest", ".csv");
-		writeCSV(recordData, tmp);
-		CSVReader reader = new CSVReader(tmp);
+		final File tmp = File.createTempFile("CargoImporterTest", ".csv");
+		try {
+			writeCSV(recordData, tmp);
+			final CSVReader reader = new CSVReader(tmp);
+			try {
+				final CargoImporter cargoImporter = new CargoImporter();
+				final IImportContext context = Mockito.mock(IImportContext.class);
+				final Collection<EObject> importedObjects = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
 
-		CargoImporter cargoImporter = new CargoImporter();
-		IImportContext context = Mockito.mock(IImportContext.class);
-		Collection<EObject> importedObjects = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
+				Assert.assertEquals(1, importedObjects.size());
 
-		Assert.assertEquals(1, importedObjects.size());
+				final EObject obj = importedObjects.iterator().next();
+				Assert.assertTrue(obj instanceof DischargeSlot);
 
-		EObject obj = importedObjects.iterator().next();
-		Assert.assertTrue(obj instanceof DischargeSlot);
+				final DischargeSlot dischargeSlot = (DischargeSlot) obj;
 
-		DischargeSlot dischargeSlot = (DischargeSlot) obj;
-
-		Assert.assertEquals("DischargeSlot1", dischargeSlot.getName());
-		Assert.assertEquals("UUID", dischargeSlot.getUuid());
-		// Assert.assertEquals("ContractName", loadSlot.getContract());
-		Assert.assertEquals(42, dischargeSlot.getDuration());
-		Assert.assertEquals(1000, dischargeSlot.getMinQuantity());
-		Assert.assertEquals(2000, dischargeSlot.getMaxQuantity());
-		Assert.assertTrue(dischargeSlot.isOptional());
-		// Assert.assertEquals("PortName", loadSlot.getPort());
-		Assert.assertEquals("PRICE+1", dischargeSlot.getPriceExpression());
-		Assert.assertEquals(7, dischargeSlot.getWindowSize());
-		Assert.assertEquals(new Date(2013 - 1900, 0, 1, 0, 0, 0), dischargeSlot.getWindowStart());
-		Assert.assertEquals(9, dischargeSlot.getWindowStartTime());
-		Assert.assertEquals(CargoDeliveryType.ANY, dischargeSlot.getPurchaseDeliveryType());
+				Assert.assertEquals("DischargeSlot1", dischargeSlot.getName());
+				Assert.assertEquals("UUID", dischargeSlot.getUuid());
+				// Assert.assertEquals("ContractName", loadSlot.getContract());
+				Assert.assertEquals(42, dischargeSlot.getDuration());
+				Assert.assertEquals(1000, dischargeSlot.getMinQuantity());
+				Assert.assertEquals(2000, dischargeSlot.getMaxQuantity());
+				Assert.assertTrue(dischargeSlot.isOptional());
+				// Assert.assertEquals("PortName", loadSlot.getPort());
+				Assert.assertEquals("PRICE+1", dischargeSlot.getPriceExpression());
+				Assert.assertEquals(7, dischargeSlot.getWindowSize());
+				Assert.assertEquals(new Date(2013 - 1900, 0, 1, 0, 0, 0), dischargeSlot.getWindowStart());
+				Assert.assertEquals(9, dischargeSlot.getWindowStartTime());
+				Assert.assertEquals(CargoDeliveryType.ANY, dischargeSlot.getPurchaseDeliveryType());
+			} finally {
+				// Clean up!
+				reader.close();
+			}
+		} finally {
+			// Clean up!
+			tmp.delete();
+		}
 	}
 
-	// //////////////// Methods liefteed from ExportCSVWizard
+	// //////////////// Methods lifted from ExportCSVWizard
 
 	/**
 	 * @param rows

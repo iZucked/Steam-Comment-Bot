@@ -42,7 +42,6 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * 
  */
 public class DataIndexImporter implements IClassImporter {
-	private static final String NAME = "name";
 	private static final String EXPRESSION = "expression";
 	boolean parseAsInt = false;
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -97,12 +96,6 @@ public class DataIndexImporter implements IClassImporter {
 			result = PricingFactory.eINSTANCE.createDataIndex();
 		}
 
-		if (row.containsKey(NAME)) {
-			result.setName(row.get(NAME));
-		} else {
-			context.addProblem(context.createProblem("Index name is missing", true, true, true));
-		}
-
 		if (result instanceof DataIndex) {
 			final DataIndex<Number> data = (DataIndex<Number>) result;
 			for (final String s : row.keySet()) {
@@ -140,7 +133,7 @@ public class DataIndexImporter implements IClassImporter {
 						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
 					}
 				} catch (final ParseException ex) {
-					if (s.equals(NAME) == false && s.equals(EXPRESSION) == false) {
+					if (s.equals(EXPRESSION) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
 					}
 				}
@@ -158,8 +151,6 @@ public class DataIndexImporter implements IClassImporter {
 			}
 		}
 
-		context.registerNamedObject(result);
-
 		return Collections.singleton((EObject) result);
 	}
 
@@ -169,26 +160,15 @@ public class DataIndexImporter implements IClassImporter {
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {
 				final DataIndex<Number> i = (DataIndex) o;
-				// Date sort columns, nut keep "name" column at start
+				// Date sort columns
 				final Map<String, String> row = new TreeMap<String, String>(new Comparator<String>() {
 
 					@Override
 					public int compare(final String o1, final String o2) {
 
-						// Always sort name column first
-						if (NAME.equals(o1) && NAME.equals(o2)) {
-							return 0;
-						}
-						if (NAME.equals(o1)) {
-							return -1;
-						} else if (NAME.equals(o2)) {
-							return 1;
-						}
-
 						return o1.compareTo(o2);
 					}
 				});
-				row.put(NAME, i.getName());
 				for (final IndexPoint<Number> pt : i.getPoints()) {
 					final Number n = pt.getValue();
 					final Date dt = pt.getDate();
@@ -202,7 +182,6 @@ public class DataIndexImporter implements IClassImporter {
 			} else if (o instanceof DerivedIndex) {
 				final DerivedIndex<Number> derived = (DerivedIndex<Number>) o;
 				final Map<String, String> row = new LinkedHashMap<String, String>();
-				row.put(NAME, derived.getName());
 				row.put(EXPRESSION, derived.getExpression());
 				result.add(row);
 			}

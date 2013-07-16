@@ -11,6 +11,7 @@ import java.util.Comparator;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -22,6 +23,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -48,7 +50,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public Control createControl(Composite parent) {
+	public Control createControl(Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		viewer = CheckboxTableViewer.newCheckList(parent, SWT.V_SCROLL | SWT.BORDER);
 		viewer.setContentProvider(new AdapterFactoryContentProvider(new PortItemProviderAdapterFactory()) {
 

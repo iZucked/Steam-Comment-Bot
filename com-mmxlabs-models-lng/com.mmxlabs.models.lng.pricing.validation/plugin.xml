@@ -56,7 +56,7 @@
                   {0}
                </message>
                <target
-                     class="Index">
+                     class="CommodityIndex">
                </target>
             </constraint>
             <constraint
@@ -73,6 +73,22 @@
                </message>
                <target
                      class="PricingModel">
+               </target>
+            </constraint>
+             <constraint
+                  class="com.mmxlabs.models.lng.pricing.validation.SensibleIndexDateConstraint"
+                  id="com.mmxlabs.models.lng.pricing.validation.SensibleIndexDateConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Commodity curve dates"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  Index {0} has data preceding {1}
+               </message>
+               <target
+                     class="CommodityIndex">
                </target>
             </constraint>
          </constraints>

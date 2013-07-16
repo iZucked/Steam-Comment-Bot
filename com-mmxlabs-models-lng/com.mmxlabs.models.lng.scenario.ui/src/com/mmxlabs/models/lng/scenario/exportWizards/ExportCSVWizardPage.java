@@ -74,6 +74,7 @@ public class ExportCSVWizardPage extends WizardPage {
 		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 		final Listener listener = new Listener() {
+			@Override
 			public void handleEvent(final Event event) {
 
 				dialogChanged();

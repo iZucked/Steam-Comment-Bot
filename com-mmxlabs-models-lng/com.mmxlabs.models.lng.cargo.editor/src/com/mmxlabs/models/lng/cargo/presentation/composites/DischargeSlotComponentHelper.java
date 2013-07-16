@@ -70,6 +70,7 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_FOBSaleEditor(detailComposite, topClass);
 		add_PurchaseDeliveryTypeEditor(detailComposite, topClass);
+		add_transferToEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -99,6 +100,15 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_PurchaseDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE));
+	}
+
+	/**
+	 * Create the editor for the transferTo feature on DischargeSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_transferToEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO));
 	}
 
 	@Override

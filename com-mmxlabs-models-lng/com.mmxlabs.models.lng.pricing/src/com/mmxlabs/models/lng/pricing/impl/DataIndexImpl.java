@@ -183,6 +183,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Value getForwardValueForMonth(final Date date) {
 		for (final IndexPoint<Value> point : getSortedPoints()) {
@@ -198,6 +199,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Value getBackwardsValueForMonth(final Date date) {
 		IndexPoint<Value> lastPoint = null;

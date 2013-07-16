@@ -61,7 +61,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);	
 	}
 
 	/**
@@ -71,11 +71,11 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
 		add_DESPurchaseEditor(detailComposite, topClass);
+		add_transferFromEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -114,6 +114,15 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_DESPurchaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE));
+	}
+
+	/**
+	 * Create the editor for the transferFrom feature on LoadSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_transferFromEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__TRANSFER_FROM));
 	}
 
 	@Override

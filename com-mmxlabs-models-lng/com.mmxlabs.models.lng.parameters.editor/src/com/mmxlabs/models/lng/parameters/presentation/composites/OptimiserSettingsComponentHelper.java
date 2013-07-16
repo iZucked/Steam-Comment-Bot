@@ -72,6 +72,8 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 		add_seedEditor(detailComposite, topClass);
 		add_argumentsEditor(detailComposite, topClass);
 		add_rewireEditor(detailComposite, topClass);
+		add_generateCharterOutsEditor(detailComposite, topClass);
+		add_shippingOnlyEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the objectives feature on OptimiserSettings
@@ -129,5 +131,23 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_rewireEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__REWIRE));
+	}
+
+	/**
+	 * Create the editor for the generateCharterOuts feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_generateCharterOutsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS));
+	}
+
+	/**
+	 * Create the editor for the shippingOnly feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_shippingOnlyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__SHIPPING_ONLY));
 	}
 }

@@ -250,4 +250,16 @@
           id="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider">
     </ModelCommandProvider>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated cargo -->
+      <editor
+            id="com.mmxlabs.models.lng.cargo.presentation.CargoEditorID"
+            name="%_UI_CargoEditor_label"
+            icon="icons/full/obj16/CargoModelFile.gif"
+            extensions="cargo"
+            class="com.mmxlabs.models.lng.cargo.presentation.CargoEditor"
+            contributorClass="com.mmxlabs.models.lng.cargo.presentation.CargoActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>

@@ -21,6 +21,7 @@ public class ContractModelFactory extends DefaultModelFactory {
 	protected EObject createSubInstance(final EObject top, final EReference reference) {
 		if (reference.equals(CommercialPackage.Literals.CONTRACT__PRICE_INFO)) {
 			EClass priceInfoClass = getEClassFromName(priceInfoClassName, null);
+			// return a price info object of the specified type
 			if (priceInfoClass != null) {
 				return priceInfoClass.getEPackage().getEFactoryInstance().create(priceInfoClass);
 			}

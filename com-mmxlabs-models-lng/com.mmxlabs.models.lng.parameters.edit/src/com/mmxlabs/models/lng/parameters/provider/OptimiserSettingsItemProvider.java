@@ -65,6 +65,8 @@ public class OptimiserSettingsItemProvider
 			addNamePropertyDescriptor(object);
 			addSeedPropertyDescriptor(object);
 			addRewirePropertyDescriptor(object);
+			addGenerateCharterOutsPropertyDescriptor(object);
+			addShippingOnlyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -127,6 +129,52 @@ public class OptimiserSettingsItemProvider
 				 getString("_UI_OptimiserSettings_rewire_feature"),
 				 getString("_UI_OptimiserSettings_rewire_description"),
 				 ParametersPackage.Literals.OPTIMISER_SETTINGS__REWIRE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Generate Charter Outs feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGenerateCharterOutsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimiserSettings_generateCharterOuts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimiserSettings_generateCharterOuts_feature", "_UI_OptimiserSettings_type"),
+				 ParametersPackage.Literals.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Shipping Only feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShippingOnlyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimiserSettings_shippingOnly_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimiserSettings_shippingOnly_feature", "_UI_OptimiserSettings_type"),
+				 ParametersPackage.Literals.OPTIMISER_SETTINGS__SHIPPING_ONLY,
 				 true,
 				 false,
 				 false,
@@ -209,6 +257,8 @@ public class OptimiserSettingsItemProvider
 			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
 			case ParametersPackage.OPTIMISER_SETTINGS__SEED:
 			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
+			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
+			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:

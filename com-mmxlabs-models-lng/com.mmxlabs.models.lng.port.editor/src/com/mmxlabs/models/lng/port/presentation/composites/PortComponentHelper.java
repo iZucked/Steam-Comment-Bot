@@ -5,26 +5,24 @@
 package com.mmxlabs.models.lng.port.presentation.composites;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.timezone.ITimezoneProvider;
 import com.mmxlabs.common.timezone.impl.GoogleTimezoneProvider;
@@ -122,9 +120,9 @@ public class PortComponentHelper extends BaseComponentHelper {
 	protected void add_timeZoneEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new TimezoneInlineEditor(PortPackage.Literals.PORT__TIME_ZONE) {
 			@Override
-			public Control createControl(final Composite parent) {
+			public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 
-				final Control control = super.createControl(parent);
+				final Control control = super.createControl(parent, dbc, toolkit);
 
 				/** Insert button to lookup timezone from lat/lon */
 

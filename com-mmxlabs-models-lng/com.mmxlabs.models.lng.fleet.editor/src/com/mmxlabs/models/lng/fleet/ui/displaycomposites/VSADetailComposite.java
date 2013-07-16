@@ -11,6 +11,7 @@ import java.util.Comparator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -44,6 +45,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -58,17 +60,16 @@ import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 
 /**
- * Detail composite for vessel state attributes; adds an additional bit to the bottom of the
- * composite which contains a fuel curve table.
+ * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
  * 
  * @author hinton
- *
+ * 
  */
 public class VSADetailComposite extends Composite implements IDisplayComposite {
 	private IDisplayComposite delegate;
 	private ICommandHandler commandHandler;
 	private TableViewer tableViewer;
-	
+
 	public VSADetailComposite(final Composite parent, final int style) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
@@ -76,124 +77,116 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		delegate.getComposite().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		final Label consumptionCurve = new Label(this, SWT.NONE);
 		consumptionCurve.setText("Fuel Consumption");
-		
+
 		final TableViewer tableViewer = new TableViewer(this, SWT.FULL_SELECTION);
 		final Table table = tableViewer.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		table.setLayout(new TableLayout());
-		
+
 		final TableViewerColumn speedColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		final TableViewerColumn fuelColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		
+
 		speedColumn.getColumn().setText("Speed (knots)");
 		fuelColumn.getColumn().setText("Consumption (MT/day)");
-		
-		table.addListener(SWT.Resize, 
-				new Listener() {
-					boolean resizing = false;
-					@Override
-					public void handleEvent(Event event) {
-						if (resizing) return;
-						resizing = true;
-						speedColumn.getColumn().pack();
-						fuelColumn.getColumn().pack();
-						resizing = false;
-					}
-				});
-		
+
+		table.addListener(SWT.Resize, new Listener() {
+			boolean resizing = false;
+
+			@Override
+			public void handleEvent(Event event) {
+				if (resizing)
+					return;
+				resizing = true;
+				speedColumn.getColumn().pack();
+				fuelColumn.getColumn().pack();
+				resizing = false;
+			}
+		});
+
 		speedColumn.setEditingSupport(new EditingSupport(tableViewer) {
 			final EAttribute attr = FleetPackage.eINSTANCE.getFuelConsumption_Speed();
+
 			@Override
 			protected void setValue(Object element, Object value) {
 				final EditingDomain ed = commandHandler.getEditingDomain();
-				commandHandler.handleCommand(
-						SetCommand.create(ed, element, 
-								attr
-								, value)
-						, (EObject) element, attr);
+				commandHandler.handleCommand(SetCommand.create(ed, element, attr, value), (EObject) element, attr);
 			}
-			
+
 			@Override
 			protected Object getValue(Object element) {
-				return ((EObject)element).eGet(attr);
+				return ((EObject) element).eGet(attr);
 			}
-			
+
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
 				ed.setFormatter(new DoubleFormatter());
 				return ed;
 			}
-			
+
 			@Override
 			protected boolean canEdit(Object element) {
 				return true;
 			}
 		});
-		
+
 		fuelColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return element == null ? "" : 
-					String.format("%d",
-					((FuelConsumption) element).getConsumption());
+				return element == null ? "" : String.format("%d", ((FuelConsumption) element).getConsumption());
 			}
 		});
-		
+
 		speedColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return element == null ? "" : 
-					String.format("%.2f",
-					((FuelConsumption) element).getSpeed());
+				return element == null ? "" : String.format("%.2f", ((FuelConsumption) element).getSpeed());
 			}
 		});
-		
+
 		fuelColumn.setEditingSupport(new EditingSupport(tableViewer) {
 			final EAttribute attr = FleetPackage.eINSTANCE.getFuelConsumption_Consumption();
+
 			@Override
 			protected void setValue(Object element, Object value) {
 				final EditingDomain ed = commandHandler.getEditingDomain();
-				commandHandler.handleCommand(
-						SetCommand.create(ed, element, 
-								attr
-								, value)
-						
-						, (EObject) element, attr);
+				commandHandler.handleCommand(SetCommand.create(ed, element, attr, value)
+
+				, (EObject) element, attr);
 			}
-			
+
 			@Override
 			protected Object getValue(Object element) {
-				return ((EObject)element).eGet(attr);
+				return ((EObject) element).eGet(attr);
 			}
-			
+
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
 				ed.setFormatter(new IntegerFormatter());
 				return ed;
 			}
-			
+
 			@Override
 			protected boolean canEdit(Object element) {
 				return true;
 			}
 		});
-		
+
 		VSADetailComposite.this.tableViewer = tableViewer;
 		tableViewer.setContentProvider(new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-				
+
 			}
-			
+
 			@Override
 			public void dispose() {
-				
+
 			}
-			
+
 			@Override
 			public Object[] getElements(Object inputElement) {
 				Object[] things = ((VesselStateAttributes) inputElement).getFuelConsumption().toArray();
@@ -201,15 +194,16 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 
 					@Override
 					public int compare(Object arg0, Object arg1) {
-						return ((Double)((FuelConsumption) arg0).getSpeed()).compareTo(((FuelConsumption) arg1).getSpeed());
-					}});
-				
+						return ((Double) ((FuelConsumption) arg0).getSpeed()).compareTo(((FuelConsumption) arg1).getSpeed());
+					}
+				});
+
 				return things;
 			}
 		});
-		
+
 		final Composite buttons = new Composite(this, SWT.NONE);
-		
+
 		buttons.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
 		final GridLayout buttonLayout = new GridLayout(2, true);
 		buttons.setLayout(buttonLayout);
@@ -220,24 +214,23 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				remove.setEnabled(event.getSelection().isEmpty() == false);
 			}
 		});
-		
-		
+
 		remove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final ISelection sel = tableViewer.getSelection();
-				if (sel.isEmpty()) return;
+				if (sel.isEmpty())
+					return;
 				if (sel instanceof IStructuredSelection) {
 					final FuelConsumption fc = (FuelConsumption) ((IStructuredSelection) sel).getFirstElement();
-					commandHandler.handleCommand(
-							RemoveCommand.create(commandHandler.getEditingDomain(), fc.eContainer(), fc.eContainingFeature(), fc),
-							oldValue,FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption());
+					commandHandler.handleCommand(RemoveCommand.create(commandHandler.getEditingDomain(), fc.eContainer(), fc.eContainingFeature(), fc), oldValue,
+							FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption());
 					tableViewer.refresh();
 				}
 			}
@@ -245,14 +238,14 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		final Button add = new Button(buttons, SWT.NONE);
 		add.setText("+");
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
-		
+
 		add.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final ISelection sel = tableViewer.getSelection();
-				
+
 				FuelConsumption selection;
-				if (!sel.isEmpty() && sel instanceof IStructuredSelection) {	
+				if (!sel.isEmpty() && sel instanceof IStructuredSelection) {
 					selection = (FuelConsumption) ((IStructuredSelection) sel).getFirstElement();
 				} else {
 					selection = null;
@@ -264,14 +257,13 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 				final FuelConsumption newConsumption = FleetFactory.eINSTANCE.createFuelConsumption();
 				newConsumption.setConsumption(selection == null ? 0 : selection.getConsumption() + 1);
 				newConsumption.setSpeed(selection == null ? 15 : selection.getSpeed() + 1);
-				commandHandler.handleCommand(
-						AddCommand.create(commandHandler.getEditingDomain(), oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), newConsumption),
+				commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption(), newConsumption),
 						oldValue, FleetPackage.eINSTANCE.getVesselStateAttributes_FuelConsumption());
 				tableViewer.setSelection(new StructuredSelection(newConsumption));
 			}
 		});
 	}
-	
+
 	@Override
 	public Composite getComposite() {
 		return this;
@@ -283,24 +275,26 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		@Override
 		public void reallyNotifyChanged(Notification notification) {
 			if (!isDisposed() && isVisible()) {
-				if (tableViewer != null && tableViewer.getTable().isDisposed() == false) tableViewer.refresh();
+				if (tableViewer != null && tableViewer.getTable().isDisposed() == false)
+					tableViewer.refresh();
 			} else {
 				VSADetailComposite.this.removeAdapter();
 			}
 		}
-		
+
 	};
-	
+
 	void removeAdapter() {
 		if (oldValue != null) {
 			oldValue.eAdapters().remove(adapter);
 			oldValue = null;
 		}
 	}
-	
+
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
-		delegate.display(location, root, value, range);
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range, final EMFDataBindingContext dbc,
+			final FormToolkit toolkit) {
+		delegate.display(location, root, value, range, dbc, toolkit);
 		tableViewer.setInput(value);
 		removeAdapter();
 		oldValue = (VesselStateAttributes) value;
@@ -324,7 +318,9 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		delegate.displayValidationStatus(status);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.ui.editors.IDisplayComposite#setEditorWrapper(com.mmxlabs.models.ui.editors.IInlineEditorWrapper)
 	 */
 	@Override

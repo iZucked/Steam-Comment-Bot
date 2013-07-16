@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -29,6 +30,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
@@ -324,21 +326,21 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		}
 
 		@Override
-		public Control createControl(final Composite parent) {
+		public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 
-			final Composite sub = new Composite(parent, SWT.NONE);
+			final Composite sub = toolkit.createComposite(parent);
 			final GridLayout layout = new GridLayout(2, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			sub.setLayout(layout);
 
 			final Combo combo = new Combo(sub, SWT.READ_ONLY);
 			this.combo = combo;
+			toolkit.adapt(combo);
 
 			combo.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-			final Button lock = new Button(sub, SWT.CHECK);
+			final Button lock = toolkit.createButton(sub, "locked", SWT.CHECK);
 			this.lock = lock;
-			lock.setText("Locked");
 			lock.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 			lock.addSelectionListener(new SelectionAdapter() {

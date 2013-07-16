@@ -240,6 +240,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			filterField.setFilterSupport(scenarioViewer.getFilterSupport());
 
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
+				@Override
 				protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
 					return event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL || event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION
 							|| event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC;
