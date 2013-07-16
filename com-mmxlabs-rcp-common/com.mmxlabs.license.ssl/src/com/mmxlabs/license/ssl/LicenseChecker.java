@@ -14,7 +14,12 @@ import java.net.URL;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.ssl.internal.Activator;
 
@@ -25,12 +30,24 @@ import com.mmxlabs.license.ssl.internal.Activator;
  */
 public final class LicenseChecker {
 
+	private static final Logger log = LoggerFactory.getLogger(LicenseChecker.class);
+	
+	/**
+	 * @since 4.0
+	 */
+	public static enum LicenseState {
+		Valid, Expired, Unknown, NotYetValid
+	}
+
 	// Hardcoded keystore password - only storing public key so not really an issue - although tampering may be an issue
 	private static final String password = "Lok3pDTS";
 
 	// private static final char[] password = new char[] { '1', '2', '3', '4', '5', '6' };
 
-	public static boolean checkLicense() {
+	/**
+	 * @since 4.0
+	 */
+	public LicenseState checkLicense() {
 
 		try {
 			// Load keystore
@@ -46,7 +63,7 @@ public final class LicenseChecker {
 
 			final Certificate rootCertificate = keyStore.getCertificate("rootca");
 			if (rootCertificate == null) {
-				return false;
+				return LicenseState.Unknown;
 			}
 
 			// Load the license file
@@ -59,7 +76,7 @@ public final class LicenseChecker {
 			}
 
 			if (licenseKeystore == null) {
-				return false;
+				return LicenseState.Unknown;
 			}
 
 			// Hardcoded alias name in the keystore as part of generation process
@@ -84,7 +101,7 @@ public final class LicenseChecker {
 					stream = new FileOutputStream(keyStoreFile);
 					licenseKeystore.store(stream, password.toCharArray());
 					stream.close();
-					
+
 					stream = new FileOutputStream(trustStoreFile);
 					keyStore.store(stream, password.toCharArray());
 					System.setProperty("javax.net.ssl.keyStore", keyStoreFile.toString());
@@ -94,7 +111,7 @@ public final class LicenseChecker {
 					System.setProperty("javax.net.ssl.trustStore", trustStoreFile.toString());
 					System.setProperty("javax.net.ssl.trustStorePassword", password);
 
-					return true;
+					return LicenseState.Valid;
 				} finally {
 					if (stream != null) {
 						stream.close();
@@ -102,9 +119,14 @@ public final class LicenseChecker {
 				}
 			}
 
-			return false;
+			return LicenseState.Unknown;
+		} catch (final CertificateExpiredException e) {
+			return LicenseState.Expired;
+		} catch (final CertificateNotYetValidException e) {
+			return LicenseState.NotYetValid;
 		} catch (final Exception e) {
-			return false;
+			log.error(e.getMessage(), e);
+			return LicenseState.Unknown;
 		}
 	}
 
