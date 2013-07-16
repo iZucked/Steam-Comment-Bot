@@ -6,8 +6,10 @@ package com.mmxlabs.models.ui.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -25,9 +27,9 @@ public class MMXObjectDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, MMXRootObject root, EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, MMXRootObject root, EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		// handle extension fields.
-		super.display(location, root, object, range);
+		super.display(location, root, object, range, dbc, toolkit);
 	}
 
 	

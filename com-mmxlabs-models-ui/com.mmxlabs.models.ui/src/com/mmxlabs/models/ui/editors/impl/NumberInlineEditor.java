@@ -87,7 +87,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	@Override
 	public Control createValueControl(Composite parent) {
 		if (unit != null) {
-			final Composite sub = new Composite(parent, SWT.NONE);
+			// final Composite sub = new Composite(parent, SWT.NONE);
+			final Composite sub = toolkit.createComposite(parent, SWT.NONE);
 			final GridLayout layout = new GridLayout(2, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			sub.setLayout(layout);
@@ -101,9 +102,13 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		text.getControl().addModifyListener(this);
 		text.getControl().addDisposeListener(this);
 
+		// Hook into Forms stuff
+		toolkit.adapt(text.getControl(), true, false);
+
 		if (unit != null) {
-			final Label unitLabel = new Label(parent, SWT.NONE);
-			unitLabel.setText(unit);
+			// final Label unitLabel = new Label(parent, SWT.NONE);
+			final Label unitLabel = toolkit.createLabel(parent, unit, SWT.NONE);
+			// unitLabel.setText(unit);
 			text.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 			return parent;
 		} else {

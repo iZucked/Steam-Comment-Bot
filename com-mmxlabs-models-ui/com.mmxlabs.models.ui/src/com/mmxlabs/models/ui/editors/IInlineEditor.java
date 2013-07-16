@@ -12,11 +12,13 @@ package com.mmxlabs.models.ui.editors;
 import java.util.Collection;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -34,7 +36,10 @@ public interface IInlineEditor {
 
 	public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range);
 
-	public Control createControl(final Composite parent);
+	/**
+	 * @since 5.0
+	 */
+	public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit);
 
 	void processValidation(IStatus status);
 

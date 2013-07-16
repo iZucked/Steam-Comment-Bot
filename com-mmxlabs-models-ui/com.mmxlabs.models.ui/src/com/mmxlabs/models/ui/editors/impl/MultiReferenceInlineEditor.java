@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -61,18 +63,24 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		super.display(location, context, input, range);
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	public Control createControl(final Composite parent) {
-		final Composite buttonAndLabel = new Composite(parent, SWT.NONE);
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+//		final Composite buttonAndLabel = new Composite(parent, SWT.NONE);
+		final Composite buttonAndLabel = toolkit.createComposite(parent);
 		final GridLayout gl = new GridLayout(2, false);
 		buttonAndLabel.setLayout(gl);
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
 
-		final Label label = new Label(buttonAndLabel, SWT.NONE);
+//		final Label label = new Label(buttonAndLabel, SWT.NONE);
+		final Label label = toolkit.createLabel(buttonAndLabel, "");
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		button = new Button(buttonAndLabel, SWT.NONE);
-		button.setText("Edit");
+//		button = new Button(buttonAndLabel, SWT.NONE);
+		button = toolkit.createButton(buttonAndLabel, "Edit", SWT.NONE);
+//		button.setText("Edit");
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override

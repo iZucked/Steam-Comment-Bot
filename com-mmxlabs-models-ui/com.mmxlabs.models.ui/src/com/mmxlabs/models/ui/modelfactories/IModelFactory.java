@@ -19,8 +19,10 @@ public interface IModelFactory {
 	 * @param ID the extension point ID
 	 * @param outputEClassName the name of the output EClass
 	 * @param label a nice label for this in the UI
+	 * @param replacementEClass 
+	 * @param replacementEReference 
 	 */
-	public void initFromExtension(final String ID, final String label, final String prototype);
+	public void initFromExtension(final String ID, final String label, final String prototype, String replacementEReference, String replacementEClass);
 	
 	/**
 	 * Get the display label for this factory.

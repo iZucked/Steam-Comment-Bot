@@ -98,6 +98,23 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="replacementEReference" type="string">
+            <annotation>
+               <documentation>
+                  The factory should not instantiate this attribute with a sub-object of the default EClass; instead it should use a specified subclass.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="replacementEClass" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.ecore.EClass"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

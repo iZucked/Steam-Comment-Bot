@@ -89,7 +89,8 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	}
 
 	protected Text createText(final Composite parent) {
-		final Text text = new Text(parent, style);
+//		final Text text = new Text(parent, style);
+		final Text text = toolkit.createText(parent, "", style);
 		return text;
 	}
 }

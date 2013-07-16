@@ -10,13 +10,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -49,57 +52,67 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	public DefaultTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
 		super(parent, style);
 		this.location = location;
+		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
+		toolkit.adapt(g);
 		g.setText(EditorUtils.unmangle(eClass.getName()));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
+		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
 		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, location);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
-		createChildComposites(root, object, eClass, this);
+		createChildComposites(root, object, eClass, this, toolkit);
 
-		topLevel.display(location, root, object, range);
+		topLevel.display(location, root, object, range, dbc, toolkit);
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			children.next().display(location, root, childObjectsItr.next(), range);
+			children.next().display(location, root, childObjectsItr.next(), range, dbc,toolkit);
 		}
 
 		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
 	}
 
-	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
+	/**
+	 * @since 5.0
+	 */
+	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent, final FormToolkit toolkit) {
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
 				if (ref.isMany()) {
 					final List values = (List) object.eGet(ref);
 					for (Object o : values) {
 						if (o instanceof EObject) {
-							createChildArea(root, object, parent, ref, (EObject) o);
+							createChildArea(root, object, parent, ref, (EObject) o, toolkit);
 						}
 					}
 				} else {
 					final EObject value = (EObject) object.eGet(ref);
 
-					createChildArea(root, object, parent, ref, value);
+					createChildArea(root, object, parent, ref, value, toolkit);
 				}
 			}
 		}
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 5.0
 	 */
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
+	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, final FormToolkit toolkit) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
+			toolkit.adapt(g2);
 			g2.setText(EditorUtils.unmangle(ref.getName()));
 			g2.setLayout(new FillLayout());
 			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));

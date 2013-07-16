@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.viewers.ISelection;
 
@@ -33,6 +34,8 @@ public class DefaultModelFactory implements IModelFactory {
 	private String extensionID;
 	private String label;
 	protected String prototypeClass;
+	protected String referenceToUseGivenClass;
+	protected String classToUseForGivenReference;
 	
 	/**
 	 * @since 2.1
@@ -162,8 +165,20 @@ public class DefaultModelFactory implements IModelFactory {
 
 		return object;
 	}
+	
 
 	protected EObject createSubInstance(final EObject top, final EReference reference) {
+		// override the instance class for the specified attribute if necessary
+		if (referenceToUseGivenClass != null) {
+			final EStructuralFeature referenceToReplace = top.eClass().getEStructuralFeature(referenceToUseGivenClass);
+			if (referenceToReplace == reference) {
+				final EClass classToReplaceWith = getEClassFromName(classToUseForGivenReference, null);
+				if (classToReplaceWith != null) {
+					return constructInstance(classToReplaceWith);	
+				}
+			}
+		}
+
 		return constructInstance(reference.getEReferenceType());
 	}
 
@@ -190,10 +205,12 @@ public class DefaultModelFactory implements IModelFactory {
 	}
 
 	@Override
-	public void initFromExtension(final String ID, final String label, final String prototype) {
+	public void initFromExtension(final String ID, final String label, final String prototype, final String replacementEReference, final String replacementEClass) {
 		this.label = label;
 		this.extensionID = ID;
 		this.prototypeClass = prototype;
+		this.referenceToUseGivenClass = replacementEReference;
+		this.classToUseForGivenReference = replacementEClass;
 	}
 
 	@Override

@@ -9,12 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -42,6 +45,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 	public DefaultDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
+		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
 	}
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
@@ -60,14 +64,23 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		}
 	}
 
-	public void createControls(MMXRootObject root, EObject object) {
+	/**
+	 * @since 5.0
+	 */
+	public void createControls(MMXRootObject root, EObject object, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+		
+		toolkit.adapt(this);
+		
 		for (final IInlineEditor editor : editors) {
 			final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE) : null;
 			editor.setLabel(label);
-			final Control control = editor.createControl(this);
+			final Control control = editor.createControl(this, dbc, toolkit);
 			control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
 			control.setData(LABEL_CONTROL_KEY, label);
+			control.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 			if (label != null) {
+				toolkit.adapt(label, true, false);
+				label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 				label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
 			}
 		}
@@ -79,15 +92,16 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	 * Recreates the controls if the object's eClass is different to what we had before.
 	 * 
 	 * @param object
+	 * @since 5.0
 	 */
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		final EClass eClass = object.eClass();
 		setLayout(layoutProvider.createDetailLayout(root, object));
 		if (eClass != displayedClass) {
 			clear();
 			initialize(eClass);
-			createControls(root, object);
+			createControls(root, object, dbc, toolkit);
 		}
 		for (final IInlineEditor editor : editors) {
 			editor.display(location, root, object, range);
