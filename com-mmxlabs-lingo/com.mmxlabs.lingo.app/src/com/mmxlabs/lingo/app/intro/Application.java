@@ -29,6 +29,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 
 /**
@@ -45,9 +46,10 @@ public class Application implements IApplication {
 	public Object start(final IApplicationContext context) {
 
 		final Display display = PlatformUI.createDisplay();
-		if (!LicenseChecker.checkLicense()) {
+		LicenseState validity = LicenseChecker.checkLicense();
+		if (validity != LicenseState.Valid) {
 
-			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license");
+			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license " + validity.name());
 
 			display.dispose();
 			return IApplication.EXIT_OK;
