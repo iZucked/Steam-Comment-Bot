@@ -33,6 +33,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -79,7 +80,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		termsFeatures = new ArrayList<EStructuralFeature>();
 		termsFeatures.add(CargoFeatures.getLoadSlot_ArriveCold());
-		// termsFeatures.add(CargoFeatures.getLoadSlot_CargoCV());
+		termsFeatures.add(CargoFeatures.getSlot_Notes());
 		// termsFeatures.add(CargoFeatures.getSlot_WindowSize());
 		missedFeatures = new ArrayList<EStructuralFeature>();
 

@@ -73,6 +73,7 @@ public class SlotItemProvider
 			addPriceExpressionPropertyDescriptor(object);
 			addCargoPropertyDescriptor(object);
 			addPricingDatePropertyDescriptor(object);
+			addNotesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -368,6 +369,29 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_notes_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__NOTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -414,6 +438,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__OPTIONAL:
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 			case CargoPackage.SLOT__PRICING_DATE:
+			case CargoPackage.SLOT__NOTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
