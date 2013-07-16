@@ -228,6 +228,7 @@ public class PriceExpressionUtils {
 	  * @param earliest
 	  * @param windowStart
 	  * @return
+	 * @since 5.0
 	  */
 	public static int convertTime(final Date earliest, final Date windowStart) {
 		final TimeZone timezone = TimeZone.getTimeZone("UTC");
