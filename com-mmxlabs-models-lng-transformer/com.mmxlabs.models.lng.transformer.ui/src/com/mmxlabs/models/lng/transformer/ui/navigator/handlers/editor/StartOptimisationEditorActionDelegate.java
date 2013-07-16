@@ -48,6 +48,10 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 	public void run(final IAction methodAction) {
 
 		runLastMode();
+					} else if (optimising && cat.getId().endsWith(".optimisation")) {
+						return true;
+					} else if (!optimising && cat.getId().endsWith(".evaluation")) {
+						return true;
 	}
 
 	@Override
