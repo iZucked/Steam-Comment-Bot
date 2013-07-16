@@ -56,7 +56,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	@Override
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
@@ -85,7 +85,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent, final FormToolkit toolkit) {
 		for (final EReference ref : eClass.getEAllReferences()) {
@@ -107,7 +107,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, final FormToolkit toolkit) {
 		if (value != null) {

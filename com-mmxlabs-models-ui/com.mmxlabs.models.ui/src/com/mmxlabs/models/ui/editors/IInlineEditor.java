@@ -37,7 +37,7 @@ public interface IInlineEditor {
 	public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range);
 
 	/**
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit);
 

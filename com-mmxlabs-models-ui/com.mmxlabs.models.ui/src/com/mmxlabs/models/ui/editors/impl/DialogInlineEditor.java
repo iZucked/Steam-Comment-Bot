@@ -33,7 +33,7 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {

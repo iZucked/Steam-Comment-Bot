@@ -18,8 +18,14 @@ public interface IModelFactoryExtension {
 	@MapName("outputEClass")
 	public String getOutputEClass();
 
+	/**
+	 * @since 6.0
+	 */
 	@MapName("replacementEReference")
 	public String getReplacementEReference();
+	/**
+	 * @since 6.0
+	 */
 	@MapName("replacementEClass")
 	public String getReplacementEClass();
 	@MapName("label")

@@ -41,7 +41,7 @@ import com.mmxlabs.models.ui.editors.util.EditorUtils;
 
 /**
  * 
- * @since 5.0
+ * @since 6.0
  * 
  */
 public abstract class DBCAttributeInlineEditor implements IInlineEditor {

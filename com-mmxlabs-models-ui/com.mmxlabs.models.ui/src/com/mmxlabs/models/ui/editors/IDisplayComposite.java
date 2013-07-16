@@ -42,7 +42,7 @@ public interface IDisplayComposite {
 	 * 
 	 * @param root
 	 * @param value
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range, EMFDataBindingContext dbc, final FormToolkit toolkit);
 

@@ -21,6 +21,7 @@ public interface IModelFactory {
 	 * @param label a nice label for this in the UI
 	 * @param replacementEClass 
 	 * @param replacementEReference 
+	 * @since 6.0
 	 */
 	public void initFromExtension(final String ID, final String label, final String prototype, String replacementEReference, String replacementEClass);
 	

@@ -65,7 +65,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	public void createControls(MMXRootObject root, EObject object, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		
@@ -92,7 +92,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	 * Recreates the controls if the object's eClass is different to what we had before.
 	 * 
 	 * @param object
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	@Override
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
