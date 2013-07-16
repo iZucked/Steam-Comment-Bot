@@ -36,7 +36,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		miscFolder.addView("org.eclipse.pde.runtime.LogView");
 		miscFolder.addPlaceholder(TotalsHierarchyView.ID);
 
-		layout.addPlaceholder(HorizontalKPIReportView.ID, IPageLayout.TOP, 0.05f, "IPageLayout.ID_EDITOR_AREA");
+		layout.addPlaceholder(HorizontalKPIReportView.ID, IPageLayout.TOP, 0.05f, IPageLayout.ID_EDITOR_AREA);
 
 		// KPIBannerFolder.addPlaceholder(HorizontalKPIReportView.ID);
 
