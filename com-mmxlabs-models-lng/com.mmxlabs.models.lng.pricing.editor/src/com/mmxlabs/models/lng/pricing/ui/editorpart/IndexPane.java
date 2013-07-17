@@ -29,22 +29,31 @@ import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.parser.series.ISeries;
+import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
@@ -56,6 +65,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.DialogFeatureManipulator;
 
 public class IndexPane extends ScenarioTableViewerPane {
 
+	private static final Date dateZero = new Date(0);
 	private List<EReference> path = null;
 
 	private boolean useIntegers;
@@ -67,6 +77,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 		this.indexFeature = indexFeature;
 
 	}
+
+	private SeriesParser seriesParser = null;
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
@@ -184,14 +196,71 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// }
 	}
 
+	private SeriesParser createSeriesParser(final PricingModel pricingModel) {
+		final SeriesParser seriesParser = new SeriesParser();
+
+		Object obj = pricingModel;
+		for (final EReference ref : path) {
+			obj = ((EObject) obj).eGet(ref);
+		}
+
+		if (obj instanceof List) {
+			final List<EObject> indexObjects = (List<EObject>) obj;
+
+			for (final EObject indexObject : indexObjects) {
+
+				if (!indexObject.eIsSet(indexFeature)) {
+					continue;
+				}
+
+				String name = "Unknown";
+				if (indexObject instanceof NamedObject) {
+					final NamedObject namedObject = (NamedObject) indexObject;
+					name = namedObject.getName();
+				}
+
+				final Index<?> idx = (Index<?>) indexObject.eGet(indexFeature);
+
+				if (idx instanceof DataIndex) {
+					PriceIndexUtils.addSeriesDataFromDataIndex(seriesParser, name, dateZero, (DataIndex<? extends Number>) idx);
+				} else if (idx instanceof DerivedIndex) {
+					seriesParser.addSeriesExpression(name, ((DerivedIndex) idx).getExpression());
+				}
+			}
+		}
+		return seriesParser;
+
+	}
+
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		final ScenarioTableViewer result = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
+			@Override
+			protected void internalRefresh(final Object element) {
+				final Object input = getInput();
+				if (input instanceof PricingModel) {
+					final PricingModel pricingModel = (PricingModel) input;
+					seriesParser = createSeriesParser(pricingModel);
+				}
+				super.internalRefresh(element);
+			}
+
+			@Override
+			protected void internalRefresh(final Object element, final boolean updateLabels) {
+				final Object input = getInput();
+				if (input instanceof PricingModel) {
+					final PricingModel pricingModel = (PricingModel) input;
+					seriesParser = createSeriesParser(pricingModel);
+				}
+				super.internalRefresh(element, updateLabels);
+			}
+
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
 
 				if (input instanceof PricingModel) {
 					final PricingModel pricingModel = (PricingModel) input;
+					seriesParser = createSeriesParser(pricingModel);
 
 					Object obj = pricingModel;
 					for (final EReference ref : path) {
@@ -211,7 +280,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 							}
 
 							final Index<?> idx = (Index<?>) indexObject.eGet(indexFeature);
-
 							if (!(idx instanceof DataIndex<?>)) {
 								continue;
 							}
@@ -286,6 +354,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 					public Comparable getComparable(Object element) {
 
 						// Unwrap index from owner
+						String name = null;
+						if (element instanceof NamedObject) {
+							final NamedObject namedObject = (NamedObject) element;
+							name = namedObject.getName();
+						}
+
 						if (element instanceof EObject) {
 							final EObject eObject = (EObject) element;
 							if (eObject.eIsSet(indexFeature)) {
@@ -301,6 +375,20 @@ public class IndexPane extends ScenarioTableViewerPane {
 								return (Integer) valueAfter;
 							} else if (valueAfter instanceof Double) {
 								return (Double) valueAfter;
+							}
+						} else if (element instanceof DerivedIndex) {
+							final Date colDate = (Date) col.getColumn().getData("date");
+							try {
+								final ISeries series = seriesParser.getSeries(name);
+								final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+								// final Object valueAfter = idx.getValueForMonth(colDate);
+								if (valueAfter instanceof Integer) {
+									return (Integer) valueAfter;
+								} else if (valueAfter instanceof Double) {
+									return (Double) valueAfter;
+								}
+							} catch (Exception e) {
+
 							}
 						}
 
@@ -368,7 +456,11 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 					@Override
 					public Object getValue(Object element) {
-
+						String name = null;
+						if (element instanceof NamedObject) {
+							final NamedObject namedObject = (NamedObject) element;
+							name = namedObject.getName();
+						}
 						// Unwrap index from owner
 						if (element instanceof EObject) {
 							final EObject eObject = (EObject) element;
@@ -384,6 +476,21 @@ public class IndexPane extends ScenarioTableViewerPane {
 								return (Integer) valueAfter;
 							} else if (valueAfter instanceof Double) {
 								return (Double) valueAfter;
+							}
+						} else if (element instanceof DerivedIndex) {
+							final DerivedIndex<?> idx = (DerivedIndex<?>) element;
+							final Date colDate = (Date) col.getColumn().getData("date");
+
+							try {
+								final ISeries series = seriesParser.getSeries(name);
+								final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+								// final Object valueAfter = idx.getValueForMonth(colDate);
+								if (valueAfter instanceof Integer) {
+									return (Integer) valueAfter;
+								} else if (valueAfter instanceof Double) {
+									return (Double) valueAfter;
+								}
+							} catch (Exception e) {
 							}
 						}
 
@@ -454,7 +561,29 @@ public class IndexPane extends ScenarioTableViewerPane {
 				col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
 
 					@Override
+					public Color getForeground(Object element) {
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eIsSet(indexFeature)) {
+								element = eObject.eGet(indexFeature);
+							}
+						}
+						if (element instanceof DerivedIndex<?>) {
+							return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+						}
+						return super.getForeground(element);
+					}
+
+					@Override
 					public String getText(Object element) {
+
+						String name = null;
+						if (element instanceof NamedObject) {
+							final NamedObject namedObject = (NamedObject) element;
+							name = namedObject.getName();
+						}
+
 						// Unwrap index from owner
 						if (element instanceof EObject) {
 							final EObject eObject = (EObject) element;
@@ -471,6 +600,24 @@ public class IndexPane extends ScenarioTableViewerPane {
 									return String.format("%d", valueAfter);
 								} else {
 									return String.format("%01.3f", valueAfter);
+								}
+							}
+						} else if (element instanceof DerivedIndex) {
+							final Date colDate = (Date) col.getColumn().getData("date");
+							if (name != null && !name.isEmpty()) {
+								try {
+									final ISeries series = seriesParser.getSeries(name);
+									final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+									// final Object valueAfter = idx.getValueForMonth(colDate);
+									if (valueAfter != null) {
+										if (valueAfter instanceof Integer) {
+											return String.format("%d", valueAfter);
+										} else {
+											return String.format("%01.3f", valueAfter);
+										}
+									}
+								} catch (Exception e) {
+									// Ignore
 								}
 							}
 						}

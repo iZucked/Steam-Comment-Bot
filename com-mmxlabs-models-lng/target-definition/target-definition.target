@@ -47,6 +47,8 @@
 <unit id="org.ops4j.peaberry" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
 <unit id="org.mockito.mockito-all" version="1.9.5"/>
+<unit id="org.apache.shiro.core.source" version="1.2.0"/>
+<unit id="org.apache.shiro.core" version="1.2.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">

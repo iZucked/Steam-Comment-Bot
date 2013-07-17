@@ -17,3 +17,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.port;bundle-version="[5.0.0,6.0.0)",
  com.mmxlabs.models.lng.fleet;bundle-version="[5.0.0,6.0.0)"
 Bundle-ActivationPolicy: lazy
+Import-Package: com.mmxlabs.common;version="2.2.1",
+ com.mmxlabs.common.parser.series;version="2.2.1",
+ com.mmxlabs.common.parser.series.functions;version="2.2.1"

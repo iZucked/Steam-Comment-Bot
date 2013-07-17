@@ -4,16 +4,11 @@
  */
 package com.mmxlabs.models.lng.pricing.validation.utils;
 
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.EmptyStackException;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -29,6 +24,7 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -68,7 +64,8 @@ public class PriceExpressionUtils {
 	 * @param failures
 	 *            The list of validation failures to append to.
 	 */
-	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final SeriesParser parser, final List<IStatus> failures) {
+	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final SeriesParser parser,
+			final List<IStatus> failures) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Price Expression is missing."));
@@ -113,39 +110,40 @@ public class PriceExpressionUtils {
 				failures.add(dsd);
 			}
 		}
-		
+
 	}
 
 	/**
 	 * @since 5.0
 	 */
-	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue, final Double maxValue, final Date date, final List<IStatus> failures) {
+	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
+			final Double maxValue, final Date date, final List<IStatus> failures) {
 		SeriesParser parser = getParser(date);
 		try {
 			final IExpression<ISeries> expression = parser.parse(priceExpression);
 			final ISeries parsed = expression.evaluate();
 			final double value = parsed.evaluate(0).doubleValue();
-			
+
 			final boolean lessThanMin = minValue != null && value < minValue;
 			final boolean moreThanMax = minValue != null && value > maxValue;
 			if (lessThanMin || moreThanMax) {
 				final String boundLabel = lessThanMin ? "minimum" : "maximum";
 				final double boundValue = lessThanMin ? minValue : maxValue;
 				final String comparisonLabel = lessThanMin ? "less" : "more";
-				
+
 				final String message = String.format("Price expression has value %.2f which is %s than %s value %.2f", value, comparisonLabel, boundLabel, boundValue);
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(object, feature);
 				failures.add(dsd);
-				
+
 			}
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	/**
 	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
@@ -170,7 +168,7 @@ public class PriceExpressionUtils {
 				for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
 					final Index<Double> index = commodityIndex.getData();
 					if (index instanceof DataIndex) {
-						addSeriesDataFromDataIndex(indices, commodityIndex.getName(), dateZero, (DataIndex<? extends Number>) index);
+						PriceIndexUtils.addSeriesDataFromDataIndex(indices, commodityIndex.getName(), dateZero, (DataIndex<? extends Number>) index);
 					} else if (index instanceof DerivedIndex) {
 						indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
 					}
@@ -180,67 +178,4 @@ public class PriceExpressionUtils {
 		}
 		return null;
 	}
-	
-	/**
-	 * Add data from a DataIndex object to a SeriesParser object (which allows the evaluation of price expressions).
-	 * 
-	 * @param parser The parser to add the index data information to.
-	 * @param name The index name to use.
-	 * @param dateZero Internally, dates are represented for the SeriesParser in offsets from a "date zero" value.
-	 * @param index The index data to use.
-	 * @since 5.0
-	 */
-	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final String name, final Date dateZero, final DataIndex<? extends Number> index) {
-		final int [] times;
-		final Number [] values;
-		
-		// if no date zero is specified, we don't bother with real times or values
-		if (dateZero == null) {
-			// For this validation, we do not need real times or values
-			times = new int[1];
-			values = new Number[1];			
-		}
-		// otherwise, we use the data from the DataIndex
-		else { 
-			final List<Date> dates = index.getDates();
-			
-			final int length = dates.size();
-			times = new int[length];
-			values = new Number[length];
-			
-			Collections.sort(dates);
-			int i = 0;
-			for (Date date: dates) {
-				values[i] = (Number) index.getValueForMonth(date);
-				times[i] = convertTime(dateZero, date);
-				i++;
-			}
-			
-		}
-		
-		parser.addSeriesData(name, times, values);
-	}
-	
-	 /**
-	  * Code duplication from DateAndCurveHelper.java to avoid circular 
-	  * project dependencies. Keep this method in sync!
-	  * 
-	  * @param earliest
-	  * @param windowStart
-	  * @return
-	 * @since 5.0
-	  */
-	public static int convertTime(final Date earliest, final Date windowStart) {
-		final TimeZone timezone = TimeZone.getTimeZone("UTC");
-		// I am using two calendars, because the java date objects are all
-		// deprecated; however, timezones should not be a problem because
-		// every Date in the EMF representation is in UTC.
-		final Calendar a = Calendar.getInstance(timezone);
-		a.setTime(earliest);
-		final Calendar b = Calendar.getInstance(timezone);
-		b.setTime(windowStart);
-		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
-		return (int) (difference / Timer.ONE_HOUR);
-	}
-
 }

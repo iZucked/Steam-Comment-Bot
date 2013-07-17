@@ -18,6 +18,7 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -80,7 +81,7 @@ public class CargoEditorMenuHelper {
 
 	private final LNGScenarioModel scenarioModel;
 
-	private static final boolean enableSTSMenus = true;
+	private static final boolean enableSTSMenus = SecurityUtils.getSubject().isPermitted("features:shiptoship");
 
 	/**
 	 * @since 4.0
