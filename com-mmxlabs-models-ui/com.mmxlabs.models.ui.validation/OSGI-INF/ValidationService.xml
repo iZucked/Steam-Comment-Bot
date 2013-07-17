@@ -5,7 +5,7 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.models.ui.validation.impl.ValidationService">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" deactivate="shutdown" immediate="true" name="com.mmxlabs.models.ui.validation.impl.ValidationService">
    <implementation class="com.mmxlabs.models.ui.validation.impl.ValidationService"/>
    <service>
       <provide interface="com.mmxlabs.models.ui.validation.IValidationService"/>
