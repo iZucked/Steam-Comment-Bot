@@ -32,6 +32,16 @@ public class ValidationService implements IValidationService {
 
 	private ValidationInputService validationInputService = new ValidationInputService();
 
+	private ExecutorService executor;
+
+	public ValidationService() {
+		executor = Executors.newSingleThreadExecutor();
+	}
+	
+	public void shutdown() {
+		executor.shutdown();
+	}
+
 	@Override
 	public IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final Collection<? extends EObject> targets) {
 		final FutureTask<IStatus> validationTask = new FutureTask<IStatus>(new Callable<IStatus>() {
@@ -45,9 +55,6 @@ public class ValidationService implements IValidationService {
 				}
 			}
 		});
-
-		// Validation should run in it's own thread - separate to any other validation task, so create an executor to manage the thread.
-		final ExecutorService executor = Executors.newSingleThreadExecutor();
 
 		try {
 			// Submit a task to the executor
@@ -63,7 +70,7 @@ public class ValidationService implements IValidationService {
 			return null;
 		} finally {
 			// Force executor shutdown
-			executor.shutdownNow();
+//			executor.shutdownNow();
 		}
 	}
 
