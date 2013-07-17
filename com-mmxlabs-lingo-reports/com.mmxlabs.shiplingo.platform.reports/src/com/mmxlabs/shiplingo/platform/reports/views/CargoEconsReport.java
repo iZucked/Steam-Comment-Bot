@@ -456,7 +456,6 @@ public class CargoEconsReport extends ViewPart {
 					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 					cv = loadSlot.getSlotOrPortCV();
 					price = allocation.getPrice();
-					break;
 				} else {
 					cv = getMarketCV(marketAllocation.getMarket());
 					price = marketAllocation.getPrice();
@@ -473,7 +472,6 @@ public class CargoEconsReport extends ViewPart {
 				if (allocation.getSlot() instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 					cv = loadSlot.getSlotOrPortCV();
-					break;
 				} else {
 					cv = getMarketCV(marketAllocation.getMarket());
 				}
@@ -485,8 +483,11 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_PER_MMBTU: {
 				final Integer pnl = CargoEconsReport.getPNLValue(marketAllocation);
 				if (pnl != null) {
-					final double dischargeVolumeInMMBTu = ((Number) getObject(FieldType.SELL_VOLUME_IN_MMBTU)).doubleValue();
-					return (double) pnl / dischargeVolumeInMMBTu;
+					Number number = (Number) getObject(FieldType.SELL_VOLUME_IN_MMBTU);
+					if (number != null) {
+						final double dischargeVolumeInMMBTu = number.doubleValue();
+						return (double) pnl / dischargeVolumeInMMBTu;
+					}
 				}
 				break;
 			}
@@ -502,7 +503,6 @@ public class CargoEconsReport extends ViewPart {
 					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 					cv = loadSlot.getSlotOrPortCV();
 					price = marketAllocation.getPrice();
-					break;
 				} else {
 					cv = getMarketCV(marketAllocation.getMarket());
 					price = allocation.getPrice();
@@ -520,17 +520,12 @@ public class CargoEconsReport extends ViewPart {
 					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 					// TODO: Avg CV
 					cv = loadSlot.getSlotOrPortCV();
-					break;
 				} else {
 					cv = getMarketCV(marketAllocation.getMarket());
 				}
-				long dischargeVolume = 0;
-				if (allocation.getSlot() instanceof DischargeSlot) {
-					final int dischargeVolumeInM3 = allocation.getVolumeTransferred();
-					final double volumeInMMBTu = (dischargeVolumeInM3 * cv);
-					dischargeVolume += volumeInMMBTu;
-				}
-				return dischargeVolume;
+				final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
+				final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
+				return volumeInMMBTu;
 			}
 			case SHIPPING_BOIL_OFF_COST_TOTAL:
 			case SHIPPING_BUNKERS_COST_TOTAL:
