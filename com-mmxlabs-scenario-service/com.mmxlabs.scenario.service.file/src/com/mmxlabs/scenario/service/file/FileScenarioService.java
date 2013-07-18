@@ -171,7 +171,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	@Override
 	public void save(final ScenarioInstance scenarioInstance) throws IOException {
-		// store manifest
+		// store backup manifest
 		saveManifest(scenarioInstance);
 
 		super.save(scenarioInstance);
