@@ -102,9 +102,15 @@
         modelClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
   </componentHelper>
   <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
+        inheritable="true"        
+        modelClass="com.mmxlabs.models.lng.pricing.PortCost">
+  </componentHelper>
+  <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityIndexComponentHelper"
         id="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityIndexComponentHelper"
-        inheritable="true"
+        inheritable="true"        
         modelClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
   </componentHelper>
   <componentHelper
@@ -212,6 +218,12 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Cooldown Price"
           targetEClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.PortCost.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Port Cost"
+          targetEClass="com.mmxlabs.models.lng.pricing.PortCost">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.charterIndex"

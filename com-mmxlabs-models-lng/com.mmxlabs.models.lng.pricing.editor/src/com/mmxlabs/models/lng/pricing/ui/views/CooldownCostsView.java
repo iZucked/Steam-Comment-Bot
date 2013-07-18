@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
@@ -27,9 +28,12 @@ public class CooldownCostsView extends ScenarioTableViewerView<CooldownCostsPane
 
 	@Override
 	protected void initViewerPane(final CooldownCostsPane pane) {
-		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(), PricingPackage.eINSTANCE.getPricingModel_CooldownPrices() }), getAdapterFactory(),
-				getEditingDomain().getCommandStack());
-		pane.getViewer().setInput(getRootObject());
+		final EditingDomain domain = getEditingDomain();
+		if (domain != null) {
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(), PricingPackage.eINSTANCE.getPricingModel_CooldownPrices() }),
+					getAdapterFactory(), domain.getCommandStack());
+			pane.getViewer().setInput(getRootObject());
+		}
 	}
 
 	@Override

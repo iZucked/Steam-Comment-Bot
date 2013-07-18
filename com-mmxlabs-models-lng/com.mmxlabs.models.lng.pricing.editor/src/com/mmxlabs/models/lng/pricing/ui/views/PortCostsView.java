@@ -28,11 +28,11 @@ public class PortCostsView extends ScenarioTableViewerView<PortCostPane> {
 
 	@Override
 	protected void initViewerPane(final PortCostPane pane) {
-	EditingDomain domain = getEditingDomain();
-	if (domain != null) {
-		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(), PricingPackage.eINSTANCE.getPricingModel_PortCosts() }), getAdapterFactory(),
-				domain.getCommandStack());
-		pane.getViewer().setInput(getRootObject());
+		final EditingDomain domain = getEditingDomain();
+		if (domain != null) {
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(), PricingPackage.eINSTANCE.getPricingModel_PortCosts() }), getAdapterFactory(),
+					domain.getCommandStack());
+			pane.getViewer().setInput(getRootObject());
 		}
 	}
 
@@ -46,7 +46,7 @@ public class PortCostsView extends ScenarioTableViewerView<PortCostPane> {
 		if (status instanceof DetailConstraintStatusDecorator) {
 
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
-			Object target = dcsd.getTarget();
+			final Object target = dcsd.getTarget();
 
 			if (target instanceof PortCost) {
 				getSite().getPage().activate(this);

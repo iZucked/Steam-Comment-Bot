@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -28,10 +29,13 @@ public class FOBSalesSpotMarketView extends ScenarioTableViewerView<SpotMarketGr
 
 	@Override
 	protected void initViewerPane(final SpotMarketGroupPane pane) {
-		pane.init(
-				Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SpotMarketsModel(), SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket(),
-						SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }), getAdapterFactory(), getEditingDomain().getCommandStack());
-		pane.getViewer().setInput(getRootObject());
+		final EditingDomain domain = getEditingDomain();
+		if (domain != null) {
+			pane.init(
+					Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SpotMarketsModel(), SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket(),
+							SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }), getAdapterFactory(), domain.getCommandStack());
+			pane.getViewer().setInput(getRootObject());
+		}
 	}
 
 	@Override

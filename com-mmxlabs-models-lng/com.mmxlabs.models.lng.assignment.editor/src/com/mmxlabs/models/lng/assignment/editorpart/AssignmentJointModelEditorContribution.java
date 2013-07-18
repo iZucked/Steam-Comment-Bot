@@ -282,7 +282,7 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 		editor.setTaskFilter(taskFilter);
 
 		updateEditorInput();
-		modelObject.eAdapters().add(adapter);
+		rootObject.eAdapters().add(adapter);
 		editorPart.setPageText(editorPart.addPage(outer), "Assignments");
 	}
 
@@ -306,7 +306,7 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 
 	@Override
 	public void dispose() {
-		modelObject.eAdapters().remove(adapter);
+		rootObject.eAdapters().remove(adapter);
 	}
 
 	@Override

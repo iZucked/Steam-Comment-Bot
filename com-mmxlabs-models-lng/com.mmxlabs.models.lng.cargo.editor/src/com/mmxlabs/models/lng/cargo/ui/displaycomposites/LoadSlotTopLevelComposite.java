@@ -41,7 +41,7 @@ public class LoadSlotTopLevelComposite extends DefaultTopLevelComposite {
 
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
-
+		toolkit.adapt(g);
 		String groupName = EditorUtils.unmangle(eClass.getName());
 		if (object instanceof LoadSlot) {
 			LoadSlot loadSlot = (LoadSlot) object;

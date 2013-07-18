@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -26,10 +27,13 @@ public class VesselEventView extends ScenarioTableViewerView<VesselEventViewerPa
 
 	@Override
 	protected void initViewerPane(final VesselEventViewerPane pane) {
-		pane.init(
-				Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ScenarioFleetModel(),
-						FleetPackage.eINSTANCE.getScenarioFleetModel_VesselEvents() }), getAdapterFactory(), getEditingDomain().getCommandStack());
-		pane.getViewer().setInput(getRootObject());
+		final EditingDomain domain = getEditingDomain();
+		if (domain != null) {
+			pane.init(
+					Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ScenarioFleetModel(),
+							FleetPackage.eINSTANCE.getScenarioFleetModel_VesselEvents() }), getAdapterFactory(), domain.getCommandStack());
+			pane.getViewer().setInput(getRootObject());
+		}
 	}
 
 	@Override

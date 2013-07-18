@@ -26,11 +26,12 @@ public class VesselClassView extends ScenarioTableViewerView<VesselClassViewerPa
 
 	@Override
 	protected void initViewerPane(final VesselClassViewerPane pane) {
-	EditingDomain domain = getEditingDomain();
-	if (domain != null) {
-		pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses() }), getAdapterFactory(),
-				domain.getCommandStack());
-		pane.getViewer().setInput(getRootObject());}
+		final EditingDomain domain = getEditingDomain();
+		if (domain != null) {
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses() }), getAdapterFactory(),
+					domain.getCommandStack());
+			pane.getViewer().setInput(getRootObject());
+		}
 	}
 
 	@Override
