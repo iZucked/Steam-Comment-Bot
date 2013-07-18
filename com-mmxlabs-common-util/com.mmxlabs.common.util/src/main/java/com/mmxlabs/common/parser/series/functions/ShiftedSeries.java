@@ -20,7 +20,7 @@ public class ShiftedSeries implements ISeries {
 
 	@Override
 	public int[] getChangePoints() {
-		final int[] shifteePoints = shiftee.getChangePoints();
+		final int[] shifteePoints = shiftee.getChangePoints().clone();
 
 		final int[] shifterChangePoints = shifter.getChangePoints();
 
