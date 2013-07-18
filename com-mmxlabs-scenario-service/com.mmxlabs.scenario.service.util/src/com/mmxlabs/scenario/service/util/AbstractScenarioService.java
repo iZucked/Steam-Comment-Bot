@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
@@ -159,7 +160,10 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 		final EditingDomain domain = initEditingDomain(resourceSet, implementation, instance);
 		instance.getAdapters().put(EditingDomain.class, domain);
-		instance.getAdapters().put(BasicCommandStack.class, (BasicCommandStack) domain.getCommandStack());
+
+		// Register under both interfaces
+		instance.getAdapters().put(CommandStack.class, domain.getCommandStack());
+		instance.getAdapters().put(BasicCommandStack.class, domain.getCommandStack());
 
 		fireEvent(ScenarioServiceEvent.POST_LOAD, instance);
 
