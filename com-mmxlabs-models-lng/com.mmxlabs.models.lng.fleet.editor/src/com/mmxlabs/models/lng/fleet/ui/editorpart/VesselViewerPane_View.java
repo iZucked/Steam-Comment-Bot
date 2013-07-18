@@ -87,7 +87,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 					final FleetModel fleetModel = ((LNGScenarioModel) rootObject).getFleetModel();
 					final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(), VesselViewerPane_View.this.getJointModelEditorPart()
 							.getDefaultCommandHandler());
-					dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
+					dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_VesselGroups());
 				}
 			}
 		});
