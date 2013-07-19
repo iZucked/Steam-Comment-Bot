@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -23,13 +24,13 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 public class DefaultDisplayCompositeFactory implements IDisplayCompositeFactory {
 
 	@Override
-	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location) {
-		return new DefaultTopLevelComposite(parent, SWT.NONE, location);
+	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new DefaultTopLevelComposite(parent, SWT.NONE, location, toolkit);
 	}
 
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location) {
-		return new DefaultDetailComposite(parent, SWT.NONE);
+	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new DefaultDetailComposite(parent, SWT.NONE, toolkit);
 	}
 
 	@Override

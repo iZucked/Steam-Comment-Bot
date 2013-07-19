@@ -42,10 +42,17 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	private EClass displayedClass;
 	protected IDisplayCompositeLayoutProvider layoutProvider = createLayoutProvider();
 	private IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
+	/**
+	 * @since 6.0
+	 */
+	protected final FormToolkit toolkit;
 
-	public DefaultDetailComposite(final Composite parent, final int style) {
+	/**
+	 * @since 6.0
+	 */
+	public DefaultDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
-		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
+		this.toolkit = toolkit;
 	}
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
@@ -67,7 +74,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	/**
 	 * @since 6.0
 	 */
-	public void createControls(MMXRootObject root, EObject object, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public void createControls(final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
 		
 		toolkit.adapt(this);
 		
@@ -95,13 +102,13 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	 * @since 6.0
 	 */
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		final EClass eClass = object.eClass();
 		setLayout(layoutProvider.createDetailLayout(root, object));
 		if (eClass != displayedClass) {
 			clear();
 			initialize(eClass);
-			createControls(root, object, dbc, toolkit);
+			createControls(root, object, dbc);
 		}
 		for (final IInlineEditor editor : editors) {
 			editor.display(location, root, object, range);
@@ -128,12 +135,12 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	}
 
 	@Override
-	public void setCommandHandler(ICommandHandler commandHandler) {
+	public void setCommandHandler(final ICommandHandler commandHandler) {
 		this.commandHandler = commandHandler;
 	}
 
 	@Override
-	public void displayValidationStatus(IStatus status) {
+	public void displayValidationStatus(final IStatus status) {
 		for (final IInlineEditor editor : editors)
 			editor.processValidation(status);
 	}
@@ -143,7 +150,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		this.wrapper = wrapper;
 	}
 
-	public void setLayoutProvider(IDisplayCompositeLayoutProvider layoutProvider) {
+	public void setLayoutProvider(final IDisplayCompositeLayoutProvider layoutProvider) {
 		this.layoutProvider = layoutProvider;
 	}
 }

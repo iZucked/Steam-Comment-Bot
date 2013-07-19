@@ -48,37 +48,45 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	protected IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 	protected IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
 	protected IScenarioEditingLocation location;
+	/**
+	 * @since 6.0
+	 */
+	protected FormToolkit toolkit;
 
-	public DefaultTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
+	/**
+	 * @since 6.0
+	 */
+	public DefaultTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, final FormToolkit toolkit) {
 		super(parent, style);
 		this.location = location;
-		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
+		this.toolkit = toolkit;
+		toolkit.adapt(this);
 	}
 
 	/**
 	 * @since 6.0
 	 */
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
 		toolkit.adapt(g);
 		g.setText(EditorUtils.unmangle(eClass.getName()));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
-		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, location);
+		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, location, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
-		createChildComposites(root, object, eClass, this, toolkit);
+		createChildComposites(root, object, eClass, this);
 
-		topLevel.display(location, root, object, range, dbc, toolkit);
+		topLevel.display(location, root, object, range, dbc);
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			children.next().display(location, root, childObjectsItr.next(), range, dbc,toolkit);
+			children.next().display(location, root, childObjectsItr.next(), range, dbc);
 		}
 
 		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));
@@ -87,20 +95,20 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	/**
 	 * @since 6.0
 	 */
-	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent, final FormToolkit toolkit) {
+	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
 		for (final EReference ref : eClass.getEAllReferences()) {
 			if (shouldDisplay(ref)) {
 				if (ref.isMany()) {
 					final List values = (List) object.eGet(ref);
 					for (Object o : values) {
 						if (o instanceof EObject) {
-							createChildArea(root, object, parent, ref, (EObject) o, toolkit);
+							createChildArea(root, object, parent, ref, (EObject) o);
 						}
 					}
 				} else {
 					final EObject value = (EObject) object.eGet(ref);
 
-					createChildArea(root, object, parent, ref, value, toolkit);
+					createChildArea(root, object, parent, ref, value);
 				}
 			}
 		}
@@ -109,7 +117,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	/**
 	 * @since 6.0
 	 */
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, final FormToolkit toolkit) {
+	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {
 			final Group g2 = new Group(parent, SWT.NONE);
 			toolkit.adapt(g2);
@@ -117,7 +125,8 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 			g2.setLayout(new FillLayout());
 			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
 
-			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(), location);
+			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass())
+					.createSublevelComposite(g2, value.eClass(), location, toolkit);
 
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);

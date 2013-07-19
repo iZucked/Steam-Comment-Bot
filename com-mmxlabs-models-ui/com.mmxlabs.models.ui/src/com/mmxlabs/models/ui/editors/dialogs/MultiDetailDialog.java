@@ -164,7 +164,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
 		createProxies();
 
-		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, scenarioEditingLocation);
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, scenarioEditingLocation, toolkit);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		displayComposite.setEditorWrapper(wrapper);
@@ -185,7 +185,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			}
 		};
 		displayComposite.setCommandHandler(immediate);
-		displayComposite.display(scenarioEditingLocation, rootObject, proxies.get(proxies.size() - 1), proxies, dbc, toolkit);
+		displayComposite.display(scenarioEditingLocation, rootObject, proxies.get(proxies.size() - 1), proxies, dbc);
 		disableControls();
 		resizeAndCenter();
 	}

@@ -19,18 +19,20 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
  * Extension of {@link DefaultDetailComposite} which adds support for extensions in {@link MMXObject#getExtensions()}
  * 
  * @author hinton
- *
+ * 
  */
 public class MMXObjectDetailComposite extends DefaultDetailComposite {
-	public MMXObjectDetailComposite(Composite parent, int style) {
-		super(parent, style);
+	/**
+	 * @since 6.0
+	 */
+	public MMXObjectDetailComposite(Composite parent, int style, final FormToolkit toolkit) {
+		super(parent, style, toolkit);
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, MMXRootObject root, EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public void display(final IScenarioEditingLocation location, MMXRootObject root, EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		// handle extension fields.
-		super.display(location, root, object, range, dbc, toolkit);
+		super.display(location, root, object, range, dbc);
 	}
 
-	
 }
