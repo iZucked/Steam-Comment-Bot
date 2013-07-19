@@ -2,21 +2,18 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.cargo.Slot;
-
-import com.mmxlabs.models.lng.schedule.MarketAllocation;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,6 +27,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl#getMarket <em>Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl#getSlotVisit <em>Slot Visit</em>}</li>
  * </ul>
  * </p>
  *
@@ -85,6 +83,16 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * @ordered
 	 */
 	protected double price = PRICE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getSlotVisit() <em>Slot Visit</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSlotVisit()
+	 * @generated
+	 * @ordered
+	 */
+	protected SlotVisit slotVisit;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -267,6 +275,49 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public SlotVisit getSlotVisit() {
+		return slotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSlotVisit(SlotVisit newSlotVisit, NotificationChain msgs) {
+		SlotVisit oldSlotVisit = slotVisit;
+		slotVisit = newSlotVisit;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT, oldSlotVisit, newSlotVisit);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSlotVisit(SlotVisit newSlotVisit) {
+		if (newSlotVisit != slotVisit) {
+			NotificationChain msgs = null;
+			if (slotVisit != null)
+				msgs = ((InternalEObject)slotVisit).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT, null, msgs);
+			if (newSlotVisit != null)
+				msgs = ((InternalEObject)newSlotVisit).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT, null, msgs);
+			msgs = basicSetSlotVisit(newSlotVisit, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT, newSlotVisit, newSlotVisit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -288,6 +339,8 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 		switch (featureID) {
 			case SchedulePackage.MARKET_ALLOCATION__SLOT_ALLOCATION:
 				return basicSetSlotAllocation(null, msgs);
+			case SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT:
+				return basicSetSlotVisit(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -311,6 +364,8 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 				return basicGetSlotAllocation();
 			case SchedulePackage.MARKET_ALLOCATION__PRICE:
 				return getPrice();
+			case SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT:
+				return getSlotVisit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -334,6 +389,9 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 				return;
 			case SchedulePackage.MARKET_ALLOCATION__PRICE:
 				setPrice((Double)newValue);
+				return;
+			case SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT:
+				setSlotVisit((SlotVisit)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -359,6 +417,9 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 			case SchedulePackage.MARKET_ALLOCATION__PRICE:
 				setPrice(PRICE_EDEFAULT);
 				return;
+			case SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT:
+				setSlotVisit((SlotVisit)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -379,6 +440,8 @@ public class MarketAllocationImpl extends ProfitAndLossContainerImpl implements 
 				return slotAllocation != null;
 			case SchedulePackage.MARKET_ALLOCATION__PRICE:
 				return price != PRICE_EDEFAULT;
+			case SchedulePackage.MARKET_ALLOCATION__SLOT_VISIT:
+				return slotVisit != null;
 		}
 		return super.eIsSet(featureID);
 	}

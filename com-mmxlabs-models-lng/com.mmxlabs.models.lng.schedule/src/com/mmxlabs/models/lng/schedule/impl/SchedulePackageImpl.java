@@ -53,7 +53,6 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import java.lang.Iterable;
 
 /**
  * <!-- begin-user-doc -->
@@ -1005,6 +1004,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMarketAllocation_SlotVisit() {
+		return (EReference)marketAllocationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1481,6 +1490,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(marketAllocationEClass, MARKET_ALLOCATION__MARKET);
 		createEReference(marketAllocationEClass, MARKET_ALLOCATION__SLOT_ALLOCATION);
 		createEAttribute(marketAllocationEClass, MARKET_ALLOCATION__PRICE);
+		createEReference(marketAllocationEClass, MARKET_ALLOCATION__SLOT_VISIT);
 
 		slotAllocationEClass = createEClass(SLOT_ALLOCATION);
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT);
@@ -1703,6 +1713,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getMarketAllocation_Market(), theSpotMarketsPackage.getSpotMarket(), null, "market", null, 1, 1, MarketAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketAllocation_SlotAllocation(), this.getSlotAllocation(), this.getSlotAllocation_MarketAllocation(), "slotAllocation", null, 0, 1, MarketAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarketAllocation_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, MarketAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarketAllocation_SlotVisit(), this.getSlotVisit(), null, "slotVisit", null, 0, 1, MarketAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotAllocationEClass, SlotAllocation.class, "SlotAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotAllocation_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

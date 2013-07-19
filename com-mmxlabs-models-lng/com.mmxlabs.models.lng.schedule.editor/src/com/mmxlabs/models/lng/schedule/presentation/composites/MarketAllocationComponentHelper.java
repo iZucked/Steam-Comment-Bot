@@ -2,19 +2,19 @@
  */
 package com.mmxlabs.models.lng.schedule.presentation.composites;
 
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for MarketAllocation instances
@@ -65,6 +65,7 @@ public class MarketAllocationComponentHelper extends BaseComponentHelper {
 		add_marketEditor(detailComposite, topClass);
 		add_slotAllocationEditor(detailComposite, topClass);
 		add_priceEditor(detailComposite, topClass);
+		add_slotVisitEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slot feature on MarketAllocation
@@ -99,5 +100,14 @@ public class MarketAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_priceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.MARKET_ALLOCATION__PRICE));
+	}
+
+	/**
+	 * Create the editor for the slotVisit feature on MarketAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_slotVisitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.MARKET_ALLOCATION__SLOT_VISIT));
 	}
 }

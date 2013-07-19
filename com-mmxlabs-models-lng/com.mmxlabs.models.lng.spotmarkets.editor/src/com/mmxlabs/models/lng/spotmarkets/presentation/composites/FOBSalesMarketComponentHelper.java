@@ -69,10 +69,11 @@ public class FOBSalesMarketComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the loadPort feature on FOBSalesMarket
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_loadPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.FOB_SALES_MARKET__LOAD_PORT));
+		// Deprecated for origin ports
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.FOB_SALES_MARKET__LOAD_PORT));
 	}
 
 	/**

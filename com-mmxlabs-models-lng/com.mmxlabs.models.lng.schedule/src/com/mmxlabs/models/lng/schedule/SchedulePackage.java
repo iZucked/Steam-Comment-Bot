@@ -752,6 +752,15 @@ public interface SchedulePackage extends EPackage {
 	int MARKET_ALLOCATION__PRICE = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Slot Visit</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION__SLOT_VISIT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Market Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -759,7 +768,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 4;
+	int MARKET_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Market Allocation</em>' class.
@@ -4369,6 +4378,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getMarketAllocation_Price();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit <em>Slot Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Slot Visit</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit()
+	 * @see #getMarketAllocation()
+	 * @generated
+	 */
+	EReference getMarketAllocation_SlotVisit();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotAllocation <em>Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5493,6 +5513,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MARKET_ALLOCATION__PRICE = eINSTANCE.getMarketAllocation_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot Visit</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MARKET_ALLOCATION__SLOT_VISIT = eINSTANCE.getMarketAllocation_SlotVisit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
