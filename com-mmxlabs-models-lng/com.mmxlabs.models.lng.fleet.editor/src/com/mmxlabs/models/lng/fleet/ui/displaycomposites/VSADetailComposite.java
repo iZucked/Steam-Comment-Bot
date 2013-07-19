@@ -70,16 +70,18 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	private ICommandHandler commandHandler;
 	private TableViewer tableViewer;
 
-	public VSADetailComposite(final Composite parent, final int style) {
+	public VSADetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
+		toolkit.adapt(this);
 		setLayout(new GridLayout(1, false));
-		delegate = new DefaultDetailComposite(this, style);
+		delegate = new DefaultDetailComposite(this, style, toolkit);
 		delegate.getComposite().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		final Label consumptionCurve = new Label(this, SWT.NONE);
-		consumptionCurve.setText("Fuel Consumption");
+		@SuppressWarnings("unused")
+		final Label consumptionCurve = toolkit.createLabel(this, "Fuel Consumption");
 
 		final TableViewer tableViewer = new TableViewer(this, SWT.FULL_SELECTION);
 		final Table table = tableViewer.getTable();
+
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -202,15 +204,14 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 			}
 		});
 
-		final Composite buttons = new Composite(this, SWT.NONE);
+		final Composite buttons = toolkit.createComposite(this);
 
 		buttons.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
 		final GridLayout buttonLayout = new GridLayout(2, true);
 		buttons.setLayout(buttonLayout);
 		buttonLayout.marginHeight = 0;
 		buttonLayout.marginWidth = 0;
-		final Button remove = new Button(buttons, SWT.NONE);
-		remove.setText("-");
+		final Button remove = toolkit.createButton(buttons, "-", SWT.NONE);
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -235,8 +236,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 				}
 			}
 		});
-		final Button add = new Button(buttons, SWT.NONE);
-		add.setText("+");
+		final Button add = toolkit.createButton(buttons, "+", SWT.NONE);
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		add.addSelectionListener(new SelectionAdapter() {
@@ -292,9 +292,8 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range, final EMFDataBindingContext dbc,
-			final FormToolkit toolkit) {
-		delegate.display(location, root, value, range, dbc, toolkit);
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+		delegate.display(location, root, value, range, dbc);
 		tableViewer.setInput(value);
 		removeAdapter();
 		oldValue = (VesselStateAttributes) value;

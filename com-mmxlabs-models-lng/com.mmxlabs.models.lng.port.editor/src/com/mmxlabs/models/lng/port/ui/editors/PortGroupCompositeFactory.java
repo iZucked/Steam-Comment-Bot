@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.port.ui.editors;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -14,7 +15,7 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 
 public class PortGroupCompositeFactory extends DefaultDisplayCompositeFactory {
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
-		return new PortGroupDetailComposite(composite, SWT.NONE);
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new PortGroupDetailComposite(composite, SWT.NONE, toolkit);
 	}
 }

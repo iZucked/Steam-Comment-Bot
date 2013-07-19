@@ -16,30 +16,28 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
  * A display composite to show a commodity index (not including its DataIndex children)
+ * 
  * @author Simon McGregor
  * 
  */
 public class NamedIndexContainerTopLevelComposite extends DefaultTopLevelComposite {
 
-	public NamedIndexContainerTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
-		super(parent, style, location);
+	public NamedIndexContainerTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		super(parent, style, location, toolkit);
 	}
 
 	/**
 	 * Don't display DataIndex child objects for editing.
 	 */
 	@Override
-	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value, final FormToolkit toolkit) {
+	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		/*
-		 * Note: the logic is implemented in the #createChildArea method because 
-		 * the #shouldDisplay method does not permit the particular value of
-		 * a child object to be interrogated.
+		 * Note: the logic is implemented in the #createChildArea method because the #shouldDisplay method does not permit the particular value of a child object to be interrogated.
 		 */
-		
-		if ((value instanceof DataIndex) == false) {		
-			super.createChildArea(root, object, parent, ref, value, toolkit);
+
+		if ((value instanceof DataIndex) == false) {
+			super.createChildArea(root, object, parent, ref, value);
 		}
 	}
-
 
 }

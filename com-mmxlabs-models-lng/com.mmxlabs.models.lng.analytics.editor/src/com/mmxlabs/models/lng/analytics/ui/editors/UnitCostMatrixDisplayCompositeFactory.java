@@ -26,14 +26,14 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
  */
 public class UnitCostMatrixDisplayCompositeFactory extends DefaultDisplayCompositeFactory {
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
-		return new DefaultDetailComposite(composite, SWT.NONE) {
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new DefaultDetailComposite(composite, SWT.NONE, toolkit) {
 			@Override
-			public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+			public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 				if (object instanceof UnitCostMatrix) {
 					((UnitCostMatrix) object).getCostLines().clear();
 				}
-				super.display(location, root, object, range,dbc,toolkit);
+				super.display(location, root, object, range, dbc);
 			}
 		};
 	}

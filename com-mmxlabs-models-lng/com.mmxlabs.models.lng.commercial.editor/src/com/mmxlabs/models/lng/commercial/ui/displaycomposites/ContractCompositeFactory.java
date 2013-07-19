@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -28,12 +29,12 @@ public class ContractCompositeFactory extends DefaultDisplayCompositeFactory {
 	}
 
 	@Override
-	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
-		return new ContractTopLevelComposite(composite, SWT.NONE, location);
+	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new ContractTopLevelComposite(composite, SWT.NONE, location, toolkit);
 	}
 
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
 		// This is not expected to be called. The CargoTopLevelComposite will create it's own instances directly.
 		throw new UnsupportedOperationException("Unexpected method invocations");
 	}

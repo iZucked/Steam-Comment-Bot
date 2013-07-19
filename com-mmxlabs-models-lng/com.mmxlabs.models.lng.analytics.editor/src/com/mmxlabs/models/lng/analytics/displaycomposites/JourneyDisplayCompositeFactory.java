@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -19,16 +20,16 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 
 public class JourneyDisplayCompositeFactory extends DefaultDisplayCompositeFactory {
 	@Override
-	public IDisplayComposite createSublevelComposite(Composite parent,EClass eClass, IScenarioEditingLocation location) {
-		final DefaultDetailComposite s = (DefaultDetailComposite) super.createSublevelComposite(parent, eClass, location);
+	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		final DefaultDetailComposite s = (DefaultDetailComposite) super.createSublevelComposite(parent, eClass, location, toolkit);
 
 		s.setLayoutProvider(new DefaultDisplayCompositeLayoutProvider() {
 			@Override
-			public Layout createDetailLayout(MMXRootObject root, EObject value) {
+			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
 				return new GridLayout(4, false);
 			}
 		});
-		
+
 		return s;
 	}
 }

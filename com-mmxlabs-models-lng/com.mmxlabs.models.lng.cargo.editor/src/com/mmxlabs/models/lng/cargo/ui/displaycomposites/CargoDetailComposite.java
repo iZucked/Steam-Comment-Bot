@@ -40,8 +40,8 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 	private final boolean top;
 	private final Map<EStructuralFeature, IInlineEditor> feature2Editor;
 	
-	public CargoDetailComposite(final Composite parent, final int style, final boolean top) {
-		super(parent, style);
+	public CargoDetailComposite(final Composite parent, final int style, final boolean top,  final FormToolkit toolkit) {
+		super(parent, style, toolkit);
 		feature2Editor = new HashMap<EStructuralFeature, IInlineEditor>();
 		this.top = top;
 		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -93,9 +93,9 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 	}
 	
 	@Override
-	public void createControls(MMXRootObject root, EObject object, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public void createControls(MMXRootObject root, EObject object, final EMFDataBindingContext dbc) {
 		// TODO Auto-generated method stub
-		super.createControls(root, object, dbc, toolkit);
+		super.createControls(root, object, dbc);
 //		for (final IInlineEditor editor : editors) {
 //			final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE) : null;
 //			editor.setLabel(label);
