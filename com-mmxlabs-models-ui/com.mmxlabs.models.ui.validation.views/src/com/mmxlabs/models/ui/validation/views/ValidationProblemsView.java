@@ -63,27 +63,28 @@ public class ValidationProblemsView extends ViewPart {
 	private final IPartListener partListener = new IPartListener() {
 
 		@Override
-		public void partOpened(IWorkbenchPart part) {
+		public void partOpened(final IWorkbenchPart part) {
 
 		}
 
 		@Override
-		public void partDeactivated(IWorkbenchPart part) {
+		public void partDeactivated(final IWorkbenchPart part) {
 
 		}
 
 		@Override
-		public void partClosed(IWorkbenchPart part) {
+		public void partClosed(final IWorkbenchPart part) {
 			if (part == editorPart) {
 				if (currentInstance != null) {
 					releaseScenarioInstance(currentInstance);
 					currentInstance = null;
 				}
+				viewer.refresh();
 			}
 		}
 
 		@Override
-		public void partBroughtToTop(IWorkbenchPart part) {
+		public void partBroughtToTop(final IWorkbenchPart part) {
 			// If the selection tracks editor, then get the scenario instance and make it the only selection.
 			if (part instanceof IEditorPart) {
 				editorPart = (IEditorPart) part;
@@ -106,7 +107,7 @@ public class ValidationProblemsView extends ViewPart {
 		}
 
 		@Override
-		public void partActivated(IWorkbenchPart part) {
+		public void partActivated(final IWorkbenchPart part) {
 
 			// If the selection tracks editor, then get the scenario instance and make it the only selection.
 			if (part instanceof IEditorPart) {
