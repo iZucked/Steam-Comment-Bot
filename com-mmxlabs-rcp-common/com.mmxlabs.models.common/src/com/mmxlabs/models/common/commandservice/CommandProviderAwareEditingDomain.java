@@ -143,7 +143,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 					if (addition.canExecute() == false) {
-						log.warn("Provided command was not executable, ignoring it");
+						log.error("Provided command was not executable, ignoring it", new RuntimeException());
 					} else {
 						wrapper.append(addition);
 					}
