@@ -34,20 +34,34 @@ public class MigrationTest {
 
 		// Create a V1 loader
 		final MetamodelLoader v1Loader = new MetamodelLoader();
-		final EPackage v1Pkg = v1Loader.loadEPackage(URI.createURI(getClass().getResource("/models/model-v1.ecore").toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+		final URI v1ResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/model-v1.ecore", true);
+		PackageData v1PkgData = new PackageData("http://com.mmxlabs.models.migration.tests/model", "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore",
+				"../../com.mmxlabs.models.migration.tests/models/model.ecore");
+		final EPackage v1Pkg = v1Loader.loadEPackage(v1ResourceURI, v1PkgData);
 		Assert.assertNotNull(v1Pkg);
-		final EPackage v1SubPkg = v1Loader.loadEPackage(URI.createURI(getClass().getResource("/models/sub-model-v1.ecore").toString()));//, "platform:/plugin/com.mmxlabs.models.migration.tests/models/submodel.ecore");
+
+		final URI v1SubResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/sub-model-v1.ecore", true);
+		PackageData v1SubPkgData = new PackageData("http://com.mmxlabs.models.migration.tests/submodel", "platform:/plugin/com.mmxlabs.models.migration.tests/models/sub-model.ecore",
+				"../../com.mmxlabs.models.migration.tests/models/sub-model.ecore");
+		final EPackage v1SubPkg = v1Loader.loadEPackage(v1SubResourceURI, v1SubPkgData);
 		Assert.assertNotNull(v1SubPkg);
 
 		// Create a V2 loader
 		final MetamodelLoader v2Loader = new MetamodelLoader();
-		final EPackage v2Pkg = v2Loader.loadEPackage(URI.createURI(getClass().getResource("/models/model-v2.ecore").toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+		final URI v2ResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/model-v2.ecore", true);
+		PackageData v2PkgData = new PackageData("http://com.mmxlabs.models.migration.tests/model", "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore",
+				"../../com.mmxlabs.models.migration.tests/models/model.ecore");
+		final EPackage v2Pkg = v2Loader.loadEPackage(v2ResourceURI, v2PkgData);
 		Assert.assertNotNull(v2Pkg);
-		final EPackage v2SubPkg = v2Loader.loadEPackage(URI.createURI(getClass().getResource("/models/sub-model-v2.ecore").toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/submodel.ecore");
+
+		final URI v2SubResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/sub-model-v2.ecore", true);
+		PackageData v2SubPkgData = new PackageData("http://com.mmxlabs.models.migration.tests/submodel", "platform:/plugin/com.mmxlabs.models.migration.tests/models/sub-model.ecore",
+				"../../com.mmxlabs.models.migration.tests/models/sub-model.ecore");
+		final EPackage v2SubPkg = v2Loader.loadEPackage(v2SubResourceURI, v2SubPkgData);
 		Assert.assertNotNull(v2SubPkg);
 
-		
 		EcoreUtil.resolveAll(v1Loader.getResourceSet());
+		EcoreUtil.resolveAll(v2Loader.getResourceSet());
 		// Initialise a V1 model instance
 		final EObject v1Object = createV1Model(v1SubPkg, v1Pkg, 1, 2, 3);
 

@@ -12,6 +12,8 @@ import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.viewers.AcceptAllFilter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -76,15 +78,18 @@ public class MetamodelLoaderTest {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
-		// Test load
-		final URL subResourceURL = getClass().getResource("/models/sub-model-v1.ecore");
-		final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()));
-		Assert.assertNotNull(subPackage);
-
-		// Test re-used reference
-		final URL resourceURL = getClass().getResource("/models/model-v1.ecore");
-		final EPackage pkg = loader.loadEPackage(URI.createURI(resourceURL.toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+		final URI resourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/model-v1.ecore", true);
+		PackageData pkgData = new PackageData("http://com.mmxlabs.models.migration.tests/model", "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore",
+				"../../com.mmxlabs.models.migration.tests/models/model.ecore");
+		final EPackage pkg = loader.loadEPackage(resourceURI, pkgData);
 		Assert.assertNotNull(pkg);
+
+		final URI subResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/sub-model-v1.ecore", true);
+		PackageData subPkgData = new PackageData("http://com.mmxlabs.models.migration.tests/submodel", "platform:/plugin/com.mmxlabs.models.migration.tests/models/sub-model.ecore",
+				"../../com.mmxlabs.models.migration.tests/models/sub-model.ecore");
+		final EPackage subPackage = loader.loadEPackage(subResourceURI, subPkgData);
+
+		EcoreUtil.resolveAll(loader.getResourceSet());
 
 		final EClass subClassA = (EClass) subPackage.getEClassifier("SubClassA");
 		Assert.assertNotNull(subClassA);
@@ -111,15 +116,19 @@ public class MetamodelLoaderTest {
 		{
 			final MetamodelLoader loader = new MetamodelLoader();
 
-			// Test load
-			final URL subResourceURL = getClass().getResource("/models/sub-model-v1.ecore");
-			final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()));
+			final URI resourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/model-v1.ecore", true);
+			PackageData pkgData = new PackageData("http://com.mmxlabs.models.migration.tests/model", "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore",
+					"../../com.mmxlabs.models.migration.tests/models/model.ecore");
+			final EPackage pkg = loader.loadEPackage(resourceURI, pkgData);
+			Assert.assertNotNull(pkg);
+
+			final URI subResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/sub-model-v1.ecore", true);
+			PackageData subPkgData = new PackageData("http://com.mmxlabs.models.migration.tests/submodel", "platform:/plugin/com.mmxlabs.models.migration.tests/models/sub-model.ecore",
+					"../../com.mmxlabs.models.migration.tests/models/sub-model.ecore");
+			final EPackage subPackage = loader.loadEPackage(subResourceURI, subPkgData);
 			Assert.assertNotNull(subPackage);
 
-			// Test re-used reference
-			final URL resourceURL = getClass().getResource("/models/model-v1.ecore");
-			final EPackage pkg = loader.loadEPackage(URI.createURI(resourceURL.toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
-			Assert.assertNotNull(pkg);
+			EcoreUtil.resolveAll(loader.getResourceSet());
 
 			final EClass subClassA = (EClass) subPackage.getEClassifier("SubClassA");
 			Assert.assertNotNull(subClassA);
@@ -132,7 +141,7 @@ public class MetamodelLoaderTest {
 			final EObject object = subFactory.create(subClassA);
 			Assert.assertNotNull(object);
 
-			final EStructuralFeature attributeA = classA.getEStructuralFeature("attributeB");
+			final EStructuralFeature attributeA = classA.getEStructuralFeature("attributeA");
 
 			object.eSet(attributeA, 1);
 			Assert.assertEquals(1, ((Integer) object.eGet(attributeA)).intValue());
@@ -143,13 +152,18 @@ public class MetamodelLoaderTest {
 			final MetamodelLoader loader = new MetamodelLoader();
 
 			// Test load
-			final URL subResourceURL = getClass().getResource("/models/sub-model-v2.ecore");
-			final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()));
+			final URI subResourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/sub-model-v2.ecore", true);
+			PackageData subPkgData = new PackageData("http://com.mmxlabs.models.migration.tests/submodel", "platform:/plugin/com.mmxlabs.models.migration.tests/models/sub-model.ecore",
+					"../../com.mmxlabs.models.migration.tests/models/sub-model.ecore");
+			final EPackage subPackage = loader.loadEPackage(subResourceURI, subPkgData);
 			Assert.assertNotNull(subPackage);
 
 			// Test re-used reference
-			final URL resourceURL = getClass().getResource("/models/model-v2.ecore");
-			final EPackage pkg = loader.loadEPackage(URI.createURI(resourceURL.toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+			final URI resourceURI = URI.createPlatformPluginURI("/com.mmxlabs.models.migration.tests/models/model-v2.ecore", true);
+			PackageData pkgData = new PackageData("http://com.mmxlabs.models.migration.tests/model", "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore",
+					"../../com.mmxlabs.models.migration.tests/models/model.ecore");
+
+			final EPackage pkg = loader.loadEPackage(resourceURI, pkgData);
 			Assert.assertNotNull(pkg);
 
 			final EClass subClassA = (EClass) subPackage.getEClassifier("SubClassA");
