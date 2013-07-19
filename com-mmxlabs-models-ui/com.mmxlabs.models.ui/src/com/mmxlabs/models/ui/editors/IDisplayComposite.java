@@ -28,7 +28,7 @@ public interface IDisplayComposite {
 	/**
 	 * Key used to associate a label with it's control for tool tips
 	 */
-	public static final String LABEL_CONTROL_KEY = "label-control";
+	public static String LABEL_CONTROL_KEY = "label-control";
 
 	/**
 	 * Get the SWT {@link Composite} which will be used to display values
@@ -44,7 +44,7 @@ public interface IDisplayComposite {
 	 * @param value
 	 * @since 6.0
 	 */
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range, EMFDataBindingContext dbc, final FormToolkit toolkit);
+	public void display(IScenarioEditingLocation location, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc);
 
 	/**
 	 * Sets the command handler for any stuff that goes on in this composite.
@@ -58,12 +58,12 @@ public interface IDisplayComposite {
 	 * 
 	 * @param wrapper
 	 */
-	public void setEditorWrapper(final IInlineEditorWrapper wrapper);
+	public void setEditorWrapper(IInlineEditorWrapper wrapper);
 
 	/**
 	 * Update contents with validation data.
 	 * 
 	 * @param status
 	 */
-	public void displayValidationStatus(final IStatus status);
+	public void displayValidationStatus(IStatus status);
 }

@@ -384,8 +384,8 @@ public class EObjectTableViewer extends GridTableViewer {
 			currentCommandStack.addCommandStackListener(commandStackListener);
 		}
 
-		table.setRowHeaderVisible(true);
-		table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
+//		table.setRowHeaderVisible(true);
+//		table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
 
 		// This appears to do nothing in the Nebula Grid case.
 		// See Grid#setItemHeight() instead

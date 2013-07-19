@@ -349,7 +349,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
-		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), scenarioEditingLocation);
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), scenarioEditingLocation, toolkit);
 		// Create a new instance with the current adapter factory.
 		// TODO: Dispose?
 		copyDialogToClipboardEditorWrapper = new CopyDialogToClipboard(scenarioEditingLocation.getAdapterFactory());
@@ -371,7 +371,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		displayComposite.display(scenarioEditingLocation, rootObject, duplicate, ranges.get(selection), dbc, toolkit);
+		displayComposite.display(scenarioEditingLocation, rootObject, duplicate, ranges.get(selection), dbc);
 
 		if (false) {
 			errorText = new Text(dialogArea, SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
