@@ -161,13 +161,6 @@
           subModelImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter">
     </submodelImporter>
  </extension>
- <extension
-       point="com.mmxlabs.models.common.modelcommandprovider">
-    <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.spotmarkets.editor.commands.SpotAvailabilityNameUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.spotmarkets.editor.commands.SpotAvailabilityNameUpdatingCommandProvider">
-    </ModelCommandProvider>
- </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated spotmarkets -->
       <editor
