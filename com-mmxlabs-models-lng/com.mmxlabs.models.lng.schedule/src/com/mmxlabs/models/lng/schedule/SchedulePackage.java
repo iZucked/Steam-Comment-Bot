@@ -754,6 +754,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slot Visit</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4380,6 +4381,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit <em>Slot Visit</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Slot Visit</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit()
@@ -5517,6 +5519,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot Visit</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
