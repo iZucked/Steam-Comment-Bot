@@ -9,6 +9,9 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * @since 6.0
+ */
 public class MultiTextInlineEditor extends TextInlineEditor {
 	final String newLine;
 
