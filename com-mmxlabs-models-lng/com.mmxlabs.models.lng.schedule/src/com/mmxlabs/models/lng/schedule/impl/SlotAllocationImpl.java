@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
-import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
@@ -608,9 +607,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			return getSlotVisit().getPort();
 		} else if (isSetSpotMarket()) {
 			final SpotMarket market = getSpotMarket();
-			if (market instanceof FOBSalesMarket) {
-				return ((FOBSalesMarket) market).getLoadPort();
-			} else if (market instanceof FOBPurchasesMarket) {
+			if (market instanceof FOBPurchasesMarket) {
 				return ((FOBPurchasesMarket) market).getNotionalPort();
 			}
 		}
