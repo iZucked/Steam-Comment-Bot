@@ -12,6 +12,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+/**
+ * @since 6.0
+ */
 public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiConstraint {
 	protected Map<EStructuralFeature, Double> minValues = new HashMap<EStructuralFeature, Double>();
 	protected Map<EStructuralFeature, Double> maxValues = new HashMap<EStructuralFeature, Double>();
