@@ -85,7 +85,7 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 		final EObject target = ctx.getTarget();
 
 		for (EStructuralFeature feature: getConstrainedFeatures()) {
-			if (shouldValidateFeature(target,feature)) {
+			if (target.eIsSet(feature) && shouldValidateFeature(target,feature)) {
 				final String className = target.eClass().getName();
 				final String featureName = feature.getName();
 			
