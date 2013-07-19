@@ -41,7 +41,7 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 	}
 	
 	protected Composite createChildControl(final Composite parent) {
-		return new SashForm(parent, SWT.VERTICAL);		
+		return new SashForm(parent, SWT.HORIZONTAL);		
 	}
 
 	@Override
