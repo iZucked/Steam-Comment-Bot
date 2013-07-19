@@ -196,6 +196,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
@@ -206,6 +207,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
@@ -482,6 +484,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -491,6 +494,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -281,6 +281,7 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Notes feature.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
