@@ -1,7 +1,6 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,7 +22,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
@@ -33,7 +31,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -116,8 +113,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 	}
 
-	public SlotDetailComposite(final Composite parent, final int style) {
-		super(parent, style);
+	public SlotDetailComposite(final Composite parent, final int style, FormToolkit toolkit) {
+		super(parent, style, toolkit);
 		feature2Editor = new HashMap<EStructuralFeature, IInlineEditor>();
 		eObject2Editor = new HashMap<EObject, EContentAdapter>();
 		// setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -174,14 +171,13 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc,
-			final FormToolkit toolkit) {
-		
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+
 		for (final Map.Entry<EObject, EContentAdapter> e : eObject2Editor.entrySet()) {
 			e.getKey().eAdapters().remove(e.getValue());
 		}
-		
-		super.display(location, root, object, range, dbc, toolkit);
+
+		super.display(location, root, object, range, dbc);
 		// ec.setExpanded(true);
 		// ec.setExpanded(false);
 		// final EClass eClass = object.eClass();
@@ -220,10 +216,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	@Override
-	public void createControls(final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public void createControls(final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
 
 		toolkit.adapt(this);
-		
+
 		LoadSlot loadSlot;
 		DischargeSlot dischargeSlot;
 		boolean isLoad;
@@ -254,26 +250,26 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		scrollComposite.setContent(contentComposite);
 
 		for (final EStructuralFeature f : mainFeatures) {
-			makeControl(root, object, contentComposite, f, dbc, toolkit);
+			makeControl(root, object, contentComposite, f, dbc);
 		}
 
 		// ecWindow = new ExpandableComposite(contentComposite, SWT.NONE, ExpandableComposite.`TIE);
 		ecWindow = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
 		ecWindow.setText("");
-		final Composite windowC = createExpandable(ecWindow, toolkit);
+		final Composite windowC = createExpandable(ecWindow);
 		for (final EStructuralFeature f : windowFeatures) {
 
-			final Control control = makeControl(root, object, windowC, f, dbc, toolkit);
+			final Control control = makeControl(root, object, windowC, f, dbc);
 		}
 
 		ecTerms = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
 		ecTerms.setText("");
 
-		final Composite termC = createExpandable(ecTerms, toolkit);
+		final Composite termC = createExpandable(ecTerms);
 		for (final EStructuralFeature f : termsFeatures) {
 			if (!isLoad && loadOnlyFeatures.contains(f))
 				continue;
-			final Control control = makeControl(root, object, termC, f, dbc, toolkit);
+			final Control control = makeControl(root, object, termC, f, dbc);
 		}
 		for (final EStructuralFeature f : missedFeatures) {
 			// Control control = makeControl(root, object, termC, f);
@@ -287,7 +283,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				continue;
 			if (termsFeatures.contains(f))
 				continue;
-			final Control c = makeControl(root, object, windowC, f, dbc, toolkit);
+			final Control c = makeControl(root, object, windowC, f, dbc);
 		}
 
 		this.addControlListener(new ControlAdapter() {
@@ -297,7 +293,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		});
 	}
 
-	private Composite createExpandable(final ExpandableComposite ec, final FormToolkit toolkit) {
+	private Composite createExpandable(final ExpandableComposite ec) {
 		// ec.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		ec.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 		ec.addExpansionListener(new ExpansionAdapter() {
@@ -336,7 +332,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		return null;
 	}
 
-	private Control makeControl(final MMXRootObject root, final EObject object, final Composite c, final EStructuralFeature f, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	private Control makeControl(final MMXRootObject root, final EObject object, final Composite c, final EStructuralFeature f, final EMFDataBindingContext dbc) {
 
 		final IInlineEditor editor = feature2Editor.get(f);
 		final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(c, SWT.NONE) : null;

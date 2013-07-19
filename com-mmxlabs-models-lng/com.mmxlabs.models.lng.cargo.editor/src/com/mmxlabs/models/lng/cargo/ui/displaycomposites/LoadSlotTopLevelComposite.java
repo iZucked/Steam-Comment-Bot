@@ -32,12 +32,13 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
  */
 public class LoadSlotTopLevelComposite extends DefaultTopLevelComposite {
 
-	public LoadSlotTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
-		super(parent, style, location);
+	public LoadSlotTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, FormToolkit toolkit) {
+		super(parent, style, location, toolkit);
+		toolkit.adapt(this);
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
@@ -56,18 +57,18 @@ public class LoadSlotTopLevelComposite extends DefaultTopLevelComposite {
 		g.setText(groupName);
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, location);
+		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, location, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
-		createChildComposites(root, object, eClass, this, toolkit);
+		createChildComposites(root, object, eClass, this);
 
-		topLevel.display(location, root, object, range, dbc, toolkit);
+		topLevel.display(location, root, object, range, dbc);
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			children.next().display(location, root, childObjectsItr.next(), range, dbc, toolkit);
+			children.next().display(location, root, childObjectsItr.next(), range, dbc);
 		}
 
 		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));

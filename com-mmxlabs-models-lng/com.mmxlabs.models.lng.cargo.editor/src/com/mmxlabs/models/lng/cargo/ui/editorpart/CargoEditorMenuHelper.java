@@ -674,7 +674,7 @@ public class CargoEditorMenuHelper {
 				menuManager.add(new CreateSlotAction("Discharge", source, null, false, null));
 				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, null));
 
-				if (enableSTSMenus ) {
+				if (enableSTSMenus) {
 					if (loadSlot.getTransferFrom() == null) {
 						if (!transferPorts.isEmpty()) {
 							final MenuManager subMenu = new MenuManager("Ship to Ship", null);
@@ -750,8 +750,8 @@ public class CargoEditorMenuHelper {
 			menuName = "FOB Sale";
 			final SpotMarketGroup group = pricingModel.getFobSalesSpotMarket();
 			for (final SpotMarket market : group.getMarkets()) {
-				final Port loadPort = ((FOBSalesMarket) market).getLoadPort();
-				if (loadPort == source.getPort()) {
+				final Set<Port> originPorts = SetUtils.getObjects(((FOBSalesMarket) market).getOriginPorts());
+				if (originPorts != null && originPorts.contains(source.getPort())) {
 					validMarkets.add(market);
 				}
 			}

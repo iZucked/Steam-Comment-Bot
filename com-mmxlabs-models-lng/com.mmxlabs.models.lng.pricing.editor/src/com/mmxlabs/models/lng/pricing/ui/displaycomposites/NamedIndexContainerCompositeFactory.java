@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.pricing.ui.displaycomposites;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -19,8 +20,8 @@ public class NamedIndexContainerCompositeFactory extends DefaultDisplayComposite
 	}
 
 	@Override
-	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
-		return new NamedIndexContainerTopLevelComposite(composite, SWT.NONE, location);
+	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new NamedIndexContainerTopLevelComposite(composite, SWT.NONE, location, toolkit);
 	}
 
 }

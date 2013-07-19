@@ -10,6 +10,7 @@ package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
  */
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -23,8 +24,8 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 
 	private final boolean mainTab;
 
-	public ContractDetailComposite(final Composite parent, final int style, final boolean top) {
-		super(parent, style);
+	public ContractDetailComposite(final Composite parent, final int style, final boolean top, final FormToolkit toolkit) {
+		super(parent, style, toolkit);
 
 		this.mainTab = top;
 	}

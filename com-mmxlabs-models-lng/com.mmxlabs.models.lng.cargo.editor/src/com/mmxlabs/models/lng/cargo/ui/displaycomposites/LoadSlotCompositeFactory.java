@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -24,13 +25,12 @@ public class LoadSlotCompositeFactory extends DefaultDisplayCompositeFactory {
 	}
 
 	@Override
-	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
-		return new LoadSlotTopLevelComposite(composite, SWT.NONE, location);
+	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new LoadSlotTopLevelComposite(composite, SWT.NONE, location, toolkit);
 	}
-	
+
 	@Override
-	public IDisplayComposite createSublevelComposite(Composite parent,
-			EClass eClass, IScenarioEditingLocation location) {
-		return new SlotDetailComposite(parent, SWT.NONE);
+	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new SlotDetailComposite(parent, SWT.NONE, toolkit);
 	}
 }
