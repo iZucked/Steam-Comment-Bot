@@ -60,7 +60,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain));
 
-		getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
+//		getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
 		/*
 		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {
 			@Override
