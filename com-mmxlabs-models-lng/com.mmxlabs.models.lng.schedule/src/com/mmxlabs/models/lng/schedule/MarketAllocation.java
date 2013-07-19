@@ -3,7 +3,6 @@
 package com.mmxlabs.models.lng.schedule;
 
 import com.mmxlabs.models.lng.cargo.Slot;
-
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 /**
@@ -19,6 +18,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getMarket <em>Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotAllocation <em>Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getPrice <em>Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit <em>Slot Visit</em>}</li>
  * </ul>
  * </p>
  *
@@ -132,5 +132,31 @@ public interface MarketAllocation extends ProfitAndLossContainer {
 	 * @generated
 	 */
 	void setPrice(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Slot Visit</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Slot Visit</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Slot Visit</em>' containment reference.
+	 * @see #setSlotVisit(SlotVisit)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getMarketAllocation_SlotVisit()
+	 * @model containment="true"
+	 * @generated
+	 */
+	SlotVisit getSlotVisit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit <em>Slot Visit</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Slot Visit</em>' containment reference.
+	 * @see #getSlotVisit()
+	 * @generated
+	 */
+	void setSlotVisit(SlotVisit value);
 
 } // MarketAllocation
