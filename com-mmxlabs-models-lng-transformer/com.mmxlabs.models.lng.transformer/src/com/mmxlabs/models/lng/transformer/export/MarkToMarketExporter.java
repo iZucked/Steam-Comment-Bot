@@ -98,6 +98,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 
 			final MarketAllocation eAllocation = scheduleFactory.createMarketAllocation();
 			eAllocation.setSlot(optSlot);
+			eAllocation.setSlotVisit(sv);
 			eAllocation.setMarket(entities.getModelObject(market, SpotMarket.class));
 			allocations.put(slot, eAllocation);
 			output.getMarketAllocations().add(eAllocation);
