@@ -13,12 +13,17 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.emf.edit.ui.action.RedoAction;
+import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
@@ -33,28 +38,41 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView {
 	private Composite childComposite;
-	private LinkedList<ScenarioTableViewerPane> viewerPanes = new LinkedList<ScenarioTableViewerPane>();
+	private final LinkedList<ScenarioTableViewerPane> viewerPanes = new LinkedList<ScenarioTableViewerPane>();
+	private UndoAction undoAction;
+	private RedoAction redoAction;
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		childComposite = createChildControl(parent);
 		listenToScenarioSelection();
+
+		final IActionBars actionBars = getViewSite().getActionBars();
+
+		final ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+		undoAction = new UndoAction();
+		undoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_UNDO));
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
+
+		redoAction = new RedoAction();
+		redoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 	}
-	
+
 	protected Composite createChildControl(final Composite parent) {
-		return new SashForm(parent, SWT.HORIZONTAL);		
+		return new SashForm(parent, SWT.HORIZONTAL);
 	}
 
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
 		if (instance != getScenarioInstance()) {
-			for (ScenarioTableViewerPane pane: viewerPanes) {
+			for (final ScenarioTableViewerPane pane : viewerPanes) {
 				if (pane != null) {
 					getSite().setSelectionProvider(null);
 					pane.dispose();
-				}				
+				}
 			}
-			
+
 			viewerPanes.clear();
 
 			final Composite parent = childComposite.getParent();
@@ -65,10 +83,10 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
 				viewerPanes.addAll(createViewerPanes());
-				for (ScenarioTableViewerPane pane: viewerPanes) {
+				for (final ScenarioTableViewerPane pane : viewerPanes) {
 					pane.createControl(childComposite);
 					pane.setLocked(isLocked());
-					
+
 				}
 				initViewerPanes(viewerPanes);
 
@@ -77,18 +95,18 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 		}
 	}
 
-	abstract protected EReference [] [] getPaneRootPaths();
-	
-	private void initViewerPanes(List<ScenarioTableViewerPane> panes) {
-		
-		final EditingDomain domain = getEditingDomain();		
-		EReference [] [] references = getPaneRootPaths();
-		
+	abstract protected EReference[][] getPaneRootPaths();
+
+	private void initViewerPanes(final List<ScenarioTableViewerPane> panes) {
+
+		final EditingDomain domain = getEditingDomain();
+		final EReference[][] references = getPaneRootPaths();
+
 		if (domain != null) {
 			for (int i = 0; i < panes.size(); i++) {
 				panes.get(i).init(Arrays.asList(references[i]), getAdapterFactory(), domain.getCommandStack());
 				panes.get(i).getViewer().setInput(getRootObject());
-			}			
+			}
 		}
 
 	}
@@ -102,11 +120,11 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 
 	@Override
 	public void setLocked(final boolean locked) {
-		for (ScenarioTableViewerPane pane: viewerPanes) {
+		for (final ScenarioTableViewerPane pane : viewerPanes) {
 			if (pane != null) {
 				pane.setLocked(locked);
 			}
-			
+
 		}
 		super.setLocked(locked);
 	}
@@ -124,13 +142,13 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 			final EObject target = dcsd.getTarget();
-			
-			final EReference[][] paths = getPaneRootPaths();			
-			
+
+			final EReference[][] paths = getPaneRootPaths();
+
 			for (int i = 0; i < paths.length; i++) {
-				final EReference[] path = paths[i];				
+				final EReference[] path = paths[i];
 				final EClass rootClass = path[path.length - 1].getEReferenceType();
-				
+
 				// dcsd target matches the root class for this pane
 				if (rootClass.isInstance(target)) {
 					getSite().getPage().activate(this);
@@ -139,10 +157,10 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 						viewerPanes.get(i).getScenarioViewer().setSelection(selection, true);
 					}
 				}
-				
+
 			}
 		}
-			
+
 	}
 
 }
