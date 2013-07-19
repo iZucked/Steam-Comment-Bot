@@ -139,7 +139,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), null, true, optimising, ScenarioLock.OPTIMISER);
+				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), null, false, optimising, ScenarioLock.OPTIMISER);
 			}
 		}
 	}
