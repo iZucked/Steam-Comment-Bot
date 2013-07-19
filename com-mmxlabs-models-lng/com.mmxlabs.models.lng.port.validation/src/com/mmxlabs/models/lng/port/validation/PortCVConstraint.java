@@ -13,8 +13,8 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.ui.validation.AbstractFeatureRangeConstraint;
 
 public class PortCVConstraint extends AbstractFeatureRangeConstraint {
-	public PortCVConstraint() {
-		setRange(PortPackage.Literals.PORT__CV_VALUE, 1.0, 40.0);
+	public void createConstraints() {
+		setRange(PortPackage.Literals.PORT__CV_VALUE, 1.0, 40.0, "Port CV");
 	}
 
 	@Override
@@ -27,26 +27,5 @@ public class PortCVConstraint extends AbstractFeatureRangeConstraint {
 		return (target instanceof Port && ((Port) target).getCapabilities().contains(PortCapability.LOAD));
 	}
 
-	/*
-	@Override
-	public IStatus validate(final IValidationContext ctx) {
-		final EObject target = ctx.getTarget();
-		if (target instanceof Port) {
-			final Port port = (Port) target;
-
-			if (port.getCapabilities().contains(PortCapability.LOAD)) {
-				double cv = port.getCvValue();
-				if (cv < minCv || cv > maxCv) {
-					String message = String.format("Port CV value %.2f (should be between %.2f and %.2f)", cv, minCv, maxCv);
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-					dsd.addEObjectAndFeature(port, PortPackage.eINSTANCE.getPort_CvValue());
-					return dsd;					
-				}
-			}
-
-		}
-		return ctx.createSuccessStatus();
-	}
-	*/
 	
 }

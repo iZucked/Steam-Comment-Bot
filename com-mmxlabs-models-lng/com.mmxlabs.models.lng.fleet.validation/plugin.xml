@@ -73,6 +73,25 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselAttributesRangeConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselAttributesRangeConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Attributes Have Sensible Values"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Vessel state attributes must lie within sensible ranges.
+               </description>
+               <target
+                     class="VesselStateAttributes">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint"
                   id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.max_speed"
                   isEnabledByDefault="true"
