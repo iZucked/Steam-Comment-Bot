@@ -15,30 +15,72 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiConstraint {
 	protected Map<EStructuralFeature, Double> minValues = new HashMap<EStructuralFeature, Double>();
 	protected Map<EStructuralFeature, Double> maxValues = new HashMap<EStructuralFeature, Double>();
+	protected Map<EStructuralFeature, String> featureLabels = new HashMap<EStructuralFeature, String>();
 	
-	protected void setMin(EStructuralFeature feature, double value) {
-		minValues.put(feature, value);
+	public AbstractFeatureRangeConstraint() {
+		createConstraints();
 	}
 	
-	protected void setMax(EStructuralFeature feature, double value) {
-		maxValues.put(feature, value);
+	/**
+	 * Sets the required range for a particular feature. The min and max values may be null for "any".
+	 * A label string to use when displaying the feature may also be supplied.
+	 * 
+	 * @param feature
+	 * @param min
+	 * @param max
+	 * @param label
+	 */
+	protected void setRange(EStructuralFeature feature, Double min, Double max, String label) {
+		if (min != null) {
+			minValues.put(feature, min);
+		}
+		if (max != null) {
+			maxValues.put(feature, max);
+		}
+		if (label != null) {
+			featureLabels.put(feature, label);
+		}
 	}
 	
-	protected void setRange(EStructuralFeature feature, double min, double max) {
-		setMin(feature, min);
-		setMax(feature, max);
-	}
-	
-	protected Collection<EStructuralFeature> getConstrainedFeatures() {
+	/**
+	 * Returns a collection of the features which this constraint applies to.
+	 * @return
+	 */
+	private Collection<EStructuralFeature> getConstrainedFeatures() {
 		HashSet<EStructuralFeature> result = new HashSet<EStructuralFeature>(minValues.keySet());
 		result.addAll(maxValues.keySet());
 		return result;
 	}
 	
-	protected boolean shouldValidateFeature(EObject object, EStructuralFeature feature) {
-		return true;
-	}	
+	/**
+	 * Returns the display label to use for a particular feature.
+	 * 
+	 * @param feature
+	 * @return
+	 */
+	private String getLabel(EStructuralFeature feature) {
+		if (featureLabels.containsKey(feature)) {
+			return featureLabels.get(feature);
+		}
+		
+		return feature.getEContainingClass().getName() + " " + feature.getName();
+	}
+	
+	/**
+	 * Implement this method to indicate whether or not a particular object's feature should be validated.
+	 * 
+	 * @param object
+	 * @param feature
+	 * @return
+	 */
+	abstract protected boolean shouldValidateFeature(EObject object, EStructuralFeature feature);	
 
+	/** 
+	 * Implementing classes should set their constraints here, via
+	 * setRange() calls.
+	 */
+	abstract protected void createConstraints();
+	
 	protected String validate(final IValidationContext ctx, List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
@@ -57,17 +99,17 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 					
 					final Double minValue = minValues.get(feature);
 					final Double maxValue = maxValues.get(feature);
-					if (minValue != null && number < minValue) {
+					if (minValue != null && number <= minValue) {
 						comparator = "more";
 						comparison = minValue;
 					}
-					else if (minValue != null && number > maxValue) {
+					else if (maxValue != null && number >= maxValue) {
 						comparator = "less";
 						comparison = maxValue;
 					}
 					
 					if (comparison != null) {
-						final String message = String.format("%s %s is %.2f (should be %s than %.2f)", className, featureName, number, comparator, comparison);
+						final String message = String.format("%s is %.2f (should be %s than %.2f)", getLabel(feature), number, comparator, comparison);
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dcsd.addEObjectAndFeature(target, feature);
 						statuses.add(dcsd);
@@ -88,5 +130,11 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 		
 	}
 
+	/**
+	 * Implementing sub-classes should implement this with the body "return Activator.PLUGIN_ID;"
+	 * (assuming there is a local Activator class to import).
+	 * 
+	 * @return
+	 */
 	protected abstract String getPluginId();
 }
