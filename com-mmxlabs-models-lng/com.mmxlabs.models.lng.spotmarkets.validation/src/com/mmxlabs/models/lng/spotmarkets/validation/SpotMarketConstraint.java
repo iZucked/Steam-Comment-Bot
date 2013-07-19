@@ -110,10 +110,16 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 
 				checkSpotMarketGroup(ctx, failures, spotMarket, SpotType.FOB_SALE);
 
-				final Port loadPort = fobSalesMarket.getLoadPort();
-				if (loadPort == null || loadPort.getCapabilities().contains(PortCapability.LOAD) == false) {
+				final Set<Port> ports = SetUtils.getObjects(fobSalesMarket.getOriginPorts());
+				boolean foundLoadPort = false;
+				for (final Port p : ports) {
+					if (p.getCapabilities().contains(PortCapability.LOAD)) {
+						foundLoadPort = true;
+					}
+				}
+				if (!foundLoadPort) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A load port must be set"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_LoadPort());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_OriginPorts());
 					failures.add(dsd);
 				}
 			}
