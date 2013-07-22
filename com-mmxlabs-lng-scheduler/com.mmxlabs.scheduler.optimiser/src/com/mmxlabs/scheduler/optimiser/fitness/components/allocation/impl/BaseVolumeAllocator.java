@@ -684,29 +684,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		cargoCount++;
 	}
 
-	/**
-	 * Get the variable associated with this slot (load or discharge) in the current run.
-	 * 
-	 * @param slot
-	 * @return
-	 */
-	protected final int variableForSlot(final IPortSlot slot) {
-		final Integer i = variableTable.get(slot);
-		return i == null ? -1 : i.intValue();
-	}
-
 	protected abstract long[] allocateSpareVolume();
 
 	public void solve() {
 		this.allocation = allocateSpareVolume();
-	}
-
-	public long getAllocation(final IPortSlot slot) {
-		final int index = variableForSlot(slot);
-		if (index == -1) {
-			return 0;
-		}
-		return allocation[index];
 	}
 
 	@Override
