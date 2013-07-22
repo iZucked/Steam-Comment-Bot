@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -156,7 +157,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					}
 				}
 
-				if (earliest == null) {
+				if (earliest == null || latest == null) {
 					return result;
 				}
 
