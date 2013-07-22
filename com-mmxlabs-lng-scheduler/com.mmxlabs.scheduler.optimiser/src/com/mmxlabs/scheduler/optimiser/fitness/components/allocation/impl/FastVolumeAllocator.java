@@ -31,9 +31,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * TODO has no handling of load lower bounds; need to do a first pass allocating LB to every cargo first.
  * 
  * @author hinton
+ * @since 6.0
  * 
  */
-public abstract class FastCargoAllocator extends BaseCargoAllocator {
+public abstract class FastVolumeAllocator extends BaseVolumeAllocator {
 //	final Map<IPortSlot, Integer> volumeConstraintMap = new HashMap<IPortSlot, Integer>();
 //	final ArrayList<Long> initialConstraintValues = new ArrayList<Long>();
 //

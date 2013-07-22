@@ -40,7 +40,7 @@ import com.mmxlabs.scheduler.optimiser.builder.impl.XYPortEuclideanDistanceCalcu
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListCargoAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListVolumeAllocationEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
@@ -215,7 +215,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 		bind(IRouteCostProviderEditor.class).toInstance(routeCostProvider);
 
-		final ITotalVolumeLimitEditor totalVolumeLimits = new ArrayListCargoAllocationEditor(SchedulerConstants.DCP_totalVolumeLimitProvider);
+		final ITotalVolumeLimitEditor totalVolumeLimits = new ArrayListVolumeAllocationEditor(SchedulerConstants.DCP_totalVolumeLimitProvider);
 		bind(ITotalVolumeLimitProvider.class).toInstance(totalVolumeLimits);
 		bind(ITotalVolumeLimitEditor.class).toInstance(totalVolumeLimits);
 

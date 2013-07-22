@@ -40,9 +40,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
  * Base class for allocating load/discharge volumes; doesn't implement the solve() method, but does do various book-keeping tasks.
  * 
  * @author hinton
+ * @since 6.0
  * 
  */
-public abstract class BaseCargoAllocator implements IVolumeAllocator {
+public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Inject
 	ITotalVolumeLimitProvider cargoAllocationProvider;
@@ -84,7 +85,7 @@ public abstract class BaseCargoAllocator implements IVolumeAllocator {
 	@Inject
 	private Provider<VoyagePlanIterator> voyagePlanIteratorProvider;
 
-	public BaseCargoAllocator() {
+	public BaseVolumeAllocator() {
 		super();
 	}
 

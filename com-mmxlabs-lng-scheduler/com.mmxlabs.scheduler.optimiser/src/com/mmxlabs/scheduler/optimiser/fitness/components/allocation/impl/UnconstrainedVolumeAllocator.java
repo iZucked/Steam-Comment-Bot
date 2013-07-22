@@ -12,9 +12,10 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * A cargo allocator which presumes that there are no total volume constraints, and so the total remaining capacity should be allocated
  * 
  * @author Tom Hinton
+ * @since 6.0
  * 
  */
-public class UnconstrainedCargoAllocator extends BaseCargoAllocator {
+public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	/*
 	 * (non-Javadoc)
 	 * 

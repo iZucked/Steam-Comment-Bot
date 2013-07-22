@@ -13,11 +13,12 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolum
  * Allocation provider editor for indexed port slots. Just a list wrapper.
  * 
  * @author hinton
+ * @since 6.0
  * 
  */
-public class ArrayListCargoAllocationEditor implements ITotalVolumeLimitEditor {
+public class ArrayListVolumeAllocationEditor implements ITotalVolumeLimitEditor {
 
-	public ArrayListCargoAllocationEditor(final String name) {
+	public ArrayListVolumeAllocationEditor(final String name) {
 		super();
 		this.name = name;
 	}

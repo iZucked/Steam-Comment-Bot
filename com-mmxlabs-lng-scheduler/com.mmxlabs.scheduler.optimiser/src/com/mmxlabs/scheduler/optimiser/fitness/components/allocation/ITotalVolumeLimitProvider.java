@@ -6,10 +6,10 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.BaseCargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.BaseVolumeAllocator;
 
 /**
- * DCP which tells the {@link BaseCargoAllocator} what the allocation limits are.
+ * DCP which tells the {@link BaseVolumeAllocator} what the allocation limits are.
  * 
  * @author hinton
  * 
