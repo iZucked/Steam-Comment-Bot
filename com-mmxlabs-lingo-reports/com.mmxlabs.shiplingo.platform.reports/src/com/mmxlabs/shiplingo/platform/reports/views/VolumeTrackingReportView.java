@@ -188,7 +188,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						@Override
 						public String getColumnText(VolumeData data) {
 							long result = data.volumes.containsKey(year) ? data.volumes.get(year) : 0;
-							return String.format("%d", result);
+							return String.format("%,d", result);
 						}
 
 						@Override
