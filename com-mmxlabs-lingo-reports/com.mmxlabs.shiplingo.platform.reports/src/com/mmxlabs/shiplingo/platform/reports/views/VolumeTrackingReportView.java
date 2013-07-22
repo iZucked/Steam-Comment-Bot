@@ -29,7 +29,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * for each gas year (with additional rows for "other purchase" and "other sales"). 
  * 
  * @author Simon McGregor
- * @since 2.0
+ * @since 4.0
  */
 public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrackingReportView.VolumeData> {
 	@SuppressWarnings("serial")
