@@ -23,11 +23,17 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 
 public class DefaultDisplayCompositeFactory implements IDisplayCompositeFactory {
 
+	/**
+	 * @since 6.0
+	 */
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
 		return new DefaultTopLevelComposite(parent, SWT.NONE, location, toolkit);
 	}
 
+	/**
+	 * @since 6.0
+	 */
 	@Override
 	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
 		return new DefaultDetailComposite(parent, SWT.NONE, toolkit);
