@@ -118,6 +118,11 @@ public class PriceExpressionUtils {
 	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
 			final Double maxValue, final Date date, final List<IStatus> failures) {
+		
+		if (priceExpression == null || priceExpression.isEmpty()) {
+			return;
+		}
+		
 		SeriesParser parser = getParser(date);
 		try {
 			final IExpression<ISeries> expression = parser.parse(priceExpression);
