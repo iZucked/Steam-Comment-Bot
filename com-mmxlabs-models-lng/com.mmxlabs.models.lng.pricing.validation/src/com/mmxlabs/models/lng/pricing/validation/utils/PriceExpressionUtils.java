@@ -107,6 +107,11 @@ public class PriceExpressionUtils {
 				failures.add(dsd);
 			}
 		}
+		
+		if (priceExpression == null || priceExpression.isEmpty()) {
+			return;
+		}
+		
 	}
 
 	/**
