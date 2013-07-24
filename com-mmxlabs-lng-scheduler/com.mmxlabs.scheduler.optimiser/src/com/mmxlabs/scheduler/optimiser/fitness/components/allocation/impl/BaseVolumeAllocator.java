@@ -65,6 +65,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		/** Prices of LNG at each load / discharge slot in the cargo */
 		final int [] slotPricesPerM3;
 		
+		final int [] slotTimes;
+		
 		/** Slots in the cargo */
 		final IPortSlot [] slots;
 		
@@ -72,15 +74,52 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final VoyagePlan voyagePlan;
 		
-		public AllocationRecord(long capacity, long forced, long heel, int [] prices, IPortSlot [] slots, VoyagePlan plan) {
+		public AllocationRecord(long capacity, long forced, long heel, int [] prices, IPortSlot [] slots, int [] times, VoyagePlan plan) {
 			vesselCapacityInM3 = capacity;
 			requiredFuelVolumeInM3 = forced;
 			minEndVolumeInM3 = heel;
 			slotPricesPerM3 = prices;			
+			slotTimes = times;
 			this.slots = slots;
 			voyagePlan = plan;
 
 			allocations = new long [slots.length];
+		}
+		
+		public AllocationAnnotation createAnnotation() {
+			final AllocationAnnotation annotation = new AllocationAnnotation();
+
+			annotation.getSlots().clear();
+			for (final IPortSlot slot : slots) {
+				annotation.getSlots().add(slot);
+			}
+
+			annotation.setFuelVolumeInM3(requiredFuelVolumeInM3);
+			annotation.setRemainingHeelVolumeInM3(minEndVolumeInM3);
+
+			// TODO recompute load price here; this is not necessarily right
+			// final int[] prices = priceIterator.next();
+			final int[] prices = slotPricesPerM3;
+
+			assert slots.length == prices.length;
+			for (int i = 0; i < slots.length; i++) {
+				annotation.setSlotPricePerM3(slots[i], prices[i]);
+				annotation.setSlotTime(slots[i], slotTimes[i]);
+			}
+
+			// load/discharge case
+			if (slots.length == 2) {
+				annotation.setSlotVolumeInM3(slots[1], allocations[1]);
+			}
+			// LDD case
+			else {
+				for (int j = 1; j < slots.length; j++) {
+					final IDischargeOption discharge = (IDischargeOption) slots[j];
+					annotation.setSlotVolumeInM3(discharge, discharge.getMaxDischargeVolume());
+				}
+			}
+			
+			return annotation;		
 		}
 	}
 	
@@ -447,8 +486,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
 		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
+		final int [] times = { loadTime, dischargeTime };
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, prices, slots, plan));
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, prices, slots, times, plan));
 		
 		cargoCount++;
 	}
@@ -505,8 +545,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
 		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
+		final int [] times = { time, time };
 		
-		constraints.add(new AllocationRecord(Long.MAX_VALUE, 0l, 0l, prices, slots, plan));
+		constraints.add(new AllocationRecord(Long.MAX_VALUE, 0l, 0l, prices, slots, times, plan));
 
 		cargoCount++;
 	}
@@ -519,9 +560,12 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final long vesselCapacityInM3 = vessel.getCargoCapacity();
 		final IPortSlot[] slots = new IPortSlot[portDetails.length];
 
+		final int [] slotTimes = new int [slots.length];
+		
 		for (int i = 0; i < slots.length; i++) {
-			slots[i] = portDetails[i].getOptions().getPortSlot();
-			slotTimes.put(slots[i], times[i]);
+			//slots[i] = portDetails[i].getOptions().getPortSlot();
+			//slotTimes.put(slots[i], times[i]);
+			slotTimes[i] = times[i];
 		}
 
 		final long heelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l; 
@@ -569,7 +613,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			pricesPerM3[0] = loadPricePerM3;
 		}
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, pricesPerM3, slots, plan));
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, pricesPerM3, slots, slotTimes, plan));
 		cargoCount++;
 	}
 
@@ -590,7 +634,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			public Iterator<Pair<VoyagePlan, IAllocationAnnotation>> iterator() {
 				return new Iterator<Pair<VoyagePlan, IAllocationAnnotation>>() {
 					final Iterator<AllocationRecord> constraintsIterator = constraints.iterator();
-					int allocationIndex;
 
 					@Override
 					public boolean hasNext() {
@@ -599,40 +642,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 					@Override
 					public Pair<VoyagePlan, IAllocationAnnotation> next() {
-						final AllocationAnnotation annotation = new AllocationAnnotation();
 						AllocationRecord constraint = constraintsIterator.next();
-
-						final IPortSlot[] slots = constraint.slots;
-
-						annotation.getSlots().clear();
-						for (final IPortSlot slot : slots) {
-							annotation.getSlots().add(slot);
-						}
-
-						annotation.setFuelVolumeInM3(constraint.requiredFuelVolumeInM3);
-						annotation.setRemainingHeelVolumeInM3(constraint.minEndVolumeInM3);
-
-						// TODO recompute load price here; this is not necessarily right
-						// final int[] prices = priceIterator.next();
-						final int[] prices = constraint.slotPricesPerM3;
-
-						assert slots.length == prices.length;
-						for (int i = 0; i < slots.length; i++) {
-							annotation.setSlotPricePerM3(slots[i], prices[i]);
-							annotation.setSlotTime(slots[i], slotTimes.get(slots[i]));
-						}
-
-						// load/discharge case
-						if (slots.length == 2) {
-							annotation.setSlotVolumeInM3(slots[1], constraint.allocations[1]);
-						}
-						// LDD case
-						else {
-							for (int j = 1; j < slots.length; j++) {
-								final IDischargeOption discharge = (IDischargeOption) slots[j];
-								annotation.setSlotVolumeInM3(discharge, discharge.getMaxDischargeVolume());
-							}
-						}
+						AllocationAnnotation annotation = constraint.createAnnotation();
 
 						return new Pair<VoyagePlan, IAllocationAnnotation>(constraint.voyagePlan, annotation);
 					}
