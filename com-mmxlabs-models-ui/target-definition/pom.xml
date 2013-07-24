@@ -4,9 +4,9 @@
 	<parent>
 		<groupId>com.mmxlabs.models.ui</groupId>
 		<artifactId>com.mmxlabs.models.ui.parent</artifactId>
-		<version>5.0.2.RELEASE</version>
+		<version>5.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
-	<version>5.0.2.RELEASE</version>
+	<version>5.0.2-SNAPSHOT</version>
 </project>
