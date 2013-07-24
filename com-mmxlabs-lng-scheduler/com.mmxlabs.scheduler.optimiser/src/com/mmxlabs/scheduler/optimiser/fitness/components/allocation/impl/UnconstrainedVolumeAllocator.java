@@ -38,7 +38,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * @param constraint
 	 * @return
 	 */
-	protected final static long [] allocateBasicSlotVolumes(AllocationConstraints constraint) {
+	protected final static long [] allocateBasicSlotVolumes(AllocationRecord constraint) {
 		final IPortSlot[] slots = constraint.slots;		
 		final long [] result = new long [slots.length];
 		

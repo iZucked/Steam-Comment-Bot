@@ -49,40 +49,28 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * Record class for allocation constraints per  
 	 * @author Simon McGregor
 	 */
-	static final class AllocationConstraints {
-		/**
-		 * The LNG volume which the vessel starts with (the start heel)
-		 */
+	static final class AllocationRecord {
+		/** The LNG volume which the vessel starts with (the start heel) */
 		final long startVolumeInM3 = 0;
 		
-		/**
-		 * The capacity of the vessel carrying the cargo
-		 */		
+		/** The capacity of the vessel carrying the cargo */		
 		final long vesselCapacityInM3;
 		
-		/**
-		 * The quantity of LNG which <em>must</em> be loaded for a given cargo (for fuel)
-		 */
+		/** The quantity of LNG which <em>must</em> be loaded for a given cargo (for fuel) */
 		final long requiredFuelVolumeInM3;
 
-		/**
-		 * The LNG volume which must remain at the end of the voyage (the remaining heel)
-		 */
+		/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
 		final long minEndVolumeInM3;
 		
-		/**
-		 * Prices of LNG at each load / discharge slot in the cargo
-		 */
+		/** Prices of LNG at each load / discharge slot in the cargo */
 		final int [] slotPricesPerM3;
 		
-		/**
-		 * Slots in the cargo
-		 */
+		/** Slots in the cargo */
 		final IPortSlot [] slots;
 
 		final VoyagePlan voyagePlan;
 		
-		public AllocationConstraints(long capacity, long forced, long heel, int [] prices, IPortSlot [] slots, VoyagePlan plan) {
+		public AllocationRecord(long capacity, long forced, long heel, int [] prices, IPortSlot [] slots, VoyagePlan plan) {
 			vesselCapacityInM3 = capacity;
 			requiredFuelVolumeInM3 = forced;
 			minEndVolumeInM3 = heel;
@@ -95,7 +83,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	/**
 	 * All the constraints to take into account, indexed bu cargo
 	 */
-	final ArrayList<AllocationConstraints> constraints = new ArrayList<AllocationConstraints>();
+	final ArrayList<AllocationRecord> constraints = new ArrayList<AllocationRecord>();
 	
 	@Inject
 	ITotalVolumeLimitProvider cargoAllocationProvider;
@@ -467,7 +455,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
 
-		constraints.add(new AllocationConstraints(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, prices, slots, plan));
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, prices, slots, plan));
 		
 		cargoCount++;
 	}
@@ -531,7 +519,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
 		
-		constraints.add(new AllocationConstraints(Long.MAX_VALUE, 0l, 0l, prices, slots, plan));
+		constraints.add(new AllocationRecord(Long.MAX_VALUE, 0l, 0l, prices, slots, plan));
 
 		cargoCount++;
 	}
@@ -601,7 +589,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			pricesPerM3[0] = loadPricePerM3;
 		}
 
-		constraints.add(new AllocationConstraints(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, pricesPerM3, slots, plan));
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, pricesPerM3, slots, plan));
 		cargoCount++;
 	}
 
@@ -621,7 +609,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			@Override
 			public Iterator<Pair<VoyagePlan, IAllocationAnnotation>> iterator() {
 				return new Iterator<Pair<VoyagePlan, IAllocationAnnotation>>() {
-					final Iterator<AllocationConstraints> constraintsIterator = constraints.iterator();
+					final Iterator<AllocationRecord> constraintsIterator = constraints.iterator();
 					int allocationIndex;
 
 					@Override
@@ -632,7 +620,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					@Override
 					public Pair<VoyagePlan, IAllocationAnnotation> next() {
 						final AllocationAnnotation annotation = new AllocationAnnotation();
-						AllocationConstraints constraint = constraintsIterator.next();
+						AllocationRecord constraint = constraintsIterator.next();
 
 						final IPortSlot[] slots = constraint.slots;
 
