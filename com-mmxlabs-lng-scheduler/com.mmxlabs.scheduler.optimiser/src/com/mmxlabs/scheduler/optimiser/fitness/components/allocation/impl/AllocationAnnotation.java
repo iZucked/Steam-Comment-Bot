@@ -141,7 +141,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	@Override
 	public long getSlotDischargeVolumeInM3(final IPortSlot slot) {
