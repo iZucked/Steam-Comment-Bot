@@ -42,7 +42,7 @@ public interface IAllocationAnnotation {
 	 * @return
 	 * @since 5.0
 	 */
-	long getSlotTransferVolumeInM3(IPortSlot slot);
+	long getSlotVolumeInM3(IPortSlot slot);
 	
 	/**
 	 * Returns the time a load or discharge began
