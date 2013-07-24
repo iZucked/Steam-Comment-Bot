@@ -23,8 +23,7 @@ import com.mmxlabs.common.Pair;
 /**
  * An inline editor for picking a value from a fixed list of values.
  * 
- * It's constructed with a list of name/value pairs. The names are displayed for
- * the corresponding value objects.
+ * It's constructed with a list of name/value pairs. The names are displayed for the corresponding value objects.
  * 
  * @author hinton
  * 
@@ -35,9 +34,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	private final List<String> names;
 	private final List<Object> values;
 
-	public ValueListInlineEditor(
-			final EStructuralFeature feature,
-			final List<Pair<String, Object>> values) {
+	public ValueListInlineEditor(final EStructuralFeature feature, final List<Pair<String, Object>> values) {
 		super(feature);
 		names = new ArrayList<String>(values.size());
 		this.values = new ArrayList<Object>(values.size());
@@ -73,7 +70,9 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		combo.select(values.indexOf(value));
+		if (combo != null && !combo.isDisposed()) {
+			combo.select(values.indexOf(value));
+		}
 	}
 
 	@Override
@@ -85,14 +84,15 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	protected void setControlsEnabled(final boolean enabled) {
 
 		combo.setEnabled(enabled);
-		
+
 		super.setControlsEnabled(enabled);
 	}
+
 	@Override
 	protected void setControlsVisible(final boolean visible) {
-		
+
 		combo.setVisible(visible);
-		
+
 		super.setControlsVisible(visible);
 	}
 }
