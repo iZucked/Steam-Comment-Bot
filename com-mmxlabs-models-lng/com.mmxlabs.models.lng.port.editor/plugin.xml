@@ -195,4 +195,16 @@
           id="com.mmxlabs.models.lng.port.ui.commands.RoutePortCommandProvider">
     </ModelCommandProvider>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated port -->
+      <editor
+            id="com.mmxlabs.models.lng.port.presentation.PortEditorID"
+            name="%_UI_PortEditor_label"
+            icon="icons/full/obj16/PortModelFile.gif"
+            extensions="port"
+            class="com.mmxlabs.models.lng.port.presentation.PortEditor"
+            contributorClass="com.mmxlabs.models.lng.port.presentation.PortActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>

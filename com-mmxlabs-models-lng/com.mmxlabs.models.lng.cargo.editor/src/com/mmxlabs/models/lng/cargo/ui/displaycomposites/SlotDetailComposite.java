@@ -34,6 +34,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -66,7 +67,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private Collection Features;
 
 	{
-		mainFeatures = (ArrayList<EStructuralFeature>) CollectionsUtil.makeArrayList(CargoFeatures.getSlot_Contract(), CargoFeatures.getSlot_PriceExpression(), CargoFeatures.getSlot_Port(),
+		mainFeatures = (ArrayList<EStructuralFeature>) CollectionsUtil.makeArrayList(MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Contract(), CargoFeatures.getSlot_PriceExpression(), CargoFeatures.getSlot_Port(),
 				CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity(), CargoFeatures.getSlot_Optional());
 
 		windowFeatures = new ArrayList<EStructuralFeature>();

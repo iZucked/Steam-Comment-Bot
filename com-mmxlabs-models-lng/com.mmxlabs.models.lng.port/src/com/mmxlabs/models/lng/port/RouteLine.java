@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.port;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,6 +18,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getDistance <em>Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getVia <em>Via</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getVias <em>Vias</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,5 +105,88 @@ public interface RouteLine extends MMXObject {
 	 * @generated
 	 */
 	void setDistance(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Via</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Via</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Via</em>' reference.
+	 * @see #isSetVia()
+	 * @see #unsetVia()
+	 * @see #setVia(Port)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRouteLine_Via()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	Port getVia();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.RouteLine#getVia <em>Via</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Via</em>' reference.
+	 * @see #isSetVia()
+	 * @see #unsetVia()
+	 * @see #getVia()
+	 * @generated
+	 */
+	void setVia(Port value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.port.RouteLine#getVia <em>Via</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #isSetVia()
+	 * @see #getVia()
+	 * @see #setVia(Port)
+	 * @generated
+	 */
+	void unsetVia();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.port.RouteLine#getVia <em>Via</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Via</em>' reference is set.
+	 * @see #unsetVia()
+	 * @see #getVia()
+	 * @see #setVia(Port)
+	 * @generated
+	 */
+	boolean isSetVia();
+
+	/**
+	 * Returns the value of the '<em><b>Vias</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.RouteLine}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vias</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vias</em>' reference list.
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getRouteLine_Vias()
+	 * @model
+	 * @generated
+	 */
+	EList<RouteLine> getVias();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getFullDistance();
 
 } // RouteLine

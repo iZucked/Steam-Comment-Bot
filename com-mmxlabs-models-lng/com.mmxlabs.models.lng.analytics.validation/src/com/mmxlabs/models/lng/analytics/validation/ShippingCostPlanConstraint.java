@@ -196,7 +196,7 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 	private void collectMinTimes(final Map<Pair<Port, Port>, Integer> minTimes, final Route d, final int extraTime, final double maxSpeed) {
 		for (final RouteLine dl : d.getLines()) {
 			final Pair<Port, Port> p = new Pair<Port, Port>(dl.getFrom(), dl.getTo());
-			final int time = Calculator.getTimeFromSpeedDistance(OptimiserUnitConvertor.convertToInternalSpeed(maxSpeed), dl.getDistance()) + extraTime;
+			final int time = Calculator.getTimeFromSpeedDistance(OptimiserUnitConvertor.convertToInternalSpeed(maxSpeed), dl.getFullDistance()) + extraTime;
 			if (!minTimes.containsKey(p) || (minTimes.get(p) > time)) {
 				minTimes.put(p, time);
 			}

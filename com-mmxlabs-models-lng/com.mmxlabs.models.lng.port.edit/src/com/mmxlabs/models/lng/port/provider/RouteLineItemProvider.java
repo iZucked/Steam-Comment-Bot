@@ -62,6 +62,8 @@ public class RouteLineItemProvider
 			addFromPropertyDescriptor(object);
 			addToPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
+			addViaPropertyDescriptor(object);
+			addViasPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -128,6 +130,50 @@ public class RouteLineItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Via feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addViaPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RouteLine_via_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RouteLine_via_feature", "_UI_RouteLine_type"),
+				 PortPackage.Literals.ROUTE_LINE__VIA,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vias feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addViasPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RouteLine_vias_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RouteLine_vias_feature", "_UI_RouteLine_type"),
+				 PortPackage.Literals.ROUTE_LINE__VIAS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

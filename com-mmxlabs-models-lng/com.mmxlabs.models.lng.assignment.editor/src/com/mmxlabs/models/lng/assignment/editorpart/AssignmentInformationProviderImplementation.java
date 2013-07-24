@@ -213,7 +213,7 @@ public final class AssignmentInformationProviderImplementation implements IAssig
 				for (final RouteLine line : route.getLines()) {
 					final Pair<Port, Port> p = new Pair<Port, Port>(line.getFrom(), line.getTo());
 					final Integer i = minTravelTimes.get(p);
-					final int t = (int) (line.getDistance() / maxSpeed);
+					final int t = (int) (line.getFullDistance() / maxSpeed);
 					if (i == null || t < i) {
 						minTravelTimes.put(p, t);
 					}

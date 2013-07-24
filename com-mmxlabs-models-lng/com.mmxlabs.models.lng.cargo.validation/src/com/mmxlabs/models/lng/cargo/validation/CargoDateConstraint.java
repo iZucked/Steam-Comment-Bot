@@ -162,7 +162,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		
 		for (final RouteLine dl : d.getLines()) {
 			final Pair<Port, Port> p = new Pair<Port, Port>(dl.getFrom(), dl.getTo());
-			final int time = Calculator.getTimeFromSpeedDistance(OptimiserUnitConvertor.convertToInternalSpeed(maxSpeed), dl.getDistance()) + extraTime;
+			final int time = Calculator.getTimeFromSpeedDistance(OptimiserUnitConvertor.convertToInternalSpeed(maxSpeed), dl.getFullDistance()) + extraTime;
 			if (!minTimes.containsKey(p) || (minTimes.get(p) > time)) {
 				minTimes.put(p, time);
 			}
