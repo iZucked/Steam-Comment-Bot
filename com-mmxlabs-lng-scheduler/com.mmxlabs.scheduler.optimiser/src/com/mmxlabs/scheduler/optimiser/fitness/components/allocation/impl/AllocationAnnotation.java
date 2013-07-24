@@ -145,24 +145,31 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	 */
 	@Override
 	public long getSlotVolumeInM3(final IPortSlot slot) {
-		// TODO: remove this horrible hack!
-		if (slot instanceof ILoadOption) {
-			// assume just one load option, and assume it is the first slot in the itinerary
-			long result = remainingHeelVolumeInM3 + fuelVolumeInM3;
-			for (final Entry<IPortSlot, SlotAllocationAnnotation> entry : slotAllocations.entrySet()) {
-				if (entry.getKey() instanceof IDischargeOption) {
-					result += entry.getValue().volumeInM3;
-				}
-			}
-			return result;
-		}
+		long result = -1;
 
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {
-			return allocation.volumeInM3;
+			result = allocation.volumeInM3;
 		}
+
+		/*
+		// TODO: remove this horrible hack!
+		if (slot instanceof ILoadOption) {
+			// assume just one load option, and assume it is the first slot in the itinerary
+			long hackResult = remainingHeelVolumeInM3 + fuelVolumeInM3;
+			for (final Entry<IPortSlot, SlotAllocationAnnotation> entry : slotAllocations.entrySet()) {
+				if (entry.getKey() instanceof IDischargeOption) {
+					hackResult += entry.getValue().volumeInM3;
+				}
+			}
+			
+			return hackResult;
+		}
+		*/
+		
+
 		// TODO: throw an exception instead of returning magic value
-		return -1;
+		return result;
 	}
 
 	/**

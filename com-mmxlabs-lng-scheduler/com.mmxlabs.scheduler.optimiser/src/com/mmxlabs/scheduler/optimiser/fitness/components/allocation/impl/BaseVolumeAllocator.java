@@ -89,11 +89,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		public AllocationAnnotation createAnnotation() {
 			final AllocationAnnotation annotation = new AllocationAnnotation();
 
-			annotation.getSlots().clear();
-			for (final IPortSlot slot : slots) {
-				annotation.getSlots().add(slot);
-			}
-
 			annotation.setFuelVolumeInM3(requiredFuelVolumeInM3);
 			annotation.setRemainingHeelVolumeInM3(minEndVolumeInM3);
 
@@ -101,14 +96,17 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			// final int[] prices = priceIterator.next();
 			final int[] prices = slotPricesPerM3;
 
+			//annotation.getSlots().clear();
 			assert slots.length == prices.length;
 			for (int i = 0; i < slots.length; i++) {
+				annotation.getSlots().add(slots[i]);
 				annotation.setSlotPricePerM3(slots[i], prices[i]);
 				annotation.setSlotTime(slots[i], slotTimes[i]);
 			}
 
 			// load/discharge case
 			if (slots.length == 2) {
+				annotation.setSlotVolumeInM3(slots[0], allocations[0]);
 				annotation.setSlotVolumeInM3(slots[1], allocations[1]);
 			}
 			// LDD case
