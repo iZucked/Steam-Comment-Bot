@@ -91,11 +91,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	
 	@Inject
 	ITotalVolumeLimitProvider cargoAllocationProvider;
-	// TODO the following could all probably be replaced with something faster
-	/**
-	 * Maps from slots to cargo indices (LP variables, in the LP)
-	 */
-	final Map<IPortSlot, Integer> variableTable = new HashMap<IPortSlot, Integer>();
+
 	/**
 	 * Maps from slots to arrival times; subclasses need this to determine whether a slot lies in a given gas year.
 	 */
@@ -141,7 +137,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	public void reset() {
 		cargoCount = 0;
 
-		variableTable.clear();
 		slotTimes.clear();
 		constraints.clear();
 	}
@@ -423,12 +418,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		slotTimes.put(loadSlot, loadTime);
 		slotTimes.put(dischargeSlot, dischargeTime);
 
-		// store the current cargo index (variable index in the LP) so that we
-		// can reverse-lookup from slots to LP variables
-		final Integer ci = cargoCount;
-		variableTable.put(loadSlot, ci);
-		variableTable.put(dischargeSlot, ci);		
-		
 		final IPortSlot[] slots = { loadSlot, dischargeSlot };
 
 
@@ -497,12 +486,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		slotTimes.put(loadSlot, time);
 		slotTimes.put(dischargeSlot, time);
 
-		// store the current cargo index (variable index in the LP) so that we
-		// can reverse-lookup from slots to LP variables
-		final Integer ci = cargoCount;
-		variableTable.put(loadSlot, ci);
-		variableTable.put(dischargeSlot, ci);
-
 		final IPortSlot[] slots = { loadSlot, dischargeSlot };
 		
 		final int cargoCVValue = loadSlot.getCargoCVValue();
@@ -539,13 +522,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		for (int i = 0; i < slots.length; i++) {
 			slots[i] = portDetails[i].getOptions().getPortSlot();
 			slotTimes.put(slots[i], times[i]);
-		}
-
-		// store the current cargo index (variable index in the LP) so that we
-		// can reverse-lookup from slots to LP variables
-		final Integer ci = cargoCount;
-		for (final IPortSlot slot : slots) {
-			variableTable.put(slot, ci);
 		}
 
 		final long heelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l; 
