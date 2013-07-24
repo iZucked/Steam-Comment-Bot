@@ -148,11 +148,11 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 									if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 										IPortSlot portSlot = details.getOptions().getPortSlot();
-										loadVolumeInM3 += currentAllocation.getSlotDischargeVolumeInM3(portSlot);
+										loadVolumeInM3 += currentAllocation.getSlotTransferVolumeInM3(portSlot);
 										// TODO: Average?
 									} else if (details.getOptions().getPortSlot().getPortType() == PortType.Discharge) {
 										final IPortSlot portSlot = details.getOptions().getPortSlot();
-										final long dischargeVolumeInM3 = currentAllocation.getSlotDischargeVolumeInM3(portSlot);
+										final long dischargeVolumeInM3 = currentAllocation.getSlotTransferVolumeInM3(portSlot);
 										final int dischargePricePerM3 = currentAllocation.getSlotPricePerM3(portSlot);
 										totalSalesRevenue += Calculator.convertM3ToM3Price(dischargeVolumeInM3, dischargePricePerM3);
 									}
