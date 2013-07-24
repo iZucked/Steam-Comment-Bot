@@ -67,6 +67,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		
 		/** Slots in the cargo */
 		final IPortSlot [] slots;
+		
+		final long [] allocations; 
 
 		final VoyagePlan voyagePlan;
 		
@@ -77,6 +79,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			slotPricesPerM3 = prices;			
 			this.slots = slots;
 			voyagePlan = plan;
+
+			allocations = new long [slots.length];
 		}
 	}
 	
@@ -99,7 +103,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	int cargoCount;
 
-	private long[] allocation;
+	//private long[] allocation;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -593,10 +597,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		cargoCount++;
 	}
 
-	protected abstract long[] allocateSpareVolume();
+	protected abstract void allocateSpareVolume();
 
 	public void solve() {
-		this.allocation = allocateSpareVolume();
+		allocateSpareVolume();
 	}
 
 	@Override
@@ -644,7 +648,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 						// load/discharge case
 						if (slots.length == 2) {
-							annotation.setSlotVolumeInM3(slots[1], allocation[allocationIndex++]);
+							annotation.setSlotVolumeInM3(slots[1], constraint.allocations[1]);
 						}
 						// LDD case
 						else {

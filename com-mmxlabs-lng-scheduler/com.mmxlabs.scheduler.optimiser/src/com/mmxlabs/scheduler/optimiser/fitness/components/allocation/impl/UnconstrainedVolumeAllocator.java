@@ -38,9 +38,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * @param constraint
 	 * @return
 	 */
-	protected final static long [] allocateBasicSlotVolumes(AllocationRecord constraint) {
+	protected final static void allocateBasicSlotVolumes(AllocationRecord constraint) {
 		final IPortSlot[] slots = constraint.slots;		
-		final long [] result = new long [slots.length];
+		final long [] result = constraint.allocations;
 		
 		// load / discharge case
 		if (slots.length == 2) {
@@ -68,7 +68,6 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			
 			result[1] = dischargeVolume;
 			//return dischargeVolume;
-			return result;
 									
 		}		
 		// multiple load/discharge case
@@ -124,7 +123,6 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// Note this currently does nothing as the next() method in the allocator iterator (BaseCargoAllocator) ignores this data and looks directly on the discharge slot.
 		}
 		
-		return result;
 	}
 	
 	/*
@@ -133,11 +131,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl. BaseCargoAllocator#allocateSpareVolume()
 	 */
 	@Override
-	protected long[] allocateSpareVolume() {
-		final long[] result = new long[cargoCount];
-		for (int i = 0; i < result.length; i++) {
-			result[i] = allocateBasicSlotVolumes(constraints.get(i))[1];
+	protected void allocateSpareVolume() {
+		for (AllocationRecord constraint: constraints) {
+			allocateBasicSlotVolumes(constraint);
 		}
-		return result;
 	}
 }
