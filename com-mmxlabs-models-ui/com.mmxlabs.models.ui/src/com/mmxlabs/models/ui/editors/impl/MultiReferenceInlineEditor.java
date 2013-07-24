@@ -68,19 +68,16 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	 */
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
-//		final Composite buttonAndLabel = new Composite(parent, SWT.NONE);
 		final Composite buttonAndLabel = toolkit.createComposite(parent);
 		final GridLayout gl = new GridLayout(2, false);
 		buttonAndLabel.setLayout(gl);
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
 
-//		final Label label = new Label(buttonAndLabel, SWT.NONE);
 		final Label label = toolkit.createLabel(buttonAndLabel, "");
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		button = new Button(buttonAndLabel, SWT.NONE);
+
 		button = toolkit.createButton(buttonAndLabel, "Edit", SWT.NONE);
-//		button.setText("Edit");
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -140,38 +137,17 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
 		final Collection<EObject> sel = (Collection<EObject>) getValue();
-		for (final Pair<String, EObject> p : options) {
-			if (sel.contains(p.getSecond())) {
-				selectedOptions.add(p);
+		if (sel != null) {
+			for (final Pair<String, EObject> p : options) {
+				if (sel.contains(p.getSecond())) {
+					selectedOptions.add(p);
+				}
 			}
 		}
 
 		dlg.setInitialSelections(selectedOptions.toArray());
-		dlg.addColumn("Name", new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ((Pair<String, ?>) element).getFirst();
-			}
-		});
 
-		// if
-		// (((EReference)feature).getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort()))
-		// {
-		// for (final PortCapability pc : PortCapability.values()) {
-		// dlg.addColumn(pc.getName(), new ColumnLabelProvider(){
-		// @Override
-		// public String getText(Object element) {
-		// final Pair<?, EObject> p = (Pair<?, EObject>)element;
-		// if (p.getSecond() instanceof Port) {
-		// return ((Port)p.getSecond()).getCapabilities().contains(pc) ? "Yes" :
-		// "No";
-		// } else {
-		// return "";
-		// }
-		// }
-		// });
-		// }
-		// }
+		createColumns(dlg);
 
 		dlg.groupBy(new ColumnLabelProvider() {
 			@Override
@@ -191,6 +167,19 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	protected void createColumns(final ListSelectionDialog dlg) {
+		dlg.addColumn("Name", new ColumnLabelProvider() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public String getText(final Object element) {
+				return ((Pair<String, ?>) element).getFirst();
+			}
+		});
 	}
 
 	@Override
