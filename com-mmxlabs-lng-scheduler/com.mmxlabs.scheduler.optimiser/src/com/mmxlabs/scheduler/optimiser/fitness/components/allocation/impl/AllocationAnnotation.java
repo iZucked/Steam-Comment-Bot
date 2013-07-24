@@ -64,7 +64,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 			}
 
 			final String action = (slot instanceof IDischargeOption) ? "discharged" : (slot instanceof ILoadOption ? "loaded" : "???");
-			final long volume = getSlotDischargeVolumeInM3(slot);
+			final long volume = getSlotVolumeInM3(slot);
 			// long volume = (slot instanceof IDischargeOption) ? getDischargeVolumeInM3() : (slot instanceof ILoadOption ? getLoadVolumeInM3() : -1);
 			builder.append(String.format(slotFormat, slot.getId(), slotAllocation.startTime, action, volume));
 		}
@@ -144,7 +144,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	 * @since 5.0
 	 */
 	@Override
-	public long getSlotDischargeVolumeInM3(final IPortSlot slot) {
+	public long getSlotVolumeInM3(final IPortSlot slot) {
 		// TODO: remove this horrible hack!
 		if (slot instanceof ILoadOption) {
 			// assume just one load option, and assume it is the first slot in the itinerary

@@ -99,7 +99,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			} else if (slot instanceof IDischargeOption) {
 
 			}
-			final long volumeInM3 = currentAllocation.getSlotDischargeVolumeInM3(slot);
+			final long volumeInM3 = currentAllocation.getSlotVolumeInM3(slot);
 			final int pricePerM3 = currentAllocation.getSlotPricePerM3(slot);
 			final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(pricePerM3, cvValue);
 			final int time = currentAllocation.getSlotTime(slot);
