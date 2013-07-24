@@ -194,6 +194,22 @@
                      class="AssignmentModel">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.CargoVolumeVesselAssignmentConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.CargoVolumeVesselAssignmentConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Cargo / Vessel Volume Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ElementAssignment">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
