@@ -1766,7 +1766,7 @@ public class LNGScenarioTransformer {
 				from = portAssociation.lookup(dl.getFrom());
 				to = portAssociation.lookup(dl.getTo());
 
-				final int distance = dl.getDistance();
+				final int distance = dl.getFullDistance();
 
 				builder.setPortToPortDistance(from, to, r.getName(), distance);
 			}

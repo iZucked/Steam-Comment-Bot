@@ -892,7 +892,7 @@ public class DefaultScenarioCreator {
 
 		for (final RouteLine line : r.getLines()) {
 			if (line.getFrom() == p1 && line.getTo() == p2) {
-				return line.getDistance();
+				return line.getFullDistance();
 			}
 		}
 
