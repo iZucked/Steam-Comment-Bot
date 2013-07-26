@@ -1,5 +1,0 @@
-name,otherNames,minQuantity,maxQuantity,priceInfo.priceExpression,entity,allowedPorts,priceInfo.kind,kind
-HH Sales,,0,0,7,US,,ExpressionPriceParameters,SalesContract
-NBP Sales,,0,0,7,Europe,,ExpressionPriceParameters,SalesContract
-TTF Sales,,0,0,7,Europe,,ExpressionPriceParameters,SalesContract
-JCC Sales,,0,0,7,Asia,,ExpressionPriceParameters,SalesContract

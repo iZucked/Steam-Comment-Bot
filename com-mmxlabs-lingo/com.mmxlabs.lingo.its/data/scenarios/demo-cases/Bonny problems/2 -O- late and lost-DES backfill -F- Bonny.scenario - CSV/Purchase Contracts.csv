@@ -1,5 +1,5 @@
-uuid,name,otherNames,minQuantity,maxQuantity,priceInfo.uuid,priceInfo.priceExpression,entity,allowedPorts,priceInfo.kind,kind
-_g2QRlG3kEeGoB9CX9jdaHQ,HH Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd4PA,5,US,,ExpressionPriceParameters,PurchaseContract
-_g2QRlW3kEeGoB9CX9jdaHQ,NBP Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd5PA,5,Europe,,ExpressionPriceParameters,PurchaseContract
-_g2QRlm3kEeGoB9CX9jdaHQ,JCC Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd6PA,5,Asia,,ExpressionPriceParameters,PurchaseContract
-_g2QRl23kEeGoB9CX9jdaHQ,TTF Spot Purchase,,0,0,_ngJo4XnREeKJe_KFGcd7PA,5,Europe,,ExpressionPriceParameters,PurchaseContract
+name,minQuantity,maxQuantity,restrictedListsArePermissive,entity,allowedPorts,restrictedContracts,restrictedPorts,priceInfo.priceExpression,priceInfo.kind,kind
+HH Spot Purchase,0,0,false,US,,,,5,ExpressionPriceParameters,PurchaseContract
+NBP Spot Purchase,0,0,false,Europe,,,,5,ExpressionPriceParameters,PurchaseContract
+JCC Spot Purchase,0,0,false,Asia,,,,5,ExpressionPriceParameters,PurchaseContract
+TTF Spot Purchase,0,0,false,Europe,,,,5,ExpressionPriceParameters,PurchaseContract

@@ -9,12 +9,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.internal.runtime.InternalPlatform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.junit.Assert;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.ScenarioFleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselClassImporter;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.importers.ParametersModelImporter;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -113,6 +112,7 @@ public class CSVImporter {
 		dataMap.put(PricingModelImporter.COOLDOWN_PRICING_KEY, baseFileName + "/" + "Cooldown Prices.csv");
 		dataMap.put(PricingModelImporter.PORT_COSTS_KEY, baseFileName + "/" + "Port Costs.csv");
 		dataMap.put(PricingModelImporter.PRICE_CURVE_KEY, baseFileName + "/" + "Commodity Curves.csv");
+		dataMap.put(PricingModelImporter.BASEFUEL_PRICING_KEY, baseFileName + "/" + "Base Fuel Curves.csv");
 		dataMap.put(SpotMarketsModelImporter.SPOT_CARGO_MARKETS_KEY, baseFileName + "/" + "Spot Cargo Markets.csv");
 
 		// No schedule importers
@@ -127,7 +127,7 @@ public class CSVImporter {
 		scenarioModel.setPricingModel((PricingModel) importSubModel(importerRegistry, context, baseFileName, dataMap, PricingPackage.eINSTANCE.getPricingModel()));
 		scenarioModel.setCommercialModel((CommercialModel) importSubModel(importerRegistry, context, baseFileName, dataMap, CommercialPackage.eINSTANCE.getCommercialModel()));
 		scenarioModel.setSpotMarketsModel((SpotMarketsModel) importSubModel(importerRegistry, context, baseFileName, dataMap, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel()));
-		scenarioModel.setParametersModel((ParametersModel) importSubModel(importerRegistry, context, baseFileName, dataMap, ParametersPackage.eINSTANCE.getParametersModel()));
+//		scenarioModel.setParametersModel((ParametersModel) importSubModel(importerRegistry, context, baseFileName, dataMap, ParametersPackage.eINSTANCE.getParametersModel()));
 		scenarioModel.setAnalyticsModel(((AnalyticsModel) importSubModel(importerRegistry, context, baseFileName, dataMap, AnalyticsPackage.eINSTANCE.getAnalyticsModel())));
 
 		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
@@ -153,7 +153,7 @@ public class CSVImporter {
 			if (activator != null) {
 				importerRegistry = activator.getImporterRegistry();
 			} else {
-				final BundleContext bundleContext = InternalPlatform.getDefault().getBundleContext();
+				final BundleContext bundleContext = FrameworkUtil.getBundle(CSVImporter.class).getBundleContext();
 				if (bundleContext != null) {
 					// Partial plugin env - its bundle activator does not seem to be started when run from eclipse.
 					final Injector injector = Guice.createInjector(new ExtensionConfigurationModule(bundleContext));

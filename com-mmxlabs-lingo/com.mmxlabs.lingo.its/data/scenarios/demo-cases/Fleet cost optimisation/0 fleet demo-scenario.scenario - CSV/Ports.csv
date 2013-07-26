@@ -1,131 +1,131 @@
-uuid,name,otherNames,capabilities,timeZone,loadDuration,dischargeDuration,cvValue,defaultStartTime,allowCooldown,defaultWindowSize,portCode,location.country,location.lat,location.lon,location.kind,kind
-_v3BKMqMaEeGZW52HURim3w,Aliaga,,"DISCHARGE,DRYDOCK",Europe/Istanbul,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3FboaMaEeGZW52HURim3w,Altamira,,DISCHARGE,America/Mexico_City,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3C_YqMaEeGZW52HURim3w,Andres,,"DISCHARGE,DRYDOCK",America/Santo_Domingo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpyKMaEeGZW52HURim3w,Arzew,,LOAD,Africa/Algiers,24,24,23.97,7,false,24,,,0.0,0.0,Location,Port
-_v3BxQaMaEeGZW52HURim3w,Bahia,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3BKM6MaEeGZW52HURim3w,Bahia Blanca,,DISCHARGE,America/Buenos_Aires,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3H35qMaEeGZW52HURim3w,Balhaf,,LOAD,Asia/Dubai,24,24,24.03,7,false,24,,,0.0,0.0,Location,Port
-_v3FbqaMaEeGZW52HURim3w,Barcelona,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3FbqqMaEeGZW52HURim3w,Bilbao,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ2aMaEeGZW52HURim3w,Bintulu,,LOAD,Asia/Kuala_Lumpur,24,24,23.58,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ0aMaEeGZW52HURim3w,Bioko Is,"Bioko,Bioko Island",LOAD,Etc/GMT+1,24,24,23.34,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ1KMaEeGZW52HURim3w,Blang Lacang,,LOAD,Asia/Jakarta,24,24,23.64,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ2qMaEeGZW52HURim3w,Bonny Is,"Bonny,Bonny Island",LOAD,Africa/Lagos,24,24,23.81,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ1aMaEeGZW52HURim3w,Bontang,,LOAD,Asia/Jakarta,24,24,23.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCu6MaEeGZW52HURim3w,Cameron,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3BxQ6MaEeGZW52HURim3w,Canaport,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v2_8EKMaEeGZW52HURim3w,Cape Town,,DRYDOCK,Africa/Johannesburg,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3Fbq6MaEeGZW52HURim3w,Cartagena,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0k6MaEeGZW52HURim3w,Chita,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3FboqMaEeGZW52HURim3w,Costa Azul,,"DISCHARGE,LOAD",America/Mexico_City,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCvKMaEeGZW52HURim3w,Cove Point,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3DmcqMaEeGZW52HURim3w,Dabhol,,DISCHARGE,Etc/GMT+5,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3DmcKMaEeGZW52HURim3w,Dahej,,DISCHARGE,Etc/GMT-5,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3C_YKMaEeGZW52HURim3w,Dalian,,"DISCHARGE,DRYDOCK",Etc/GMT+8,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ0qMaEeGZW52HURim3w,Damietta,,LOAD,Africa/Cairo,24,24,23.98,7,false,24,,,0.0,0.0,Location,Port
-_v3Gpy6MaEeGZW52HURim3w,Dampier,,LOAD,Australia/Perth,24,24,23.99,7,false,24,,,0.0,0.0,Location,Port
-_v3GpzKMaEeGZW52HURim3w,Darwin,,LOAD,Australia/Darwin,24,24,23.79,7,false,24,,,0.0,0.0,Location,Port
-_v3H35KMaEeGZW52HURim3w,Das Is,,LOAD,Asia/Dubai,24,24,23.87,7,false,24,,,0.0,0.0,Location,Port
-_v3GCt6MaEeGZW52HURim3w,Dragon LNG,Dragon,DISCHARGE,Europe/London,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCtaMaEeGZW52HURim3w,Dubai,,"DISCHARGE,DRYDOCK",Asia/Dubai,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCsKMaEeGZW52HURim3w,El Ferrol,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpwqMaEeGZW52HURim3w,Elba Is,,"DISCHARGE,LOAD",America/New_York,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3BKNKMaEeGZW52HURim3w,Escobar,,DISCHARGE,America/Buenos_Aires,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCvaMaEeGZW52HURim3w,Everett,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3C_Y6MaEeGZW52HURim3w,Fos Sur Mer,Fos Cavaou,"DISCHARGE,DRYDOCK",Europe/Paris,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCvqMaEeGZW52HURim3w,Freeport,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3CYUaMaEeGZW52HURim3w,Fujian,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0lKMaEeGZW52HURim3w,Fukuoko,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0laMaEeGZW52HURim3w,Futtsu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3FbpKMaEeGZW52HURim3w,Gate,,"DISCHARGE,DRYDOCK,LOAD",Europe/Amsterdam,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v23ZMKMaEeGZW52HURim3w,Gibraltar,,DRYDOCK,Europe/Madrid,0,24,0.0,7,false,24,,,0.0,0.0,Location,Port
-_v3GpzaMaEeGZW52HURim3w,Gladstone,,LOAD,Australia/Brisbane,24,24,22.21,7,false,24,,,0.0,0.0,Location,Port
-_v3GpxKMaEeGZW52HURim3w,Golden Pass,,DISCHARGE,America/Chicago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3BxQKMaEeGZW52HURim3w,Guanabara Bay,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3CYUKMaEeGZW52HURim3w,Guangdong Dapeng,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0m6MaEeGZW52HURim3w,Gwangyang,,"DISCHARGE,DRYDOCK",Asia/Seoul,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3CYU6MaEeGZW52HURim3w,Haikou,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0lqMaEeGZW52HURim3w,Hatsukaichi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3DmcaMaEeGZW52HURim3w,Hazira,,DISCHARGE,Etc/GMT+5,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_Mmy9S4OyEeGIEpCXLEqYMQ,Heibei,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_L_4BdqS_EeGySdElvuopWw,Higashi-Ogishima,"Ogishima,Ohgishima,Higashi Ohgishima,Higashi-Ohgishima",DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0mKMaEeGZW52HURim3w,Himeji,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3FbrKMaEeGZW52HURim3w,Huelva,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ06MaEeGZW52HURim3w,Idku,,LOAD,Africa/Cairo,24,24,23.98,7,false,24,,,0.0,0.0,Location,Port
-_v3E0nKMaEeGZW52HURim3w,Incheon,,"DISCHARGE,DRYDOCK",Asia/Seoul,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ16MaEeGZW52HURim3w,Iran,,LOAD,Asia/Tehran,24,24,23.82,7,false,24,,,0.0,0.0,Location,Port
-_v3GCtqMaEeGZW52HURim3w,Isle of Grain,,DISCHARGE,Europe/London,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3CYVaMaEeGZW52HURim3w,Jiangsu,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0maMaEeGZW52HURim3w,Kagoshima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3FbpaMaEeGZW52HURim3w,Karachi,,DISCHARGE,Asia/Karachi,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0mqMaEeGZW52HURim3w,Kawagoe,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3H35aMaEeGZW52HURim3w,Kenai,Nikiski,LOAD,Asia/Dubai,24,24,22.13,7,false,24,,,0.0,0.0,Location,Port
-_v3H36KMaEeGZW52HURim3w,Kitimat,,LOAD,America/Vancouver,24,24,23.53,7,false,24,,,0.0,0.0,Location,Port
-_v3Dmc6MaEeGZW52HURim3w,Kochi,,DISCHARGE,Etc/GMT+5,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_Mmy9ToOyEeGIEpCXLEqYMQ,Krk Island,Krk Is,DISCHARGE,Europe/Zagreb,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpwKMaEeGZW52HURim3w,Lake Charles,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENgKMaEeGZW52HURim3w,Livorno,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ0KMaEeGZW52HURim3w,Lumut,,LOAD,Asia/Brunei,24,24,23.95,7,false,24,,,0.0,0.0,Location,Port
-_v3Fbo6MaEeGZW52HURim3w,Manzanillo,,DISCHARGE,America/Mexico_City,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCs6MaEeGZW52HURim3w,Map Ta Phut,,DISCHARGE,Asia/Bangkok,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCtKMaEeGZW52HURim3w,Marmara Ereglisi,,"DISCHARGE,DRYDOCK",Europe/Istanbul,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ2KMaEeGZW52HURim3w,Marsa el Brega,,LOAD,Africa/Tripoli,24,24,22.92,7,false,24,,,0.0,0.0,Location,Port
-_v3BxRaMaEeGZW52HURim3w,Mejillones,,DISCHARGE,America/Santiago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ26MaEeGZW52HURim3w,Melkoya Is,Melkoya,LOAD,Europe/Oslo,24,24,23.67,7,false,24,,,0.0,0.0,Location,Port
-_L_4BfqS_EeGySdElvuopWw,Mina Al-Ahmadi,Mina al Ahmadi,"DISCHARGE,DRYDOCK",Asia/Kuwait,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENgaMaEeGZW52HURim3w,Mizushima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3C_ZKMaEeGZW52HURim3w,Montoir,,"DISCHARGE,DRYDOCK",Europe/Paris,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENgqMaEeGZW52HURim3w,Nagasaki,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENg6MaEeGZW52HURim3w,Negishi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpxaMaEeGZW52HURim3w,Neptune,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENhKMaEeGZW52HURim3w,Niigata,Higashi Niigata,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCuqMaEeGZW52HURim3w,North East Gateway,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENhaMaEeGZW52HURim3w,Oita,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENhqMaEeGZW52HURim3w,Osaka,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ3aMaEeGZW52HURim3w,Pampa Melchorita,,LOAD,America/Lima,24,24,23.16,7,false,24,,,0.0,0.0,Location,Port
-_v3DmdKMaEeGZW52HURim3w,Panigaglia,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3Gpw6MaEeGZW52HURim3w,Pascagoula,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3BKNqMaEeGZW52HURim3w,Pecem,,DISCHARGE,America/Fortaleza,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_L_4BhqS_EeGySdElvuopWw,Panuelas,Penuelas,DISCHARGE,America/Puerto_Rico,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpzqMaEeGZW52HURim3w,Pluto,,LOAD,Australia/Perth,24,24,23.9,7,false,24,,,0.0,0.0,Location,Port
-_v3H356MaEeGZW52HURim3w,Point Fortin,,LOAD,America/Port_of_Spain,24,24,22.53,7,false,24,,,0.0,0.0,Location,Port
-_v3Gpx6MaEeGZW52HURim3w,Port Arthur,,DISCHARGE,America/Chicago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpxqMaEeGZW52HURim3w,Port Dolphin,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3H34KMaEeGZW52HURim3w,Port Moresby,,LOAD,Pacific/Port_Moresby,24,24,23.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0naMaEeGZW52HURim3w,Pyeongtaek,"Pyeongteak,Pyeongtaek/Tongyeong","DISCHARGE,DRYDOCK",Asia/Seoul,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ3KMaEeGZW52HURim3w,Qalhat,,LOAD,Asia/Muscat,24,24,24.01,7,false,24,,,0.0,0.0,Location,Port
-_v3BxQqMaEeGZW52HURim3w,Quebec,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3BxRKMaEeGZW52HURim3w,Quintero,,DISCHARGE,America/Santiago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3H346MaEeGZW52HURim3w,Ras Laffan,,LOAD,Asia/Qatar,24,24,23.87,7,false,24,,,0.0,0.0,Location,Port
-_v3C_ZqMaEeGZW52HURim3w,Revithoussa,Revithousa,"DISCHARGE,DRYDOCK",Europe/Athens,24,24,30.0,7,false,24,,,0.0,0.0,Location,Port
-_v3DmdaMaEeGZW52HURim3w,Rovigo,,"DISCHARGE,DRYDOCK",Europe/Rome,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpwaMaEeGZW52HURim3w,Sabine Pass,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3FbraMaEeGZW52HURim3w,Sagunto,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENh6MaEeGZW52HURim3w,Sakai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3H34aMaEeGZW52HURim3w,Sakhalin II,Sakhalin,LOAD,Asia/Sakhalin,24,24,23.57,7,false,24,,,0.0,0.0,Location,Port
-_v3ENiKMaEeGZW52HURim3w,Senboku,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENiaMaEeGZW52HURim3w,Sendai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3CYUqMaEeGZW52HURim3w,Shanghai,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENi6MaEeGZW52HURim3w,Shimizu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENiqMaEeGZW52HURim3w,Shin-minato,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3H34qMaEeGZW52HURim3w,Shtokman,,LOAD,Europe/Moscow,24,24,23.69,7,false,24,,,0.0,0.0,Location,Port
-_v3Fbp6MaEeGZW52HURim3w,Sines,,"DISCHARGE,DRYDOCK,LOAD",Europe/Lisbon,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3AjIKMaEeGZW52HURim3w,Singapore,,"DISCHARGE,DRYDOCK,LOAD",Asia/Singapore,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpyaMaEeGZW52HURim3w,Skikda,,LOAD,Africa/Algiers,24,24,23.15,7,false,24,,,0.0,0.0,Location,Port
-_v3ENjKMaEeGZW52HURim3w,Sodegaura,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCuKMaEeGZW52HURim3w,South Hook,,DISCHARGE,Europe/London,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GpyqMaEeGZW52HURim3w,Soyo,,LOAD,Africa/Luanda,24,24,23.69,7,false,24,,,0.0,0.0,Location,Port
-_v3FbpqMaEeGZW52HURim3w,Swinoujscie,,DISCHARGE,Europe/Warsaw,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCsqMaEeGZW52HURim3w,Taichung,,DISCHARGE,Asia/Taipei,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3HQ1qMaEeGZW52HURim3w,Tangguh,,LOAD,Asia/Jakarta,24,24,23.21,7,false,24,,,0.0,0.0,Location,Port
-_v3GCuaMaEeGZW52HURim3w,Teeside,,DISCHARGE,Europe/London,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3AjIqMaEeGZW52HURim3w,Tenerife,,DRYDOCK,Europe/Madrid,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3ENjaMaEeGZW52HURim3w,Tobata,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0nqMaEeGZW52HURim3w,Tongyeong,,"DISCHARGE,DRYDOCK",Asia/Seoul,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3C_ZaMaEeGZW52HURim3w,Wilhelmshaven,,"DISCHARGE,DRYDOCK",Europe/Berlin,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0kKMaEeGZW52HURim3w,Yanai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0kaMaEeGZW52HURim3w,Yokkaichi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3E0kqMaEeGZW52HURim3w,Yokohama,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3GCsaMaEeGZW52HURim3w,Yung An,,DISCHARGE,Asia/Taipei,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
-_v3BKNaMaEeGZW52HURim3w,Zeebrugge,,"DISCHARGE,LOAD",Europe/Brussels,24,24,22.8,7,false,24,,,0.0,0.0,Location,Port
+name,otherNames,capabilities,timeZone,loadDuration,dischargeDuration,cvValue,defaultStartTime,allowCooldown,defaultWindowSize,atobviacCode,dataloyCode,location.country,location.lat,location.lon,location.kind,kind
+Aliaga,,"DISCHARGE,DRYDOCK",Europe/Istanbul,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Altamira,,DISCHARGE,America/Mexico_City,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Andres,,"DISCHARGE,DRYDOCK",America/Santo_Domingo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Arzew,,LOAD,Africa/Algiers,24,24,23.97,7,false,24,,,,0.0,0.0,Location,Port
+Bahia,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Bahia Blanca,,DISCHARGE,America/Buenos_Aires,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Balhaf,,LOAD,Asia/Dubai,24,24,24.03,7,false,24,,,,0.0,0.0,Location,Port
+Barcelona,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Bilbao,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Bintulu,,LOAD,Asia/Kuala_Lumpur,24,24,23.58,7,false,24,,,,0.0,0.0,Location,Port
+Bioko Is,"Bioko,Bioko Island",LOAD,Etc/GMT+1,24,24,23.34,7,false,24,,,,0.0,0.0,Location,Port
+Blang Lacang,,LOAD,Asia/Jakarta,24,24,23.64,7,false,24,,,,0.0,0.0,Location,Port
+Bonny Is,"Bonny,Bonny Island",LOAD,Africa/Lagos,24,24,23.81,7,false,24,,,,0.0,0.0,Location,Port
+Bontang,,LOAD,Asia/Jakarta,24,24,23.8,7,false,24,,,,0.0,0.0,Location,Port
+Cameron,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Canaport,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Cape Town,,DRYDOCK,Africa/Johannesburg,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Cartagena,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Chita,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Costa Azul,,"DISCHARGE,LOAD",America/Mexico_City,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Cove Point,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Dabhol,,DISCHARGE,Etc/GMT+5,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Dahej,,DISCHARGE,Etc/GMT-5,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Dalian,,"DISCHARGE,DRYDOCK",Etc/GMT+8,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Damietta,,LOAD,Africa/Cairo,24,24,23.98,7,false,24,,,,0.0,0.0,Location,Port
+Dampier,,LOAD,Australia/Perth,24,24,23.99,7,false,24,,,,0.0,0.0,Location,Port
+Darwin,,LOAD,Australia/Darwin,24,24,23.79,7,false,24,,,,0.0,0.0,Location,Port
+Das Is,,LOAD,Asia/Dubai,24,24,23.87,7,false,24,,,,0.0,0.0,Location,Port
+Dragon LNG,Dragon,DISCHARGE,Europe/London,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Dubai,,"DISCHARGE,DRYDOCK",Asia/Dubai,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+El Ferrol,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Elba Is,,"DISCHARGE,LOAD",America/New_York,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Escobar,,DISCHARGE,America/Buenos_Aires,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Everett,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Fos Sur Mer,Fos Cavaou,"DISCHARGE,DRYDOCK",Europe/Paris,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Freeport,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Fujian,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Fukuoko,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Futtsu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Gate,,"DISCHARGE,DRYDOCK,LOAD",Europe/Amsterdam,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Gibraltar,,DRYDOCK,Europe/Madrid,0,24,0.0,7,false,24,,,,0.0,0.0,Location,Port
+Gladstone,,LOAD,Australia/Brisbane,24,24,22.21,7,false,24,,,,0.0,0.0,Location,Port
+Golden Pass,,DISCHARGE,America/Chicago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Guanabara Bay,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Guangdong Dapeng,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Gwangyang,,"DISCHARGE,DRYDOCK",Asia/Seoul,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Haikou,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Hatsukaichi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Hazira,,DISCHARGE,Etc/GMT+5,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Heibei,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Higashi-Ogishima,"Ogishima,Ohgishima,Higashi Ohgishima,Higashi-Ohgishima",DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Himeji,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Huelva,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Idku,,LOAD,Africa/Cairo,24,24,23.98,7,false,24,,,,0.0,0.0,Location,Port
+Incheon,,"DISCHARGE,DRYDOCK",Asia/Seoul,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Iran,,LOAD,Asia/Tehran,24,24,23.82,7,false,24,,,,0.0,0.0,Location,Port
+Isle of Grain,,DISCHARGE,Europe/London,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Jiangsu,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Kagoshima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Karachi,,DISCHARGE,Asia/Karachi,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Kawagoe,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Kenai,Nikiski,LOAD,Asia/Dubai,24,24,22.13,7,false,24,,,,0.0,0.0,Location,Port
+Kitimat,,LOAD,America/Vancouver,24,24,23.53,7,false,24,,,,0.0,0.0,Location,Port
+Kochi,,DISCHARGE,Etc/GMT+5,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Krk Island,Krk Is,DISCHARGE,Europe/Zagreb,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Lake Charles,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Livorno,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Lumut,,LOAD,Asia/Brunei,24,24,23.95,7,false,24,,,,0.0,0.0,Location,Port
+Manzanillo,,DISCHARGE,America/Mexico_City,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Map Ta Phut,,DISCHARGE,Asia/Bangkok,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Marmara Ereglisi,,"DISCHARGE,DRYDOCK",Europe/Istanbul,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Marsa el Brega,,LOAD,Africa/Tripoli,24,24,22.92,7,false,24,,,,0.0,0.0,Location,Port
+Mejillones,,DISCHARGE,America/Santiago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Melkoya Is,Melkoya,LOAD,Europe/Oslo,24,24,23.67,7,false,24,,,,0.0,0.0,Location,Port
+Mina Al-Ahmadi,Mina al Ahmadi,"DISCHARGE,DRYDOCK",Asia/Kuwait,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Mizushima,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Montoir,,"DISCHARGE,DRYDOCK",Europe/Paris,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Nagasaki,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Negishi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Neptune,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Niigata,Higashi Niigata,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+North East Gateway,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Oita,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Osaka,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Pampa Melchorita,,LOAD,America/Lima,24,24,23.16,7,false,24,,,,0.0,0.0,Location,Port
+Panigaglia,,DISCHARGE,Europe/Rome,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Pascagoula,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Pecem,,DISCHARGE,America/Fortaleza,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Panuelas,Penuelas,DISCHARGE,America/Puerto_Rico,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Pluto,,LOAD,Australia/Perth,24,24,23.9,7,false,24,,,,0.0,0.0,Location,Port
+Point Fortin,,LOAD,America/Port_of_Spain,24,24,22.53,7,false,24,,,,0.0,0.0,Location,Port
+Port Arthur,,DISCHARGE,America/Chicago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Port Dolphin,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Port Moresby,,LOAD,Pacific/Port_Moresby,24,24,23.8,7,false,24,,,,0.0,0.0,Location,Port
+Pyeongtaek,"Pyeongteak,Pyeongtaek/Tongyeong","DISCHARGE,DRYDOCK",Asia/Seoul,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Qalhat,,LOAD,Asia/Muscat,24,24,24.01,7,false,24,,,,0.0,0.0,Location,Port
+Quebec,,DISCHARGE,America/New_York,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Quintero,,DISCHARGE,America/Santiago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Ras Laffan,,LOAD,Asia/Qatar,24,24,23.87,7,false,24,,,,0.0,0.0,Location,Port
+Revithoussa,Revithousa,"DISCHARGE,DRYDOCK",Europe/Athens,24,24,30.0,7,false,24,,,,0.0,0.0,Location,Port
+Rovigo,,"DISCHARGE,DRYDOCK",Europe/Rome,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Sabine Pass,,"DISCHARGE,LOAD",America/Chicago,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Sagunto,,"DISCHARGE,DRYDOCK,LOAD",Europe/Madrid,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Sakai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Sakhalin II,Sakhalin,LOAD,Asia/Sakhalin,24,24,23.57,7,false,24,,,,0.0,0.0,Location,Port
+Senboku,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Sendai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Shanghai,,"DISCHARGE,DRYDOCK",Asia/Shanghai,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Shimizu,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Shin-minato,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Shtokman,,LOAD,Europe/Moscow,24,24,23.69,7,false,24,,,,0.0,0.0,Location,Port
+Sines,,"DISCHARGE,DRYDOCK,LOAD",Europe/Lisbon,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Singapore,,"DISCHARGE,DRYDOCK,LOAD",Asia/Singapore,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Skikda,,LOAD,Africa/Algiers,24,24,23.15,7,false,24,,,,0.0,0.0,Location,Port
+Sodegaura,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+South Hook,,DISCHARGE,Europe/London,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Soyo,,LOAD,Africa/Luanda,24,24,23.69,7,false,24,,,,0.0,0.0,Location,Port
+Swinoujscie,,DISCHARGE,Europe/Warsaw,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Taichung,,DISCHARGE,Asia/Taipei,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Tangguh,,LOAD,Asia/Jakarta,24,24,23.21,7,false,24,,,,0.0,0.0,Location,Port
+Teeside,,DISCHARGE,Europe/London,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Tenerife,,DRYDOCK,Europe/Madrid,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Tobata,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Tongyeong,,"DISCHARGE,DRYDOCK",Asia/Seoul,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Wilhelmshaven,,"DISCHARGE,DRYDOCK",Europe/Berlin,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Yanai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Yokkaichi,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Yokohama,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Yung An,,DISCHARGE,Asia/Taipei,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port
+Zeebrugge,,"DISCHARGE,LOAD",Europe/Brussels,24,24,22.8,7,false,24,,,,0.0,0.0,Location,Port

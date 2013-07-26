@@ -10,6 +10,7 @@ import java.util.Map;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -24,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.DefaultGeneratedCh
 public class LingoOptimiserModuleService implements IOptimiserInjectorService {
 
 	@Override
-	public Module requestModule(String... hints) {
+	public Module requestModule(final String... hints) {
 
 		return new AbstractModule() {
 
@@ -32,14 +33,23 @@ public class LingoOptimiserModuleService implements IOptimiserInjectorService {
 			protected void configure() {
 				// Register default implementations
 				bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
-				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+
+				if (hints != null) {
+					for (final String hint : hints) {
+						if (LNGTransformer.HINT_GENERATE_CHARTER_OUTS.equals(hint)) {
+							bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+						}
+						break;
+					}
+				}
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 		};
 	}
 
 	@Override
-	public Map<ModuleType, List<Module>> requestModuleOverrides(String... hints) {
+	public Map<ModuleType, List<Module>> requestModuleOverrides(final String... hints) {
+		
 		return null;
 	}
 }

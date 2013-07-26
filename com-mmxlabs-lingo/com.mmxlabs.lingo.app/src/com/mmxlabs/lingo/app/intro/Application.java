@@ -6,6 +6,9 @@ package com.mmxlabs.lingo.app.intro;
 
 import java.io.IOException;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -15,7 +18,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 
 /**
@@ -32,13 +37,16 @@ public class Application implements IApplication {
 	public Object start(final IApplicationContext context) {
 
 		final Display display = PlatformUI.createDisplay();
-		if (!LicenseChecker.checkLicense()) {
+		LicenseState validity = LicenseChecker.checkLicense();
+		if (validity != LicenseState.Valid) {
 
-			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license");
+			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license " + validity.name());
 
 			display.dispose();
 			return IApplication.EXIT_OK;
 		}
+
+		initAccessControl();
 
 		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
 
@@ -77,6 +85,15 @@ public class Application implements IApplication {
 			}
 		}
 		return IApplication.EXIT_OK;
+	}
+
+	private void initAccessControl() {
+		// Initialise feature enablements
+		LicenseFeatures.initialiseFeatureEnablements();
+
+		// Login our default user
+		final Subject subject = SecurityUtils.getSubject();
+		subject.login(new UsernamePasswordToken("user", "password"));
 	}
 
 	/*
