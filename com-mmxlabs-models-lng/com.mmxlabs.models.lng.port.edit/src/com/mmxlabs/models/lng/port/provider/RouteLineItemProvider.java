@@ -137,6 +137,7 @@ public class RouteLineItemProvider
 	/**
 	 * This adds a property descriptor for the Via feature.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -159,6 +160,7 @@ public class RouteLineItemProvider
 	/**
 	 * This adds a property descriptor for the Vias feature.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
