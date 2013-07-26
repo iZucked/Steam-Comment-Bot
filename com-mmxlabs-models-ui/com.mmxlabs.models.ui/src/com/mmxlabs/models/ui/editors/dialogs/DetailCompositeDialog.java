@@ -894,7 +894,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			displayComposite.displayValidationStatus(status);
 		}
 
-		checkButtonEnablement(!status.matches(IStatus.ERROR));
+		checkButtonEnablement(true);//!status.matches(IStatus.ERROR));
 	}
 
 	private void processMessages(StringBuilder sb, IStatus status) {
