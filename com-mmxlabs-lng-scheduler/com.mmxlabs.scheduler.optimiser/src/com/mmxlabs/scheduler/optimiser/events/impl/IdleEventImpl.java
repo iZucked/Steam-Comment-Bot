@@ -4,13 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.events.impl;
 
-import java.util.EnumMap;
-
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
  * Implementation of {@link IIdleEvent}.

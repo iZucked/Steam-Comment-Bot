@@ -4,24 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-
 /**
  * A faster than LP cargo allocator. Does a bit of finagling to make it all work, which isn't hugely pretty. Each cargo is assigned an index by the base class; this class maps ports slots to a single
  * load/discharge sum constraint (i.e. presumes that there cannot be two contractual limits applying to a single slot) using the cargoConstraints array.
