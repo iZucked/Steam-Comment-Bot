@@ -134,6 +134,7 @@ public class BulkImportPage extends WizardPage {
 			services = (EList<ScenarioService>) newInput;
 		}
 		
+		@Override
 		public Object[] getElements(Object inputElement) {
 			if (services.size() == 1) {
 				return getChildren(services.get(0));
@@ -143,6 +144,7 @@ public class BulkImportPage extends WizardPage {
 			}
 		}
 		
+		@Override
 		public Object [] getChildren(Object parentElement) {
 			LinkedList<Object> result = new LinkedList<Object>();
 			
@@ -163,6 +165,7 @@ public class BulkImportPage extends WizardPage {
 			return result.toArray();
 		}
 		
+		@Override
 		public boolean hasChildren(Object element) {
 			if (!(element instanceof Container)) {
 				return false;

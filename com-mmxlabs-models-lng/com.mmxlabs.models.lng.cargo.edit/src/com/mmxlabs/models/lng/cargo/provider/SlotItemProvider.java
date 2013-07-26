@@ -72,6 +72,8 @@ public class SlotItemProvider
 			addOptionalPropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
 			addCargoPropertyDescriptor(object);
+			addPricingDatePropertyDescriptor(object);
+			addNotesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -111,7 +113,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_windowStart_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_windowStart_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_windowStart_description"),
 				 CargoPackage.Literals.SLOT__WINDOW_START,
 				 true,
 				 false,
@@ -133,7 +135,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_windowStartTime_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_windowStartTime_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_windowStartTime_description"),
 				 CargoPackage.Literals.SLOT__WINDOW_START_TIME,
 				 true,
 				 false,
@@ -155,7 +157,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_windowSize_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_windowSize_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_windowSize_description"),
 				 CargoPackage.Literals.SLOT__WINDOW_SIZE,
 				 true,
 				 false,
@@ -199,7 +201,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_contract_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_contract_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_contract_description"),
 				 CargoPackage.Literals.SLOT__CONTRACT,
 				 true,
 				 false,
@@ -221,7 +223,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_duration_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_duration_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_duration_description"),
 				 CargoPackage.Literals.SLOT__DURATION,
 				 true,
 				 false,
@@ -243,7 +245,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_minQuantity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_minQuantity_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_minQuantity_description"),
 				 CargoPackage.Literals.SLOT__MIN_QUANTITY,
 				 true,
 				 false,
@@ -265,7 +267,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_maxQuantity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_maxQuantity_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_maxQuantity_description"),
 				 CargoPackage.Literals.SLOT__MAX_QUANTITY,
 				 true,
 				 false,
@@ -287,7 +289,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_optional_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_optional_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_optional_description"),
 				 CargoPackage.Literals.SLOT__OPTIONAL,
 				 true,
 				 false,
@@ -310,7 +312,7 @@ public class SlotItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Slot_priceExpression_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_priceExpression_feature", "_UI_Slot_type"),
+				 getString("_UI_Slot_priceExpression_description"),
 				 CargoPackage.Literals.SLOT__PRICE_EXPRESSION,
 				 true,
 				 false,
@@ -339,6 +341,52 @@ public class SlotItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pricing Date feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_pricingDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_pricingDate_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PRICING_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_notes_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__NOTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -389,6 +437,8 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__MAX_QUANTITY:
 			case CargoPackage.SLOT__OPTIONAL:
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
+			case CargoPackage.SLOT__PRICING_DATE:
+			case CargoPackage.SLOT__NOTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

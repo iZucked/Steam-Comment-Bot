@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
-import com.mmxlabs.models.lng.schedule.*;
 import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -27,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -113,6 +113,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseCargoAllocation(CargoAllocation object) {
 				return createCargoAllocationAdapter();
+			}
+			@Override
+			public Adapter caseMarketAllocation(MarketAllocation object) {
+				return createMarketAllocationAdapter();
 			}
 			@Override
 			public Adapter caseSlotAllocation(SlotAllocation object) {
@@ -410,6 +414,21 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCargoAllocationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.MarketAllocation <em>Market Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation
+	 * @generated
+	 */
+	public Adapter createMarketAllocationAdapter() {
 		return null;
 	}
 

@@ -145,7 +145,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 			// get the VesselSet currently attached to the cargo
-			final AVesselSet vs = getVessel(cargo);
+			final AVesselSet<Vessel> vs = getVessel(cargo);
 			// by preference, find the string attached to this object by the value provider
 			for (final Pair<String, EObject> pair : getAllowedValues(cargo, allowedValues)) {
 				if (pair.getSecond() == vs)

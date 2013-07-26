@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -19,11 +20,13 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class MarketSlotConstraint extends AbstractModelConstraint {
@@ -47,16 +50,16 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 
 					if (spotLoadSlot.getContract() != null) {
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("[Market model|"+spotLoadSlot.getName()+"] DES purchase should not have a contract set."), IStatus.WARNING);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName()
+								+ "] DES purchase should not have a contract set."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						failures.add(dsd);
 
 					}
 					if (!desPurchaseMarket.getDestinationPorts().contains(spotLoadSlot.getPort())) {
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|"+spotLoadSlot.getName()+"] DES purchase port is not a market port."),
-								IStatus.WARNING);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName()
+								+ "] DES purchase port is not a market port."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Port());
 						failures.add(dsd);
 
@@ -66,8 +69,8 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 					final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) market;
 					if (spotLoadSlot.getPort() != fobPurchasesMarket.getNotionalPort()) {
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|"+spotLoadSlot.getName()+"] FOB Purchase Port does not match market port of "+fobPurchasesMarket.getNotionalPort()+"."
-								+ fobPurchasesMarket.getNotionalPort().getName()), IStatus.WARNING);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName()
+								+ "] FOB Purchase Port does not match market port of " + fobPurchasesMarket.getNotionalPort() + "." + fobPurchasesMarket.getNotionalPort().getName()), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Port());
 						failures.add(dsd);
 
@@ -75,8 +78,8 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 
 					if (spotLoadSlot.getContract() != null) {
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("[Market model|"+spotLoadSlot.getName()+"] FOB purchase should not have a contract set."), IStatus.WARNING);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName()
+								+ "] FOB purchase should not have a contract set."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						failures.add(dsd);
 
@@ -91,8 +94,8 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 					if (spotDischargeSlot.getContract() != null) {
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("[Market model|"+spotDischargeSlot.getName()+"] DES sales should not have a contract set."), IStatus.WARNING);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName()
+								+ "] DES sales should not have a contract set."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						failures.add(dsd);
 
@@ -100,8 +103,8 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 
 					if (spotDischargeSlot.getPort() != desSalesMarket.getNotionalPort()) {
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|"+spotDischargeSlot.getName()+"] DES sales Port does not match market port of '"+desSalesMarket.getNotionalPort()+"'."
-								+ desSalesMarket.getNotionalPort().getName()), IStatus.WARNING);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName()
+								+ "] DES sales Port does not match market port of '" + desSalesMarket.getNotionalPort() + "'." + desSalesMarket.getNotionalPort().getName()), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
 						failures.add(dsd);
 
@@ -112,16 +115,17 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 
 					if (spotDischargeSlot.getContract() != null) {
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("[Market model|"+spotDischargeSlot.getName()+"] FOB sale should not have a contract set."), IStatus.WARNING);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName()
+								+ "] FOB sale should not have a contract set."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						failures.add(dsd);
 
 					}
-					if (spotDischargeSlot.getPort() != fobSalesMarket.getLoadPort()) {
+					final Set<Port> originPorts = SetUtils.getObjects(fobSalesMarket.getOriginPorts());
+					if (!originPorts.contains(spotDischargeSlot.getPort())) {
 
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|"+spotDischargeSlot.getName()+"] FOB sale port does not match market port of '" + fobSalesMarket.getLoadPort()+"'."
-								+ fobSalesMarket.getLoadPort().getName()), IStatus.WARNING);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName()
+								+ "] FOB sale port does not match market ports"), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
 						failures.add(dsd);
 
@@ -144,5 +148,4 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 			return multi;
 		}
 	}
-
 }

@@ -4,37 +4,29 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
-import org.eclipse.emf.validation.IValidationContext;
-import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.ui.validation.AbstractFeatureRangeConstraint;
 
-public class LoadSlotCVConstraint extends AbstractModelConstraint {
+public class LoadSlotCVConstraint extends AbstractFeatureRangeConstraint {
 
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
-		final EObject target = ctx.getTarget();
-		if (target instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) target;
+	protected boolean shouldValidateFeature(EObject object,
+			EStructuralFeature feature) {
+		return object instanceof LoadSlot;
+	}
 
-			if (loadSlot.isSetCargoCV()) {
-				if (loadSlot.getCargoCV() < 1.0) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("CV value it too low."));
-					dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
-					return dsd;
-				} else if (loadSlot.getCargoCV() > 40.0) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("CV value is too high."));
-					dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
-					return dsd;
-				}
-			}
+	@Override
+	protected String getPluginId() {
+		return Activator.PLUGIN_ID;
+	}
 
-		}
-		return ctx.createSuccessStatus();
+	@Override
+	protected void createConstraints() {
+		setRange(CargoPackage.Literals.LOAD_SLOT__CARGO_CV, 1.0, 40.0, "CV");	
 	}
 }

@@ -64,12 +64,12 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		// Load all the current model versions
 		final ResourceSet resourceSet = destinationLoader.getResourceSet();
 
-//		// Standard options
-//		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_ATTACHMENT, true);
-//
-//		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
-//		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
-//		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
+		// // Standard options
+		// resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_ATTACHMENT, true);
+		//
+		// resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
+		// resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
+		// resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
 
 		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 

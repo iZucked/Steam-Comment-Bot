@@ -67,7 +67,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 			// This will be a single vessel or a vessel class
 			if (!(vesselAssignment instanceof Vessel || vesselAssignment instanceof VesselClass)) {
 				// Unsupported case - bail out!
-				log.error("ElementAssignment as non Vessel or VesselClass assignment - unable to validate");
+				log.error("Assignment is not a Vessel or VesselClass - unable to validate");
 				return ctx.createSuccessStatus();
 			}
 
@@ -114,9 +114,9 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 
 				final String message;
 				if (assignedObject instanceof Cargo) {
-					message = String.format("Element Assignment for Cargo %s requires vessel(s) not in the allowed vessels list.", ((Cargo) assignedObject).getName());
+					message = String.format("Cargo '%s': Assignment '%s' is not in the allowed vessels list.", ((Cargo) assignedObject).getName(), vesselAssignment.getName());
 				} else if (assignedObject instanceof VesselEvent) {
-					message = String.format("Element Assignment for Vessel Event %s requires vessel(s) not in the allowed vessels list.", ((VesselEvent) assignedObject).getName());
+					message = String.format("Vessel Event '%s': Assignment requires vessel(s) not in the allowed vessels list.", ((VesselEvent) assignedObject).getName());
 				} else {
 					throw new IllegalStateException("Unexpected code branch.");
 				}

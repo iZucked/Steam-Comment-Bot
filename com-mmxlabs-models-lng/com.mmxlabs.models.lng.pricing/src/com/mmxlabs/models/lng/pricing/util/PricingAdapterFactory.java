@@ -4,19 +4,22 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
-import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -125,6 +128,22 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseCooldownPrice(CooldownPrice object) {
 				return createCooldownPriceAdapter();
+			}
+			@Override
+			public Adapter caseCommodityIndex(CommodityIndex object) {
+				return createCommodityIndexAdapter();
+			}
+			@Override
+			public Adapter caseCharterIndex(CharterIndex object) {
+				return createCharterIndexAdapter();
+			}
+			@Override
+			public Adapter caseBaseFuelIndex(BaseFuelIndex object) {
+				return createBaseFuelIndexAdapter();
+			}
+			@Override
+			public <Value> Adapter caseNamedIndexContainer(NamedIndexContainer<Value> object) {
+				return createNamedIndexContainerAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -309,6 +328,66 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCooldownPriceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CommodityIndex <em>Commodity Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CommodityIndex
+	 * @generated
+	 */
+	public Adapter createCommodityIndexAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.CharterIndex <em>Charter Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.CharterIndex
+	 * @generated
+	 */
+	public Adapter createCharterIndexAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.BaseFuelIndex <em>Base Fuel Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.BaseFuelIndex
+	 * @generated
+	 */
+	public Adapter createBaseFuelIndexAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer <em>Named Index Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer
+	 * @generated
+	 */
+	public Adapter createNamedIndexContainerAdapter() {
 		return null;
 	}
 

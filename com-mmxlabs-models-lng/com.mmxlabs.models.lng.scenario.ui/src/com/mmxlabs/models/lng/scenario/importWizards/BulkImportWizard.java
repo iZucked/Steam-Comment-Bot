@@ -39,6 +39,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		this.setForcePreviousAndNextButtons(false);
 	}
 
+	@Override
 	public void addPages() {
 		super.addPages();
 		addPage(bip);

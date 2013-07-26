@@ -26,8 +26,12 @@ public class SpotSlotHelper {
 		// Spot market - make a month range.
 		final Calendar cal = Calendar.getInstance();
 		// Get the timezone
-		final TimeZone zone = TimeZone.getTimeZone(newPort.getTimeZone());
-		cal.setTimeZone(zone);
+		if (newPort != null) {
+			final TimeZone zone = TimeZone.getTimeZone(newPort.getTimeZone());
+			cal.setTimeZone(zone);
+		} else {
+			cal.setTimeZone(TimeZone.getTimeZone("UTC"));
+		}
 		if (oldPort == newPort) {
 			// Prime with date
 			cal.setTime(newDate);

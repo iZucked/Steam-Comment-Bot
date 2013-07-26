@@ -13,8 +13,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
@@ -52,7 +52,7 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 	 * @generated
 	 * @ordered
 	 */
-	protected Index<Double> index;
+	protected CommodityIndex index;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -87,14 +87,15 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public Index<Double> getIndex() {
+	public CommodityIndex getIndex() {
 		if (index != null && index.eIsProxy()) {
 			InternalEObject oldIndex = (InternalEObject)index;
-			index = (Index<Double>)eResolveProxy(oldIndex);
+			index = (CommodityIndex)eResolveProxy(oldIndex);
 			if (index != oldIndex) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.COOLDOWN_PRICE__INDEX, oldIndex, index));
@@ -105,20 +106,22 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index<Double> basicGetIndex() {
+	public CommodityIndex basicGetIndex() {
 		return index;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIndex(Index<Double> newIndex) {
-		Index<Double> oldIndex = index;
+	public void setIndex(CommodityIndex newIndex) {
+		CommodityIndex oldIndex = index;
 		index = newIndex;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COOLDOWN_PRICE__INDEX, oldIndex, index));
@@ -155,7 +158,7 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 				getPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				setIndex((Index<Double>)newValue);
+				setIndex((CommodityIndex)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -173,7 +176,7 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 				getPorts().clear();
 				return;
 			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				setIndex((Index<Double>)null);
+				setIndex((CommodityIndex)null);
 				return;
 		}
 		super.eUnset(featureID);

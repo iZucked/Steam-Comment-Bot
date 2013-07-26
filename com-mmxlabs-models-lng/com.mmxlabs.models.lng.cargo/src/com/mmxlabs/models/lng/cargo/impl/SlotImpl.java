@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -20,8 +19,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
-
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -52,6 +49,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingDate <em>Pricing Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNotes <em>Notes</em>}</li>
  * </ul>
  * </p>
  *
@@ -318,6 +317,60 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected Cargo cargo;
+
+	/**
+	 * The default value of the '{@link #getPricingDate() <em>Pricing Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getPricingDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Date PRICING_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPricingDate() <em>Pricing Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getPricingDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected Date pricingDate = PRICING_DATE_EDEFAULT;
+
+	/**
+	 * This is true if the Pricing Date attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pricingDateESet;
+
+	/**
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NOTES_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected String notes = NOTES_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -821,6 +874,79 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Date getPricingDate() {
+		return pricingDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPricingDate(Date newPricingDate) {
+		Date oldPricingDate = pricingDate;
+		pricingDate = newPricingDate;
+		boolean oldPricingDateESet = pricingDateESet;
+		pricingDateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_DATE, oldPricingDate, pricingDate, !oldPricingDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPricingDate() {
+		Date oldPricingDate = pricingDate;
+		boolean oldPricingDateESet = pricingDateESet;
+		pricingDate = PRICING_DATE_EDEFAULT;
+		pricingDateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PRICING_DATE, oldPricingDate, PRICING_DATE_EDEFAULT, oldPricingDateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPricingDate() {
+		return pricingDateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
+		notes = newNotes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__NOTES, oldNotes, notes));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -963,6 +1089,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CARGO:
 				if (resolve) return getCargo();
 				return basicGetCargo();
+			case CargoPackage.SLOT__PRICING_DATE:
+				return getPricingDate();
+			case CargoPackage.SLOT__NOTES:
+				return getNotes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1011,6 +1141,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CARGO:
 				setCargo((Cargo)newValue);
 				return;
+			case CargoPackage.SLOT__PRICING_DATE:
+				setPricingDate((Date)newValue);
+				return;
+			case CargoPackage.SLOT__NOTES:
+				setNotes((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1058,6 +1194,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CARGO:
 				setCargo((Cargo)null);
 				return;
+			case CargoPackage.SLOT__PRICING_DATE:
+				unsetPricingDate();
+				return;
+			case CargoPackage.SLOT__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1093,6 +1235,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetPriceExpression();
 			case CargoPackage.SLOT__CARGO:
 				return cargo != null;
+			case CargoPackage.SLOT__PRICING_DATE:
+				return isSetPricingDate();
+			case CargoPackage.SLOT__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1213,6 +1359,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(optional);
 		result.append(", priceExpression: ");
 		if (priceExpressionESet) result.append(priceExpression); else result.append("<unset>");
+		result.append(", pricingDate: ");
+		if (pricingDateESet) result.append(pricingDate); else result.append("<unset>");
+		result.append(", notes: ");
+		result.append(notes);
 		result.append(')');
 		return result.toString();
 	}
@@ -1229,7 +1379,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		} else if (CargoPackage.eINSTANCE.getSlot_MinQuantity() == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MinQuantity(), (Integer) 0);
 		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) 500000);
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) 140000);
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}	

@@ -387,22 +387,13 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				// now find column
 				if (!draggedToNowhere && !draggingFromLeft && (e.x >= ca.x + terminalSize && e.x <= ca.x + 2 * terminalSize)) {
 					// arrived in left column from right
-					newWiring.put(fromRowData, null);
 					newWiring.put(toRowData, fromRowData);
-					if (!ctrlPressed) {
-						newWiring.put(null, toRowData);
-					}
 				} else if (!draggedToNowhere && draggingFromLeft && (e.x >= ca.x + ca.width - terminalSize * 2 && e.x <= ca.x + ca.width - terminalSize)) {
 					// arrived in right column
 					newWiring.put(fromRowData, toRowData);
-					newWiring.put(toRowData, null);
-					newWiring.put(null, fromRowData);
-					// No multi-load handling
-					ctrlPressed = false;
 				} else {
 					// clear wire
 					newWiring.put(fromRowData, null);
-					newWiring.put(null, fromRowData);
 				}
 				wiringChanged(newWiring, ctrlPressed);
 			}

@@ -248,16 +248,9 @@
        point="org.eclipse.ui.views">
     <view
           category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.fleet.editor.views.VesselView"
-          id="com.mmxlabs.models.lng.fleet.editor.views.VesselView"
-          name="Vessels"
-          restorable="true">
-    </view>
-    <view
-          category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.fleet.editor.views.VesselClassView"
-          id="com.mmxlabs.models.lng.fleet.editor.views.VesselClassView"
-          name="Vessel Classes"
+          class="com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView"
+          id="com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView"
+          name="Vessels + Classes"
           restorable="true">
     </view>
     <view

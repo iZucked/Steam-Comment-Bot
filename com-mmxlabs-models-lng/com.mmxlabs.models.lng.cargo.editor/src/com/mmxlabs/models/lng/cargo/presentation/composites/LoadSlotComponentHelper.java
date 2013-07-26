@@ -14,6 +14,10 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
@@ -21,6 +25,16 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -61,7 +75,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);	
 	}
 
 	/**
@@ -71,11 +85,11 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
 		add_DESPurchaseEditor(detailComposite, topClass);
+		add_transferFromEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -114,6 +128,15 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_DESPurchaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE));
+	}
+
+	/**
+	 * Create the editor for the transferFrom feature on LoadSlot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_transferFromEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__TRANSFER_FROM));
 	}
 
 	@Override

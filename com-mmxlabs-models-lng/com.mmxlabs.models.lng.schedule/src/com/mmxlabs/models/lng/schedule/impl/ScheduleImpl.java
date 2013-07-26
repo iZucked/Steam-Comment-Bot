@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -31,6 +32,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSequences <em>Sequences</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getCargoAllocations <em>Cargo Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getMarketAllocations <em>Market Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getUnusedElements <em>Unused Elements</em>}</li>
@@ -59,6 +61,17 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected EList<CargoAllocation> cargoAllocations;
+
+	/**
+	 * The cached value of the '{@link #getMarketAllocations() <em>Market Allocations</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getMarketAllocations()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<MarketAllocation> marketAllocations;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocations() <em>Slot Allocations</em>}' containment reference list.
@@ -135,6 +148,19 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<MarketAllocation> getMarketAllocations() {
+		if (marketAllocations == null) {
+			marketAllocations = new EObjectContainmentEList<MarketAllocation>(MarketAllocation.class, this, SchedulePackage.SCHEDULE__MARKET_ALLOCATIONS);
+		}
+		return marketAllocations;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -181,6 +207,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return ((InternalEList<?>)getSequences()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				return ((InternalEList<?>)getCargoAllocations()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__MARKET_ALLOCATIONS:
+				return ((InternalEList<?>)getMarketAllocations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				return ((InternalEList<?>)getSlotAllocations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__FITNESSES:
@@ -201,6 +229,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return getSequences();
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				return getCargoAllocations();
+			case SchedulePackage.SCHEDULE__MARKET_ALLOCATIONS:
+				return getMarketAllocations();
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				return getSlotAllocations();
 			case SchedulePackage.SCHEDULE__FITNESSES:
@@ -227,6 +257,10 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				getCargoAllocations().clear();
 				getCargoAllocations().addAll((Collection<? extends CargoAllocation>)newValue);
+				return;
+			case SchedulePackage.SCHEDULE__MARKET_ALLOCATIONS:
+				getMarketAllocations().clear();
+				getMarketAllocations().addAll((Collection<? extends MarketAllocation>)newValue);
 				return;
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
@@ -258,6 +292,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				getCargoAllocations().clear();
 				return;
+			case SchedulePackage.SCHEDULE__MARKET_ALLOCATIONS:
+				getMarketAllocations().clear();
+				return;
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
 				return;
@@ -283,6 +320,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return sequences != null && !sequences.isEmpty();
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				return cargoAllocations != null && !cargoAllocations.isEmpty();
+			case SchedulePackage.SCHEDULE__MARKET_ALLOCATIONS:
+				return marketAllocations != null && !marketAllocations.isEmpty();
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 				return slotAllocations != null && !slotAllocations.isEmpty();
 			case SchedulePackage.SCHEDULE__FITNESSES:

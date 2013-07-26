@@ -14,9 +14,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -36,6 +38,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPortCosts <em>Port Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCooldownPrices <em>Cooldown Prices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,7 +53,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Index<Double>> commodityIndices;
+	protected EList<CommodityIndex> commodityIndices;
 
 	/**
 	 * The cached value of the '{@link #getCharterIndices() <em>Charter Indices</em>}' containment reference list.
@@ -60,7 +63,7 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Index<Integer>> charterIndices;
+	protected EList<CharterIndex> charterIndices;
 
 	/**
 	 * The cached value of the '{@link #getFleetCost() <em>Fleet Cost</em>}' containment reference.
@@ -103,6 +106,17 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	protected EList<CooldownPrice> cooldownPrices;
 
 	/**
+	 * The cached value of the '{@link #getBaseFuelPrices() <em>Base Fuel Prices</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #getBaseFuelPrices()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<BaseFuelIndex> baseFuelPrices;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -126,9 +140,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Index<Double>> getCommodityIndices() {
+	public EList<CommodityIndex> getCommodityIndices() {
 		if (commodityIndices == null) {
-			commodityIndices = new EObjectContainmentEList<Index<Double>>(Index.class, this, PricingPackage.PRICING_MODEL__COMMODITY_INDICES);
+			commodityIndices = new EObjectContainmentEList<CommodityIndex>(CommodityIndex.class, this, PricingPackage.PRICING_MODEL__COMMODITY_INDICES);
 		}
 		return commodityIndices;
 	}
@@ -138,9 +152,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Index<Integer>> getCharterIndices() {
+	public EList<CharterIndex> getCharterIndices() {
 		if (charterIndices == null) {
-			charterIndices = new EObjectContainmentEList<Index<Integer>>(Index.class, this, PricingPackage.PRICING_MODEL__CHARTER_INDICES);
+			charterIndices = new EObjectContainmentEList<CharterIndex>(CharterIndex.class, this, PricingPackage.PRICING_MODEL__CHARTER_INDICES);
 		}
 		return charterIndices;
 	}
@@ -226,6 +240,19 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<BaseFuelIndex> getBaseFuelPrices() {
+		if (baseFuelPrices == null) {
+			baseFuelPrices = new EObjectContainmentEList<BaseFuelIndex>(BaseFuelIndex.class, this, PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES);
+		}
+		return baseFuelPrices;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -244,6 +271,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return ((InternalEList<?>)getPortCosts()).basicRemove(otherEnd, msgs);
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				return ((InternalEList<?>)getCooldownPrices()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
+				return ((InternalEList<?>)getBaseFuelPrices()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -268,6 +297,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getPortCosts();
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				return getCooldownPrices();
+			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
+				return getBaseFuelPrices();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -283,11 +314,11 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 		switch (featureID) {
 			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
 				getCommodityIndices().clear();
-				getCommodityIndices().addAll((Collection<? extends Index<Double>>)newValue);
+				getCommodityIndices().addAll((Collection<? extends CommodityIndex>)newValue);
 				return;
 			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
 				getCharterIndices().clear();
-				getCharterIndices().addAll((Collection<? extends Index<Integer>>)newValue);
+				getCharterIndices().addAll((Collection<? extends CharterIndex>)newValue);
 				return;
 			case PricingPackage.PRICING_MODEL__FLEET_COST:
 				setFleetCost((FleetCostModel)newValue);
@@ -303,6 +334,10 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				getCooldownPrices().clear();
 				getCooldownPrices().addAll((Collection<? extends CooldownPrice>)newValue);
+				return;
+			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
+				getBaseFuelPrices().clear();
+				getBaseFuelPrices().addAll((Collection<? extends BaseFuelIndex>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -334,6 +369,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				getCooldownPrices().clear();
 				return;
+			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
+				getBaseFuelPrices().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -358,6 +396,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return portCosts != null && !portCosts.isEmpty();
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				return cooldownPrices != null && !cooldownPrices.isEmpty();
+			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
+				return baseFuelPrices != null && !baseFuelPrices.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

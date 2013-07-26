@@ -535,13 +535,23 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__NOTIONAL_PORT = SPOT_MARKET_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Market Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__MARKET_PORTS = SPOT_MARKET_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>DES Sales Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SALES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 1;
+	int DES_SALES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBPurchasesMarketImpl <em>FOB Purchases Market</em>}' class.
@@ -635,13 +645,23 @@ public interface SpotMarketsPackage extends EPackage {
 	int FOB_PURCHASES_MARKET__CV = SPOT_MARKET_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Market Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__MARKET_PORTS = SPOT_MARKET_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>FOB Purchases Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FOB_PURCHASES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 2;
+	int FOB_PURCHASES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl <em>FOB Sales Market</em>}' class.
@@ -726,13 +746,23 @@ public interface SpotMarketsPackage extends EPackage {
 	int FOB_SALES_MARKET__LOAD_PORT = SPOT_MARKET_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Origin Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__ORIGIN_PORTS = SPOT_MARKET_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>FOB Sales Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FOB_SALES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 1;
+	int FOB_SALES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotAvailabilityImpl <em>Spot Availability</em>}' class.
@@ -1063,6 +1093,18 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getDESSalesMarket_NotionalPort();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getMarketPorts <em>Market Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Market Ports</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getMarketPorts()
+	 * @see #getDESSalesMarket()
+	 * @generated
+	 */
+	EReference getDESSalesMarket_MarketPorts();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket <em>FOB Purchases Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1095,6 +1137,18 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getFOBPurchasesMarket_Cv();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getMarketPorts <em>Market Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Market Ports</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getMarketPorts()
+	 * @see #getFOBPurchasesMarket()
+	 * @generated
+	 */
+	EReference getFOBPurchasesMarket_MarketPorts();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket <em>FOB Sales Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1107,6 +1161,7 @@ public interface SpotMarketsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket#getLoadPort <em>Load Port</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Load Port</em>'.
 	 * @see com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket#getLoadPort()
@@ -1114,6 +1169,18 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFOBSalesMarket_LoadPort();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket#getOriginPorts <em>Origin Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Origin Ports</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket#getOriginPorts()
+	 * @see #getFOBSalesMarket()
+	 * @generated
+	 */
+	EReference getFOBSalesMarket_OriginPorts();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotAvailability <em>Spot Availability</em>}'.
@@ -1400,6 +1467,15 @@ public interface SpotMarketsPackage extends EPackage {
 		EReference DES_SALES_MARKET__NOTIONAL_PORT = eINSTANCE.getDESSalesMarket_NotionalPort();
 
 		/**
+		 * The meta object literal for the '<em><b>Market Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 5.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DES_SALES_MARKET__MARKET_PORTS = eINSTANCE.getDESSalesMarket_MarketPorts();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBPurchasesMarketImpl <em>FOB Purchases Market</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1426,6 +1502,15 @@ public interface SpotMarketsPackage extends EPackage {
 		EAttribute FOB_PURCHASES_MARKET__CV = eINSTANCE.getFOBPurchasesMarket_Cv();
 
 		/**
+		 * The meta object literal for the '<em><b>Market Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 5.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FOB_PURCHASES_MARKET__MARKET_PORTS = eINSTANCE.getFOBPurchasesMarket_MarketPorts();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl <em>FOB Sales Market</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1442,6 +1527,15 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FOB_SALES_MARKET__LOAD_PORT = eINSTANCE.getFOBSalesMarket_LoadPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Origin Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 5.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FOB_SALES_MARKET__ORIGIN_PORTS = eINSTANCE.getFOBSalesMarket_OriginPorts();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotAvailabilityImpl <em>Spot Availability</em>}' class.

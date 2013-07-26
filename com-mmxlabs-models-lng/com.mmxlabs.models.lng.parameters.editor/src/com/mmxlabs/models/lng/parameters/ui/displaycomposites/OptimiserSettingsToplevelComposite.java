@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -22,6 +23,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.Objective;
@@ -37,15 +39,15 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 
 public class OptimiserSettingsToplevelComposite extends DefaultTopLevelComposite {
-	public OptimiserSettingsToplevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
-		super(parent, style, location);
+	public OptimiserSettingsToplevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		super(parent, style, location, toolkit);
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
-		super.display(location, root, object, range);
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+		super.display(location, root, object, range, dbc);
 		// display sub-things
-		final Composite lower = new Composite(this, SWT.NONE);
+		final Composite lower = toolkit.createComposite(this);
 		final GridData gd = new GridData();
 		gd.grabExcessHorizontalSpace = true;
 		gd.grabExcessVerticalSpace = true;
@@ -60,11 +62,13 @@ public class OptimiserSettingsToplevelComposite extends DefaultTopLevelComposite
 		lower.setLayout(gl);
 
 		final Group constraints = new Group(lower, SWT.NONE);
+		toolkit.adapt(constraints);
 		constraints.setText("Constraints");
 
 		constraints.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		final Group objectives = new Group(lower, SWT.NONE);
+		toolkit.adapt(objectives);
 		objectives.setText("Objectives");
 
 		objectives.setLayoutData(new GridData(GridData.FILL_BOTH));

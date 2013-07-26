@@ -329,13 +329,33 @@ public interface CargoPackage extends EPackage {
 	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__PRICING_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -572,6 +592,26 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__CARGO = SLOT__CARGO;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PRICING_DATE = SLOT__PRICING_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__NOTES = SLOT__NOTES;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -863,6 +903,26 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__CARGO = SLOT__CARGO;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PRICING_DATE = SLOT__PRICING_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__NOTES = SLOT__NOTES;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -1321,6 +1381,26 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__CARGO = LOAD_SLOT__CARGO;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__PRICING_DATE = LOAD_SLOT__PRICING_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__NOTES = LOAD_SLOT__NOTES;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1619,6 +1699,26 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__CARGO = DISCHARGE_SLOT__CARGO;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PRICING_DATE = DISCHARGE_SLOT__PRICING_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__NOTES = DISCHARGE_SLOT__NOTES;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -2068,6 +2168,30 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSlot_Cargo();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getPricingDate()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_PricingDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notes</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getNotes()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_Notes();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
@@ -2538,6 +2662,24 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT__CARGO = eINSTANCE.getSlot_Cargo();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 5.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__PRICING_DATE = eINSTANCE.getSlot_PricingDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 5.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__NOTES = eINSTANCE.getSlot_Notes();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.

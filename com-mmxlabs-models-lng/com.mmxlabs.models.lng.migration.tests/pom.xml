@@ -1,15 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>5.0.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.migration.tests</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>5.0.2-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+
+					<product>org.eclipse.sdk.ide</product>
+					<application>org.eclipse.ui.ide.workbench</application>
+
+					<dependencies>
+
+						<!-- Logging plug-ins -->
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>ch.qos.logback.core</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>ch.qos.logback.classic</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>ch.qos.logback.slf4j</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+
+
+
+					</dependencies>
+					<!-- Automatically start these bundles at specified run level. These contain the services required for test execution -->
+					<bundleStartLevel>
+						<bundle>
+							<id>org.eclipse.equinox.ds</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.equinox.common</id>
+							<level>2</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.core.runtime</id>
+							<level>3</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.ops4j.peaberry.activation</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.migration</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+					</bundleStartLevel>
+
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
 </project>

@@ -18,6 +18,7 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -79,6 +80,8 @@ public class CargoEditorMenuHelper {
 	private final CargoEditingCommands cec;
 
 	private final LNGScenarioModel scenarioModel;
+
+	private static final boolean enableSTSMenus = SecurityUtils.getSubject().isPermitted("features:shiptoship");
 
 	/**
 	 * @since 4.0
@@ -671,7 +674,7 @@ public class CargoEditorMenuHelper {
 				menuManager.add(new CreateSlotAction("Discharge", source, null, false, null));
 				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, null));
 
-				if (false) {
+				if (enableSTSMenus) {
 					if (loadSlot.getTransferFrom() == null) {
 						if (!transferPorts.isEmpty()) {
 							final MenuManager subMenu = new MenuManager("Ship to Ship", null);
@@ -690,7 +693,7 @@ public class CargoEditorMenuHelper {
 			if (!dischargeSlot.isFOBSale()) {
 				menuManager.add(new CreateSlotAction("DES Purchase", source, null, true, null));
 			}
-			if (false) {
+			if (enableSTSMenus) {
 
 				if (dischargeSlot.getTransferTo() == null) {
 					if (!transferPorts.isEmpty()) {
@@ -747,8 +750,8 @@ public class CargoEditorMenuHelper {
 			menuName = "FOB Sale";
 			final SpotMarketGroup group = pricingModel.getFobSalesSpotMarket();
 			for (final SpotMarket market : group.getMarkets()) {
-				final Port loadPort = ((FOBSalesMarket) market).getLoadPort();
-				if (loadPort == source.getPort()) {
+				final Set<Port> originPorts = SetUtils.getObjects(((FOBSalesMarket) market).getOriginPorts());
+				if (originPorts != null && originPorts.contains(source.getPort())) {
 					validMarkets.add(market);
 				}
 			}

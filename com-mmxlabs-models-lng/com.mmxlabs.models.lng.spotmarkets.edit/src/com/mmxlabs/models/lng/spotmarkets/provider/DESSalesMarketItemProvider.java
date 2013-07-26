@@ -57,6 +57,7 @@ public class DESSalesMarketItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNotionalPortPropertyDescriptor(object);
+			addMarketPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -75,6 +76,29 @@ public class DESSalesMarketItemProvider
 				 getString("_UI_DESSalesMarket_notionalPort_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_DESSalesMarket_notionalPort_feature", "_UI_DESSalesMarket_type"),
 				 SpotMarketsPackage.Literals.DES_SALES_MARKET__NOTIONAL_PORT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Market Ports feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarketPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DESSalesMarket_marketPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DESSalesMarket_marketPorts_feature", "_UI_DESSalesMarket_type"),
+				 SpotMarketsPackage.Literals.DES_SALES_MARKET__MARKET_PORTS,
 				 true,
 				 false,
 				 true,

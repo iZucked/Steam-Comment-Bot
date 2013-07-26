@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.validation.utils;
 
+import java.util.Date;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -18,10 +19,12 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -40,7 +43,7 @@ public class PriceExpressionUtils {
 	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
 
 	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final List<IStatus> failures) {
-		validatePriceExpression(ctx, object, feature, priceExpression, getParser(), failures);
+		validatePriceExpression(ctx, object, feature, priceExpression, getParser(null), failures);
 	}
 
 	/**
@@ -93,7 +96,7 @@ public class PriceExpressionUtils {
 				final Pattern p = Pattern.compile(operatorPattern);
 				final Matcher m = p.matcher(priceExpression);
 				if (m.find()) {
-					hints = "Consequetive operators: " + m.group(0);
+					hints = "Consecutive operators: " + m.group(0);
 				} else {
 					hints = "Unknown problem";
 				}
@@ -107,20 +110,53 @@ public class PriceExpressionUtils {
 				failures.add(dsd);
 			}
 		}
+
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
+			final Double maxValue, final Date date, final List<IStatus> failures) {
 		
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return;
 		}
 		
+		SeriesParser parser = getParser(date);
+		try {
+			final IExpression<ISeries> expression = parser.parse(priceExpression);
+			final ISeries parsed = expression.evaluate();
+			final double value = parsed.evaluate(0).doubleValue();
+
+			final boolean lessThanMin = minValue != null && value < minValue;
+			final boolean moreThanMax = minValue != null && value > maxValue;
+			if (lessThanMin || moreThanMax) {
+				final String boundLabel = lessThanMin ? "minimum" : "maximum";
+				final double boundValue = lessThanMin ? minValue : maxValue;
+				final String comparisonLabel = lessThanMin ? "less" : "more";
+
+				final String message = String.format("Price expression has value %.2f which is %s than %s value %.2f", value, comparisonLabel, boundLabel, boundValue);
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+				dsd.addEObjectAndFeature(object, feature);
+				failures.add(dsd);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
 	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
+	 * @since 5.0
 	 */
 	@SuppressWarnings("rawtypes")
-	public static SeriesParser getParser() {
+	public static SeriesParser getParser(Date dateZero) {
 		final Activator activator = Activator.getDefault();
 		if (activator == null) {
 			return null;
@@ -130,18 +166,16 @@ public class PriceExpressionUtils {
 			final MMXRootObject rootObject = extraValidationContext.getRootObject();
 
 			if (rootObject instanceof LNGScenarioModel) {
-				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final SeriesParser indices = new SeriesParser();
 
 				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
-				for (final Index<Double> index : pricingModel.getCommodityIndices()) {
+				for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
+					final Index<Double> index = commodityIndex.getData();
 					if (index instanceof DataIndex) {
-						// For this validation, we do not need real times or values
-						final int[] times = new int[1];
-						final Number[] nums = new Number[1];
-						indices.addSeriesData(index.getName(), times, nums);
+						PriceIndexUtils.addSeriesDataFromDataIndex(indices, commodityIndex.getName(), dateZero, (DataIndex<? extends Number>) index);
 					} else if (index instanceof DerivedIndex) {
-						indices.addSeriesExpression(index.getName(), ((DerivedIndex) index).getExpression());
+						indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
 					}
 				}
 				return indices;

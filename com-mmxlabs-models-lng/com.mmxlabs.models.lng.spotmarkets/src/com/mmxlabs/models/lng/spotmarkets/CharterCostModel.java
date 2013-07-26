@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.spotmarkets;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
@@ -53,24 +53,26 @@ public interface CharterCostModel extends MMXObject {
 	 * If the meaning of the '<em>Charter In Price</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter In Price</em>' reference.
-	 * @see #setCharterInPrice(Index)
+	 * @see #setCharterInPrice(CharterIndex)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterCostModel_CharterInPrice()
-	 * @model type="com.mmxlabs.models.lng.pricing.Index<org.eclipse.emf.ecore.EIntegerObject>" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
-	Index<Integer> getCharterInPrice();
+	CharterIndex getCharterInPrice();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#getCharterInPrice <em>Charter In Price</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Charter In Price</em>' reference.
 	 * @see #getCharterInPrice()
 	 * @generated
 	 */
-	void setCharterInPrice(Index<Integer> value);
+	void setCharterInPrice(CharterIndex value);
 
 	/**
 	 * Returns the value of the '<em><b>Charter Out Price</b></em>' reference.
@@ -79,24 +81,26 @@ public interface CharterCostModel extends MMXObject {
 	 * If the meaning of the '<em>Charter Out Price</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Out Price</em>' reference.
-	 * @see #setCharterOutPrice(Index)
+	 * @see #setCharterOutPrice(CharterIndex)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterCostModel_CharterOutPrice()
-	 * @model type="com.mmxlabs.models.lng.pricing.Index<org.eclipse.emf.ecore.EIntegerObject>" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
-	Index<Integer> getCharterOutPrice();
+	CharterIndex getCharterOutPrice();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#getCharterOutPrice <em>Charter Out Price</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Charter Out Price</em>' reference.
 	 * @see #getCharterOutPrice()
 	 * @generated
 	 */
-	void setCharterOutPrice(Index<Integer> value);
+	void setCharterOutPrice(CharterIndex value);
 
 	/**
 	 * Returns the value of the '<em><b>Spot Charter Count</b></em>' attribute.

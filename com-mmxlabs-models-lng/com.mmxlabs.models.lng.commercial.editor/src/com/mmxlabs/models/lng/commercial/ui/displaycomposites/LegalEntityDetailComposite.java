@@ -14,6 +14,7 @@ import java.util.Date;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -48,6 +49,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -82,15 +84,16 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 
 	private EObject target;
 
-	public LegalEntityDetailComposite(final Composite parent, final int style) {
+	public LegalEntityDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
+		toolkit.adapt(this);
 		setLayout(new GridLayout(1, false));
 
-		delegate = new DefaultDetailComposite(this, style);
+		delegate = new DefaultDetailComposite(this, style, toolkit);
 		delegate.getComposite().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		final Label taxCurve = new Label(this, SWT.NONE);
-		taxCurve.setText("Tax Rate");
+		@SuppressWarnings("unused")
+		final Label taxCurve = toolkit.createLabel(this, "Tax Rate", SWT.NONE);
 
 		final TableViewer tableViewer = new TableViewer(this, SWT.FULL_SELECTION);
 		final Table table = tableViewer.getTable();
@@ -248,15 +251,14 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 			}
 		});
 
-		final Composite buttons = new Composite(this, SWT.NONE);
+		final Composite buttons = toolkit.createComposite(this);
 
 		buttons.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
 		final GridLayout buttonLayout = new GridLayout(2, true);
 		buttons.setLayout(buttonLayout);
 		buttonLayout.marginHeight = 0;
 		buttonLayout.marginWidth = 0;
-		final Button remove = new Button(buttons, SWT.NONE);
-		remove.setText("-");
+		final Button remove = toolkit.createButton(buttons, "-", SWT.NONE);
 		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		remove.setEnabled(false);
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -280,8 +282,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 				}
 			}
 		});
-		final Button add = new Button(buttons, SWT.NONE);
-		add.setText("+");
+		final Button add = toolkit.createButton(buttons, "+", SWT.NONE);
 		add.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		add.addSelectionListener(new SelectionAdapter() {
@@ -338,9 +339,9 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		target = value;
-		delegate.display(location, root, value, range);
+		delegate.display(location, root, value, range, dbc);
 		tableViewer.setInput(value);
 		removeAdapter();
 		oldValue = (LegalEntity) value;

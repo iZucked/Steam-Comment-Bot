@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -34,12 +35,12 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 	}
 
 	@Override
-	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
-		return new CargoTopLevelComposite(composite, SWT.NONE, location);
+	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new CargoTopLevelComposite(composite, SWT.NONE, location, toolkit);
 	}
 
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
 		// This is not expected to be called. The CargoTopLevelComposite will create it's own instances directly.
 		throw new UnsupportedOperationException("Unexpected method invocations");
 	}

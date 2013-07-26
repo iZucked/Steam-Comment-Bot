@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.schedule.*;
-import java.lang.Iterable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,6 +39,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -70,7 +69,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 */
 	public static ScheduleFactory init() {
 		try {
-			ScheduleFactory theScheduleFactory = (ScheduleFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/schedule/1/"); 
+			ScheduleFactory theScheduleFactory = (ScheduleFactory)EPackage.Registry.INSTANCE.getEFactory(SchedulePackage.eNS_URI);
 			if (theScheduleFactory != null) {
 				return theScheduleFactory;
 			}
@@ -103,6 +102,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.SCHEDULE: return createSchedule();
 			case SchedulePackage.FITNESS: return createFitness();
 			case SchedulePackage.CARGO_ALLOCATION: return createCargoAllocation();
+			case SchedulePackage.MARKET_ALLOCATION: return createMarketAllocation();
 			case SchedulePackage.SLOT_ALLOCATION: return createSlotAllocation();
 			case SchedulePackage.SEQUENCE: return createSequence();
 			case SchedulePackage.EVENT: return createEvent();
@@ -311,6 +311,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public CargoAllocation createCargoAllocation() {
 		CargoAllocationImpl cargoAllocation = new CargoAllocationImpl();
 		return cargoAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MarketAllocation createMarketAllocation() {
+		MarketAllocationImpl marketAllocation = new MarketAllocationImpl();
+		return marketAllocation;
 	}
 
 	/**

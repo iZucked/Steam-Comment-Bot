@@ -11,12 +11,14 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
@@ -147,8 +149,8 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 				}
 
 				@Override
-				public Control createControl(Composite parent) {
-					return numberEditor.createControl(parent);
+				public Control createControl(Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+					return numberEditor.createControl(parent, dbc, toolkit);
 				}
 
 				@Override

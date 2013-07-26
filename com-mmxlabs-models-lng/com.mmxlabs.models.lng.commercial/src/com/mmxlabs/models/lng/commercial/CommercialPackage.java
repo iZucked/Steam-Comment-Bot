@@ -321,13 +321,23 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -450,6 +460,16 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__PRICE_INFO = CONTRACT__PRICE_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__NOTES = CONTRACT__NOTES;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -611,6 +631,16 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__PRICE_INFO = CONTRACT__PRICE_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__NOTES = CONTRACT__NOTES;
 
 	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
@@ -956,6 +986,18 @@ public interface CommercialPackage extends EPackage {
 	EReference getContract_PriceInfo();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notes</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getNotes()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_Notes();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1257,6 +1299,15 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTRACT__PRICE_INFO = eINSTANCE.getContract_PriceInfo();
+
+		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 5.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__NOTES = eINSTANCE.getContract_Notes();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.

@@ -17,6 +17,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -74,7 +75,19 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_restrictedContractsEditor(detailComposite, topClass);
 		add_restrictedPortsEditor(detailComposite, topClass);
 		add_priceInfoEditor(detailComposite, topClass);
+		add_notesEditor(detailComposite, topClass);
 	}
+	
+	/**
+	 * Create the editor for the notes feature on Contract
+	 * 
+	 * @generated NO
+	 */
+	private void add_notesEditor(IInlineEditorContainer detailComposite,
+			EClass topClass) {
+		detailComposite.addInlineEditor(new MultiTextInlineEditor(CommercialPackage.Literals.CONTRACT__NOTES));
+	}
+
 	/**
 	 * Create the editor for the entity feature on Contract
 	 *

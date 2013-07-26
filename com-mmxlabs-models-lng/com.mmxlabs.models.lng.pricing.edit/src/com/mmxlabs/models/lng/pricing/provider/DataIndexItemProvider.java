@@ -111,10 +111,7 @@ public class DataIndexItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((DataIndex<?>)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_DataIndex_type") :
-			getString("_UI_DataIndex_type") + " " + label;
+		return getString("_UI_DataIndex_type");
 	}
 
 	/**
