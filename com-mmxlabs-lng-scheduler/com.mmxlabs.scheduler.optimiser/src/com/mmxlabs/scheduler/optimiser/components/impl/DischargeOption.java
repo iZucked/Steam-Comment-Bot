@@ -26,20 +26,23 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 
 	private ISalesPriceCalculator priceCalculator;
 
+	private int pricingDate;
+
 	public DischargeOption() {
 		setPortType(PortType.Discharge);
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
-	public DischargeOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator) {
+	public DischargeOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int pricingDate) {
 		super(id, port, timeWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
 		this.priceCalculator = priceCalculator;
 		this.minCvValue = minCvValue;
 		this.maxCvValue = maxCvValue;
+		this.pricingDate = pricingDate;
 	}
 
 	@Override
@@ -103,7 +106,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	/**
 	 * @since 2.0
 	 */
-	public void setMinCvValue(long value) {
+	public void setMinCvValue(final long value) {
 		minCvValue = value;
 	}
 	
@@ -118,8 +121,23 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	/**
 	 * @since 2.0
 	 */
-	public void setMaxCvValue(long value) {
+	public void setMaxCvValue(final long value) {
 		maxCvValue = value;
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public int getPricingDate() {
+		return pricingDate;
+	}
+	
+	/**
+	 * @since 6.0
+	 */
+	public void setPricingDate(final int value) {
+		pricingDate = value;
 	}
 	
 }

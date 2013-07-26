@@ -8,9 +8,20 @@ import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 
 public interface IPortExclusionProvider extends IDataComponentProvider {
+
+	/**
+	 * Get the set of ports which this vessel cannot visit.
+	 * 
+	 * @param vesselClass
+	 * @return
+	 * @since 6.0
+	 */
+	public Set<IPort> getExcludedPorts(IVessel vessel);
+
 	/**
 	 * Get the set of ports which vessels of this class cannot visit.
 	 * 

@@ -20,6 +20,8 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
@@ -54,6 +56,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
@@ -71,6 +74,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
@@ -91,6 +95,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
@@ -272,6 +277,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	private IShortCargoReturnElementProviderEditor shortCargoReturnElementProviderEditor;
 
+	@Inject
+	private IMarkToMarketProviderEditor markToMarketProviderEditor;
+
+	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> desSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> fobSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
+	private final Map<IPort, MarkToMarket> fobPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
 	/**
 	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
 	 * 
@@ -326,9 +338,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0);
 	}
 
+	/**
+	 * @since 6.0
+	 */
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator loadContract,
-			final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, final boolean optional) {
+			final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, int pricingDate, final boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -341,7 +356,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		slot.setCooldownForbidden(cooldownForbidden);
 		slot.setCooldownSet(cooldownSet);
-		final ISequenceElement element = configureLoadOption(slot, id, port, window, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, optional);
+		final ISequenceElement element = configureLoadOption(slot, id, port, window, minVolumeInM3, maxVolumeInM3, loadContract, cargoCVValue, pricingDate, optional);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
 
@@ -349,18 +364,18 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	@Override
 	public ILoadOption createDESPurchaseLoadSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator,
-			final int cargoCVValue, final boolean slotIsOptional) {
+			final int cargoCVValue, final int pricingDate, final boolean slotIsOptional) {
 
 		if (port == null) {
 			port = ANYWHERE;
 		}
 
 		final LoadOption slot = new LoadOption();
-		final ISequenceElement element = configureLoadOption(slot, id, port, window, minVolume, maxVolume, priceCalculator, cargoCVValue, slotIsOptional);
+		final ISequenceElement element = configureLoadOption(slot, id, port, window, minVolume, maxVolume, priceCalculator, cargoCVValue, pricingDate, slotIsOptional);
 
 		unshippedElements.add(element);
 
@@ -370,7 +385,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private ISequenceElement configureLoadOption(final LoadOption slot, final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final ILoadPriceCalculator priceCalculator, final int cargoCVValue, final boolean optional) {
+			final ILoadPriceCalculator priceCalculator, final int cargoCVValue, final int pricingDate, final boolean optional) {
 		slot.setId(id);
 		slot.setPort(port);
 		slot.setTimeWindow(window);
@@ -379,6 +394,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// slot.setPurchasePriceCurve(pricePerMMBTu);
 		slot.setLoadPriceCalculator(priceCalculator);
 		slot.setCargoCVValue(cargoCVValue);
+		slot.setPricingDate(pricingDate);
 
 		loadSlots.add(slot);
 
@@ -407,11 +423,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	@Override
 	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final long minCvValue, final long maxCvValue,
-			final ISalesPriceCalculator priceCalculator, final boolean slotIsOptional) {
+			final ISalesPriceCalculator priceCalculator, int pricingDate, final boolean slotIsOptional) {
 
 		if (port == null) {
 			port = ANYWHERE;
@@ -419,7 +435,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final DischargeOption slot = new DischargeOption();
 
-		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, slotIsOptional);
+		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, pricingDate, slotIsOptional);
 
 		unshippedElements.add(element);
 
@@ -429,7 +445,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private ISequenceElement configureDischargeOption(final DischargeOption slot, final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final boolean optional) {
+			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, int pricingDate, final boolean optional) {
 		slot.setId(id);
 		slot.setPort(port);
 		slot.setTimeWindow(window);
@@ -438,6 +454,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setMinCvValue(minCvValue);
 		slot.setMaxCvValue(maxCvValue);
 		slot.setDischargePriceCalculator(priceCalculator);
+		slot.setPricingDate(pricingDate);
 
 		dischargeSlots.add(slot);
 
@@ -465,11 +482,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final long minCvValue,
-			final long maxCvValue, final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final boolean optional) {
+			final long maxCvValue, final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final int pricingDate, final boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -480,7 +497,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final DischargeSlot slot = new DischargeSlot();
 
-		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolumeInM3, maxVolumeInM3, minCvValue, maxCvValue, pricePerMMBTu, optional);
+		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolumeInM3, maxVolumeInM3, minCvValue, maxCvValue, pricePerMMBTu, pricingDate, optional);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
 
@@ -935,6 +952,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		applyAdjacencyConstraints();
 		applyVesselRestrictionConstraints();
 
+		linkMarkToMarkets();
 		// set the self-self distance to zero for all ports to make sure indexed DCP has seen every element.
 
 		// this is no good, because it makes lots of canal choices happen.
@@ -1001,6 +1019,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.addDataComponentProvider(SchedulerConstants.DCP_dateKeyProvider, dateKeyProviderEditor);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_shortCargoReturnElementProvider, shortCargoReturnElementProviderEditor);
+
+		data.addDataComponentProvider(SchedulerConstants.DCP_markToMarketElementProvider, markToMarketProviderEditor);
 
 		for (final IBuilderExtension extension : extensions) {
 			for (final Pair<String, IDataComponentProvider> provider : extension.createDataComponentProviders(data)) {
@@ -1182,6 +1202,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setVesselClassInaccessiblePorts(final IVesselClass vc, final Set<IPort> inaccessiblePorts) {
 		this.portExclusionProvider.setExcludedPorts(vc, inaccessiblePorts);
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public void setVesselInaccessiblePorts(final IVessel vessel, final Set<IPort> inaccessiblePorts) {
+		this.portExclusionProvider.setExcludedPorts(vessel, inaccessiblePorts);
 	}
 
 	/**
@@ -1578,8 +1606,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
+	/**
+	 * @since 6.0
+	 */
 	@Override
-	public void bindLoadSlotsToFOBSale(final IDischargeOption fobSale, final IPort loadPort) {
+	public void bindLoadSlotsToFOBSale(final IDischargeOption fobSale, final Collection<IPort> loadPorts) {
 
 		final ISequenceElement desElement = portSlotsProvider.getElement(fobSale);
 
@@ -1594,7 +1625,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			if (option instanceof LoadSlot) {
 
-				if (loadPort == option.getPort()) {
+				if (loadPorts.contains(option.getPort())) {
 					// Get current allocation
 
 					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
@@ -1700,4 +1731,89 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portCVProvider.setPortCV(port, cv);
 	}
 
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public IMarkToMarket createDESPurchaseMTM(@NonNull final Set<IPort> marketPorts, final int cargoCVValue, @NonNull final ILoadPriceCalculator priceCalculator) {
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue);
+
+		for (final IPort port : marketPorts) {
+			desPurchaseMTMPortMap.put(port, mtm);
+		}
+		return mtm;
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public IMarkToMarket createFOBSaleMTM(@NonNull final Set<IPort> marketPorts, @NonNull final ISalesPriceCalculator priceCalculator) {
+
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator);
+
+		for (final IPort port : marketPorts) {
+			fobSaleMTMPortMap.put(port, mtm);
+		}
+
+		return mtm;
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator) {
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue);
+
+		for (final IPort port : marketPorts) {
+			fobPurchaseMTMPortMap.put(port, mtm);
+		}
+		return mtm;
+	}
+
+	/**
+	 * @since 6.0
+	 */
+	@Override
+	public IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator) {
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator);
+
+		for (final IPort port : marketPorts) {
+			desSaleMTMPortMap.put(port, mtm);
+		}
+
+		return mtm;
+	}
+
+	private void linkMarkToMarkets() {
+		for (final ISequenceElement element : sequenceElements) {
+			if (element != null) {
+				final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
+				final IPort port = portSlot.getPort();
+
+				if (portSlot instanceof ILoadSlot) {
+					final IMarkToMarket market = fobSaleMTMPortMap.get(port);
+					if (market != null) {
+						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
+					}
+				} else if (portSlot instanceof ILoadOption) {
+					final IMarkToMarket market = desSaleMTMPortMap.get(port);
+					if (market != null) {
+						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
+					}
+				} else if (portSlot instanceof IDischargeSlot) {
+					final IMarkToMarket market = desPurchaseMTMPortMap.get(port);
+					if (market != null) {
+						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
+					}
+				} else if (portSlot instanceof IDischargeOption) {
+					final IMarkToMarket market = fobPurchaseMTMPortMap.get(port);
+					if (market != null) {
+						markToMarketProviderEditor.setMarkToMarketForElement(element, market);
+					}
+				}
+			}
+		}
+	}
 }

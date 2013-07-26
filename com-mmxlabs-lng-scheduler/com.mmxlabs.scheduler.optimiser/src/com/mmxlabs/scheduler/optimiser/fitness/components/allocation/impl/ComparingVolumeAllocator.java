@@ -16,9 +16,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
+ * @since 6.0
  * 
  */
-public abstract class ComparingCargoAllocator implements IVolumeAllocator {
+public abstract class ComparingVolumeAllocator implements IVolumeAllocator {
 //	private final FastCargoAllocator fastAllocator = new FastCargoAllocator();
 //
 //	// private final SimplexCargoAllocator simplexAllocator = new SimplexCargoAllocator();

@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
@@ -27,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
@@ -422,14 +425,16 @@ public interface ISchedulerBuilder {
 	 * @param cargoCVValue
 	 *            Scaled conversion factor to convert from M3 to MMBTU of LNG
 	 * @return
+	 * @since 6.0
 	 */
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet,
-			boolean cooldownForbidden, boolean slotIsOptional);
+			boolean cooldownForbidden, int pricingDate, boolean slotIsOptional);
 
 	/**
-	 * @since 2.0
+	 * @since 6.0
 	 */
-	ILoadOption createDESPurchaseLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, boolean slotIsOptional);
+	ILoadOption createDESPurchaseLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int pricingDate,
+			boolean slotIsOptional);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -444,10 +449,10 @@ public interface ISchedulerBuilder {
 	 * @param price
 	 *            Scaled sales price in $/MMBTu
 	 * @return
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue, ISalesPriceCalculator pricePerMMBTu,
-			int durationHours, boolean optional);
+			int durationHours, int pricingDate, boolean optional);
 
 	/**
 	 * 
@@ -459,10 +464,10 @@ public interface ISchedulerBuilder {
 	 * @param priceCalculator
 	 * @param slotIsOptional
 	 * @return
-	 * @since 2.0
+	 * @since 6.0
 	 */
 	IDischargeOption createFOBSaleDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue, ISalesPriceCalculator priceCalculator,
-			boolean slotIsOptional);
+			int pricingDate, boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
@@ -498,6 +503,21 @@ public interface ISchedulerBuilder {
 	 */
 	IVessel createSpotVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInPrice);
 
+	/**
+	 * Set the list of ports this vessel is not permitted to travel to.
+	 * 
+	 * @param vessel
+	 * @param inaccessiblePorts
+	 * @since 6.0
+	 */
+	void setVesselInaccessiblePorts(IVessel vessel, Set<IPort> inaccessiblePorts);
+
+	/**
+	 * Set the list of ports vessels of this class are not permitted to travel to.
+	 * 
+	 * @param vessel
+	 * @param inaccessiblePorts
+	 */
 	void setVesselClassInaccessiblePorts(IVesselClass vc, Set<IPort> inaccessiblePorts);
 
 	/**
@@ -601,12 +621,13 @@ public interface ISchedulerBuilder {
 	void bindDischargeSlotsToDESPurchase(ILoadOption desPurchase, Collection<IPort> dischargePorts);
 
 	/**
-	 * Permit all real load slots at the given {@link IPort} to be re-wired to the given FOB Sale.
+	 * Permit all real load slots at the given {@link IPort}s to be re-wired to the given FOB Sale.
 	 * 
 	 * @param desPurchase
 	 * @param dischargePorts
+	 * @since 6.0
 	 */
-	void bindLoadSlotsToFOBSale(IDischargeOption fobSale, IPort loadPort);
+	void bindLoadSlotsToFOBSale(IDischargeOption fobSale, Collection<IPort> loadPorts);
 
 	/**
 	 * Place a {@link Collection} of {@link IPortSlot}s into a "count" group - that is a group in which only the count number of elements may be used.
@@ -652,5 +673,35 @@ public interface ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	void setPortCV(IPort port, int convertToInternalConversionFactor);
+
+	/**
+	 * Create a Mark-To-Market market for DES Purchases valid against the given set of {@link IPort}s
+	 * 
+	 * @since 6.0
+	 */
+	IMarkToMarket createDESPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator);
+
+	/**
+	 * Create a Mark-To-Market market for FOB sales valid against the given set of {@link IPort}s
+	 * 
+	 * @since 6.0
+	 */
+	IMarkToMarket createFOBSaleMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
+
+	/**
+	 * Create a Mark-To-Market market for FOB Purchases valid against the given set of {@link IPort}s
+	 * 
+	 * @param cargoCVValue
+	 * 
+	 * @since 6.0
+	 */
+	IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator);
+
+	/**
+	 * Create a Mark-To-Market market for DES sales valid against the given set of {@link IPort}s
+	 * 
+	 * @since 6.0
+	 */
+	IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
 
 }

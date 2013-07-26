@@ -32,9 +32,11 @@ public final class PortDetails implements IProfitAndLossDetails, Cloneable {
 
 	}
 
-	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final LongFastEnumMap<CapacityViolationType> capacityViolations, long totalGroupProfitAndLoss) {
+	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final EnumMap<FuelComponent, Integer> fuelPrice,
+			final LongFastEnumMap<CapacityViolationType> capacityViolations, final long totalGroupProfitAndLoss) {
 		this.options = options;
 		this.fuelConsumption.putAll(fuelConsumption);
+		this.fuelPrice.putAll(fuelPrice);
 		this.capacityViolations.putAll(capacityViolations);
 		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
 	}
@@ -105,6 +107,7 @@ public final class PortDetails implements IProfitAndLossDetails, Cloneable {
 			return Objects.equal(totalGroupProfitAndLoss, d.totalGroupProfitAndLoss)
 				&& Objects.equal(fuelConsumption, d.fuelConsumption)
 				&& Objects.equal(capacityViolations, d.capacityViolations)
+				&& Objects.equal(fuelPrice, d.fuelPrice)
 				&& Objects.equal(options, d.options)
 						;
 			// @formatter:on
@@ -132,7 +135,7 @@ public final class PortDetails implements IProfitAndLossDetails, Cloneable {
 
 	@Override
 	public PortDetails clone() {
-		return new PortDetails(new PortOptions(options), fuelConsumption, capacityViolations, totalGroupProfitAndLoss);
+		return new PortDetails(new PortOptions(options), fuelConsumption, fuelPrice, capacityViolations, totalGroupProfitAndLoss);
 	}
 
 	@Override

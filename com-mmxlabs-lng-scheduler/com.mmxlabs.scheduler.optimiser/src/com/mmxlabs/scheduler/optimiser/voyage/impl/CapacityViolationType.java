@@ -34,7 +34,7 @@ public enum CapacityViolationType {
 	/**
 	 * A cooldown has been forced where a cooldown is not permitted
 	 */
-	FORCED_COOLDOWN("Cooldown forced"), 
+	FORCED_COOLDOWN("Cooldown forced"),
 	/**
 	 * The voyage consumption exceeds available heel volume
 	 */
@@ -42,8 +42,8 @@ public enum CapacityViolationType {
 
 	private final String displayName;
 
-	private CapacityViolationType(String dispalyName) {
-		this.displayName = dispalyName;
+	private CapacityViolationType(final String displayName) {
+		this.displayName = displayName;
 	}
 
 	/**

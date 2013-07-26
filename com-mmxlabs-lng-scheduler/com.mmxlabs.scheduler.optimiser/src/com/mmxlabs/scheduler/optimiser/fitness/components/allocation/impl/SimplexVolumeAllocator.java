@@ -9,9 +9,10 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
  * A cargo allocator which uses the simplex algorithm.
  * 
  * @author hinton
+ * @since 6.0
  * 
  */
-public class SimplexCargoAllocator {// extends BaseCargoAllocator {
+public class SimplexVolumeAllocator {// extends BaseCargoAllocator {
 // final LinearOptimizer optimizer = new SimplexSolver();
 // {
 // optimizer.setMaxIterations(1000);

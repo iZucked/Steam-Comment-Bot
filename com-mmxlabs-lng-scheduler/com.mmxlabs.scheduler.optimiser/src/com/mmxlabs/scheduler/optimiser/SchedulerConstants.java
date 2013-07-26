@@ -98,4 +98,8 @@ public final class SchedulerConstants {
 	 * @since 5.0
 	 */
 	public static final String DCP_shipToShipElementProvider = "provider-ship-to-ship";
+	/**
+	 * @since 6.0
+	 */
+	public static final String DCP_markToMarketElementProvider = "provider-mark-to-market";
 }
