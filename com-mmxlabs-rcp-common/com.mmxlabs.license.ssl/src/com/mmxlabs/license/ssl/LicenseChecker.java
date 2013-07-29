@@ -17,6 +17,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
+import java.util.Enumeration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ import com.mmxlabs.license.ssl.internal.Activator;
 public final class LicenseChecker {
 
 	private static final Logger log = LoggerFactory.getLogger(LicenseChecker.class);
-	
+
 	/**
 	 * @since 4.0
 	 */
@@ -43,6 +44,9 @@ public final class LicenseChecker {
 	private static final String password = "Lok3pDTS";
 
 	// private static final char[] password = new char[] { '1', '2', '3', '4', '5', '6' };
+
+	private static String CACERTS_PATH = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security" + File.separatorChar + "cacerts"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
+	private static String CACERTS_TYPE = "JKS"; //$NON-NLS-1$
 
 	/**
 	 * @since 4.0
@@ -87,6 +91,43 @@ public final class LicenseChecker {
 
 			// Verify license is signed by the server
 			licenseCertificate.verify(rootCertificate.getPublicKey());
+
+			// Load in existing certificates from default store. We replace the default store with our own, so make sure other bits of the app using a truststore still work.
+			{
+				String defaultStorePath = System.getProperty("javax.net.ssl.trustStore");
+				if (defaultStorePath == null) {
+					defaultStorePath = CACERTS_PATH;
+				}
+				String defaultStoreType = System.getProperty("javax.net.ssl.trustStoreType");
+				if (defaultStoreType == null) {
+					defaultStoreType = CACERTS_TYPE;
+				}
+
+				final String defaultStorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
+				final char[] pass = defaultStorePassword == null ? null : defaultStorePassword.toCharArray();
+
+				final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
+				FileInputStream fis = null;
+				try {
+					fis = new FileInputStream(defaultStorePath);
+					defaultStore.load(fis, pass);
+					final Enumeration<String> enumerator = defaultStore.aliases();
+					while (enumerator.hasMoreElements()) {
+						final String alias = enumerator.nextElement();
+						keyStore.setCertificateEntry(alias, defaultStore.getCertificate(alias));
+					}
+				} catch (final IOException e) {
+					log.error(e.getMessage(), e);
+				} finally {
+					if (fis != null) {
+						try {
+							fis.close();
+						} catch (final IOException e) {
+							// Ignore
+						}
+					}
+				}
+			}
 
 			// Check dates are valid. We expect a X509 certificate
 			if (licenseCertificate instanceof X509Certificate) {
