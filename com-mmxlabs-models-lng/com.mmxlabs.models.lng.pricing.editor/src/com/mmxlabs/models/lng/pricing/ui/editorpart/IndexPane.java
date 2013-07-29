@@ -110,7 +110,11 @@ public class IndexPane extends ScenarioTableViewerPane {
 		AddDateToIndexAction addDateAction = new AddDateToIndexAction(this);
 		getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, addDateAction);
 		getToolBarManager().update(true);
-
+		
+		if (addAction instanceof MenuAddAction) {
+			
+		}
+		
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
 			public String render(final Object object) {
