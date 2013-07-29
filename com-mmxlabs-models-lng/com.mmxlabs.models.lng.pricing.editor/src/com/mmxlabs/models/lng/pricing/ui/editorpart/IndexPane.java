@@ -299,6 +299,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 							final int columnCount = grid.getColumnCount();
 							for (int i = columnCount - 1; i > 1; i--) {
 								final GridColumn column = grid.getColumn(i);
+								getSortingSupport().removeSortableColumn(column);
 								column.dispose();
 							}
 							final Calendar c = Calendar.getInstance();
