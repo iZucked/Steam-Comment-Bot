@@ -4,15 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import java.util.Map;
-
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton

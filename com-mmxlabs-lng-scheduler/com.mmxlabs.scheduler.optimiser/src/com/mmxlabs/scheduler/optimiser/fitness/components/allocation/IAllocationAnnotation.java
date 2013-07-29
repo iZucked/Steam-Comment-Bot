@@ -40,7 +40,7 @@ public interface IAllocationAnnotation {
 	 * Returns the quantity of LNG in m3 that has been discharged.
 	 * 
 	 * @return
-	 * @since 5.0
+	 * @since 6.0
 	 */
 	long getSlotVolumeInM3(IPortSlot slot);
 	
