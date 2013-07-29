@@ -125,7 +125,7 @@ public class PortCostPane extends ScenarioTableViewerPane {
 		}
 
 		@Override
-		public Comparable getComparable(Object object) {
+		public Comparable<?> getComparable(Object object) {
 			return render(object);
 		}
 
