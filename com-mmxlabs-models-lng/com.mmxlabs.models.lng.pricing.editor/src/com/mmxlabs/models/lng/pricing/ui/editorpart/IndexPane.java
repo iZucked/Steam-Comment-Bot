@@ -60,6 +60,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.DialogFeatureManipulator;
+import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 
 public class IndexPane extends ScenarioTableViewerPane {
 
@@ -111,7 +112,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 		getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, addDateAction);
 		getToolBarManager().update(true);
 		
-		if (addAction instanceof MenuAddAction) {
+		if (addAction instanceof AbstractMenuAction) {
+			AbstractMenuAction ama = (AbstractMenuAction) addAction;
 			
 		}
 		
