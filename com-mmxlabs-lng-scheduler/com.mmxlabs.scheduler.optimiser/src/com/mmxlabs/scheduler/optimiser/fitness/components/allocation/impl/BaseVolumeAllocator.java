@@ -51,7 +51,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 */
 	static final class AllocationRecord {
 		/** The LNG volume which the vessel starts with (the start heel) */
-		final long startVolumeInM3 = 0;
+		final long startVolumeInM3;
 		
 		/** The capacity of the vessel carrying the cargo */		
 		final long vesselCapacityInM3;
@@ -74,9 +74,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final VoyagePlan voyagePlan;
 		
-		public AllocationRecord(long capacity, long forced, long heel, int [] prices, IPortSlot [] slots, int [] times, VoyagePlan plan) {
+		public AllocationRecord(long capacity, long forced, long start, long heel, IPortSlot [] slots, int [] prices, int [] times, VoyagePlan plan) {
 			vesselCapacityInM3 = capacity;
 			requiredFuelVolumeInM3 = forced;
+			startVolumeInM3 = start;
 			minEndVolumeInM3 = heel;
 			slotPricesPerM3 = prices;			
 			slotTimes = times;
@@ -118,6 +119,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			}
 			
 			return annotation;		
+		}
+		
+		public AllocationRecord(IPortSlot [] slots, int [] prices, int [] times, VoyagePlan plan) {
+			this(Long.MAX_VALUE, 0l, 0l, 0l, slots, prices, times, plan);
 		}
 	}
 	
@@ -486,7 +491,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
 		final int [] times = { loadTime, dischargeTime };
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, prices, slots, times, plan));
+		final long startHeel = constraints.isEmpty() ? 0 : constraints.get(constraints.size()-1).minEndVolumeInM3;
+		//final long startHeel = 0;
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, heelRequired, slots, prices, times, plan));
 		
 		cargoCount++;
 	}
@@ -545,7 +552,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
 		final int [] times = { time, time };
 		
-		constraints.add(new AllocationRecord(Long.MAX_VALUE, 0l, 0l, prices, slots, times, plan));
+		constraints.add(new AllocationRecord(slots, prices, times, plan));
 
 		cargoCount++;
 	}
@@ -561,8 +568,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int [] slotTimes = new int [slots.length];
 		
 		for (int i = 0; i < slots.length; i++) {
-			//slots[i] = portDetails[i].getOptions().getPortSlot();
-			//slotTimes.put(slots[i], times[i]);
 			slotTimes[i] = times[i];
 		}
 
@@ -611,7 +616,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			pricesPerM3[0] = loadPricePerM3;
 		}
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, heelRequired, pricesPerM3, slots, slotTimes, plan));
+		final long startHeel = constraints.isEmpty() ? 0 : constraints.get(constraints.size()-1).minEndVolumeInM3;
+		//final long startHeel = 0;
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, heelRequired, slots, pricesPerM3, slotTimes, plan));
 		cargoCount++;
 	}
 
