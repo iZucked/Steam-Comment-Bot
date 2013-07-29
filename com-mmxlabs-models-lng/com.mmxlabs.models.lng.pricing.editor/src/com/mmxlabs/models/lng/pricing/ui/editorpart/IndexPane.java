@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.ui.actions.AddDateToIndexAction;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -64,6 +65,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	private static final Date dateZero = new Date(0);
 	private List<EReference> path = null;
+	private Date minDisplayDate = null;
+	private Date maxDisplayDate = null;	
 
 	private boolean useIntegers;
 
@@ -77,11 +80,36 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	private SeriesParser seriesParser = null;
 
+	/**
+	 * Ensures that a given date is visible in the editor column range, as long as the editor is open.
+	 * 
+	 * @param date
+	 */
+	public void selectDateColumn(Date date) {
+		if (date == null) {
+			return;
+		}
+		
+		if (minDisplayDate == null || minDisplayDate.after(date)) {
+			minDisplayDate = date;
+		}
+		
+		if (maxDisplayDate == null || maxDisplayDate.before(date)) {
+			maxDisplayDate = date;
+		}				
+		
+		((IndexTableViewer) viewer).redisplayDateRange(date);
+	}
+	
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
 
 		this.path = path;
+		
+		AddDateToIndexAction addDateAction = new AddDateToIndexAction(this);
+		getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, addDateAction);
+		getToolBarManager().update(true);
 
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
@@ -155,7 +183,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		}
 
 		@Override
-		public Comparable getComparable(final Object object) {
+		public Comparable<?> getComparable(final Object object) {
 			return pick(object).getComparable(object);
 		}
 
@@ -228,404 +256,414 @@ public class IndexPane extends ScenarioTableViewerPane {
 		return seriesParser;
 
 	}
+	
+	protected class IndexTableViewer extends ScenarioTableViewer {
 
-	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		final ScenarioTableViewer result = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
-			@Override
-			protected void internalRefresh(final Object element) {
-				final Object input = getInput();
-				if (input instanceof PricingModel) {
-					final PricingModel pricingModel = (PricingModel) input;
-					seriesParser = createSeriesParser(pricingModel);
+		public IndexTableViewer(Composite parent, int style,
+				IScenarioEditingLocation part) {
+			super(parent, style, part);
+		}
+		
+		@Override
+		protected void internalRefresh(final Object element) {
+			final Object input = getInput();
+			if (input instanceof PricingModel) {
+				final PricingModel pricingModel = (PricingModel) input;
+				seriesParser = createSeriesParser(pricingModel);
+			}
+			super.internalRefresh(element);
+		}
+
+		@Override
+		protected void internalRefresh(final Object element, final boolean updateLabels) {
+			final Object input = getInput();
+			if (input instanceof PricingModel) {
+				final PricingModel pricingModel = (PricingModel) input;
+				seriesParser = createSeriesParser(pricingModel);
+			}
+			super.internalRefresh(element, updateLabels);
+		}
+		
+		protected void redisplayDateRange(Date selected) {
+			if (minDisplayDate != null && maxDisplayDate != null) {
+				final Grid grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+				final int columnCount = grid.getColumnCount();
+				for (int i = columnCount - 1; i > 1; i--) {
+					final GridColumn column = grid.getColumn(i);
+					column.dispose();
 				}
-				super.internalRefresh(element);
+				final Calendar c = Calendar.getInstance();
+				c.setTime(minDisplayDate);
+				c.set(Calendar.MILLISECOND, 0);
+				c.set(Calendar.SECOND, 0);
+				c.set(Calendar.MINUTE, 0);
+				c.set(Calendar.HOUR, 0);
+				c.set(Calendar.DAY_OF_MONTH, 1);
+
+				while (!c.getTime().after(maxDisplayDate)) {
+					addColumn(c, true, useIntegers);
+					c.add(Calendar.MONTH, 1);
+				}
 			}
 
-			@Override
-			protected void internalRefresh(final Object element, final boolean updateLabels) {
-				final Object input = getInput();
-				if (input instanceof PricingModel) {
-					final PricingModel pricingModel = (PricingModel) input;
-					seriesParser = createSeriesParser(pricingModel);
-				}
-				super.internalRefresh(element, updateLabels);
-			}
+			viewer.refresh();			
+		}
 
-			@Override
-			protected void inputChanged(final Object input, final Object oldInput) {
-				super.inputChanged(input, oldInput);
+		@Override
+		protected void inputChanged(final Object input, final Object oldInput) {
+			super.inputChanged(input, oldInput);
 
-				if (input instanceof PricingModel) {
-					final PricingModel pricingModel = (PricingModel) input;
-					seriesParser = createSeriesParser(pricingModel);
+			if (input instanceof PricingModel) {
+				final PricingModel pricingModel = (PricingModel) input;
+				seriesParser = createSeriesParser(pricingModel);
 
-					Object obj = pricingModel;
-					for (final EReference ref : path) {
-						obj = ((EObject) obj).eGet(ref);
-					}
-
-					if (obj instanceof List) {
-						final List<EObject> indexObjects = (List<EObject>) obj;
-
-						Date minDate = null;
-						Date maxDate = null;
-
-						for (final EObject indexObject : indexObjects) {
-
-							if (!indexObject.eIsSet(indexFeature)) {
-								continue;
-							}
-
-							final Index<?> idx = (Index<?>) indexObject.eGet(indexFeature);
-							if (!(idx instanceof DataIndex<?>)) {
-								continue;
-							}
-
-							for (final Date d : idx.getDates()) {
-								if (minDate == null || minDate.after(d)) {
-									minDate = d;
-								}
-								if (maxDate == null || maxDate.before(d)) {
-									maxDate = d;
-								}
-							}
-						}
-
-						if (minDate != null && maxDate != null) {
-							final Grid grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
-							final int columnCount = grid.getColumnCount();
-							for (int i = columnCount - 1; i > 1; i--) {
-								final GridColumn column = grid.getColumn(i);
-								column.dispose();
-							}
-							final Calendar c = Calendar.getInstance();
-							c.setTime(minDate);
-							c.set(Calendar.MILLISECOND, 0);
-							c.set(Calendar.SECOND, 0);
-							c.set(Calendar.MINUTE, 0);
-							c.set(Calendar.HOUR, 0);
-							c.set(Calendar.DAY_OF_MONTH, 1);
-
-							while (!c.getTime().after(maxDate)) {
-								addColumn(c, true, useIntegers);
-								c.add(Calendar.MONTH, 1);
-							}
-							addColumn(c, true, useIntegers);
-						}
-
-						viewer.refresh();
-					}
+				Object obj = pricingModel;
+				for (final EReference ref : path) {
+					obj = ((EObject) obj).eGet(ref);
 				}
 
-			}
+				if (obj instanceof List) {
+					final List<EObject> indexObjects = (List<EObject>) obj;
 
-			@Override
-			protected void doCommandStackChanged() {
-				inputChanged(getInput(), getInput());
-				super.doCommandStackChanged();
-			}
+					for (final EObject indexObject : indexObjects) {
 
-			private void addColumn(final Calendar cal, final boolean sortable, final boolean isIntegerBased) {
-
-				final String date = String.format("%4d-%02d", cal.get(Calendar.YEAR), (cal.get(Calendar.MONTH) + 1));
-				final GridViewerColumn col = addSimpleColumn(date, sortable);
-				col.getColumn().setData("date", cal.getTime());
-
-				final ICellRenderer renderer = new ICellRenderer() {
-
-					@Override
-					public String render(final Object object) {
-						return object.toString();
-					}
-
-					@Override
-					public Object getFilterValue(final Object object) {
-						return null;
-					}
-
-					@Override
-					public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
-						return null;
-					}
-
-					@Override
-					public Comparable getComparable(Object element) {
-
-						// Unwrap index from owner
-						String name = null;
-						if (element instanceof NamedObject) {
-							final NamedObject namedObject = (NamedObject) element;
-							name = namedObject.getName();
+						if (!indexObject.eIsSet(indexFeature)) {
+							continue;
 						}
 
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eIsSet(indexFeature)) {
-								element = eObject.eGet(indexFeature);
+						final Index<?> idx = (Index<?>) indexObject.eGet(indexFeature);
+						if (!(idx instanceof DataIndex<?>)) {
+							continue;
+						}
+
+						for (final Date d : idx.getDates()) {
+							if (minDisplayDate == null || minDisplayDate.after(d)) {
+								minDisplayDate = d;
+							}
+							if (maxDisplayDate == null || maxDisplayDate.before(d)) {
+								maxDisplayDate = d;
 							}
 						}
+					}
+					
+					redisplayDateRange(null);
 
-						if (element instanceof DataIndex) {
-							final DataIndex<?> idx = (DataIndex<?>) element;
-							final Date colDate = (Date) col.getColumn().getData("date");
-							final Object valueAfter = idx.getValueForMonth(colDate);
+				}
+			}
+
+		}
+
+		@Override
+		protected void doCommandStackChanged() {
+			inputChanged(getInput(), getInput());
+			super.doCommandStackChanged();
+		}
+
+		private void addColumn(final Calendar cal, final boolean sortable, final boolean isIntegerBased) {
+
+			final String date = String.format("%4d-%02d", cal.get(Calendar.YEAR), (cal.get(Calendar.MONTH) + 1));
+			final GridViewerColumn col = addSimpleColumn(date, sortable);
+			col.getColumn().setData("date", cal.getTime());
+
+			final ICellRenderer renderer = new ICellRenderer() {
+
+				@Override
+				public String render(final Object object) {
+					return object.toString();
+				}
+
+				@Override
+				public Object getFilterValue(final Object object) {
+					return null;
+				}
+
+				@Override
+				public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(Object element) {
+
+					// Unwrap index from owner
+					String name = null;
+					if (element instanceof NamedObject) {
+						final NamedObject namedObject = (NamedObject) element;
+						name = namedObject.getName();
+					}
+
+					if (element instanceof EObject) {
+						final EObject eObject = (EObject) element;
+						if (eObject.eIsSet(indexFeature)) {
+							element = eObject.eGet(indexFeature);
+						}
+					}
+
+					if (element instanceof DataIndex) {
+						final DataIndex<?> idx = (DataIndex<?>) element;
+						final Date colDate = (Date) col.getColumn().getData("date");
+						final Object valueAfter = idx.getValueForMonth(colDate);
+						if (valueAfter instanceof Integer) {
+							//return (Integer) valueAfter;
+							return new Double((Integer) valueAfter);
+						} else if (valueAfter instanceof Double) {
+							return (Double) valueAfter;
+						}
+					} else if (element instanceof DerivedIndex) {
+						final Date colDate = (Date) col.getColumn().getData("date");
+						try {
+							final ISeries series = seriesParser.getSeries(name);
+							final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+							// final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter instanceof Integer) {
 								//return (Integer) valueAfter;
 								return new Double((Integer) valueAfter);
 							} else if (valueAfter instanceof Double) {
 								return (Double) valueAfter;
 							}
-						} else if (element instanceof DerivedIndex) {
-							final Date colDate = (Date) col.getColumn().getData("date");
-							try {
-								final ISeries series = seriesParser.getSeries(name);
-								final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
-								// final Object valueAfter = idx.getValueForMonth(colDate);
-								if (valueAfter instanceof Integer) {
-									//return (Integer) valueAfter;
-									return new Double((Integer) valueAfter);
-								} else if (valueAfter instanceof Double) {
-									return (Double) valueAfter;
-								}
-							} catch (Exception e) {
+						} catch (Exception e) {
 
-							}
 						}
-
-						return null;
 					}
-				};
 
-				col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
-				final ICellManipulator manipulator = new ICellManipulator() {
+					return null;
+				}
+			};
 
-					@SuppressWarnings("unchecked")
-					@Override
-					public void setValue(Object element, final Object value) {
-						// Unwrap index from owner
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eIsSet(indexFeature)) {
-								element = eObject.eGet(indexFeature);
-							}
+			col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
+			final ICellManipulator manipulator = new ICellManipulator() {
+
+				@SuppressWarnings("unchecked")
+				@Override
+				public void setValue(Object element, final Object value) {
+					// Unwrap index from owner
+					if (element instanceof EObject) {
+						final EObject eObject = (EObject) element;
+						if (eObject.eIsSet(indexFeature)) {
+							element = eObject.eGet(indexFeature);
 						}
-						if (element instanceof DataIndex) {
-							final Date colDate = (Date) col.getColumn().getData("date");
+					}
+					if (element instanceof DataIndex) {
+						final Date colDate = (Date) col.getColumn().getData("date");
 
-							if (isIntegerBased) {
-								setIndexPoint((Integer) value, (DataIndex<Integer>) element, colDate);
+						if (isIntegerBased) {
+							setIndexPoint((Integer) value, (DataIndex<Integer>) element, colDate);
 
+						} else {
+
+							setIndexPoint((Double) value, (DataIndex<Double>) element, colDate);
+						}
+					}
+				}
+
+				@SuppressWarnings({ "deprecation" })
+				private <T> void setIndexPoint(final T value, final DataIndex<T> di, final Date colDate) {
+
+					for (final IndexPoint<T> p : di.getPoints()) {
+						if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonth() == colDate.getMonth()) {
+
+							final Command cmd;
+							if (value == null) {
+								cmd = RemoveCommand.create(getEditingDomain(), p);
 							} else {
-
-								setIndexPoint((Double) value, (DataIndex<Double>) element, colDate);
+								cmd = SetCommand.create(getEditingDomain(), p, PricingPackage.eINSTANCE.getIndexPoint_Value(), value);
 							}
-						}
-					}
-
-					@SuppressWarnings({ "deprecation" })
-					private <T> void setIndexPoint(final T value, final DataIndex<T> di, final Date colDate) {
-
-						for (final IndexPoint<T> p : di.getPoints()) {
-							if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonth() == colDate.getMonth()) {
-
-								final Command cmd;
-								if (value == null) {
-									cmd = RemoveCommand.create(getEditingDomain(), p);
-								} else {
-									cmd = SetCommand.create(getEditingDomain(), p, PricingPackage.eINSTANCE.getIndexPoint_Value(), value);
-								}
-								if (!cmd.canExecute()) {
-									throw new RuntimeException("Unable to execute index set command");
-								}
-								getEditingDomain().getCommandStack().execute(cmd);
-
-								return;
-							}
-						}
-						if (value != null) {
-							final IndexPoint<T> p = PricingFactory.eINSTANCE.createIndexPoint();
-							p.setDate(colDate);
-							p.setValue(value);
-							final Command cmd = AddCommand.create(getEditingDomain(), di, PricingPackage.eINSTANCE.getDataIndex_Points(), p);
 							if (!cmd.canExecute()) {
-								throw new RuntimeException("Unable to execute index add command");
+								throw new RuntimeException("Unable to execute index set command");
 							}
 							getEditingDomain().getCommandStack().execute(cmd);
+
+							return;
 						}
 					}
+					if (value != null) {
+						final IndexPoint<T> p = PricingFactory.eINSTANCE.createIndexPoint();
+						p.setDate(colDate);
+						p.setValue(value);
+						final Command cmd = AddCommand.create(getEditingDomain(), di, PricingPackage.eINSTANCE.getDataIndex_Points(), p);
+						if (!cmd.canExecute()) {
+							throw new RuntimeException("Unable to execute index add command");
+						}
+						getEditingDomain().getCommandStack().execute(cmd);
+					}
+				}
 
-					@Override
-					public Object getValue(Object element) {
-						String name = null;
-						if (element instanceof NamedObject) {
-							final NamedObject namedObject = (NamedObject) element;
-							name = namedObject.getName();
+				@Override
+				public Object getValue(Object element) {
+					String name = null;
+					if (element instanceof NamedObject) {
+						final NamedObject namedObject = (NamedObject) element;
+						name = namedObject.getName();
+					}
+					// Unwrap index from owner
+					if (element instanceof EObject) {
+						final EObject eObject = (EObject) element;
+						if (eObject.eIsSet(indexFeature)) {
+							element = eObject.eGet(indexFeature);
 						}
-						// Unwrap index from owner
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eIsSet(indexFeature)) {
-								element = eObject.eGet(indexFeature);
-							}
+					}
+					if (element instanceof DataIndex) {
+						final DataIndex<?> idx = (DataIndex<?>) element;
+						final Date colDate = (Date) col.getColumn().getData("date");
+						final Object valueAfter = idx.getValueForMonth(colDate);
+						if (valueAfter instanceof Integer) {
+							return (Integer) valueAfter;
+						} else if (valueAfter instanceof Double) {
+							return (Double) valueAfter;
 						}
-						if (element instanceof DataIndex) {
-							final DataIndex<?> idx = (DataIndex<?>) element;
-							final Date colDate = (Date) col.getColumn().getData("date");
-							final Object valueAfter = idx.getValueForMonth(colDate);
+					} else if (element instanceof DerivedIndex) {
+						final DerivedIndex<?> idx = (DerivedIndex<?>) element;
+						final Date colDate = (Date) col.getColumn().getData("date");
+
+						try {
+							final ISeries series = seriesParser.getSeries(name);
+							final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+							// final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter instanceof Integer) {
 								return (Integer) valueAfter;
 							} else if (valueAfter instanceof Double) {
 								return (Double) valueAfter;
 							}
-						} else if (element instanceof DerivedIndex) {
-							final DerivedIndex<?> idx = (DerivedIndex<?>) element;
-							final Date colDate = (Date) col.getColumn().getData("date");
+						} catch (Exception e) {
+						}
+					}
 
+					return null;
+				}
+
+				@Override
+				public CellEditor getCellEditor(final Composite parent, final Object object) {
+
+					final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
+					final NumberFormatter formatter;
+					if (isIntegerBased) {
+						formatter = new IntegerFormatter("#,###.###");
+					} else {
+						formatter = new DoubleFormatter("#,###.###");
+					}
+
+					formatter.setFixedLengths(false, false);
+
+					result.setFormatter(formatter);
+
+					return result;
+				}
+
+				@Override
+				public boolean canEdit(Object element) {
+
+					// Unwrap index from owner
+					if (element instanceof EObject) {
+						final EObject eObject = (EObject) element;
+						if (eObject.eIsSet(indexFeature)) {
+							element = eObject.eGet(indexFeature);
+						}
+					}
+
+					return (element instanceof DataIndex<?>);
+				}
+			};
+			col.getColumn().setData(EObjectTableViewer.COLUMN_MANIPULATOR, manipulator);
+
+			col.setEditingSupport(new EditingSupport((ColumnViewer) viewer) {
+				@Override
+				protected boolean canEdit(final Object element) {
+					return (lockedForEditing == false) && (manipulator != null) && manipulator.canEdit(element);
+				}
+
+				@Override
+				protected CellEditor getCellEditor(final Object element) {
+					return manipulator.getCellEditor(((GridTableViewer) viewer).getGrid(), element);
+				}
+
+				@Override
+				protected Object getValue(final Object element) {
+					return manipulator.getValue(element);
+				}
+
+				@Override
+				protected void setValue(final Object element, final Object value) {
+					// a value has come out of the celleditor and is being set on
+					// the element.
+					if (lockedForEditing) {
+						return;
+					}
+					manipulator.setValue(element, value);
+					refresh();
+				}
+			});
+			col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
+
+				@Override
+				public Color getForeground(Object element) {
+					// Unwrap index from owner
+					if (element instanceof EObject) {
+						final EObject eObject = (EObject) element;
+						if (eObject.eIsSet(indexFeature)) {
+							element = eObject.eGet(indexFeature);
+						}
+					}
+					if (element instanceof DerivedIndex<?>) {
+						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+					}
+					return super.getForeground(element);
+				}
+
+				@Override
+				public String getText(Object element) {
+
+					String name = null;
+					if (element instanceof NamedObject) {
+						final NamedObject namedObject = (NamedObject) element;
+						name = namedObject.getName();
+					}
+
+					// Unwrap index from owner
+					if (element instanceof EObject) {
+						final EObject eObject = (EObject) element;
+						if (eObject.eIsSet(indexFeature)) {
+							element = eObject.eGet(indexFeature);
+						}
+					}
+					if (element instanceof DataIndex) {
+						final DataIndex<?> idx = (DataIndex<?>) element;
+						final Date colDate = (Date) col.getColumn().getData("date");
+						final Object valueAfter = idx.getValueForMonth(colDate);
+						if (valueAfter != null) {
+							if (valueAfter instanceof Integer) {
+								return String.format("%d", valueAfter);
+							} else {
+								return String.format("%01.3f", valueAfter);
+							}
+						}
+					} else if (element instanceof DerivedIndex) {
+						final Date colDate = (Date) col.getColumn().getData("date");
+						if (name != null && !name.isEmpty()) {
 							try {
 								final ISeries series = seriesParser.getSeries(name);
 								final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
 								// final Object valueAfter = idx.getValueForMonth(colDate);
-								if (valueAfter instanceof Integer) {
-									return (Integer) valueAfter;
-								} else if (valueAfter instanceof Double) {
-									return (Double) valueAfter;
+								if (valueAfter != null) {
+									if (valueAfter instanceof Integer) {
+										return String.format("%d", valueAfter);
+									} else {
+										return String.format("%01.3f", valueAfter);
+									}
 								}
 							} catch (Exception e) {
+								// Ignore
 							}
 						}
-
-						return null;
 					}
+					return null;
+				}
+			});
+		}
+	}
+	
 
-					@Override
-					public CellEditor getCellEditor(final Composite parent, final Object object) {
-
-						final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
-						final NumberFormatter formatter;
-						if (isIntegerBased) {
-							formatter = new IntegerFormatter("#,###.###");
-						} else {
-							formatter = new DoubleFormatter("#,###.###");
-						}
-
-						formatter.setFixedLengths(false, false);
-
-						result.setFormatter(formatter);
-
-						return result;
-					}
-
-					@Override
-					public boolean canEdit(Object element) {
-
-						// Unwrap index from owner
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eIsSet(indexFeature)) {
-								element = eObject.eGet(indexFeature);
-							}
-						}
-
-						return (element instanceof DataIndex<?>);
-					}
-				};
-				col.getColumn().setData(EObjectTableViewer.COLUMN_MANIPULATOR, manipulator);
-
-				col.setEditingSupport(new EditingSupport((ColumnViewer) viewer) {
-					@Override
-					protected boolean canEdit(final Object element) {
-						return (lockedForEditing == false) && (manipulator != null) && manipulator.canEdit(element);
-					}
-
-					@Override
-					protected CellEditor getCellEditor(final Object element) {
-						return manipulator.getCellEditor(((GridTableViewer) viewer).getGrid(), element);
-					}
-
-					@Override
-					protected Object getValue(final Object element) {
-						return manipulator.getValue(element);
-					}
-
-					@Override
-					protected void setValue(final Object element, final Object value) {
-						// a value has come out of the celleditor and is being set on
-						// the element.
-						if (lockedForEditing) {
-							return;
-						}
-						manipulator.setValue(element, value);
-						refresh();
-					}
-				});
-				col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
-
-					@Override
-					public Color getForeground(Object element) {
-						// Unwrap index from owner
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eIsSet(indexFeature)) {
-								element = eObject.eGet(indexFeature);
-							}
-						}
-						if (element instanceof DerivedIndex<?>) {
-							return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-						}
-						return super.getForeground(element);
-					}
-
-					@Override
-					public String getText(Object element) {
-
-						String name = null;
-						if (element instanceof NamedObject) {
-							final NamedObject namedObject = (NamedObject) element;
-							name = namedObject.getName();
-						}
-
-						// Unwrap index from owner
-						if (element instanceof EObject) {
-							final EObject eObject = (EObject) element;
-							if (eObject.eIsSet(indexFeature)) {
-								element = eObject.eGet(indexFeature);
-							}
-						}
-						if (element instanceof DataIndex) {
-							final DataIndex<?> idx = (DataIndex<?>) element;
-							final Date colDate = (Date) col.getColumn().getData("date");
-							final Object valueAfter = idx.getValueForMonth(colDate);
-							if (valueAfter != null) {
-								if (valueAfter instanceof Integer) {
-									return String.format("%d", valueAfter);
-								} else {
-									return String.format("%01.3f", valueAfter);
-								}
-							}
-						} else if (element instanceof DerivedIndex) {
-							final Date colDate = (Date) col.getColumn().getData("date");
-							if (name != null && !name.isEmpty()) {
-								try {
-									final ISeries series = seriesParser.getSeries(name);
-									final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
-									// final Object valueAfter = idx.getValueForMonth(colDate);
-									if (valueAfter != null) {
-										if (valueAfter instanceof Integer) {
-											return String.format("%d", valueAfter);
-										} else {
-											return String.format("%01.3f", valueAfter);
-										}
-									}
-								} catch (Exception e) {
-									// Ignore
-								}
-							}
-						}
-						return null;
-					}
-				});
-			}
-		};
+	protected ScenarioTableViewer constructViewer(final Composite parent) {
+		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
 		return result;
 	}
 
