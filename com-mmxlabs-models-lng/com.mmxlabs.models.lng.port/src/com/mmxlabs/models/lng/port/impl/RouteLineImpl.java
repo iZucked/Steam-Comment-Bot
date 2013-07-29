@@ -311,7 +311,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * @generated NOT
 	 */
 	public int getFullDistance() {
-		if (getVia() != null) {
+		if (!getVias().isEmpty()) {
 			// Be careful of circular references!
 			int distance = 0;
 			for (final RouteLine rl : getVias()) {
