@@ -17,9 +17,11 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
@@ -49,10 +51,14 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.ui.actions.AddDateToIndexAction;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -103,19 +109,17 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 	
 	@Override
+	protected Action createAddAction(final EReference containment) {
+		Action [] actions = new Action [] { new AddDateToIndexAction(this) }; 
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), actions);		
+	}
+	
+	
+	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
 
 		this.path = path;
-		
-		AddDateToIndexAction addDateAction = new AddDateToIndexAction(this);
-		getToolBarManager().appendToGroup(ADD_REMOVE_GROUP, addDateAction);
-		getToolBarManager().update(true);
-		
-		if (addAction instanceof AbstractMenuAction) {
-			AbstractMenuAction ama = (AbstractMenuAction) addAction;
-			
-		}
 		
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override

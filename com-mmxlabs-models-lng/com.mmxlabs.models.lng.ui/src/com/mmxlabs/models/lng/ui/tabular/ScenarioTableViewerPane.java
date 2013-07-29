@@ -337,7 +337,12 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 	
 	protected Action createAddAction(final EReference containment) {
-		return AddModelAction.create(containment.getEReferenceType(), new IAddContext() {
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment));
+		
+	}
+	
+	protected IAddContext getAddContext(final EReference containment) {
+		return new IAddContext() {
 			@Override
 			public MMXRootObject getRootObject() {
 				return scenarioEditingLocation.getRootObject();
@@ -367,8 +372,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			public ISelection getCurrentSelection() {
 				return viewer.getSelection();
 			}
-		});
-		
+		};		
 	}
 
 	/**

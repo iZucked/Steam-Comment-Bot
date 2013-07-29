@@ -65,6 +65,16 @@ public final class AddModelAction {
 		else
 			return new MenuAddAction(factories, context);
 	}
+	
+	public final static Action create(final EClass eClass, final IAddContext context, Action [] additionalActions) {
+		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(eClass);
+
+		if (factories.isEmpty())
+			return null;
+		else
+			return new MenuAddAction(factories, context, additionalActions);
+		
+	}
 }
 
 class SingleAddAction extends LockableAction {
@@ -133,18 +143,28 @@ class SingleAddAction extends LockableAction {
 class MenuAddAction extends AbstractMenuAction {
 	private final List<IModelFactory> factories;
 	private final IAddContext context;
+	private final Action [] additionalActions;
 
 	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context) {
+		this (factories, context, new Action[0]);
+	}
+
+	public MenuAddAction(List<IModelFactory> factories, IAddContext context,
+			Action[] additionalActions) {
 		super("Create new element");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		this.context = context;
 		this.factories = factories;
+		this.additionalActions = additionalActions;
 	}
 
 	@Override
 	protected void populate(final Menu menu) {
 		for (final IModelFactory factory : factories) {
 			addActionToMenu(new SingleAddAction(factory, context), menu);
+		}
+		for (Action action: additionalActions) {
+			addActionToMenu(action, menu);
 		}
 	}
 }
