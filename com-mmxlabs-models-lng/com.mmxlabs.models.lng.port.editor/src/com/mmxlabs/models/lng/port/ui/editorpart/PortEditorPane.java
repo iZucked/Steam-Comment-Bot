@@ -65,6 +65,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -88,7 +89,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getJointModelEditorPart().getEditingDomain()));
 		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE, getJointModelEditorPart().getEditingDomain()));
-		addTypicalColumn("Other Names", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(), getEditingDomain()));
+		addTypicalColumn("Other Names", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(),
+				getEditingDomain())));
 
 		// addTypicalColumn("Timezone", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_TimeZone(), getJointModelEditorPart().getEditingDomain()));
 		// addTypicalColumn("Port Code", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_PortCode(), getJointModelEditorPart().getEditingDomain()));
