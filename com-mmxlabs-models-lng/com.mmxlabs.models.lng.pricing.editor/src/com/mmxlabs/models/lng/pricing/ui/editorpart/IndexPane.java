@@ -372,7 +372,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 							final Date colDate = (Date) col.getColumn().getData("date");
 							final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter instanceof Integer) {
-								return (Integer) valueAfter;
+								//return (Integer) valueAfter;
+								return new Double((Integer) valueAfter);
 							} else if (valueAfter instanceof Double) {
 								return (Double) valueAfter;
 							}
@@ -383,7 +384,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 								final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
 								// final Object valueAfter = idx.getValueForMonth(colDate);
 								if (valueAfter instanceof Integer) {
-									return (Integer) valueAfter;
+									//return (Integer) valueAfter;
+									return new Double((Integer) valueAfter);
 								} else if (valueAfter instanceof Double) {
 									return (Double) valueAfter;
 								}
