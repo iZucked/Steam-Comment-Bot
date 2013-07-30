@@ -45,7 +45,6 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 	@Override
 	public void createPartControl(final Composite parent) {
 		childComposite = createChildControl(parent);
-		listenToScenarioSelection();
 
 		final IActionBars actionBars = getViewSite().getActionBars();
 
@@ -57,6 +56,10 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 		redoAction = new RedoAction();
 		redoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
+
+		updateActions(null);
+
+		listenToScenarioSelection();
 	}
 
 	protected Composite createChildControl(final Composite parent) {
@@ -65,6 +68,8 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
+		updateActions(null);
+
 		if (instance != getScenarioInstance()) {
 			for (final ScenarioTableViewerPane pane : viewerPanes) {
 				if (pane != null) {
@@ -92,6 +97,8 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 
 			}
 			parent.layout(true);
+			updateActions(getEditingDomain());
+
 		}
 	}
 
@@ -108,7 +115,15 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 				panes.get(i).getViewer().setInput(getRootObject());
 			}
 		}
+	}
 
+	private void updateActions(EditingDomain editingDomain) {
+
+		undoAction.setEditingDomain(editingDomain);
+		redoAction.setEditingDomain(editingDomain);
+
+		undoAction.setEnabled(editingDomain != null);
+		redoAction.setEnabled(editingDomain != null);
 	}
 
 	@Override
@@ -116,6 +131,8 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 		if (childComposite != null) {
 			childComposite.setFocus();
 		}
+		updateActions(getEditingDomain());
+
 	}
 
 	@Override
@@ -124,8 +141,15 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 			if (pane != null) {
 				pane.setLocked(locked);
 			}
-
 		}
+
+		// Disable while locked.
+		if (locked) {
+			updateActions(null);
+		} else {
+			updateActions(getEditingDomain());
+		}
+
 		super.setLocked(locked);
 	}
 
