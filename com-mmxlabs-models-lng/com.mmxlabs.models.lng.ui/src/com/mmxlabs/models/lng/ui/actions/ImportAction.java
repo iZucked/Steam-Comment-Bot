@@ -8,7 +8,6 @@
  */
 package com.mmxlabs.models.lng.ui.actions;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -189,16 +188,18 @@ public abstract class ImportAction extends LockableAction {
 		final Set<String> updatedObjectNames = new HashSet<String>(existingNamedObjects.keySet());
 		updatedObjectNames.retainAll(newNamedObjects.keySet());
 
-		final List<EObject> deletedObjects = new ArrayList<EObject>();
+		// Use Set command as named object map could contain duplicates if the object has multiple names
+		final Set<EObject> deletedObjects = new HashSet<EObject>();
 		for (final String name : updatedObjectNames) {
 			final EObject oldObject = existingNamedObjects.get(name);
 			final EObject newObject = newNamedObjects.get(name);
 
-			// update references to point from old object to new object
-			setter.append(replace(domain, oldObject, newObject, importHooksProvider.getRootObject()));
-			// add new object
+			// Mark object for removal
+			if (deletedObjects.add(oldObject)) {
+				// update references to point from old object to new object - only if we have not already seen this object
+				setter.append(replace(domain, oldObject, newObject, importHooksProvider.getRootObject()));
+			}
 
-			deletedObjects.add(oldObject);
 		}
 
 		merge.append(setter);
