@@ -357,6 +357,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 					
 					redisplayDateRange(null);
+								getSortingSupport().removeSortableColumn(column);
 
 				}
 			}
