@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.ui.views;
 
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.jface.action.ToolBarManager;
@@ -35,7 +36,6 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	@Override
 	public void createPartControl(final Composite parent) {
 		this.childComposite = new Composite(parent, SWT.NONE);
-		listenToScenarioSelection();
 
 		final IActionBars actionBars = getViewSite().getActionBars();
 
@@ -47,6 +47,10 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		redoAction = new RedoAction();
 		redoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
+
+		updateActions(null);
+
+		listenToScenarioSelection();
 	}
 
 	protected abstract T createViewerPane();
@@ -55,6 +59,9 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
+
+		// Clear existing settings
+		updateActions(null);
 		if (instance != getScenarioInstance()) {
 			if (viewerPane != null) {
 				getSite().setSelectionProvider(null);
@@ -76,7 +83,19 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 				initViewerPane(viewerPane);
 			}
 			parent.layout(true);
+
+			// re-enable!
+			updateActions(getEditingDomain());
 		}
+	}
+
+	private void updateActions(EditingDomain editingDomain) {
+
+		undoAction.setEditingDomain(editingDomain);
+		redoAction.setEditingDomain(editingDomain);
+
+		undoAction.setEnabled(editingDomain != null);
+		redoAction.setEnabled(editingDomain != null);
 	}
 
 	@Override
@@ -86,6 +105,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		} else if (childComposite != null) {
 			childComposite.setFocus();
 		}
+		updateActions(getEditingDomain());
 	}
 
 	@Override
@@ -93,6 +113,14 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		if (viewerPane != null) {
 			viewerPane.setLocked(locked);
 		}
+
+		// Disable while locked.
+		if (locked) {
+			updateActions(null);
+		} else {
+			updateActions(getEditingDomain());
+		}
+
 		super.setLocked(locked);
 	}
 
