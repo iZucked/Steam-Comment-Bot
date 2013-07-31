@@ -6,65 +6,51 @@ package com.mmxlabs.scenario.service.dirscan;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
 import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.emf.query.conditions.eobjects.structuralfeatures.EObjectAttributeValueCondition;
-import org.eclipse.emf.query.statements.FROM;
-import org.eclipse.emf.query.statements.IQueryResult;
-import org.eclipse.emf.query.statements.SELECT;
-import org.eclipse.emf.query.statements.WHERE;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.IServiceModelTracker;
-import com.mmxlabs.scenario.service.ScenarioServiceIOHelper;
+import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
-public class DirScanScenarioService implements IScenarioService {
+public class DirScanScenarioService extends AbstractScenarioService {
 
 	private static final Logger log = LoggerFactory.getLogger(DirScanScenarioService.class);
 
 	private ScenarioService scenarioService;
 
-	private ScenarioServiceIOHelper ioHelper;
+	private File dataPath;
 
-	private IPath dataPath;
+	private String serviceName;
 
-	public DirScanScenarioService() {
-	}
+	private EContentAdapter serviceModelAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(org.eclipse.emf.common.notify.Notification notification) {
 
-	@Override
-	public String getName() {
-		return "Dir Scan Scenario Service";
-	}
+			super.notifyChanged(notification);
 
-	@Override
-	public ScenarioService getServiceModel() {
-		return scenarioService;
+			// TODO: Process changes and replicate on FileSystem
+
+		}
+
+	};
+
+	public DirScanScenarioService(String name) {
+		super(name);
 	}
 
 	public void start(final ComponentContext context) {
@@ -72,13 +58,14 @@ public class DirScanScenarioService implements IScenarioService {
 		final Dictionary<?, ?> d = context.getProperties();
 
 		final String scenarioServiceID = d.get("component.id").toString();
+		final String path = d.get("path").toString();
+		serviceName = d.get("serviceName").toString();
 
-		dataPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().append("/data/");
+		dataPath = new File(path);
 
 		scenarioService = initialise();
 
-		ioHelper = new ScenarioServiceIOHelper(scenarioService, dataPath);
-
+		// initFileWatcher(dataPath);
 		scanForScenarios(scenarioServiceID);
 	}
 
@@ -95,121 +82,27 @@ public class DirScanScenarioService implements IScenarioService {
 		return serviceService;
 	}
 
-	@Override
-	public InputStream createInputStream(final String uuid, final Map<?, ?> options) throws IOException {
-
-		return ioHelper.createInputStream(uuid, options);
-	}
-
-	@Override
-	public OutputStream createOutputStream(final String uuid, final Map<?, ?> options) throws IOException {
-
-		return ioHelper.createOutputStream(uuid, options);
-	}
-
-	@Override
-	public boolean exists(final String uuid, final Map<?, ?> options) {
-
-		return ioHelper.exists(uuid, options);
-	}
-
-	@Override
-	public void delete(final String uuid, final Map<?, ?> options) {
-
-		ioHelper.delete(uuid, options);
-	}
-
-	@Override
-	public EObject getScenario(final String uuid) {
-		final ScenarioInstance findInstance = ioHelper.findInstance(uuid);
-
-		if (findInstance.getInstance() == null) {
-			try {
-				final EObject scenario = ioHelper.loadScenario(uuid, Collections.EMPTY_MAP);
-
-				Map<Class<?>, Object> adapters = findInstance.getAdapters();
-				if (adapters == null) {
-					adapters = new HashMap<Class<?>, Object>();
-					findInstance.setAdapters(adapters);
-				}
-				final EditingDomain ed = initEditingDomain();
-				adapters.put(EditingDomain.class, ed);
-				ed.getResourceSet().getResources().add(scenario.eResource());
-
-				findInstance.setInstance(scenario);
-
-				final IServiceModelTracker tracker = (IServiceModelTracker) Platform.getAdapterManager().loadAdapter(scenario, IServiceModelTracker.class.getCanonicalName());
-				if (tracker != null) {
-					tracker.setScenarioInstance(findInstance);
-				}
-			} catch (final IOException e) {
-				log.error(e.getMessage(), e);
-			}
-		}
-		return findInstance.getInstance();
-	}
-
-	@Override
-	public ScenarioInstance getScenarioInstance(final String uuid) {
-		return ioHelper.findInstance(uuid);
-	}
-
-	@Override
-	public <T> T getAdapter(final String uuid, final Class<T> adapter) {
-
-		if (EditingDomain.class.isAssignableFrom(adapter)) {
-			final ScenarioInstance instance = ioHelper.findInstance(uuid);
-
-			final Map<Class<?>, Object> adapters = instance.getAdapters();
-			if (adapters != null && adapters.containsKey(adapter)) {
-				return adapter.cast(adapters.get(adapter));
-			}
-		}
-		return null;
-	}
-
-	public EditingDomain initEditingDomain() {
-		final BasicCommandStack commandStack = new BasicCommandStack();
-
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-
-		// Create the editing domain with a special command stack.
-		//
-		return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
-	}
-
 	public void scanForScenarios(final String scenarioServiceID) {
 
-		final File dataDir = dataPath.toFile();
-		scanForScenarios(scenarioServiceID, scenarioService, dataDir);
+		scanForScenarios(scenarioServiceID, scenarioService, dataPath);
 	}
 
 	public void scanForScenarios(final String scenarioServiceID, final Container container, final File dataDir) {
 		if (dataDir.isDirectory() || dataDir.exists()) {
 			for (final File f : dataDir.listFiles()) {
 				if (f.isFile()) {
-					final String uuid = f.getName();
-
-					// See if file exists in scenario
-					final SELECT query = new SELECT(1, new FROM(scenarioService), new WHERE(new EObjectAttributeValueCondition(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid(),
-							new org.eclipse.emf.query.conditions.strings.StringValue(uuid))));
-					final IQueryResult queryResult = query.execute();
-
-					if (queryResult.isEmpty()) {
+					Manifest manifest = loadManifest(f);
+					if (manifest != null) {
 						final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-						scenarioInstance.setUuid(uuid);
+						scenarioInstance.setUuid(manifest.getUUID());
+						URI fileURI = URI.createFileURI(f.getAbsolutePath());
+						scenarioInstance.setRootObjectURI("archive://" + fileURI.toString() + "/!rootObject.xmi");
 						scenarioInstance.setName(f.getName());
-
-						scenarioInstance.setUri("service://" + scenarioServiceID + "/" + uuid);
-
-						final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-						// TODO: Set correct content type
-						metadata.setContentType("text/xmi");
-						scenarioInstance.setMetadata(metadata);
-
+						scenarioInstance.setVersionContext(manifest.getVersionContext());
+						scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
+						final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
+						scenarioInstance.setMetadata(meta);
+						meta.setContentType(manifest.getScenarioType());
 						container.getElements().add(scenarioInstance);
 					}
 				} else if (f.isDirectory()) {
@@ -222,5 +115,54 @@ public class DirScanScenarioService implements IScenarioService {
 				}
 			}
 		}
+	}
+
+	@Override
+	public ScenarioInstance insert(Container container, EObject rootObject) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void delete(Container container) {
+
+	}
+
+	@Override
+	protected ScenarioService initServiceModel() {
+
+		ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
+		serviceModel.setName(serviceName);
+
+		return serviceModel;
+	}
+
+	@Override
+	public URI resolveURI(String uri) {
+		return URI.createURI(uri);
+	}
+
+	private Manifest loadManifest(File scenario) {
+		final URI fileURI = URI.createFileURI(scenario.toString());
+
+		final URI manifestURI = URI.createURI("archive:" + fileURI.toString() + "!/MANIFEST.xmi");
+		final ResourceSetImpl resourceSet = new ResourceSetImpl();
+
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+
+		final Resource resource = resourceSet.createResource(manifestURI);
+		try {
+			resource.load(null);
+			if (resource.getContents().size() == 1) {
+				final EObject top = resource.getContents().get(0);
+				if (top instanceof Manifest) {
+					return (Manifest) top;
+				}
+			}
+		} catch (Exception e) {
+			// Unable to parse file for some reason
+			log.error("Unable to find manifest for " + scenario, e);
+		}
+		return null;
 	}
 }

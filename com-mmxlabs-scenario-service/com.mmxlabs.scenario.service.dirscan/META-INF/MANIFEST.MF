@@ -10,7 +10,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.core.resources;bundle-version="3.7.100",
  org.eclipse.osgi.services;bundle-version="3.3.0",
  org.eclipse.emf.query;bundle-version="1.2.100",
- com.mmxlabs.scenario.service.model.edit;bundle-version="[4.0.0,5.0.0)"
+ com.mmxlabs.scenario.service.model.edit;bundle-version="[4.0.0,5.0.0)",
+ com.mmxlabs.scenario.service.util;bundle-version="[4.0.0,5.0.0)",
+ com.mmxlabs.scenario.service.manifest;bundle-version="[4.0.0,5.0.0)",
+ org.eclipse.emf.ecore.xmi;bundle-version="2.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*
