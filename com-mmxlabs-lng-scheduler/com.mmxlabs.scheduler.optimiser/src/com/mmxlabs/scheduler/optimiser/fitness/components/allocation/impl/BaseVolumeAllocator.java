@@ -568,6 +568,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int [] slotTimes = new int [slots.length];
 		
 		for (int i = 0; i < slots.length; i++) {
+			slots[i] = portDetails[i].getOptions().getPortSlot();
 			slotTimes[i] = times[i];
 		}
 
