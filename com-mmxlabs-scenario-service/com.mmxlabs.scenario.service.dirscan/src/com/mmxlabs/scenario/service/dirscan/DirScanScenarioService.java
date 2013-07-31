@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,15 +33,13 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	private static final Logger log = LoggerFactory.getLogger(DirScanScenarioService.class);
 
-	private ScenarioService scenarioService;
-
 	private File dataPath;
 
 	private String serviceName;
 
-	private EContentAdapter serviceModelAdapter = new EContentAdapter() {
+	private final EContentAdapter serviceModelAdapter = new EContentAdapter() {
 		@Override
-		public void notifyChanged(org.eclipse.emf.common.notify.Notification notification) {
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 
 			super.notifyChanged(notification);
 
@@ -49,54 +49,29 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	};
 
-	public DirScanScenarioService(String name) {
+	public DirScanScenarioService(final String name) {
 		super(name);
-	}
-
-	public void start(final ComponentContext context) {
-
-		final Dictionary<?, ?> d = context.getProperties();
-
-		final String scenarioServiceID = d.get("component.id").toString();
-		final String path = d.get("path").toString();
-		serviceName = d.get("serviceName").toString();
-
-		dataPath = new File(path);
-
-		scenarioService = initialise();
-
-		// initFileWatcher(dataPath);
-		scanForScenarios(scenarioServiceID);
-	}
-
-	public void stop(final ComponentContext context) {
-		scenarioService = null;
-	}
-
-	private ScenarioService initialise() {
-
-		final ScenarioService serviceService = ScenarioServiceFactory.eINSTANCE.createScenarioService();
-		serviceService.setName(getName());
-		serviceService.setDescription("DirScan scenario service");
-
-		return serviceService;
 	}
 
 	public void scanForScenarios(final String scenarioServiceID) {
 
-		scanForScenarios(scenarioServiceID, scenarioService, dataPath);
+		scanForScenarios(scenarioServiceID, getServiceModel(), dataPath);
 	}
 
 	public void scanForScenarios(final String scenarioServiceID, final Container container, final File dataDir) {
 		if (dataDir.isDirectory() || dataDir.exists()) {
 			for (final File f : dataDir.listFiles()) {
 				if (f.isFile()) {
-					Manifest manifest = loadManifest(f);
+
+					// TODO: Check file extensions
+					// String ext = f
+
+					final Manifest manifest = loadManifest(f);
 					if (manifest != null) {
 						final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 						scenarioInstance.setUuid(manifest.getUUID());
-						URI fileURI = URI.createFileURI(f.getAbsolutePath());
-						scenarioInstance.setRootObjectURI("archive://" + fileURI.toString() + "/!rootObject.xmi");
+						final URI fileURI = URI.createFileURI(f.getAbsolutePath());
+						scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
 						scenarioInstance.setName(f.getName());
 						scenarioInstance.setVersionContext(manifest.getVersionContext());
 						scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
@@ -118,31 +93,32 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public ScenarioInstance insert(Container container, EObject rootObject) throws IOException {
+	public ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void delete(Container container) {
+	public void delete(final Container container) {
 
 	}
 
 	@Override
 	protected ScenarioService initServiceModel() {
 
-		ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
+		final ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
 		serviceModel.setName(serviceName);
+		serviceModel.setDescription("DirScan scenario service");
 
 		return serviceModel;
 	}
 
 	@Override
-	public URI resolveURI(String uri) {
+	public URI resolveURI(final String uri) {
 		return URI.createURI(uri);
 	}
 
-	private Manifest loadManifest(File scenario) {
+	private Manifest loadManifest(final File scenario) {
 		final URI fileURI = URI.createFileURI(scenario.toString());
 
 		final URI manifestURI = URI.createURI("archive:" + fileURI.toString() + "!/MANIFEST.xmi");
@@ -159,10 +135,23 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					return (Manifest) top;
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// Unable to parse file for some reason
 			log.error("Unable to find manifest for " + scenario, e);
 		}
 		return null;
+	}
+
+	public void updated(final Dictionary<?, ?> d) {
+
+		// stop(context);
+		// TODO Auto-generated method stub
+		final String scenarioServiceID = d.get("component.id").toString();
+		final String path = d.get("path").toString();
+		serviceName = d.get("serviceName").toString();
+
+		dataPath = new File(path);
+		// initFileWatcher(dataPath);
+		scanForScenarios(scenarioServiceID);
 	}
 }
