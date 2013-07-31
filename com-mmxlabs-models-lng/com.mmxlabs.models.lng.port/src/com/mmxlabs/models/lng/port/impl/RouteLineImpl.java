@@ -27,7 +27,6 @@ import java.util.Collection;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getDistance <em>Distance</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getVia <em>Via</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getVias <em>Vias</em>}</li>
  * </ul>
  * </p>
@@ -74,27 +73,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * @ordered
 	 */
 	protected int distance = DISTANCE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getVia() <em>Via</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @see #getVia()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port via;
-
-	/**
-	 * This is true if the Via reference has been set.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean viaESet;
 
 	/**
 	 * The cached value of the '{@link #getVias() <em>Vias</em>}' reference list.
@@ -229,74 +207,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port getVia() {
-		if (via != null && via.eIsProxy()) {
-			InternalEObject oldVia = (InternalEObject)via;
-			via = (Port)eResolveProxy(oldVia);
-			if (via != oldVia) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PortPackage.ROUTE_LINE__VIA, oldVia, via));
-			}
-		}
-		return via;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port basicGetVia() {
-		return via;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVia(Port newVia) {
-		Port oldVia = via;
-		via = newVia;
-		boolean oldViaESet = viaESet;
-		viaESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.ROUTE_LINE__VIA, oldVia, via, !oldViaESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetVia() {
-		Port oldVia = via;
-		boolean oldViaESet = viaESet;
-		via = null;
-		viaESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, PortPackage.ROUTE_LINE__VIA, oldVia, null, oldViaESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetVia() {
-		return viaESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<RouteLine> getVias() {
 		if (vias == null) {
 			vias = new EObjectResolvingEList<RouteLine>(RouteLine.class, this, PortPackage.ROUTE_LINE__VIAS);
@@ -338,9 +248,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 				return basicGetTo();
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				return getDistance();
-			case PortPackage.ROUTE_LINE__VIA:
-				if (resolve) return getVia();
-				return basicGetVia();
 			case PortPackage.ROUTE_LINE__VIAS:
 				return getVias();
 		}
@@ -364,9 +271,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 				return;
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				setDistance((Integer)newValue);
-				return;
-			case PortPackage.ROUTE_LINE__VIA:
-				setVia((Port)newValue);
 				return;
 			case PortPackage.ROUTE_LINE__VIAS:
 				getVias().clear();
@@ -393,9 +297,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				setDistance(DISTANCE_EDEFAULT);
 				return;
-			case PortPackage.ROUTE_LINE__VIA:
-				unsetVia();
-				return;
 			case PortPackage.ROUTE_LINE__VIAS:
 				getVias().clear();
 				return;
@@ -417,8 +318,6 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 				return to != null;
 			case PortPackage.ROUTE_LINE__DISTANCE:
 				return distance != DISTANCE_EDEFAULT;
-			case PortPackage.ROUTE_LINE__VIA:
-				return isSetVia();
 			case PortPackage.ROUTE_LINE__VIAS:
 				return vias != null && !vias.isEmpty();
 		}

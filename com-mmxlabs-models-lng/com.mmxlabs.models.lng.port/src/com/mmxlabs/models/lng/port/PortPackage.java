@@ -391,16 +391,6 @@ public interface PortPackage extends EPackage {
 	int ROUTE_LINE__DISTANCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Via</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROUTE_LINE__VIA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>Vias</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -408,7 +398,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_LINE__VIAS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int ROUTE_LINE__VIAS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Route Line</em>' class.
@@ -417,7 +407,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int ROUTE_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 
 	/**
@@ -835,18 +825,6 @@ public interface PortPackage extends EPackage {
 	EAttribute getRouteLine_Distance();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.port.RouteLine#getVia <em>Via</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Via</em>'.
-	 * @see com.mmxlabs.models.lng.port.RouteLine#getVia()
-	 * @see #getRouteLine()
-	 * @generated
-	 */
-	EReference getRouteLine_Via();
-
-	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.port.RouteLine#getVias <em>Vias</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -1183,15 +1161,6 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROUTE_LINE__DISTANCE = eINSTANCE.getRouteLine_Distance();
-
-		/**
-		 * The meta object literal for the '<em><b>Via</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 5.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ROUTE_LINE__VIA = eINSTANCE.getRouteLine_Via();
 
 		/**
 		 * The meta object literal for the '<em><b>Vias</b></em>' reference list feature.

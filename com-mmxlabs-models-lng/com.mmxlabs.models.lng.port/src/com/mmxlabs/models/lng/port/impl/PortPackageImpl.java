@@ -349,18 +349,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getRouteLine_Via() {
-		return (EReference)routeLineEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getRouteLine_Vias() {
-		return (EReference)routeLineEClass.getEStructuralFeatures().get(4);
+		return (EReference)routeLineEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -515,7 +505,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(routeLineEClass, ROUTE_LINE__FROM);
 		createEReference(routeLineEClass, ROUTE_LINE__TO);
 		createEAttribute(routeLineEClass, ROUTE_LINE__DISTANCE);
-		createEReference(routeLineEClass, ROUTE_LINE__VIA);
 		createEReference(routeLineEClass, ROUTE_LINE__VIAS);
 
 		portModelEClass = createEClass(PORT_MODEL);
@@ -613,7 +602,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getRouteLine_From(), this.getPort(), null, "from", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRouteLine_To(), this.getPort(), null, "to", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRouteLine_Distance(), ecorePackage.getEInt(), "distance", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getRouteLine_Via(), this.getPort(), null, "via", null, 1, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRouteLine_Vias(), this.getRouteLine(), null, "vias", null, 0, -1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(routeLineEClass, ecorePackage.getEInt(), "getFullDistance", 0, 1, IS_UNIQUE, IS_ORDERED);

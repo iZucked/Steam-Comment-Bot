@@ -19,10 +19,17 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -102,7 +109,6 @@ public class RouteLineComponentHelper extends BaseComponentHelper {
 		add_fromEditor(detailComposite, topClass);
 		add_toEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
-		add_viaEditor(detailComposite, topClass);
 		add_viasEditor(detailComposite, topClass);
 	}
 	/**
@@ -128,15 +134,6 @@ public class RouteLineComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_distanceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE_LINE__DISTANCE));
-	}
-
-	/**
-	 * Create the editor for the via feature on RouteLine
-	 *
-	 * @generated
-	 */
-	protected void add_viaEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.ROUTE_LINE__VIA));
 	}
 
 	/**
