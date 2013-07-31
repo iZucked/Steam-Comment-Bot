@@ -1,4 +1,4 @@
-package com.mmxlabs.scenario.service.dirscan;
+package com.mmxlabs.scenario.service.dirscan.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
