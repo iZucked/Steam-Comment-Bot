@@ -115,6 +115,9 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	 */
 	protected Action deleteAction;
 	
+	/**
+	 * @since 5.0
+	 */
 	protected Action addAction;
 
 	private final ISelectionListener selectionListener = new ISelectionListener() {
@@ -332,15 +335,24 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	protected void defaultSetTitle(final String string) {
 		setTitle(string, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 	
+	/**
+	 * @since 5.0
+	 */
 	protected Action createAddAction(final EReference containment) {
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment));
 		
 	}
 	
+	/**
+	 * @since 5.0
+	 */
 	protected IAddContext getAddContext(final EReference containment) {
 		return new IAddContext() {
 			@Override

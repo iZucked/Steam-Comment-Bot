@@ -66,6 +66,9 @@ public final class AddModelAction {
 			return new MenuAddAction(factories, context);
 	}
 	
+	/**
+	 * @since 5.0
+	 */
 	public final static Action create(final EClass eClass, final IAddContext context, Action [] additionalActions) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(eClass);
 
