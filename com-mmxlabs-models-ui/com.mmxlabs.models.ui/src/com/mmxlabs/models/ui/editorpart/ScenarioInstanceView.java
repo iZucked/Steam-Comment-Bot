@@ -225,6 +225,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public EditingDomain getEditingDomain() {
+		if (scenarioInstance == null) {
+			return null;
+		}
+		
 		final Map<Class<?>, Object> adapters = scenarioInstance.getAdapters();
 		if (adapters != null) {
 			return (EditingDomain) adapters.get(EditingDomain.class);
