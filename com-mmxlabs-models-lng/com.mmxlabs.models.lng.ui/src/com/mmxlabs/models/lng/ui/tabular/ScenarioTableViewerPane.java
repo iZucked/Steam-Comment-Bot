@@ -114,6 +114,8 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	 * @since 2.0
 	 */
 	protected Action deleteAction;
+	
+	protected Action addAction;
 
 	private final ISelectionListener selectionListener = new ISelectionListener() {
 
@@ -333,34 +335,14 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected void defaultSetTitle(final String string) {
 		setTitle(string, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
-
-	/**
-	 * @since 3.1
-	 */
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
-		scenarioViewer.init(adapterFactory, commandStack, path.toArray(new EReference[path.size()]));
-
-		scenarioViewer.setStatusProvider(getJointModelEditorPart().getStatusProvider());
-
-		final Grid table = scenarioViewer.getGrid();
-
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		// set up toolbars
-		final ToolBarManager toolbar = getToolBarManager();
-		toolbar.add(new GroupMarker(EDIT_GROUP));
-		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
-		toolbar.add(new GroupMarker(VIEW_GROUP));
-		toolbar.appendToGroup(VIEW_GROUP, new PackGridTableColumnsAction(scenarioViewer));
-
-		final ActionContributionItem filter = filterField.getContribution();
-
-		toolbar.appendToGroup(VIEW_GROUP, filter);
-
-		final EReference containment = path.get(path.size() - 1);
-
-		final Action addAction = AddModelAction.create(containment.getEReferenceType(), new IAddContext() {
+	
+	protected Action createAddAction(final EReference containment) {
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment));
+		
+	}
+	
+	protected IAddContext getAddContext(final EReference containment) {
+		return new IAddContext() {
 			@Override
 			public MMXRootObject getRootObject() {
 				return scenarioEditingLocation.getRootObject();
@@ -390,7 +372,36 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			public ISelection getCurrentSelection() {
 				return viewer.getSelection();
 			}
-		});
+		};		
+	}
+
+	/**
+	 * @since 3.1
+	 */
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		scenarioViewer.init(adapterFactory, commandStack, path.toArray(new EReference[path.size()]));
+
+		scenarioViewer.setStatusProvider(getJointModelEditorPart().getStatusProvider());
+
+		final Grid table = scenarioViewer.getGrid();
+
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+
+		// set up toolbars
+		final ToolBarManager toolbar = getToolBarManager();
+		toolbar.add(new GroupMarker(EDIT_GROUP));
+		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
+		toolbar.add(new GroupMarker(VIEW_GROUP));
+		toolbar.appendToGroup(VIEW_GROUP, new PackGridTableColumnsAction(scenarioViewer));
+
+		final ActionContributionItem filter = filterField.getContribution();
+
+		toolbar.appendToGroup(VIEW_GROUP, filter);
+
+		final EReference containment = path.get(path.size() - 1);
+
+		addAction = createAddAction(containment);
 
 		if (addAction != null) {
 			// if we can't add one, we can't duplicate one either.
