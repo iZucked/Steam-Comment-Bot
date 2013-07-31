@@ -117,16 +117,6 @@ public class DistanceLineViewer extends GridTableViewer {
 			}
 		});
 
-		// final GridViewerColumn fromColumn = new GridViewerColumn(this,
-		// SWT.NONE);
-		// fromColumn.setLabelProvider(new ColumnLabelProvider() {
-		// @Override
-		// public String getText(Object element) {
-		// return ((Pair<Port, Map<Port, DistanceLine>>) element)
-		// .getFirst().getName();
-		// }
-		// });
-
 		final ArrayList<Port> ports = new ArrayList<Port>();
 		final PortModel portModel = scenario.getPortModel();
 		ports.addAll(portModel.getPorts());
@@ -154,17 +144,6 @@ public class DistanceLineViewer extends GridTableViewer {
 						return "";
 					}
 				}
-
-				// @Override
-				// public void update(final ViewerCell cell) {
-				// super.update(cell);
-				//
-				// final Pair<Port, Map<Port, DistanceLine>> e = (Pair<Port, Map<Port, DistanceLine>>) cell.getElement();
-				// cell.getControl().setToolTipText("Distance from "
-				// +e.getFirst().getName() + " to " + e.getSecond().get(p) + "\n" +
-				//
-				// cell.getControl().getToolTipText());
-				// }
 			});
 
 			toColumn.setEditingSupport(new EditingSupport(this) {
@@ -250,11 +229,7 @@ public class DistanceLineViewer extends GridTableViewer {
 
 				final Pair<Port, Map<Port, RouteLine>> e = (Pair<Port, Map<Port, RouteLine>>) element;
 				cell.setText(e.getFirst().getName());
-				
-//				final RouteLine dl = e.getSecond().get(p);
-//				return dl.getVia() == null;
 
-				
 				if (element instanceof RouteLine) {
 					final RouteLine routeLine = (RouteLine) element;
 					if (routeLine.getVias().isEmpty()) {
