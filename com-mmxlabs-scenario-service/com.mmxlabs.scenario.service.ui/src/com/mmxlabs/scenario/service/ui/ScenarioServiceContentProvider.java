@@ -149,10 +149,12 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) e;
 				if (isShowScenarioInstances()) {
 					filtered = !mayBeShow;
-					final ScenarioInstanceSavable savable = new ScenarioInstanceSavable(scenarioInstance);
-					saveablesMap.put(savable, scenarioInstance);
-					if (provider != null) {
-						provider.fireOpened(savable);
+					if (!saveablesMap.values().contains(scenarioInstance)) {
+						final ScenarioInstanceSavable savable = new ScenarioInstanceSavable(scenarioInstance);
+						saveablesMap.put(savable, scenarioInstance);
+						if (provider != null) {
+							provider.fireOpened(savable);
+						}
 					}
 				}
 			} else if (e instanceof Folder) {
