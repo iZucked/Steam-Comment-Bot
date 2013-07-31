@@ -42,18 +42,19 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		final IPortSlot[] slots = constraint.slots;		
 		final long [] result = constraint.allocations;
 		
+		ILoadOption loadSlot = (ILoadOption) slots[0];
+		long availableCargoSpace = constraint.vesselCapacityInM3 - constraint.startVolumeInM3;
+		
+		// greedy assumption: always load as much as possible
+		long loadVolume = capValueWithZeroDefault(loadSlot.getMaxLoadVolume(), availableCargoSpace);
+		
+		result[0] = loadVolume;
+
+		// available volume is non-negative
+		long availableVolumeForDischarge = Math.max(loadVolume + constraint.startVolumeInM3 - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3, 0);
+
 		// load / discharge case
 		if (slots.length == 2) {
-			ILoadOption loadSlot = (ILoadOption) slots[0];
-			long availableCargoSpace = constraint.vesselCapacityInM3 - constraint.startVolumeInM3;
-			
-			// greedy assumption: always load as much as possible
-			long loadVolume = capValueWithZeroDefault(loadSlot.getMaxLoadVolume(), availableCargoSpace);
-			
-			result[0] = loadVolume;
-			
-			// available volume is non-negative
-			long availableVolumeForDischarge = Math.max(loadVolume - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3, 0);
 			
 			IDischargeOption dischargeSlot = (IDischargeOption) slots[1]; 
 
@@ -67,23 +68,11 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			 */ 
 			
 			result[1] = dischargeVolume;
-			//return dischargeVolume;
-									
 		}		
 		// multiple load/discharge case
 		else {
 			// TODO: this only handles LDD* cases
-			ILoadOption loadSlot = (ILoadOption) slots[0];
-			long availableCargoSpace = constraint.vesselCapacityInM3 - constraint.startVolumeInM3;
 			
-			// greedy assumption: always load as much as possible
-			long loadVolume = capValueWithZeroDefault(loadSlot.getMaxLoadVolume(), availableCargoSpace);
-			
-			result[0] = loadVolume;
-			
-			// available volume is non-negative
-			long availableVolumeForDischarge = Math.max(loadVolume - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3, 0);
-				
 			// track which discharge slot is the most profitable 
 			int [] prices = constraint.slotPricesPerM3;
 			int mostProfitableDischargeIndex = 1;
