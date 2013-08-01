@@ -44,6 +44,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getVersionContext <em>Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getFragments <em>Fragments</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isReadonly <em>Readonly</em>}</li>
  * </ul>
  * </p>
  *
@@ -246,6 +247,26 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @ordered
 	 */
 	protected EList<ScenarioFragment> fragments;
+
+	/**
+	 * The default value of the '{@link #isReadonly() <em>Readonly</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isReadonly()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean READONLY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isReadonly() <em>Readonly</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isReadonly()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean readonly = READONLY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -501,6 +522,27 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setReadonly(boolean newReadonly) {
+		boolean oldReadonly = readonly;
+		readonly = newReadonly;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__READONLY, oldReadonly, readonly));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isDirty() {
 		return dirty;
 	}
@@ -564,7 +606,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioLock getLock(String key) {
+	public ScenarioLock getLock(final String key) {
 		final List<ScenarioLock> locks = getLocks();
 		synchronized (locks) {
 			for (final ScenarioLock lock : locks) {
@@ -650,6 +692,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return getVersionContext();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
 			return getFragments();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+			return isReadonly();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -701,6 +745,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			getFragments().clear();
 			getFragments().addAll((Collection<? extends ScenarioFragment>) newValue);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+			setReadonly((Boolean) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -749,6 +796,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
 			getFragments().clear();
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+			setReadonly(READONLY_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -785,6 +835,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return VERSION_CONTEXT_EDEFAULT == null ? versionContext != null : !VERSION_CONTEXT_EDEFAULT.equals(versionContext);
 		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
 			return fragments != null && !fragments.isEmpty();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+			return readonly != READONLY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -816,6 +868,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		result.append(scenarioVersion);
 		result.append(", versionContext: ");
 		result.append(versionContext);
+		result.append(", readonly: ");
+		result.append(readonly);
 		result.append(')');
 		return result.toString();
 	}

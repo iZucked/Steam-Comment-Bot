@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import com.mmxlabs.scenario.service.model.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -36,7 +37,7 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 */
 	public static ScenarioServiceFactory init() {
 		try {
-			ScenarioServiceFactory theScenarioServiceFactory = (ScenarioServiceFactory) EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.scenario.service/model/1");
+			ScenarioServiceFactory theScenarioServiceFactory = (ScenarioServiceFactory) EPackage.Registry.INSTANCE.getEFactory(ScenarioServicePackage.eNS_URI);
 			if (theScenarioServiceFactory != null) {
 				return theScenarioServiceFactory;
 			}

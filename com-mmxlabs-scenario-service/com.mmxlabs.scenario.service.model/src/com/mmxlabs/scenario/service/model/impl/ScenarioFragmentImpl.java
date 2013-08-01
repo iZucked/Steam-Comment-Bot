@@ -111,7 +111,7 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	public ScenarioInstance getScenarioInstance() {
 		if (eContainerFeatureID() != ScenarioServicePackage.SCENARIO_FRAGMENT__SCENARIO_INSTANCE)
 			return null;
-		return (ScenarioInstance) eContainer();
+		return (ScenarioInstance) eInternalContainer();
 	}
 
 	/**

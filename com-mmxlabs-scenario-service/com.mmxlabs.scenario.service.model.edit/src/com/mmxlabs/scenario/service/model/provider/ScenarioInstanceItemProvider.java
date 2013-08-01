@@ -63,6 +63,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 			addValidationStatusCodePropertyDescriptor(object);
 			addScenarioVersionPropertyDescriptor(object);
 			addVersionContextPropertyDescriptor(object);
+			addReadonlyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -140,6 +141,18 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioInstance_versionContext_feature"), getString("_UI_ScenarioInstance_versionContext_description"),
 				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__VERSION_CONTEXT, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Readonly feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReadonlyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_readonly_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_readonly_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__READONLY, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -254,6 +267,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:

@@ -474,6 +474,15 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__FRAGMENTS = CONTAINER_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Readonly</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__READONLY = CONTAINER_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @Note: Compatibility filter created
@@ -481,7 +490,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 12;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -936,6 +945,17 @@ public interface ScenarioServicePackage extends EPackage {
 	EReference getScenarioInstance_Fragments();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Readonly</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_Readonly();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1388,6 +1408,14 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCENARIO_INSTANCE__FRAGMENTS = eINSTANCE.getScenarioInstance_Fragments();
+
+		/**
+		 * The meta object literal for the '<em><b>Readonly</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_INSTANCE__READONLY = eINSTANCE.getScenarioInstance_Readonly();
 
 		/**
 		 * The meta object literal for the '<em><b>Dirty</b></em>' attribute feature.

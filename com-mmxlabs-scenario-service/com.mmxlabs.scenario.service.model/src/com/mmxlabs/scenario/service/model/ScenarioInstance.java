@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVersionContext <em>Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
  * </ul>
  * </p>
  *
@@ -270,6 +271,32 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	EList<ScenarioFragment> getFragments();
+
+	/**
+	 * Returns the value of the '<em><b>Readonly</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Readonly</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Readonly</em>' attribute.
+	 * @see #setReadonly(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Readonly()
+	 * @model
+	 * @generated
+	 */
+	boolean isReadonly();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Readonly</em>' attribute.
+	 * @see #isReadonly()
+	 * @generated
+	 */
+	void setReadonly(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Dirty</b></em>' attribute.
