@@ -681,6 +681,13 @@
             properties="pinned"
             type="com.mmxlabs.scenario.service.model.ScenarioInstance">
       </propertyTester>
+      <propertyTester
+            class="com.mmxlabs.scenario.service.ui.propertytesters.ScenarioInstanceFlagsPropertyTester"
+            id="com.mmxlabs.scenario.service.ui.propertytesters.ScenarioInstanceFlagsPropertyTester"
+            namespace="com.mmxlabs.scenario.service.ui.flags"
+            properties="locked,hidden,readonly,archived,dirty"
+            type="com.mmxlabs.scenario.service.ui.propertytesters.ScenarioInstanceFlagsPropertyTester">
+      </propertyTester>
    </extension>
    <extension
          point="org.eclipse.ui.editorActions">
