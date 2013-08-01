@@ -88,10 +88,6 @@ public class Activator extends AbstractUIPlugin {
 			dirScanRegistration.setProperties(props);
 			// .. the way I've found to make it work...
 			service.updated(props);
-
-			// We need a handle on the migration service. Note: we are probably leaking a reference here.
-			final ServiceReference<IScenarioMigrationService> configAdminReference = getBundle().getBundleContext().getServiceReference(IScenarioMigrationService.class);
-			service.setScenarioMigrationService(getBundle().getBundleContext().getService(configAdminReference));
 		}
 
 	}
