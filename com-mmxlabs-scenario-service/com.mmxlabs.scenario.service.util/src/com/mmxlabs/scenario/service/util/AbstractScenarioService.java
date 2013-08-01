@@ -379,8 +379,11 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		this.scenarioMigrationService = scenarioMigrationHandler;
 	}
 
+	/**
+	 * @since 4.0
+	 */
 	@SuppressWarnings("resource")
-	private void copyURIData(@NonNull final URIConverter uc, @NonNull final URI src, @NonNull final URI dest) throws IOException {
+	protected void copyURIData(@NonNull final URIConverter uc, @NonNull final URI src, @NonNull final URI dest) throws IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {
