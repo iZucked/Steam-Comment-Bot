@@ -300,6 +300,8 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		result.eAdapters().add(saveAdapter);
 
+		result.setSupportsForking(true);
+		
 		return result;
 	}
 
