@@ -21,6 +21,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getServiceRef <em>Service Ref</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isSupportsForking <em>Supports Forking</em>}</li>
  * </ul>
  * </p>
  *
@@ -66,6 +67,26 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * @ordered
 	 */
 	protected IScenarioService serviceRef = SERVICE_REF_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isSupportsForking() <em>Supports Forking</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSupportsForking()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SUPPORTS_FORKING_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isSupportsForking() <em>Supports Forking</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSupportsForking()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean supportsForking = SUPPORTS_FORKING_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -133,6 +154,27 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isSupportsForking() {
+		return supportsForking;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSupportsForking(boolean newSupportsForking) {
+		boolean oldSupportsForking = supportsForking;
+		supportsForking = newSupportsForking;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING, oldSupportsForking, supportsForking));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -140,6 +182,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return getDescription();
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
 			return getServiceRef();
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
+			return isSupportsForking();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -157,6 +201,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return;
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
 			setServiceRef((IScenarioService) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
+			setSupportsForking((Boolean) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -176,6 +223,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
 			setServiceRef(SERVICE_REF_EDEFAULT);
 			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
+			setSupportsForking(SUPPORTS_FORKING_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -192,6 +242,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
 			return SERVICE_REF_EDEFAULT == null ? serviceRef != null : !SERVICE_REF_EDEFAULT.equals(serviceRef);
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
+			return supportsForking != SUPPORTS_FORKING_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -211,6 +263,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		result.append(description);
 		result.append(", serviceRef: ");
 		result.append(serviceRef);
+		result.append(", supportsForking: ");
+		result.append(supportsForking);
 		result.append(')');
 		return result.toString();
 	}

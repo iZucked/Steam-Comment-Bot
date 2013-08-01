@@ -32,6 +32,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceRef" eType="#//IScenarioService"
         transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="supportsForking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ScenarioInstance" eSuperTypes="#//Container">
     <eOperations name="getContainedInstanceCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">

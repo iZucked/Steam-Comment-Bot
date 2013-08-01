@@ -16,6 +16,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceRef <em>Service Ref</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsForking <em>Supports Forking</em>}</li>
  * </ul>
  * </p>
  *
@@ -75,5 +76,31 @@ public interface ScenarioService extends Container {
 	 * @generated
 	 */
 	void setServiceRef(IScenarioService value);
+
+	/**
+	 * Returns the value of the '<em><b>Supports Forking</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Supports Forking</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Supports Forking</em>' attribute.
+	 * @see #setSupportsForking(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_SupportsForking()
+	 * @model
+	 * @generated
+	 */
+	boolean isSupportsForking();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsForking <em>Supports Forking</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Supports Forking</em>' attribute.
+	 * @see #isSupportsForking()
+	 * @generated
+	 */
+	void setSupportsForking(boolean value);
 
 } // ScenarioService
