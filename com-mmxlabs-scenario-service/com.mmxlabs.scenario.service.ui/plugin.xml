@@ -363,10 +363,15 @@
             <with
                   variable="selection">
                <iterate
-                     ifEmpty="false">
+                     ifEmpty="false"
+                     operator="and">
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                   </instanceof>
+                  <test
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.scenario.service.ui.caps.forking">
+                  </test>
                </iterate>
             </with>
          </activeWhen>
@@ -382,6 +387,10 @@
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                   </instanceof>
+                                        <test
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.scenario.service.ui.flags.dirty">
+                  </test>
                </iterate>
             </with>
          </activeWhen>
@@ -411,6 +420,10 @@
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioFragment">
                   </instanceof>
+                   <not><test
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                  </test></not>
                </and>
             </iterate>
          </activeWhen>
@@ -421,6 +434,10 @@
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioFragment">
                   </instanceof>
+                  <not><test
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.scenario.service.ui.flags.readonly">
+                  </test></not>
                </and>
             </iterate>
          </enabledWhen>
@@ -686,7 +703,14 @@
             id="com.mmxlabs.scenario.service.ui.propertytesters.ScenarioInstanceFlagsPropertyTester"
             namespace="com.mmxlabs.scenario.service.ui.flags"
             properties="locked,hidden,readonly,archived,dirty"
-            type="com.mmxlabs.scenario.service.ui.propertytesters.ScenarioInstanceFlagsPropertyTester">
+            type="com.mmxlabs.scenario.service.model.ScenarioInstance">
+      </propertyTester>
+      <propertyTester
+            class="com.mmxlabs.scenario.service.ui.propertytesters.ServiceCapabilitiesFlagsPropertyTester"
+            id="com.mmxlabs.scenario.service.ui.propertytesters.ServiceCapabilitiesFlagsPropertyTester"
+            namespace="com.mmxlabs.scenario.service.ui.caps"
+            properties="forking"
+            type="com.mmxlabs.scenario.service.model.Container">
       </propertyTester>
    </extension>
    <extension
