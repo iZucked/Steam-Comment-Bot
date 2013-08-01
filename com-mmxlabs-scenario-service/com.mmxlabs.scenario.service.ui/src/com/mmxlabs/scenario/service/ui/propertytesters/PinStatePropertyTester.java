@@ -18,7 +18,7 @@ public class PinStatePropertyTester extends PropertyTester {
 				final ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
 				final ScenarioInstance pinned = selectionProvider.getPinnedInstance();
 				return pinned == receiver;
-			}			
+			}
 		}
 		return false;
 	}
