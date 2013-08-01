@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -394,5 +395,10 @@ public class FileScenarioService extends AbstractScenarioService {
 		} else {
 			return uri;
 		}
+	}
+
+	@Override
+	public void moveInto(final List<Container> elements, final Container destination) {
+		destination.getElements().addAll(elements);
 	}
 }

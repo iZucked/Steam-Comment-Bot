@@ -126,22 +126,31 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 				final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
 				if (selection instanceof IStructuredSelection) {
+
+					int detail = aDropTargetEvent.detail;
+
 					final List<Container> containers = new LinkedList<Container>();
 					final Iterator<?> iterator = ((IStructuredSelection) selection).iterator();
 					while (iterator.hasNext()) {
 						final Object obj = iterator.next();
 						if (obj instanceof Container) {
-							containers.add((Container) obj);
+							final Container c = (Container) obj;
+							// Moving between scenario services? Force a copy
+							if (c.getScenarioService() != container.getScenarioService()) {
+								detail = DND.DROP_COPY;
+							}
+							containers.add(c);
 						} else {
 							return Status.CANCEL_STATUS;
 						}
 					}
 
 					// TODO: This should really invoke a shared move/copy etc command/action handler
-
-					if (aDropTargetEvent.detail == DND.DROP_MOVE) {
-						container.getElements().addAll(containers);
-					} else if (aDropTargetEvent.detail == DND.DROP_COPY) {
+					if (detail == DND.DROP_MOVE) {
+						
+						final IScenarioService scenarioService = container.getScenarioService();
+						 scenarioService.moveInto(containers, container);
+					} else if (detail == DND.DROP_COPY) {
 
 						for (final Container c : containers) {
 							if (c instanceof Folder) {
@@ -173,7 +182,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
 						if (instance != null) {
 							try {
-								String scenarioName = new File(filePath).getName();
+								final String scenarioName = new File(filePath).getName();
 								container.getScenarioService().duplicate(instance, container).setName(scenarioName);
 							} catch (final IOException e) {
 								log.error(e.getMessage(), e);
