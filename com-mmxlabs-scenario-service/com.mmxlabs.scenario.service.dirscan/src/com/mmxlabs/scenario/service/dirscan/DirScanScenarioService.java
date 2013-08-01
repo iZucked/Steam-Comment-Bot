@@ -343,6 +343,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		final Manifest manifest = loadManifest(f);
 		if (manifest != null) {
 			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setReadonly(true);
 			scenarioInstance.setUuid(manifest.getUUID());
 			final URI fileURI = URI.createFileURI(f.getAbsolutePath());
 			scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
