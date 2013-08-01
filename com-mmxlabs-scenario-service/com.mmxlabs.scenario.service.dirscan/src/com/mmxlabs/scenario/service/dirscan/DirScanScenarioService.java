@@ -4,29 +4,55 @@
  */
 package com.mmxlabs.scenario.service.dirscan;
 
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
+
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
-import org.osgi.service.component.ComponentContext;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
 public class DirScanScenarioService extends AbstractScenarioService {
@@ -37,65 +63,35 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	private String serviceName;
 
+	private final WatchService watcher;
+	private final Map<WatchKey, Path> keys;
+
+	private final Map<String, WeakReference<Container>> folderMap = new HashMap<String, WeakReference<Container>>();
+	private final Map<String, WeakReference<ScenarioInstance>> scenarioMap = new HashMap<String, WeakReference<ScenarioInstance>>();
+
 	private final EContentAdapter serviceModelAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 
 			super.notifyChanged(notification);
 
-			// TODO: Process changes and replicate on FileSystem
+			// TODO: Process changes and replicate back on FileSystem
 
 		}
 
 	};
 
-	public DirScanScenarioService(final String name) {
+	public DirScanScenarioService(final String name) throws IOException {
 		super(name);
-	}
+		this.watcher = FileSystems.getDefault().newWatchService();
+		this.keys = new HashMap<WatchKey, Path>();
 
-	public void scanForScenarios(final String scenarioServiceID) {
-
-		scanForScenarios(scenarioServiceID, getServiceModel(), dataPath);
-	}
-
-	public void scanForScenarios(final String scenarioServiceID, final Container container, final File dataDir) {
-		if (dataDir.isDirectory() || dataDir.exists()) {
-			for (final File f : dataDir.listFiles()) {
-				if (f.isFile()) {
-
-					// TODO: Check file extensions
-					// String ext = f
-
-					final Manifest manifest = loadManifest(f);
-					if (manifest != null) {
-						final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-						scenarioInstance.setUuid(manifest.getUUID());
-						final URI fileURI = URI.createFileURI(f.getAbsolutePath());
-						scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
-						scenarioInstance.setName(f.getName());
-						scenarioInstance.setVersionContext(manifest.getVersionContext());
-						scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
-						final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
-						scenarioInstance.setMetadata(meta);
-						meta.setContentType(manifest.getScenarioType());
-						container.getElements().add(scenarioInstance);
-					}
-				} else if (f.isDirectory()) {
-					// Create container,
-					final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
-					container.getElements().add(folder);
-					folder.setName(f.getName());
-					// Recurse
-					scanForScenarios(scenarioServiceID, folder, f);
-				}
-			}
-		}
 	}
 
 	@Override
 	public ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
+
 	}
 
 	@Override
@@ -144,14 +140,377 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	public void updated(final Dictionary<?, ?> d) {
 
-		// stop(context);
 		// TODO Auto-generated method stub
-		final String scenarioServiceID = d.get("component.id").toString();
+		// final String scenarioServiceID = d.get("component.id").toString();
 		final String path = d.get("path").toString();
 		serviceName = d.get("serviceName").toString();
 
 		dataPath = new File(path);
 		// initFileWatcher(dataPath);
-		scanForScenarios(scenarioServiceID);
+		try {
+			folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
+			recursiveAdd(getServiceModel(), dataPath.toPath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			log.error(e.getMessage(), e);
+		}
+
+		Thread t = new Thread() {
+			public void run() {
+
+				for (;;) {
+
+					// wait for key to be signalled
+					WatchKey key;
+					try {
+						key = watcher.take();
+					} catch (InterruptedException x) {
+						return;
+					}
+
+					Path dir = keys.get(key);
+					if (dir == null) {
+						System.err.println("WatchKey not recognized!!");
+						continue;
+					}
+
+					for (WatchEvent<?> event : key.pollEvents()) {
+						WatchEvent.Kind kind = event.kind();
+
+						// TBD - provide example of how OVERFLOW event is handled
+						if (kind == OVERFLOW) {
+							continue;
+						}
+
+						// Context for directory entry event is the file name of entry
+						@SuppressWarnings("unchecked")
+						WatchEvent<Path> ev = (WatchEvent<Path>) (event);
+						Path name = ev.context();
+						Path child = dir.resolve(name);
+
+						// if directory is created, and watching recursively, then
+						// register it and its sub-directories
+						if (kind == ENTRY_CREATE) {
+							try {
+								recursiveAdd(folderMap.get(child.getParent().normalize().toString()).get(), child);
+							} catch (IOException x) {
+								// ignore to keep sample readbale
+							}
+						}
+
+						else if (kind == ENTRY_DELETE) {
+
+							String pathKey = child.normalize().toString();
+							if (folderMap.containsKey(pathKey)) {
+								try {
+									removeFolder(child);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+
+							} else if (scenarioMap.containsKey(pathKey)) {
+								removeFile(child);
+							}
+						} else if (kind == ENTRY_MODIFY) {
+							//
+							if (Files.isRegularFile(child)) {
+								String pathKey = child.normalize().toString();
+								if (!scenarioMap.containsKey(pathKey)) {
+									addFile(child);
+								}
+							}
+						}
+					}
+
+					// reset key and remove from set if directory no longer accessible
+					boolean valid = key.reset();
+					if (!valid) {
+						keys.remove(key);
+
+						// all directories are inaccessible
+						if (keys.isEmpty()) {
+							break;
+						}
+					}
+				}
+
+			};
+		};
+		t.start();
+	}
+
+	/**
+	 * Register the given directory, and all its sub-directories, with the WatchService.
+	 */
+	private void recursiveRemove(final Path path) throws IOException {
+		// Container c = folderMap.remove(path.normalize().toString());
+		// if (c != null) {
+		// removeFolder(path);
+
+		// register directory and sub-directories
+		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+
+				removeFolder(dir);
+
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+
+				removeFile(file);
+
+				return super.visitFile(file, attrs);
+			}
+		});
+	}
+
+	/**
+	 * Register the given directory, and all its sub-directories, with the WatchService.
+	 */
+	private void recursiveAdd(Container root, final Path dataPath) throws IOException {
+		// folderMap.put(dataPath.normalize().toString(), new WeakReference<Container>( root));
+		// register directory and sub-directories
+		Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+
+				addFolder(dir);
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+
+				addFile(file);
+
+				return super.visitFile(file, attrs);
+			}
+		});
+	}
+
+	protected void removeFolder(Path dir) throws IOException {
+
+		System.out.println("Remove Folder: " + dir);
+
+		Container c = folderMap.remove(dir.normalize().toString()).get();
+		if (c != null) {
+			detachSubTree(c);
+			EObject container = c.eContainer();
+			if (container instanceof Container) {
+				((Container) container).getElements().remove(c);
+			}
+		}
+		for (Map.Entry<WatchKey, Path> e : keys.entrySet()) {
+			if (e.getValue().equals(dir)) {
+				WatchKey key = e.getKey();
+				key.cancel();
+				keys.remove(key);
+				break;
+			}
+		}
+	}
+
+	protected void addFolder(Path dir) throws IOException {
+
+		System.out.println("Add Folder: " + dir);
+
+		// top entry will have no parent....
+		if (!dir.equals(dataPath.toPath())) {
+			final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+
+			String string = dir.getParent().normalize().toString();
+			// Add folder to parent
+			folderMap.get(string).get().getElements().add(folder);
+
+			folder.setName(dir.toFile().getName());
+
+			// Store in map
+			folderMap.put(dir.normalize().toString(), new WeakReference<Container>(folder));
+		}
+		WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+		keys.put(key, dir);
+	}
+
+	protected void addFile(Path file) {
+
+		System.out.println("Add File: " + file);
+
+		File f = file.toFile();
+		final Manifest manifest = loadManifest(f);
+		if (manifest != null) {
+			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setUuid(manifest.getUUID());
+			final URI fileURI = URI.createFileURI(f.getAbsolutePath());
+			scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
+			scenarioInstance.setName(f.getName());
+			scenarioInstance.setVersionContext(manifest.getVersionContext());
+			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
+			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
+			scenarioInstance.setMetadata(meta);
+			meta.setContentType(manifest.getScenarioType());
+			String string = file.getParent().normalize().toString();
+			System.out.println("Parent " + string);
+			WeakReference<Container> weakReference = folderMap.get(string);
+			weakReference.get().getElements().add(scenarioInstance);
+
+			scenarioMap.put(file.normalize().toString(), new WeakReference<ScenarioInstance>(scenarioInstance));
+		}
+	}
+
+	protected void removeFile(Path file) {
+		ScenarioInstance c = scenarioMap.remove(file.normalize().toString()).get();
+
+		System.out.println("Remove File: " + file + " - " + c);
+		if (c != null) {
+			detachSubTree(c);
+			EObject container = c.eContainer();
+			if (container instanceof Container) {
+				((Container) container).getElements().remove(c);
+			}
+		}
+
+	}
+
+	/**
+	 * File system changes mean this is no longer in the tree. Fire various notifications
+	 * 
+	 * @param c
+	 */
+	private void detachSubTree(Container c) {
+
+		for (Container cc : c.getElements()) {
+			detachSubTree(cc);
+		}
+		if (c instanceof ScenarioInstance) {
+
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
+
+			// TODO: Deselect from view
+			// Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
+
+			final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
+			Display.getDefault().syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+					// TODO: Prompt to save?
+					activePage.closeEditors(editorReferences, false);
+
+				}
+			});
+		}
+	}
+
+	@Override
+	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException {
+		log.debug("Duplicating " + original.getUuid() + " into " + destination);
+		final IScenarioService originalService = original.getScenarioService();
+
+		StringBuilder sb = new StringBuilder();
+		{
+			Container c = destination;
+			while (c != null && !(c instanceof ScenarioService)) {
+				sb.insert(0, File.separator + c.getName());
+				c = c.getParent();
+			}
+
+		}
+
+		final ResourceSet instanceResourceSet = createResourceSet();
+		URI scenarioURI = URI.createFileURI(dataPath.toString() + sb.toString() + File.separator + original.getName() + ".lingo");
+
+		final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
+		if (original.getInstance() == null) {
+			// Not loaded, copy raw data
+			final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
+			URI sourceURI = originalService.resolveURI(original.getRootObjectURI());
+			copyURIData(uc, sourceURI, destURI);
+		} else {
+			// Already loaded? Just use the same instance.
+			EObject rootObject = EcoreUtil.copy(original.getInstance());
+			final Resource instanceResource = instanceResourceSet.createResource(destURI);
+			instanceResource.getContents().add(rootObject);
+			instanceResource.save(null);
+		}
+
+		// // Create new model nodes
+		// final ScenarioInstance dup = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+		// dup.setName(original.getName());
+		// dup.setScenarioVersion(original.getScenarioVersion());
+		// dup.setVersionContext(original.getVersionContext());
+		//
+		// final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
+		// dup.setMetadata(metadata);
+		// dup.getMetadata().setContentType(original.getMetadata().getContentType());
+		// dup.getMetadata().setCreated(original.getMetadata().getCreated());
+		// dup.getMetadata().setLastModified(new Date());
+		//
+		// // Create a new UUID
+		// final String uuid = UUID.randomUUID().toString();
+		// dup.setUuid(uuid);
+
+		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+		manifest.setScenarioType(original.getMetadata().getContentType());
+		manifest.setUUID(original.getUuid());
+		manifest.setScenarioVersion(original.getScenarioVersion());
+		manifest.setVersionContext(original.getVersionContext());
+		final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
+		final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
+
+		manifestResource.getContents().add(manifest);
+
+		manifest.getModelURIs().add("rootObject.xmi");
+		manifestResource.save(null);
+		//
+		// // Clear dirty flag
+		// dup.setDirty(false);
+		//
+		// // Finally add to node in the service model.
+		// destination.getElements().add(dup);
+
+		return null;
+	}
+
+	@Override
+	public void moveInto(List<Container> elements, Container destination) {
+
+		// for (Container element : elements) {
+		//
+		//
+		// }
+
+		// Manipulate file system
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public EObject load(ScenarioInstance instance) throws IOException {
+
+		if (instance.getInstance() == null) {
+
+			EObject object = super.load(instance);
+
+			if (object != null) {
+				{
+					ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
+					lock.claim();
+				}
+				{
+					ScenarioLock lock = instance.getLock(ScenarioLock.OPTIMISER);
+					lock.claim();
+				}
+			}
+
+			return object;
+		} else {
+			return instance.getInstance();
+		}
 	}
 }
