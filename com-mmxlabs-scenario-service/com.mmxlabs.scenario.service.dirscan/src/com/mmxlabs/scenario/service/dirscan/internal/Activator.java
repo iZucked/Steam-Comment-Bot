@@ -1,15 +1,16 @@
 package com.mmxlabs.scenario.service.dirscan.internal;
 
+import java.io.IOException;
 import java.util.Hashtable;
 
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.scenario.service.IScenarioMigrationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.dirscan.DirScanScenarioService;
 import com.mmxlabs.scenario.service.dirscan.preferences.PreferenceConstants;
@@ -18,6 +19,8 @@ import com.mmxlabs.scenario.service.dirscan.preferences.PreferenceConstants;
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
+	
+	private static final Logger log = LoggerFactory.getLogger(Activator.class);
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.scenario.service.dirscan"; //$NON-NLS-1$
@@ -82,12 +85,17 @@ public class Activator extends AbstractUIPlugin {
 			// used internally
 			props.put("component.id", serviceName);
 
-			final DirScanScenarioService service = new DirScanScenarioService(serviceName);
-			// Various ways of passing properties which do not work...
-			dirScanRegistration = getBundle().getBundleContext().registerService(IScenarioService.class, service, props);
-			dirScanRegistration.setProperties(props);
-			// .. the way I've found to make it work...
-			service.updated(props);
+			DirScanScenarioService service;
+			try {
+				service = new DirScanScenarioService(serviceName);
+				// Various ways of passing properties which do not work...
+				dirScanRegistration = getBundle().getBundleContext().registerService(IScenarioService.class, service, props);
+				dirScanRegistration.setProperties(props);
+				// .. the way I've found to make it work...
+				service.updated(props);
+			} catch (IOException e) {
+				log.error("Error starting DirScan Scenario Service: " + e.getMessage(), e);
+			}
 		}
 
 	}
