@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (C) Minimax Labs Ltd., 2010 - 2012&#xA;All rights reserved."
     modelDirectory="/com.mmxlabs.scenario.service.model/src" modelPluginID="com.mmxlabs.scenario.service.model"
     modelName="Scenario" codeFormatting="true" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false">
+    complianceLevel="6.0" copyrightFields="false" runtimeVersion="2.8">
   <foreignModel>scenario.service.ecore</foreignModel>
   <genPackages prefix="ScenarioService" basePackage="com.mmxlabs.scenario.service"
       disposableProviderFactory="true" ecorePackage="scenario.service.ecore#/">
@@ -33,20 +33,21 @@
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioInstance">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/uuid"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/metadata"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/subModelURIs"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/dependencyUUIDs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/locked"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/instance"/>
+      <genFeatures createChild="false" propertyDescription="Handy transient store for data items such as a shared editing domain, command stack etc"
+          ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/adapters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/rootObjectURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/dirty"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/locks"/>
+      <genFeatures property="Readonly" createChild="false" propertyDescription="Last recorded validation status recorded as an IStatus severity code "
+          ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/validationStatusCode"/>
       <genFeatures createChild="false" propertyDescription="The version number of the data model - within the versionContext"
           ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/scenarioVersion"/>
       <genFeatures createChild="false" propertyDescription="A versioning context for which the scenario version relates"
           ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/versionContext"/>
-      <genFeatures property="Readonly" createChild="false" propertyDescription="Last recorded validation status recorded as an IStatus severity code "
-          ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/validationStatusCode"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/locks"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/locked"/>
-      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/instance"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/dirty"/>
-      <genFeatures createChild="false" propertyDescription="Handy transient store for data items such as a shared editing domain, command stack etc"
-          ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/adapters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/fragments"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/readonly"/>
       <genOperations ecoreOperation="scenario.service.ecore#//ScenarioInstance/getContainedInstanceCount"/>
       <genOperations ecoreOperation="scenario.service.ecore#//ScenarioInstance/getLock">
         <genParameters ecoreParameter="scenario.service.ecore#//ScenarioInstance/getLock/key"/>
@@ -69,6 +70,12 @@
       <genOperations ecoreOperation="scenario.service.ecore#//ScenarioLock/awaitClaim"/>
       <genOperations ecoreOperation="scenario.service.ecore#//ScenarioLock/release"/>
       <genOperations ecoreOperation="scenario.service.ecore#//ScenarioLock/init"/>
+    </genClasses>
+    <genClasses ecoreClass="scenario.service.ecore#//ScenarioFragment">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioFragment/scenarioInstance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioFragment/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioFragment/fragment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioFragment/contentType"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
