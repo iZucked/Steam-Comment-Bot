@@ -22,6 +22,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getServiceRef <em>Service Ref</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isSupportsForking <em>Supports Forking</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isSupportsImport <em>Supports Import</em>}</li>
  * </ul>
  * </p>
  *
@@ -87,6 +88,26 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * @ordered
 	 */
 	protected boolean supportsForking = SUPPORTS_FORKING_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isSupportsImport() <em>Supports Import</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSupportsImport()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean SUPPORTS_IMPORT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isSupportsImport() <em>Supports Import</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSupportsImport()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean supportsImport = SUPPORTS_IMPORT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -175,6 +196,27 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isSupportsImport() {
+		return supportsImport;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSupportsImport(boolean newSupportsImport) {
+		boolean oldSupportsImport = supportsImport;
+		supportsImport = newSupportsImport;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT, oldSupportsImport, supportsImport));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -184,6 +226,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return getServiceRef();
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
 			return isSupportsForking();
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
+			return isSupportsImport();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -204,6 +248,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return;
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
 			setSupportsForking((Boolean) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
+			setSupportsImport((Boolean) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -226,6 +273,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
 			setSupportsForking(SUPPORTS_FORKING_EDEFAULT);
 			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
+			setSupportsImport(SUPPORTS_IMPORT_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -244,6 +294,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return SERVICE_REF_EDEFAULT == null ? serviceRef != null : !SERVICE_REF_EDEFAULT.equals(serviceRef);
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
 			return supportsForking != SUPPORTS_FORKING_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
+			return supportsImport != SUPPORTS_IMPORT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -265,6 +317,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		result.append(serviceRef);
 		result.append(", supportsForking: ");
 		result.append(supportsForking);
+		result.append(", supportsImport: ");
+		result.append(supportsImport);
 		result.append(')');
 		return result.toString();
 	}

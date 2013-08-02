@@ -17,6 +17,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceRef <em>Service Ref</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsForking <em>Supports Forking</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport <em>Supports Import</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,5 +103,31 @@ public interface ScenarioService extends Container {
 	 * @generated
 	 */
 	void setSupportsForking(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Supports Import</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Supports Import</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Supports Import</em>' attribute.
+	 * @see #setSupportsImport(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_SupportsImport()
+	 * @model
+	 * @generated
+	 */
+	boolean isSupportsImport();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport <em>Supports Import</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Supports Import</em>' attribute.
+	 * @see #isSupportsImport()
+	 * @generated
+	 */
+	void setSupportsImport(boolean value);
 
 } // ScenarioService

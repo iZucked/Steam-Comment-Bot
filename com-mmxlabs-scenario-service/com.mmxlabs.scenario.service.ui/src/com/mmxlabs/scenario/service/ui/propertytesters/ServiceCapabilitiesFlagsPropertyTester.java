@@ -24,6 +24,9 @@ public class ServiceCapabilitiesFlagsPropertyTester extends PropertyTester {
 				if (property.equals("forking")) {
 					return scenarioService.isSupportsForking();
 				}
+				else if (property.equals("import")) {
+					return scenarioService.isSupportsImport();
+				}
 			}
 		}
 		return false;

@@ -307,13 +307,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_SERVICE__SUPPORTS_FORKING = CONTAINER_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Supports Import</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_SERVICE__SUPPORTS_IMPORT = CONTAINER_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Service</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 3;
+	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
@@ -852,6 +861,17 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getScenarioService_SupportsForking();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport <em>Supports Import</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Supports Import</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport()
+	 * @see #getScenarioService()
+	 * @generated
+	 */
+	EAttribute getScenarioService_SupportsImport();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1350,6 +1370,14 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SCENARIO_SERVICE__SUPPORTS_FORKING = eINSTANCE.getScenarioService_SupportsForking();
+
+		/**
+		 * The meta object literal for the '<em><b>Supports Import</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_SERVICE__SUPPORTS_IMPORT = eINSTANCE.getScenarioService_SupportsImport();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.

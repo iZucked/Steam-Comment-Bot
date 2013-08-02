@@ -709,7 +709,7 @@
             class="com.mmxlabs.scenario.service.ui.propertytesters.ServiceCapabilitiesFlagsPropertyTester"
             id="com.mmxlabs.scenario.service.ui.propertytesters.ServiceCapabilitiesFlagsPropertyTester"
             namespace="com.mmxlabs.scenario.service.ui.caps"
-            properties="forking"
+            properties="forking,import"
             type="com.mmxlabs.scenario.service.model.Container">
       </propertyTester>
    </extension>
