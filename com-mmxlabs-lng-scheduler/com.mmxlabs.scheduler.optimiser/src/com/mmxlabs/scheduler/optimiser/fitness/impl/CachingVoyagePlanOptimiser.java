@@ -106,6 +106,8 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			result = (prime * result) + (int)vessel.getHourlyCharterInPrice().getValueAtPoint(vesselStartTime);
 
 			result = (prime * result) + ((vessel == null) ? 0 : vessel.hashCode());
+			
+			result = (prime * result) + (int) startHeel;
 
 			return result;
 		}
@@ -125,7 +127,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// return false;
 
 				return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(times, other.times) && (// loadPrice == other.loadPrice &&
-						dischargePrice == other.dischargePrice);
+						dischargePrice == other.dischargePrice && startHeel == other.startHeel);
 			}
 			return false;
 		}
