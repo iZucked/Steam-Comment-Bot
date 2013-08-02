@@ -2236,8 +2236,8 @@ public class ShippingCalculationsTest {
 		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
 
 		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		
 		// base fuel is now 10x more expensive, so FBO is economical
-
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 		
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -2253,7 +2253,80 @@ public class ShippingCalculationsTest {
 		};
 
 		SequenceTester checker = getDefaultTester(classes);
+		
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer [] {1, 2, 2, 2, 1});
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer [] {15, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer [] {0, 10, 10, 10, 5});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer [] {0, 20, 20, 20, 10});
+		
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer [] {0, 2, 2, 2, 0});
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] {0, 10, 10, 10, 0});
+		
+		// volume allocations: load 10000 at first load port (loading from empty)
+		// at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here 
+		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
+		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer [] {10000, -9430, 9510, -9445});
 
+		checker.baseFuelPricePerM3 = 100;
+		checker.setupOrdinaryFuelCosts();
+		
+		final Sequence sequence = schedule.getSequences().get(0);		
+		checker.check(sequence);
+	}
+
+	@Test
+	public void testForcedHeelRollover() {
+		System.err.println("\n\nTest case when load & discharge requirements cause excess heel to be left over");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
+		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		
+		msc.vc.setMinHeel(500);
+		
+		Slot loadSlot = msc.cargo.getSlots().get(0);
+		Slot dischargeSlot = msc.cargo.getSlots().get(1);
+		
+		loadSlot.setMinQuantity(10000);
+		dischargeSlot.setMaxQuantity(9000);		
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Class<?>[] classes = { 
+				StartEvent.class, Journey.class, Idle.class, // start to load 
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to load 
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to end 
+				EndEvent.class 
+		};
+
+		SequenceTester checker = getDefaultTester(classes);
+		
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer [] {1, 2, 2, 2, 1});
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer [] {15, 10, 10, 10, 15});
+		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer [] {0, 20, 20, 20, 0});
+		
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer [] {0, 2, 2, 2, 0});
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] {0, 10, 10, 10, 0});
+		
+		// volume allocations: load 10000 at first load port (min load)
+		// at first discharge, discharge 9000 (max discharge) rolling over 970 (30m3 travel + idle usage) 
+		// at next load, load back up to full (970 rollover minus 30m3 travel + idle fuel was on board)
+		// at next discharge, discharge fully; 30m3 was used to get here
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer [] {10000, -9000, 9060, -9970});
+
+		checker.setupOrdinaryFuelCosts();
+		
 		final Sequence sequence = schedule.getSequences().get(0);		
 		checker.check(sequence);
 	}
