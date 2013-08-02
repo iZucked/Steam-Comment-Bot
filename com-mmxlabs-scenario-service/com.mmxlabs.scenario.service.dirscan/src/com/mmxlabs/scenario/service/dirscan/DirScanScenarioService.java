@@ -27,6 +27,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.emf.common.util.URI;
@@ -55,6 +56,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
@@ -80,6 +82,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	private final Map<String, WeakReference<Container>> folderMap = new HashMap<String, WeakReference<Container>>();
 	private final Map<String, WeakReference<ScenarioInstance>> scenarioMap = new HashMap<String, WeakReference<ScenarioInstance>>();
+	private final Map<Container, Path> modelToFilesystemMap = new WeakHashMap<Container, Path>();
 
 	private Thread watchThread;
 	private volatile boolean watchThreadRunning;
@@ -90,10 +93,25 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 			super.notifyChanged(notification);
 
-			// TODO: Process changes and replicate back on FileSystem
+			// Process changes and replicate back on FileSystem
+			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
 
+				final Container c = (Container) notification.getNotifier();
+
+				final Path path = modelToFilesystemMap.get(c);
+				if (path != null) {
+					final Path newName = path.getParent().resolve(notification.getNewStringValue());
+					// Remove from tree as file system watcher will re-add
+					if (c instanceof ScenarioInstance) {
+						removeFile(path);
+					} else {
+						removeFolder(path);
+					}
+
+					path.toFile().renameTo(newName.toFile());
+				}
+			}
 		}
-
 	};
 
 	public DirScanScenarioService(final String name) throws IOException {
@@ -119,7 +137,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		final ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
 		serviceModel.setName(serviceName);
 		serviceModel.setDescription("DirScan scenario service");
-
+		serviceModel.eAdapters().add(serviceModelAdapter);
 		return serviceModel;
 	}
 
@@ -226,22 +244,14 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 							final String pathKey = child.normalize().toString();
 							if (folderMap.containsKey(pathKey)) {
-								try {
-									removeFolder(child);
-								} catch (final IOException e) {
-									log.error(e.getMessage(), e);
-								}
-
+								removeFolder(child);
 							} else if (scenarioMap.containsKey(pathKey)) {
 								removeFile(child);
 							}
 						} else if (kind == ENTRY_MODIFY) {
 							//
 							if (Files.isRegularFile(child)) {
-								final String pathKey = child.normalize().toString();
-								if (!scenarioMap.containsKey(pathKey)) {
-									addFile(child);
-								}
+								addFile(child);
 							}
 						}
 					}
@@ -289,6 +299,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	/**
 	 * Register the given directory, and all its sub-directories, with the WatchService.
 	 */
+
 	private void recursiveAdd(final Container root, final Path dataPath) throws IOException {
 		// register directory and sub-directories
 		Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
@@ -310,7 +321,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		});
 	}
 
-	protected void removeFolder(final Path dir) throws IOException {
+	protected void removeFolder(final Path dir) {
 
 		final Container c = folderMap.remove(dir.normalize().toString()).get();
 		if (c != null) {
@@ -331,48 +342,56 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void addFolder(final Path dir) throws IOException {
+		final String pathKey = dir.normalize().toString();
+		if (!folderMap.containsKey(pathKey)) {
+			// top entry will have no parent....
+			if (!dir.equals(dataPath.toPath())) {
+				final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
 
-		// top entry will have no parent....
-		if (!dir.equals(dataPath.toPath())) {
-			final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+				final String string = dir.getParent().normalize().toString();
+				// Add folder to parent
+				folderMap.get(string).get().getElements().add(folder);
 
-			final String string = dir.getParent().normalize().toString();
-			// Add folder to parent
-			folderMap.get(string).get().getElements().add(folder);
+				folder.setName(dir.toFile().getName());
 
-			folder.setName(dir.toFile().getName());
-
-			// Store in map
-			folderMap.put(dir.normalize().toString(), new WeakReference<Container>(folder));
+				// Store in map
+				folderMap.put(dir.normalize().toString(), new WeakReference<Container>(folder));
+				modelToFilesystemMap.put(folder, dir);
+			}
+			final WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+			keys.put(key, dir);
 		}
-		final WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-		keys.put(key, dir);
 	}
 
 	protected void addFile(final Path file) {
 
-		final File f = file.toFile();
-		final Manifest manifest = loadManifest(f);
-		if (manifest != null) {
-			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			scenarioInstance.setReadonly(true);
-			scenarioInstance.setUuid(manifest.getUUID());
+		final String pathKey = file.normalize().toString();
+		if (!scenarioMap.containsKey(pathKey)) {
 
-			final URI fileURI = URI.createFileURI(f.getAbsolutePath());
-			scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
-			scenarioInstance.setName(f.getName());
-			scenarioInstance.setVersionContext(manifest.getVersionContext());
-			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
+			final File f = file.toFile();
+			final Manifest manifest = loadManifest(f);
+			if (manifest != null) {
+				final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+				scenarioInstance.setReadonly(true);
+				scenarioInstance.setUuid(manifest.getUUID());
 
-			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
-			scenarioInstance.setMetadata(meta);
-			meta.setContentType(manifest.getScenarioType());
+				final URI fileURI = URI.createFileURI(f.getAbsolutePath());
+				scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
+				scenarioInstance.setName(f.getName());
+				scenarioInstance.setVersionContext(manifest.getVersionContext());
+				scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
 
-			final String string = file.getParent().normalize().toString();
-			final WeakReference<Container> weakReference = folderMap.get(string);
-			weakReference.get().getElements().add(scenarioInstance);
+				final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
+				scenarioInstance.setMetadata(meta);
+				meta.setContentType(manifest.getScenarioType());
 
-			scenarioMap.put(file.normalize().toString(), new WeakReference<ScenarioInstance>(scenarioInstance));
+				final String string = file.getParent().normalize().toString();
+				final WeakReference<Container> weakReference = folderMap.get(string);
+				weakReference.get().getElements().add(scenarioInstance);
+
+				scenarioMap.put(pathKey, new WeakReference<ScenarioInstance>(scenarioInstance));
+				modelToFilesystemMap.put(scenarioInstance, file);
+			}
 		}
 	}
 
