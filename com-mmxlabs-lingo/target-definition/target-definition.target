@@ -120,7 +120,7 @@
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/4.0.2-SNAPSHOT/com.mmxlabs.scenario.service.p2-4.0.2-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/5.0.0-SNAPSHOT/com.mmxlabs.scenario.service.p2-5.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.migration.feature.source.feature.group" version="3.0.0.RELEASE"/>
