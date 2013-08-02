@@ -86,11 +86,16 @@
                               value="1">
                         </count>
                         <iterate>
-                           <or>
+                           <and>
                               <instanceof
                                     value="com.mmxlabs.scenario.service.model.Folder">
                               </instanceof>
-                           </or>
+                              <test
+                                    forcePluginActivation="true"
+                                    property="com.mmxlabs.scenario.service.ui.caps.import">
+                              </test>
+                           </and>
+                           <or></or>
                         </iterate>
                      </and>
                   </with>

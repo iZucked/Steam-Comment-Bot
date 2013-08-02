@@ -23,9 +23,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
@@ -83,7 +83,10 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 		gd.heightHint = 320;
 		gd.horizontalSpan = 2;
 		scenarioServiceSelectionGroup.setLayoutData(gd);
+		scenarioServiceSelectionGroup.getContentProvider();
 
+		scenarioServiceSelectionGroup.setSetShowOnlyCapsImport(true);
+		
 		final Label label = new Label(container, SWT.NULL);
 		label.setText("&File name:");
 		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
@@ -107,7 +110,7 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 	 */
 
 	private void initialize() {
-		final Bundle bundle = Activator.getDefault().getBundle();
+		final Bundle bundle = FrameworkUtil.getBundle(getClass());
 		final BundleContext bundleContext = bundle.getBundleContext();
 		final ServiceReference<ScenarioServiceRegistry> serviceReference = bundleContext.getServiceReference(ScenarioServiceRegistry.class);
 
