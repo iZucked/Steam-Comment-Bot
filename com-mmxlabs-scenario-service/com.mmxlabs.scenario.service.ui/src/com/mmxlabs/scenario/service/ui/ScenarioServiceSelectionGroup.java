@@ -32,6 +32,10 @@ public class ScenarioServiceSelectionGroup extends Composite {
 
 	private TreeViewer treeViewer;
 
+	private boolean setShowOnlyCapsImport = false;
+
+	private ScenarioServiceContentProvider contentProvider;
+	
 	public ScenarioServiceSelectionGroup(final Composite parent, final Listener listener, int style) {
 		super(parent, style);
 		this.listener = listener;
@@ -42,12 +46,13 @@ public class ScenarioServiceSelectionGroup extends Composite {
 		setLayout(new FillLayout());
 
 		treeViewer = new TreeViewer(this, SWT.NONE);
-		final ScenarioServiceContentProvider cp = new ScenarioServiceContentProvider();
+		contentProvider = new ScenarioServiceContentProvider();
 
-		cp.setShowFolders(true);
-		cp.setShowScenarioInstances(true);
+		contentProvider.setShowFolders(true);
+		contentProvider.setShowScenarioInstances(true);
+		contentProvider.setShowOnlyCapsImport(isSetShowOnlyCapsImport());
 
-		treeViewer.setContentProvider(cp);
+		treeViewer.setContentProvider(contentProvider);
 		treeViewer.setLabelProvider(new ScenarioServiceLabelProvider());
 
 		treeViewer.setLabelProvider(new ScenarioServiceLabelProvider());
@@ -117,5 +122,20 @@ public class ScenarioServiceSelectionGroup extends Composite {
 
 	public void setInput(final ScenarioServiceRegistry registry) {
 		treeViewer.setInput(registry);
+	}
+
+	public ScenarioServiceContentProvider getContentProvider() {
+		return contentProvider; 
+	}
+
+	public boolean isSetShowOnlyCapsImport() {
+		return setShowOnlyCapsImport;
+	}
+
+	public void setSetShowOnlyCapsImport(boolean setShowOnlyCapsImport) {
+		this.setShowOnlyCapsImport = setShowOnlyCapsImport;
+		if (contentProvider != null) {
+			contentProvider.setShowOnlyCapsImport(setShowOnlyCapsImport);
+		}
 	}
 }

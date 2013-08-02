@@ -66,6 +66,9 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	private boolean showMetadata = false;
 	private boolean showArchivedElements = false;
 	private boolean showHiddenElements = false;
+	private boolean showReadOnlyElements = true;
+	private boolean showOnlyCapsImport = false;
+	private boolean showOnlyCapsForking = false;
 
 	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
 
@@ -166,7 +169,22 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			} else if (e instanceof ScenarioModel) {
 				filtered = !isShowScenarioServices();
 			} else if (e instanceof IScenarioService || e instanceof ScenarioService) {
-				filtered = !isShowScenarioServices();
+				ScenarioService ss = null;
+				if (e instanceof IScenarioService) {
+					ss = ((IScenarioService) e).getServiceModel();
+				} else {
+					ss =  (ScenarioService)e;
+				}
+				
+				boolean visible = isShowScenarioServices();
+				if (visible && isShowOnlyCapsImport()) {
+					visible =  ss.isSupportsImport();
+				}
+				if (visible && isShowOnlyCapsForking()) {
+					visible =  ss.isSupportsForking();
+				}
+				
+				filtered = !visible;
 			} else if (e instanceof ScenarioServiceRegistry) {
 				filtered = false;
 			} else if (e instanceof ScenarioFragment) {
@@ -268,5 +286,29 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		}
 
 		return null;
+	}
+
+	public boolean isShowReadOnlyElements() {
+		return showReadOnlyElements;
+	}
+
+	public void setShowReadOnlyElements(final boolean showReadOnlyElements) {
+		this.showReadOnlyElements = showReadOnlyElements;
+	}
+
+	public boolean isShowOnlyCapsImport() {
+		return showOnlyCapsImport;
+	}
+
+	public void setShowOnlyCapsImport(final boolean showCapsImport) {
+		this.showOnlyCapsImport = showCapsImport;
+	}
+
+	public boolean isShowOnlyCapsForking() {
+		return showOnlyCapsForking;
+	}
+
+	public void setShowOnlyCapsForking(final boolean showCapsForking) {
+		this.showOnlyCapsForking = showCapsForking;
 	}
 }
