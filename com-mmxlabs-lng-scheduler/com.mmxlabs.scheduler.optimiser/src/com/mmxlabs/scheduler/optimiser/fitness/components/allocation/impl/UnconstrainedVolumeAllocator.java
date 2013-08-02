@@ -48,26 +48,23 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// greedy assumption: always load as much as possible
 		long loadVolume = capValueWithZeroDefault(loadSlot.getMaxLoadVolume(), availableCargoSpace);
 		
-		result[0] = loadVolume;
-
 		// available volume is non-negative
-		long availableVolumeForDischarge = Math.max(loadVolume + constraint.startVolumeInM3 - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3, 0);
+		long unusedVolume = Math.max(loadVolume + constraint.startVolumeInM3 - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3, 0);
 
 		// load / discharge case
+		// this is subsumed by the LDD* case, but can be done more efficiently 
 		if (slots.length == 2) {
 			
 			IDischargeOption dischargeSlot = (IDischargeOption) slots[1]; 
 
 			// greedy assumption: always discharge as much as possible
-			long dischargeVolume = capValueWithZeroDefault(dischargeSlot.getMaxDischargeVolume(), availableVolumeForDischarge);
+			long dischargeVolume = capValueWithZeroDefault(dischargeSlot.getMaxDischargeVolume(), unusedVolume);
 
 			// TODO: this method does not yet enforce minimum load / discharge constraints
 			
-			/* TODO: if the max discharge volume would leave excess heel, the correct load volume 
-			 * decision depends on relative prices at this load and the next.   
-			 */ 
-			
 			result[1] = dischargeVolume;
+			unusedVolume -= dischargeVolume;
+
 		}		
 		// multiple load/discharge case
 		else {
@@ -84,7 +81,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				
 				// assign the minimum amount per discharge slot
 				result[i] = minDischargeVolume;
-				availableVolumeForDischarge -= minDischargeVolume;
+				unusedVolume -= minDischargeVolume;
 				
 				// more profitable ? 
 				if (i > 1 && prices[i] > prices[mostProfitableDischargeIndex]) {
@@ -96,22 +93,43 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			
 			// now, starting with the most profitable discharge slot, allocate
 			// any remaining volume
-			for (int i = 0; i < nDischargeSlots && availableVolumeForDischarge > 0; i++) {
+			for (int i = 0; i < nDischargeSlots && unusedVolume > 0; i++) {
 				// start at the most profitable slot and cycle through them in order
 				// TODO: would be better to sort them by profitability, but needs to be done efficiently
 				int index = 1 + ((i + mostProfitableDischargeIndex) % nDischargeSlots);
 				
 				IDischargeOption slot = (IDischargeOption) slots[index];
 				// discharge all remaining volume at this slot, up to the slot maximum 
-				long volume = Math.min(slot.getMaxDischargeVolume(), availableVolumeForDischarge);
+				long volume = Math.min(slot.getMaxDischargeVolume(), unusedVolume);
 				// reduce the remaining available volume 
-				availableVolumeForDischarge -= volume - result[index];
+				unusedVolume -= volume - result[index];
 				result[index] = volume;
 			}
 			
 			// Note this currently does nothing as the next() method in the allocator iterator (BaseCargoAllocator) ignores this data and looks directly on the discharge slot.
 		}
 		
+		/* TODO: if the max discharge volume would leave excess heel, the correct load volume 
+		 * decision depends on relative prices at this load and the next.
+		 * Presently we use a conservative heuristic: load exactly as much as we need, subject to constraints   
+		 */ 
+		
+		// if there is any leftover volume after discharge
+		if (unusedVolume > 0) {
+			// we use a conservative heuristic: load exactly as much as we need, subject to constraints
+			long revisedLoadVolume = Math.max(loadVolume - unusedVolume, loadSlot.getMinLoadVolume());
+			
+			unusedVolume -= loadVolume - revisedLoadVolume;
+			loadVolume = revisedLoadVolume;
+		}
+		
+		// under certain circumstances, the remaining heel may be more than expected
+		// for instance, when a minimum load constraint far exceeds a maximum discharge constraint
+		
+		constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3 + unusedVolume;
+		
+		result[0] = loadVolume;
+
 	}
 	
 	/*

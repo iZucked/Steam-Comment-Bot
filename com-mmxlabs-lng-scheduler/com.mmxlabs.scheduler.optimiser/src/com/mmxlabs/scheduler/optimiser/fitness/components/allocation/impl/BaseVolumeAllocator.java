@@ -62,6 +62,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
 		final long minEndVolumeInM3;
 		
+		/** The LNG volume which will actually remain at the end of the voyage */
+		long allocatedEndVolumeInM3;
+		
 		/** Prices of LNG at each load / discharge slot in the cargo */
 		final int [] slotPricesPerM3;
 		
@@ -91,7 +94,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			final AllocationAnnotation annotation = new AllocationAnnotation();
 
 			annotation.setFuelVolumeInM3(requiredFuelVolumeInM3);
-			annotation.setRemainingHeelVolumeInM3(minEndVolumeInM3);
+			annotation.setRemainingHeelVolumeInM3(allocatedEndVolumeInM3);
 
 			// TODO recompute load price here; this is not necessarily right
 			// final int[] prices = priceIterator.next();
