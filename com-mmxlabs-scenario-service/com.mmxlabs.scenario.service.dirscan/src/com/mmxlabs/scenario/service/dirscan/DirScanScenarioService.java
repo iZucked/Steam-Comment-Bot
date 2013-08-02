@@ -146,17 +146,15 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		serviceName = d.get("serviceName").toString();
 
 		dataPath = new File(path);
-		// initFileWatcher(dataPath);
+
 		try {
 			folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
 			recursiveAdd(getServiceModel(), dataPath.toPath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (final IOException e) {
 			log.error(e.getMessage(), e);
 		}
 
-		Thread t = new Thread() {
+		final Thread t = new Thread() {
 			public void run() {
 
 				for (;;) {
@@ -165,18 +163,18 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					WatchKey key;
 					try {
 						key = watcher.take();
-					} catch (InterruptedException x) {
+					} catch (final InterruptedException x) {
 						return;
 					}
 
-					Path dir = keys.get(key);
+					final Path dir = keys.get(key);
 					if (dir == null) {
 						System.err.println("WatchKey not recognized!!");
 						continue;
 					}
 
-					for (WatchEvent<?> event : key.pollEvents()) {
-						WatchEvent.Kind kind = event.kind();
+					for (final WatchEvent<?> event : key.pollEvents()) {
+						final WatchEvent.Kind kind = event.kind();
 
 						// TBD - provide example of how OVERFLOW event is handled
 						if (kind == OVERFLOW) {
@@ -185,27 +183,27 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 						// Context for directory entry event is the file name of entry
 						@SuppressWarnings("unchecked")
-						WatchEvent<Path> ev = (WatchEvent<Path>) (event);
-						Path name = ev.context();
-						Path child = dir.resolve(name);
+						final WatchEvent<Path> ev = (WatchEvent<Path>) (event);
+						final Path name = ev.context();
+						final Path child = dir.resolve(name);
 
 						// if directory is created, and watching recursively, then
 						// register it and its sub-directories
 						if (kind == ENTRY_CREATE) {
 							try {
 								recursiveAdd(folderMap.get(child.getParent().normalize().toString()).get(), child);
-							} catch (IOException x) {
+							} catch (final IOException x) {
 								// ignore to keep sample readbale
 							}
 						}
 
 						else if (kind == ENTRY_DELETE) {
 
-							String pathKey = child.normalize().toString();
+							final String pathKey = child.normalize().toString();
 							if (folderMap.containsKey(pathKey)) {
 								try {
 									removeFolder(child);
-								} catch (IOException e) {
+								} catch (final IOException e) {
 									e.printStackTrace();
 								}
 
@@ -215,7 +213,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						} else if (kind == ENTRY_MODIFY) {
 							//
 							if (Files.isRegularFile(child)) {
-								String pathKey = child.normalize().toString();
+								final String pathKey = child.normalize().toString();
 								if (!scenarioMap.containsKey(pathKey)) {
 									addFile(child);
 								}
@@ -224,7 +222,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					}
 
 					// reset key and remove from set if directory no longer accessible
-					boolean valid = key.reset();
+					final boolean valid = key.reset();
 					if (!valid) {
 						keys.remove(key);
 
@@ -243,47 +241,19 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	/**
 	 * Register the given directory, and all its sub-directories, with the WatchService.
 	 */
-	private void recursiveRemove(final Path path) throws IOException {
-		// Container c = folderMap.remove(path.normalize().toString());
-		// if (c != null) {
-		// removeFolder(path);
-
-		// register directory and sub-directories
-		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-
-				removeFolder(dir);
-
-				return FileVisitResult.CONTINUE;
-			}
-
-			@Override
-			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-
-				removeFile(file);
-
-				return super.visitFile(file, attrs);
-			}
-		});
-	}
-
-	/**
-	 * Register the given directory, and all its sub-directories, with the WatchService.
-	 */
-	private void recursiveAdd(Container root, final Path dataPath) throws IOException {
-		// folderMap.put(dataPath.normalize().toString(), new WeakReference<Container>( root));
+	private void recursiveAdd(final Container root, final Path dataPath) throws IOException {
 		// register directory and sub-directories
 		Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
 			@Override
-			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+			public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
 
 				addFolder(dir);
+
 				return FileVisitResult.CONTINUE;
 			}
 
 			@Override
-			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
 
 				addFile(file);
 
@@ -292,21 +262,19 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		});
 	}
 
-	protected void removeFolder(Path dir) throws IOException {
+	protected void removeFolder(final Path dir) throws IOException {
 
-		System.out.println("Remove Folder: " + dir);
-
-		Container c = folderMap.remove(dir.normalize().toString()).get();
+		final Container c = folderMap.remove(dir.normalize().toString()).get();
 		if (c != null) {
 			detachSubTree(c);
-			EObject container = c.eContainer();
+			final EObject container = c.eContainer();
 			if (container instanceof Container) {
 				((Container) container).getElements().remove(c);
 			}
 		}
-		for (Map.Entry<WatchKey, Path> e : keys.entrySet()) {
+		for (final Map.Entry<WatchKey, Path> e : keys.entrySet()) {
 			if (e.getValue().equals(dir)) {
-				WatchKey key = e.getKey();
+				final WatchKey key = e.getKey();
 				key.cancel();
 				keys.remove(key);
 				break;
@@ -314,15 +282,13 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 	}
 
-	protected void addFolder(Path dir) throws IOException {
-
-		System.out.println("Add Folder: " + dir);
+	protected void addFolder(final Path dir) throws IOException {
 
 		// top entry will have no parent....
 		if (!dir.equals(dataPath.toPath())) {
 			final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
 
-			String string = dir.getParent().normalize().toString();
+			final String string = dir.getParent().normalize().toString();
 			// Add folder to parent
 			folderMap.get(string).get().getElements().add(folder);
 
@@ -331,15 +297,13 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			// Store in map
 			folderMap.put(dir.normalize().toString(), new WeakReference<Container>(folder));
 		}
-		WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+		final WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 		keys.put(key, dir);
 	}
 
-	protected void addFile(Path file) {
+	protected void addFile(final Path file) {
 
-		System.out.println("Add File: " + file);
-
-		File f = file.toFile();
+		final File f = file.toFile();
 		final Manifest manifest = loadManifest(f);
 		if (manifest != null) {
 			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
@@ -353,22 +317,21 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
 			scenarioInstance.setMetadata(meta);
 			meta.setContentType(manifest.getScenarioType());
-			String string = file.getParent().normalize().toString();
-			System.out.println("Parent " + string);
-			WeakReference<Container> weakReference = folderMap.get(string);
+			final String string = file.getParent().normalize().toString();
+
+			final WeakReference<Container> weakReference = folderMap.get(string);
 			weakReference.get().getElements().add(scenarioInstance);
 
 			scenarioMap.put(file.normalize().toString(), new WeakReference<ScenarioInstance>(scenarioInstance));
 		}
 	}
 
-	protected void removeFile(Path file) {
-		ScenarioInstance c = scenarioMap.remove(file.normalize().toString()).get();
+	protected void removeFile(final Path file) {
+		final ScenarioInstance c = scenarioMap.remove(file.normalize().toString()).get();
 
-		System.out.println("Remove File: " + file + " - " + c);
 		if (c != null) {
 			detachSubTree(c);
-			EObject container = c.eContainer();
+			final EObject container = c.eContainer();
 			if (container instanceof Container) {
 				((Container) container).getElements().remove(c);
 			}
@@ -381,9 +344,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	 * 
 	 * @param c
 	 */
-	private void detachSubTree(Container c) {
+	private void detachSubTree(final Container c) {
 
-		for (Container cc : c.getElements()) {
+		for (final Container cc : c.getElements()) {
 			detachSubTree(cc);
 		}
 		if (c instanceof ScenarioInstance) {
@@ -398,7 +361,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				@Override
 				public void run() {
-					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 					final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
 					// TODO: Prompt to save?
 					activePage.closeEditors(editorReferences, false);
@@ -413,7 +376,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		log.debug("Duplicating " + original.getUuid() + " into " + destination);
 		final IScenarioService originalService = original.getScenarioService();
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		{
 			Container c = destination;
 			while (c != null && !(c instanceof ScenarioService)) {
@@ -424,37 +387,21 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 
 		final ResourceSet instanceResourceSet = createResourceSet();
-		URI scenarioURI = URI.createFileURI(dataPath.toString() + sb.toString() + File.separator + original.getName() + ".lingo");
+		final URI scenarioURI = URI.createFileURI(dataPath.toString() + sb.toString() + File.separator + original.getName() + ".lingo");
 
 		final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
 		if (original.getInstance() == null) {
 			// Not loaded, copy raw data
 			final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
-			URI sourceURI = originalService.resolveURI(original.getRootObjectURI());
+			final URI sourceURI = originalService.resolveURI(original.getRootObjectURI());
 			copyURIData(uc, sourceURI, destURI);
 		} else {
 			// Already loaded? Just use the same instance.
-			EObject rootObject = EcoreUtil.copy(original.getInstance());
+			final EObject rootObject = EcoreUtil.copy(original.getInstance());
 			final Resource instanceResource = instanceResourceSet.createResource(destURI);
 			instanceResource.getContents().add(rootObject);
 			instanceResource.save(null);
 		}
-
-		// // Create new model nodes
-		// final ScenarioInstance dup = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-		// dup.setName(original.getName());
-		// dup.setScenarioVersion(original.getScenarioVersion());
-		// dup.setVersionContext(original.getVersionContext());
-		//
-		// final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-		// dup.setMetadata(metadata);
-		// dup.getMetadata().setContentType(original.getMetadata().getContentType());
-		// dup.getMetadata().setCreated(original.getMetadata().getCreated());
-		// dup.getMetadata().setLastModified(new Date());
-		//
-		// // Create a new UUID
-		// final String uuid = UUID.randomUUID().toString();
-		// dup.setUuid(uuid);
 
 		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
 		manifest.setScenarioType(original.getMetadata().getContentType());
@@ -468,45 +415,27 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		manifest.getModelURIs().add("rootObject.xmi");
 		manifestResource.save(null);
-		//
-		// // Clear dirty flag
-		// dup.setDirty(false);
-		//
-		// // Finally add to node in the service model.
-		// destination.getElements().add(dup);
 
 		return null;
 	}
 
 	@Override
-	public void moveInto(List<Container> elements, Container destination) {
+	public void moveInto(final List<Container> elements, final Container destination) {
 
-		// for (Container element : elements) {
-		//
-		//
-		// }
-
-		// Manipulate file system
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public EObject load(ScenarioInstance instance) throws IOException {
+	public EObject load(final ScenarioInstance instance) throws IOException {
 
 		if (instance.getInstance() == null) {
 
-			EObject object = super.load(instance);
+			final EObject object = super.load(instance);
 
 			if (object != null) {
-				{
-					ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
-					lock.claim();
-				}
-				{
-					ScenarioLock lock = instance.getLock(ScenarioLock.OPTIMISER);
-					lock.claim();
-				}
+				final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
+				lock.claim();
 			}
 
 			return object;
