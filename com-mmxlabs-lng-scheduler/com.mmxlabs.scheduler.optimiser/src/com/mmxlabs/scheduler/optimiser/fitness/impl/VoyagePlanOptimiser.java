@@ -50,6 +50,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private long bestCost = Long.MAX_VALUE;
 
 	private VoyagePlan bestPlan = null;
+	
+	private long startHeel;
 
 	/**
 	 * True iff {@link #bestPlan} meets the requirement that every voyage uses less than or equal to the available time for that voyage
@@ -501,5 +503,15 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	@Override
 	public void addChoice(final IVoyagePlanChoice choice) {
 		choices.add(choice);
+	}
+
+	@Override
+	public void setStartHeel(long heelVolumeInM3) {
+		startHeel = heelVolumeInM3;
+	}
+
+	@Override
+	public long getStartHeel() {
+		return startHeel;
 	}
 }

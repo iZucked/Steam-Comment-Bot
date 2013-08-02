@@ -856,7 +856,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// We cannot load more than is available or which would exceed
 		// vessel capacity.
 		final long upperLoadLimitInM3 = Math.min(cargoCapacityInM3, loadSlot.getMaxLoadVolume());
-
+		
 		// This is the smallest amount of gas we can load
 		if (minLoadVolumeInM3 - lngCommitmentInM3 > maxDischargeVolumeInM3) {
 			
@@ -866,6 +866,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				++violationsCount;
 			} else {
 				// load breach -- need to load less than we are permitted
+
+				/* note - this might not be a genuine violation since rolling over the excess LNG may be permissible
+				 * and in some cases it is even commercially desirable
+				 */ 
+				
 				loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngCommitmentInM3));
 				++violationsCount;
 			}
@@ -880,6 +885,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				++violationsCount;
 			} else {
 				// discharge breach -- need to discharge less than we are permitted
+				
 				dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - lngCommitmentInM3);
 				++violationsCount;
 			}

@@ -53,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
 
 /**
  * Abstract {@link ISequenceScheduler} implementation to manage the sequence optimisation given a set of arrival times at each sequence element. This class handles the construction of
@@ -394,6 +395,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		int prevVisitDuration = 0;
 		final Iterator<ISequenceElement> itr = sequence.iterator();
+
+		long heelVolumeInM3 = 0;
+		
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final ISequenceElement element = itr.next();
 
@@ -452,11 +456,18 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
 				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 				if (!shortCargoEnd) {
-					final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+					final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
 					if (plan == null) {
 						return null;
 					}
 					voyagePlans.add(plan);
+					
+					if (plan.getRemainingHeelType() == HeelType.END) {
+						heelVolumeInM3 = plan.getRemainingHeelInM3();
+					}
+					else{
+						heelVolumeInM3 = 0;
+					}
 				}
 
 				if (isShortsSequence) {
@@ -487,7 +498,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
 			if (plan == null) {
 				return null;
 			}
@@ -545,12 +556,14 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	 *            An alternating list of PortOptions and VoyageOptions objects
 	 * @param arrivalTimes
 	 * @param optimiser
+	 * @param heelVolumeInM3 
 	 * @return An optimised VoyagePlan
 	 */
-	final public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser) {
+	final public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser, long heelVolumeInM3) {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
+		optimiser.setStartHeel(heelVolumeInM3);
 		optimiser.init();
 		final VoyagePlan result = optimiser.optimise();
 		if (result == null) {
@@ -585,8 +598,8 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 	}
 
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) {
-		final VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser);
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser, final long startHeel) {
+		final VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser, startHeel);
 		if (plan == null) {
 			return false;
 		}

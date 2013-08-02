@@ -117,4 +117,15 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 		reference.setArrivalTimes(currentTimes);
 		delegate.setArrivalTimes(currentTimes);
 	}
+
+	@Override
+	public void setStartHeel(long heelVolumeInM3) {
+		delegate.setStartHeel(heelVolumeInM3);
+		reference.setStartHeel(heelVolumeInM3);		
+	}
+
+	@Override
+	public long getStartHeel() {
+		return delegate.getStartHeel();
+	}
 }

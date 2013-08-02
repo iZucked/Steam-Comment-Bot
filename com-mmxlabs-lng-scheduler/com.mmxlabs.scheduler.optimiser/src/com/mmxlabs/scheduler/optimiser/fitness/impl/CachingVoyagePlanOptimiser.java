@@ -45,12 +45,14 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final IPortSlot[] slots;
 		private final List<Object> sequence;
 		private final List<IVoyagePlanChoice> choices;
+		//private final int startVolumeInM3;
 
 		private final int dischargePrice;
 
 		protected List<Integer> arrivalTimes;
+		protected final long startHeel;
 
-		public CacheKey(final IVessel vessel, final int vesselStartTime, final List<Object> sequence, final List<Integer> arrivalTimes, final List<IVoyagePlanChoice> choices) {
+		public CacheKey(final IVessel vessel, final int vesselStartTime, final List<Object> sequence, final List<Integer> arrivalTimes, final List<IVoyagePlanChoice> choices, final long startHeel) {
 			super();
 			this.vessel = vessel;
 			this.vesselStartTime = vesselStartTime;
@@ -78,6 +80,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			this.sequence = sequence;
 			this.arrivalTimes = arrivalTimes;
 			this.choices = choices;
+			this.startHeel = startHeel;
 
 			if ((loadix != -1) && (dischargeix != -1)) {
 				// loadPrice =
@@ -144,6 +147,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private List<Integer> arrivalTimes;
 
+	private long startHeel;
 
 	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
@@ -162,6 +166,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 				delegate.setBasicSequence(arg.sequence);
 				delegate.setArrivalTimes(arg.arrivalTimes);
+				delegate.setStartHeel(arg.startHeel);
 				delegate.init();
 				delegate.optimise();
 
@@ -178,7 +183,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	@Override
 	public VoyagePlan optimise() {
 
-		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, vesselStartTime, basicSequence, arrivalTimes, choices));
+		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, vesselStartTime, basicSequence, arrivalTimes, choices, startHeel));
 
 		// bestPlan = (VoyagePlan) best.getFirst().clone();
 		bestPlan = best.getFirst();
@@ -254,6 +259,16 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	@Override
 	public void setArrivalTimes(final List<Integer> arrivalTimes) {
 		this.arrivalTimes = arrivalTimes;
+	}
+
+	@Override
+	public void setStartHeel(long heelVolumeInM3) {
+		startHeel = heelVolumeInM3;		
+	}
+
+	@Override
+	public long getStartHeel() {
+		return startHeel;
 	}
 
 }

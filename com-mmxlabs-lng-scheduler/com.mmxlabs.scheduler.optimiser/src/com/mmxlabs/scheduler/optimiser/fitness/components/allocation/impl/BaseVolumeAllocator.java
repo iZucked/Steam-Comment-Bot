@@ -62,6 +62,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
 		final long minEndVolumeInM3;
 		
+		//final long maxEndVolumeInM3;
+		
 		/** The LNG volume which will actually remain at the end of the voyage */
 		long allocatedEndVolumeInM3;
 		

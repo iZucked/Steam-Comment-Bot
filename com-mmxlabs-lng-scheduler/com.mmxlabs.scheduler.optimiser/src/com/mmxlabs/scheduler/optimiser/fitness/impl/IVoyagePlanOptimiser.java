@@ -103,4 +103,12 @@ public interface IVoyagePlanOptimiser {
 	 */
 	void addChoice(final IVoyagePlanChoice choice);
 
+	/**
+	 * The start heel for this particular voyage.
+	 * @param heelVolumeInM3
+	 */
+	void setStartHeel(long heelVolumeInM3);
+	
+	long getStartHeel();
+
 }
