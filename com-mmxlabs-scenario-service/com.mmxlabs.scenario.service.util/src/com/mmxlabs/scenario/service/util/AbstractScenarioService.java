@@ -380,7 +380,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 5.0
 	 */
 	@SuppressWarnings("resource")
 	protected void copyURIData(@NonNull final URIConverter uc, @NonNull final URI src, @NonNull final URI dest) throws IOException {

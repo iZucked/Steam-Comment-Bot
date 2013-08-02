@@ -300,6 +300,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Supports Forking</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -309,6 +310,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Supports Import</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -494,6 +496,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Readonly</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -852,6 +855,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsForking <em>Supports Forking</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Supports Forking</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioService#isSupportsForking()
@@ -863,6 +867,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport <em>Supports Import</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Supports Import</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport()
@@ -987,6 +992,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Readonly</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly()
@@ -1236,424 +1242,5 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	ScenarioServiceFactory getScenarioServiceFactory();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * Defines literals for the meta objects that represent
-	 * <ul>
-	 *   <li>each class,</li>
-	 *   <li>each feature of each class,</li>
-	 *   <li>each enum,</li>
-	 *   <li>and each data type</li>
-	 * </ul>
-	 * @noimplement This interface is not intended to be implemented by clients.
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	interface Literals {
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioModelImpl <em>Scenario Model</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioModelImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioModel()
-		 * @generated
-		 */
-		EClass SCENARIO_MODEL = eINSTANCE.getScenarioModel();
-
-		/**
-		 * The meta object literal for the '<em><b>Scenario Services</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_MODEL__SCENARIO_SERVICES = eINSTANCE.getScenarioModel_ScenarioServices();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl <em>Container</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.ContainerImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getContainer()
-		 * @generated
-		 */
-		EClass CONTAINER = eINSTANCE.getContainer();
-
-		/**
-		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CONTAINER__PARENT = eINSTANCE.getContainer_Parent();
-
-		/**
-		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CONTAINER__ELEMENTS = eINSTANCE.getContainer_Elements();
-
-		/**
-		 * The meta object literal for the '<em><b>Archived</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CONTAINER__ARCHIVED = eINSTANCE.getContainer_Archived();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CONTAINER__NAME = eINSTANCE.getContainer_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Hidden</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CONTAINER__HIDDEN = eINSTANCE.getContainer_Hidden();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.FolderImpl <em>Folder</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.FolderImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getFolder()
-		 * @generated
-		 */
-		EClass FOLDER = eINSTANCE.getFolder();
-
-		/**
-		 * The meta object literal for the '<em><b>Metadata</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FOLDER__METADATA = eINSTANCE.getFolder_Metadata();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl <em>Scenario Service</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioService()
-		 * @generated
-		 */
-		EClass SCENARIO_SERVICE = eINSTANCE.getScenarioService();
-
-		/**
-		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_SERVICE__DESCRIPTION = eINSTANCE.getScenarioService_Description();
-
-		/**
-		 * The meta object literal for the '<em><b>Service Ref</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_SERVICE__SERVICE_REF = eINSTANCE.getScenarioService_ServiceRef();
-
-		/**
-		 * The meta object literal for the '<em><b>Supports Forking</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_SERVICE__SUPPORTS_FORKING = eINSTANCE.getScenarioService_SupportsForking();
-
-		/**
-		 * The meta object literal for the '<em><b>Supports Import</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_SERVICE__SUPPORTS_IMPORT = eINSTANCE.getScenarioService_SupportsImport();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioInstance()
-		 * @generated
-		 */
-		EClass SCENARIO_INSTANCE = eINSTANCE.getScenarioInstance();
-
-		/**
-		 * The meta object literal for the '<em><b>Uuid</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__UUID = eINSTANCE.getScenarioInstance_Uuid();
-
-		/**
-		 * The meta object literal for the '<em><b>Metadata</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__METADATA = eINSTANCE.getScenarioInstance_Metadata();
-
-		/**
-		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__LOCKED = eINSTANCE.getScenarioInstance_Locked();
-
-		/**
-		 * The meta object literal for the '<em><b>Instance</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__INSTANCE = eINSTANCE.getScenarioInstance_Instance();
-
-		/**
-		 * The meta object literal for the '<em><b>Adapters</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__ADAPTERS = eINSTANCE.getScenarioInstance_Adapters();
-
-		/**
-		 * The meta object literal for the '<em><b>Root Object URI</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 4.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__ROOT_OBJECT_URI = eINSTANCE.getScenarioInstance_RootObjectURI();
-
-		/**
-		 * The meta object literal for the '<em><b>Scenario Version</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.1
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__SCENARIO_VERSION = eINSTANCE.getScenarioInstance_ScenarioVersion();
-
-		/**
-		 * The meta object literal for the '<em><b>Version Context</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.1
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__VERSION_CONTEXT = eINSTANCE.getScenarioInstance_VersionContext();
-
-		/**
-		 * The meta object literal for the '<em><b>Fragments</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * @since 4.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__FRAGMENTS = eINSTANCE.getScenarioInstance_Fragments();
-
-		/**
-		 * The meta object literal for the '<em><b>Readonly</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__READONLY = eINSTANCE.getScenarioInstance_Readonly();
-
-		/**
-		 * The meta object literal for the '<em><b>Dirty</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__DIRTY = eINSTANCE.getScenarioInstance_Dirty();
-
-		/**
-		 * The meta object literal for the '<em><b>Locks</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_INSTANCE__LOCKS = eINSTANCE.getScenarioInstance_Locks();
-
-		/**
-		 * The meta object literal for the '<em><b>Validation Status Code</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = eINSTANCE.getScenarioInstance_ValidationStatusCode();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.MetadataImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getMetadata()
-		 * @generated
-		 */
-		EClass METADATA = eINSTANCE.getMetadata();
-
-		/**
-		 * The meta object literal for the '<em><b>Creator</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute METADATA__CREATOR = eINSTANCE.getMetadata_Creator();
-
-		/**
-		 * The meta object literal for the '<em><b>Created</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute METADATA__CREATED = eINSTANCE.getMetadata_Created();
-
-		/**
-		 * The meta object literal for the '<em><b>Last Modified</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute METADATA__LAST_MODIFIED = eINSTANCE.getMetadata_LastModified();
-
-		/**
-		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute METADATA__COMMENT = eINSTANCE.getMetadata_Comment();
-
-		/**
-		 * The meta object literal for the '<em><b>Last Modified By</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute METADATA__LAST_MODIFIED_BY = eINSTANCE.getMetadata_LastModifiedBy();
-
-		/**
-		 * The meta object literal for the '<em><b>Content Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute METADATA__CONTENT_TYPE = eINSTANCE.getMetadata_ContentType();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioLockImpl <em>Scenario Lock</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioLockImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioLock()
-		 * @generated
-		 */
-		EClass SCENARIO_LOCK = eINSTANCE.getScenarioLock();
-
-		/**
-		 * The meta object literal for the '<em><b>Available</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_LOCK__AVAILABLE = eINSTANCE.getScenarioLock_Available();
-
-		/**
-		 * The meta object literal for the '<em><b>Claimed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_LOCK__CLAIMED = eINSTANCE.getScenarioLock_Claimed();
-
-		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_LOCK__KEY = eINSTANCE.getScenarioLock_Key();
-
-		/**
-		 * The meta object literal for the '<em><b>Instance</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_LOCK__INSTANCE = eINSTANCE.getScenarioLock_Instance();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl <em>Scenario Fragment</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * @since 4.0
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioFragment()
-		 * @generated
-		 */
-		EClass SCENARIO_FRAGMENT = eINSTANCE.getScenarioFragment();
-
-		/**
-		 * The meta object literal for the '<em><b>Scenario Instance</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 4.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_FRAGMENT__SCENARIO_INSTANCE = eINSTANCE.getScenarioFragment_ScenarioInstance();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 4.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_FRAGMENT__NAME = eINSTANCE.getScenarioFragment_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Fragment</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 4.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCENARIO_FRAGMENT__FRAGMENT = eINSTANCE.getScenarioFragment_Fragment();
-
-		/**
-		 * The meta object literal for the '<em><b>Content Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @since 4.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SCENARIO_FRAGMENT__CONTENT_TYPE = eINSTANCE.getScenarioFragment_ContentType();
-
-		/**
-		 * The meta object literal for the '<em>IScenario Service</em>' data type.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.IScenarioService
-		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getIScenarioService()
-		 * @generated
-		 */
-		EDataType ISCENARIO_SERVICE = eINSTANCE.getIScenarioService();
-
-	}
 
 } //ScenarioServicePackage

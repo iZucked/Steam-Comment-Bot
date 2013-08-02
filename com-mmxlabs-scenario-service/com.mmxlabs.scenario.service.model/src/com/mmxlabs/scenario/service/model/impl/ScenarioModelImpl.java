@@ -55,7 +55,7 @@ public class ScenarioModelImpl extends EObjectImpl implements ScenarioModel {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.SCENARIO_MODEL;
+		return ScenarioServicePackage.eINSTANCE.getScenarioModel();
 	}
 
 	/**

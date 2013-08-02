@@ -36,7 +36,7 @@ public class ScenarioServiceSelectionGroup extends Composite {
 
 	private ScenarioServiceContentProvider contentProvider;
 	
-	public ScenarioServiceSelectionGroup(final Composite parent, final Listener listener, int style) {
+	public ScenarioServiceSelectionGroup(final Composite parent, final Listener listener, final int style) {
 		super(parent, style);
 		this.listener = listener;
 		createContents();
@@ -124,15 +124,24 @@ public class ScenarioServiceSelectionGroup extends Composite {
 		treeViewer.setInput(registry);
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public ScenarioServiceContentProvider getContentProvider() {
 		return contentProvider; 
 	}
 
+	/**
+	 * @since 5.0
+	 */
 	public boolean isSetShowOnlyCapsImport() {
 		return setShowOnlyCapsImport;
 	}
 
-	public void setSetShowOnlyCapsImport(boolean setShowOnlyCapsImport) {
+	/**
+	 * @since 5.0
+	 */
+	public void setSetShowOnlyCapsImport(final boolean setShowOnlyCapsImport) {
 		this.setShowOnlyCapsImport = setShowOnlyCapsImport;
 		if (contentProvider != null) {
 			contentProvider.setShowOnlyCapsImport(setShowOnlyCapsImport);

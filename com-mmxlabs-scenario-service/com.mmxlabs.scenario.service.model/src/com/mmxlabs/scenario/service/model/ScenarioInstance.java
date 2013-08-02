@@ -279,6 +279,7 @@ public interface ScenarioInstance extends Container {
 	 * If the meaning of the '<em>Readonly</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Readonly</em>' attribute.
 	 * @see #setReadonly(boolean)
@@ -291,6 +292,7 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Readonly</em>' attribute.
 	 * @see #isReadonly()

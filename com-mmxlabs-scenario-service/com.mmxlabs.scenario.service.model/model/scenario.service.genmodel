@@ -6,7 +6,7 @@
     complianceLevel="6.0" copyrightFields="false" runtimeVersion="2.8">
   <foreignModel>scenario.service.ecore</foreignModel>
   <genPackages prefix="ScenarioService" basePackage="com.mmxlabs.scenario.service"
-      disposableProviderFactory="true" ecorePackage="scenario.service.ecore#/">
+      disposableProviderFactory="true" literalsInterface="false" ecorePackage="scenario.service.ecore#/">
     <genDataTypes ecoreDataType="scenario.service.ecore#//IScenarioService"/>
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioModel">
       <genFeatures children="true" createChild="false" propertySortChoices="true"
@@ -29,6 +29,8 @@
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioService">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/serviceRef"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/supportsForking"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/supportsImport"/>
     </genClasses>
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioInstance">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/uuid"/>

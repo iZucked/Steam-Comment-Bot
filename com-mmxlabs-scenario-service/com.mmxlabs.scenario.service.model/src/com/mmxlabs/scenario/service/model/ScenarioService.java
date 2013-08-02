@@ -85,6 +85,7 @@ public interface ScenarioService extends Container {
 	 * If the meaning of the '<em>Supports Forking</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Supports Forking</em>' attribute.
 	 * @see #setSupportsForking(boolean)
@@ -97,6 +98,7 @@ public interface ScenarioService extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsForking <em>Supports Forking</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Supports Forking</em>' attribute.
 	 * @see #isSupportsForking()
@@ -111,6 +113,7 @@ public interface ScenarioService extends Container {
 	 * If the meaning of the '<em>Supports Import</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Supports Import</em>' attribute.
 	 * @see #setSupportsImport(boolean)
@@ -123,6 +126,7 @@ public interface ScenarioService extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport <em>Supports Import</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Supports Import</em>' attribute.
 	 * @see #isSupportsImport()

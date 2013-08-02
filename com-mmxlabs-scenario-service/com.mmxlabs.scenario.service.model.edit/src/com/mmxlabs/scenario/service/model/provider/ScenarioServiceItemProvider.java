@@ -54,6 +54,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 			addDescriptionPropertyDescriptor(object);
 			addServiceRefPropertyDescriptor(object);
 			addSupportsForkingPropertyDescriptor(object);
+			addSupportsImportPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -67,7 +68,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 	protected void addDescriptionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioService_description_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_description_feature", "_UI_ScenarioService_type"),
-				ScenarioServicePackage.Literals.SCENARIO_SERVICE__DESCRIPTION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioService_Description(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -79,19 +80,33 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 	protected void addServiceRefPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioService_serviceRef_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_serviceRef_feature", "_UI_ScenarioService_type"),
-				ScenarioServicePackage.Literals.SCENARIO_SERVICE__SERVICE_REF, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioService_ServiceRef(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
 	 * This adds a property descriptor for the Supports Forking feature.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addSupportsForkingPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioService_supportsForking_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_supportsForking_feature", "_UI_ScenarioService_type"),
-				ScenarioServicePackage.Literals.SCENARIO_SERVICE__SUPPORTS_FORKING, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioService_SupportsForking(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Supports Import feature.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSupportsImportPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_supportsImport_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_supportsImport_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioService_SupportsImport(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -132,6 +147,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
+		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}

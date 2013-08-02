@@ -72,6 +72,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	/**
 	 * The default value of the '{@link #isSupportsForking() <em>Supports Forking</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isSupportsForking()
 	 * @generated
@@ -82,6 +83,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	/**
 	 * The cached value of the '{@link #isSupportsForking() <em>Supports Forking</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isSupportsForking()
 	 * @generated
@@ -92,6 +94,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	/**
 	 * The default value of the '{@link #isSupportsImport() <em>Supports Import</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isSupportsImport()
 	 * @generated
@@ -102,6 +105,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	/**
 	 * The cached value of the '{@link #isSupportsImport() <em>Supports Import</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isSupportsImport()
 	 * @generated
@@ -125,7 +129,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.SCENARIO_SERVICE;
+		return ScenarioServicePackage.eINSTANCE.getScenarioService();
 	}
 
 	/**
@@ -172,6 +176,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -181,6 +186,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -193,6 +199,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -202,6 +209,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

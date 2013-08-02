@@ -69,7 +69,7 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 	 */
 	protected void addArchivedPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_Container_archived_feature"), getString("_UI_Container_archived_description"), ScenarioServicePackage.Literals.CONTAINER__ARCHIVED, true, false, false,
+				getString("_UI_Container_archived_feature"), getString("_UI_Container_archived_description"), ScenarioServicePackage.eINSTANCE.getContainer_Archived(), true, false, false,
 				ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
@@ -81,7 +81,7 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Container_name_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Container_name_feature", "_UI_Container_type"), ScenarioServicePackage.Literals.CONTAINER__NAME, true, false, false,
+				getString("_UI_PropertyDescriptor_description", "_UI_Container_name_feature", "_UI_Container_type"), ScenarioServicePackage.eINSTANCE.getContainer_Name(), true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -93,7 +93,7 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 	 */
 	protected void addHiddenPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Container_hidden_feature"),
-				getString("_UI_Container_hidden_description"), ScenarioServicePackage.Literals.CONTAINER__HIDDEN, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+				getString("_UI_Container_hidden_description"), ScenarioServicePackage.eINSTANCE.getContainer_Hidden(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScenarioServicePackage.Literals.CONTAINER__ELEMENTS);
+			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getContainer_Elements());
 		}
 		return childrenFeatures;
 	}
@@ -173,11 +173,11 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.CONTAINER__ELEMENTS, ScenarioServiceFactory.eINSTANCE.createFolder()));
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getContainer_Elements(), ScenarioServiceFactory.eINSTANCE.createFolder()));
 
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.CONTAINER__ELEMENTS, ScenarioServiceFactory.eINSTANCE.createScenarioService()));
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getContainer_Elements(), ScenarioServiceFactory.eINSTANCE.createScenarioService()));
 
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.CONTAINER__ELEMENTS, ScenarioServiceFactory.eINSTANCE.createScenarioInstance()));
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getContainer_Elements(), ScenarioServiceFactory.eINSTANCE.createScenarioInstance()));
 	}
 
 	/**

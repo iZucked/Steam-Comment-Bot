@@ -127,7 +127,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.CONTAINER;
+		return ScenarioServicePackage.eINSTANCE.getContainer();
 	}
 
 	/**

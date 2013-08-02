@@ -66,7 +66,7 @@ public class FolderItemProvider extends ContainerItemProvider implements IEditin
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScenarioServicePackage.Literals.FOLDER__METADATA);
+			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getFolder_Metadata());
 		}
 		return childrenFeatures;
 	}
@@ -137,7 +137,7 @@ public class FolderItemProvider extends ContainerItemProvider implements IEditin
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.FOLDER__METADATA, ScenarioServiceFactory.eINSTANCE.createMetadata()));
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getFolder_Metadata(), ScenarioServiceFactory.eINSTANCE.createMetadata()));
 	}
 
 }

@@ -100,7 +100,7 @@ public class ScenarioFragmentImpl extends EObjectImpl implements ScenarioFragmen
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.SCENARIO_FRAGMENT;
+		return ScenarioServicePackage.eINSTANCE.getScenarioFragment();
 	}
 
 	/**

@@ -111,7 +111,7 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.SCENARIO_LOCK;
+		return ScenarioServicePackage.eINSTANCE.getScenarioLock();
 	}
 
 	/**
