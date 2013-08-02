@@ -19,7 +19,7 @@ import com.mmxlabs.scenario.service.dirscan.preferences.PreferenceConstants;
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(Activator.class);
 
 	// The plug-in ID
@@ -32,7 +32,7 @@ public class Activator extends AbstractUIPlugin {
 
 	private ServiceRegistration<IScenarioService> dirScanRegistration;
 
-	// private BundleContext context;
+	private DirScanScenarioService dirScanService;
 
 	/**
 	 * The constructor
@@ -85,14 +85,13 @@ public class Activator extends AbstractUIPlugin {
 			// used internally
 			props.put("component.id", serviceName);
 
-			DirScanScenarioService service;
 			try {
-				service = new DirScanScenarioService(serviceName);
+				dirScanService = new DirScanScenarioService(serviceName);
 				// Various ways of passing properties which do not work...
-				dirScanRegistration = getBundle().getBundleContext().registerService(IScenarioService.class, service, props);
+				dirScanRegistration = getBundle().getBundleContext().registerService(IScenarioService.class, dirScanService, props);
 				dirScanRegistration.setProperties(props);
 				// .. the way I've found to make it work...
-				service.updated(props);
+				dirScanService.start(props);
 			} catch (IOException e) {
 				log.error("Error starting DirScan Scenario Service: " + e.getMessage(), e);
 			}
@@ -105,6 +104,9 @@ public class Activator extends AbstractUIPlugin {
 
 			dirScanRegistration.unregister();
 			dirScanRegistration = null;
+
+			dirScanService.stop();
+			dirScanService = null;
 		}
 	}
 

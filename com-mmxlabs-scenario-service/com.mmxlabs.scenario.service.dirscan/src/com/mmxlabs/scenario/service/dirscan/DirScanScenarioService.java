@@ -12,12 +12,14 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.nio.file.ClosedWatchServiceException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.WatchEvent;
+import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -25,6 +27,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -59,15 +62,27 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	private static final Logger log = LoggerFactory.getLogger(DirScanScenarioService.class);
 
+	/**
+	 * Root of the directory tree
+	 */
 	private File dataPath;
 
+	/**
+	 * Name of this service
+	 */
 	private String serviceName;
 
-	private final WatchService watcher;
+	/**
+	 * The watch service instance
+	 */
+	private WatchService watcher;
 	private final Map<WatchKey, Path> keys;
 
 	private final Map<String, WeakReference<Container>> folderMap = new HashMap<String, WeakReference<Container>>();
 	private final Map<String, WeakReference<ScenarioInstance>> scenarioMap = new HashMap<String, WeakReference<ScenarioInstance>>();
+
+	private Thread watchThread;
+	private volatile boolean watchThreadRunning;
 
 	private final EContentAdapter serviceModelAdapter = new EContentAdapter() {
 		@Override
@@ -83,7 +98,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	public DirScanScenarioService(final String name) throws IOException {
 		super(name);
-		this.watcher = FileSystems.getDefault().newWatchService();
 		this.keys = new HashMap<WatchKey, Path>();
 
 	}
@@ -138,7 +152,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		return null;
 	}
 
-	public void updated(final Dictionary<?, ?> d) {
+	public void start(final Dictionary<?, ?> d) throws IOException {
 
 		// TODO Auto-generated method stub
 		// final String scenarioServiceID = d.get("component.id").toString();
@@ -147,6 +161,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		dataPath = new File(path);
 
+		this.watcher = FileSystems.getDefault().newWatchService();
 		try {
 			folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
 			recursiveAdd(getServiceModel(), dataPath.toPath());
@@ -154,17 +169,26 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			log.error(e.getMessage(), e);
 		}
 
-		final Thread t = new Thread() {
+		watchThreadRunning = true;
+		watchThread = new Thread("DirScan Watcher") {
+			@Override
 			public void run() {
 
-				for (;;) {
+				while (watchThreadRunning) {
 
 					// wait for key to be signalled
 					WatchKey key;
 					try {
-						key = watcher.take();
+						// Yield every 2 seconds to check running state
+						key = watcher.poll(2, TimeUnit.SECONDS);
+					} catch (final ClosedWatchServiceException e) {
+						break;
 					} catch (final InterruptedException x) {
 						return;
+					}
+
+					if (key == null) {
+						continue;
 					}
 
 					final Path dir = keys.get(key);
@@ -174,7 +198,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					}
 
 					for (final WatchEvent<?> event : key.pollEvents()) {
-						final WatchEvent.Kind kind = event.kind();
+						final Kind<?> kind = event.kind();
 
 						// TBD - provide example of how OVERFLOW event is handled
 						if (kind == OVERFLOW) {
@@ -184,6 +208,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						// Context for directory entry event is the file name of entry
 						@SuppressWarnings("unchecked")
 						final WatchEvent<Path> ev = (WatchEvent<Path>) (event);
+						// Work out filename - if renamed or deleted, the old name will no longer exist on filesystem.
 						final Path name = ev.context();
 						final Path child = dir.resolve(name);
 
@@ -192,8 +217,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						if (kind == ENTRY_CREATE) {
 							try {
 								recursiveAdd(folderMap.get(child.getParent().normalize().toString()).get(), child);
-							} catch (final IOException x) {
-								// ignore to keep sample readbale
+							} catch (final IOException e) {
+								log.error(e.getMessage(), e);
 							}
 						}
 
@@ -204,7 +229,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 								try {
 									removeFolder(child);
 								} catch (final IOException e) {
-									e.printStackTrace();
+									log.error(e.getMessage(), e);
 								}
 
 							} else if (scenarioMap.containsKey(pathKey)) {
@@ -232,10 +257,33 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						}
 					}
 				}
-
 			};
 		};
-		t.start();
+		watchThread.start();
+	}
+
+	public void stop() {
+
+		// Terminate watch thread
+		watchThreadRunning = false;
+		// Close watch service - this will cause the watch#poll/take methods to throw exceptions
+		try {
+			watcher.close();
+		} catch (final IOException e) {
+			log.error(e.getMessage(), e);
+		}
+		// Cancel all keys
+		for (final WatchKey key : keys.keySet()) {
+			key.cancel();
+		}
+		// Remove Model elements
+		getServiceModel().getElements().clear();
+
+		// Empty maps
+		keys.clear();
+		folderMap.clear();
+		scenarioMap.clear();
+
 	}
 
 	/**
@@ -309,16 +357,18 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 			scenarioInstance.setReadonly(true);
 			scenarioInstance.setUuid(manifest.getUUID());
+
 			final URI fileURI = URI.createFileURI(f.getAbsolutePath());
 			scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
 			scenarioInstance.setName(f.getName());
 			scenarioInstance.setVersionContext(manifest.getVersionContext());
 			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
+
 			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
 			scenarioInstance.setMetadata(meta);
 			meta.setContentType(manifest.getScenarioType());
-			final String string = file.getParent().normalize().toString();
 
+			final String string = file.getParent().normalize().toString();
 			final WeakReference<Container> weakReference = folderMap.get(string);
 			weakReference.get().getElements().add(scenarioInstance);
 
