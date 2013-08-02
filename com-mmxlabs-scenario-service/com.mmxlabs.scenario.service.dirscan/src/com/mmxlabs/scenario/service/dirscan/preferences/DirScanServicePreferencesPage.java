@@ -41,6 +41,7 @@ public class DirScanServicePreferencesPage extends FieldEditorPreferencePage imp
 	/**
 	 * Creates the field editors. Field editors are abstractions of the common GUI blocks needed to manipulate various types of preferences. Each field editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ENABLED_KEY, "&Enabled:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_NAME_KEY, "&Name:", getFieldEditorParent()));
@@ -53,9 +54,11 @@ public class DirScanServicePreferencesPage extends FieldEditorPreferencePage imp
 	 * 
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	protected Control createContents(Composite parent) {
 		final Composite c = (Composite) super.createContents(parent);
@@ -95,17 +98,6 @@ public class DirScanServicePreferencesPage extends FieldEditorPreferencePage imp
 		});
 
 		return c;
-	}
-
-	private Label label(Composite sub, String string, String string2) {
-		final Label l1 = new Label(sub, SWT.RIGHT);
-		l1.setText(string);
-		l1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-
-		final Label l2 = new Label(sub, SWT.LEFT);
-		l2.setText(string2);
-		l2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		return l2;
 	}
 
 }
