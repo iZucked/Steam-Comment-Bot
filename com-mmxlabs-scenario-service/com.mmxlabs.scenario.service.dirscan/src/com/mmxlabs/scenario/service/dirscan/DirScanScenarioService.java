@@ -100,7 +100,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				final Path path = modelToFilesystemMap.get(c);
 				if (path != null) {
-					final Path newName = path.getParent().resolve(notification.getNewStringValue());
+					final Path newName = path.getParent().resolve(notification.getNewStringValue() + ".lingo");
 					// Remove from tree as file system watcher will re-add
 					if (c instanceof ScenarioInstance) {
 						removeFile(path);
@@ -364,6 +364,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void addFile(final Path file) {
+		// Filter based on file extension
+		if (!(file.toString().endsWith(".lingo") || file.toString().endsWith(".scenario"))) {
+			return;
+		}
 
 		final String pathKey = file.normalize().toString();
 		if (!scenarioMap.containsKey(pathKey)) {
@@ -377,7 +381,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				final URI fileURI = URI.createFileURI(f.getAbsolutePath());
 				scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
-				scenarioInstance.setName(f.getName());
+				String scenarioname = f.getName().replaceFirst("\\.lingo$", "").replace("\\.scenario$", "");
+				scenarioInstance.setName(scenarioname);
 				scenarioInstance.setVersionContext(manifest.getVersionContext());
 				scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
 
