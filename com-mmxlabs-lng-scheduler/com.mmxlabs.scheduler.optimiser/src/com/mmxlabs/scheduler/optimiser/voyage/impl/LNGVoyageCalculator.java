@@ -859,31 +859,31 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		
 		// This is the smallest amount of gas we can load
 		if (minLoadVolumeInM3 - lngCommitmentInM3 > maxDischargeVolumeInM3) {
+			/* note - this might not be a genuine violation since rolling over the excess LNG may be permissible
+			 * and in some cases it is even commercially desirable, but restrictions on LNG destination or
+			 * complications from profit share contracts make it a potential violation, and we err on the side
+			 * of caution
+			 */ 
 			
-			if (minLoadVolumeInM3 - lngCommitmentInM3 < 0) {
-				// discharge breach -- need to discharge more than we are permitted
-				dischargeDetails.setCapacityViolation(CapacityViolationType.MAX_DISCHARGE, (minLoadVolumeInM3 - lngCommitmentInM3) - maxDischargeVolumeInM3);
-				++violationsCount;
-			} else {
-				// load breach -- need to load less than we are permitted
+			// load breach -- need to load less than we are permitted
 
-				/* note - this might not be a genuine violation since rolling over the excess LNG may be permissible
-				 * and in some cases it is even commercially desirable
-				 */ 
-				
-				loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngCommitmentInM3));
-				++violationsCount;
-			}
+			loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngCommitmentInM3));
+			++violationsCount;
 		}
 
 		// This is the smallest amount we can discharge..
 		if (minDischargeVolumeInM3 + lngCommitmentInM3 > upperLoadLimitInM3) {
 
+			// When the load constraint doesn't even cover the fuel requirements, we are going to have to violate the load constraint
 			if (upperLoadLimitInM3 - lngCommitmentInM3 < 0) {
 				// load breach -- need to load more than we are permitted (note - we are still within vessel capacity otherwise we would not have reached this point.)
 				loadDetails.setCapacityViolation(CapacityViolationType.MAX_LOAD, lngCommitmentInM3 - upperLoadLimitInM3);
 				++violationsCount;
-			} else {
+			}
+			/* When the load constraint covers the fuel requirements, we assert a discharge breach. Max load constraints are
+			 * more likely to be hard physical constraints than min discharge, so we make the safer assumption.  
+			 */			
+			else {
 				// discharge breach -- need to discharge less than we are permitted
 				
 				dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - lngCommitmentInM3);
