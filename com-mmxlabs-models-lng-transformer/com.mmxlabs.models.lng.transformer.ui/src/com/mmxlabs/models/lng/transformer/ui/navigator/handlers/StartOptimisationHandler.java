@@ -10,6 +10,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,15 +56,19 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+			BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 
-			final Iterator<?> itr = strucSelection.iterator();
-			while (itr.hasNext()) {
-				final Object obj = itr.next();
-				if (obj instanceof ScenarioInstance) {
-					return OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, null, false, optimising, ScenarioLock.OPTIMISER);
+				@Override
+				public void run() {
+					final Iterator<?> itr = strucSelection.iterator();
+					while (itr.hasNext()) {
+						final Object obj = itr.next();
+						if (obj instanceof ScenarioInstance) {
+							OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, null, false, optimising, ScenarioLock.OPTIMISER);
+						}
+					}
 				}
-
-			}
+			});
 		}
 
 		return null;
