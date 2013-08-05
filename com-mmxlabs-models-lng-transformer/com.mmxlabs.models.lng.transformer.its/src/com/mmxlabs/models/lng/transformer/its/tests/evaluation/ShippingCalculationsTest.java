@@ -2278,8 +2278,8 @@ public class ShippingCalculationsTest {
 	}
 
 	@Test
-	public void testForcedHeelRollover() {
-		System.err.println("\n\nTest case when load & discharge requirements cause excess heel to be left over");
+	public void testTooMuchLoadVolume() {
+		System.err.println("\n\nTest case when load & discharge requirements would cause excess heel to be left over");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
@@ -2310,20 +2310,20 @@ public class ShippingCalculationsTest {
 		SequenceTester checker = getDefaultTester(classes);
 		
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer [] {1, 2, 2, 2, 1});
-		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer [] {15, 10, 10, 10, 15});
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer [] {15, 10, 30, 10, 15});
 		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer [] {0, 0, 0, 0, 0});
-		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer [] {0, 20, 20, 20, 0});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer [] {0, 20, 0, 20, 0});
 		
 		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer [] {0, 2, 2, 2, 0});
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer [] {0, 0, 10, 0, 0});
 		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] {0, 10, 10, 10, 0});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] {0, 10, 0, 10, 0});
 		
-		// volume allocations: load 10000 at first load port (min load)
-		// at first discharge, discharge 9000 (max discharge) rolling over 970 (30m3 travel + idle usage) 
-		// at next load, load back up to full (970 rollover minus 30m3 travel + idle fuel was on board)
+		// volume allocations: load 9030 at first load port (violate min load)
+		// at first discharge, discharge 9000 (max discharge) emptying vessel  
+		// at next load, load back up to full (10000)
 		// at next discharge, discharge fully; 30m3 was used to get here
-		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer [] {10000, -9000, 9060, -9970});
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer [] {9030, -9000, 10000, -9970});
 
 		checker.setupOrdinaryFuelCosts();
 		
