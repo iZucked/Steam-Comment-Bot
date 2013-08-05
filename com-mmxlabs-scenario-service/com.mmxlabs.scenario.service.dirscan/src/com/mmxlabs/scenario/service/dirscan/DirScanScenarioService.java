@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -346,16 +347,28 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		if (!folderMap.containsKey(pathKey)) {
 			// top entry will have no parent....
 			if (!dir.equals(dataPath.toPath())) {
-				final Folder folder = ScenarioServiceFactory.eINSTANCE.createFolder();
 
 				final String string = dir.getParent().normalize().toString();
 				// Add folder to parent
-				folderMap.get(string).get().getElements().add(folder);
+				final Container parentFolder = folderMap.get(string).get();
+				final EList<Container> elements = parentFolder.getElements();
+				final String folderName = dir.toFile().getName();
 
-				folder.setName(dir.toFile().getName());
-
+				// This handles the case where a folder has been added to the model before it appeared on filesystem
+				Container folder = null;
+				for (final Container c : elements) {
+					if (c.getName().equals(folderName)) {
+						folder = c;
+						break;
+					}
+				}
+				if (folder == null) {
+					folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+					elements.add(folder);
+					folder.setName(folderName);
+				}
 				// Store in map
-				folderMap.put(dir.normalize().toString(), new WeakReference<Container>(folder));
+				folderMap.put(pathKey, new WeakReference<Container>(folder));
 				modelToFilesystemMap.put(folder, dir);
 			}
 			final WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
@@ -381,7 +394,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				final URI fileURI = URI.createFileURI(f.getAbsolutePath());
 				scenarioInstance.setRootObjectURI("archive:" + fileURI.toString() + "!/rootObject.xmi");
-				String scenarioname = f.getName().replaceFirst("\\.lingo$", "").replace("\\.scenario$", "");
+				final String scenarioname = f.getName().replaceFirst("\\.lingo$", "").replace("\\.scenario$", "");
 				scenarioInstance.setName(scenarioname);
 				scenarioInstance.setVersionContext(manifest.getVersionContext());
 				scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
