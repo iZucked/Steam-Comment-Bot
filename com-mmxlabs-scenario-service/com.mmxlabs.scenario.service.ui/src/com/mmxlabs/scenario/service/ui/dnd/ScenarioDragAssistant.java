@@ -24,7 +24,6 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 import org.slf4j.Logger;
