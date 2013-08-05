@@ -16,7 +16,6 @@ import java.util.Map;
 import junit.framework.AssertionFailedError;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -92,7 +91,8 @@ public class ShippingCalculationsTest {
 	}
 
 	public enum Expectations {
-		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, OVERHEAD_COSTS
+		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, OVERHEAD_COSTS, 
+		MIN_LOAD_VIOLATIONS, MAX_LOAD_VIOLATIONS, MIN_DISCHARGE_VIOLATIONS, MIN_HEEL_VIOLATIONS 
 	}
 
 	public void checkClasses(final EList<? extends Object> objects, final Class<?>[] classes) {
@@ -140,6 +140,41 @@ public class ShippingCalculationsTest {
 			} else
 				// TODO: extract the overhead costs or revenue for drydock events, charter outs etc.
 				return null;
+		}
+		case MIN_LOAD_VIOLATIONS: {
+			if (event instanceof SlotVisit) {
+				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MIN_LOAD);
+				return (value == null) ? 0 : (int) (long) value;  
+			}
+			else {
+				return null;
+			}
+		}
+		case MAX_LOAD_VIOLATIONS: {
+			if (event instanceof SlotVisit) {
+				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MAX_LOAD);
+				return (value == null) ? 0 : (int) (long) value;  
+			}
+			else {
+				return null;
+			}
+		}
+		case MIN_DISCHARGE_VIOLATIONS: {
+			if (event instanceof SlotVisit) {
+				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MIN_DISCHARGE);
+				return (value == null) ? 0 : (int) (long) value;  
+			}
+			else {
+				return null;
+			}
+		}
+		case MIN_HEEL_VIOLATIONS: {
+			if (event instanceof SlotVisit) {
+				return 0;
+			}
+			else {
+				return null;
+			}
 		}
 		default:
 			return null;
@@ -438,6 +473,7 @@ public class ShippingCalculationsTest {
 
 		public void setClasses(final Class<?>[] classes) {
 			this.classes = classes;
+			
 			for (final Expectations field : Expectations.values()) {
 				expectedArrays.put(field, new Integer[classes.length]);
 				for (int i = 0; i < classes.length; i++) {
@@ -492,7 +528,7 @@ public class ShippingCalculationsTest {
 				perClassIndex += 1;
 			}
 		}
-
+		
 		public Integer[] getExpectedValues(final Expectations field, final Class<?> clazz) {
 			final List<Integer> indices = getValueIndices(classes, clazz);
 			final Integer[] array = getStorageArray(field);
@@ -520,7 +556,7 @@ public class ShippingCalculationsTest {
 				array[i] = value;
 			}
 		}
-
+		
 		public void setExpectedPnlValues(final Integer[] pnl) {
 			expectedPnlValues = pnl;
 		}
@@ -949,6 +985,7 @@ public class ShippingCalculationsTest {
 		// expected costs of journeys
 		final Integer[] expectedJourneyCosts = { 150, 520, 150 };
 		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
+		checker.setExpectedValue(20, Expectations.MIN_HEEL_VIOLATIONS, SlotVisit.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -957,13 +994,6 @@ public class ShippingCalculationsTest {
 
 		checker.check(sequence);
 
-		// Check that a violation has been recorded
-		int violationCount = 0;
-
-		for (final SlotVisit visit : extractObjectsOfClass(sequence.getEvents(), SlotVisit.class)) {
-			violationCount += visit.getViolations().size();
-		}
-		Assert.assertTrue(violationCount > 0);
 	}
 
 	@Test
@@ -1090,6 +1120,8 @@ public class ShippingCalculationsTest {
 
 		// change from default scenario: add a maximum load volume
 		msc.cargo.getSlots().get(0).setMaxQuantity(500);
+		// no minimum heel
+		msc.vc.setMinHeel(0);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1098,6 +1130,33 @@ public class ShippingCalculationsTest {
 		// 470 (discharge) = 500 { load } - 30 { consumption }
 		final Integer[] expectedloadDischargeVolumes = { 500, -470 };
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+
+	}
+
+	@Test
+	public void testMaxLoadViolation() {
+		System.err.println("\n\nMaximum Load Volume Violated To Accommodate Min Heel");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		// change from default scenario: add a maximum load volume
+		msc.cargo.getSlots().get(0).setMaxQuantity(500);
+
+		final SequenceTester checker = getDefaultTester();
+
+		// expected load / discharge volumes:
+		// 500 (load) = { new maximum load value }
+		// 470 (discharge) = 500 { load } - 30 { consumption }
+		final Integer[] expectedloadDischargeVolumes = { 520, -470 };
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+		checker.setExpectedValue(20, Expectations.MAX_LOAD_VIOLATIONS, SlotVisit.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1672,6 +1731,7 @@ public class ShippingCalculationsTest {
 
 	}
 
+	//@Ignore("Test description is inconsistent with coded expectations")
 	@Test
 	public void testLimitedStartHeelIsCapacityViolation() {
 		System.err.println("\n\nLimited Start Heel, should still NBO travel and idle - Capacity Violation");
@@ -1713,11 +1773,6 @@ public class ShippingCalculationsTest {
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
-
-		// Check that a violation has been recorded
-		final StartEvent firstVisit = extractObjectsOfClass(sequence.getEvents(), StartEvent.class).get(0);
-		final EMap<CapacityViolationType, Long> violations = firstVisit.getViolations();
-		Assert.assertFalse(violations.isEmpty());
 	}
 
 	private SequenceTester getTesterForVesselEventPostDischarge() {
@@ -2222,7 +2277,7 @@ public class ShippingCalculationsTest {
 	
 	@Test
 	public void testHeelRollover() {
-		System.err.println("\n\nTest heel rollover");
+		System.err.println("\n\nTest min heel rollover: LNG travel due to expensive BF");
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
@@ -2325,9 +2380,13 @@ public class ShippingCalculationsTest {
 		// at next discharge, discharge fully; 30m3 was used to get here
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer [] {9030, -9000, 10000, -9970});
 
+		checker.setExpectedValue(970, Expectations.MIN_LOAD_VIOLATIONS, SlotVisit.class, 0);		
+		
 		checker.setupOrdinaryFuelCosts();
 		
 		final Sequence sequence = schedule.getSequences().get(0);		
 		checker.check(sequence);
+	
 	}
+	
 }
