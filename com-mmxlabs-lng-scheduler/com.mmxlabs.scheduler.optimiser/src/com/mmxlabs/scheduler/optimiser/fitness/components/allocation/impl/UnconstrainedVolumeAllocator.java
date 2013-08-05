@@ -35,33 +35,50 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * Assumes that the maximum amount within available constraints will be loaded or discharged at each
 	 * slot.  
 	 * 
+	 * Currently only handles LDD* cases for multiple load / discharge cargoes.
+	 * 
 	 * @param constraint
 	 * @return
+	 * 
+	 * @author Simon McGregor
 	 */
 	protected final static void allocateBasicSlotVolumes(AllocationRecord constraint) {
+		// TODO: the logic for reporting constraint violations should be moved into this method
 		final IPortSlot[] slots = constraint.slots;		
 		final long [] result = constraint.allocations;
 		
 		ILoadOption loadSlot = (ILoadOption) slots[0];
-		long availableCargoSpace = constraint.vesselCapacityInM3 - constraint.startVolumeInM3;
+		
+		// how much room is there in the tanks?
+		final long availableCargoSpace = constraint.vesselCapacityInM3 - constraint.startVolumeInM3;
+		// how much fuel will be required over and above what we start with in the tanks?
+		final long fuelDeficit = constraint.requiredFuelVolumeInM3 - constraint.startVolumeInM3;
 		
 		// greedy assumption: always load as much as possible
 		long loadVolume = capValueWithZeroDefault(loadSlot.getMaxLoadVolume(), availableCargoSpace);
-		
+		// violate maximum load volume constraint when it has to be done to fuel the vessel 
+		if (loadVolume < fuelDeficit) {
+			loadVolume = fuelDeficit;
+			// we should never be required to load more than the vessel can fit in its tanks
+			assert(loadVolume <= availableCargoSpace);
+			// TODO: report max load constraint violation
+		}
+
+		// the amount of LNG available for discharge
+		long unusedVolume = loadVolume + constraint.startVolumeInM3 - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3;
 		// available volume is non-negative
-		long unusedVolume = Math.max(loadVolume + constraint.startVolumeInM3 - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3, 0);
+		assert(unusedVolume >= 0);
 
 		// load / discharge case
-		// this is subsumed by the LDD* case, but can be done more efficiently 
+		// this is subsumed by the LDD* case, but can be done more efficiently by branching instead of looping
 		if (slots.length == 2) {
 			
 			IDischargeOption dischargeSlot = (IDischargeOption) slots[1]; 
 
 			// greedy assumption: always discharge as much as possible
-			long dischargeVolume = capValueWithZeroDefault(dischargeSlot.getMaxDischargeVolume(), unusedVolume);
+			long dischargeVolume = capValueWithZeroDefault(dischargeSlot.getMaxDischargeVolume(), unusedVolume);			
+			// TODO: report min discharge constraint violation if appropriate
 
-			// TODO: this method does not yet enforce minimum load / discharge constraints
-			
 			result[1] = dischargeVolume;
 			unusedVolume -= dischargeVolume;
 
@@ -79,9 +96,15 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				IDischargeOption dischargeSlot = (IDischargeOption) slots[i];
 				long minDischargeVolume = dischargeSlot.getMinDischargeVolume();
 				
-				// assign the minimum amount per discharge slot
-				result[i] = minDischargeVolume;
-				unusedVolume -= minDischargeVolume;
+				// assign the minimum amount per discharge slot				
+				if (unusedVolume >= minDischargeVolume) {
+					result[i] = minDischargeVolume;
+				}
+				else {
+					result[i] = unusedVolume;
+					// TODO: report min discharge constraint violation
+				}
+				unusedVolume -= result[i];
 				
 				// more profitable ? 
 				if (i > 1 && prices[i] > prices[mostProfitableDischargeIndex]) {
@@ -119,7 +142,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// if there is any leftover volume after discharge
 		if (unusedVolume > 0) {
 			// we use a conservative heuristic: load exactly as much as we need, subject to constraints
-			long revisedLoadVolume = Math.max(loadVolume - unusedVolume, loadSlot.getMinLoadVolume());
+			long revisedLoadVolume = loadVolume - unusedVolume;
+			
+			// TODO: report min load constraint violation if necessary
 			
 			unusedVolume -= loadVolume - revisedLoadVolume;
 			loadVolume = revisedLoadVolume;
