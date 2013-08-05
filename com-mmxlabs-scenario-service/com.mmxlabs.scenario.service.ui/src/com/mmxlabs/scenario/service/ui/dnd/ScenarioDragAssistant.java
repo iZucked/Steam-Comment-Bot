@@ -18,10 +18,13 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TransferData;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 import org.slf4j.Logger;
@@ -112,7 +115,6 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 	public IStatus handleDrop(final CommonDropAdapter aDropAdapter, final DropTargetEvent aDropTargetEvent, final Object aTarget) {
 
 		// Check operation is valid
-
 		if (!(aDropTargetEvent.detail == DND.DROP_MOVE || aDropTargetEvent.detail == DND.DROP_COPY)) {
 			return Status.CANCEL_STATUS;
 		}
@@ -147,26 +149,37 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 					// TODO: This should really invoke a shared move/copy etc command/action handler
 					if (detail == DND.DROP_MOVE) {
-						
-						final IScenarioService scenarioService = container.getScenarioService();
-						 scenarioService.moveInto(containers, container);
-					} else if (detail == DND.DROP_COPY) {
 
-						for (final Container c : containers) {
-							if (c instanceof Folder) {
-								try {
-									copyFolder(container, (Folder) c);
-								} catch (final IOException e) {
-									log.error(e.getMessage(), e);
-								}
-							} else {
-								try {
-									copyScenario(container, (ScenarioInstance) c);
-								} catch (final IOException e) {
-									log.error(e.getMessage(), e);
+						BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
+
+							@Override
+							public void run() {
+								final IScenarioService scenarioService = container.getScenarioService();
+								scenarioService.moveInto(containers, container);
+							}
+						});
+					} else if (detail == DND.DROP_COPY) {
+						BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
+
+							@Override
+							public void run() {
+								for (final Container c : containers) {
+									if (c instanceof Folder) {
+										try {
+											copyFolder(container, (Folder) c);
+										} catch (final IOException e) {
+											log.error(e.getMessage(), e);
+										}
+									} else {
+										try {
+											copyScenario(container, (ScenarioInstance) c);
+										} catch (final IOException e) {
+											log.error(e.getMessage(), e);
+										}
+									}
 								}
 							}
-						}
+						});
 					} else {
 						return Status.CANCEL_STATUS;
 					}
