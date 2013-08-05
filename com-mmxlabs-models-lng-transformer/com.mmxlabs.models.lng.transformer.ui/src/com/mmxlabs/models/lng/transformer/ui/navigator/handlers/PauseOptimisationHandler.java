@@ -10,6 +10,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
@@ -44,26 +45,30 @@ public class PauseOptimisationHandler extends AbstractOptimisationHandler {
 
 		if ((selection != null) && (selection instanceof IStructuredSelection)) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+			BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 
-			final Iterator<?> itr = strucSelection.iterator();
-			while (itr.hasNext()) {
-				final Object obj = itr.next();
-				if (obj instanceof ScenarioInstance) {
-					final ScenarioInstance instance = (ScenarioInstance) obj;
+				@Override
+				public void run() {
+					final Iterator<?> itr = strucSelection.iterator();
+					while (itr.hasNext()) {
+						final Object obj = itr.next();
+						if (obj instanceof ScenarioInstance) {
+							final ScenarioInstance instance = (ScenarioInstance) obj;
 
-					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
-					final IJobControl control = jobManager.getControlForJob(job);
+							final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
+							final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
+							final IJobControl control = jobManager.getControlForJob(job);
 
-					if (control != null) {
-						if (control.getJobState() == EJobState.RUNNING) {
-							control.pause();
+							if (control != null) {
+								if (control.getJobState() == EJobState.RUNNING) {
+									control.pause();
+								}
+							}
 						}
 					}
 				}
-			}
+			});
 		}
-
 		// Update button state?
 
 		return null;
