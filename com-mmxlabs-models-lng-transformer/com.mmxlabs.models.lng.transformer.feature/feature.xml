@@ -24,7 +24,6 @@ All rights reserved.
       [Enter License Description here.]
    </license>
 
-      <import feature="com.mmxlabs.scenario.service.feature" version="4.0.0" match="compatible"/>
    <plugin
          id="com.mmxlabs.models.lng.transformer"
          download-size="0"
