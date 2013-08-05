@@ -13,7 +13,9 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEditorActionDelegate {
@@ -36,6 +38,11 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
 				final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
 
+				if (instance.isReadonly()) {
+					action.setEnabled(false);
+					return;
+				}
+				
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 				final IJobControl control = jobManager.getControlForJob(job);

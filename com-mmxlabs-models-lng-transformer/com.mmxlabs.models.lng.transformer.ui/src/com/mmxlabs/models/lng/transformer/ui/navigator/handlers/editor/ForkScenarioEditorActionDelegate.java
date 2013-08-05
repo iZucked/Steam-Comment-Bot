@@ -26,6 +26,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -48,7 +49,6 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 				final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
 
 				final IScenarioService scenarioService = instance.getScenarioService();
-
 				try {
 					final Set<String> existingNames = new HashSet<String>();
 					for (final Container c : instance.getElements()) {
@@ -99,6 +99,30 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
 		this.editor = targetEditor;
+		if (editor != null) {
+			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+				final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
+
+				{
+					Container c = instance;
+					while (c != null && !(c instanceof ScenarioService)) {
+						c = c.getParent();
+					}
+					if (c instanceof ScenarioService) {
+						ScenarioService scenarioService = (ScenarioService) c;
+						if (!scenarioService.isSupportsForking()) {
+							action.setEnabled(false);
+							return;
+						}
+					} else {
+						action.setEnabled(false);
+						return;
+					}
+				}
+			}
+		}
+
 		if (action != null) {
 			action.setEnabled(true);
 		}
