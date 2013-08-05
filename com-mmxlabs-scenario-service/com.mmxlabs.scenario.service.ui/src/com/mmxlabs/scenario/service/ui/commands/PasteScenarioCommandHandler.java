@@ -14,6 +14,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.ui.IWorkbenchPage;
@@ -38,37 +39,47 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+		final Exception exceptions[] = new Exception[1];
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 
-		final ISelection selection = activePage.getSelection();
+			@Override
+			public void run() {
+				final ISelection selection = activePage.getSelection();
 
-		final Container container = getContainer(selection);
+				final Container container = getContainer(selection);
 
-		if (container == null) {
-			return null;
-		}
+				if (container == null) {
+					return;
+				}
 
-		final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
-		try {
-			if (!pasteLocal(clipboard, container)) {
-				pasteFromFiles(clipboard, container);
+				final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
+				try {
+					if (!pasteLocal(clipboard, container)) {
+						pasteFromFiles(clipboard, container);
+					}
+				} catch (final IOException e) {
+					exceptions[0] = e;
+				} finally {
+					clipboard.dispose();
+				}
 			}
-		} catch (final IOException e) {
-			throw new ExecutionException(e.getMessage(), e);
-		} finally {
-			clipboard.dispose();
+		});
+
+		if (exceptions[0] != null) {
+			throw new ExecutionException(exceptions[0].getMessage(), exceptions[0]);
 		}
 
 		return null;
 	}
-	
+
 	private boolean pasteLocal(final Clipboard clipboard, final Container container) throws IOException {
 		final Object localData = clipboard.getContents(LocalTransfer.getInstance());
 		final IScenarioService service = container.getScenarioService();
 		if (localData instanceof Iterable) {
-			for (final Object o : (Iterable<?>)localData) {
+			for (final Object o : (Iterable<?>) localData) {
 				if (o instanceof ScenarioInstance) {
 					System.err.println("Local paste " + ((ScenarioInstance) o).getName());
-					service.duplicate((ScenarioInstance)o, container).setName("Copy of " + ((ScenarioInstance)o).getName());
+					service.duplicate((ScenarioInstance) o, container).setName("Copy of " + ((ScenarioInstance) o).getName());
 				}
 			}
 			return true;

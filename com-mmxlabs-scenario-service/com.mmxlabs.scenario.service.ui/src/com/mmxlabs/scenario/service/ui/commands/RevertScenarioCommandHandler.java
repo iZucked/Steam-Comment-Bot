@@ -11,6 +11,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -41,47 +42,52 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 
-		final ISelection selection = activePage.getSelection();
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
-			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
-				final Object element = iterator.next();
-				if (element instanceof ScenarioInstance) {
-					final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
+			@Override
+			public void run() {
+				final ISelection selection = activePage.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+					for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
+						final Object element = iterator.next();
+						if (element instanceof ScenarioInstance) {
+							final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
 
-					final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.EDITORS);
-					if (lock.awaitClaim()) {
-						try {
+							final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.EDITORS);
+							if (lock.awaitClaim()) {
+								try {
 
-							// Deselect from view
-							Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
+									// Deselect from view
+									Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
 
-							final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
-							final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+									final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
+									final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
 
-							if (editorReferences != null && editorReferences.length > 0) {
-								activePage.closeEditors(editorReferences, false);
+									if (editorReferences != null && editorReferences.length > 0) {
+										activePage.closeEditors(editorReferences, false);
+									}
+
+									scenarioInstance.getScenarioService().unload(scenarioInstance);
+									scenarioInstance.setDirty(false);
+
+									if (editorReferences != null && editorReferences.length > 0) {
+										// scenarioInstance.getScenarioService().load(scenarioInstance);
+										OpenScenarioUtils.openScenarioInstance(activePage, scenarioInstance);
+									}
+									// } catch (final IOException e) {
+									// log.error(e.getMessage(), e);
+								} catch (final PartInitException e) {
+									log.error(e.getMessage(), e);
+								} finally {
+									lock.release();
+								}
 							}
-
-							scenarioInstance.getScenarioService().unload(scenarioInstance);
-							scenarioInstance.setDirty(false);
-
-							if (editorReferences != null && editorReferences.length > 0) {
-//								scenarioInstance.getScenarioService().load(scenarioInstance);
-								OpenScenarioUtils.openScenarioInstance(activePage, scenarioInstance);
-							}
-//						} catch (final IOException e) {
-//							log.error(e.getMessage(), e);
-						} catch (final PartInitException e) {
-							log.error(e.getMessage(), e);
-						} finally {
-							lock.release();
 						}
 					}
 				}
 			}
-		}
+		});
 
 		return null;
 	}

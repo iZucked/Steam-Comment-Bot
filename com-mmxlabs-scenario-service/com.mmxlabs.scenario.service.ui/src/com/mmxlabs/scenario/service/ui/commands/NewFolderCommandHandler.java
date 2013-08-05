@@ -16,6 +16,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.util.tracker.ServiceTracker;
@@ -33,34 +34,39 @@ public class NewFolderCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 
-		final ISelection selection = activePage.getSelection();
-		// No selection - either the root element is a scenario service or it is the registry (in which case the user should select the service)
-		if (selection.isEmpty()) {
-			// create a new folder in the top scenario service?
-			final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle()
-					.getBundleContext(), ScenarioServiceRegistry.class, null);
-			tracker.open();
+			@Override
+			public void run() {
+				final ISelection selection = activePage.getSelection();
+				// No selection - either the root element is a scenario service or it is the registry (in which case the user should select the service)
+				if (selection.isEmpty()) {
+					// create a new folder in the top scenario service?
+					final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault()
+							.getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
+					tracker.open();
 
-			final ScenarioServiceRegistry serviceRegistry = tracker.getService();
-			if (serviceRegistry != null) {
+					final ScenarioServiceRegistry serviceRegistry = tracker.getService();
+					if (serviceRegistry != null) {
 
-				final Collection<IScenarioService> scenarioServices = serviceRegistry.getScenarioServices();
-				if (scenarioServices.size() == 1) {
+						final Collection<IScenarioService> scenarioServices = serviceRegistry.getScenarioServices();
+						if (scenarioServices.size() == 1) {
 
-					final ScenarioService top = scenarioServices.iterator().next().getServiceModel();
-					createFolderInContainer(activePage, top);
+							final ScenarioService top = scenarioServices.iterator().next().getServiceModel();
+							createFolderInContainer(activePage, top);
+						}
+					}
+
+					tracker.close();
+				} else if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+					final Object o = strucSelection.getFirstElement();
+					if (o instanceof Container) {
+						createFolderInContainer(activePage, (Container) o);
+					}
 				}
 			}
-
-			tracker.close();
-		} else if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
-			final Object o = strucSelection.getFirstElement();
-			if (o instanceof Container) {
-				createFolderInContainer(activePage, (Container) o);
-			}
-		}
+		});
 		return null;
 	}
 
