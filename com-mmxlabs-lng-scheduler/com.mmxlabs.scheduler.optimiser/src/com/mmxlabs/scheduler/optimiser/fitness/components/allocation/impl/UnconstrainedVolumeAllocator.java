@@ -109,11 +109,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// Note this currently does nothing as the next() method in the allocator iterator (BaseCargoAllocator) ignores this data and looks directly on the discharge slot.
 		}
 		
-		/* TODO: if the max discharge volume would leave excess heel, the correct load volume 
-		 * decision depends on relative prices at this load and the next.
-		 * Presently we use a conservative heuristic: load exactly as much as we need, subject to constraints   
-		 */ 
-		
+		/* Under certain circumstances, the remaining heel may be more than expected:
+		 * for instance, when a minimum load constraint far exceeds a maximum discharge constraint.
+		 * This may cause problems with restrictions on where LNG can be shipped, or with profit share contracts,
+		 * so at present a conservative assumption in the LNGVoyageCalculator treats it as a capacity violation
+		 * and assumes that the load has to be reduced below its min value constraint.
+		 */
+
 		// if there is any leftover volume after discharge
 		if (unusedVolume > 0) {
 			// we use a conservative heuristic: load exactly as much as we need, subject to constraints
@@ -121,12 +123,14 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			
 			unusedVolume -= loadVolume - revisedLoadVolume;
 			loadVolume = revisedLoadVolume;
-		}
-		
-		// under certain circumstances, the remaining heel may be more than expected
-		// for instance, when a minimum load constraint far exceeds a maximum discharge constraint
-		
-		constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3 + unusedVolume;
+			/* TODO: if the max discharge volume would leave excess heel, the correct load volume 
+			 * decision depends on relative prices at this load and the next, and whether carrying over excess heel is contractually
+			 * permissible (and CV-compatible with the next load port).
+			 */ 			
+		}		
+
+		constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3;
+		// constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3 + unusedVolume;
 		
 		result[0] = loadVolume;
 
