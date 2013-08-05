@@ -697,6 +697,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			long minDischargeVolumeInM3 = dischargeSlot.getMinDischargeVolume();
 
 			final boolean boiloffWasUsed = (lastBoiloffElement != null);
+			long remainingHeelInM3 = 0;
 
 			// Min Heel adjustments. The VoyageDetails tells us how much gas we consumed on the voyage. This may include some of the vessel min heel during the idle time.
 			// If a minimum heel is specified, this is the amount which has to remain in the tanks after
@@ -704,25 +705,23 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (boiloffWasUsed && vesselClass.getMinHeel() > 0) {
 				// Assert added for null analysis friendliness
 				assert lastBoiloffElement != null;
-				final long remainingHeelInM3 = calculateRemainingMinHeel(vesselClass, lastBoiloffElement);
+				remainingHeelInM3 = calculateRemainingMinHeel(vesselClass, lastBoiloffElement);
 
 				// If we will have some LNG left after travel, allocate it depending on laden or ballast legs
 				if (remainingHeelInM3 > 0) {
 					if (lastBoiloffElement.getOptions().getVesselState() == VesselState.Laden) {
 						// Discharge the heel, make money!
-						minDischargeVolumeInM3 += remainingHeelInM3;
+						// TODO: change magical use of minDischargeVolume to signal heel usage to volume allocator?
 						voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.DISCHARGE);
 					} else {
 						// Add heel to the voyage consumed quantity for capacity constraint purposes. However it is not tracked otherwise
 						// TODO: Roll over into new voyage plan
-						lngCommitmentInM3 += remainingHeelInM3;
 						voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.END);
 					}
 				}
 
 			}
 
-			// final long cargoCapacityInM3 = vesselClass.getCargoCapacity();
 			final long cargoCapacityInM3 = vessel.getCargoCapacity();
 
 			if (lngCommitmentInM3 > cargoCapacityInM3) {
@@ -732,7 +731,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				return -1;
 			}
 
-			violationsCount += checkCargoCapacityViolations(lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3);
+			violationsCount += checkCargoCapacityViolations(lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3, remainingHeelInM3);
 
 			// Sanity checks
 			assert lngCommitmentInM3 >= 0;
@@ -847,7 +846,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	protected int checkCargoCapacityViolations(final long lngCommitmentInM3, final PortDetails loadDetails, final ILoadSlot loadSlot, final PortDetails dischargeDetails,
-			final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3, final long cargoCapacityInM3) {
+			final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3, final long cargoCapacityInM3, final long heelToDischarge) {
 
 		int violationsCount = 0;
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
@@ -871,13 +870,15 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			++violationsCount;
 		}
 
+		long fuelRequirements = lngCommitmentInM3 + heelToDischarge;
+
 		// This is the smallest amount we can discharge..
-		if (minDischargeVolumeInM3 + lngCommitmentInM3 > upperLoadLimitInM3) {
+		if (minDischargeVolumeInM3 + fuelRequirements > upperLoadLimitInM3) {
 
 			// When the load constraint doesn't even cover the fuel requirements, we are going to have to violate the load constraint
-			if (upperLoadLimitInM3 - lngCommitmentInM3 < 0) {
+			if (upperLoadLimitInM3 - fuelRequirements < 0) {
 				// load breach -- need to load more than we are permitted (note - we are still within vessel capacity otherwise we would not have reached this point.)
-				loadDetails.setCapacityViolation(CapacityViolationType.MAX_LOAD, lngCommitmentInM3 - upperLoadLimitInM3);
+				loadDetails.setCapacityViolation(CapacityViolationType.MAX_LOAD, fuelRequirements - upperLoadLimitInM3);
 				++violationsCount;
 			}
 			/* When the load constraint covers the fuel requirements, we assert a discharge breach. Max load constraints are
@@ -886,7 +887,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			else {
 				// discharge breach -- need to discharge less than we are permitted
 				
-				dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - lngCommitmentInM3);
+				dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - fuelRequirements);
 				++violationsCount;
 			}
 		}
