@@ -26,7 +26,7 @@ public class DirScanServicePreferencesPage extends FieldEditorPreferencePage imp
 	public DirScanServicePreferencesPage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Dir Scan");
+		setDescription("Folder Sync");
 	}
 
 	/**

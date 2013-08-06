@@ -6,7 +6,7 @@
       <page
             class="com.mmxlabs.scenario.service.dirscan.preferences.DirScanServicePreferencesPage"
             id="com.mmxlabs.scenario.service.dirscan.preferences.DirScanServicePreferencesPage"
-            name="Dir Scan">
+            name="Shared Data Folder">
       </page>
    </extension>
    <extension
