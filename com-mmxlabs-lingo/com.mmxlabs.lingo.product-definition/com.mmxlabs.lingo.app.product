@@ -56,6 +56,7 @@ Build: {1}
       <plugin id="com.mmxlabs.datasources.dataloy" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.lingo.extensions" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.liveevaluator" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.scenario.service.dirscan" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.transformer" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.transformer.ui" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.ui.validation" autoStart="true" startLevel="0" />
