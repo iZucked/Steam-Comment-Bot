@@ -72,6 +72,9 @@ public class PathDelegateCache {
 			} else {
 				return null;
 			}
+			if (containerClass == null) {
+				return null;
+			}
 			try {
 				methods.add(containerClass.getDeclaredMethod(methodName));
 			} catch (final Exception ex) {
