@@ -15,7 +15,7 @@
             class="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
             icon="icons/problems_view.gif"
             id="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
-            name="Validation Problems"
+            name="Validation"
             restorable="true">
       </view>
    </extension>
