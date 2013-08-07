@@ -183,7 +183,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		if (!dataPath.exists()) {
 			throw new IOException("Target folder does not exist: " + dataPath.toString());
 		}
-		
+
 		this.watcher = FileSystems.getDefault().newWatchService();
 		try {
 			folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
@@ -282,10 +282,12 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		// Terminate watch thread
 		watchThreadRunning = false;
 		// Close watch service - this will cause the watch#poll/take methods to throw exceptions
-		try {
-			watcher.close();
-		} catch (final IOException e) {
-			log.error(e.getMessage(), e);
+		if (watcher != null) {
+			try {
+				watcher.close();
+			} catch (final IOException e) {
+				log.error(e.getMessage(), e);
+			}
 		}
 		// Cancel all keys
 		for (final WatchKey key : keys.keySet()) {
