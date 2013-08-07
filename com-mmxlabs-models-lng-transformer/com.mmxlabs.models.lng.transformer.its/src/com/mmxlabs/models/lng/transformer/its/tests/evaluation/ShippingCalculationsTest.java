@@ -962,6 +962,7 @@ public class ShippingCalculationsTest {
 		Assert.assertEquals("Exactly one leg uses FBO", 1, fboUsages);
 	}
 
+	@Ignore("Edge case: min heel is perilously close to vessel capacity")
 	@Test
 	public void testMinHeelForcesBfSupplementAndHeelout() {
 		System.err.println("\n\nMinimum Heel Forces BF supplement and heel out");
@@ -1152,9 +1153,9 @@ public class ShippingCalculationsTest {
 		final SequenceTester checker = getDefaultTester();
 
 		// expected load / discharge volumes:
-		// 500 (load) = { new maximum load value }
-		// 470 (discharge) = 500 { load } - 30 { consumption }
-		final Integer[] expectedloadDischargeVolumes = { 520, -470 };
+		// 520 (load) = 500 { min heel } + 20 { travel consumption }
+		// 490 (discharge) = 520 { load } - 20 { travel consumption } - 10 { idle consumption }
+		final Integer[] expectedloadDischargeVolumes = { 520, -490 };
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
 		checker.setExpectedValue(20, Expectations.MAX_LOAD_VIOLATIONS, SlotVisit.class, 0);
 
