@@ -606,6 +606,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @param dischargeTime
 	 * @param loadTime
+	 * @return Number of capacity constraints which had to be violated in the allocation
 	 * @since 5.0
 	 */
 	@Override
@@ -869,11 +870,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngCommitmentInM3));
 			++violationsCount;
 		}
-
-		long fuelRequirements = lngCommitmentInM3 + heelToDischarge;
-
-		// This is the smallest amount we can discharge..
-		if (minDischargeVolumeInM3 + fuelRequirements > upperLoadLimitInM3) {
+		
+		// The load should cover at least the fuel usage plus the heel (or the min discharge, whichever is greater)
+		if (Math.max(minDischargeVolumeInM3, heelToDischarge) + lngCommitmentInM3 > upperLoadLimitInM3) {
+			long fuelRequirements = lngCommitmentInM3 + heelToDischarge;
 
 			// When the load constraint doesn't even cover the fuel requirements, we are going to have to violate the load constraint
 			if (upperLoadLimitInM3 - fuelRequirements < 0) {
@@ -886,8 +886,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			 */			
 			else {
 				// discharge breach -- need to discharge less than we are permitted
-				
-				dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, upperLoadLimitInM3 - fuelRequirements);
+				dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, minDischargeVolumeInM3 + lngCommitmentInM3 - upperLoadLimitInM3);
 				++violationsCount;
 			}
 		}

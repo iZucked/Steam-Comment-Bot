@@ -92,7 +92,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			allocations = new long [slots.length];
 		}
 		
-		public AllocationAnnotation createAnnotation() {
+		public AllocationAnnotation createAllocationAnnotation() {
 			final AllocationAnnotation annotation = new AllocationAnnotation();
 
 			annotation.setFuelVolumeInM3(requiredFuelVolumeInM3);
@@ -654,7 +654,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					@Override
 					public Pair<VoyagePlan, IAllocationAnnotation> next() {
 						AllocationRecord constraint = constraintsIterator.next();
-						AllocationAnnotation annotation = constraint.createAnnotation();
+						AllocationAnnotation annotation = constraint.createAllocationAnnotation();
 
 						return new Pair<VoyagePlan, IAllocationAnnotation>(constraint.voyagePlan, annotation);
 					}
