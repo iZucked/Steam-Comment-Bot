@@ -329,21 +329,23 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (uuid: ");
-		result.append(uuid);
-		result.append(", canal: ");
-		result.append(canal);
-		result.append(", routingOptions: ");
-		result.append(routingOptions);
-		result.append(')');
-		return result.toString();
+//		StringBuffer result = new StringBuffer(super.toString());
+//		result.append(" (uuid: ");
+//		result.append(uuid);
+//		result.append(", canal: ");
+//		result.append(canal);
+//		result.append(", routingOptions: ");
+//		result.append(routingOptions);
+//		result.append(')');
+//		return result.toString();
+		
+		return getName();
 	}
 
 } //RouteImpl
