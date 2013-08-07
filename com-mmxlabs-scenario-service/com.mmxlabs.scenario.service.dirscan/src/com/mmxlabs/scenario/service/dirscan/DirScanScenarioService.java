@@ -180,6 +180,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		dataPath = new File(path);
 
+		if (!dataPath.exists()) {
+			throw new IOException("Target folder does not exist: " + dataPath.toString());
+		}
+		
 		this.watcher = FileSystems.getDefault().newWatchService();
 		try {
 			folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
