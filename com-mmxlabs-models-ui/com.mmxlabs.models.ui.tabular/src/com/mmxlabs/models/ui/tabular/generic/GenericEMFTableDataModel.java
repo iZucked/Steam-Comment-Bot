@@ -7,7 +7,9 @@ package com.mmxlabs.models.ui.tabular.generic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -124,6 +126,24 @@ public class GenericEMFTableDataModel {
 	}
 
 	/**
+	 * Create an {@link EReference} for use with a "Row" object.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static EAttribute createRowAttribute(final EClass owner, final EClassifier type, final String value) {
+		final EAttribute valueRef = EcoreFactory.eINSTANCE.createEAttribute();
+		valueRef.setLowerBound(0);
+		valueRef.setUpperBound(1);
+		valueRef.setEType(type);
+		valueRef.setName(FEATURE_VALUE_PREFIX + value);
+
+		owner.getEStructuralFeatures().add(valueRef);
+
+		return valueRef;
+	}
+
+	/**
 	 * Return the {@link EStructuralFeature} for a "Row" object with the given name.
 	 * 
 	 * @param ePackage
@@ -191,6 +211,7 @@ public class GenericEMFTableDataModel {
 
 		final List<EObject> newList = new ArrayList<EObject>();
 		if (dataModelInstance.eIsSet(rootNodes)) {
+			@SuppressWarnings("unchecked")
 			final List<EObject> oldList = (List<EObject>) dataModelInstance.eGet(rootNodes);
 			newList.addAll(oldList);
 		}
@@ -254,10 +275,10 @@ public class GenericEMFTableDataModel {
 				}
 			}
 
-			private Object getObjectFromGroup(final EStructuralFeature groupNodesFeature, final Object e1, EObject g1) {
+			private Object getObjectFromGroup(final EStructuralFeature groupNodesFeature, final Object e1, final EObject g1) {
 				final Object rd1;
 				if (g1 != null) {
-					List<?> nodes = (List<?>) g1.eGet(groupNodesFeature);
+					final List<?> nodes = (List<?>) g1.eGet(groupNodesFeature);
 					rd1 = nodes.get(0);
 				} else {
 					rd1 = e1;
@@ -265,5 +286,9 @@ public class GenericEMFTableDataModel {
 				return rd1;
 			}
 		};
+	}
+
+	public static EClass getRowClass(final EPackage dataModel) {
+		return (EClass) dataModel.getEClassifier(CLASS_NAME_ROW);
 	}
 }
