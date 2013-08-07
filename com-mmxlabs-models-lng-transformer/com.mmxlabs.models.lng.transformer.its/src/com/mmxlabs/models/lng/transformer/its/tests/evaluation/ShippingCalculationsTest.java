@@ -16,7 +16,6 @@ import java.util.Map;
 import junit.framework.AssertionFailedError;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -65,8 +64,8 @@ import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator.MinimalScenarioSetup;
 import com.mmxlabs.models.lng.transformer.its.tests.LddScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.StsScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -92,7 +91,8 @@ public class ShippingCalculationsTest {
 	}
 
 	public enum Expectations {
-		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, OVERHEAD_COSTS
+		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, OVERHEAD_COSTS, 
+		MIN_LOAD_VIOLATIONS, MAX_LOAD_VIOLATIONS, MIN_DISCHARGE_VIOLATIONS, MIN_HEEL_VIOLATIONS 
 	}
 
 	public void checkClasses(final EList<? extends Object> objects, final Class<?>[] classes) {
@@ -140,6 +140,41 @@ public class ShippingCalculationsTest {
 			} else
 				// TODO: extract the overhead costs or revenue for drydock events, charter outs etc.
 				return null;
+		}
+		case MIN_LOAD_VIOLATIONS: {
+			if (event instanceof SlotVisit) {
+				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MIN_LOAD);
+				return (value == null) ? 0 : (int) (long) value;  
+			}
+			else {
+				return null;
+			}
+		}
+		case MAX_LOAD_VIOLATIONS: {
+			if (event instanceof SlotVisit) {
+				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MAX_LOAD);
+				return (value == null) ? 0 : (int) (long) value;  
+			}
+			else {
+				return null;
+			}
+		}
+		case MIN_DISCHARGE_VIOLATIONS: {
+			if (event instanceof SlotVisit) {
+				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MIN_DISCHARGE);
+				return (value == null) ? 0 : (int) (long) value;  
+			}
+			else {
+				return null;
+			}
+		}
+		case MIN_HEEL_VIOLATIONS: {
+			if (event instanceof SlotVisit) {
+				return 0;
+			}
+			else {
+				return null;
+			}
 		}
 		default:
 			return null;
@@ -438,6 +473,7 @@ public class ShippingCalculationsTest {
 
 		public void setClasses(final Class<?>[] classes) {
 			this.classes = classes;
+			
 			for (final Expectations field : Expectations.values()) {
 				expectedArrays.put(field, new Integer[classes.length]);
 				for (int i = 0; i < classes.length; i++) {
@@ -492,7 +528,7 @@ public class ShippingCalculationsTest {
 				perClassIndex += 1;
 			}
 		}
-
+		
 		public Integer[] getExpectedValues(final Expectations field, final Class<?> clazz) {
 			final List<Integer> indices = getValueIndices(classes, clazz);
 			final Integer[] array = getStorageArray(field);
@@ -520,7 +556,7 @@ public class ShippingCalculationsTest {
 				array[i] = value;
 			}
 		}
-
+		
 		public void setExpectedPnlValues(final Integer[] pnl) {
 			expectedPnlValues = pnl;
 		}
@@ -647,15 +683,14 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCanalRouteShorter() {
 		System.err.println("\n\nUse canal which is cheaper than default route");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a canal
 
-		final Route canal = dsc.portCreator.addCanal("canal");
-		dsc.portCreator.setDistance(mss.loadPort, mss.dischargePort, 10, canal);
-		dsc.fleetCreator.assignDefaultCanalData(mss.vc, canal);
+		final Route canal = msc.portCreator.addCanal("canal");
+		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
+		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -703,15 +738,14 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCanalRouteLonger() {
 		System.err.println("\n\nDon't use canal which is longer than default route");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a canal, but it is longer than the default route
 
-		final Route canal = dsc.portCreator.addCanal("canal");
-		dsc.portCreator.setDistance(mss.loadPort, mss.dischargePort, 30, canal);
-		dsc.fleetCreator.assignDefaultCanalData(mss.vc, canal);
+		final Route canal = msc.portCreator.addCanal("canal");
+		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 30, canal);
+		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -731,18 +765,17 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCanalRouteTooExpensive() {
 		System.err.println("\n\nDon't use canal which is has a high cost associated with it");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a canal,
 		// which is shorter than the default route
 		// but has a high usage cost
 
-		final Route canal = dsc.portCreator.addCanal("canal");
-		dsc.portCreator.setDistance(mss.loadPort, mss.dischargePort, 10, canal);
-		dsc.fleetCreator.assignDefaultCanalData(mss.vc, canal);
-		final RouteCost cost = dsc.getRouteCost(mss.vc, canal);
+		final Route canal = msc.portCreator.addCanal("canal");
+		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
+		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
+		final RouteCost cost = msc.getRouteCost(msc.vc, canal);
 		cost.setLadenCost(500);
 
 		final SequenceTester checker = getDefaultTester();
@@ -763,16 +796,15 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCanalRouteShorterWithDelay() {
 		System.err.println("\n\nUse canal which is cheaper than default route but has a delay");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a canal
 
-		final Route canal = dsc.portCreator.addCanal("canal");
-		dsc.portCreator.setDistance(mss.loadPort, mss.dischargePort, 10, canal);
-		dsc.fleetCreator.assignDefaultCanalData(mss.vc, canal);
-		final VesselClassRouteParameters routeParameters = dsc.getRouteParameters(mss.vc, canal);
+		final Route canal = msc.portCreator.addCanal("canal");
+		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
+		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
+		final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, canal);
 
 		routeParameters.setExtraTransitTime(2);
 		routeParameters.setLadenNBORate(TimeUnitConvert.convertPerHourToPerDay(1));
@@ -825,13 +857,12 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testPlentyStartHeel() {
 		System.err.println("\n\nGenerous Start Heel Means NBO on First Voyage");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
-
-		final VesselAvailability vesselAvailability = mss.vesselAvailability;
+		
+		final VesselAvailability vesselAvailability = msc.vesselAvailability;
 		vesselAvailability.getStartHeel().setVolumeAvailable(1000);
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 
@@ -864,13 +895,12 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testLimitedStartHeel() {
 		System.err.println("\n\nLimited Start Heel");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
 
-		final VesselAvailability vesselAvailability = mss.vesselAvailability;
+		final VesselAvailability vesselAvailability = msc.vesselAvailability;
 		vesselAvailability.getStartHeel().setVolumeAvailable(5);
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 
@@ -895,9 +925,8 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testFBOLimitedByMinHeel() {
 		System.err.println("\n\nUse FBO for one trip after loading");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
-		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
 		final PricingModel pricingModel = scenario.getPricingModel();
@@ -906,13 +935,13 @@ public class ShippingCalculationsTest {
 		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
 
-		dsc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
 		// but the vessel's capacity is only 50m3 greater than its minimum heel
 		// and the journeys (after loading) use a total of 40m3 NBO
 		// so only 10m3 is available for FBO, which is not enough for both journeys
-		mss.vc.setCapacity(60);
-		mss.vc.setMinHeel(10);
+		msc.vc.setCapacity(60);
+		msc.vc.setMinHeel(10);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -936,13 +965,12 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMinHeelForcesBfSupplementAndHeelout() {
 		System.err.println("\n\nMinimum Heel Forces BF supplement and heel out");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: make the minimum heel unattainable - thus causing a capacity violation
 		// Cause a heel out and BF supplement to be used
-		mss.vc.setMinHeel(10000);
+		msc.vc.setMinHeel(10000);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -957,6 +985,7 @@ public class ShippingCalculationsTest {
 		// expected costs of journeys
 		final Integer[] expectedJourneyCosts = { 150, 520, 150 };
 		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
+		checker.setExpectedValue(20, Expectations.MIN_HEEL_VIOLATIONS, SlotVisit.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -965,32 +994,24 @@ public class ShippingCalculationsTest {
 
 		checker.check(sequence);
 
-		// Check that a violation has been recorded
-		int violationCount = 0;
-
-		for (final SlotVisit visit : extractObjectsOfClass(sequence.getEvents(), SlotVisit.class)) {
-			violationCount += visit.getViolations().size();
-		}
-		Assert.assertTrue(violationCount > 0);
 	}
 
 	@Test
 	public void testHeelMeansNoCooldownRequired() {
 		System.err.println("\n\nStart heel is sufficient to avoid cooldown at load port.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: cooldown times and volumes specified
-		mss.vc.setWarmingTime(0);
-		// mss.vc.setCoolingTime(1);
-		mss.vc.setCoolingVolume(100);
+		msc.vc.setWarmingTime(0);
+		// msc.vc.setCoolingTime(1);
+		msc.vc.setCoolingVolume(100);
 
-		mss.setupCooldown(1.0);
-		mss.loadPort.setAllowCooldown(true);
+		msc.setupCooldown(1.0);
+		msc.loadPort.setAllowCooldown(true);
 
 		// but a big start heel should mean no cooldown is required
-		final VesselAvailability vesselAvailability = mss.vesselAvailability;
+		final VesselAvailability vesselAvailability = msc.vesselAvailability;
 		vesselAvailability.getStartHeel().setVolumeAvailable(1000);
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 
@@ -1019,8 +1040,8 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testBasicScenario() {
 		System.err.println("\n\nBasic Scenario");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1039,8 +1060,8 @@ public class ShippingCalculationsTest {
 		 * // extract the three journeys List<Journey> journeys = extractObjectsOfClass(events, Journey.class); Journey originToLoad = journeys.get(0); Journey loadToDischarge = journeys.get(1);
 		 * Journey dischargeToOrigin = journeys.get(2);
 		 * 
-		 * // check they go between the right places and have the right distances dsc.checkJourneyGeography(originToLoad, mss.originPort, mss.loadPort); dsc.checkJourneyGeography(loadToDischarge,
-		 * mss.loadPort, mss.dischargePort); dsc.checkJourneyGeography(dischargeToOrigin, mss.dischargePort, mss.originPort);
+		 * // check they go between the right places and have the right distances msc.checkJourneyGeography(originToLoad, msc.originPort, msc.loadPort); msc.checkJourneyGeography(loadToDischarge,
+		 * msc.loadPort, msc.dischargePort); msc.checkJourneyGeography(dischargeToOrigin, msc.dischargePort, msc.originPort);
 		 */
 
 	}
@@ -1048,8 +1069,8 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testFBODesirable() {
 		System.err.println("\n\nUse FBO for both trips after loading");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
 		final PricingModel pricingModel = scenario.getPricingModel();
@@ -1057,7 +1078,7 @@ public class ShippingCalculationsTest {
 
 		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-		dsc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
 		final SequenceTester checker = getDefaultTester();
 		checker.baseFuelPricePerM3 = 100;
@@ -1094,12 +1115,13 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMaxLoadVolume() {
 		System.err.println("\n\nMaximum Load Volume Limits Load & Discharge");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a maximum load volume
-		mss.cargo.getSlots().get(0).setMaxQuantity(500);
+		msc.cargo.getSlots().get(0).setMaxQuantity(500);
+		// no minimum heel
+		msc.vc.setMinHeel(0);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1119,14 +1141,40 @@ public class ShippingCalculationsTest {
 	}
 
 	@Test
-	public void testMaxDischargeVolume() {
-		System.err.println("\n\nMaximum Discharge Volume Limits Load & Discharge");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+	public void testMaxLoadViolation() {
+		System.err.println("\n\nMaximum Load Volume Violated To Accommodate Min Heel");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a maximum load volume
-		mss.cargo.getSlots().get(1).setMaxQuantity(500);
+		msc.cargo.getSlots().get(0).setMaxQuantity(500);
+
+		final SequenceTester checker = getDefaultTester();
+
+		// expected load / discharge volumes:
+		// 500 (load) = { new maximum load value }
+		// 470 (discharge) = 500 { load } - 30 { consumption }
+		final Integer[] expectedloadDischargeVolumes = { 520, -470 };
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+		checker.setExpectedValue(20, Expectations.MAX_LOAD_VIOLATIONS, SlotVisit.class, 0);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+
+	}
+
+	@Test
+	public void testMaxDischargeVolume() {
+		System.err.println("\n\nMaximum Discharge Volume Limits Load & Discharge");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		// change from default scenario: add a maximum load volume
+		msc.cargo.getSlots().get(1).setMaxQuantity(500);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1148,22 +1196,21 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMinDischargeVolume() {
 		System.err.println("\n\nMinimum Discharge Volume Prevents FBO");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: base fuel price more expensive, so FBO is economical
 		final PricingModel pricingModel = scenario.getPricingModel();
 		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
 		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
-		dsc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
 		// but minimum discharge volume means that it causes a capacity violation
-		mss.cargo.getSlots().get(1).setMinQuantity(9965);
+		msc.cargo.getSlots().get(1).setMinQuantity(9965);
 
 		// for the moment, set min heel to zero since it causes problems in the volume calculations
-		mss.vc.setMinHeel(0);
+		msc.vc.setMinHeel(0);
 
 		final SequenceTester checker = getDefaultTester();
 		checker.baseFuelPricePerM3 = 100;
@@ -1191,12 +1238,11 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMaxLoadVolumeForcesBfIdle() {
 		System.err.println("\n\nMaximum Load Volume Forces BF Idle");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a maximum load volume
-		mss.cargo.getSlots().get(0).setMaxQuantity(20);
+		msc.cargo.getSlots().get(0).setMaxQuantity(20);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1231,14 +1277,13 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testIdleAfterVesselReturn() {
 		System.err.println("\n\nSpecified date for vessel return causes idling.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = mss.vesselAvailability;
-		final Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final VesselAvailability av = msc.vesselAvailability;
+		final Date endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 		// return 3 hrs after discharge window ends
 		final Date returnDate = new Date(endDischarge.getTime() + 3 * 3600 * 1000);
@@ -1267,19 +1312,18 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testIdleAfterVesselStart() {
 		System.err.println("\n\nSpecified date for vessel start causes idling.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = mss.vesselAvailability;
-		final Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final VesselAvailability av = msc.vesselAvailability;
+		final Date startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 
 		// start 3 hrs before load window begins
-		final Date startDate = dsc.addHours(startLoad, -3);
+		final Date startDate = msc.addHours(startLoad, -3);
 		av.setStartBy(startDate);
-		av.setStartAfter(dsc.addHours(startDate, -5));
+		av.setStartAfter(msc.addHours(startDate, -5));
 		System.err.println("Vessel to start before: " + startDate);
 
 		final SequenceTester checker = getDefaultTester();
@@ -1303,15 +1347,14 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testIgnoreStartAfterAndEndBy() {
 		System.err.println("\n\nNo effects of in-bounds values for vessel start-after and end-by");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = mss.vesselAvailability;
-		final Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-		final Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final VesselAvailability av = msc.vesselAvailability;
+		final Date startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final Date endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 		// start within 5 hrs before load window starts
 		final Date startDate = new Date(startLoad.getTime() - 5 * 3600 * 1000);
@@ -1338,17 +1381,16 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testExtraTimeScheduledForCooldown() {
 		System.err.println("\n\nExtra time should be scheduled after leaving start port for cooldown at load port.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: cooldown times and volumes specified
-		mss.vc.setWarmingTime(0);
-		// mss.vc.setCoolingTime(1);
-		mss.vc.setCoolingVolume(100);
+		msc.vc.setWarmingTime(0);
+		// msc.vc.setCoolingTime(1);
+		msc.vc.setCoolingVolume(100);
 
-		mss.setupCooldown(1.0);
-		mss.loadPort.setAllowCooldown(true);
+		msc.setupCooldown(1.0);
+		msc.loadPort.setAllowCooldown(true);
 
 		// change from default scenario: should insert a cooldown event
 		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class,
@@ -1373,17 +1415,16 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testLongWarmupMeansNoCooldownRequired() {
 		System.err.println("\n\nStart heel is sufficient to avoid cooldown at load port.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: cooldown times and volumes specified
-		mss.vc.setWarmingTime(3);
-		// mss.vc.setCoolingTime(1);
-		mss.vc.setCoolingVolume(100);
+		msc.vc.setWarmingTime(3);
+		// msc.vc.setCoolingTime(1);
+		msc.vc.setCoolingVolume(100);
 
-		mss.setupCooldown(1.0);
-		mss.loadPort.setAllowCooldown(true);
+		msc.setupCooldown(1.0);
+		msc.loadPort.setAllowCooldown(true);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1398,17 +1439,16 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCooldownAdded() {
 		System.err.println("\n\nCooldown event should be scheduled at load port.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: cooldown times and volumes specified
-		mss.vc.setWarmingTime(0);
-		// mss.vc.setCoolingTime(0);
-		mss.vc.setCoolingVolume(100);
+		msc.vc.setWarmingTime(0);
+		// msc.vc.setCoolingTime(0);
+		msc.vc.setCoolingVolume(100);
 
-		mss.setupCooldown(1.0);
-		mss.loadPort.setAllowCooldown(true);
+		msc.setupCooldown(1.0);
+		msc.loadPort.setAllowCooldown(true);
 
 		// change from default scenario: should insert a cooldown event
 		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class,
@@ -1438,13 +1478,12 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCharterCost_IgnoredForTimeCharter() {
 		System.err.println("\n\nTime Charter vessel charter cost ignored.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		final int charterRatePerDay = 0;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		mss.vesselAvailability.setTimeCharterRate(charterRatePerDay);
+		msc.vesselAvailability.setTimeCharterRate(charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
 		checker.hireCostPerHour = charterRatePerDay / 24;
@@ -1463,9 +1502,8 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCharterCost_SpotCharterIn() {
 		System.err.println("\n\nSpot charter-in vessel charter cost added correctly.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// Remove default vessel
 		final FleetModel fleetModel = scenario.getFleetModel();
@@ -1474,8 +1512,8 @@ public class ShippingCalculationsTest {
 		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
 		scenarioFleetModel.getVesselAvailabilities().clear();
 		// Cannot null as final
-		// mss.vessel = null;
-		// mss.vesselAvailability = null;
+		// msc.vessel = null;
+		// msc.vesselAvailability = null;
 
 		// Set up a charter index curve
 		final int charterRatePerDay = 240;
@@ -1494,7 +1532,7 @@ public class ShippingCalculationsTest {
 		final CharterCostModel charterModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
 		charteringSpotMarkets.add(charterModel);
 
-		charterModel.getVesselClasses().add(mss.vc);
+		charterModel.getVesselClasses().add(msc.vc);
 		charterModel.setSpotCharterCount(1);
 		charterModel.setCharterInPrice(spotMarketRate);
 
@@ -1594,13 +1632,12 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testCharterCostUnset() {
 		System.err.println("\n\nZero vessel charter cost added correctly.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		final int charterRatePerDay = 0;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		mss.vesselAvailability.setTimeCharterRate(charterRatePerDay);
+		msc.vesselAvailability.setTimeCharterRate(charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1620,11 +1657,10 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testVesselStartsAnywhere() {
 		System.err.println("\n\nVessel starts anywhere.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
-		mss.vesselAvailability.getStartAt().clear();
+		msc.vesselAvailability.getStartAt().clear();
 
 		// change from default scenario: vessel makes only two journeys
 		final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
@@ -1672,11 +1708,10 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testVesselEndsAnywhere() {
 		System.err.println("\n\nVessel ends anywhere - travels back to load port for end.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
-		mss.vesselAvailability.getEndAt().clear();
+		msc.vesselAvailability.getEndAt().clear();
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1696,26 +1731,26 @@ public class ShippingCalculationsTest {
 
 	}
 
+	//@Ignore("Test description is inconsistent with coded expectations")
 	@Test
 	public void testLimitedStartHeelIsCapacityViolation() {
 		System.err.println("\n\nLimited Start Heel, should still NBO travel and idle - Capacity Violation");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
 
-		final VesselAvailability vesselAvailability = mss.vesselAvailability;
+		final VesselAvailability vesselAvailability = msc.vesselAvailability;
 		vesselAvailability.getStartHeel().setVolumeAvailable(10);
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final Date startLoad = mss.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final Date startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
 
 		// start 3 hrs before load window begins
-		final Date startDate = dsc.addHours(startLoad, -3);
+		final Date startDate = msc.addHours(startLoad, -3);
 		vesselAvailability.setStartBy(startDate);
-		vesselAvailability.setStartAfter(dsc.addHours(startLoad, -5));
+		vesselAvailability.setStartAfter(msc.addHours(startLoad, -5));
 		System.err.println("Vessel to start before: " + startDate);
 
 		final SequenceTester checker = getDefaultTester();
@@ -1738,11 +1773,6 @@ public class ShippingCalculationsTest {
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
-
-		// Check that a violation has been recorded
-		final StartEvent firstVisit = extractObjectsOfClass(sequence.getEvents(), StartEvent.class).get(0);
-		final EMap<CapacityViolationType, Long> violations = firstVisit.getViolations();
-		Assert.assertFalse(violations.isEmpty());
 	}
 
 	private SequenceTester getTesterForVesselEventPostDischarge() {
@@ -1800,18 +1830,17 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testDryDock() {
 		System.err.println("\n\nDry dock event inserted correctly.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
-		final Date endLoad = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 		final Date dryDockStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
 		final Date dryDockStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
-		dsc.vesselEventCreator.createDryDockEvent("DryDock", mss.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+		msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
 
 		// set up a drydock pricing of 6
-		dsc.portCreator.setPortCost(mss.loadPort, PortCapability.DRYDOCK, 6);
+		msc.portCreator.setPortCost(msc.loadPort, PortCapability.DRYDOCK, 6);
 
 		SequenceTester checker = getTesterForVesselEventPostDischarge();
 
@@ -1833,18 +1862,17 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testMaintenance() {
 		System.err.println("\n\nMaintenance event inserted correctly.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
-		final Date endLoad = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 		final Date maintenanceDockStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
 		final Date maintenanceDockStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
-		dsc.vesselEventCreator.createMaintenanceEvent("Maintenance", mss.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
+		msc.vesselEventCreator.createMaintenanceEvent("Maintenance", msc.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
 
 		// set up a drydock pricing of 6
-		dsc.portCreator.setPortCost(mss.loadPort, PortCapability.MAINTENANCE, 3);
+		msc.portCreator.setPortCost(msc.loadPort, PortCapability.MAINTENANCE, 3);
 
 		SequenceTester checker = getTesterForVesselEventPostDischarge();
 
@@ -1867,14 +1895,13 @@ public class ShippingCalculationsTest {
 	public void testFixedPortCosts() {
 		System.err.println("\n\nTest fixed port costs are added to the itinerary cost appropriately.");
 
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		SequenceTester checker = getDefaultTester();
 
 		int loadPortCost = 30;
-		dsc.pricingCreator.setPortCost(mss.loadPort, PortCapability.LOAD, loadPortCost);
+		msc.pricingCreator.setPortCost(msc.loadPort, PortCapability.LOAD, loadPortCost);
 
 		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, SlotVisit.class, new Integer[] { loadPortCost, 0 });
 
@@ -1891,9 +1918,8 @@ public class ShippingCalculationsTest {
 	public void testPortFuelCosts() {
 		System.err.println("\n\nTest port fuel costs are added to the itinerary cost appropriately.");
 
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		SequenceTester checker = getDefaultTester();
 
@@ -1902,11 +1928,11 @@ public class ShippingCalculationsTest {
 		Integer[] portDurations = new Integer[] { 24, 48 };
 
 		// set the in-port laden fuel consumption for the vessel class
-		mss.vc.getLadenAttributes().setInPortBaseRate(ladenBaseConsumption);
-		mss.vc.getBallastAttributes().setInPortBaseRate(ballastBaseConsumption);
+		msc.vc.getLadenAttributes().setInPortBaseRate(ladenBaseConsumption);
+		msc.vc.getBallastAttributes().setInPortBaseRate(ballastBaseConsumption);
 		// set the durations of the load visit & discharge visit
 		for (int i = 0; i < portDurations.length; i++) {
-			mss.cargo.getSortedSlots().get(i).setDuration(portDurations[i]);
+			msc.cargo.getSortedSlots().get(i).setDuration(portDurations[i]);
 		}
 
 		// change from default: base fuel usage at ports, and duration spent there
@@ -1934,20 +1960,19 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testStartDateChosenForLeastIdleTime() {
 		System.err.println("\n\nStart time should be chosen to minimise idle time at first visit.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
-		final Slot loadSlot = mss.cargo.getSlots().get(0);
+		final Slot loadSlot = msc.cargo.getSlots().get(0);
 		final Date loadDate = loadSlot.getWindowStartWithSlotOrPortTime();
 
-		final double maxSpeed = mss.vc.getMaxSpeed();
+		final double maxSpeed = msc.vc.getMaxSpeed();
 		final int firstIdle = 1;
-		final Date startAfterDate = dsc.addHours(loadDate, -5 * dsc.getTravelTime(mss.originPort, mss.loadPort, null, (int) maxSpeed));
-		final Date startByDate = dsc.addHours(loadDate, -dsc.getTravelTime(mss.originPort, mss.loadPort, null, (int) maxSpeed) - firstIdle);
+		final Date startAfterDate = msc.addHours(loadDate, -5 * msc.getTravelTime(msc.originPort, msc.loadPort, null, (int) maxSpeed));
+		final Date startByDate = msc.addHours(loadDate, -msc.getTravelTime(msc.originPort, msc.loadPort, null, (int) maxSpeed) - firstIdle);
 
-		mss.vesselAvailability.setStartAfter(startAfterDate);
-		mss.vesselAvailability.setStartBy(startByDate);
+		msc.vesselAvailability.setStartAfter(startAfterDate);
+		msc.vesselAvailability.setStartBy(startByDate);
 
 		SequenceTester checker = getDefaultTester();
 
@@ -1967,12 +1992,11 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testUseDefaultFinalIdlingWhenEndTimeUnspecified() {
 		System.err.println("\n\nUnspecified end time should result in idling due to a defined minimum time between last event and end.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
-		mss.vesselAvailability.unsetEndAfter();
-		mss.vesselAvailability.unsetEndBy();
+		msc.vesselAvailability.unsetEndAfter();
+		msc.vesselAvailability.unsetEndBy();
 
 		SequenceTester checker = getDefaultTester();
 
@@ -1993,16 +2017,15 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testGeneratedCharterOut() {
 		System.err.println("\n\nIdle at end should permit generated charter out event.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
-		dsc.pricingCreator.createDefaultCharterCostModel(mss.vc, 1, 96);
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96);
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
-		final VesselAvailability av = mss.vesselAvailability;
-		final Date endDischarge = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final VesselAvailability av = msc.vesselAvailability;
+		final Date endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 		// return 37 hrs after discharge window ends
 		final Date returnDate = new Date(endDischarge.getTime() + 37l * 3600l * 1000l);
@@ -2055,11 +2078,10 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testNotGeneratedCharterOut() {
 		System.err.println("\n\nIdle at end should not permit generated charter out event.");
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
-		dsc.pricingCreator.createDefaultCharterCostModel(mss.vc, 1, 96);
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96);
 
 		SequenceTester checker = getDefaultTester();
 
@@ -2074,13 +2096,13 @@ public class ShippingCalculationsTest {
 
 	}
 
-	public CharterOutEvent makeCharterOut(DefaultScenarioCreator dsc, MinimalScenarioSetup mss, MMXRootObject scenario, Port startPort, Port endPort) {
+	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
-		final Date endLoad = mss.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 		final Date charterStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
 		final Date charterStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
 		int charterOutRate = 24;
-		CharterOutEvent event = dsc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
+		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
 		event.getHeelOptions().setVolumeAvailable(0);
 		event.getHeelOptions().setCvValue(21);
 		event.getHeelOptions().setPricePerMMBTU(1);
@@ -2092,10 +2114,10 @@ public class ShippingCalculationsTest {
 	public void testRegularCharterOutLoadToOrigin() {
 		System.err.println("\n\nTest regular charter out from load port to origin port.");
 
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
-		CharterOutEvent event = makeCharterOut(dsc, mss, scenario, mss.loadPort, mss.originPort);
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		CharterOutEvent event = makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
 
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
@@ -2162,10 +2184,10 @@ public class ShippingCalculationsTest {
 	public void testRegularCharterOutLoadToLoadNoHeel() {
 		System.err.println("\n\nTest regular charter out from load port to load port.");
 
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
-		CharterOutEvent event = makeCharterOut(dsc, mss, scenario, mss.loadPort, mss.loadPort);
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		CharterOutEvent event = makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
 
 		SequenceTester checker = getTesterForVesselEventPostDischarge();
 		// SequenceTester checker = getDefaultTester();
@@ -2189,15 +2211,14 @@ public class ShippingCalculationsTest {
 	public void testRegularCharterOutLoadToLoadWithHeel() {
 		System.err.println("\n\nTest regular charter out from load port to load port. LNG heel should be used for return journey");
 
-		final DefaultScenarioCreator dsc = new DefaultScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
-		final MinimalScenarioSetup mss = dsc.minimalScenarioSetup;
-		CharterOutEvent event = makeCharterOut(dsc, mss, scenario, mss.loadPort, mss.loadPort);
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		CharterOutEvent event = makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
 
 		event.getHeelOptions().setVolumeAvailable(20);
 
 		SequenceTester checker = getTesterForVesselEventPostDischarge();
-		// SequenceTester checker = getDefaultTester();
 
 		// expected charter out duration
 		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
@@ -2225,8 +2246,8 @@ public class ShippingCalculationsTest {
 	// test doesn't work yet
 	public void testStsVoyage() {
 		System.err.println("\n\nSTS journey");
-		final DefaultScenarioCreator dsc = new StsScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
+		final DefaultScenarioCreator msc = new StsScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -2244,8 +2265,8 @@ public class ShippingCalculationsTest {
 	@Test
 	public void testLddVoyage() {
 		System.err.println("\n\nLDD journey");
-		final DefaultScenarioCreator dsc = new LddScenarioCreator();
-		final LNGScenarioModel scenario = dsc.buildScenario();
+		final DefaultScenarioCreator msc = new LddScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -2253,4 +2274,119 @@ public class ShippingCalculationsTest {
 		final Sequence sequence = schedule.getSequences().get(0);
 
 	}
+	
+	@Test
+	public void testHeelRollover() {
+		System.err.println("\n\nTest min heel rollover: LNG travel due to expensive BF");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
+		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		
+		msc.vc.setMinHeel(500);
+
+		final PricingModel pricingModel = scenario.getPricingModel();
+		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+
+		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		
+		// base fuel is now 10x more expensive, so FBO is economical
+		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Class<?>[] classes = { 
+				StartEvent.class, Journey.class, Idle.class, // start to load 
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to load 
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to end 
+				EndEvent.class 
+		};
+
+		SequenceTester checker = getDefaultTester(classes);
+		
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer [] {1, 2, 2, 2, 1});
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer [] {15, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer [] {0, 10, 10, 10, 5});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer [] {0, 20, 20, 20, 10});
+		
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer [] {0, 2, 2, 2, 0});
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] {0, 10, 10, 10, 0});
+		
+		// volume allocations: load 10000 at first load port (loading from empty)
+		// at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here 
+		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
+		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer [] {10000, -9430, 9510, -9445});
+
+		checker.baseFuelPricePerM3 = 100;
+		checker.setupOrdinaryFuelCosts();
+		
+		final Sequence sequence = schedule.getSequences().get(0);		
+		checker.check(sequence);
+	}
+
+	@Test
+	public void testTooMuchLoadVolume() {
+		System.err.println("\n\nTest case when load & discharge requirements would cause excess heel to be left over");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
+		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		
+		msc.vc.setMinHeel(500);
+		
+		Slot loadSlot = msc.cargo.getSlots().get(0);
+		Slot dischargeSlot = msc.cargo.getSlots().get(1);
+		
+		loadSlot.setMinQuantity(10000);
+		dischargeSlot.setMaxQuantity(9000);		
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Class<?>[] classes = { 
+				StartEvent.class, Journey.class, Idle.class, // start to load 
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to load 
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to end 
+				EndEvent.class 
+		};
+
+		SequenceTester checker = getDefaultTester(classes);
+		
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer [] {1, 2, 2, 2, 1});
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer [] {15, 10, 30, 10, 15});
+		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer [] {0, 20, 0, 20, 0});
+		
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer [] {0, 2, 2, 2, 0});
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer [] {0, 0, 10, 0, 0});
+		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] {0, 10, 0, 10, 0});
+		
+		// volume allocations: load 9030 at first load port (violate min load)
+		// at first discharge, discharge 9000 (max discharge) emptying vessel  
+		// at next load, load back up to full (10000)
+		// at next discharge, discharge fully; 30m3 was used to get here
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer [] {9030, -9000, 10000, -9970});
+
+		checker.setExpectedValue(970, Expectations.MIN_LOAD_VIOLATIONS, SlotVisit.class, 0);		
+		
+		checker.setupOrdinaryFuelCosts();
+		
+		final Sequence sequence = schedule.getSequences().get(0);		
+		checker.check(sequence);
+	
+	}
+	
 }
