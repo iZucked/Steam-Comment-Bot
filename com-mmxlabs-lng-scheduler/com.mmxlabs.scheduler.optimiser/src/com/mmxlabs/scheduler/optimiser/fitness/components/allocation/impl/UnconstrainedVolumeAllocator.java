@@ -51,8 +51,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		
 		// how much room is there in the tanks?
 		final long availableCargoSpace = constraint.vesselCapacityInM3 - constraint.startVolumeInM3;
+		
 		// how much fuel will be required over and above what we start with in the tanks?
-		final long fuelDeficit = constraint.requiredFuelVolumeInM3 - constraint.startVolumeInM3;
+		// note: this is the fuel consumption plus any heel quantity required at discharge
+		final long fuelDeficit = constraint.requiredFuelVolumeInM3 + constraint.dischargeHeelInM3 - constraint.startVolumeInM3;
 		
 		// greedy assumption: always load as much as possible
 		long loadVolume = capValueWithZeroDefault(loadSlot.getMaxLoadVolume(), availableCargoSpace);
@@ -66,6 +68,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		// the amount of LNG available for discharge
 		long unusedVolume = loadVolume + constraint.startVolumeInM3 - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3;
+		
 		// available volume is non-negative
 		assert(unusedVolume >= 0);
 

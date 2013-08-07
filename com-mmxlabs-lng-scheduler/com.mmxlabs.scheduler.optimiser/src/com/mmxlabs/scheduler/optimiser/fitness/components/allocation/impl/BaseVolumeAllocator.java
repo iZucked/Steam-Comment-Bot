@@ -64,6 +64,13 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		
 		//final long maxEndVolumeInM3;
 		
+		/** 
+		 * Hack: magic number calculated by LNGVoyageCalculator representing the amount of heel which should be
+		 * present after the load -> discharge voyage but can be discharged after idling. Should be
+		 * equal to the minimum heel value minus the idle consumption. There must be a better way of doing this.
+		 */
+		final long dischargeHeelInM3;
+		
 		/** The LNG volume which will actually remain at the end of the voyage */
 		long allocatedEndVolumeInM3;
 		
@@ -79,12 +86,13 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final VoyagePlan voyagePlan;
 		
-		public AllocationRecord(long capacity, long forced, long start, long heel, IPortSlot [] slots, int [] prices, int [] times, VoyagePlan plan) {
+		public AllocationRecord(long capacity, long forced, long start, long heel, long dischargeHeel, IPortSlot [] slots, int [] prices, int [] times, VoyagePlan plan) {
 			vesselCapacityInM3 = capacity;
 			requiredFuelVolumeInM3 = forced;
 			startVolumeInM3 = start;
 			minEndVolumeInM3 = heel;
-			slotPricesPerM3 = prices;			
+			dischargeHeelInM3 = dischargeHeel;
+			slotPricesPerM3 = prices;
 			slotTimes = times;
 			this.slots = slots;
 			voyagePlan = plan;
@@ -127,7 +135,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		}
 		
 		public AllocationRecord(IPortSlot [] slots, int [] prices, int [] times, VoyagePlan plan) {
-			this(Long.MAX_VALUE, 0l, 0l, 0l, slots, prices, times, plan);
+			this(Long.MAX_VALUE, 0l, 0l, 0l, 0l, slots, prices, times, plan);
 		}
 	}
 	
@@ -467,8 +475,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final IPortSlot[] slots = { loadSlot, dischargeSlot };
 
-
-		final long heelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l; 
+		final long  endHeelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l;
+		final long dischargeHeelRequired = plan.getRemainingHeelType() == HeelType.DISCHARGE ? plan.getRemainingHeelInM3() : 0l;
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
@@ -498,7 +506,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final long startHeel = constraints.isEmpty() ? 0 : constraints.get(constraints.size()-1).minEndVolumeInM3;
 		//final long startHeel = 0;
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, heelRequired, slots, prices, times, plan));
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, endHeelRequired, dischargeHeelRequired, slots, prices, times, plan));
 		
 		cargoCount++;
 	}
@@ -577,7 +585,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			slotTimes[i] = times[i];
 		}
 
-		final long heelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l; 
+		final long endHeelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l; 
+		final long dischargeHeelRequired = plan.getRemainingHeelType() == HeelType.DISCHARGE ? plan.getRemainingHeelInM3() : 0l;
 
 		
 		final ILoadSlot firstLoadSlot = (ILoadSlot) slots[0];
@@ -624,7 +633,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final long startHeel = constraints.isEmpty() ? 0 : constraints.get(constraints.size()-1).minEndVolumeInM3;
 		//final long startHeel = 0;
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, heelRequired, slots, pricesPerM3, slotTimes, plan));
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, slotTimes, plan));
 		cargoCount++;
 	}
 
