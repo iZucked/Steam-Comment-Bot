@@ -1731,6 +1731,28 @@ public class ShippingCalculationsTest {
 
 	}
 
+	@Test
+	public void testViolateMinDischarge() {
+		System.err.println("\n\nMin discharge violated due to fuel constraints.");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		// change from default: min discharge equal to vessel capacity
+		msc.cargo.getSlots().get(1).setMinQuantity(10000);
+		
+		SequenceTester checker = getDefaultTester();
+		// discharge will be short by 30m3 (the fuel expenditure after loading)
+		checker.setExpectedValue(30, Expectations.MIN_DISCHARGE_VIOLATIONS, SlotVisit.class, 1);
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);		
+	}
+	
 	//@Ignore("Test description is inconsistent with coded expectations")
 	@Test
 	public void testLimitedStartHeelIsCapacityViolation() {
@@ -2374,7 +2396,7 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
 		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] {0, 10, 0, 10, 0});
 		
-		// volume allocations: load 9030 at first load port (violate min load)
+		// volume allocations: load 9030 at first load port (violate min load by 970)
 		// at first discharge, discharge 9000 (max discharge) emptying vessel  
 		// at next load, load back up to full (10000)
 		// at next discharge, discharge fully; 30m3 was used to get here
@@ -2388,5 +2410,8 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);
 	
 	}
+	
+	
+	
 	
 }
