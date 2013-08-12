@@ -69,9 +69,9 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/6.0.0-SNAPSHOT/com.mmxlabs.scheduler.p2-6.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.1.RELEASE"/>
-<unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.1.RELEASE"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/1.0.1.RELEASE/com.mmxlabs.jobmanager.p2-1.0.1.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.1.0.RELEASE"/>
+<unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.1.0.RELEASE"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/1.1.0.RELEASE/com.mmxlabs.jobmanager.p2-1.1.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="4.0.0.RELEASE"/>
