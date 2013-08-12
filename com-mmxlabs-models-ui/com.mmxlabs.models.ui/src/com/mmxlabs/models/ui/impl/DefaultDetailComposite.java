@@ -13,6 +13,7 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.internal.win32.TOOLINFO;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -152,5 +153,17 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 	public void setLayoutProvider(final IDisplayCompositeLayoutProvider layoutProvider) {
 		this.layoutProvider = layoutProvider;
+	}
+
+	protected Control createLabelledEditorControl(MMXRootObject root, EObject object, Composite c, IInlineEditor editor, EMFDataBindingContext dbc) {
+		final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(c, SWT.NONE) : null;
+		if (label != null) label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		editor.setLabel(label);
+		final Control control = editor.createControl(c, dbc, toolkit);
+		control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
+		control.setData(LABEL_CONTROL_KEY, label);
+		control.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		if (label != null) label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
+		return control;
 	}
 }
