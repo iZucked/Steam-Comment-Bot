@@ -59,7 +59,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				if (dischargeSlot.getTransferTo() != null) {
 					transferTo = dischargeSlot.getTransferTo();
 					transferFrom = dischargeSlot;
-					cargo = dischargeSlot.getCargo();
+					cargo = ((LoadSlot) extraValidationContext.getOriginal(transferTo)).getCargo();
 				}
 			}
 			
@@ -87,7 +87,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					boolean isAssigned = false;
 					
 					for (ElementAssignment assignment: assignmentModel.getElementAssignments()) {
-						if (assignment.getAssignedObject().equals(slot.getCargo()) && assignment.getAssignment() != null) {
+						if (assignment.getAssignedObject().equals(cargo) && assignment.getAssignment() != null) {
 							isAssigned = true; 
 							break;
 						}
