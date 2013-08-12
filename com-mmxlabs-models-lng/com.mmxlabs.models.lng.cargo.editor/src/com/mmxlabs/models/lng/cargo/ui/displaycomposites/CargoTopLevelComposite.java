@@ -156,14 +156,14 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 				if (value instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) value;
 					if (loadSlot.getTransferFrom() != null) {
-						g2.setText("STS: Load");
+						g2.setText("Load: STS");
 					} else {
 						g2.setText("Load");
 					}
 				} else if (value instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) value;
 					if (dischargeSlot.getTransferTo() != null) {
-						g2.setText("STS: Discharge");
+						g2.setText("Discharge: STS");
 					} else {
 						g2.setText("Discharge");
 
