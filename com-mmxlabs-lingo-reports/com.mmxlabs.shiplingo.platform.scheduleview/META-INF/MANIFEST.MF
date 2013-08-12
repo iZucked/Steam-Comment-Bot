@@ -13,9 +13,9 @@ Require-Bundle: org.eclipse.help;bundle-version="3.5.0",
  com.google.inject;bundle-version="3.0.0",
  com.mmxlabs.ganttviewer;bundle-version="[4.0.0,5.0.0)",
  com.mmxlabs.shiplingo.platform.reports;bundle-version="[4.0.0,5.0.0)",
- com.mmxlabs.jobmanager.eclipse;bundle-version="[1.0.0,2.0.0)",
+ com.mmxlabs.jobmanager.eclipse;bundle-version="[1.1.0,2.0.0)",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[4.0.0,5.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[4.1.0,5.0.0)",
  com.mmxlabs.models.lng.assignment.editor;bundle-version="[5.0.0,6.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
