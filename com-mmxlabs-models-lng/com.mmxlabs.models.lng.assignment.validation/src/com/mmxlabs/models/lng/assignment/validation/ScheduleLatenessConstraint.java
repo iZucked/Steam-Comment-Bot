@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.assignment.validation;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -15,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
@@ -56,6 +58,8 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 
 				final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(inputModel, fleetModel, scenarioFleetModel);
 
+				final List<Pair<UUIDObject, UUIDObject>> problems = new LinkedList<Pair<UUIDObject, UUIDObject>>();
+
 				// Check sequencing for each grouping
 				for (final CollectedAssignment collectedAssignment : collectAssignments) {
 					UUIDObject prevAssignment = null;
@@ -66,17 +70,23 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 						if (left != null && right != null) {
 							if (left.after(right)) {
 								// Uh oh, likely to be an error
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-										"%s and %s overlap causing too much lateness. Change dates or vessel.", getID(prevAssignment), getID(assignment))));
-								addEndDateFeature(failure, prevAssignment);
-								addStartDateFeature(failure, assignment);
-
-								statuses.add(failure);
+								problems.add(new Pair<UUIDObject, UUIDObject>(prevAssignment, assignment));
 							}
 						}
 
 						prevAssignment = assignment;
 					}
+				}
+
+				// More than one problem is likely to be a problem for the optimiser
+				final int severity = problems.size() > 1 ? IStatus.ERROR : IStatus.WARNING;
+				for (final Pair<UUIDObject, UUIDObject> p : problems) {
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
+							"%s and %s overlap causing too much lateness. Change dates or vessel.", getID(p.getFirst()), getID(p.getSecond()))), severity);
+					addEndDateFeature(failure, p.getFirst());
+					addStartDateFeature(failure, p.getSecond());
+
+					statuses.add(failure);
 				}
 			}
 		}
@@ -124,7 +134,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 	private Date getEndDate(final UUIDObject uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
-			EList<Slot> sortedSlots = cargo.getSortedSlots();
+			final EList<Slot> sortedSlots = cargo.getSortedSlots();
 			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
 			return slot.getWindowEndWithSlotOrPortTime();
 		} else if (uuidObject instanceof VesselEvent) {
