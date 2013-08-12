@@ -4,9 +4,9 @@
 	<parent>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
-		<version>5.0.0.RELEASE</version>
+		<version>5.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
-	<version>5.0.0.RELEASE</version>
+	<version>5.0.1-SNAPSHOT</version>
 </project>
