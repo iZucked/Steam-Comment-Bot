@@ -87,7 +87,7 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -106,7 +106,7 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -116,7 +116,7 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

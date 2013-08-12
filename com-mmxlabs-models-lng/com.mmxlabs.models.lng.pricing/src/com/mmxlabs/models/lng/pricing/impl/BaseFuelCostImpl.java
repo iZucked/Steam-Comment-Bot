@@ -66,7 +66,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 	/**
 	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @see #getIndex()
 	 * @generated
@@ -154,7 +154,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -172,7 +172,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -182,7 +182,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -195,7 +195,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -217,7 +217,7 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */

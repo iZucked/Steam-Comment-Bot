@@ -315,7 +315,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

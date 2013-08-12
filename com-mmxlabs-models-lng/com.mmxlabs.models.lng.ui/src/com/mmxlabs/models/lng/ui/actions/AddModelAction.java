@@ -67,7 +67,7 @@ public final class AddModelAction {
 	}
 	
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	public final static Action create(final EClass eClass, final IAddContext context, Action [] additionalActions) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(eClass);

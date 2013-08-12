@@ -145,7 +145,7 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * If the meaning of the '<em>Parameters</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parameters</em>' containment reference.
 	 * @see #setParameters(OptimiserSettings)
@@ -158,7 +158,7 @@ public interface LNGPortfolioModel extends UUIDObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters <em>Parameters</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Parameters</em>' containment reference.
 	 * @see #getParameters()

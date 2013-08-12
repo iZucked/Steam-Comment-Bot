@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.analytics.edit;singleton:=true
-Bundle-Version: 5.0.0.qualifier
+Bundle-Version: 5.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.analytics.provider.AnalyticsEditPlugin$Implementation
 Bundle-Vendor: %providerName
@@ -11,11 +11,11 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.models.lng.analytics.provider
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.edit;bundle-version="2.7.2";visibility:=reexport,
- com.mmxlabs.models.lng.analytics;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.assignment.edit;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.cargo.edit;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.commercial.edit;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.pricing.edit;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.port.edit;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.schedule.edit;bundle-version="[5.0.0,6.0.0)";visibility:=reexport
+ com.mmxlabs.models.lng.analytics;bundle-version="[5.1.0,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.assignment.edit;bundle-version="[5.1.0,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.cargo.edit;bundle-version="[5.1.0,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.commercial.edit;bundle-version="[5.1.0,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.pricing.edit;bundle-version="[5.1.0,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.port.edit;bundle-version="[5.1.0,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.schedule.edit;bundle-version="[5.1.0,6.0.0)";visibility:=reexport
 Bundle-ActivationPolicy: lazy

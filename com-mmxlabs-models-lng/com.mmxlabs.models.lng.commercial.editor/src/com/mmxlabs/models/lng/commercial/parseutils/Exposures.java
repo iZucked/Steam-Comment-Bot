@@ -293,7 +293,7 @@ public class Exposures {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	public static double getExposureCoefficient(final String priceExpression, final CommodityIndex index) {
 		final RawTreeParser parser = new RawTreeParser();
@@ -311,7 +311,7 @@ public class Exposures {
 	 * @param contract
 	 * @param index
 	 * @return
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	public static double getExposureCoefficient(final Slot slot, final CommodityIndex index) {
 		String priceExpression = null;
@@ -346,7 +346,7 @@ public class Exposures {
 	 * @param schedule
 	 * @param index
 	 * @return
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	public static Map<MonthYear, Double> getExposuresByMonth(final Schedule schedule, final CommodityIndex index) {
 		final CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();

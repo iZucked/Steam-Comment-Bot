@@ -331,7 +331,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -341,7 +341,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -596,7 +596,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -606,7 +606,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -907,7 +907,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -917,7 +917,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1383,7 +1383,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1393,7 +1393,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1703,7 +1703,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1713,7 +1713,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2172,7 +2172,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Pricing Date</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getPricingDate()
@@ -2184,7 +2184,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Notes</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getNotes()
@@ -2666,7 +2666,7 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Pricing Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2675,7 +2675,7 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

@@ -144,7 +144,7 @@ public interface PricingModel extends UUIDObject {
 	 * If the meaning of the '<em>Base Fuel Prices</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Base Fuel Prices</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_BaseFuelPrices()

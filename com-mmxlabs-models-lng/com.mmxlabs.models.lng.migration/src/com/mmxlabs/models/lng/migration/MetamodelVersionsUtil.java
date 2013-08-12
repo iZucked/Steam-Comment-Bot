@@ -124,7 +124,7 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	public static MetamodelLoader createV1_V2_IntermediateLoader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
@@ -153,7 +153,7 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	public static MetamodelLoader createV2Loader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
@@ -182,7 +182,7 @@ public class MetamodelVersionsUtil {
 	}
 	
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	public static MetamodelLoader createV2_V3Loader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
@@ -211,7 +211,7 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	public static MetamodelLoader createV3Loader(final Map<URI, PackageData> extraPackages) {
 		return createCurrentLoader(extraPackages);

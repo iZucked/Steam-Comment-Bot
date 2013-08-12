@@ -82,7 +82,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	/**
 	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @see #getParameters()
 	 * @generated
@@ -375,7 +375,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -399,7 +399,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -409,7 +409,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -425,7 +425,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

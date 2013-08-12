@@ -393,7 +393,7 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vias</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -827,7 +827,7 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.port.RouteLine#getVias <em>Vias</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Vias</em>'.
 	 * @see com.mmxlabs.models.lng.port.RouteLine#getVias()
@@ -1165,7 +1165,7 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vias</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

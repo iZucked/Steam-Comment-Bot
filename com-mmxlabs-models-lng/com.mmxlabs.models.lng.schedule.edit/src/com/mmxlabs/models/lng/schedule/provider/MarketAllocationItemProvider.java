@@ -30,7 +30,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.MarketAllocation} object.
  * <!-- begin-user-doc -->
- * @since 5.0
+ * @since 5.1
  * <!-- end-user-doc -->
  * @generated
  */

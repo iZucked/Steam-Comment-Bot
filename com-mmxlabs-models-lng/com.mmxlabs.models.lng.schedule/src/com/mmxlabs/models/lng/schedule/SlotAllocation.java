@@ -178,7 +178,7 @@ public interface SlotAllocation extends MMXObject {
 	 * If the meaning of the '<em>Market Allocation</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Market Allocation</em>' reference.
 	 * @see #setMarketAllocation(MarketAllocation)
@@ -192,7 +192,7 @@ public interface SlotAllocation extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getMarketAllocation <em>Market Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Market Allocation</em>' reference.
 	 * @see #getMarketAllocation()

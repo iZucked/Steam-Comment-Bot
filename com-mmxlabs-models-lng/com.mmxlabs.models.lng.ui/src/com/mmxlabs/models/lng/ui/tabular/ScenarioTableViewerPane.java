@@ -116,7 +116,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected Action deleteAction;
 	
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	protected Action addAction;
 
@@ -343,7 +343,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 	
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	protected Action createAddAction(final EReference containment) {
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment));
@@ -351,7 +351,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 	
 	/**
-	 * @since 5.0
+	 * @since 5.1
 	 */
 	protected IAddContext getAddContext(final EReference containment) {
 		return new IAddContext() {

@@ -219,7 +219,7 @@ public interface ParametersPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Generate Charter Outs</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -229,7 +229,7 @@ public interface ParametersPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Shipping Only</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -600,7 +600,7 @@ public interface ParametersPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Generate Charter Outs</em>'.
 	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts()
@@ -612,7 +612,7 @@ public interface ParametersPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Shipping Only</em>'.
 	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly()
@@ -909,7 +909,7 @@ public interface ParametersPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Generate Charter Outs</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -918,7 +918,7 @@ public interface ParametersPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Shipping Only</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

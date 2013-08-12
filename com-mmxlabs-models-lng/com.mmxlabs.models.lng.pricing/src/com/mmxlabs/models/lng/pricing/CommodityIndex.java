@@ -12,7 +12,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Commodity Index</b></em>'.
- * @since 5.0
+ * @since 5.1
  * <!-- end-user-doc -->
  *
  * <p>

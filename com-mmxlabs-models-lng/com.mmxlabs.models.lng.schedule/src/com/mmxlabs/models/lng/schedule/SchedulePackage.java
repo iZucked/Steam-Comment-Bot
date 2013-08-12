@@ -194,7 +194,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Market Allocations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -693,7 +693,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl <em>Market Allocation</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getMarketAllocation()
@@ -704,7 +704,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -714,7 +714,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -724,7 +724,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -734,7 +734,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -744,7 +744,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -754,7 +754,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slot Visit</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -764,7 +764,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Market Allocation</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -774,7 +774,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Market Allocation</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -820,7 +820,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Market Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3677,7 +3677,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getMarketAllocations <em>Market Allocations</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Market Allocations</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Schedule#getMarketAllocations()
@@ -4322,7 +4322,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.MarketAllocation <em>Market Allocation</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Market Allocation</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation
@@ -4333,7 +4333,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlot <em>Slot</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Slot</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlot()
@@ -4345,7 +4345,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getMarket <em>Market</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Market</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getMarket()
@@ -4357,7 +4357,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotAllocation <em>Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Slot Allocation</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotAllocation()
@@ -4369,7 +4369,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getPrice <em>Price</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getPrice()
@@ -4381,7 +4381,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit <em>Slot Visit</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Slot Visit</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit()
@@ -4436,7 +4436,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getMarketAllocation <em>Market Allocation</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Market Allocation</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getMarketAllocation()
@@ -4963,7 +4963,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Market Allocations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5472,7 +5472,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl <em>Market Allocation</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getMarketAllocation()
@@ -5483,7 +5483,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5492,7 +5492,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5501,7 +5501,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot Allocation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5510,7 +5510,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5519,7 +5519,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot Visit</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5562,7 +5562,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Market Allocation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
+		 * @since 5.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

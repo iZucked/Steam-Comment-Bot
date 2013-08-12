@@ -116,7 +116,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Commodity Index</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Commodity Index</em>'.
 	 * @generated
@@ -126,7 +126,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Charter Index</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Charter Index</em>'.
 	 * @generated
@@ -136,7 +136,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Base Fuel Index</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Base Fuel Index</em>'.
 	 * @generated
@@ -146,7 +146,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Named Index Container</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Named Index Container</em>'.
 	 * @generated

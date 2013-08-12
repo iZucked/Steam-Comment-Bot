@@ -96,7 +96,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	/**
 	 * The cached value of the '{@link #getMarketAllocation() <em>Market Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @see #getMarketAllocation()
 	 * @generated
@@ -376,7 +376,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -394,7 +394,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -404,7 +404,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -420,7 +420,7 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

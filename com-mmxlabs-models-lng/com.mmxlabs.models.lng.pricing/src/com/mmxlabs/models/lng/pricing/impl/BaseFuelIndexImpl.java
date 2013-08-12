@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Base Fuel Index</b></em>'.
- * @since 5.0
+ * @since 5.1
  * <!-- end-user-doc -->
  * <p>
  * </p>

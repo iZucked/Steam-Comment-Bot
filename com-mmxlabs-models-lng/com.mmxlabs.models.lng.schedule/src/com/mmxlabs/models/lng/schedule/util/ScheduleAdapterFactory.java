@@ -422,7 +422,7 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation

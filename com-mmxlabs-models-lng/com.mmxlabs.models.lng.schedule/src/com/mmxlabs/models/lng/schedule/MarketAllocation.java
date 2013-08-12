@@ -12,7 +12,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Market Allocation</b></em>'.
- * @since 5.0
+ * @since 5.1
  * <!-- end-user-doc -->
  *
  * <p>

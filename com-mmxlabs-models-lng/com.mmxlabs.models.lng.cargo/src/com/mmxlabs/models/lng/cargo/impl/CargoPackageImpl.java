@@ -341,7 +341,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -351,7 +351,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

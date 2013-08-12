@@ -39,7 +39,7 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * Custom import logic for loading a commodity index.
  * 
  * @author Simon Goodall, hinton
- * @since 5.0
+ * @since 5.1
  * 
  */
 public class CommodityIndexImporter implements IClassImporter {

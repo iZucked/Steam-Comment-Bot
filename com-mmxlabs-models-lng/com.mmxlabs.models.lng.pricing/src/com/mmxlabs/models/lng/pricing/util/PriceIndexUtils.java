@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
  * @author Simon McGregor
  * 
  *         Utility class to provide methods for evaluating index curves
- * @since 5.0
+ * @since 5.1
  * 
  */
 public class PriceIndexUtils {

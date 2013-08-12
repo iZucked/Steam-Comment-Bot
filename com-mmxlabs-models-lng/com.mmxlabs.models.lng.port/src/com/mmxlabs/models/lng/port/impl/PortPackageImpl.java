@@ -345,7 +345,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

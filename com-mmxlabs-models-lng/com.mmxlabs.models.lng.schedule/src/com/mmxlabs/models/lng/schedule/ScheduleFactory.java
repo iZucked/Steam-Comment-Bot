@@ -144,7 +144,7 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Market Allocation</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Market Allocation</em>'.
 	 * @generated

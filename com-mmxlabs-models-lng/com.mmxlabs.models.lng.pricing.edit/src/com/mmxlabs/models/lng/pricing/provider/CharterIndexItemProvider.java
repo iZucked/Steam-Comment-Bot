@@ -32,7 +32,7 @@ import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.CharterIndex} object.
  * <!-- begin-user-doc -->
- * @since 5.0
+ * @since 5.1
  * <!-- end-user-doc -->
  * @generated
  */

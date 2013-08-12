@@ -21,7 +21,7 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * Custom import logic for loading a base fuel index.
  * 
  * @author Simon McGregor
- * @since 5.0
+ * @since 5.1
  * 
  */
 public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {

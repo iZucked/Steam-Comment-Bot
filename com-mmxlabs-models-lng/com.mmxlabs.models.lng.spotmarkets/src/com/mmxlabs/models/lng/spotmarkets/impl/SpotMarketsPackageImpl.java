@@ -409,7 +409,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -446,7 +446,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -474,7 +474,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

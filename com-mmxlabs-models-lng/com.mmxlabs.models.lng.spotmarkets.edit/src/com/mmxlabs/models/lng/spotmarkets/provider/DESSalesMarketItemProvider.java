@@ -87,7 +87,7 @@ public class DESSalesMarketItemProvider
 	/**
 	 * This adds a property descriptor for the Market Ports feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

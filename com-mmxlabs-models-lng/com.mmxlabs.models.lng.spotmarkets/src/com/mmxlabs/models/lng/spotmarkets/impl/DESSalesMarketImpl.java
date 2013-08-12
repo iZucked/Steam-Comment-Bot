@@ -44,7 +44,7 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	/**
 	 * The cached value of the '{@link #getMarketPorts() <em>Market Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @see #getMarketPorts()
 	 * @generated
@@ -111,7 +111,7 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

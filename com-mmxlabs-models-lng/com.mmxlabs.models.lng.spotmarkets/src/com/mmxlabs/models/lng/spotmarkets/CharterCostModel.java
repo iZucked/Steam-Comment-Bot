@@ -53,7 +53,7 @@ public interface CharterCostModel extends MMXObject {
 	 * If the meaning of the '<em>Charter In Price</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter In Price</em>' reference.
 	 * @see #setCharterInPrice(CharterIndex)
@@ -66,7 +66,7 @@ public interface CharterCostModel extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#getCharterInPrice <em>Charter In Price</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Charter In Price</em>' reference.
 	 * @see #getCharterInPrice()
@@ -81,7 +81,7 @@ public interface CharterCostModel extends MMXObject {
 	 * If the meaning of the '<em>Charter Out Price</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Out Price</em>' reference.
 	 * @see #setCharterOutPrice(CharterIndex)
@@ -94,7 +94,7 @@ public interface CharterCostModel extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#getCharterOutPrice <em>Charter Out Price</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
+	 * @since 5.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Charter Out Price</em>' reference.
 	 * @see #getCharterOutPrice()
