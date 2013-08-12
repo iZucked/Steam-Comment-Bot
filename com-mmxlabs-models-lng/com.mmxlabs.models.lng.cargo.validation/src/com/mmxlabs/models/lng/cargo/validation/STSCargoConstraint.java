@@ -51,7 +51,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (loadSlot.getTransferFrom() != null) {
 					transferFrom = loadSlot.getTransferFrom();
-					transferTo = loadSlot;					
+					transferTo = loadSlot;
 					cargo = ((DischargeSlot) extraValidationContext.getOriginal(transferFrom)).getCargo();
 				}
 			} else if (slot instanceof DischargeSlot) {
@@ -62,7 +62,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					cargo = ((LoadSlot) extraValidationContext.getOriginal(transferTo)).getCargo();
 				}
 			}
-			
+
 			if (transferFrom != null && transferTo != null) {
 				validateAttributes(ctx, transferTo, transferFrom, failures, severity);
 				validateSlotPlacements(ctx, transferTo, transferFrom, failures, severity);
@@ -79,34 +79,36 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 							failures.add(dsd);
 						}
 					}
-					
+
 					// make sure cargo is assigned to a vessel
 					final LNGScenarioModel model = (LNGScenarioModel) extraValidationContext.getRootObject();
 					final AssignmentModel assignmentModel = model.getPortfolioModel().getAssignmentModel();
-					
+
 					boolean isAssigned = false;
-					
-					for (ElementAssignment assignment: assignmentModel.getElementAssignments()) {
+
+					for (final ElementAssignment assignment : assignmentModel.getElementAssignments()) {
 						if (assignment.getAssignedObject().equals(cargo) && assignment.getAssignment() != null) {
-							isAssigned = true; 
+							isAssigned = true;
 							break;
 						}
 					}
-					
+
 					if (!isAssigned) {
 						final String failureMessage = String.format("Cargo '%s' must be assigned a vessel", cargo.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-						failures.add(dsd);					
+						dsd.addEObjectAndFeature(transferTo.getCargo(), AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
+						dsd.addEObjectAndFeature(transferFrom.getCargo(), AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
+						failures.add(dsd);
 					}
 				}
-				
+
 				else {
 					final String failureMessage = String.format("Ship to Ship '%s' must be part of a cargo", slot.getName());
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 					dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CARGO);
-					failures.add(dsd);					
+					failures.add(dsd);
 				}
-				
+
 			}
 
 		}
@@ -114,7 +116,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private void validateAttributes(final IValidationContext ctx, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final List<IStatus> failures, final int severity) {
-		
+
 		if (loadSlot.isOptional()) {
 			final String failureMessage = String.format("Ship to Ship slot cannot be optional");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
@@ -129,12 +131,10 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 			failures.add(dsd);
 		}
 
-		final EStructuralFeature [] features = { 
-				CargoPackage.Literals.SLOT__WINDOW_START, CargoPackage.Literals.SLOT__WINDOW_START_TIME, CargoPackage.Literals.SLOT__DURATION, 
-				CargoPackage.Literals.SLOT__PORT
-			};
-		
-		for (EStructuralFeature feature: features) {
+		final EStructuralFeature[] features = { CargoPackage.Literals.SLOT__WINDOW_START, CargoPackage.Literals.SLOT__WINDOW_START_TIME, CargoPackage.Literals.SLOT__DURATION,
+				CargoPackage.Literals.SLOT__PORT };
+
+		for (final EStructuralFeature feature : features) {
 			if (!Equality.isEqual(loadSlot.eGet(feature), dischargeSlot.eGet(feature))) {
 				final String failureMessage = String.format("Ship to Ship %s must be in sync", feature.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
@@ -143,7 +143,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				failures.add(dsd);
 			}
 		}
-		
+
 		if (!Equality.isEqual(loadSlot.getSlotOrContractMaxQuantity(), dischargeSlot.getSlotOrContractMaxQuantity())) {
 			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Max Quantity");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
