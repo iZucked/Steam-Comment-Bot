@@ -40,7 +40,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * wiring, colour information for terminal and wiring colouring.
  * 
  * @author Simon Goodall
- * @since 3.0
+ * @since 5.0
  * 
  */
 public class CargoModelRowTransformer {
