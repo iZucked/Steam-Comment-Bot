@@ -25,6 +25,22 @@
          <constraints
                categories=" com.mmxlabs.models.lng.pricing.validation.base">
             <constraint
+                  class="com.mmxlabs.models.lng.pricing.validation.NullReferenceConstraint"
+                  id="com.mmxlabs.models.lng.pricing.validation.NullReferenceConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Null References"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  The attribute(s) {0} must be set.
+               </message>
+               <description>
+                  Some references should not be null.
+               </description>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.pricing.validation.CanalCostConstraint"
                   id="com.mmxlabs.models.lng.pricing.validation.canalCosts"
                   isEnabledByDefault="true"
