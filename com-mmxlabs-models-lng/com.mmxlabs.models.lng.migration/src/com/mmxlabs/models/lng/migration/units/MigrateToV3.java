@@ -118,8 +118,14 @@ public class MigrateToV3 extends AbstractMigrationUnit {
 		final EObject pricingModel = (EObject) model.eGet(reference_LNGScenarioModel_pricingModel);
 
 		final EObject fleetCostModel = (EObject) pricingModel.eGet(reference_PricingModel_fleetCost);
+		if (fleetCostModel == null) {
+			return;
+		}
+
 		final List<EObject> baseFuelCosts = MetamodelUtils.getValueAsTypedList(fleetCostModel, reference_FleetCostModel_baseFuelPrices);
-		
+		if (baseFuelCosts == null) {
+			return;
+		}
 		final List<EObject> baseFuelIndices = new ArrayList<EObject>(baseFuelCosts.size());
 		final Date indexDate;
 		{
@@ -159,7 +165,7 @@ public class MigrateToV3 extends AbstractMigrationUnit {
 					indexPrice.eSet(attribute_IndexPoint_value, price.doubleValue());
 
 					dataIndex.eSet(reference_DataIndex_points, Collections.singletonList(indexPrice));
-					
+
 					baseFuelIndex.eSet(reference_NamedIndexContainer_data, dataIndex);
 				}
 			}
