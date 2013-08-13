@@ -35,7 +35,7 @@
             context="com.mmxlabs.models.lng"
             from="2"
             id="com.mmxlabs.models.lng.migration.units.MigrateToV3"
-            to="-3">
+            to="3">
       </MigrationUnit>
    </extension>
 </plugin>
