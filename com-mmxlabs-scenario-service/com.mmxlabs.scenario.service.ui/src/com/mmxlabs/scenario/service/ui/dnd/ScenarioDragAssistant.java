@@ -226,8 +226,22 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 	private void copyFolder(final Container container, final Folder folder) throws IOException {
 
+		// Ensure name is unique in the destination container
+		String name = folder.getName();
+		boolean clean = false;
+		while (!clean) {
+			clean = true;
+			for (final Container c : container.getElements()) {
+				if (c.getName().equals(name)) {
+					clean = false;
+					name = "Copy of " + name;
+					break;
+				}
+			}
+		}
+
 		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
-		f.setName(folder.getName());
+		f.setName(name);
 		f.setMetadata(EcoreUtil.copy(folder.getMetadata()));
 		container.getElements().add(f);
 
