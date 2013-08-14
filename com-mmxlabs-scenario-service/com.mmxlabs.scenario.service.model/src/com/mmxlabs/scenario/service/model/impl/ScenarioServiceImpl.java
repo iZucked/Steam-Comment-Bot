@@ -5,10 +5,13 @@
 package com.mmxlabs.scenario.service.model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -23,6 +26,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getServiceRef <em>Service Ref</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isSupportsForking <em>Supports Forking</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isSupportsImport <em>Supports Import</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getScenarioModel <em>Scenario Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -112,6 +116,16 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * @ordered
 	 */
 	protected boolean supportsImport = SUPPORTS_IMPORT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getScenarioModel() <em>Scenario Model</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected ScenarioModel scenarioModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -225,6 +239,99 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ScenarioModel getScenarioModel() {
+		if (scenarioModel != null && scenarioModel.eIsProxy()) {
+			InternalEObject oldScenarioModel = (InternalEObject) scenarioModel;
+			scenarioModel = (ScenarioModel) eResolveProxy(oldScenarioModel);
+			if (scenarioModel != oldScenarioModel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL, oldScenarioModel, scenarioModel));
+			}
+		}
+		return scenarioModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScenarioModel basicGetScenarioModel() {
+		return scenarioModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetScenarioModel(ScenarioModel newScenarioModel, NotificationChain msgs) {
+		ScenarioModel oldScenarioModel = scenarioModel;
+		scenarioModel = newScenarioModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL, oldScenarioModel, newScenarioModel);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScenarioModel(ScenarioModel newScenarioModel) {
+		if (newScenarioModel != scenarioModel) {
+			NotificationChain msgs = null;
+			if (scenarioModel != null)
+				msgs = ((InternalEObject) scenarioModel).eInverseRemove(this, ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES, ScenarioModel.class, msgs);
+			if (newScenarioModel != null)
+				msgs = ((InternalEObject) newScenarioModel).eInverseAdd(this, ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES, ScenarioModel.class, msgs);
+			msgs = basicSetScenarioModel(newScenarioModel, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL, newScenarioModel, newScenarioModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
+			if (scenarioModel != null)
+				msgs = ((InternalEObject) scenarioModel).eInverseRemove(this, ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES, ScenarioModel.class, msgs);
+			return basicSetScenarioModel((ScenarioModel) otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
+			return basicSetScenarioModel(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -236,6 +343,10 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return isSupportsForking();
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
 			return isSupportsImport();
+		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
+			if (resolve)
+				return getScenarioModel();
+			return basicGetScenarioModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -259,6 +370,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return;
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
 			setSupportsImport((Boolean) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
+			setScenarioModel((ScenarioModel) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -284,6 +398,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
 			setSupportsImport(SUPPORTS_IMPORT_EDEFAULT);
 			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
+			setScenarioModel((ScenarioModel) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -304,6 +421,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return supportsForking != SUPPORTS_FORKING_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
 			return supportsImport != SUPPORTS_IMPORT_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
+			return scenarioModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

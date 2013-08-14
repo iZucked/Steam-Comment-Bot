@@ -27,6 +27,7 @@ public interface ScenarioModel extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Scenario Services</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.scenario.service.model.ScenarioService}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel <em>Scenario Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Scenario Services</em>' reference list isn't clear,
@@ -35,7 +36,8 @@ public interface ScenarioModel extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Scenario Services</em>' reference list.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioModel_ScenarioServices()
-	 * @model transient="true"
+	 * @see com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel
+	 * @model opposite="scenarioModel" transient="true"
 	 * @generated
 	 */
 	EList<ScenarioService> getScenarioServices();

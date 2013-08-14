@@ -12,6 +12,7 @@ import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.Saveable;
@@ -89,6 +90,18 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		filteredElements.clear();
 		super.inputChanged(viewer, oldInput, newInput);
+	}
+
+	@Override
+	public Object getParent(final Object object) {
+		if (object instanceof ScenarioService) {
+			final ScenarioService scenarioService = (ScenarioService) object;
+			return scenarioService.getScenarioModel();
+		} else if (object instanceof Container) {
+			final Container container = (Container) object;
+			return container.getParent();
+		}
+		return super.getParent(object);
 	}
 
 	@Override
@@ -173,17 +186,17 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 				if (e instanceof IScenarioService) {
 					ss = ((IScenarioService) e).getServiceModel();
 				} else {
-					ss =  (ScenarioService)e;
+					ss = (ScenarioService) e;
 				}
-				
+
 				boolean visible = isShowScenarioServices();
 				if (visible && isShowOnlyCapsImport()) {
-					visible =  ss.isSupportsImport();
+					visible = ss.isSupportsImport();
 				}
 				if (visible && isShowOnlyCapsForking()) {
-					visible =  ss.isSupportsForking();
+					visible = ss.isSupportsForking();
 				}
-				
+
 				filtered = !visible;
 			} else if (e instanceof ScenarioServiceRegistry) {
 				filtered = false;

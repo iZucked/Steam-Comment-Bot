@@ -18,6 +18,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getServiceRef <em>Service Ref</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsForking <em>Supports Forking</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport <em>Supports Import</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel <em>Scenario Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -133,5 +134,33 @@ public interface ScenarioService extends Container {
 	 * @generated
 	 */
 	void setSupportsImport(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Scenario Model</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.scenario.service.model.ScenarioModel#getScenarioServices <em>Scenario Services</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Scenario Model</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scenario Model</em>' reference.
+	 * @see #setScenarioModel(ScenarioModel)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_ScenarioModel()
+	 * @see com.mmxlabs.scenario.service.model.ScenarioModel#getScenarioServices
+	 * @model opposite="scenarioServices" transient="true"
+	 * @generated
+	 */
+	ScenarioModel getScenarioModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel <em>Scenario Model</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scenario Model</em>' reference.
+	 * @see #getScenarioModel()
+	 * @generated
+	 */
+	void setScenarioModel(ScenarioModel value);
 
 } // ScenarioService

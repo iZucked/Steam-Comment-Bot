@@ -523,15 +523,18 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	public EObject load(final ScenarioInstance instance) throws IOException {
 
 		if (instance.getInstance() == null) {
+			try {
+				final EObject object = super.load(instance);
 
-			final EObject object = super.load(instance);
+				if (object != null) {
+					final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
+					lock.claim();
+				}
 
-			if (object != null) {
-				final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
-				lock.claim();
+				return object;
+			} catch (final IOException e) {
+				throw new IOException("Error loading scenario. Copy to local scenarios and try again.", e);
 			}
-
-			return object;
 		} else {
 			return instance.getInstance();
 		}

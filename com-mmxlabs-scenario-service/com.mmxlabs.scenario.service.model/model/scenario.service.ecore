@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://com.mmxlabs.scenario.service/model/1" nsPrefix="com.mmxlabs.scenario.service">
   <eClassifiers xsi:type="ecore:EClass" name="ScenarioModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioServices" upperBound="-1"
-        eType="#//ScenarioService" transient="true"/>
+        eType="#//ScenarioService" transient="true" eOpposite="#//ScenarioService/scenarioModel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Container" abstract="true">
     <eOperations name="getScenarioService" lowerBound="1" eType="#//IScenarioService">
@@ -34,6 +34,8 @@
         transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="supportsForking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="supportsImport" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioModel" eType="#//ScenarioModel"
+        transient="true" eOpposite="#//ScenarioModel/scenarioServices"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ScenarioInstance" eSuperTypes="#//Container">
     <eOperations name="getContainedInstanceCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">

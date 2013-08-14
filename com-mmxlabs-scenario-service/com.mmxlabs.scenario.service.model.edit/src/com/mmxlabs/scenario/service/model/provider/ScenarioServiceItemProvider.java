@@ -55,6 +55,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 			addServiceRefPropertyDescriptor(object);
 			addSupportsForkingPropertyDescriptor(object);
 			addSupportsImportPropertyDescriptor(object);
+			addScenarioModelPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -107,6 +108,18 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioService_supportsImport_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_supportsImport_feature", "_UI_ScenarioService_type"),
 				ScenarioServicePackage.eINSTANCE.getScenarioService_SupportsImport(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Scenario Model feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addScenarioModelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_scenarioModel_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_scenarioModel_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioService_ScenarioModel(), true, false, true, null, null, null));
 	}
 
 	/**
