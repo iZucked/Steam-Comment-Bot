@@ -33,6 +33,7 @@ import com.mmxlabs.shiplingo.platform.reports.ScheduledEventCollector;
 
 /**
  * @author Simon Goodall
+ * @since 4.2
  * 
  */
 public class CapacityViolationReportView extends EMFReportView {
