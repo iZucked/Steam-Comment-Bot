@@ -50,6 +50,9 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 			final StringBuffer result = new StringBuffer();
 			boolean comma = false;
 			for (final Object o : eValues) {
+				if (o == null) 
+					{continue;}
+				
 				if (comma) {
 					result.append(",");
 				}
