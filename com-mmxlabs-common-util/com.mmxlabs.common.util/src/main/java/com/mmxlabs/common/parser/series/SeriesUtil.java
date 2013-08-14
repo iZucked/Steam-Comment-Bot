@@ -13,7 +13,7 @@ public class SeriesUtil {
 	public static final int[] mergeChangePoints(final int[] a, final int[] b) {
 		int ia = 0;
 		int ib = 0;
-		int[] c = new int[a.length + b.length];
+		final int[] c = new int[a.length + b.length];
 		int ic = 0;
 		while (ia < a.length && ib < b.length) {
 			if (a[ia] == b[ib]) {
@@ -43,7 +43,7 @@ public class SeriesUtil {
 		return Arrays.copyOf(c, ic);
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		final SortedSet<Integer> s1 = new TreeSet<Integer>();
 		final SortedSet<Integer> s2 = new TreeSet<Integer>();
 		final SortedSet<Integer> s3 = new TreeSet<Integer>();
@@ -62,15 +62,15 @@ public class SeriesUtil {
 		final int[] ia1 = new int[s1.size()];
 		final int[] ia2 = new int[s2.size()];
 		int i = 0;
-		for (int k : s1) {
+		for (final int k : s1) {
 			ia1[i++] = k;
 		}
 		i = 0;
-		for (int k : s2) {
+		for (final int k : s2) {
 			ia2[i++] = k;
 		}
 
-		int[] cia = mergeChangePoints(ia1, ia2);
+		final int[] cia = mergeChangePoints(ia1, ia2);
 		System.err.println(Arrays.toString(ia1));
 		System.err.println(Arrays.toString(ia2));
 		System.err.println(Arrays.toString(cia));
@@ -78,9 +78,15 @@ public class SeriesUtil {
 
 	public static int floor(final int[] points, final int point) {
 		final int pos = Arrays.binarySearch(points, point);
-		if (pos >= 0)
+		// If positive, then we have an exact match
+		if (pos >= 0) {
 			return pos;
-		final int pos2 = (-pos) - 1;
+		}
+		// If negative, then convert to the index at which we would insert the item to keep sorted
+		final int insertionIndex = (-pos) - 1;
+		// Subtract one for floor
+		final int pos2 = insertionIndex - 1;
+		// Bounds checks
 		if (pos2 < 0)
 			return 0;
 		if (pos2 >= points.length)

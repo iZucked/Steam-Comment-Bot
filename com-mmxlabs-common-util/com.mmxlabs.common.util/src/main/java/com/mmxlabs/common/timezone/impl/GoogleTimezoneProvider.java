@@ -60,11 +60,12 @@ public class GoogleTimezoneProvider implements ITimezoneProvider {
 	@Override
 	public TimeZone findTimeZone(final float latitude, final float longitude) {
 		InputStream requestStream = null;
-
+		InputStreamReader in = null;
 		try {
 			final URL requestURL = new URL(buildQueryURL(latitude, longitude));
+			in = new InputStreamReader(requestStream);
 			requestStream = requestURL.openStream();
-			final Object result = JSONValue.parse(new InputStreamReader(requestStream));
+			final Object result = JSONValue.parse(in);
 			if (result instanceof JSONObject) {
 				final JSONObject jsonObject = (JSONObject) result;
 				if (jsonObject.containsKey(status)) {
@@ -85,6 +86,13 @@ public class GoogleTimezoneProvider implements ITimezoneProvider {
 			// Wrap up and re-throw
 			throw new RuntimeException(e);
 		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (final IOException e) {
+					// Ignore
+				}
+			}
 			if (requestStream != null) {
 				try {
 					requestStream.close();
