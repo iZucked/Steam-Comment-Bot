@@ -28,6 +28,7 @@ import java.util.TreeSet;
 
 import javax.inject.Named;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.slf4j.Logger;
@@ -1915,16 +1916,19 @@ public class LNGScenarioTransformer {
 		// look up prices
 
 		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
-			ICurve baseFuelPrice = null;
+			int baseFuelPriceInInternalUnits = 0;
 			for (final BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
 					final BaseFuelIndex index = baseFuelCost.getIndex();
-					baseFuelPrice = baseFuelIndexAssociation.lookup(index);
+					final EList<Date> dates = index.getData().getDates();
+					final int point = dateHelper.convertTime(earliestTime, dates.get(0));
+					final ICurve curve = baseFuelIndexAssociation.lookup(index);
+					baseFuelPriceInInternalUnits = curve.getValueAtPoint(point);
 					break;
 				}
 			}
 
-			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPrice);
+			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPriceInInternalUnits);
 
 			vesselClassAssociation.add(eVc, vc);
 

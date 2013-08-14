@@ -72,34 +72,34 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-//	public StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale, boolean smallNumber) {
-//		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-//
-//		curve.setDefaultValue(0);
-//
-//		boolean gotOneEarlyDate = false;
-//		for (final Date date : index.getDates()) {
-//			final int value = index.getValueForMonth(date);
-//			final int hours = convertTime(date);
-//			if (hours < 0) {
-//				if (gotOneEarlyDate) {
-//					// TODO: While we should skip all the early stuff, we need to keep the latest, this currently however takes the earliest value!
-//					// continue;
-//				}
-//				gotOneEarlyDate = true;
-//			}
-//			double scaledValue = (double) value * scale;
-//			int internalValue;//
-//			if (smallNumber) {
-//				internalValue = OptimiserUnitConvertor.convertToInternalPrice(scaledValue);
-//			} else {
-//				internalValue = OptimiserUnitConvertor.convertToInternalDailyRate(scaledValue);
-//			}
-//			curve.setValueAfter(hours, internalValue);
-//		}
-//
-//		return curve;
-//	}
+	public StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale, boolean smallNumber) {
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+
+		curve.setDefaultValue(0);
+
+		boolean gotOneEarlyDate = false;
+		for (final Date date : index.getDates()) {
+			final int value = index.getValueForMonth(date);
+			final int hours = convertTime(date);
+			if (hours < 0) {
+				if (gotOneEarlyDate) {
+					// TODO: While we should skip all the early stuff, we need to keep the latest, this currently however takes the earliest value!
+					// continue;
+				}
+				gotOneEarlyDate = true;
+			}
+			double scaledValue = (double) value * scale;
+			int internalValue;//
+			if (smallNumber) {
+				internalValue = OptimiserUnitConvertor.convertToInternalPrice(scaledValue);
+			} else {
+				internalValue = OptimiserUnitConvertor.convertToInternalDailyRate(scaledValue);
+			}
+			curve.setValueAfter(hours, internalValue);
+		}
+
+		return curve;
+	}
 
 	public int convertTime(final Date startTime) {
 		assert earliestTime != null;
