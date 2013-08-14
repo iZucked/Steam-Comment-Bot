@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Migration: Scenarios
 Bundle-SymbolicName: com.mmxlabs.models.migration.scenario
-Bundle-Version: 3.1.1.qualifier
+Bundle-Version: 3.2.1.qualifier
 Bundle-Activator: com.mmxlabs.models.migration.scenario.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
  com.google.guava;bundle-version="13.0.1",
- com.mmxlabs.models.migration;bundle-version="[3.0.0,4.0.0)",
+ com.mmxlabs.models.migration;bundle-version="[3.2.0,4.0.0)",
  com.mmxlabs.scenario.service.model;bundle-version="[5.0.0,6.0.0)",
  com.mmxlabs.models.mmxcore;bundle-version="[4.0.0,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
