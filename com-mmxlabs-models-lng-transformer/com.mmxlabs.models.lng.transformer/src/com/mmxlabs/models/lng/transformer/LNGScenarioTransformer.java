@@ -1920,10 +1920,12 @@ public class LNGScenarioTransformer {
 			for (final BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
 					final BaseFuelIndex index = baseFuelCost.getIndex();
-					final EList<Date> dates = index.getData().getDates();
-					final int point = dateHelper.convertTime(earliestTime, dates.get(0));
 					final ICurve curve = baseFuelIndexAssociation.lookup(index);
-					baseFuelPriceInInternalUnits = curve.getValueAtPoint(point);
+					if (curve != null) {
+						final EList<Date> dates = index.getData().getDates();
+						final int point = dateHelper.convertTime(earliestTime, dates.get(0));
+						baseFuelPriceInInternalUnits = curve.getValueAtPoint(point);
+					}
 					break;
 				}
 			}
