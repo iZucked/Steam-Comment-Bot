@@ -50,6 +50,11 @@ public class MigrationHelper {
 			return URI.createURI(uri);
 		}
 
+		@Override
+		public void makeFolder(Container parent, String name) {
+			
+		}
+
 	}
 
 	public static void migrateAndLoad(final ScenarioInstance instance) throws IOException {
