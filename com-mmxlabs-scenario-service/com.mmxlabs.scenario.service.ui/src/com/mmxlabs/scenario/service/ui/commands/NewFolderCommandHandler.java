@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -28,6 +29,7 @@ import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
+import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 public class NewFolderCommandHandler extends AbstractHandler {
 	@Override
@@ -40,6 +42,17 @@ public class NewFolderCommandHandler extends AbstractHandler {
 				final ISelection selection = activePage.getSelection();
 				// No selection - either the root element is a scenario service or it is the registry (in which case the user should select the service)
 				if (selection.isEmpty()) {
+
+					final IWorkbenchPart part = HandlerUtil.getActivePart(event);
+					if (part instanceof ScenarioServiceNavigator) {
+						final ScenarioServiceNavigator navigator = (ScenarioServiceNavigator) part;
+						final Object input = navigator.getCommonViewer().getInput();
+						if (input instanceof Container) {
+							createFolderInContainer(activePage, (Container) input);
+						}
+						return;
+					}
+
 					// create a new folder in the top scenario service?
 					final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault()
 							.getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
