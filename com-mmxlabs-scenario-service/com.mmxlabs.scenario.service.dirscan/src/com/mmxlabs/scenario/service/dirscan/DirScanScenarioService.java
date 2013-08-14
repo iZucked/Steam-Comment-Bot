@@ -137,8 +137,17 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		final Path path = modelToFilesystemMap.get(container);
 		if (path != null) {
-			path.toFile().delete();
+			delete(path.toFile());
 		}
+	}
+
+	private void delete(final File f) {
+		if (f.isDirectory()) {
+			for (final File sub : f.listFiles()) {
+				delete(sub);
+			}
+		}
+		f.delete();
 	}
 
 	@Override
