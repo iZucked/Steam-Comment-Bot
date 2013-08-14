@@ -423,7 +423,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		try {
 			ro = scenarioService.load(instance);
 		} catch (final IOException e) {
-			throw new RuntimeException("IO Exception loading instance", e);
+			log.error("Exception loading instance: " + e.getMessage(), e);
+			throw new RuntimeException("Exception loading instance: " + e.getMessage());
 		}
 
 		if (ro == null) {
