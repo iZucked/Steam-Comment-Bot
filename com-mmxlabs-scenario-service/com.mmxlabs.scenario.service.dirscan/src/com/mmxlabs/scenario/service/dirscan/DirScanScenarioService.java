@@ -51,7 +51,6 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -330,7 +329,11 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	protected void removeFolder(final Path dir) {
 
-		final Container c = folderMap.remove(dir.normalize().toString()).get();
+		final WeakReference<Container> remove = folderMap.remove(dir.normalize().toString());
+		if (remove == null) {
+			return;
+		}
+		final Container c = remove.get();
 		if (c != null) {
 			detachSubTree(c);
 			final EObject container = c.eContainer();
@@ -515,8 +518,37 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	@Override
 	public void moveInto(final List<Container> elements, final Container destination) {
 
-		// TODO Auto-generated method stub
+		final Path destPath = modelToFilesystemMap.get(destination);
+		if (destPath == null) {
+			log.error("Destination is not known to scenario service.", new RuntimeException());
+			return;
+		}
+		if (destination instanceof ScenarioInstance) {
+			log.error("Destination is a scenario - cannot move into.", new RuntimeException());
+			return;
+		}
 
+		// Loop over targets and move (rename)
+		for (final Container c : elements) {
+
+			final Path path = modelToFilesystemMap.get(c);
+			if (path != null) {
+				try {
+					// Generate the new target filename
+					final Path destLoc = destPath.resolve(path.getFileName());
+					Files.move(path, destLoc);
+					// Remove from tree as file system watcher will re-add.
+					// We do this after the move as errors will leave the file in place (TODO: What about folder moves?)
+					if (c instanceof ScenarioInstance) {
+						removeFile(path);
+					} else {
+						removeFolder(path);
+					}
+				} catch (final IOException e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
 	}
 
 	@Override
