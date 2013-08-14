@@ -244,6 +244,7 @@ public class DefaultScenarioCreator {
 			if (bfi == null) {
 				bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
 				bfc.setIndex(bfi);
+				bfi.setName(bfc.getFuel().getName());
 			}
 			Index<Double> indexData = bfi.getData();
 			if (indexData == null || (indexData instanceof DataIndex) == false) {
@@ -282,6 +283,7 @@ public class DefaultScenarioCreator {
 			bfc.setFuel(baseFuel);
 			setBaseFuelPrice(bfc, baseFuelUnitPrice);
 			fleetCostModel.getBaseFuelPrices().add(bfc);
+			pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 			return baseFuel;
 		}

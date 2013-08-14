@@ -249,8 +249,8 @@ public class ScenarioTools {
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
 
 		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
-		
 		fleetCostModel.getBaseFuelPrices().add(bfc);
+		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 		final FleetModel fleetModel = scenario.getFleetModel();
 		fleetModel.getBaseFuels().add(baseFuel);
@@ -514,6 +514,7 @@ public class ScenarioTools {
 
 		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
 		fleetCostModel.getBaseFuelPrices().add(bfc);
+		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 		fleetModel.getBaseFuels().add(baseFuel);
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
@@ -932,7 +933,9 @@ public class ScenarioTools {
 	
 	public static BaseFuelCost createBaseFuelCost(BaseFuel baseFuel, double price) {
 		BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
+		
 		final BaseFuelIndex bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
+		bfi.setName(baseFuel.getName());
 		final DataIndex<Double> indexData = PricingFactory.eINSTANCE.createDataIndex();
 		bfi.setData(indexData);
 		IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
