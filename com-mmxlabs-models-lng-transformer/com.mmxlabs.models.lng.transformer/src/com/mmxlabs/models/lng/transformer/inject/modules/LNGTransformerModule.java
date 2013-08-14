@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.Platform;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -45,6 +46,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
  */
 public class LNGTransformerModule extends AbstractModule {
 
+	public static final String Parser_Commodity = "Commodity";
+	public static final String Parser_BaseFuel = "BaseFuel";
+	public static final String Parser_Charter = "Charter";
+
 	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
 
 	private final LNGScenarioModel scenario;
@@ -54,7 +59,7 @@ public class LNGTransformerModule extends AbstractModule {
 	/**
 	 * @since 5.0
 	 */
-	public LNGTransformerModule(final LNGScenarioModel scenario, OptimiserSettings optimiserSettings) {
+	public LNGTransformerModule(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings) {
 		this.scenario = scenario;
 		this.optimiserSettings = optimiserSettings;
 	}
@@ -69,9 +74,15 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(LNGScenarioModel.class).toInstance(scenario);
 		bind(OptimiserSettings.class).toInstance(optimiserSettings);
 
-		bind(LNGScenarioTransformer.class).in(Singleton.class);
+		// Parser for each section
+		final SeriesParser commodityParser = new SeriesParser();
+		bind(SeriesParser.class).annotatedWith(Names.named(Parser_Commodity)).toInstance(commodityParser);
+		final SeriesParser charterParser = new SeriesParser();
+		bind(SeriesParser.class).annotatedWith(Names.named(Parser_Charter)).toInstance(charterParser);
+		final SeriesParser baseFuelParser = new SeriesParser();
+		bind(SeriesParser.class).annotatedWith(Names.named(Parser_BaseFuel)).toInstance(baseFuelParser);
 
-		bind(SeriesParser.class).in(Singleton.class);
+		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
 		bind(DateAndCurveHelper.class).in(Singleton.class);
 
@@ -108,30 +119,30 @@ public class LNGTransformerModule extends AbstractModule {
 		return optimisationData;
 	}
 
-//	@Provides
-//	@Singleton
-//	/**
-//	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
-//	 * 
-//	 * @return
-//	 */
-//	OptimiserSettings getOptimisationSettings(LNGScenarioModel rootObject) {
-//		final ParametersModel om = rootObject.getParametersModel();
-//		if (om != null) {
-//			// select settings
-//			final OptimiserSettings x = om.getActiveSetting();
-//			if (x != null)
-//				return x;
-//		}
-//		// if (defaultSettings == null) {
-//		OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
-//		if (om != null) {
-//			om.getSettings().add(defaultSettings);
-//			om.setActiveSetting(defaultSettings);
-//		}
-//		// }
-//		return defaultSettings;
-//	}
+	// @Provides
+	// @Singleton
+	// /**
+	// * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
+	// *
+	// * @return
+	// */
+	// OptimiserSettings getOptimisationSettings(LNGScenarioModel rootObject) {
+	// final ParametersModel om = rootObject.getParametersModel();
+	// if (om != null) {
+	// // select settings
+	// final OptimiserSettings x = om.getActiveSetting();
+	// if (x != null)
+	// return x;
+	// }
+	// // if (defaultSettings == null) {
+	// OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
+	// if (om != null) {
+	// om.getSettings().add(defaultSettings);
+	// om.setActiveSetting(defaultSettings);
+	// }
+	// // }
+	// return defaultSettings;
+	// }
 
 	@Provides
 	@Singleton

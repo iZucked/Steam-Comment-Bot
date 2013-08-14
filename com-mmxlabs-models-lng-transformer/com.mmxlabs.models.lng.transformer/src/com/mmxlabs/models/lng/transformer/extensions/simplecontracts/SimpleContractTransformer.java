@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
@@ -23,12 +24,12 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
@@ -45,6 +46,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 			CommercialPackage.eINSTANCE.getPurchaseContract());
 
 	@Inject
+	@Named(LNGTransformerModule.Parser_Commodity)
 	private SeriesParser indices;
 
 	/**
@@ -96,10 +98,6 @@ public class SimpleContractTransformer implements IContractTransformer {
 		return handledClasses;
 	}
 
-	private FixedPriceContract createFixedPriceContract(final int pricePerMMBTU) {
-		return new FixedPriceContract(pricePerMMBTU);
-	}
-
 	/**
 	 * Create an internal representation of a PriceExpressionContract from the price expression string.
 	 * 
@@ -120,7 +118,6 @@ public class SimpleContractTransformer implements IContractTransformer {
 		if (parsed.getChangePoints().length == 0) {
 			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 		} else {
-
 			curve.setDefaultValue(0);
 			for (final int i : parsed.getChangePoints()) {
 				curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
