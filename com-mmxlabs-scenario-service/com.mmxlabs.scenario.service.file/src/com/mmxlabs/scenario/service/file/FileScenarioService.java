@@ -113,6 +113,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			final EStructuralFeature containment = container.eContainingFeature();
 			if (containment != null) {
 				if (containment.isMany()) {
+					@SuppressWarnings("unchecked")
 					final EList<EObject> value = (EList<EObject>) parent.eGet(containment);
 					while (value.remove(container))
 						;
@@ -302,7 +303,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		result.setSupportsForking(true);
 		result.setSupportsImport(true);
-		
+
 		return result;
 	}
 
@@ -403,5 +404,15 @@ public class FileScenarioService extends AbstractScenarioService {
 	@Override
 	public void moveInto(final List<Container> elements, final Container destination) {
 		destination.getElements().addAll(elements);
+	}
+
+	@Override
+	public void makeFolder(Container parent, String name) {
+		if (parent instanceof ScenarioInstance) {
+			return;
+		}
+		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
+		f.setName(name);
+		parent.getElements().add(f);
 	}
 }

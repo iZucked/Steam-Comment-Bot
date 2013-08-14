@@ -27,12 +27,11 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 public class NewFolderCommandHandler extends AbstractHandler {
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 
@@ -73,7 +72,7 @@ public class NewFolderCommandHandler extends AbstractHandler {
 	private void createFolderInContainer(final IWorkbenchPage activePage, final Container o) {
 
 		final Set<String> folderNames = new HashSet<String>();
-		for (Container c : o.getElements()) {
+		for (final Container c : o.getElements()) {
 			if (c instanceof Folder) {
 				folderNames.add(((Folder) c).getName());
 			} else if (c instanceof ScenarioInstance) {
@@ -91,7 +90,7 @@ public class NewFolderCommandHandler extends AbstractHandler {
 		final InputDialog inputDialog = new InputDialog(activePage.getActivePart().getSite().getShell(), "Folder Name", "Enter a name for the new folder", initialValue, new IInputValidator() {
 
 			@Override
-			public String isValid(String newText) {
+			public String isValid(final String newText) {
 				if (newText.isEmpty())
 					return "The folder's name cannot be empty";
 				return null;
@@ -100,10 +99,7 @@ public class NewFolderCommandHandler extends AbstractHandler {
 		if (inputDialog.open() == Window.OK) {
 			final String name = inputDialog.getValue();
 
-			final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
-			f.setName(name);
-
-			o.getElements().add(f);
+			o.getScenarioService().makeFolder(o, name);
 		}
 	}
 }

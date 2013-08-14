@@ -185,7 +185,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		this.watcher = FileSystems.getDefault().newWatchService();
 		try {
-			folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
 			recursiveAdd(getServiceModel(), dataPath.toPath());
 		} catch (final IOException e) {
 			log.error(e.getMessage(), e);
@@ -379,6 +378,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				// Store in map
 				folderMap.put(pathKey, new WeakReference<Container>(folder));
 				modelToFilesystemMap.put(folder, dir);
+			} else {
+				folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
 			}
 			final WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 			keys.put(key, dir);
@@ -570,5 +571,26 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		} else {
 			return instance.getInstance();
 		}
+	}
+
+	@Override
+	public void makeFolder(final Container parent, final String name) {
+		if (parent instanceof ScenarioInstance) {
+			return;
+		}
+
+		final Path path;
+		if (parent == getServiceModel()) {
+			path = dataPath.toPath();
+		} else {
+			path = modelToFilesystemMap.get(parent);
+		}
+
+		if (path == null) {
+			return;
+		}
+
+		final Path newFolderPath = path.resolve(name);
+		newFolderPath.toFile().mkdirs();
 	}
 }

@@ -124,4 +124,6 @@ public interface IScenarioService {
 	 * @since 5.0
 	 */
 	void moveInto(List<Container> elements, Container destination);
+
+	void makeFolder(Container parent, String name);
 }
