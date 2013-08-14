@@ -129,6 +129,16 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	@Override
 	public void delete(final Container container) {
 
+		final Path destPath = modelToFilesystemMap.get(container);
+		if (destPath == null) {
+			log.error("Destination is not known to scenario service.", new RuntimeException());
+			return;
+		}
+
+		final Path path = modelToFilesystemMap.get(container);
+		if (path != null) {
+			path.toFile().delete();
+		}
 	}
 
 	@Override
