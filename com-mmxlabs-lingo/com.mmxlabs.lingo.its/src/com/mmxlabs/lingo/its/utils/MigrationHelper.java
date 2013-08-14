@@ -56,6 +56,11 @@ public class MigrationHelper {
 			
 		}
 
+		@Override
+		public void makeFolder(Container parent, String name) {
+			
+		}
+
 	}
 
 	public static void migrateAndLoad(final ScenarioInstance instance) throws IOException {
