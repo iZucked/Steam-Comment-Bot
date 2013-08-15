@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.management.timer.Timer;
+import javax.script.ScriptContext;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -717,6 +718,7 @@ public class DefaultScenarioCreator {
 			final CharterCostModel result = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
 			result.getVesselClasses().add(vc);
 			result.setMinCharterOutDuration(minDuration);
+			
 			final String indexName = String.format("Charter-out cost for vessel class %s", vc.getName());
 			CharterIndex charterIndex = PricingFactory.eINSTANCE.createCharterIndex();
 			charterIndex.setName(indexName);
@@ -726,6 +728,8 @@ public class DefaultScenarioCreator {
 			final SpotMarketsModel marketModel = scenario.getSpotMarketsModel();
 			marketModel.getCharteringSpotMarkets().add(result);
 
+			scenario.getPricingModel().getCharterIndices().add(charterIndex);
+			
 			return result;
 		}
 
