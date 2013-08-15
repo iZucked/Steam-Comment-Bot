@@ -406,7 +406,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	private int getPartialPlanDuration(final VoyagePlan plan, final int skip) {
-		// TODO: Duplicated in ProfitAndLossAllocationComponent
 		int planDuration = 0;
 		final Object[] sequence = plan.getSequence();
 		final int k = sequence.length - skip;
