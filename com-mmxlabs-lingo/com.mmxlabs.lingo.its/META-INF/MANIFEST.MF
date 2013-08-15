@@ -34,8 +34,8 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.models.lng.migration;bundle-version="[5.2.0,6.0.0)",
  com.google.guava;bundle-version="13.0.1",
  com.mmxlabs.models.lng.scenario.ui;bundle-version="[5.2.0,6.0.0)",
- com.mmxlabs.lingo.extensions;bundle-version="3.1.0",
- com.mmxlabs.lingo.models.migration;bundle-version="3.1.0",
+ com.mmxlabs.lingo.extensions;bundle-version="3.0.0",
+ com.mmxlabs.lingo.models.migration;bundle-version="3.0.0",
  org.eclipse.emf.compare.edit;bundle-version="2.0.0"
 Bundle-ClassPath: data/,
  .
