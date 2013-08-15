@@ -51,7 +51,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	private Composite middle;
 	/**
 	 * {@link IDisplayComposite} to contain elements for the bottom of the editor
-	 * @param toolkit 
+	 * 
+	 * @param toolkit
 	 */
 	protected IDisplayComposite bottomLevel = null;
 
@@ -81,7 +82,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.setEditorWrapper(editorWrapper);
 
 		// Initialise middle composite
-		middle = new Composite(this, SWT.NONE);
+		middle = toolkit.createComposite(this);
 
 		createChildComposites(root, object, eClass, middle);
 		// We know there are n slots, so n columns
@@ -89,16 +90,17 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Additional Group for the bottom section
 		final Group g2 = new Group(this, SWT.NONE);
+		toolkit.adapt(g2);
 		// g2.setText(EditorUtils.unmangle(eClass.getName()));
 		g2.setLayout(new FillLayout());
 		g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		// Create the directly rather than go through the registry. True indicates this is the bottom section.
-		bottomLevel = new CargoDetailComposite(g2, SWT.NONE, false);
+		bottomLevel = new CargoDetailComposite(g2, SWT.NONE, false, toolkit);
 		bottomLevel.setCommandHandler(commandHandler);
 		bottomLevel.setEditorWrapper(editorWrapper);
 
 		topLevel.display(location, root, object, range, dbc);
-		bottomLevel.display(location, root, object, range);
+		bottomLevel.display(location, root, object, range, dbc);
 
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
@@ -161,7 +163,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
 			toolkit.adapt(g2);
 
-			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(), location , toolkit);
+			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass())
+					.createSublevelComposite(g2, value.eClass(), location, toolkit);
 
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);

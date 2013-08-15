@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
-import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -26,7 +25,7 @@ public class CargoDetailComposite extends DefaultDetailComposite {
 
 	private final boolean top;
 
-	public CargoDetailComposite(final Composite parent, final int style, final boolean top,  final FormToolkit toolkit) {
+	public CargoDetailComposite(final Composite parent, final int style, final boolean top, final FormToolkit toolkit) {
 		super(parent, style, toolkit);
 
 		this.top = top;
