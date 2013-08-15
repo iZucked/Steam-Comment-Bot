@@ -30,6 +30,7 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -114,6 +115,28 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
+
+			if (instance.isReadonly()) {
+				action.setEnabled(false);
+				return;
+			}
+			{
+				Container c = instance;
+				while (c != null && !(c instanceof ScenarioService)) {
+					c = c.getParent();
+				}
+				if (c instanceof ScenarioService) {
+					ScenarioService scenarioService = (ScenarioService) c;
+					if (!scenarioService.isSupportsForking()) {
+						action.setEnabled(false);
+						return;
+					}
+				} else {
+					action.setEnabled(false);
+					return;
+				}
+			}
+
 			final Object object = instance.getInstance();
 			if (object instanceof MMXRootObject) {
 				final MMXRootObject root = (MMXRootObject) object;

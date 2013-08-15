@@ -22,6 +22,10 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                     <not><test
+                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
+                          forcePluginActivation="true">
+                     </test></not>
                      <test
                            forcePluginActivation="true"
                            property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPlay">
@@ -56,6 +60,14 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                     <not><test
+                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
+                          forcePluginActivation="true">
+                     </test></not>
+                                          <test
+                          property="com.mmxlabs.scenario.service.ui.caps.forking"
+                          forcePluginActivation="true">
+                     </test>
                      <test
                            forcePluginActivation="true"
                            property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPlay">
@@ -88,6 +100,10 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                                         <not><test
+                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
+                          forcePluginActivation="true">
+                     </test></not>
                      <test
                            property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canTerminate">
                      </test>
@@ -118,6 +134,10 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                         <not><test
+                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
+                          forcePluginActivation="true">
+                     </test></not>
                      <test
                            property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPause">
                      </test>
@@ -148,6 +168,10 @@
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
+                       <not><test
+                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
+                          forcePluginActivation="true">
+                     </test></not>
                      <not>
                         <test
                               property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.hasActiveJob">
@@ -283,6 +307,10 @@
                               <instanceof
                                     value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                               </instanceof>
+                                                   <not><test
+                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
+                          forcePluginActivation="true">
+                     </test></not>
                               <not>
                                  <test
                                        forcePluginActivation="true"
@@ -314,6 +342,10 @@
                               <instanceof
                                     value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                               </instanceof>
+	 							                     <test
+                          property="com.mmxlabs.scenario.service.ui.caps.forking"
+                          forcePluginActivation="true">
+                     </test>
                               <not>
                                  <test
                                        forcePluginActivation="true"
