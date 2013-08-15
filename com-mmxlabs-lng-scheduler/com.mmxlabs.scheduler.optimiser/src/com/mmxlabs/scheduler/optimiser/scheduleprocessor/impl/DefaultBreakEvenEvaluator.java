@@ -134,7 +134,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					// Get the new cargo allocation.
 
 					// Purchase price in mmbtu = (sales revenue - shipping cost) / load volume in mmbtu
-					final long totalShippingCost = entityValueCalculator.getShippingCosts(vp, vessel, false, seq.getStartTime(), null);
+					final long totalShippingCost = entityValueCalculator.getShippingCosts(vp, vessel, false, true, seq.getStartTime(), null);
 					long totalSalesRevenue = 0;
 					long loadVolumeInM3 = 0;
 

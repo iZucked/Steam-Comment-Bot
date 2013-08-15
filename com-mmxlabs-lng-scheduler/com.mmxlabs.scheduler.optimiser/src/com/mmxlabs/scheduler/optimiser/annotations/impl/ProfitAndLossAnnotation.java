@@ -15,18 +15,10 @@ import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
  * 
  */
 public class ProfitAndLossAnnotation implements IProfitAndLossAnnotation {
-	private final int bookingTime;
 	private final Collection<IProfitAndLossEntry> entries;
 
-	public ProfitAndLossAnnotation(final int bookingTime, final Collection<IProfitAndLossEntry> entries) {
-		super();
-		this.bookingTime = bookingTime;
+	public ProfitAndLossAnnotation(final Collection<IProfitAndLossEntry> entries) {
 		this.entries = entries;
-	}
-
-	@Override
-	public int getBookingTime() {
-		return bookingTime;
 	}
 
 	@Override
