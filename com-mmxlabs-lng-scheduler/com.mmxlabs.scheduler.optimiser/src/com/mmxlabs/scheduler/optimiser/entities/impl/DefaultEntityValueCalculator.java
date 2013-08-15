@@ -341,9 +341,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		case SPOT_CHARTER:
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
-		// case TIME_CHARTER:
-		// hireRate = vessel.getHourlyCharterInPrice();
-		// break;
+		case TIME_CHARTER:
+			hireRate = vessel.getHourlyCharterInPrice();
+			break;
 		case CARGO_SHORTS:
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
