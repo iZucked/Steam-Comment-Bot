@@ -113,6 +113,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 	/**
 	 * This adds a property descriptor for the Scenario Model feature.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
