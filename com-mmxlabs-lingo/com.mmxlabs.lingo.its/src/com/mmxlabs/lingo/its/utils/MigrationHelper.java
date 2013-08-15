@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -48,6 +49,11 @@ public class MigrationHelper {
 		@Override
 		public URI resolveURI(final String uri) {
 			return URI.createURI(uri);
+		}
+
+		@Override
+		public void moveInto(List<Container> elements, Container destination) {
+			
 		}
 
 		@Override
