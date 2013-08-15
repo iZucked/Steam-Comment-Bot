@@ -19,8 +19,6 @@ public final class IdleEventImpl extends AbstractFuelUsingEventImpl implements I
 
 	private VesselState vesselState;
 
-	private int cooldownDuration;
-
 	@Override
 	public IPort getPort() {
 		return port;
@@ -37,14 +35,5 @@ public final class IdleEventImpl extends AbstractFuelUsingEventImpl implements I
 
 	public void setVesselState(final VesselState vesselState) {
 		this.vesselState = vesselState;
-	}
-
-	public void setCooldownDuration(final int cooldownDuration) {
-		this.cooldownDuration = cooldownDuration;
-	}
-
-	@Override
-	public int getCooldownDuration() {
-		return cooldownDuration;
 	}
 }

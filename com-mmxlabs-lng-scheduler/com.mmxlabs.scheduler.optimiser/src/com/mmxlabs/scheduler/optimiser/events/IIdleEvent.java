@@ -28,6 +28,4 @@ public interface IIdleEvent extends IScheduledEvent, IFuelUsingEvent {
 	 * @return
 	 */
 	VesselState getVesselState();
-	
-	int getCooldownDuration();
 }
