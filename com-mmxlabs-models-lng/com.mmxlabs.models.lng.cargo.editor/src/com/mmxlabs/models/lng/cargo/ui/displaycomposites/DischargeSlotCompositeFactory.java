@@ -28,9 +28,4 @@ public class DischargeSlotCompositeFactory extends DefaultDisplayCompositeFactor
 	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
 		return new DischargeSlotTopLevelComposite(composite, SWT.NONE, location, toolkit);
 	}
-
-	@Override
-	public IDisplayComposite createSublevelComposite(Composite parent, EClass eClass, IScenarioEditingLocation location, final FormToolkit toolkit) {
-		return new SlotDetailComposite(parent, SWT.NONE, toolkit);
-	}
 }
