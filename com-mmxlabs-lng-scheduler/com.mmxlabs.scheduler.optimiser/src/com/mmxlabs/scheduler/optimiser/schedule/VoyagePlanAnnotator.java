@@ -209,7 +209,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				visit.setPortSlot(currentPortSlot);
 
 				visit.setDuration(visitDuration);
-				visit.setCharterCost(Calculator.quantityFromRateTime(charterRate, visitDuration));
+				visit.setHireCost(Calculator.quantityFromRateTime(charterRate, visitDuration));
 				solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_visitInfo, visit);
 
 				visit.setStartTime(currentTime); // details.getStartTime()
@@ -242,7 +242,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				journey.setRouteCost(details.getRouteCost());
 
 				journey.setDuration(travelTime);
-				journey.setCharterCost(Calculator.quantityFromRateTime(charterRate, travelTime));
+				journey.setHireCost(Calculator.quantityFromRateTime(charterRate, travelTime));
 				journey.setSpeed(details.getSpeed());
 
 				for (final FuelComponent fuel : travelFuelComponents) {
@@ -281,7 +281,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					// Calculate revenue
 					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutHourlyRate(), idleTime));
-					charterOut.setCharterCost(Calculator.quantityFromRateTime(charterRate, idleTime));
+					charterOut.setHireCost(Calculator.quantityFromRateTime(charterRate, idleTime));
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 
 				} else {
@@ -292,7 +292,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					idle.setStartTime(currentTime + travelTime);
 					idle.setDuration(idleTime);
-					idle.setCharterCost(Calculator.quantityFromRateTime(charterRate, idleTime));
+					idle.setHireCost(Calculator.quantityFromRateTime(charterRate, idleTime));
 					idle.setEndTime(currentTime + travelTime + idleTime);
 					idle.setSequenceElement(element);
 
