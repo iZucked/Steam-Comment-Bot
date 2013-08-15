@@ -53,6 +53,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	public DefaultDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
 		this.toolkit = toolkit;
+		toolkit.adapt(this);
 	}
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
