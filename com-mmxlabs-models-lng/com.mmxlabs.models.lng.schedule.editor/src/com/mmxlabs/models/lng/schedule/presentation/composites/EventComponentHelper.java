@@ -9,11 +9,25 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -72,6 +86,7 @@ public class EventComponentHelper extends BaseComponentHelper {
 		add_previousEventEditor(detailComposite, topClass);
 		add_nextEventEditor(detailComposite, topClass);
 		add_sequenceEditor(detailComposite, topClass);
+		add_charterCostEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the start feature on Event
@@ -123,5 +138,14 @@ public class EventComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_sequenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__SEQUENCE));
+	}
+
+	/**
+	 * Create the editor for the charterCost feature on Event
+	 *
+	 * @generated
+	 */
+	protected void add_charterCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__CHARTER_COST));
 	}
 }

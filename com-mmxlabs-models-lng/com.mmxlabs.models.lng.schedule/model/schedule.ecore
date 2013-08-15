@@ -83,8 +83,6 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fitnesses" upperBound="-1"
         eType="#//Fitness" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyHireRate" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceType" eType="#//SequenceType"/>
@@ -95,7 +93,6 @@
     <eOperations name="getLocalEnd" lowerBound="1" eType="#//Calendar"/>
     <eOperations name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eOperations name="getHireCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
@@ -105,6 +102,7 @@
         eOpposite="#//Event/previousEvent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" eType="#//Sequence"
         eOpposite="#//Sequence/events"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit #//ProfitAndLossContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
@@ -180,6 +178,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLoss" eType="#//GroupProfitAndLoss"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLossNoTimeCharter"
+        eType="#//GroupProfitAndLoss" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GroupProfitAndLoss">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
