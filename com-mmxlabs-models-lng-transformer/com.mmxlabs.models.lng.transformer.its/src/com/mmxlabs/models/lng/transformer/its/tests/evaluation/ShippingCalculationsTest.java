@@ -605,7 +605,7 @@ public class ShippingCalculationsTest {
 				} else if (durations[i] != null) {
 					hireCosts[i] = durations[i] * hireRatePerHour;
 				} else {
-					hireCosts[i] = null;
+					hireCosts[i] = 0;
 				}
 
 			}
