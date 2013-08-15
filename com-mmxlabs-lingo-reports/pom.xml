@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.shiplingo.platform</groupId>
 	<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
-	<version>4.3.0.RELEASE</version>
+	<version>4.3.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
