@@ -214,9 +214,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 				visit.setStartTime(currentTime); // details.getStartTime()
 				visit.setEndTime(currentTime + visitDuration);
-				if (details.getOptions().getPortSlot().getPortType() == PortType.End) {
-					int ii = 0;
-				}
 			} else if (e instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) e;
 
