@@ -196,7 +196,7 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("Charter Cost", new CostFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
-				return (int) ((Event) object).getHireCost();
+				return (int) ((Event) object).getCharterCost();
 			}
 		});
 
@@ -221,7 +221,7 @@ public class PortRotationReportView extends EMFReportView {
 					total += ((FuelUsage) object).getFuelCost();
 				}
 				if (object instanceof Event) {
-					total += ((Event) object).getHireCost();
+					total += ((Event) object).getCharterCost();
 				}
 				if (object instanceof Journey) {
 					total += ((Journey) object).getToll();
