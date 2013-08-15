@@ -147,7 +147,7 @@
 <unit id="com.mmxlabs.models.lng.transformer.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.transformer.its.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.transformer.its.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/lng/transformer/com.mmxlabs.models.lng.transformer.p2/5.2.0-SNAPSHOT/com.mmxlabs.models.lng.transformer.p2-5.2.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/lng/transformer/com.mmxlabs.models.lng.transformer.p2/5.2.0.RELEASE/com.mmxlabs.models.lng.transformer.p2-5.2.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.shiplingo.platform.feature.feature.group" version="0.0.0"/>
