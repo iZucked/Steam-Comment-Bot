@@ -65,6 +65,7 @@ public class EventItemProvider
 			addPortPropertyDescriptor(object);
 			addPreviousEventPropertyDescriptor(object);
 			addNextEventPropertyDescriptor(object);
+			addCharterCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -180,6 +181,28 @@ public class EventItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Charter Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Event_charterCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Event_charterCost_feature", "_UI_Event_type"),
+				 SchedulePackage.Literals.EVENT__CHARTER_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Event.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -219,6 +242,7 @@ public class EventItemProvider
 		switch (notification.getFeatureID(Event.class)) {
 			case SchedulePackage.EVENT__START:
 			case SchedulePackage.EVENT__END:
+			case SchedulePackage.EVENT__CHARTER_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

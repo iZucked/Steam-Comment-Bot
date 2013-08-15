@@ -40,6 +40,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getPreviousEvent <em>Previous Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getNextEvent <em>Next Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getSequence <em>Sequence</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getCharterCost <em>Charter Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -115,6 +116,26 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @ordered
 	 */
 	protected Event nextEvent;
+
+	/**
+	 * The default value of the '{@link #getCharterCost() <em>Charter Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CHARTER_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCharterCost() <em>Charter Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int charterCost = CHARTER_COST_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -379,6 +400,27 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCharterCost() {
+		return charterCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterCost(int newCharterCost) {
+		int oldCharterCost = charterCost;
+		charterCost = newCharterCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__CHARTER_COST, oldCharterCost, charterCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getDuration() {
@@ -425,15 +467,6 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 */
 	public String name() {
 		return "";
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public int getHireCost() {
-		return (((Sequence)eContainer()).getDailyHireRate() * getDuration()) / 24;
 	}
 
 	/**
@@ -526,6 +559,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return basicGetNextEvent();
 			case SchedulePackage.EVENT__SEQUENCE:
 				return getSequence();
+			case SchedulePackage.EVENT__CHARTER_COST:
+				return getCharterCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -555,6 +590,9 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return;
 			case SchedulePackage.EVENT__SEQUENCE:
 				setSequence((Sequence)newValue);
+				return;
+			case SchedulePackage.EVENT__CHARTER_COST:
+				setCharterCost((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -586,6 +624,9 @@ public class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__SEQUENCE:
 				setSequence((Sequence)null);
 				return;
+			case SchedulePackage.EVENT__CHARTER_COST:
+				setCharterCost(CHARTER_COST_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -610,6 +651,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return nextEvent != null;
 			case SchedulePackage.EVENT__SEQUENCE:
 				return getSequence() != null;
+			case SchedulePackage.EVENT__CHARTER_COST:
+				return charterCost != CHARTER_COST_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -648,8 +691,6 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return type();
 			case SchedulePackage.EVENT___NAME:
 				return name();
-			case SchedulePackage.EVENT___GET_HIRE_COST:
-				return getHireCost();
 			case SchedulePackage.EVENT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -670,6 +711,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 		result.append(start);
 		result.append(", end: ");
 		result.append(end);
+		result.append(", charterCost: ");
+		result.append(charterCost);
 		result.append(')');
 		return result.toString();
 	}

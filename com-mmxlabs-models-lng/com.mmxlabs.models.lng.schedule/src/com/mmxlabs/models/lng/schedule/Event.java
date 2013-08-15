@@ -24,6 +24,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getPreviousEvent <em>Previous Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getNextEvent <em>Next Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getSequence <em>Sequence</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getCharterCost <em>Charter Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -195,6 +196,32 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	void setSequence(Sequence value);
 
 	/**
+	 * Returns the value of the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Cost</em>' attribute.
+	 * @see #setCharterCost(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_CharterCost()
+	 * @model
+	 * @generated
+	 */
+	int getCharterCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getCharterCost <em>Charter Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Cost</em>' attribute.
+	 * @see #getCharterCost()
+	 * @generated
+	 */
+	void setCharterCost(int value);
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
@@ -233,14 +260,6 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @generated
 	 */
 	String name();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	int getHireCost();
 
 } // end of  Event
 

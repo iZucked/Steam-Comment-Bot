@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  * </p>
@@ -98,6 +99,16 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * @ordered
 	 */
 	protected GroupProfitAndLoss groupProfitAndLoss;
+
+	/**
+	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGroupProfitAndLossNoTimeCharter()
+	 * @generated
+	 * @ordered
+	 */
+	protected GroupProfitAndLoss groupProfitAndLossNoTimeCharter;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocation() <em>Slot Allocation</em>}' reference.
@@ -225,6 +236,49 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public GroupProfitAndLoss getGroupProfitAndLossNoTimeCharter() {
+		return groupProfitAndLossNoTimeCharter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter, NotificationChain msgs) {
+		GroupProfitAndLoss oldGroupProfitAndLossNoTimeCharter = groupProfitAndLossNoTimeCharter;
+		groupProfitAndLossNoTimeCharter = newGroupProfitAndLossNoTimeCharter;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, oldGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter) {
+		if (newGroupProfitAndLossNoTimeCharter != groupProfitAndLossNoTimeCharter) {
+			NotificationChain msgs = null;
+			if (groupProfitAndLossNoTimeCharter != null)
+				msgs = ((InternalEObject)groupProfitAndLossNoTimeCharter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
+			if (newGroupProfitAndLossNoTimeCharter != null)
+				msgs = ((InternalEObject)newGroupProfitAndLossNoTimeCharter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
+			msgs = basicSetGroupProfitAndLossNoTimeCharter(newGroupProfitAndLossNoTimeCharter, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, newGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public SlotAllocation getSlotAllocation() {
 		if (slotAllocation != null && slotAllocation.eIsProxy()) {
 			InternalEObject oldSlotAllocation = (InternalEObject)slotAllocation;
@@ -285,6 +339,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				return basicSetGroupProfitAndLoss(null, msgs);
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return basicSetGroupProfitAndLossNoTimeCharter(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -306,6 +362,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return getPortCost();
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return getGroupProfitAndLossNoTimeCharter();
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
@@ -335,6 +393,9 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
 				return;
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
+				return;
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
 				return;
@@ -362,6 +423,9 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
+				return;
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
@@ -385,6 +449,8 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
+			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return groupProfitAndLossNoTimeCharter != null;
 			case SchedulePackage.END_EVENT__SLOT_ALLOCATION:
 				return slotAllocation != null;
 		}
@@ -419,6 +485,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
+				case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 				default: return -1;
 			}
 		}
@@ -453,6 +520,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS;
+				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 				default: return -1;
 			}
 		}
