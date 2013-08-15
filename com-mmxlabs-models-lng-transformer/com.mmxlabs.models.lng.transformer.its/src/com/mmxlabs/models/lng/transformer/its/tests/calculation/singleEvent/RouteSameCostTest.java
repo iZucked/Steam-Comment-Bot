@@ -230,16 +230,16 @@ public class RouteSameCostTest {
 		long total = 0;
 		
 		total += a.getLadenLeg().getFuelCost();
-		total += a.getLadenLeg().getHireCost();
+		total += a.getLadenLeg().getCharterCost();
 		total += a.getLadenLeg().getToll();
 		total += a.getLadenIdle().getFuelCost();
-		total += a.getLadenIdle().getHireCost();
+		total += a.getLadenIdle().getCharterCost();
 		
 		total += a.getBallastLeg().getFuelCost();
-		total += a.getBallastLeg().getHireCost();
+		total += a.getBallastLeg().getCharterCost();
 		total += a.getBallastLeg().getToll();
 		total += a.getBallastIdle().getFuelCost();
-		total += a.getBallastIdle().getHireCost();
+		total += a.getBallastIdle().getCharterCost();
 		
 		
 		

@@ -46,6 +46,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -68,7 +69,7 @@ public class AnnotatedSolutionExporter {
 	private final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
 	@Inject
-	private List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
+	private List<IExporterExtension> extensions ;
 
 	@Inject
 	private Injector injector;
@@ -123,7 +124,7 @@ public class AnnotatedSolutionExporter {
 		}
 
 		// TODO: Generate an unused element exporter inteface etc.
-		MarkToMarketExporter mtmExporter = new MarkToMarketExporter();
+		final MarkToMarketExporter mtmExporter = new MarkToMarketExporter();
 		{
 			injector.injectMembers(mtmExporter);
 			mtmExporter.setOutput(output);
@@ -149,20 +150,6 @@ public class AnnotatedSolutionExporter {
 			boolean skipStartEndElements = false;
 			boolean isFOBSequence = false;
 			boolean isDESSequence = false;
-
-			// TODO use spot rates correctly.
-			final ICurve hireRate;
-			switch (vessel.getVesselInstanceType()) {
-			case SPOT_CHARTER:
-				hireRate = vessel.getHourlyCharterInPrice();
-				break;
-			case TIME_CHARTER:
-				hireRate = vessel.getHourlyCharterInPrice();
-				break;
-			default:
-				hireRate = null;
-				break;
-			}
 
 			final ISequence sequence = annotatedSolution.getSequences().getSequence(resource);
 			switch (vessel.getVesselInstanceType()) {
@@ -344,17 +331,10 @@ public class AnnotatedSolutionExporter {
 				eventsForElement.clear();
 			}
 
-			// TODO: this should be exported rather than recalculated.
-			int startTime = entities.getHoursFromDate(events.get(0).getStart());
-
-			if (hireRate != null) {
-				int rate = (int) hireRate.getValueAtPoint(startTime);
-				eSequence.setDailyHireRate((rate * 24) / 1000);
-			}
-
 			// Setup next/prev events.
 			Event prev = null;
 			for (final Event event : events) {
+				
 				if (prev != null) {
 					prev.setNextEvent(event);
 					event.setPreviousEvent(prev);
