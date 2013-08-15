@@ -5,6 +5,7 @@
 package com.mmxlabs.scenario.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -114,4 +115,15 @@ public interface IScenarioService {
 	 * @since 2.0
 	 */
 	void unload(ScenarioInstance model);
+
+	/**
+	 * Move the collection of elements under the destination.
+	 * 
+	 * @param containers
+	 * @param container
+	 * @since 5.0
+	 */
+	void moveInto(List<Container> elements, Container destination);
+
+	void makeFolder(Container parent, String name);
 }

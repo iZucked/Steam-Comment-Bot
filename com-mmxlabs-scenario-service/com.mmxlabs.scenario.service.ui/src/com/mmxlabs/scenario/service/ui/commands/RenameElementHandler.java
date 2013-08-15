@@ -14,6 +14,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -37,35 +38,40 @@ public class RenameElementHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 
-		final ISelection selection = activePage.getSelection();
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
-			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
-				final Object element = iterator.next();
+			@Override
+			public void run() {
+				final ISelection selection = activePage.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+					for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
+						final Object element = iterator.next();
 
-				if (element instanceof ScenarioInstance) {
-					final ScenarioInstance instance = (ScenarioInstance) element;
+						if (element instanceof ScenarioInstance) {
+							final ScenarioInstance instance = (ScenarioInstance) element;
 
-					final String newName = getNewName(instance.getName());
-					if (newName != null) {
-						instance.setName(newName);
-					}
-				} else if (element instanceof Folder) {
-					final Folder folder = (Folder) element;
-					final String newName = getNewName(folder.getName());
-					if (newName != null) {
-						folder.setName(newName);
-					}
-				} else if (element instanceof ScenarioFragment) {
-					ScenarioFragment scenarioFragment = (ScenarioFragment) element;
-					final String newName = getNewName(scenarioFragment.getName());
-					if (newName != null) {
-						scenarioFragment.setName(newName);
+							final String newName = getNewName(instance.getName());
+							if (newName != null) {
+								instance.setName(newName);
+							}
+						} else if (element instanceof Folder) {
+							final Folder folder = (Folder) element;
+							final String newName = getNewName(folder.getName());
+							if (newName != null) {
+								folder.setName(newName);
+							}
+						} else if (element instanceof ScenarioFragment) {
+							ScenarioFragment scenarioFragment = (ScenarioFragment) element;
+							final String newName = getNewName(scenarioFragment.getName());
+							if (newName != null) {
+								scenarioFragment.setName(newName);
+							}
+						}
 					}
 				}
 			}
-		}
+		});
 
 		return null;
 	}

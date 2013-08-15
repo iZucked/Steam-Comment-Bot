@@ -275,6 +275,35 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioService_SupportsForking() {
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioService_SupportsImport() {
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenarioService_ScenarioModel() {
+		return (EReference) scenarioServiceEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -365,6 +394,16 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 */
 	public EReference getScenarioInstance_Fragments() {
 		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioInstance_Readonly() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -606,6 +645,9 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		scenarioServiceEClass = createEClass(SCENARIO_SERVICE);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__DESCRIPTION);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__SERVICE_REF);
+		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__SUPPORTS_FORKING);
+		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__SUPPORTS_IMPORT);
+		createEReference(scenarioServiceEClass, SCENARIO_SERVICE__SCENARIO_MODEL);
 
 		scenarioInstanceEClass = createEClass(SCENARIO_INSTANCE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__UUID);
@@ -620,6 +662,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__SCENARIO_VERSION);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VERSION_CONTEXT);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__FRAGMENTS);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__READONLY);
 
 		metadataEClass = createEClass(METADATA);
 		createEAttribute(metadataEClass, METADATA__CREATOR);
@@ -680,8 +723,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(scenarioModelEClass, ScenarioModel.class, "ScenarioModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getScenarioModel_ScenarioServices(), this.getScenarioService(), null, "scenarioServices", null, 0, -1, ScenarioModel.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioModel_ScenarioServices(), this.getScenarioService(), this.getScenarioService_ScenarioModel(), "scenarioServices", null, 0, -1, ScenarioModel.class, IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(containerEClass, com.mmxlabs.scenario.service.model.Container.class, "Container", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContainer_Parent(), this.getContainer(), this.getContainer_Elements(), "parent", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -708,6 +751,12 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioService_ServiceRef(), this.getIScenarioService(), "serviceRef", null, 0, 1, ScenarioService.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioService_SupportsForking(), ecorePackage.getEBoolean(), "supportsForking", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioService_SupportsImport(), ecorePackage.getEBoolean(), "supportsImport", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioService_ScenarioModel(), this.getScenarioModel(), this.getScenarioModel_ScenarioServices(), "scenarioModel", null, 0, 1, ScenarioService.class, IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scenarioInstanceEClass, ScenarioInstance.class, "ScenarioInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScenarioInstance_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE,
@@ -741,6 +790,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenarioInstance_Fragments(), this.getScenarioFragment(), this.getScenarioFragment_ScenarioInstance(), "fragments", null, 0, -1, ScenarioInstance.class, IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_Readonly(), ecorePackage.getEBoolean(), "readonly", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(scenarioInstanceEClass, ecorePackage.getEInt(), "getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
 

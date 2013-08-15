@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -112,6 +113,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			final EStructuralFeature containment = container.eContainingFeature();
 			if (containment != null) {
 				if (containment.isMany()) {
+					@SuppressWarnings("unchecked")
 					final EList<EObject> value = (EList<EObject>) parent.eGet(containment);
 					while (value.remove(container))
 						;
@@ -299,6 +301,9 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		result.eAdapters().add(saveAdapter);
 
+		result.setSupportsForking(true);
+		result.setSupportsImport(true);
+
 		return result;
 	}
 
@@ -394,5 +399,20 @@ public class FileScenarioService extends AbstractScenarioService {
 		} else {
 			return uri;
 		}
+	}
+
+	@Override
+	public void moveInto(final List<Container> elements, final Container destination) {
+		destination.getElements().addAll(elements);
+	}
+
+	@Override
+	public void makeFolder(Container parent, String name) {
+		if (parent instanceof ScenarioInstance) {
+			return;
+		}
+		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
+		f.setName(name);
+		parent.getElements().add(f);
 	}
 }

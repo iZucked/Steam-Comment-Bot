@@ -169,7 +169,7 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.METADATA;
+		return ScenarioServicePackage.eINSTANCE.getMetadata();
 	}
 
 	/**

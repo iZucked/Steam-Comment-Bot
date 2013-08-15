@@ -111,7 +111,7 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.SCENARIO_LOCK;
+		return ScenarioServicePackage.eINSTANCE.getScenarioLock();
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	public ScenarioInstance getInstance() {
 		if (eContainerFeatureID() != ScenarioServicePackage.SCENARIO_LOCK__INSTANCE)
 			return null;
-		return (ScenarioInstance) eContainer();
+		return (ScenarioInstance) eInternalContainer();
 	}
 
 	/**

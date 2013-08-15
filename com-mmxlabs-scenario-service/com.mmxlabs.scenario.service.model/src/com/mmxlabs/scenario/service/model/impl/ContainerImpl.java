@@ -127,7 +127,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.CONTAINER;
+		return ScenarioServicePackage.eINSTANCE.getContainer();
 	}
 
 	/**
@@ -138,7 +138,7 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	public Container getParent() {
 		if (eContainerFeatureID() != ScenarioServicePackage.CONTAINER__PARENT)
 			return null;
-		return (Container) eContainer();
+		return (Container) eInternalContainer();
 	}
 
 	/**

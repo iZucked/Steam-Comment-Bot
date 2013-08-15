@@ -69,7 +69,7 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements IEd
 	protected void addAvailablePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioLock_available_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioLock_available_feature", "_UI_ScenarioLock_type"),
-				ScenarioServicePackage.Literals.SCENARIO_LOCK__AVAILABLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioLock_Available(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements IEd
 	protected void addClaimedPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioLock_claimed_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioLock_claimed_feature", "_UI_ScenarioLock_type"),
-				ScenarioServicePackage.Literals.SCENARIO_LOCK__CLAIMED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioLock_Claimed(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements IEd
 	 */
 	protected void addKeyPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ScenarioLock_key_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioLock_key_feature", "_UI_ScenarioLock_type"), ScenarioServicePackage.Literals.SCENARIO_LOCK__KEY, true, false, false,
+				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioLock_key_feature", "_UI_ScenarioLock_type"), ScenarioServicePackage.eINSTANCE.getScenarioLock_Key(), true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 

@@ -18,10 +18,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TransferData;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 import org.slf4j.Logger;
@@ -112,7 +114,6 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 	public IStatus handleDrop(final CommonDropAdapter aDropAdapter, final DropTargetEvent aDropTargetEvent, final Object aTarget) {
 
 		// Check operation is valid
-
 		if (!(aDropTargetEvent.detail == DND.DROP_MOVE || aDropTargetEvent.detail == DND.DROP_COPY)) {
 			return Status.CANCEL_STATUS;
 		}
@@ -126,38 +127,58 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 				final ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
 				if (selection instanceof IStructuredSelection) {
+
+					int detail = aDropTargetEvent.detail;
+
 					final List<Container> containers = new LinkedList<Container>();
 					final Iterator<?> iterator = ((IStructuredSelection) selection).iterator();
 					while (iterator.hasNext()) {
 						final Object obj = iterator.next();
 						if (obj instanceof Container) {
-							containers.add((Container) obj);
+							final Container c = (Container) obj;
+							// Moving between scenario services? Force a copy
+							if (c.getScenarioService() != container.getScenarioService()) {
+								detail = DND.DROP_COPY;
+							}
+							containers.add(c);
 						} else {
 							return Status.CANCEL_STATUS;
 						}
 					}
 
 					// TODO: This should really invoke a shared move/copy etc command/action handler
+					if (detail == DND.DROP_MOVE) {
 
-					if (aDropTargetEvent.detail == DND.DROP_MOVE) {
-						container.getElements().addAll(containers);
-					} else if (aDropTargetEvent.detail == DND.DROP_COPY) {
+						BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
 
-						for (final Container c : containers) {
-							if (c instanceof Folder) {
-								try {
-									copyFolder(container, (Folder) c);
-								} catch (final IOException e) {
-									log.error(e.getMessage(), e);
-								}
-							} else {
-								try {
-									copyScenario(container, (ScenarioInstance) c);
-								} catch (final IOException e) {
-									log.error(e.getMessage(), e);
+							@Override
+							public void run() {
+								final IScenarioService scenarioService = container.getScenarioService();
+								scenarioService.moveInto(containers, container);
+							}
+						});
+					} else if (detail == DND.DROP_COPY) {
+						BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
+
+							@Override
+							public void run() {
+								for (final Container c : containers) {
+									if (c instanceof Folder) {
+										try {
+											copyFolder(container, (Folder) c);
+										} catch (final IOException e) {
+											log.error(e.getMessage(), e);
+										}
+									} else {
+										try {
+											copyScenario(container, (ScenarioInstance) c);
+										} catch (final IOException e) {
+											log.error(e.getMessage(), e);
+										}
+									}
 								}
 							}
-						}
+						});
 					} else {
 						return Status.CANCEL_STATUS;
 					}
@@ -173,7 +194,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
 						if (instance != null) {
 							try {
-								String scenarioName = new File(filePath).getName();
+								final String scenarioName = new File(filePath).getName();
 								container.getScenarioService().duplicate(instance, container).setName(scenarioName);
 							} catch (final IOException e) {
 								log.error(e.getMessage(), e);
@@ -205,8 +226,22 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 	private void copyFolder(final Container container, final Folder folder) throws IOException {
 
+		// Ensure name is unique in the destination container
+		String name = folder.getName();
+		boolean clean = false;
+		while (!clean) {
+			clean = true;
+			for (final Container c : container.getElements()) {
+				if (c.getName().equals(name)) {
+					clean = false;
+					name = "Copy of " + name;
+					break;
+				}
+			}
+		}
+
 		final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
-		f.setName(folder.getName());
+		f.setName(name);
 		f.setMetadata(EcoreUtil.copy(folder.getMetadata()));
 		container.getElements().add(f);
 

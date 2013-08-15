@@ -67,7 +67,7 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	protected void addScenarioServicesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioModel_scenarioServices_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioModel_scenarioServices_feature", "_UI_ScenarioModel_type"),
-				ScenarioServicePackage.Literals.SCENARIO_MODEL__SCENARIO_SERVICES, true, false, true, null, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioModel_ScenarioServices(), true, false, true, null, null, null));
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class ScenarioModelItemProvider extends ItemProviderAdapter implements IE
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_MODEL__SCENARIO_SERVICES);
+			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioModel_ScenarioServices());
 		}
 		return childrenFeatures;
 	}

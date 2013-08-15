@@ -70,7 +70,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 	 */
 	protected void addCreatorPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Metadata_creator_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_creator_feature", "_UI_Metadata_type"), ScenarioServicePackage.Literals.METADATA__CREATOR, true, false, false,
+				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_creator_feature", "_UI_Metadata_type"), ScenarioServicePackage.eINSTANCE.getMetadata_Creator(), true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -82,7 +82,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 	 */
 	protected void addCreatedPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Metadata_created_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_created_feature", "_UI_Metadata_type"), ScenarioServicePackage.Literals.METADATA__CREATED, true, false, false,
+				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_created_feature", "_UI_Metadata_type"), ScenarioServicePackage.eINSTANCE.getMetadata_Created(), true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -95,7 +95,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 	protected void addLastModifiedPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_Metadata_lastModified_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Metadata_lastModified_feature", "_UI_Metadata_type"),
-				ScenarioServicePackage.Literals.METADATA__LAST_MODIFIED, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getMetadata_LastModified(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 	 */
 	protected void addCommentPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Metadata_comment_feature"),
-				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_comment_feature", "_UI_Metadata_type"), ScenarioServicePackage.Literals.METADATA__COMMENT, true, false, false,
+				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_comment_feature", "_UI_Metadata_type"), ScenarioServicePackage.eINSTANCE.getMetadata_Comment(), true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
@@ -119,7 +119,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 	protected void addLastModifiedByPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_Metadata_lastModifiedBy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Metadata_lastModifiedBy_feature", "_UI_Metadata_type"),
-				ScenarioServicePackage.Literals.METADATA__LAST_MODIFIED_BY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getMetadata_LastModifiedBy(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements IEditin
 	protected void addContentTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_Metadata_contentType_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Metadata_contentType_feature", "_UI_Metadata_type"),
-				ScenarioServicePackage.Literals.METADATA__CONTENT_TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getMetadata_ContentType(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**

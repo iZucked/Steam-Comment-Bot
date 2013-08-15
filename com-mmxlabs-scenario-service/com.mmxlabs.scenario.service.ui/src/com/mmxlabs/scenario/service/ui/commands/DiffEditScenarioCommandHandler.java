@@ -22,6 +22,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorRegistry;
@@ -49,68 +50,73 @@ public class DiffEditScenarioCommandHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
 
-		final ISelection selection = activePage.getSelection();
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
-			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
-				final Object element = iterator.next();
-				if (element instanceof ScenarioInstance) {
+			@Override
+			public void run() {
+				final ISelection selection = activePage.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+					for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
+						final Object element = iterator.next();
+						if (element instanceof ScenarioInstance) {
 
-					ScenarioInstance instance = (ScenarioInstance) element;
+							ScenarioInstance instance = (ScenarioInstance) element;
 
-					// Check for existing sandbox scenario
-					for (Container c : new ArrayList<Container>(instance.getElements())) {
-						if (c instanceof ScenarioInstance && c.isHidden() && c.getName().startsWith("[Sandbox]")) {
+							// Check for existing sandbox scenario
+							for (Container c : new ArrayList<Container>(instance.getElements())) {
+								if (c instanceof ScenarioInstance && c.isHidden() && c.getName().startsWith("[Sandbox]")) {
 
-							ScenarioInstance subInstance = (ScenarioInstance) c;
-							EObject instance2 = subInstance.getInstance();
-							if (instance2 == null) {
-								// Assume not cleaned up!
-								String name = "[Sandbox-Recovered] " + subInstance.getName();
-								subInstance.setName(name);
-								subInstance.setHidden(false);
-								// subInstance.getScenarioService().delete(subInstance);
-							} else {
-								// Most likely already in sandbox, so ignore
-								return null;
+									ScenarioInstance subInstance = (ScenarioInstance) c;
+									EObject instance2 = subInstance.getInstance();
+									if (instance2 == null) {
+										// Assume not cleaned up!
+										String name = "[Sandbox-Recovered] " + subInstance.getName();
+										subInstance.setName(name);
+										subInstance.setHidden(false);
+										// subInstance.getScenarioService().delete(subInstance);
+									} else {
+										// Most likely already in sandbox, so ignore
+										return;
+									}
+								}
+							}
+
+							final IScenarioService scenarioService = instance.getScenarioService();
+
+							try {
+
+								final Set<String> existingNames = new HashSet<String>();
+								for (final Container c : instance.getElements()) {
+									if (c instanceof Folder) {
+										existingNames.add(((Folder) c).getName());
+									} else if (c instanceof ScenarioInstance) {
+										existingNames.add(((ScenarioInstance) c).getName());
+									}
+								}
+
+								final String namePrefix = "[S] " + instance.getName();
+								String newName = namePrefix;
+								int counter = 1;
+								while (existingNames.contains(newName)) {
+									newName = namePrefix + " (" + counter++ + ")";
+								}
+								final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
+								fork.setName(newName);
+								fork.setHidden(true);
+
+								openScenarioInstance(activePage, fork, instance);
+							} catch (final Exception e) {
+
+								MessageDialog.openError(activePage.getWorkbenchWindow().getShell(), "Error opening editor", e.getMessage());
+
+								log.error(e.getMessage(), e);
 							}
 						}
-					}
-
-					final IScenarioService scenarioService = instance.getScenarioService();
-
-					try {
-
-						final Set<String> existingNames = new HashSet<String>();
-						for (final Container c : instance.getElements()) {
-							if (c instanceof Folder) {
-								existingNames.add(((Folder) c).getName());
-							} else if (c instanceof ScenarioInstance) {
-								existingNames.add(((ScenarioInstance) c).getName());
-							}
-						}
-
-						final String namePrefix = "[S] " + instance.getName();
-						String newName = namePrefix;
-						int counter = 1;
-						while (existingNames.contains(newName)) {
-							newName = namePrefix + " (" + counter++ + ")";
-						}
-						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
-						fork.setName(newName);
-						fork.setHidden(true);
-
-						openScenarioInstance(activePage, fork, instance);
-					} catch (final Exception e) {
-
-						MessageDialog.openError(activePage.getWorkbenchWindow().getShell(), "Error opening editor", e.getMessage());
-
-						log.error(e.getMessage(), e);
 					}
 				}
 			}
-		}
+		});
 
 		return null;
 	}

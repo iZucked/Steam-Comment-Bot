@@ -6,11 +6,15 @@ package com.mmxlabs.scenario.service.model.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -55,7 +59,7 @@ public class ScenarioModelImpl extends EObjectImpl implements ScenarioModel {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.SCENARIO_MODEL;
+		return ScenarioServicePackage.eINSTANCE.getScenarioModel();
 	}
 
 	/**
@@ -65,9 +69,39 @@ public class ScenarioModelImpl extends EObjectImpl implements ScenarioModel {
 	 */
 	public EList<ScenarioService> getScenarioServices() {
 		if (scenarioServices == null) {
-			scenarioServices = new EObjectResolvingEList<ScenarioService>(ScenarioService.class, this, ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES);
+			scenarioServices = new EObjectWithInverseResolvingEList<ScenarioService>(ScenarioService.class, this, ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES,
+					ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL);
 		}
 		return scenarioServices;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+		case ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getScenarioServices()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+		case ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES:
+			return ((InternalEList<?>) getScenarioServices()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

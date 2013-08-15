@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.scenario.service.feature"
       label="Scenario Service Feature"
-      version="4.1.1.qualifier"
+      version="5.0.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -68,6 +68,13 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.scenario.service.util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.scenario.service.dirscan"
          download-size="0"
          install-size="0"
          version="0.0.0"

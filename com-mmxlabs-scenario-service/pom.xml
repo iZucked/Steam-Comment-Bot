@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.scenario.service</groupId>
 	<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
-	<version>4.1.1-SNAPSHOT</version>
+	<version>5.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -38,6 +38,7 @@
 		<module>com.mmxlabs.scenario.service.manifest.edit</module>
 
 		<module>com.mmxlabs.scenario.service.file</module>
+		<module>com.mmxlabs.scenario.service.dirscan</module>
 
 		<module>com.mmxlabs.scenario.service.feature</module>
 

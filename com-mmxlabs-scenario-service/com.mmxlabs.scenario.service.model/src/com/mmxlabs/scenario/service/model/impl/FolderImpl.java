@@ -54,7 +54,7 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ScenarioServicePackage.Literals.FOLDER;
+		return ScenarioServicePackage.eINSTANCE.getFolder();
 	}
 
 	/**

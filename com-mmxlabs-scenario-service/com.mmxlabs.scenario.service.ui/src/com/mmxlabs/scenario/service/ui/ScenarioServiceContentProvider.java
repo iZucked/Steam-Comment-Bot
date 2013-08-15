@@ -66,6 +66,9 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	private boolean showMetadata = false;
 	private boolean showArchivedElements = false;
 	private boolean showHiddenElements = false;
+	private boolean showReadOnlyElements = true;
+	private boolean showOnlyCapsImport = false;
+	private boolean showOnlyCapsForking = false;
 
 	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
 
@@ -86,6 +89,18 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		filteredElements.clear();
 		super.inputChanged(viewer, oldInput, newInput);
+	}
+
+	@Override
+	public Object getParent(final Object object) {
+		if (object instanceof ScenarioService) {
+			final ScenarioService scenarioService = (ScenarioService) object;
+			return scenarioService.getScenarioModel();
+		} else if (object instanceof Container) {
+			final Container container = (Container) object;
+			return container.getParent();
+		}
+		return super.getParent(object);
 	}
 
 	@Override
@@ -166,7 +181,22 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			} else if (e instanceof ScenarioModel) {
 				filtered = !isShowScenarioServices();
 			} else if (e instanceof IScenarioService || e instanceof ScenarioService) {
-				filtered = !isShowScenarioServices();
+				ScenarioService ss = null;
+				if (e instanceof IScenarioService) {
+					ss = ((IScenarioService) e).getServiceModel();
+				} else {
+					ss = (ScenarioService) e;
+				}
+
+				boolean visible = isShowScenarioServices();
+				if (visible && isShowOnlyCapsImport()) {
+					visible = ss.isSupportsImport();
+				}
+				if (visible && isShowOnlyCapsForking()) {
+					visible = ss.isSupportsForking();
+				}
+
+				filtered = !visible;
 			} else if (e instanceof ScenarioServiceRegistry) {
 				filtered = false;
 			} else if (e instanceof ScenarioFragment) {
@@ -268,5 +298,47 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		}
 
 		return null;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public boolean isShowReadOnlyElements() {
+		return showReadOnlyElements;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public void setShowReadOnlyElements(final boolean showReadOnlyElements) {
+		this.showReadOnlyElements = showReadOnlyElements;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public boolean isShowOnlyCapsImport() {
+		return showOnlyCapsImport;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public void setShowOnlyCapsImport(final boolean showCapsImport) {
+		this.showOnlyCapsImport = showCapsImport;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public boolean isShowOnlyCapsForking() {
+		return showOnlyCapsForking;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public void setShowOnlyCapsForking(final boolean showCapsForking) {
+		this.showOnlyCapsForking = showCapsForking;
 	}
 }

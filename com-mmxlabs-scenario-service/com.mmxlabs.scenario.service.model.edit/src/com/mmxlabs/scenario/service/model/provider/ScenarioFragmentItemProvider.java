@@ -71,7 +71,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter implements
 	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioFragment_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioFragment_name_feature", "_UI_ScenarioFragment_type"),
-				ScenarioServicePackage.Literals.SCENARIO_FRAGMENT__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioFragment_Name(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter implements
 	protected void addFragmentPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioFragment_fragment_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioFragment_fragment_feature", "_UI_ScenarioFragment_type"),
-				ScenarioServicePackage.Literals.SCENARIO_FRAGMENT__FRAGMENT, true, false, true, null, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioFragment_Fragment(), true, false, true, null, null, null));
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter implements
 	protected void addContentTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioFragment_contentType_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioFragment_contentType_feature", "_UI_ScenarioFragment_type"),
-				ScenarioServicePackage.Literals.SCENARIO_FRAGMENT__CONTENT_TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				ScenarioServicePackage.eINSTANCE.getScenarioFragment_ContentType(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
