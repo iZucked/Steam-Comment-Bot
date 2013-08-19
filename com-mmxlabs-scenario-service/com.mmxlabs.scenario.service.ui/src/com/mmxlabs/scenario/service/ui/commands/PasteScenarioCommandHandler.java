@@ -117,7 +117,12 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 				final Object element = iterator.next();
 				if (element instanceof Container) {
-					return (Container) element;
+					Container container = (Container) element;
+					// Step up to a non-scenario item
+					while (container != null && container instanceof ScenarioInstance) {
+						container = container.getParent();
+					}
+					return container;
 				}
 			}
 		}

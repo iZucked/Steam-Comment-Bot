@@ -251,7 +251,7 @@
                   ifEmpty="false">
                <and>
                   <instanceof
-                        value="com.mmxlabs.scenario.service.model.Folder">
+                        value="com.mmxlabs.scenario.service.model.Container">
                   </instanceof>
                </and>
             </iterate>
@@ -264,7 +264,7 @@
                   ifEmpty="false">
                <and>
                   <instanceof
-                        value="com.mmxlabs.scenario.service.model.Folder">
+                        value="com.mmxlabs.scenario.service.model.Container">
                   </instanceof>
                </and>
             </iterate>
