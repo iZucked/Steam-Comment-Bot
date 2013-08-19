@@ -75,7 +75,17 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 public class CreateStripDialog extends FormDialog {
 
 	public static enum StripType {
-		TYPE_FOB_SALE_SLOT, TYPE_FOB_PURCHASE_SLOT, TYPE_DES_SALE_SLOT, TYPE_DES_PURCHASE_SLOT;
+		TYPE_FOB_SALE_SLOT ("FOB Sale"), TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_DES_PURCHASE_SLOT("DES Purchase");
+
+		private final String name;
+
+		private StripType(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
 	}
 
 	private ObservablesManager mgr;
