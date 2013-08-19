@@ -182,6 +182,7 @@ public class CustomScenarioCreator {
 
 		final BaseFuelCost bfc = ScenarioTools.createBaseFuelCost(baseFuel, baseFuelUnitPrice);
 		fleetCostModel.getBaseFuelPrices().add(bfc);
+		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
 		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();

@@ -73,12 +73,15 @@ public class TradingExporterExtension implements IExporterExtension {
 		final IVesselProvider vesselProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
 			{
-				final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
-				final IShippingCostAnnotation shippingCost = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCost, IShippingCostAnnotation.class);
-				final IShippingCostAnnotation shippingCostWithBoilOff = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
-						IShippingCostAnnotation.class);
+				final IProfitAndLossAnnotation profitAndLossWithTimeCharter = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
+						IProfitAndLossAnnotation.class);
+				final IProfitAndLossAnnotation profitAndLossWithoutTimeCharter = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLossNoTimeCharterRate,
+						IProfitAndLossAnnotation.class);
+				// final IShippingCostAnnotation shippingCost = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCost, IShippingCostAnnotation.class);
+				// final IShippingCostAnnotation shippingCostWithBoilOff = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
+				// IShippingCostAnnotation.class);
 
-				if (profitAndLoss != null) {
+				if (profitAndLossWithTimeCharter != null) {
 					// emit p&l entry - depends on the type of slot associated with the element.
 					final IPortSlot slot = slotProvider.getPortSlot(element);
 
@@ -94,9 +97,9 @@ public class TradingExporterExtension implements IExporterExtension {
 							}
 						}
 						if (cargoAllocation != null) {
-							setPandLentries(profitAndLoss, cargoAllocation);
-							setShippingCosts(shippingCost, cargoAllocation, false);
-							setShippingCosts(shippingCostWithBoilOff, cargoAllocation, true);
+							setPandLentries(profitAndLossWithTimeCharter, profitAndLossWithoutTimeCharter, cargoAllocation);
+							// setShippingCosts(shippingCost, cargoAllocation, false);
+							// setShippingCosts(shippingCostWithBoilOff, cargoAllocation, true);
 						} else {
 
 							MarketAllocation marketAllocation = null;
@@ -107,7 +110,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								}
 							}
 							if (marketAllocation != null) {
-								setPandLentries(profitAndLoss, marketAllocation);
+								setPandLentries(profitAndLossWithTimeCharter, profitAndLossWithoutTimeCharter, marketAllocation);
 							}
 						}
 					} else if (slot instanceof IDischargeOption) {
@@ -121,7 +124,7 @@ public class TradingExporterExtension implements IExporterExtension {
 							}
 						}
 						if (marketAllocation != null) {
-							setPandLentries(profitAndLoss, marketAllocation);
+							setPandLentries(profitAndLossWithTimeCharter, profitAndLossWithoutTimeCharter, marketAllocation);
 						}
 
 					} else if (slot instanceof IVesselEventPortSlot) {
@@ -138,26 +141,26 @@ public class TradingExporterExtension implements IExporterExtension {
 							}
 						}
 						if (visit != null) {
-							setPandLentries(profitAndLoss, visit);
-							setShippingCosts(shippingCost, visit, false);
-							setShippingCosts(shippingCostWithBoilOff, visit, true);
+							setPandLentries(profitAndLossWithTimeCharter, profitAndLossWithoutTimeCharter, visit);
+							// setShippingCosts(shippingCost, visit, false);
+							// setShippingCosts(shippingCostWithBoilOff, visit, true);
 						}
 						// }
 					} else if (slot instanceof StartPortSlot) {
 						final StartEvent startEvent = findStartEvent(vesselProvider, element);
 
 						if (startEvent != null) {
-							setPandLentries(profitAndLoss, startEvent);
-							setShippingCosts(shippingCost, startEvent, false);
-							setShippingCosts(shippingCostWithBoilOff, startEvent, true);
+							setPandLentries(profitAndLossWithTimeCharter, profitAndLossWithoutTimeCharter, startEvent);
+							// setShippingCosts(shippingCost, startEvent, false);
+							// setShippingCosts(shippingCostWithBoilOff, startEvent, true);
 						}
 					} else if (slot instanceof EndPortSlot) {
 						final EndEvent endEvent = findEndEvent(element);
 
 						if (endEvent != null) {
-							setPandLentries(profitAndLoss, endEvent);
-							setShippingCosts(shippingCost, endEvent, false);
-							setShippingCosts(shippingCostWithBoilOff, endEvent, true);
+							setPandLentries(profitAndLossWithTimeCharter, profitAndLossWithoutTimeCharter, endEvent);
+							// setShippingCosts(shippingCost, endEvent, false);
+							// setShippingCosts(shippingCostWithBoilOff, endEvent, true);
 						}
 					} else {
 						// for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
@@ -175,6 +178,8 @@ public class TradingExporterExtension implements IExporterExtension {
 			}
 			final IProfitAndLossAnnotation generatedCharterOutProfitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss,
 					IProfitAndLossAnnotation.class);
+			final IProfitAndLossAnnotation generatedCharterOutProfitAndLossWithoutTimeCharter = annotatedSolution.getElementAnnotations().getAnnotation(element,
+					SchedulerConstants.AI_charterOutProfitAndLossNoTimeCharterRate, IProfitAndLossAnnotation.class);
 			if (generatedCharterOutProfitAndLoss != null) {
 				// emit p&l entry - depends on the type of slot associated with the element.
 				final IPortSlot slot = slotProvider.getPortSlot(element);
@@ -200,7 +205,7 @@ public class TradingExporterExtension implements IExporterExtension {
 							nextEvent = nextEvent.getNextEvent();
 						}
 						if (nextEvent instanceof GeneratedCharterOut) {
-							setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
+							setPandLentries(generatedCharterOutProfitAndLoss, generatedCharterOutProfitAndLossWithoutTimeCharter, (GeneratedCharterOut) nextEvent);
 						}
 					}
 
@@ -214,7 +219,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								nextEvent = nextEvent.getNextEvent();
 							}
 							if (nextEvent instanceof GeneratedCharterOut) {
-								setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
+								setPandLentries(generatedCharterOutProfitAndLoss, generatedCharterOutProfitAndLossWithoutTimeCharter, (GeneratedCharterOut) nextEvent);
 							}
 						}
 					} else if (slot instanceof EndPortSlot) {
@@ -239,7 +244,7 @@ public class TradingExporterExtension implements IExporterExtension {
 								nextEvent = nextEvent.getNextEvent();
 							}
 							if (nextEvent instanceof GeneratedCharterOut) {
-								setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
+								setPandLentries(generatedCharterOutProfitAndLoss, generatedCharterOutProfitAndLossWithoutTimeCharter, (GeneratedCharterOut) nextEvent);
 							}
 						}
 					}
@@ -318,10 +323,19 @@ public class TradingExporterExtension implements IExporterExtension {
 		return startEvent;
 	}
 
-	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container) {
+	private void setPandLentries(final IProfitAndLossAnnotation profitAndLossWithTCRate, final IProfitAndLossAnnotation profitAndLossWithoutTCRate, final ProfitAndLossContainer container) {
+		setPandLentries(profitAndLossWithTCRate, container, true);
+		setPandLentries(profitAndLossWithoutTCRate, container, false);
+	}
+
+	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container, final boolean includeTimeCharterRate) {
 		int totalGroupValue = 0;
 		final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
-		container.setGroupProfitAndLoss(groupProfitAndLoss);
+		if (includeTimeCharterRate) {
+			container.setGroupProfitAndLoss(groupProfitAndLoss);
+		} else {
+			container.setGroupProfitAndLossNoTimeCharter(groupProfitAndLoss);
+		}
 
 		final Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
 
@@ -354,22 +368,22 @@ public class TradingExporterExtension implements IExporterExtension {
 		groupProfitAndLoss.setProfitAndLoss(totalGroupValue);
 	}
 
-	private void setShippingCosts(final IShippingCostAnnotation shippingCostAnnotation, final ProfitAndLossContainer container, final boolean incBoilOff) {
-		if (shippingCostAnnotation == null) {
-			return;
-		}
-		// final int shippingCostValue = OptimiserUnitConvertor.convertToExternalFixedCost(shippingCostAnnotation.getShippingCost());
-		// final ExtraData shippingCostData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", shippingCostValue,
-		// ExtraDataFormatType.CURRENCY) : container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", shippingCostValue, ExtraDataFormatType.CURRENCY);
-		//
-		// shippingCostData.addExtraData("date", "Date", entities.getDateFromHours(shippingCostAnnotation.getBookingTime()), ExtraDataFormatType.AUTO);
-		//
-		// if (shippingCostAnnotation.getDetails() != null) {
-		// final ExtraData detail = exportDetailTree(shippingCostAnnotation.getDetails());
-		// detail.setName("Details");
-		// shippingCostData.getExtraData().add(detail);
-		// }
-	}
+	// private void setShippingCosts(final IShippingCostAnnotation shippingCostAnnotation, final ProfitAndLossContainer container) {
+	// if (shippingCostAnnotation == null) {
+	// return;
+	// }
+	// // final int shippingCostValue = OptimiserUnitConvertor.convertToExternalFixedCost(shippingCostAnnotation.getShippingCost());
+	// // final ExtraData shippingCostData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", shippingCostValue,
+	// // ExtraDataFormatType.CURRENCY) : container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", shippingCostValue, ExtraDataFormatType.CURRENCY);
+	// //
+	// // shippingCostData.addExtraData("date", "Date", entities.getDateFromHours(shippingCostAnnotation.getBookingTime()), ExtraDataFormatType.AUTO);
+	// //
+	// // if (shippingCostAnnotation.getDetails() != null) {
+	// // final ExtraData detail = exportDetailTree(shippingCostAnnotation.getDetails());
+	// // detail.setName("Details");
+	// // shippingCostData.getExtraData().add(detail);
+	// // }
+	// }
 
 	// private ExtraData exportDetailTree(final IDetailTree details) {
 	// final ExtraData ad = TypesFactory.eINSTANCE.createExtraData();

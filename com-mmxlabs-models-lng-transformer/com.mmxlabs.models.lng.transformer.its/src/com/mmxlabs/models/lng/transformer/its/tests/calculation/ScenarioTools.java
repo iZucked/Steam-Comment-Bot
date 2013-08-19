@@ -249,8 +249,8 @@ public class ScenarioTools {
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
 
 		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
-		
 		fleetCostModel.getBaseFuelPrices().add(bfc);
+		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 		final FleetModel fleetModel = scenario.getFleetModel();
 		fleetModel.getBaseFuels().add(baseFuel);
@@ -514,6 +514,7 @@ public class ScenarioTools {
 
 		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
 		fleetCostModel.getBaseFuelPrices().add(bfc);
+		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 		fleetModel.getBaseFuels().add(baseFuel);
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
@@ -759,7 +760,7 @@ public class ScenarioTools {
 		System.err.println("\tRoute: " + journey.getRoute().getName() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getDuration() + ", Speed: " + journey.getSpeed());
 		printFuel(journey.getFuels());
 		// FIXME: Update for API changes
-		System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getHireCost()));
+		System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getCharterCost()));
 	}
 
 	/**
@@ -849,8 +850,8 @@ public class ScenarioTools {
 					System.err.println("\tPort cost: " + sv.getPortCost());
 
 				}
-				if (sv.getHireCost() > 0) {
-					System.err.println("\tHire cost: " + sv.getHireCost());
+				if (sv.getCharterCost() > 0) {
+					System.err.println("\tHire cost: " + sv.getCharterCost());
 
 				}
 			} else if (e instanceof Cooldown) {
@@ -932,7 +933,9 @@ public class ScenarioTools {
 	
 	public static BaseFuelCost createBaseFuelCost(BaseFuel baseFuel, double price) {
 		BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
+		
 		final BaseFuelIndex bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
+		bfi.setName(baseFuel.getName());
 		final DataIndex<Double> indexData = PricingFactory.eINSTANCE.createDataIndex();
 		bfi.setData(indexData);
 		IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();

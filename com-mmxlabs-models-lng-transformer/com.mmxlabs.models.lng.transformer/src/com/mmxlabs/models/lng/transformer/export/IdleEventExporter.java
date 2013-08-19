@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
@@ -45,7 +46,7 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		if (event == null) {
 			return null;
 		}
-			
+
 		Port ePort = entities.getModelObject(event.getPort(), Port.class);
 
 		// TODO this is a bit of a kludge; the ANYWHERE port does not
@@ -61,17 +62,15 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 
 		idle.setPort(ePort);
 		idle.setStart(entities.getDateFromHours(event.getStartTime()));
-		final long cooldownVolume = event.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
-		if (cooldownVolume > 0) {
-			// there was a cooldown - subtract cooldown duration from the end time
-			idle.setEnd(entities.getDateFromHours(event.getEndTime() - event.getCooldownDuration()));
-		} else {
-			idle.setEnd(entities.getDateFromHours(event.getEndTime()));
-		}
-		
+		idle.setEnd(entities.getDateFromHours(event.getEndTime()));
+
 		idle.setLaden(VesselState.Laden.equals(event.getVesselState()));
 
 		idle.getFuels().addAll(super.createFuelQuantities(event));
+
+		// set up hire cost
+		// Note: Cooldown duration is zero - this will need to be changed if cooldown duration becomes non-zero again. This will likely need API support
+		idle.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));
 
 		return idle;
 	}

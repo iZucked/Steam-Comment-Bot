@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer;
 
 import java.util.TreeMap;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
@@ -21,10 +22,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class TransformerHelper {
 
-	public static IVesselClass buildIVesselClass(ISchedulerBuilder builder, VesselClass eVc, double baseFuelPrice) {
+	public static IVesselClass buildIVesselClass(final ISchedulerBuilder builder, final VesselClass eVc, final int baseFuelPriceInInternalUnits) {
 		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
-				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), OptimiserUnitConvertor.convertToInternalPrice(baseFuelPrice),
+				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuelPriceInInternalUnits,
 				OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()),
 				eVc.getWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()));
 
