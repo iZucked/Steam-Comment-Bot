@@ -219,12 +219,16 @@ public class CreateStripDialog extends FormDialog {
 
 		{
 			final Composite patternComposite = toolkit.createComposite(body);
-			patternComposite.setLayout(new GridLayout(2, false));
+			patternComposite.setLayout(new GridLayout(4, false));
 			patternComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 			toolkit.createLabel(patternComposite, "Repeat Pattern");
-
 			pattern = new ComboViewer(patternComposite);
+			{
+				GridData gd = new GridData(GridData.GRAB_HORIZONTAL);
+				gd.horizontalSpan = 3;
+				pattern.getControl().setLayoutData(gd);
+			}
 			toolkit.adapt(pattern.getControl(), true, true);
 
 			pattern.setContentProvider(new ArrayContentProvider());
