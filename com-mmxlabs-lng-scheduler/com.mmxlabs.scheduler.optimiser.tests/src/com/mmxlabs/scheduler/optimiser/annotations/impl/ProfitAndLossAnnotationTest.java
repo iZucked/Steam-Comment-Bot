@@ -17,12 +17,10 @@ public class ProfitAndLossAnnotationTest {
 	@Test
 	public void testProfitAndLossAnnotation() {
 
-		final int bookingTime = 123456;
 		final Collection<IProfitAndLossEntry> entries = Collections.emptySet();
 
-		final ProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(bookingTime, entries);
+		final ProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(entries);
 
-		Assert.assertEquals(bookingTime, annotation.getBookingTime());
 		Assert.assertSame(entries, annotation.getEntries());
 	}
 
