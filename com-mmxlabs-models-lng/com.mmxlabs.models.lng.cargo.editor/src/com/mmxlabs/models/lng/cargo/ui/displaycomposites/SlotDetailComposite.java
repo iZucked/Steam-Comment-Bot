@@ -23,6 +23,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -64,14 +66,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	
 	private static final SimpleDateFormat WindowDateFormat = new SimpleDateFormat("dd MMM YYYY");
 
-	private ExpandableComposite ecWindow;
-	private ExpandableComposite ecTerms;
 	ScrolledComposite scrollComposite;
 	Composite contentComposite;
 	private final Map<EStructuralFeature, IInlineEditor> feature2Editor;
-	private final Map<EObject, EContentAdapter> eObject2Editor;
-	Collection theExpandables;
-	private ExpandableSet es2Restrictions;
 	private final ExpandableSet esPricing;
 	private final ExpandableSet esWindow;
 	private final ExpandableSet esTerms;
@@ -82,7 +79,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private ArrayList<EStructuralFeature[]> loadTermsFeatures;
 	private ArrayList<EStructuralFeature[]> dischargeTermsFeatures;
 	private ArrayList<EStructuralFeature> missedFeatures;
-	private Label ecWindowLabel;
 	private HashSet<EStructuralFeature> windowTitleFeatures;
 	private HashSet<EStructuralFeature> pricingTitleFeatures;
 
@@ -91,9 +87,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		nameFeatures.add(new EStructuralFeature[]{MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional()}); 
 			
 		mainFeatures = new ArrayList<EStructuralFeature[]>();
-//		mainFeatures.add(new EStructuralFeature[]{CargoFeatures.getSlot_Contract()}); 
-//		mainFeatures.add(new EStructuralFeature[]{CargoFeatures.getSlot_PriceExpression()}); 
-//		mainFeatures.add(new EStructuralFeature[]{CargoFeatures.getSlot_PricingDate()}); 
 		mainFeatures.add(new EStructuralFeature[]{CargoFeatures.getSlot_Port()}); 
 		mainFeatures.add(new EStructuralFeature[]{CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity()}); 
 
@@ -121,7 +114,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		missedFeatures = new ArrayList<EStructuralFeature>();
 	}
 
-	private class ExpandableSet {
+	private class ExpandableSet implements DisposeListener {
 
 		ExpandableComposite ec;
 		Composite client;
@@ -129,19 +122,30 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		Label textClient;
 		String baseTitle;
 		Set<EStructuralFeature> headerFeatures;
+		EContentAdapter titleListener;
+		HashSet<EObject> titleEObjects;
 		
 		public ExpandableSet(String title) {
 			baseTitle = title;
+			titleEObjects = new HashSet<EObject>();			
 		}
 
 		void setFeatures(List<EStructuralFeature[]> f, Set<EStructuralFeature> titleF){
 			headerFeatures = titleF;
-			featureLines = f;			
+			featureLines = f;						
+			titleListener = headerFeatures == null ? null: new EContentAdapter(){
+				@Override
+				public void notifyChanged(final Notification notification) {
+					super.notifyChanged(notification);
+					if((notification.getNotifier() instanceof EObject) && headerFeatures.contains(notification.getFeature()))ExpandableSet.this.updateTextClient((EObject)notification.getNotifier());
+				}
+			};	
 		}	
 		
 		void create(MMXRootObject root, EObject object, EMFDataBindingContext dbc){
 			ec = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
 			Composite c = createExpandable(ec);
+			ec.addDisposeListener(this);
 			// feature editors
 			boolean visible = false;
 			for (EStructuralFeature[] fs : featureLines) {		
@@ -160,36 +164,28 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			ec.setVisible(visible);
 		}
 
+		void init(EObject eo){
+			ec.setSize(esPricing.ec.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			ec.layout();
+			updateTextClient(eo);
+			titleEObjects.add(eo);
+			if (titleListener!=null) eo.eAdapters().add(titleListener);
+		}
+		
 		protected void updateTextClient(final EObject eo) {}
 		
 		void makeLabel(){
 		}
-		
-		final EContentAdapter getTitleAdapter(EObject eo) {
-			return headerFeatures == null ? null: new EContentAdapter(){
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-//					final Object f = notification.getFeature();
-//					if(f == CargoFeatures.getSlot_WindowStart() || f == CargoFeatures.getSlot_WindowStartTime() || f==CargoFeatures.getSlot_WindowSize()){
-						if((notification.getNotifier() instanceof EObject) && headerFeatures.contains(notification.getFeature()))ExpandableSet.this.updateTextClient((EObject)notification.getNotifier());
-//						MMXObject eo = (MMXObject) feature2Editor.get(CargoFeatures.getSlot_WindowStart()).getEditorTarget();
-//						final Date d = (Date) eo.eGet(CargoFeatures.getSlot_WindowStart());
-//						int time = (Integer) eo.eGetWithDefault(CargoFeatures.getSlot_WindowStartTime());
-//						ecWindow.setText("Window ");	
-//						ecWindowLabel.setText(WindowDateFormat.format(d) + ", " + String.format("%02d:00", time) + "   " + eo.eGetWithDefault(CargoFeatures.getSlot_WindowSize()) + " hours");
-					}
-//				}
 				
-			};	
+		@Override
+		public void widgetDisposed(DisposeEvent e) {
+			if (titleListener!=null) for (EObject eo : titleEObjects) { eo.eAdapters().remove(titleListener); }
 		}
 	}
 
 	public SlotDetailComposite(final Composite parent, final int style, FormToolkit toolkit) {
 		super(parent, style, toolkit);
 		feature2Editor = new HashMap<EStructuralFeature, IInlineEditor>();
-		eObject2Editor = new HashMap<EObject, EContentAdapter>();
-		// setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		esPricing = new ExpandableSet("Pricing"){
 			
@@ -206,6 +202,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				}
 				text += pe != null? pe : "";
 				textClient.setText(text);		
+				textClient.update();
 			}
 		};
 
@@ -238,7 +235,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	@Override
 	public void addInlineEditor(final IInlineEditor editor) {
 		final EStructuralFeature f = editor.getFeature();
-		final IInlineEditor ed = feature2Editor.put(f, editor);
+		feature2Editor.put(f, editor);
 		if (!mainFeatures.contains(f) && !windowFeatures.contains(f) && !loadTermsFeatures.contains(f)) {
 			missedFeatures.add(f);
 		}		
@@ -249,65 +246,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	@Override
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
-		for (final Map.Entry<EObject, EContentAdapter> e : eObject2Editor.entrySet()) {
-			e.getKey().eAdapters().remove(e.getValue());
-		}
-
-		super.display(location, root, object, range, dbc);
-		
-		esPricing.ec.setSize(esPricing.ec.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		esPricing.ec.layout();
-//		esPricing.makeLabel();
-		scrollComposite.setMinSize(contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		esPricing.updateTextClient(object);
-
-		
-		esWindow.ec.setSize(esWindow.ec.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		esWindow.ec.layout();
-//		esWindow.makeLabel();
-//		ecWindow.setSize(ecWindow.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-//		ecWindow.layout();
-		scrollComposite.setMinSize(contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		esWindow.updateTextClient(object);
-		
-//		ecWindowLabel = new Label(ecWindow, SWT.NONE);
-//		ecWindowLabel.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-//		ecWindow.setTextClient(ecWindowLabel);
-		
-//		EContentAdapter titleAdapter = new EContentAdapter(){
-//			@Override
-//			public void notifyChanged(final Notification notification) {
-//				super.notifyChanged(notification);
-//				final Object f = notification.getFeature();
-//				if(f == CargoFeatures.getSlot_WindowStart() || f == CargoFeatures.getSlot_WindowStartTime() || f==CargoFeatures.getSlot_WindowSize()){
-//					MMXObject eo = (MMXObject) feature2Editor.get(CargoFeatures.getSlot_WindowStart()).getEditorTarget();
-//					final Date d = (Date) eo.eGet(CargoFeatures.getSlot_WindowStart());
-//					int time = (Integer) eo.eGetWithDefault(CargoFeatures.getSlot_WindowStartTime());
-//					ecWindow.setText("Window ");	
-//					ecWindowLabel.setText(WindowDateFormat.format(d) + ", " + String.format("%02d:00", time) + "   " + eo.eGetWithDefault(CargoFeatures.getSlot_WindowSize()) + " hours");
-//				}
-//			}
-//		};
-		
+		super.display(location, root, object, range, dbc);		
 		MMXObject eo = (MMXObject) object;
-//		MMXObject eo = (MMXObject) feature2Editor.get(CargoFeatures.getSlot_WindowStart()).getEditorTarget();
-//		final Date d = (Date) eo.eGet(CargoFeatures.getSlot_WindowStart());
-//		int time = (Integer) eo.eGetWithDefault(CargoFeatures.getSlot_WindowStartTime());
-//		ecWindow.setText("Window ");	
-//		ecWindowLabel.setText(WindowDateFormat.format(d) + ", " + String.format("%02d:00", time) + "   " + eo.eGetWithDefault(CargoFeatures.getSlot_WindowSize()) + " hours");		
-		
-		eo.eAdapters().add(esWindow.getTitleAdapter(eo));
-		eo.eAdapters().add(esPricing.getTitleAdapter(eo));
-//		eo.eAdapters().add(titleAdapter);
-
-		
-		esTerms.ec.setSize(esTerms.ec.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		esTerms.ec.layout();
-//		esTerms.makeLabel();
-//		ecWindow.setSize(ecWindow.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-//		ecWindow.layout();
+		esPricing.init(eo);
+		esWindow.init(eo);
+		esTerms.init(eo);
 		scrollComposite.setMinSize(contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		esTerms.updateTextClient(object);
 	}
 
 	@Override
@@ -315,14 +259,14 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		toolkit.adapt(this);
 
-		LoadSlot loadSlot;
-		DischargeSlot dischargeSlot;
+//		LoadSlot loadSlot;
+//		DischargeSlot dischargeSlot;
 		boolean isLoad;
 		if (object instanceof LoadSlot) {
-			loadSlot = (LoadSlot) object;
+//			loadSlot = (LoadSlot) object;
 			isLoad = true;
 		} else if (object instanceof DischargeSlot) {
-			dischargeSlot = (DischargeSlot) object;
+//			dischargeSlot = (DischargeSlot) object;
 			isLoad = false;
 		} else {
 			// Say what?...
@@ -330,15 +274,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		scrollComposite = new ScrolledComposite(this, SWT.NONE | SWT.V_SCROLL);
-		// scrollComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		toolkit.adapt(scrollComposite, true, true);
 		scrollComposite.setLayout(new FillLayout());
 		scrollComposite.setExpandHorizontal(true);
 		scrollComposite.setExpandVertical(true);
 
-		// contentComposite = new Composite(scrollComposite, SWT.NONE);
 		contentComposite = toolkit.createComposite(scrollComposite);
-		// contentComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		contentComposite.setLayout(new GridLayout(2, false));
 		scrollComposite.setContent(contentComposite);
 
@@ -357,40 +298,13 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		createSpacer();
 		esWindow.setFeatures(windowFeatures, windowTitleFeatures);
 		esWindow.create(root, object, dbc);
-//		ecWindow = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
-//		ecWindow.setText("");
-//		Composite windowC = createExpandable(ecWindow);		
-//		for (EStructuralFeature[] fs : windowFeatures) {		
-//			Control control = makeControls(root, object, windowC, fs, dbc);
-//		}
-//		ecWindow.setExpanded(true);
 
 		createSpacer();
 		esTerms.setFeatures(isLoad? loadTermsFeatures : dischargeTermsFeatures, null);
 		esTerms.create(root, object, dbc);
-//		ecTerms = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
-//		ecTerms.setText("");
-//		Composite termC = createExpandable(ecTerms);
-//		for (final EStructuralFeature[] fs : isLoad ? loadTermsFeatures : dischargeTermsFeatures) {
-//			final Control control = makeControls(root, object, termC, fs, dbc);
-//		}
-
-			// Control control = makeControl(root, object, termC, f);
-		
 
 		for (EStructuralFeature f : missedFeatures) {
-//		Control control = makeControl(root, object, termC, f);
 		}
-
-//		for (final IInlineEditor editor : editors) {
-//			EStructuralFeature f = editor.getFeature();
-//if ( mainFeatures.contains(f)) continue;
-//if ( windowFeatures.contains(f)) continue;
-//if ( termsFeatures.contains(f)) continue;
-//			Control c = makeControl(root, object, windowC, f);
-//			System.out.println(f.getName());
-//		}		
-//			final Control c = makeControl(root, object, windowC, f, dbc);
 
 		this.addControlListener(new ControlAdapter() {
 			public void controlResized(final ControlEvent e) {
@@ -408,7 +322,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	private Composite createExpandable(final ExpandableComposite ec) {
-		// ec.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		ec.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 		ec.addExpansionListener(new ExpansionAdapter() {
 			@Override
@@ -421,7 +334,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			}
 		});
 		final Composite inner = toolkit.createComposite(ec);
-		// inner.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		inner.setLayout(new GridLayout(2, false));
 		ec.setClient(inner);
 		return inner;
@@ -467,32 +379,17 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			gl.marginWidth = 0;
 			gl.marginHeight = 0;
 			holder.setLayout(gl);
-//			if(labelText!= null && labelText.length()>0){
-//				final Label toplabel = new Label(holder, SWT.NONE);
-//				toplabel.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-//				toplabel.setText(labelText);
-//			}
 		}
 		for (EStructuralFeature f : fs) {			
 			IInlineEditor editor = feature2Editor.get(f);		
 			createLabelledEditorControl(root, object, holder, editor, dbc);
-
-//		toolkit.adapt(label, true, false);
-			// label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		}
 		return holder;
 	}	
 	
-	private Control makeControl(MMXRootObject root, EObject object, Composite c, EStructuralFeature f, EMFDataBindingContext dbc) {
-		
-		IInlineEditor editor = feature2Editor.get(f);		
-		return createLabelledEditorControl(root, object, c, editor, dbc);
-	}
-
-	public void dispose() {
-
-		for (final Map.Entry<EObject, EContentAdapter> e : eObject2Editor.entrySet()) {
-			e.getKey().eAdapters().remove(e.getValue());
-		}
-	};
+//	private Control makeControl(MMXRootObject root, EObject object, Composite c, EStructuralFeature f, EMFDataBindingContext dbc) {
+//		
+//		IInlineEditor editor = feature2Editor.get(f);		
+//		return createLabelledEditorControl(root, object, c, editor, dbc);
+//	}
 }
