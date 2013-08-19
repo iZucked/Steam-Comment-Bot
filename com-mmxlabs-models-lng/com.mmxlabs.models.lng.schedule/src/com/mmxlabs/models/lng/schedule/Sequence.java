@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate <em>Daily Hire Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSequenceType <em>Sequence Type</em>}</li>
  * </ul>
@@ -174,6 +175,36 @@ public interface Sequence extends MMXObject {
 	 * @generated
 	 */
 	EList<Fitness> getFitnesses();
+
+	/**
+	 * Returns the value of the '<em><b>Daily Hire Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Daily Hire Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @deprecated
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Daily Hire Rate</em>' attribute.
+	 * @see #setDailyHireRate(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_DailyHireRate()
+	 * @model required="true"
+	 * @generated
+	 */
+	@Deprecated
+	int getDailyHireRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate <em>Daily Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @deprecated
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Daily Hire Rate</em>' attribute.
+	 * @see #getDailyHireRate()
+	 * @generated
+	 */
+	@Deprecated
+	void setDailyHireRate(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Spot Index</b></em>' attribute.

@@ -1019,13 +1019,23 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Daily Hire Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @deprecated
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEQUENCE__DAILY_HIRE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__SPOT_INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int SEQUENCE__SPOT_INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Sequence Type</b></em>' attribute.
@@ -1035,7 +1045,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__SEQUENCE_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SEQUENCE__SEQUENCE_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Sequence</em>' class.
@@ -1044,7 +1054,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3829,6 +3839,19 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_Fitnesses();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate <em>Daily Hire Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @deprecated
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Daily Hire Rate</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate()
+	 * @see #getSequence()
+	 * @generated
+	 */
+	@Deprecated
+	EAttribute getSequence_DailyHireRate();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5090,6 +5113,16 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SEQUENCE__FITNESSES = eINSTANCE.getSequence_Fitnesses();
+
+		/**
+		 * The meta object literal for the '<em><b>Daily Hire Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @deprecated
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		@Deprecated
+		EAttribute SEQUENCE__DAILY_HIRE_RATE = eINSTANCE.getSequence_DailyHireRate();
 
 		/**
 		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
