@@ -170,6 +170,7 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 	 */
 	@Override
 	public Value getValueForMonth(final Date date) {
+		// THIS DOES NOT WORK - CLASSIFIER COMES THROUGH AS SERIALIZABLE
 		EClassifier classifier = eContainingFeature().getEGenericType().getETypeArguments().get(0).getERawType();
 		if (classifier instanceof EDataType) {
 			final EDataType dt = (EDataType) classifier;

@@ -21,17 +21,18 @@ public class BaseFuelPriceConstraint  extends AbstractModelConstraint {
 	public IStatus validate(IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof BaseFuelCost) {
-			final BaseFuelCost cost = (BaseFuelCost) target;
-			final double price = cost.getIndex().getPrice();
-			
-			if (price < min || price > max) {
-				String message = String.format("'%s' has price %.2f (should be between %f and %f)", cost.getFuel().getName(), price, min, max);
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				return dcsd;
-			}
-
-		}
+		// Disable for now in light of API change..
+//		if (target instanceof BaseFuelCost) {
+//			final BaseFuelCost cost = (BaseFuelCost) target;
+//			final double price = cost.getIndex().getPrice();
+//			
+//			if (price < min || price > max) {
+//				String message = String.format("'%s' has price %.2f (should be between %f and %f)", cost.getFuel().getName(), price, min, max);
+//				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+//				return dcsd;
+//			}
+//
+//		}
 
 		return ctx.createSuccessStatus();
 	}
