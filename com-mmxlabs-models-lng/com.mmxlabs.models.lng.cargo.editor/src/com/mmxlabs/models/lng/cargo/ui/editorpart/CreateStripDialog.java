@@ -138,7 +138,7 @@ public class CreateStripDialog extends FormDialog {
 
 		// Copy valid features across
 		if (selectedObject != null) {
-			for (final EStructuralFeature f : sample.eClass().getEStructuralFeatures()) {
+			for (final EStructuralFeature f : sample.eClass().getEAllStructuralFeatures()) {
 				if (f == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()) {
 					continue;
 				}
@@ -148,7 +148,7 @@ public class CreateStripDialog extends FormDialog {
 				if (f instanceof EReference && ((EReference) f).isContainment()) {
 					continue;
 				}
-				if (selectedObject.eIsSet(f)) {
+				if (selectedObject.eClass().getEAllStructuralFeatures().contains(f) && selectedObject.eIsSet(f)) {
 					sample.eSet(f, selectedObject.eGet(f));
 				}
 			}
