@@ -36,6 +36,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getVesselAvailability <em>Vessel Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getFitnesses <em>Fitnesses</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getDailyHireRate <em>Daily Hire Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getSequenceType <em>Sequence Type</em>}</li>
  * </ul>
@@ -103,6 +104,26 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @ordered
 	 */
 	protected EList<Fitness> fitnesses;
+
+	/**
+	 * The default value of the '{@link #getDailyHireRate() <em>Daily Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyHireRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DAILY_HIRE_RATE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDailyHireRate() <em>Daily Hire Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDailyHireRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected int dailyHireRate = DAILY_HIRE_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
@@ -334,6 +355,27 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getDailyHireRate() {
+		return dailyHireRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDailyHireRate(int newDailyHireRate) {
+		int oldDailyHireRate = dailyHireRate;
+		dailyHireRate = newDailyHireRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__DAILY_HIRE_RATE, oldDailyHireRate, dailyHireRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -496,6 +538,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return basicGetVesselClass();
 			case SchedulePackage.SEQUENCE__FITNESSES:
 				return getFitnesses();
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+				return getDailyHireRate();
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 				return getSpotIndex();
 			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
@@ -527,6 +571,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				getFitnesses().clear();
 				getFitnesses().addAll((Collection<? extends Fitness>)newValue);
 				return;
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+				setDailyHireRate((Integer)newValue);
+				return;
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 				setSpotIndex((Integer)newValue);
 				return;
@@ -557,6 +604,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__FITNESSES:
 				getFitnesses().clear();
 				return;
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+				setDailyHireRate(DAILY_HIRE_RATE_EDEFAULT);
+				return;
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 				unsetSpotIndex();
 				return;
@@ -583,6 +633,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return isSetVesselClass();
 			case SchedulePackage.SEQUENCE__FITNESSES:
 				return fitnesses != null && !fitnesses.isEmpty();
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
+				return dailyHireRate != DAILY_HIRE_RATE_EDEFAULT;
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 				return isSetSpotIndex();
 			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
@@ -621,7 +673,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (spotIndex: ");
+		result.append(" (dailyHireRate: ");
+		result.append(dailyHireRate);
+		result.append(", spotIndex: ");
 		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
 		result.append(", sequenceType: ");
 		result.append(sequenceType);
