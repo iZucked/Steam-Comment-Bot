@@ -320,6 +320,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Scenario Model</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -888,6 +889,7 @@ public interface ScenarioServicePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel <em>Scenario Model</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Scenario Model</em>'.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel()

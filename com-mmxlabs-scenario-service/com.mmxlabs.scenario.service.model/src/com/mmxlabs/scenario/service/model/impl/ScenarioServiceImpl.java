@@ -120,6 +120,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	/**
 	 * The cached value of the '{@link #getScenarioModel() <em>Scenario Model</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getScenarioModel()
 	 * @generated
@@ -236,6 +237,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -253,6 +255,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -262,6 +265,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -280,6 +284,7 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

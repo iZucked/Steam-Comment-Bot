@@ -143,6 +143,7 @@ public interface ScenarioService extends Container {
 	 * If the meaning of the '<em>Scenario Model</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Scenario Model</em>' reference.
 	 * @see #setScenarioModel(ScenarioModel)
@@ -156,6 +157,7 @@ public interface ScenarioService extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel <em>Scenario Model</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Scenario Model</em>' reference.
 	 * @see #getScenarioModel()
