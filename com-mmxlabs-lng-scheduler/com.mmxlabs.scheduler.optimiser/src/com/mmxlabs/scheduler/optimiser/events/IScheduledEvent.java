@@ -44,6 +44,14 @@ public interface IScheduledEvent {
 	int getDuration();
 
 	/**
+	 * Returns the chartering cost for this event.
+	 * 
+	 * @return
+	 * @since 7.0
+	 */
+	long getCharterCost();
+
+	/**
 	 * Returns the name of this event.
 	 * 
 	 * @return

@@ -17,11 +17,6 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
  */
 public interface IProfitAndLossAnnotation {
 	/**
-	 * Returns the time at which this profit/loss bundle is booked
-	 */
-	int getBookingTime();
-
-	/**
 	 * Returns a bunch of {@link IProfitAndLossEntry} instances, each pertaining to a single entity involved in this transaction.
 	 * 
 	 * @return

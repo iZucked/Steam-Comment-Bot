@@ -23,6 +23,8 @@ public abstract class AbstractScheduledEventImpl implements IScheduledEvent {
 
 	private int endTime;
 
+	private long hireCost;
+
 	private ISequenceElement element;
 
 	protected AbstractScheduledEventImpl() {
@@ -73,4 +75,20 @@ public abstract class AbstractScheduledEventImpl implements IScheduledEvent {
 	public void setSequenceElement(final ISequenceElement element) {
 		this.element = element;
 	}
+
+	/**
+	 * @since 7.0
+	 */
+	@Override
+	public long getCharterCost() {
+		return hireCost;
+	}
+
+	/**
+	 * @since 7.0
+	 */
+	public void setHireCost(final long hireCost) {
+		this.hireCost = hireCost;
+	}
+
 }

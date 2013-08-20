@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -44,6 +45,7 @@ public class VoyagePlanAnnotatorTest {
 
 		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
 		final IVessel vessel = Mockito.mock(IVessel.class);
+		Mockito.when(vessel.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class, "2");
@@ -169,6 +171,7 @@ public class VoyagePlanAnnotatorTest {
 		plans.add(plan2);
 
 		final IResource resource = Mockito.mock(IResource.class);
+		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
 		final int[] expectedArrivalTimes = new int[] { 0, 100, 200, 310 };

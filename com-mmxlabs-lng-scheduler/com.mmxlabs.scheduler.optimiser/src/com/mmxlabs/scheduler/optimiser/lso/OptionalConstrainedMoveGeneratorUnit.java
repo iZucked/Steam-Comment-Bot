@@ -257,8 +257,8 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 												// we have a working filler element to do the move above.
 												final Pair<Integer, Integer> fillerPosition = owner.reverseLookup.get(spare);
 												// TODO these checks appear duplicated, and do not seem to be used
-												final boolean check = checkResource(candidate, resource);
-												checkResource(candidate, resource);
+//												final boolean check = checkResource(candidate, resource);
+//												checkResource(candidate, resource);
 
 												return new ReplaceMoveAndFill(candidateResource, resource, candidatePosition.getSecond(), followerPosition.getSecond(), fillerPosition.getSecond(),
 														unusedIndex, false);
