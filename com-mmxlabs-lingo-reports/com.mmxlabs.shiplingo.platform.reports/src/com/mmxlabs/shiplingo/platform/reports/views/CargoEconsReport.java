@@ -205,6 +205,7 @@ public class CargoEconsReport extends ViewPart {
 		SELL_REVENUE_TOTAL("Sale Revenue", "$", DollarsFormat),
 		SELL_VOLUME_IN_MMBTU("- Volume", "mmBtu", VolumeMMBtuFormat),
 		PNL_TOTAL("P&L", "$", DollarsFormat),
+		PNL_TOTAL_NO_TC("P&L (Ex. TC)", "$", DollarsFormat),
 		PNL_PER_MMBTU("Margin", "$/mmBTu", DollarsPerMMBtuFormat);
 		// @formatter:on
 
@@ -306,6 +307,9 @@ public class CargoEconsReport extends ViewPart {
 			}
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(cargoAllocation);
+			}
+			case PNL_TOTAL_NO_TC: {
+				return CargoEconsReport.getPNLValueNoTC(cargoAllocation);
 			}
 			case SELL_REVENUE_TOTAL: {
 				double cv = 0.0;
@@ -490,6 +494,9 @@ public class CargoEconsReport extends ViewPart {
 			}
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(marketAllocation);
+			}
+			case PNL_TOTAL_NO_TC: {
+				return CargoEconsReport.getPNLValueNoTC(marketAllocation);
 			}
 			case SELL_REVENUE_TOTAL: {
 				// Find the CV & price
@@ -801,6 +808,28 @@ public class CargoEconsReport extends ViewPart {
 		}
 
 		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+		if (groupProfitAndLoss == null) {
+			return null;
+		}
+		// Rounding!
+		return (int) groupProfitAndLoss.getProfitAndLoss();
+	}
+
+	
+	/**
+	 * Get total cargo PNL value excluding time charter rate
+	 * 
+	 * @param container
+	 * @param entity
+	 * @return
+	 * @since 4.4
+	 */
+	protected static Integer getPNLValueNoTC(final ProfitAndLossContainer container) {
+		if (container == null) {
+			return null;
+		}
+
+		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLossNoTimeCharter();
 		if (groupProfitAndLoss == null) {
 			return null;
 		}
