@@ -202,7 +202,7 @@ public class PerVesselReportView extends ViewPart {
 			int activeDuration = 0;
 			int idleDuration = 0;
 			for (final Event event : sequence.getEvents()) {
-				hireCost += event.getHireCost();
+				hireCost += event.getCharterCost();
 				if (event instanceof FuelUsage) {
 					for (final FuelQuantity quantity : ((FuelUsage) event).getFuels()) {
 						Integer i = fuelCosts.get(quantity.getFuel());

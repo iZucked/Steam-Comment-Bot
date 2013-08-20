@@ -99,8 +99,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			}
 
 			for (final Event evt : seq.getEvents()) {
-				hire += evt.getHireCost();
-				totalCost += evt.getHireCost();
+				hire += evt.getCharterCost();
+				totalCost += evt.getCharterCost();
 				if (evt instanceof FuelUsage) {
 					final FuelUsage mix = (FuelUsage) evt;
 					// add up fuel components from mixture

@@ -396,14 +396,11 @@ public class CargoEconsReport extends ViewPart {
 				return cost;
 			}
 			case SHIPPING_CHARTER_COST_TOTAL:
-				if (cargoAllocation.getSequence().getDailyHireRate() == 0) {
-					return 0;
-				}
-				int duration = 0;
+				int charterCost = 0;
 				for (final Event event : cargoAllocation.getEvents()) {
-					duration += event.getDuration();
+					charterCost += event.getCharterCost();
 				}
-				return duration * cargoAllocation.getSequence().getDailyHireRate() / 24;
+				return charterCost;
 			case SHIPPING_COST_TOTAL:
 				return CargoEconsReport.getShippingCost(cargoAllocation);
 			default:
@@ -819,8 +816,11 @@ public class CargoEconsReport extends ViewPart {
 
 		// Bit of a double count here, but need to decide what to add to the model
 		int shippingCost = 0;
-		int duration = 0;
+		int charterCost = 0;
 		for (final Event event : cargoAllocation.getEvents()) {
+
+			charterCost += event.getCharterCost();
+
 			if (event instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) event;
 				// Port Costs
@@ -843,13 +843,11 @@ public class CargoEconsReport extends ViewPart {
 				final Cooldown cooldown = (Cooldown) event;
 				shippingCost += cooldown.getCost();
 			}
-
-			duration += event.getDuration();
 		}
 
 		// Add on chartering costs
 		if (cargoAllocation.getSequence().isSpotVessel()) {
-			shippingCost += duration * cargoAllocation.getSequence().getDailyHireRate() / 24;
+			shippingCost += charterCost;
 		}
 		return shippingCost;
 

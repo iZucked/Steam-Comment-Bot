@@ -104,17 +104,17 @@ public class CargoReportView extends AbstractCargoReportView {
 						if (event instanceof SlotVisit) {
 							final SlotVisit slotVisit = (SlotVisit) event;
 							total += slotVisit.getFuelCost();
-							total += slotVisit.getHireCost();
+							total += slotVisit.getCharterCost();
 							total += slotVisit.getPortCost();
 						} else if (event instanceof Journey) {
 							final Journey journey = (Journey) event;
 							total += journey.getFuelCost();
-							total += journey.getHireCost();
+							total += journey.getCharterCost();
 							total += journey.getToll();
 						} else if (event instanceof Idle) {
 							final Idle idle = (Idle) event;
 							total += idle.getFuelCost();
-							total += idle.getHireCost();
+							total += idle.getCharterCost();
 						}
 					}
 					return total;
@@ -147,7 +147,7 @@ public class CargoReportView extends AbstractCargoReportView {
 						}
 						if (collecting) {
 							total += slotVisit.getFuelCost();
-							total += slotVisit.getHireCost();
+							total += slotVisit.getCharterCost();
 							total += slotVisit.getPortCost();
 						}
 
@@ -155,14 +155,14 @@ public class CargoReportView extends AbstractCargoReportView {
 						final Journey journey = (Journey) event;
 						if (collecting) {
 							total += journey.getFuelCost();
-							total += journey.getHireCost();
+							total += journey.getCharterCost();
 							total += journey.getToll();
 						}
 					} else if (event instanceof Idle) {
 						final Idle idle = (Idle) event;
 						if (collecting) {
 							total += idle.getFuelCost();
-							total += idle.getHireCost();
+							total += idle.getCharterCost();
 						}
 					}
 				}
