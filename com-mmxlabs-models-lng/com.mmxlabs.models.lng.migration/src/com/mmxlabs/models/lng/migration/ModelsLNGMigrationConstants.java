@@ -21,7 +21,7 @@ public final class ModelsLNGMigrationConstants {
 	 * @since 4.0
 	 */
 	public static final PackageData PKG_DATA_MMXCore = new PackageData(NSURI_MMXCore, "platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore",
-			"../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore");
+			"../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore", "../../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore");
 
 	public static final String NSURI_LNGTypes = "http://www.mmxlabs.com/models/lng/types/1/";
 	/**
