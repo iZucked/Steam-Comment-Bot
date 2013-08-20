@@ -71,6 +71,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ScrollBar;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -931,7 +932,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 										// Currently unable to edit mixed content!
 									}
 								} else {
-									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX);
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX){
+										@Override
+										protected void configureShell(Shell newShell) {
+											newShell.setMinimumSize(SWT.DEFAULT, 720);
+											super.configureShell(newShell);
+										}
+									};
 									dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), editorTargets, scenarioViewer.isLocked());
 								}
 							} finally {
