@@ -46,8 +46,17 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
  */
 public class LNGTransformerModule extends AbstractModule {
 
+	/**
+	 * @since 6.0
+	 */
 	public static final String Parser_Commodity = "Commodity";
+	/**
+	 * @since 6.0
+	 */
 	public static final String Parser_BaseFuel = "BaseFuel";
+	/**
+	 * @since 6.0
+	 */
 	public static final String Parser_Charter = "Charter";
 
 	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
