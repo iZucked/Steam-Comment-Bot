@@ -63,13 +63,15 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 	
 	@Override
-	public void addInlineEditor(IInlineEditor editor) {
+	public IInlineEditor addInlineEditor(IInlineEditor editor) {
 		
 		editor = wrapper.wrap(editor);
 		if (editor != null) {
 			editor.setCommandHandler(commandHandler);
 			editors.add(editor);
 		}
+		
+		return editor;
 	}
 
 	/**
