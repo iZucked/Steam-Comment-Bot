@@ -1,9 +1,6 @@
 package com.mmxlabs.models.mmxcore.templates.editor;
 
 import org.eclipse.emf.codegen.ecore.genmodel.*;
-import com.mmxlabs.models.ui.*;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
 
 public class ComponentHelper
 {
@@ -21,7 +18,7 @@ public class ComponentHelper
   protected final String TEXT_2 = "/**";
   protected final String TEXT_3 = NL + " * ";
   protected final String TEXT_4 = NL + " */" + NL + "package ";
-  protected final String TEXT_5 = ".composites;" + NL;
+  protected final String TEXT_5 = ".composites;" + NL + "" + NL + "import com.mmxlabs.models.ui.BaseComponentHelper;" + NL + "import com.mmxlabs.models.ui.ComponentHelperUtils;" + NL + "import com.mmxlabs.models.ui.IComponentHelper;" + NL + "import com.mmxlabs.models.ui.IInlineEditorContainer;" + NL + "import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;" + NL + "" + NL + "import org.eclipse.core.runtime.IAdapterManager;" + NL + "import org.eclipse.core.runtime.Platform;";
   protected final String TEXT_6 = NL + NL + "/**" + NL + " * A component helper for ";
   protected final String TEXT_7 = " instances" + NL + " *" + NL + " * @generated" + NL + " */" + NL + "public class ";
   protected final String TEXT_8 = " extends BaseComponentHelper {" + NL + "\tprotected ";

@@ -1,4 +1,4 @@
-<%@ jet package="com.mmxlabs.models.mmxcore.templates.editor" imports="org.eclipse.emf.codegen.ecore.genmodel.* com.mmxlabs.models.ui.* org.eclipse.core.runtime.Platform org.eclipse.core.runtime.IAdapterManager" class="ComponentHelper" version="1.0" %>
+<%@ jet package="com.mmxlabs.models.mmxcore.templates.editor" imports="org.eclipse.emf.codegen.ecore.genmodel.*" class="ComponentHelper" version="1.0" %>
 <% 
 /**
  * <copyright>
@@ -13,6 +13,14 @@
 <%@ include file="../Header.javajetinc"%>
 package <%=genPackage.getPresentationPackageName()%>.composites;
 
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 <%genModel.markImportLocation(stringBuffer, genPackage);%>
 
 /**
