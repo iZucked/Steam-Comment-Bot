@@ -84,6 +84,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLossNoTimeCharter()
 	 * @generated
@@ -201,6 +202,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -210,6 +212,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -225,6 +228,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

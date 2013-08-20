@@ -103,6 +103,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLossNoTimeCharter()
 	 * @generated
@@ -233,6 +234,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -242,6 +244,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -257,6 +260,7 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

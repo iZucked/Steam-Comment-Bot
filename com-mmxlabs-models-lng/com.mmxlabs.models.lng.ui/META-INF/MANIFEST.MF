@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LNG UI
 Bundle-SymbolicName: com.mmxlabs.models.lng.ui;singleton:=true
-Bundle-Version: 5.2.1.qualifier
+Bundle-Version: 6.0.0.qualifier
 Bundle-Activator: com.mmxlabs.models.lng.ui.LngUIActivator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.emf.common.ui;bundle-version="2.7.0",
  org.eclipse.nebula.widgets.formattedtext;bundle-version="1.0.0",
  com.mmxlabs.rcp.common;bundle-version="[4.0.0,5.0.0)",
- com.mmxlabs.models.lng.types;bundle-version="[5.2.0,6.0.0)",
+ com.mmxlabs.models.lng.types;bundle-version="[6.0.0,7.0.0)",
  com.mmxlabs.models.ui;bundle-version="[6.1.0,7.0.0)",
  com.mmxlabs.models.ui.tabular;bundle-version="[6.1.0,7.0.0)",
  com.mmxlabs.models.util;bundle-version="[6.1.0,7.0.0)",

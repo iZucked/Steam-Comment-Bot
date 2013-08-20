@@ -46,6 +46,7 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLossNoTimeCharter()
 	 * @generated
@@ -117,6 +118,7 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -126,6 +128,7 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -141,6 +144,7 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

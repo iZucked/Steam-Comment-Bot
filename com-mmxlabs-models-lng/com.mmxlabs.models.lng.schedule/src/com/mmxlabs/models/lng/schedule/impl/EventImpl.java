@@ -120,6 +120,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	/**
 	 * The default value of the '{@link #getCharterCost() <em>Charter Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @see #getCharterCost()
 	 * @generated
@@ -130,6 +131,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	/**
 	 * The cached value of the '{@link #getCharterCost() <em>Charter Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @see #getCharterCost()
 	 * @generated
@@ -399,6 +401,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -408,6 +411,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

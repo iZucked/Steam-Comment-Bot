@@ -508,6 +508,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -682,6 +683,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -732,9 +734,10 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @ordered
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered
+	 * @since 6.0
 	 */
 	int MARKET_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 
@@ -1195,6 +1198,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1366,6 +1370,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1413,6 +1418,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1602,6 +1608,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1649,6 +1656,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1838,6 +1846,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2082,6 +2091,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2281,6 +2291,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2472,6 +2483,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2689,6 +2701,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2727,6 +2740,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2914,6 +2928,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2933,6 +2948,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3116,6 +3132,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3125,6 +3142,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3993,6 +4011,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Event#getCharterCost <em>Charter Cost</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Charter Cost</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Event#getCharterCost()
@@ -4810,6 +4829,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Group Profit And Loss No Time Charter</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLossNoTimeCharter()
@@ -5234,6 +5254,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Charter Cost</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 6.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5892,6 +5913,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 6.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

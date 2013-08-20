@@ -202,6 +202,7 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * If the meaning of the '<em>Charter Cost</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Cost</em>' attribute.
 	 * @see #setCharterCost(int)
@@ -214,6 +215,7 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getCharterCost <em>Charter Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Charter Cost</em>' attribute.
 	 * @see #getCharterCost()

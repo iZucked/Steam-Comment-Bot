@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.parameters;singleton:=true
-Bundle-Version: 5.2.1.qualifier
+Bundle-Version: 6.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -12,6 +12,6 @@ Export-Package: com.mmxlabs.models.lng.parameters,
  com.mmxlabs.models.lng.parameters.util
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.ecore;visibility:=reexport;bundle-version="2.7.0",
- com.mmxlabs.models.lng.types;visibility:=reexport;bundle-version="[5.2.0,6.0.0)",
+ com.mmxlabs.models.lng.types;visibility:=reexport;bundle-version="[6.0.0,7.0.0)",
  com.mmxlabs.models.mmxcore;visibility:=reexport
 Bundle-ActivationPolicy: lazy

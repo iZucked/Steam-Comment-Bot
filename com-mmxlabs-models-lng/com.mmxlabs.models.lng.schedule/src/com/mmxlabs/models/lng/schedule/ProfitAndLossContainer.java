@@ -60,6 +60,7 @@ public interface ProfitAndLossContainer extends EObject {
 	 * If the meaning of the '<em>Group Profit And Loss No Time Charter</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Group Profit And Loss No Time Charter</em>' containment reference.
 	 * @see #setGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss)
@@ -72,6 +73,7 @@ public interface ProfitAndLossContainer extends EObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Group Profit And Loss No Time Charter</em>' containment reference.
 	 * @see #getGroupProfitAndLossNoTimeCharter()

@@ -183,6 +183,7 @@ public class EventItemProvider
 	/**
 	 * This adds a property descriptor for the Charter Cost feature.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

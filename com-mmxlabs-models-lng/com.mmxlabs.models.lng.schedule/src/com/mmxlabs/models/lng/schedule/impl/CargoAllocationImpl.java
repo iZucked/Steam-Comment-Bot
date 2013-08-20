@@ -59,6 +59,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLossNoTimeCharter()
 	 * @generated
@@ -193,6 +194,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -202,6 +204,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -217,6 +220,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
