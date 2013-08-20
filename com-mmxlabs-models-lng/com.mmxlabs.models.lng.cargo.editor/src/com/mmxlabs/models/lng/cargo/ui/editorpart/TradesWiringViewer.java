@@ -935,7 +935,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX){
 										@Override
 										protected void configureShell(Shell newShell) {
-											newShell.setMinimumSize(SWT.DEFAULT, 720);
+											newShell.setMinimumSize(SWT.DEFAULT, 630);
 											super.configureShell(newShell);
 										}
 									};
