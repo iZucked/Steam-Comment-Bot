@@ -108,12 +108,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		missedFeatures = new ArrayList<EStructuralFeature>();
 	}
 
-						ExpandableSet.this.updateTextClient((EObject) notification.getNotifier());
-				eo.eAdapters().add(titleListener);
-		}
-				for (EObject eo : titleEObjects) {
-					eo.eAdapters().remove(titleListener);
-				}
 	public SlotDetailComposite(final Composite parent, final int style, FormToolkit toolkit) {
 		super(parent, style, toolkit);
 		feature2Editor = new HashMap<EStructuralFeature, IInlineEditor>();
