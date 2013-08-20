@@ -734,10 +734,10 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @ordered
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 6.0
+	 * @ordered
 	 */
 	int MARKET_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 

@@ -63,6 +63,7 @@ public class SequenceItemProvider
 
 			addVesselAvailabilityPropertyDescriptor(object);
 			addVesselClassPropertyDescriptor(object);
+			addDailyHireRatePropertyDescriptor(object);
 			addSpotIndexPropertyDescriptor(object);
 			addSequenceTypePropertyDescriptor(object);
 		}
@@ -110,6 +111,28 @@ public class SequenceItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Daily Hire Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDailyHireRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Sequence_dailyHireRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_dailyHireRate_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__DAILY_HIRE_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -226,6 +249,7 @@ public class SequenceItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Sequence.class)) {
+			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
