@@ -76,11 +76,17 @@ public abstract class AbstractScheduledEventImpl implements IScheduledEvent {
 		this.element = element;
 	}
 
+	/**
+	 * @since 7.0
+	 */
 	@Override
 	public long getCharterCost() {
 		return hireCost;
 	}
 
+	/**
+	 * @since 7.0
+	 */
 	public void setHireCost(final long hireCost) {
 		this.hireCost = hireCost;
 	}

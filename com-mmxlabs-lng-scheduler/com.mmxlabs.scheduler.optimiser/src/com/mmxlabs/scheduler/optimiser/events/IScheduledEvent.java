@@ -47,6 +47,7 @@ public interface IScheduledEvent {
 	 * Returns the chartering cost for this event.
 	 * 
 	 * @return
+	 * @since 7.0
 	 */
 	long getCharterCost();
 

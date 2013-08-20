@@ -26,6 +26,7 @@ public interface IEntityValueCalculator {
 
 	/**
 	 * Add method to obtain the shipping costs for P&L calculations
+	 * @since 7.0
 	 */
 	long getShippingCosts(VoyagePlan plan, IVessel vessel, boolean includeLNG, boolean includeTimeCharterCosts, int vesselStartTime, IDetailTree[] detailsRef);
 
