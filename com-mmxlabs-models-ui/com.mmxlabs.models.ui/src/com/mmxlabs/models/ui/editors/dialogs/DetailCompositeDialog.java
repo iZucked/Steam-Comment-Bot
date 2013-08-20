@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
@@ -128,7 +127,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private TableViewer selectionViewer;
 
-	private DialogEcoreCopier dialogEcoreCopier = new DialogEcoreCopier();
+	private final DialogEcoreCopier dialogEcoreCopier = new DialogEcoreCopier();
 
 	/**
 	 * Contains elements which have been removed from {@link #inputs}, which will be deleted if the dialog is OKed.
@@ -139,8 +138,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 * Contains elements which have been added (these will actually be added into the model, so they must be deleted on cancel)
 	 */
 	private final List<EObject> addedInputs = new ArrayList<EObject>();
-
-	private Text errorText;
 
 	private CopyDialogToClipboard copyDialogToClipboardEditorWrapper;
 
@@ -236,9 +233,9 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 *            - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
 	 * @since 6.0
 	 */
-	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, int style) {
+	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, final int style) {
 		this(parentShell, commandHandler);
-		int currentStyle = getShellStyle();
+		final int currentStyle = getShellStyle();
 		setShellStyle(currentStyle & style);
 	}
 
@@ -334,11 +331,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			// TODO display a message?
 			return;
 		}
-		if (errorText != null) {
-			errorText.dispose();
-			errorText = null;
-		}
-
 		final EObject selection = inputs.get(selectedObjectIndex);
 
 		getShell().setText("Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " + (1 + selectedObjectIndex) + " of " + inputs.size());
@@ -372,17 +364,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		displayComposite.display(scenarioEditingLocation, rootObject, duplicate, ranges.get(selection), dbc);
-
-		if (false) {
-			errorText = new Text(dialogArea, SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
-			{
-				final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
-				gd.heightHint = 0;
-				errorText.setLayoutData(gd);
-			}
-			errorText.setEditable(false);
-			errorText.setVisible(false);
-		}
 
 		getShell().layout(true, true);
 
@@ -866,40 +847,24 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		final IStatus status = dialogValidationSupport.validate();
 
 		if (status.isOK()) {
-			if (errorText != null) {
-				errorText.setText("");
-				errorText.setVisible(false);
-				((GridData) errorText.getLayoutData()).heightHint = 0;
-				getContents().pack();
-				resizeAndCenter();
-			}
-
 			managedForm.getForm().setMessage(null, IMessageProvider.NONE);
 		} else {
-
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			processMessages(sb, status);
 
 			managedForm.getForm().setMessage(sb.toString().trim(), convertType(status.getSeverity()));
-			if (errorText != null) {
-				errorText.setText(sb.toString());
-				errorText.setVisible(true);
-				((GridData) errorText.getLayoutData()).heightHint = 50;
-				getContents().pack();
-				resizeAndCenter();
-			}
 		}
 
 		if (displayComposite != null) {
 			displayComposite.displayValidationStatus(status);
 		}
 
-		checkButtonEnablement(true);//!status.matches(IStatus.ERROR));
+		checkButtonEnablement(true);// !status.matches(IStatus.ERROR));
 	}
 
-	private void processMessages(StringBuilder sb, IStatus status) {
+	private void processMessages(final StringBuilder sb, final IStatus status) {
 		if (status.isMultiStatus()) {
-			for (IStatus s : status.getChildren()) {
+			for (final IStatus s : status.getChildren()) {
 				processMessages(sb, s);
 			}
 		} else {
