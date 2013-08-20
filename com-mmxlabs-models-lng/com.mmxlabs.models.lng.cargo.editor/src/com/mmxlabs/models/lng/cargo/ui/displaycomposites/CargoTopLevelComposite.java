@@ -108,7 +108,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Additional Group for the bottom section
 //		final Group g2 = new Group(this, SWT.NONE);
-		toolkit.adapt(g2);
+//		toolkit.adapt(g2);
 		// g2.setText(EditorUtils.unmangle(eClass.getName()));
 //		g2.setLayout(new FillLayout());
 //		g2.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
