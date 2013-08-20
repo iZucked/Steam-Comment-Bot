@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
  * </ul>
  * </p>
  *
@@ -41,6 +42,17 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 	 * @ordered
 	 */
 	protected GroupProfitAndLoss groupProfitAndLoss;
+
+	/**
+	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @see #getGroupProfitAndLossNoTimeCharter()
+	 * @generated
+	 * @ordered
+	 */
+	protected GroupProfitAndLoss groupProfitAndLossNoTimeCharter;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,6 +118,52 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GroupProfitAndLoss getGroupProfitAndLossNoTimeCharter() {
+		return groupProfitAndLossNoTimeCharter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter, NotificationChain msgs) {
+		GroupProfitAndLoss oldGroupProfitAndLossNoTimeCharter = groupProfitAndLossNoTimeCharter;
+		groupProfitAndLossNoTimeCharter = newGroupProfitAndLossNoTimeCharter;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, oldGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter) {
+		if (newGroupProfitAndLossNoTimeCharter != groupProfitAndLossNoTimeCharter) {
+			NotificationChain msgs = null;
+			if (groupProfitAndLossNoTimeCharter != null)
+				msgs = ((InternalEObject)groupProfitAndLossNoTimeCharter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
+			if (newGroupProfitAndLossNoTimeCharter != null)
+				msgs = ((InternalEObject)newGroupProfitAndLossNoTimeCharter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
+			msgs = basicSetGroupProfitAndLossNoTimeCharter(newGroupProfitAndLossNoTimeCharter, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, newGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -114,6 +172,8 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 		switch (featureID) {
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS:
 				return basicSetGroupProfitAndLoss(null, msgs);
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return basicSetGroupProfitAndLossNoTimeCharter(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -128,6 +188,8 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 		switch (featureID) {
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return getGroupProfitAndLossNoTimeCharter();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -142,6 +204,9 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 		switch (featureID) {
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
+				return;
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -158,6 +223,9 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -172,6 +240,8 @@ public class ProfitAndLossContainerImpl extends EObjectImpl implements ProfitAnd
 		switch (featureID) {
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return groupProfitAndLossNoTimeCharter != null;
 		}
 		return super.eIsSet(featureID);
 	}

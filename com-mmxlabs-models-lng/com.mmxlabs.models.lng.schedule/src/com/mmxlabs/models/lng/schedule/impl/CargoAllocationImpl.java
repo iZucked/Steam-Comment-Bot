@@ -34,6 +34,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getInputCargo <em>Input Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getEvents <em>Events</em>}</li>
@@ -54,6 +55,17 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @ordered
 	 */
 	protected GroupProfitAndLoss groupProfitAndLoss;
+
+	/**
+	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @see #getGroupProfitAndLossNoTimeCharter()
+	 * @generated
+	 * @ordered
+	 */
+	protected GroupProfitAndLoss groupProfitAndLossNoTimeCharter;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocations() <em>Slot Allocations</em>}' reference list.
@@ -178,6 +190,52 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS, newGroupProfitAndLoss, newGroupProfitAndLoss));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GroupProfitAndLoss getGroupProfitAndLossNoTimeCharter() {
+		return groupProfitAndLossNoTimeCharter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter, NotificationChain msgs) {
+		GroupProfitAndLoss oldGroupProfitAndLossNoTimeCharter = groupProfitAndLossNoTimeCharter;
+		groupProfitAndLossNoTimeCharter = newGroupProfitAndLossNoTimeCharter;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, oldGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter) {
+		if (newGroupProfitAndLossNoTimeCharter != groupProfitAndLossNoTimeCharter) {
+			NotificationChain msgs = null;
+			if (groupProfitAndLossNoTimeCharter != null)
+				msgs = ((InternalEObject)groupProfitAndLossNoTimeCharter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
+			if (newGroupProfitAndLossNoTimeCharter != null)
+				msgs = ((InternalEObject)newGroupProfitAndLossNoTimeCharter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
+			msgs = basicSetGroupProfitAndLossNoTimeCharter(newGroupProfitAndLossNoTimeCharter, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, newGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter));
 	}
 
 	/**
@@ -374,6 +432,8 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:
 				return basicSetGroupProfitAndLoss(null, msgs);
+			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return basicSetGroupProfitAndLossNoTimeCharter(null, msgs);
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				return ((InternalEList<?>)getSlotAllocations()).basicRemove(otherEnd, msgs);
 		}
@@ -390,6 +450,8 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
+			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return getGroupProfitAndLossNoTimeCharter();
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				return getSlotAllocations();
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
@@ -415,6 +477,9 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
@@ -445,6 +510,9 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
+				return;
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
 				return;
@@ -471,6 +539,8 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
+			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+				return groupProfitAndLossNoTimeCharter != null;
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				return slotAllocations != null && !slotAllocations.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
@@ -493,6 +563,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
+				case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 				default: return -1;
 			}
 		}
@@ -509,6 +580,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS;
+				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 				default: return -1;
 			}
 		}

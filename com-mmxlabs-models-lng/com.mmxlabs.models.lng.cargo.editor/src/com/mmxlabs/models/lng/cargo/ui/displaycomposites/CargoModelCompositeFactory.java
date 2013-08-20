@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -52,16 +52,16 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 		if (value instanceof Cargo) {
 			final Cargo cargo = (Cargo) value;
 
-			Set<Slot> slots = new HashSet<Slot>();
-			for (Slot slot : cargo.getSlots()) {
+			final Set<Slot> slots = new LinkedHashSet<Slot>();
+			for (final Slot slot : cargo.getSortedSlots()) {
 				slots.add(slot);
 				if (slot instanceof LoadSlot) {
-					LoadSlot loadSlot = (LoadSlot) slot;
+					final LoadSlot loadSlot = (LoadSlot) slot;
 					if (loadSlot.getTransferFrom() != null) {
 						slots.add(loadSlot.getTransferFrom());
 					}
 				} else if (slot instanceof DischargeSlot) {
-					DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					if (dischargeSlot.getTransferTo() != null) {
 						slots.add(dischargeSlot.getTransferTo());
 					}
