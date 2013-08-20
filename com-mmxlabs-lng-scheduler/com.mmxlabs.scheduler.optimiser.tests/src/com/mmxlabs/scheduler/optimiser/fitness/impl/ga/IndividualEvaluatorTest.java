@@ -39,7 +39,6 @@ import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvide
 import com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
