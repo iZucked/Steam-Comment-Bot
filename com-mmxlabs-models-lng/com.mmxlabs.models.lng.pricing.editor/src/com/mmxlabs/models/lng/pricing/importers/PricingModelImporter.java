@@ -48,7 +48,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
 	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
 	/**
-	 * @since 5.1
+	 * @since 5.0
 	 */
 	public static final String BASEFUEL_PRICING_KEY = "BF_PRICING";
 	public static final String PORT_COSTS_KEY = "PORT_COSTS";

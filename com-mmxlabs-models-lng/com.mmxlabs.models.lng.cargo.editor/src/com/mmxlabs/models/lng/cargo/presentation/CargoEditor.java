@@ -171,7 +171,7 @@ public class CargoEditor
 	/**
 	 * This is the property sheet page.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

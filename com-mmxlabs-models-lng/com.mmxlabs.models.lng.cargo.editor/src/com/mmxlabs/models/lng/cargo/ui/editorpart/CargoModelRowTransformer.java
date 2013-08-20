@@ -40,7 +40,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * wiring, colour information for terminal and wiring colouring.
  * 
  * @author Simon Goodall
- * @since 5.0
+ * @since 3.0
  * 
  */
 public class CargoModelRowTransformer {
@@ -51,7 +51,7 @@ public class CargoModelRowTransformer {
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	/**
-	 * @since 5.1
+	 * @since 5.0
 	 */
 	public RootData transform(final AssignmentModel assignmentModel, final CargoModel cargoModel, final ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo,
 			final RootData existingData) {
@@ -68,7 +68,7 @@ public class CargoModelRowTransformer {
 	 * @param allDischargeSlots
 	 * @param validationInfo
 	 * @return
-	 * @since 5.1
+	 * @since 5.0
 	 */
 	public RootData transform(final AssignmentModel assignmentModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots,
 			final Schedule schedule, final Map<Object, IStatus> validationInfo, final RootData existingWiring) {
@@ -658,7 +658,7 @@ public class CargoModelRowTransformer {
 		}
 
 		/**
-		 * @since 5.1
+		 * @since 5.0
 		 */
 		public WireData addShipToShipWire(final Slot slot) {
 			// and add a wire to the group, showing the ship-to-ship transfer
@@ -902,11 +902,11 @@ public class CargoModelRowTransformer {
 		LOAD_OR_DISCHARGE,
 
 		/**
-		 * @since 5.1
+		 * @since 5.0
 		 */
 		MARKET_ALLOCATION,
 		/**
-		 * @since 5.1
+		 * @since 5.0
 		 */
 		CARGO_OR_MARKET_ALLOCATION
 	}

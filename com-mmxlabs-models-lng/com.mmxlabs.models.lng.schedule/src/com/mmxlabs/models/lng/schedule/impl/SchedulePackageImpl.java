@@ -407,7 +407,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -955,7 +955,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -965,7 +965,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -975,7 +975,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -985,7 +985,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -995,7 +995,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1005,7 +1005,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1051,7 +1051,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -39,7 +39,7 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * Custom import logic for loading a {@link CharterIndex}.
  * 
  * @author Simon Goodall, hinton
- * @since 5.1
+ * @since 5.0
  * 
  */
 public class CharterIndexImporter implements IClassImporter {

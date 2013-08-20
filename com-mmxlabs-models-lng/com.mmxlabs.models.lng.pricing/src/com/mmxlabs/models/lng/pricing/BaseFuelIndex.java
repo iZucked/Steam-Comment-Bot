@@ -10,7 +10,7 @@ package com.mmxlabs.models.lng.pricing;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Base Fuel Index</b></em>'.
- * @since 5.1
+ * @since 5.0
  * <!-- end-user-doc -->
  *
  *
@@ -22,10 +22,12 @@ public interface BaseFuelIndex extends NamedIndexContainer<Double> {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
 	 */
+	@Deprecated
 	double getPrice();
 
 } // BaseFuelIndex

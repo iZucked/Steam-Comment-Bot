@@ -22,7 +22,7 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Charter Index</b></em>'.
- * @since 5.1
+ * @since 5.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

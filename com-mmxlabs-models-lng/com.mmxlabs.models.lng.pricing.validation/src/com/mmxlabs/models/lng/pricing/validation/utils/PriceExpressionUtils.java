@@ -114,7 +114,7 @@ public class PriceExpressionUtils {
 	}
 
 	/**
-	 * @since 5.1
+	 * @since 5.0
 	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
 			final Double maxValue, final Date date, final List<IStatus> failures) {
@@ -153,7 +153,7 @@ public class PriceExpressionUtils {
 	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
-	 * @since 5.1
+	 * @since 5.0
 	 */
 	@SuppressWarnings("rawtypes")
 	public static SeriesParser getParser(Date dateZero) {

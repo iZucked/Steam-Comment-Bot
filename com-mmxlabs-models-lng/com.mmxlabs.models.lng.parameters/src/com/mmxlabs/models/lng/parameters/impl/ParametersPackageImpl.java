@@ -256,7 +256,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -267,7 +267,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

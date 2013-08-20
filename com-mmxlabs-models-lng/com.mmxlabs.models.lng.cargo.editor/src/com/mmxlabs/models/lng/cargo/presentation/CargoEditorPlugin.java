@@ -59,12 +59,12 @@ public final class CargoEditorPlugin extends EMFPlugin {
 	public static final String IMAGE_CARGO_SWAP_DISABLED = "cargo.swap.disabled";
 
 	/**
-	 * @since 5.1
+	 * @since 5.0
 	 */
 	public static final String IMAGE_CARGO_WIRING = "cargo.wiring";
 
 	/**
-	 * @since 5.1
+	 * @since 5.0
 	 */
 	public static final String IMAGE_CARGO_WIRING_DISABLED = "cargo.wiring.disabled";
 

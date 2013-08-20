@@ -39,6 +39,16 @@ import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for Sequence instances
@@ -89,7 +99,6 @@ public class SequenceComponentHelper extends BaseComponentHelper {
 		add_vesselAvailabilityEditor(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_fitnessesEditor(detailComposite, topClass);
-		add_dailyHireRateEditor(detailComposite, topClass);
 		add_spotIndexEditor(detailComposite, topClass);
 		add_sequenceTypeEditor(detailComposite, topClass);
 	}
@@ -126,15 +135,6 @@ public class SequenceComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_fitnessesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__FITNESSES));
-	}
-
-	/**
-	 * Create the editor for the dailyHireRate feature on Sequence
-	 *
-	 * @generated
-	 */
-	protected void add_dailyHireRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__DAILY_HIRE_RATE));
 	}
 
 	/**

@@ -88,7 +88,7 @@ public interface BaseFuelCost extends MMXObject {
 	 * If the meaning of the '<em>Index</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Index</em>' reference.
 	 * @see #setIndex(BaseFuelIndex)
@@ -101,7 +101,7 @@ public interface BaseFuelCost extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Index</em>' reference.
 	 * @see #getIndex()

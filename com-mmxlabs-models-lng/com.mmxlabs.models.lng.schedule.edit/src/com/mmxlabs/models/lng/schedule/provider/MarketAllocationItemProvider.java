@@ -30,7 +30,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.MarketAllocation} object.
  * <!-- begin-user-doc -->
- * @since 5.1
+ * @since 5.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -249,6 +249,29 @@ public class MarketAllocationItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.MARKET_ALLOCATION__SLOT_VISIT,
 				 ScheduleFactory.eINSTANCE.createSlotVisit()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS ||
+			childFeature == SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

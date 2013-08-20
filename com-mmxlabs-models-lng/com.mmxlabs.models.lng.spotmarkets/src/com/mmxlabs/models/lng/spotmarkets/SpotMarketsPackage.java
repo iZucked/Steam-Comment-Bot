@@ -537,7 +537,7 @@ public interface SpotMarketsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Market Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -647,7 +647,7 @@ public interface SpotMarketsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Market Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -748,7 +748,7 @@ public interface SpotMarketsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Origin Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1095,7 +1095,7 @@ public interface SpotMarketsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getMarketPorts <em>Market Ports</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Market Ports</em>'.
 	 * @see com.mmxlabs.models.lng.spotmarkets.DESSalesMarket#getMarketPorts()
@@ -1139,7 +1139,7 @@ public interface SpotMarketsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getMarketPorts <em>Market Ports</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Market Ports</em>'.
 	 * @see com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getMarketPorts()
@@ -1173,7 +1173,7 @@ public interface SpotMarketsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket#getOriginPorts <em>Origin Ports</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Origin Ports</em>'.
 	 * @see com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket#getOriginPorts()
@@ -1469,7 +1469,7 @@ public interface SpotMarketsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Market Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.1
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1504,7 +1504,7 @@ public interface SpotMarketsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Market Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.1
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1531,7 +1531,7 @@ public interface SpotMarketsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Origin Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.1
+		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

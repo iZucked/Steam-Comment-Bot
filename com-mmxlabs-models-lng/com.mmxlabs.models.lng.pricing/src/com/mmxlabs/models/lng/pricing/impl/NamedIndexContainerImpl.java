@@ -22,7 +22,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Named Index Container</b></em>'.
- * @since 5.1
+ * @since 5.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

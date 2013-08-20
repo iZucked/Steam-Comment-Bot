@@ -77,7 +77,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 	/**
 	 * The cached value of the '{@link #getVias() <em>Vias</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getVias()
 	 * @generated
@@ -203,7 +203,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -216,7 +216,7 @@ public class RouteLineImpl extends MMXObjectImpl implements RouteLine {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */

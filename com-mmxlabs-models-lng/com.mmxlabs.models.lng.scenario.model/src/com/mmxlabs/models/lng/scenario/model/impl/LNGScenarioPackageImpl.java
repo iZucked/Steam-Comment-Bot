@@ -243,7 +243,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

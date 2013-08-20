@@ -348,7 +348,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Pricing Date feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -371,7 +371,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Notes feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.1
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

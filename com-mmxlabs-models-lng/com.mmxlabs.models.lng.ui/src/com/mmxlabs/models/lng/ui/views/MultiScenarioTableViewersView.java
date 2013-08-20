@@ -34,7 +34,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * Generalises ScenarioTableViewerView to allow multiple panes.
  * 
  * @author Simon McGregor
- * @since 5.1
+ * @since 5.0
  */
 public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView {
 	private Composite childComposite;
