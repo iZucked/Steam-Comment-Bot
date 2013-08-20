@@ -55,7 +55,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	private Composite middle;
 	/**
 	 * {@link IDisplayComposite} to contain elements for the bottom of the editor
-	 * @param toolkit 
+	 * 
+	 * @param toolkit
 	 */
 //	protected IDisplayComposite bottomLevel = null;
 
@@ -97,7 +98,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.setEditorWrapper(editorWrapper);
 
 		// Initialise middle composite
-		middle = new Composite(this, SWT.NONE);
+		middle = toolkit.createComposite(this);
 
 		createChildComposites(root, object, eClass, middle);
 		// We know there are n slots, so n columns
@@ -107,6 +108,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		// Additional Group for the bottom section
 //		final Group g2 = new Group(this, SWT.NONE);
+//		toolkit.adapt(g2);
 		// g2.setText(EditorUtils.unmangle(eClass.getName()));
 //		g2.setLayout(new FillLayout());
 //		g2.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -180,7 +182,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 			g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
 			toolkit.adapt(g2);
 
-			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(), location , toolkit);
+			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass())
+					.createSublevelComposite(g2, value.eClass(), location, toolkit);
 
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);

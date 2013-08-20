@@ -31,7 +31,7 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	public void addInlineEditor(final IInlineEditor editor) {
+	public IInlineEditor addInlineEditor(final IInlineEditor editor) {
 
 		// By default all elements are in the main tab
 		boolean mainTabElement = true;
@@ -59,9 +59,10 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 
 		// Do not add elements if they are for the wrong section.
 		if (mainTab != mainTabElement) {
-			return;
+			// Rejected...
+			return null;
 		}
 
-		super.addInlineEditor(editor);
+		return super.addInlineEditor(editor);
 	}
 }

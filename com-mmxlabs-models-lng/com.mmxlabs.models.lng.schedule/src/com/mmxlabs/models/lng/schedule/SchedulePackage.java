@@ -506,6 +506,16 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -513,7 +523,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
@@ -522,7 +532,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -532,7 +542,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -541,7 +551,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -550,7 +560,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -671,6 +681,16 @@ public interface SchedulePackage extends EPackage {
 	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = 1;
+
+	/**
 	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -678,7 +698,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = 1;
+	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Profit And Loss Container</em>' class.
@@ -710,6 +730,16 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKET_ALLOCATION__GROUP_PROFIT_AND_LOSS = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -994,6 +1024,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Daily Hire Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1165,13 +1196,23 @@ public interface SchedulePackage extends EPackage {
 	int EVENT__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT__CHARTER_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1255,22 +1296,13 @@ public interface SchedulePackage extends EPackage {
 	int EVENT___NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT___GET_HIRE_COST = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
-
-	/**
 	 * The number of operations of the '<em>Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 7;
+	int EVENT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1336,6 +1368,16 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1374,13 +1416,23 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -1389,7 +1441,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1473,15 +1525,6 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT___NAME = EVENT___NAME;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1563,6 +1606,16 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1601,13 +1654,23 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -1616,7 +1679,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1700,15 +1763,6 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT___NAME = EVENT___NAME;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1788,6 +1842,16 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int JOURNEY__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -1944,15 +2008,6 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY___NAME = EVENT___NAME;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2032,6 +2087,16 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int IDLE__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2142,15 +2207,6 @@ public interface SchedulePackage extends EPackage {
 	int IDLE___NAME = EVENT___NAME;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2231,6 +2287,16 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_VISIT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -2343,15 +2409,6 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT___NAME = EVENT___NAME;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
 	 * The number of operations of the '<em>Port Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2422,6 +2479,16 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT_VISIT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2551,15 +2618,6 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_VISIT___NAME = EVENT___NAME;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2641,6 +2699,16 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -2670,13 +2738,23 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 3;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -2685,7 +2763,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2769,15 +2847,6 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT___NAME = EVENT___NAME;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
 	 * The number of operations of the '<em>Vessel Event Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2857,6 +2926,16 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -2867,6 +2946,16 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2874,7 +2963,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 1;
+	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
@@ -2884,7 +2973,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
+	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2969,15 +3058,6 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT___NAME = EVENT___NAME;
 
 	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
-
-	/**
 	 * The number of operations of the '<em>Generated Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3050,8 +3130,19 @@ public interface SchedulePackage extends EPackage {
 	int COOLDOWN__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3165,15 +3256,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int COOLDOWN___NAME = EVENT___NAME;
-
-	/**
-	 * The operation id for the '<em>Get Hire Cost</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_HIRE_COST = EVENT___GET_HIRE_COST;
 
 	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
@@ -3777,12 +3859,14 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate <em>Daily Hire Rate</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Daily Hire Rate</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate()
 	 * @see #getSequence()
 	 * @generated
 	 */
+	@Deprecated
 	EAttribute getSequence_DailyHireRate();
 
 	/**
@@ -3925,6 +4009,18 @@ public interface SchedulePackage extends EPackage {
 	EReference getEvent_Sequence();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Event#getCharterCost <em>Charter Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Cost</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Event#getCharterCost()
+	 * @see #getEvent()
+	 * @generated
+	 */
+	EAttribute getEvent_CharterCost();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#getDuration() <em>Get Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3973,16 +4069,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getEvent__Name();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#getHireCost() <em>Get Hire Cost</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Hire Cost</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.Event#getHireCost()
-	 * @generated
-	 */
-	EOperation getEvent__GetHireCost();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotVisit <em>Slot Visit</em>}'.
@@ -4741,6 +4827,18 @@ public interface SchedulePackage extends EPackage {
 	EReference getProfitAndLossContainer_GroupProfitAndLoss();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 6.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Group Profit And Loss No Time Charter</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLossNoTimeCharter()
+	 * @see #getProfitAndLossContainer()
+	 * @generated
+	 */
+	EReference getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss <em>Group Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -5039,9 +5137,11 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Daily Hire Rate</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @deprecated
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
+		@Deprecated
 		EAttribute SEQUENCE__DAILY_HIRE_RATE = eINSTANCE.getSequence_DailyHireRate();
 
 		/**
@@ -5152,6 +5252,15 @@ public interface SchedulePackage extends EPackage {
 		EReference EVENT__SEQUENCE = eINSTANCE.getEvent_Sequence();
 
 		/**
+		 * The meta object literal for the '<em><b>Charter Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 6.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EVENT__CHARTER_COST = eINSTANCE.getEvent_CharterCost();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5190,14 +5299,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation EVENT___NAME = eINSTANCE.getEvent__Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Hire Cost</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EVENT___GET_HIRE_COST = eINSTANCE.getEvent__GetHireCost();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl <em>Slot Visit</em>}' class.
@@ -5808,6 +5909,15 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 6.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = eINSTANCE.getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
