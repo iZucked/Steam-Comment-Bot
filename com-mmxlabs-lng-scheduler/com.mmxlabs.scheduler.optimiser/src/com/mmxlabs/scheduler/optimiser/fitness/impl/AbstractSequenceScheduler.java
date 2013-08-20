@@ -43,7 +43,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -70,9 +69,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
 	@Inject
-	private IElementDurationProvider durationProvider;
-
-	@Inject
 	private IPortProvider portProvider;
 
 	@Inject
@@ -93,9 +89,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	@Inject
 	protected IRouteCostProvider routeCostProvider;
 
-	@Inject
-	private IReturnElementProvider returnElementProvider;
-	
 	public IRouteCostProvider getRouteCostProvider() {
 		return routeCostProvider;
 	}
