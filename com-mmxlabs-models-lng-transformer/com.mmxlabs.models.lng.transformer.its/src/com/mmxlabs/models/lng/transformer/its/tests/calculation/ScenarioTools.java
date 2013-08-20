@@ -760,7 +760,7 @@ public class ScenarioTools {
 		System.err.println("\tRoute: " + journey.getRoute().getName() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getDuration() + ", Speed: " + journey.getSpeed());
 		printFuel(journey.getFuels());
 		// FIXME: Update for API changes
-		System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getHireCost()));
+		System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getCharterCost()));
 	}
 
 	/**
@@ -850,8 +850,8 @@ public class ScenarioTools {
 					System.err.println("\tPort cost: " + sv.getPortCost());
 
 				}
-				if (sv.getHireCost() > 0) {
-					System.err.println("\tHire cost: " + sv.getHireCost());
+				if (sv.getCharterCost() > 0) {
+					System.err.println("\tHire cost: " + sv.getCharterCost());
 
 				}
 			} else if (e instanceof Cooldown) {
