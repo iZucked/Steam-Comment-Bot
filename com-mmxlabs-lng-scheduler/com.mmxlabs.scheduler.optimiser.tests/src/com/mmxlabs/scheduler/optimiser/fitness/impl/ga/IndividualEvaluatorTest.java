@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 
+@SuppressWarnings("deprecation")
 public class IndividualEvaluatorTest {
 
 	/**
