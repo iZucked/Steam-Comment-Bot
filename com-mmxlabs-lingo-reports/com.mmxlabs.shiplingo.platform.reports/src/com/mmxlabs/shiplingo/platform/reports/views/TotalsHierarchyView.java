@@ -363,7 +363,7 @@ public class TotalsHierarchyView extends ViewPart {
 			if (seq.isFleetVessel()) continue;
 			long acc = 0;
 			for (final Event e : seq.getEvents()) {
-				acc += e.getHireCost();
+				acc += e.getCharterCost();
 			}
 			charterCosts.addChild(new TreeData(seq.getName(), acc));
 		}
