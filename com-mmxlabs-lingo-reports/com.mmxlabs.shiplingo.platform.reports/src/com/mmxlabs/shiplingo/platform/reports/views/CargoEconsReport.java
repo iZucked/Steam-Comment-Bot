@@ -824,7 +824,7 @@ public class CargoEconsReport extends ViewPart {
 	 * @return
 	 * @since 4.4
 	 */
-	protected static Integer getPNLValueNoTC(final ProfitAndLossContainer container) {
+	private static Integer getPNLValueNoTC(final ProfitAndLossContainer container) {
 		if (container == null) {
 			return null;
 		}
