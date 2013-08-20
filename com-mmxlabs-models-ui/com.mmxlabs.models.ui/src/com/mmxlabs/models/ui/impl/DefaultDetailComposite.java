@@ -53,6 +53,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	public DefaultDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
 		this.toolkit = toolkit;
+		toolkit.adapt(this);
 	}
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
@@ -154,6 +155,9 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		this.layoutProvider = layoutProvider;
 	}
 
+	/**
+	 * @since 6.1
+	 */
 	protected Control createLabelledEditorControl(MMXRootObject root, EObject object, Composite c, IInlineEditor editor, EMFDataBindingContext dbc) {
 		final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(c, SWT.NONE) : null;
 		if (label != null) label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
