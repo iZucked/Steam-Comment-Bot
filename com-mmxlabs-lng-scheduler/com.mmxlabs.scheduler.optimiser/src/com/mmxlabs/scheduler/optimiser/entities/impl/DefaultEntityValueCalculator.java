@@ -44,7 +44,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
-	private static final boolean includeTimeCharterInFitness = false;
+	private static final boolean includeTimeCharterInFitness = true;
 
 	@Inject
 	private IEntityProvider entityProvider;
@@ -185,6 +185,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return value;
 	}
 
+	/**
+	 * @since 7.0
+	 */
 	@Override
 	public long getShippingCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final boolean includeTimeCharterCosts, final int vesselStartTime, final IDetailTree[] detailsRef) {
 
