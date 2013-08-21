@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.awt.MultipleGradientPaint.ColorSpaceType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -555,11 +554,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final ActionContributionItem filter = filterField.getContribution();
 
 		toolbar.appendToGroup(VIEW_GROUP, filter);
-		{
-			final Action addAction = new AddAction("Add");
-			addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
-		}
+
+		final Action addAction = new AddAction("Add");
+		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
 		// add extension points to toolbar
 		{
@@ -584,7 +582,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			if (dupAction != null) {
 				toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
 			}
-
 		}
 		deleteAction = createDeleteAction();
 		if (deleteAction != null) {
