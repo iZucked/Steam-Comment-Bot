@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -27,25 +28,28 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -66,6 +70,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
+import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -104,6 +109,9 @@ public class CreateStripDialog extends FormDialog {
 	private Text pattern_n;
 	private ComboViewer pattern;
 	private Text pattern_quantity;
+
+	private DialogValidationSupport validationSupport;
+	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
 	private enum Patterns {
 		MONTHLY, N_PER_YEAR, EVERY_N_DAYS
@@ -226,6 +234,8 @@ public class CreateStripDialog extends FormDialog {
 
 		final Composite body = mform.getForm().getBody();
 		body.setLayout(new GridLayout(1, false));
+
+		validationSupport = new DialogValidationSupport(scenarioEditingLocation.getExtraValidationContext());
 
 		{
 			final Composite patternComposite = toolkit.createComposite(body);
@@ -366,7 +376,9 @@ public class CreateStripDialog extends FormDialog {
 		// Preview Table with generated options
 		{
 			previewWiewer = new GridTableViewer(body);
-			previewWiewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			previewWiewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+			// Enable tooltip support
+			ColumnViewerToolTipSupport.enableFor(previewWiewer);
 
 			previewWiewer.getGrid().setHeaderVisible(true);
 
@@ -402,21 +414,7 @@ public class CreateStripDialog extends FormDialog {
 
 	private void createColumn(final GridTableViewer viewer, final EStructuralFeature feature) {
 		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
-		col.setLabelProvider(new CellLabelProvider() {
-
-			@Override
-			public void update(final ViewerCell cell) {
-				Object element = cell.getElement();
-				if (element instanceof EObject) {
-					element = ((EObject) element).eGet(feature);
-				}
-				if (element instanceof NamedObject) {
-					cell.setText(((NamedObject) element).getName());
-				} else if (element != null) {
-					cell.setText(element.toString());
-				}
-			}
-		});
+		col.setLabelProvider(new ValidationLabelProvider(feature));
 		col.getColumn().setWidth(50);
 		col.getColumn().setText(feature.getName());
 	}
@@ -519,8 +517,15 @@ public class CreateStripDialog extends FormDialog {
 
 		}
 
-		return objects;
+		// Run validation
+		validationSupport.setValidationTargets(objects);
+		scenarioEditingLocation.pushExtraValidationContext(validationSupport.getValidationContext());
+		final IStatus status = validationSupport.validate();
+		validationErrors.clear();
+		validationSupport.processStatus(status, validationErrors);
+		scenarioEditingLocation.popExtraValidationContext();
 
+		return objects;
 	}
 
 	public Command createStrip(final CargoModel cargoModel, final EditingDomain domain) {
@@ -592,12 +597,12 @@ public class CreateStripDialog extends FormDialog {
 
 			@Override
 			public void pushExtraValidationContext(final IExtraValidationContext context) {
-
+				original.pushExtraValidationContext(context);
 			}
 
 			@Override
 			public void popExtraValidationContext() {
-
+				original.popExtraValidationContext();
 			}
 
 			@Override
@@ -607,7 +612,7 @@ public class CreateStripDialog extends FormDialog {
 
 			@Override
 			public IStatusProvider getStatusProvider() {
-				return null;
+				return original.getStatusProvider();
 			}
 
 			@Override
@@ -632,7 +637,7 @@ public class CreateStripDialog extends FormDialog {
 
 			@Override
 			public IExtraValidationContext getExtraValidationContext() {
-				return null;
+				return original.getExtraValidationContext();
 			}
 
 			@Override
@@ -655,6 +660,75 @@ public class CreateStripDialog extends FormDialog {
 				return original.getAdapterFactory();
 			}
 		};
+	}
 
+	private class ValidationLabelProvider extends ColumnLabelProvider {
+
+		private final Color errorColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+		private final Color warningColour = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
+
+		private final EStructuralFeature feature;
+
+		protected ValidationLabelProvider(final EStructuralFeature feature) {
+			this.feature = feature;
+		}
+
+		@Override
+		public Color getBackground(final Object element) {
+			if (validationErrors.containsKey(element)) {
+				final IStatus s = validationErrors.get(element);
+				if (s.getSeverity() == IStatus.ERROR) {
+					return errorColour;
+				} else if (s.getSeverity() == IStatus.WARNING) {
+					return warningColour;
+				}
+			}
+
+			return super.getBackground(element);
+		}
+
+		@Override
+		public String getText(Object element) {
+
+			if (element instanceof EObject) {
+				element = ((EObject) element).eGet(feature);
+			}
+			if (element instanceof NamedObject) {
+				return ((NamedObject) element).getName();
+			} else if (element != null) {
+				return element.toString();
+			}
+			return super.getText(element);
+		}
+
+		@Override
+		public String getToolTipText(final Object element) {
+			if (validationErrors.containsKey(element)) {
+				final IStatus s = validationErrors.get(element);
+				if (!s.isOK()) {
+					return getMessages(s);
+				}
+			}
+			return super.getToolTipText(element);
+		}
+
+		/**
+		 * Extract message hierarchy and construct the tool tip message.
+		 * 
+		 * @param status
+		 * @return
+		 */
+		private String getMessages(final IStatus status) {
+			if (status.isMultiStatus()) {
+				final StringBuilder sb = new StringBuilder();
+				for (final IStatus s : status.getChildren()) {
+					sb.append(getMessages(s));
+					sb.append("\n");
+				}
+				return sb.toString();
+			} else {
+				return status.getMessage();
+			}
+		}
 	}
 }
