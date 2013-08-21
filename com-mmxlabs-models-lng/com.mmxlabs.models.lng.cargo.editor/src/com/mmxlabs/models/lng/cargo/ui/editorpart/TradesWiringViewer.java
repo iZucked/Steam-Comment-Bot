@@ -41,6 +41,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -113,6 +114,9 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.ui.ImageConstants;
+import com.mmxlabs.models.lng.ui.LngUIActivator;
+import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -1279,11 +1283,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			{
-				final Action stripMenuAction = new CreateStripMenuAction("Strip");
-				addActionToMenu(stripMenuAction, menu);
-			}
-
-			{
 				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo");
 				addActionToMenu(newComplexCargo, menu);
 			}
@@ -1478,12 +1477,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 	}
 
-	private class CreateStripMenuAction extends Action implements IMenuCreator {
+	private class CreateDuplicateMenuAction extends Action implements IMenuCreator {
 
 		private Menu lastMenu;
 
-		public CreateStripMenuAction(final String label) {
+		public CreateDuplicateMenuAction(final String label) {
 			super(label, IAction.AS_DROP_DOWN_MENU);
+			setImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE));
+			setDisabledImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE_DISABLED));
 		}
 
 		@Override
@@ -1523,6 +1524,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
+
+			final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
+			// TODO: Translate into real objects, not just row object!
+			result.selectionChanged(new SelectionChangedEvent(scenarioViewer, scenarioViewer.getSelection()));
+			addActionToMenu(result, menu);
 
 			for (final CreateStripDialog.StripType stripType : CreateStripDialog.StripType.values()) {
 				final Action stripAction = new CreateStripAction(stripType.toString(), stripType);
@@ -1608,5 +1614,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				editorLock.release();
 			}
 		}
+	}
+
+	/**
+	 * Return an action which duplicates the selection
+	 * 
+	 * @return
+	 */
+	protected Action createDuplicateAction() {
+		return new CreateDuplicateMenuAction("Duplicate");
 	}
 }
