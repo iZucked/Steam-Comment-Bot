@@ -174,6 +174,10 @@ public class CreateStripDialog extends FormDialog {
 				if (f == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()) {
 					continue;
 				}
+				// skip cargo ref
+				if (f == CargoPackage.eINSTANCE.getSlot_Cargo()) {
+					continue;
+				}
 				// Skip many - how do we handle it?
 				if (f.isMany()) {
 					continue;
