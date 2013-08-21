@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -49,6 +50,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -346,7 +348,7 @@ public class CreateStripDialog extends FormDialog {
 			// Slot ? - ID prefix Port Contract, Price Expr, Date
 			// Advanced ( CV, volumes, etc)
 			final Group template = new Group(body, SWT.NONE);
-			template.setLayout(new GridLayout(1, false));
+			template.setLayout(new GridLayout(2, false));
 			template.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 			template.setText("Template");
@@ -355,19 +357,23 @@ public class CreateStripDialog extends FormDialog {
 			features = Lists.newArrayList(MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoPackage.eINSTANCE.getSlot_Contract(), CargoPackage.eINSTANCE.getSlot_PriceExpression(),
 					CargoPackage.eINSTANCE.getSlot_Port(), CargoPackage.eINSTANCE.getSlot_WindowStart());
 			editorMap = new HashMap<EStructuralFeature, IInlineEditor>();
+
+			final GridData labelDataTemplate = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+			final GridData editorDataTemplate = new GridData(SWT.FILL, SWT.CENTER, true, false);
+
 			for (final EStructuralFeature feature : features) {
 
-				final Composite editorRow = toolkit.createComposite(template);
-				editorRow.setLayout(new GridLayout(2, false));
-
-				final Label lbl = toolkit.createLabel(editorRow, "");
+				final Label lbl = toolkit.createLabel(template, "");
+				lbl.setLayoutData(GridDataFactory.copyData(labelDataTemplate));
 
 				final IInlineEditorFactory factory = Activator.getDefault().getEditorFactoryRegistry().getEditorFactory(referenceClass, feature);
 				final IInlineEditor editor = factory.createEditor(referenceClass, feature);
 				editor.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
-				editor.createControl(editorRow, dbc, toolkit);
 				editor.setLabel(lbl);
 				editorMap.put(feature, editor);
+
+				final Control control = editor.createControl(template, dbc, toolkit);
+				control.setLayoutData(GridDataFactory.copyData(editorDataTemplate));
 
 				// Copied object from selection
 				editor.display(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), sample, null);
