@@ -27,7 +27,6 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -50,17 +49,14 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -70,8 +66,8 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
-import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
+import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -102,8 +98,8 @@ public class CreateStripDialog extends FormDialog {
 	// TODO: Derive from type
 	private List<EObject> generatedObjects;
 	private GridTableViewer previewWiewer;
-	private List<EStructuralFeature> features;
-	private Map<EStructuralFeature, IInlineEditor> editorMap;
+	// private List<EStructuralFeature> features;
+	// private Map<EStructuralFeature, IInlineEditor> editorMap;
 	private final StripType stripType;
 	private EClass referenceClass;
 
@@ -166,6 +162,14 @@ public class CreateStripDialog extends FormDialog {
 		default:
 			break;
 		}
+
+		// Set a default window start
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		sample.eSet(CargoPackage.eINSTANCE.getSlot_WindowStart(), cal.getTime());
 
 		// Copy valid features across
 		if (selectedObject != null) {
@@ -362,8 +366,6 @@ public class CreateStripDialog extends FormDialog {
 		}
 		{
 			// Template - take defaults from current selection
-			// Slot ? - ID prefix Port Contract, Price Expr, Date
-			// Advanced ( CV, volumes, etc)
 			final Group template = new Group(body, SWT.NONE);
 			template.setLayout(new GridLayout(2, false));
 			template.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -371,30 +373,10 @@ public class CreateStripDialog extends FormDialog {
 			template.setText("Template");
 			toolkit.adapt(template);
 
-			features = Lists.newArrayList(MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoPackage.eINSTANCE.getSlot_Contract(), CargoPackage.eINSTANCE.getSlot_PriceExpression(),
-					CargoPackage.eINSTANCE.getSlot_Port(), CargoPackage.eINSTANCE.getSlot_WindowStart());
-			editorMap = new HashMap<EStructuralFeature, IInlineEditor>();
-
-			final GridData labelDataTemplate = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-			final GridData editorDataTemplate = new GridData(SWT.FILL, SWT.CENTER, true, false);
-
-			for (final EStructuralFeature feature : features) {
-
-				final Label lbl = toolkit.createLabel(template, "");
-				lbl.setLayoutData(GridDataFactory.copyData(labelDataTemplate));
-
-				final IInlineEditorFactory factory = Activator.getDefault().getEditorFactoryRegistry().getEditorFactory(referenceClass, feature);
-				final IInlineEditor editor = factory.createEditor(referenceClass, feature);
-				editor.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
-				editor.setLabel(lbl);
-				editorMap.put(feature, editor);
-
-				final Control control = editor.createControl(template, dbc, toolkit);
-				control.setLayoutData(GridDataFactory.copyData(editorDataTemplate));
-
-				// Copied object from selection
-				editor.display(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), sample, null);
-			}
+			final IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(sample.eClass());
+			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), scenarioEditingLocation, toolkit);
+			templateDetailComposite.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
+			templateDetailComposite.display(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), sample, null, dbc);
 		}
 
 		// Preview Table with generated options
@@ -527,21 +509,20 @@ public class CreateStripDialog extends FormDialog {
 				eObj.eSet(CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), Boolean.TRUE);
 			}
 
-			for (final EStructuralFeature feature : features) {
-				final IInlineEditor editor = editorMap.get(feature);
-				if (editor != null) {
-					if (feature == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
-						final String name = (String) editor.getEditorTarget().eGet(feature);
-						eObj.eSet(feature, name + "-" + (counter++));
-					} else if (feature == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
-						eObj.eSet(feature, date);
+			for (final EStructuralFeature feature : sample.eClass().getEAllStructuralFeatures()) {
+				if (feature == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()) {
+					continue;
+				} else if (feature == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+					final String name = (String) sample.eGet(feature);
+					eObj.eSet(feature, name + "-" + (counter++));
+				} else if (feature == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
+					eObj.eSet(feature, date);
+				} else {
+					// Copy from template
+					if (sample.eIsSet(feature)) {
+						eObj.eSet(feature, sample.eGet(feature));
 					} else {
-						// Copy from template
-						if (editor.getEditorTarget().eIsSet(feature)) {
-							eObj.eSet(feature, editor.getEditorTarget().eGet(feature));
-						} else {
-							eObj.eUnset(feature);
-						}
+						eObj.eUnset(feature);
 					}
 				}
 			}
