@@ -1477,11 +1477,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 	}
 
-	private class CreateDuplicateMenuAction extends Action implements IMenuCreator {
+	private class CreateStripMenuAction extends Action implements IMenuCreator {
 
 		private Menu lastMenu;
 
-		public CreateDuplicateMenuAction(final String label) {
+		public CreateStripMenuAction(final String label) {
 			super(label, IAction.AS_DROP_DOWN_MENU);
 			setImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE));
 			setDisabledImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE_DISABLED));
@@ -1526,8 +1526,32 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		protected void populate(final Menu menu) {
 
 			final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
-			// TODO: Translate into real objects, not just row object!
-			result.selectionChanged(new SelectionChangedEvent(scenarioViewer, scenarioViewer.getSelection()));
+			// Translate into real objects, not just row object!
+			final List<Object> selectedObjects = new LinkedList<Object>();
+			if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+				final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
+
+				final Iterator<?> itr = structuredSelection.iterator();
+				while (itr.hasNext()) {
+					final Object o = itr.next();
+					if (o instanceof RowData) {
+						final RowData rowData = (RowData) o;
+						// TODO: Check logic, a row may contain two distinct items
+						if (rowData.cargo != null) {
+							selectedObjects.add(rowData.cargo);
+							continue;
+						}
+						if (rowData.loadSlot != null) {
+							selectedObjects.add(rowData.loadSlot);
+						}
+						if (rowData.dischargeSlot != null) {
+							selectedObjects.add(rowData.dischargeSlot);
+						}
+					}
+				}
+			}
+
+			result.selectionChanged(new SelectionChangedEvent(scenarioViewer, new StructuredSelection(selectedObjects)));
 			addActionToMenu(result, menu);
 
 			for (final CreateStripDialog.StripType stripType : CreateStripDialog.StripType.values()) {
@@ -1622,6 +1646,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * @return
 	 */
 	protected Action createDuplicateAction() {
-		return new CreateDuplicateMenuAction("Duplicate");
+		return new CreateStripMenuAction("Duplicate");
 	}
 }
