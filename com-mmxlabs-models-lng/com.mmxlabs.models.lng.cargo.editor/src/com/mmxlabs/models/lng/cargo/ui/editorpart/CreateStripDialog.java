@@ -117,7 +117,17 @@ public class CreateStripDialog extends FormDialog {
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
 	private enum Patterns {
-		MONTHLY, N_PER_YEAR, EVERY_N_DAYS
+		MONTHLY("Monthly"), N_PER_YEAR("n per year"), EVERY_N_DAYS("Every n days");
+		private final String name;
+
+		private Patterns(final String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+
 	}
 
 	public CreateStripDialog(@NonNull final IShellProvider parentShell, @NonNull final IScenarioEditingLocation originalScenarioEditingLocation, @NonNull final StripType stripType,
