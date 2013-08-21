@@ -84,7 +84,7 @@ public class CreateStripDialog extends FormDialog {
 
 		private final String name;
 
-		private StripType(String name) {
+		private StripType(final String name) {
 			this.name = name;
 		}
 
@@ -245,7 +245,7 @@ public class CreateStripDialog extends FormDialog {
 			toolkit.createLabel(patternComposite, "Repeat Pattern");
 			pattern = new ComboViewer(patternComposite);
 			{
-				GridData gd = new GridData(GridData.GRAB_HORIZONTAL);
+				final GridData gd = new GridData(GridData.GRAB_HORIZONTAL);
 				gd.horizontalSpan = 3;
 				pattern.getControl().setLayoutData(gd);
 			}
