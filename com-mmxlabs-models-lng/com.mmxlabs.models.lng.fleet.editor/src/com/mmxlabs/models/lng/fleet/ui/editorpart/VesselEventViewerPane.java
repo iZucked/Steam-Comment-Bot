@@ -10,6 +10,7 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -79,7 +80,7 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
 		// IElementComparer to handle selection objects from e.g. schedule
-		((GridTableViewer) viewer).setComparer(new IElementComparer() {
+		((StructuredViewer) viewer).setComparer(new IElementComparer() {
 
 			@Override
 			public int hashCode(final Object element) {

@@ -12,8 +12,13 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -22,6 +27,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
@@ -68,7 +74,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 	private static final Date dateZero = new Date(0);
 	private List<EReference> path = null;
 	private Date minDisplayDate = null;
-	private Date maxDisplayDate = null;	
+	private Date maxDisplayDate = null;
 
 	private boolean useIntegers;
 
@@ -81,6 +87,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	private SeriesParser seriesParser = null;
+	private EPackage modelPackage;
+	private EClass node;
+	private EReference data;
+	private EAttribute name;
 
 	/**
 	 * Ensures that a given date is visible in the editor column range, as long as the editor is open.
@@ -91,31 +101,30 @@ public class IndexPane extends ScenarioTableViewerPane {
 		if (date == null) {
 			return;
 		}
-		
+
 		if (minDisplayDate == null || minDisplayDate.after(date)) {
 			minDisplayDate = date;
 		}
-		
+
 		if (maxDisplayDate == null || maxDisplayDate.before(date)) {
 			maxDisplayDate = date;
-		}				
-		
+		}
+
 		((IndexTableViewer) viewer).redisplayDateRange(date);
 	}
-	
+
 	@Override
 	protected Action createAddAction(final EReference containment) {
-		Action [] actions = new Action [] { new AddDateToIndexAction(this) }; 
-		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), actions);		
+		Action[] actions = new Action[] { new AddDateToIndexAction(this) };
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), actions);
 	}
-	
-	
+
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
 
 		this.path = path;
-		
+
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
 			public String render(final Object object) {
@@ -261,14 +270,13 @@ public class IndexPane extends ScenarioTableViewerPane {
 		return seriesParser;
 
 	}
-	
+
 	protected class IndexTableViewer extends ScenarioTableViewer {
 
-		public IndexTableViewer(Composite parent, int style,
-				IScenarioEditingLocation part) {
+		public IndexTableViewer(Composite parent, int style, IScenarioEditingLocation part) {
 			super(parent, style, part);
 		}
-		
+
 		@Override
 		protected void internalRefresh(final Object element) {
 			final Object input = getInput();
@@ -288,31 +296,38 @@ public class IndexPane extends ScenarioTableViewerPane {
 			}
 			super.internalRefresh(element, updateLabels);
 		}
-		
+
 		protected void redisplayDateRange(Date selected) {
 			if (minDisplayDate != null && maxDisplayDate != null) {
-				final Grid grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
-				final int columnCount = grid.getColumnCount();
-				for (int i = columnCount - 1; i > 1; i--) {
-					final GridColumn column = grid.getColumn(i);
-					getSortingSupport().removeSortableColumn(column);
-					column.dispose();
+				Grid grid = null;// = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+				if (IndexPane.this.viewer instanceof GridTreeViewer) {
+					grid = ((GridTreeViewer) IndexPane.this.viewer).getGrid();
+				} else if (IndexPane.this.viewer instanceof GridTableViewer) {
+					grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
 				}
-				final Calendar c = Calendar.getInstance();
-				c.setTime(minDisplayDate);
-				c.set(Calendar.MILLISECOND, 0);
-				c.set(Calendar.SECOND, 0);
-				c.set(Calendar.MINUTE, 0);
-				c.set(Calendar.HOUR, 0);
-				c.set(Calendar.DAY_OF_MONTH, 1);
+				if (grid != null) {
+					final int columnCount = grid.getColumnCount();
+					for (int i = columnCount - 1; i > 1; i--) {
+						final GridColumn column = grid.getColumn(i);
+						getSortingSupport().removeSortableColumn(column);
+						column.dispose();
+					}
+					final Calendar c = Calendar.getInstance();
+					c.setTime(minDisplayDate);
+					c.set(Calendar.MILLISECOND, 0);
+					c.set(Calendar.SECOND, 0);
+					c.set(Calendar.MINUTE, 0);
+					c.set(Calendar.HOUR, 0);
+					c.set(Calendar.DAY_OF_MONTH, 1);
 
-				while (!c.getTime().after(maxDisplayDate)) {
-					addColumn(c, true, useIntegers);
-					c.add(Calendar.MONTH, 1);
+					while (!c.getTime().after(maxDisplayDate)) {
+						addColumn(c, true, useIntegers);
+						c.add(Calendar.MONTH, 1);
+					}
 				}
 			}
 
-			viewer.refresh();			
+			viewer.refresh();
 		}
 
 		@Override
@@ -351,7 +366,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 							}
 						}
 					}
-					
+
 					redisplayDateRange(null);
 				}
 			}
@@ -409,7 +424,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						final Date colDate = (Date) col.getColumn().getData("date");
 						final Object valueAfter = idx.getValueForMonth(colDate);
 						if (valueAfter instanceof Integer) {
-							//return (Integer) valueAfter;
+							// return (Integer) valueAfter;
 							return new Double((Integer) valueAfter);
 						} else if (valueAfter instanceof Double) {
 							return (Double) valueAfter;
@@ -421,7 +436,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 							final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
 							// final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter instanceof Integer) {
-								//return (Integer) valueAfter;
+								// return (Integer) valueAfter;
 								return new Double((Integer) valueAfter);
 							} else if (valueAfter instanceof Double) {
 								return (Double) valueAfter;
@@ -578,7 +593,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 				@Override
 				protected CellEditor getCellEditor(final Object element) {
-					return manipulator.getCellEditor(((GridTableViewer) viewer).getGrid(), element);
+					Composite grid = null;// = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+					if (viewer instanceof GridTreeViewer) {
+						grid = ((GridTreeViewer) IndexPane.this.viewer).getGrid();
+					} else if (viewer instanceof GridTableViewer) {
+						grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+					} else if (viewer.getControl() instanceof Composite) {
+						grid = (Composite)viewer.getControl();
+					}
+					return manipulator.getCellEditor(grid, element);
+
 				}
 
 				@Override
@@ -665,11 +689,43 @@ public class IndexPane extends ScenarioTableViewerPane {
 			});
 		}
 	}
-	
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
 		return result;
 	}
 
+	
+	
+	
+	/////////////////
+	
+	private void createModel() {
+		modelPackage = EcoreFactory.eINSTANCE.createEPackage();
+
+		node = EcoreFactory.eINSTANCE.createEClass();
+
+		name = EcoreFactory.eINSTANCE.createEAttribute();
+		name.setName("name");
+		name.setUpperBound(1);
+		name.setLowerBound(0);
+		name.setEType(EcorePackage.Literals.ESTRING);
+
+		node.getEStructuralFeatures().add(name);
+
+		data = EcoreFactory.eINSTANCE.createEReference();
+		data.setName("data");
+		data.setContainment(false);
+		data.setUpperBound(-1);
+		data.setLowerBound(0);
+		data.setEType(EcorePackage.Literals.EOBJECT);
+
+		node.getEStructuralFeatures().add(data);
+
+		modelPackage.getEClassifiers().add(node);
+	}
+
+	
+	
+	
 }
