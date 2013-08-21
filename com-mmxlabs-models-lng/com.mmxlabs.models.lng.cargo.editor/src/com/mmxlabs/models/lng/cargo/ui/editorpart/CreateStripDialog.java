@@ -281,6 +281,9 @@ public class CreateStripDialog extends FormDialog {
 			{
 				toolkit.createLabel(patternComposite, "n");
 				pattern_n = toolkit.createText(patternComposite, "1");
+				final GridData gd = new GridData();
+				gd.widthHint = 20;
+				pattern_n.setLayoutData(gd);
 				pattern_n.addVerifyListener(new VerifyListener() {
 
 					@Override
@@ -323,6 +326,9 @@ public class CreateStripDialog extends FormDialog {
 			{
 				toolkit.createLabel(patternComposite, "quantity");
 				pattern_quantity = toolkit.createText(patternComposite, "1");
+				final GridData gd = new GridData();
+				gd.widthHint = 20;
+				pattern_quantity.setLayoutData(gd);
 				pattern_quantity.addVerifyListener(new VerifyListener() {
 
 					@Override
