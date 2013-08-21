@@ -170,12 +170,15 @@ public class CreateStripDialog extends FormDialog {
 		// Copy valid features across
 		if (selectedObject != null) {
 			for (final EStructuralFeature f : sample.eClass().getEAllStructuralFeatures()) {
+				// Skip UUID
 				if (f == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()) {
 					continue;
 				}
+				// Skip many - how do we handle it?
 				if (f.isMany()) {
 					continue;
 				}
+				// Skip containment refernces -- again how should we handle this?
 				if (f instanceof EReference && ((EReference) f).isContainment()) {
 					continue;
 				}
