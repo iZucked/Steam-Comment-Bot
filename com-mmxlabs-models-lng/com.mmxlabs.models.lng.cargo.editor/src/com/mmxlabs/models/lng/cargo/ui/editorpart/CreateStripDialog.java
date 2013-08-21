@@ -410,6 +410,9 @@ public class CreateStripDialog extends FormDialog {
 
 		this.generatedObjects = updateGeneratedObjects();
 		previewWiewer.setInput(this.generatedObjects);
+		for (final GridColumn c : previewWiewer.getGrid().getColumns()) {
+			c.pack();
+		}
 	}
 
 	private void createColumn(final GridTableViewer viewer, final EStructuralFeature feature) {
