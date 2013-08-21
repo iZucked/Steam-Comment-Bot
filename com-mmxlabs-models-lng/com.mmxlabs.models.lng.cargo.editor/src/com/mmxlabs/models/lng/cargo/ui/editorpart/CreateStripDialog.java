@@ -416,7 +416,6 @@ public class CreateStripDialog extends FormDialog {
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_PriceExpression());
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_Port());
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_WindowStart());
-			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_PricingDate());
 
 			refreshPreview();
 		}
