@@ -403,6 +403,7 @@ public class CreateStripDialog extends FormDialog {
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_PriceExpression());
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_Port());
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_WindowStart());
+			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_PricingDate());
 
 			refreshPreview();
 		}
@@ -497,9 +498,20 @@ public class CreateStripDialog extends FormDialog {
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 		}
+		final Date sampleDate = cal.getTime();
 		for (int i = 0; i < calQuantity; ++i) {
 			dates.add(cal.getTime());
 			cal.add(calUnit, calSpacing);
+		}
+
+		// Pricing date special case - keep the difference in months constant
+		int pricingMonthDiff = 0;
+		final Date pricingDate = (Date) sample.eGet(CargoPackage.eINSTANCE.getSlot_PricingDate());
+		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_PricingDate())) {
+			final int sampleKey = sampleDate.getYear() * 100 + sampleDate.getMonth();
+			final int pricingKey = pricingDate.getYear() * 100 + pricingDate.getMonth();
+			pricingMonthDiff =  pricingKey - sampleKey;
+
 		}
 
 		// Generate the slots
@@ -525,6 +537,20 @@ public class CreateStripDialog extends FormDialog {
 					eObj.eSet(feature, name + "-" + (counter++));
 				} else if (feature == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
 					eObj.eSet(feature, date);
+				} else if (feature == CargoPackage.eINSTANCE.getSlot_PricingDate()) {
+					if (sample.eIsSet(feature)) {
+						final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+						c.setTime(date);
+						// Reset to start of month
+						c.set(Calendar.DAY_OF_MONTH, 1);
+						c.set(Calendar.HOUR_OF_DAY, 0);
+						c.set(Calendar.MINUTE, 0);
+						c.set(Calendar.SECOND, 0);
+						c.set(Calendar.MILLISECOND, 0);
+						// Shift by predetermined month difference
+						c.add(Calendar.MONTH, pricingMonthDiff);
+						eObj.eSet(feature, c.getTime());
+					}
 				} else {
 					// Copy from template
 					if (sample.eIsSet(feature)) {
