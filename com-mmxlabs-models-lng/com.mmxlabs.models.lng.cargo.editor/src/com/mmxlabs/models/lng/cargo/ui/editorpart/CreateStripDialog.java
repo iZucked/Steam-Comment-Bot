@@ -510,7 +510,11 @@ public class CreateStripDialog extends FormDialog {
 						eObj.eSet(feature, date);
 					} else {
 						// Copy from template
-						eObj.eSet(feature, editor.getEditorTarget().eGet(feature));
+						if (editor.getEditorTarget().eIsSet(feature)) {
+							eObj.eSet(feature, editor.getEditorTarget().eGet(feature));
+						} else {
+							eObj.eUnset(feature);
+						}
 					}
 				}
 			}
