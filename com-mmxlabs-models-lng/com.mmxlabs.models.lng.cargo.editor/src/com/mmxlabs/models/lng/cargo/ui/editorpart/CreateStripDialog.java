@@ -95,11 +95,10 @@ public class CreateStripDialog extends FormDialog {
 	private ObservablesManager mgr;
 	private EMFDataBindingContext dbc;
 
-	// TODO: Derive from type
 	private List<EObject> generatedObjects;
+
 	private GridTableViewer previewWiewer;
-	// private List<EStructuralFeature> features;
-	// private Map<EStructuralFeature, IInlineEditor> editorMap;
+
 	private final StripType stripType;
 	private EClass referenceClass;
 
@@ -364,9 +363,11 @@ public class CreateStripDialog extends FormDialog {
 				});
 			}
 		}
+		final Composite splitPane = toolkit.createComposite(body);
+		splitPane.setLayout(new GridLayout(2, false));
 		{
 			// Template - take defaults from current selection
-			final Group template = new Group(body, SWT.NONE);
+			final Group template = new Group(splitPane, SWT.NONE);
 			template.setLayout(new GridLayout(2, false));
 			template.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -381,7 +382,14 @@ public class CreateStripDialog extends FormDialog {
 
 		// Preview Table with generated options
 		{
-			previewWiewer = new GridTableViewer(body);
+			final Group previewGroup = new Group(splitPane, SWT.NONE);
+			previewGroup.setLayout(new GridLayout(1, false));
+			previewGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
+
+			previewGroup.setText("Preview");
+			toolkit.adapt(previewGroup);
+
+			previewWiewer = new GridTableViewer(previewGroup);
 			previewWiewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 			// Enable tooltip support
 			ColumnViewerToolTipSupport.enableFor(previewWiewer);
