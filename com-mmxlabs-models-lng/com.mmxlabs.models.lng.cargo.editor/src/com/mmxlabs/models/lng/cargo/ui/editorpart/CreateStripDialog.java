@@ -453,6 +453,8 @@ public class CreateStripDialog extends FormDialog {
 			} catch (final NumberFormatException nfe) {
 				// Ignore
 			}
+			// Min of 1 element
+			n = Math.max(1, n);
 
 			int quantity = 1;
 			try {
@@ -460,6 +462,9 @@ public class CreateStripDialog extends FormDialog {
 			} catch (final NumberFormatException nfe) {
 				// Ignore
 			}
+			// Min of 1 element
+			quantity = Math.max(1, quantity);
+
 			final int selectionIndex = pattern.getCombo().getSelectionIndex();
 			if (selectionIndex < 0) {
 				return Collections.emptyList();
@@ -479,7 +484,7 @@ public class CreateStripDialog extends FormDialog {
 				break;
 			case N_PER_YEAR:
 				calSpacing = 365 / n;
-				calQuantity = Calendar.DAY_OF_YEAR;
+				calUnit = Calendar.DAY_OF_YEAR;
 				calQuantity = n;
 				break;
 			default:
@@ -510,7 +515,7 @@ public class CreateStripDialog extends FormDialog {
 		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_PricingDate())) {
 			final int sampleKey = sampleDate.getYear() * 100 + sampleDate.getMonth();
 			final int pricingKey = pricingDate.getYear() * 100 + pricingDate.getMonth();
-			pricingMonthDiff =  pricingKey - sampleKey;
+			pricingMonthDiff = pricingKey - sampleKey;
 
 		}
 
