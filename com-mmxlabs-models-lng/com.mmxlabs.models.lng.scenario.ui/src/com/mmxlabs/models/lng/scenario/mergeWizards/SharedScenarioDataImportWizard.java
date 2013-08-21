@@ -268,6 +268,8 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 						PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPricingModel(), destScenarioModel.getPricingModel(),
 						PricingPackage.eINSTANCE.getPricingModel_CharterIndices()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPricingModel(), destScenarioModel.getPricingModel(),
+						PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()));
 			}
 
 			// Fix up the descriptor data references to point to destination objects in the cases where the source is not being transferred across
