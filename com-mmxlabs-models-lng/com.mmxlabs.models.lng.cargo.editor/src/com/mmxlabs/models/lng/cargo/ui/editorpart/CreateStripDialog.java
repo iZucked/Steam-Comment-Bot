@@ -33,11 +33,11 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -75,7 +75,7 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 public class CreateStripDialog extends FormDialog {
 
 	public static enum StripType {
-		TYPE_FOB_SALE_SLOT ("FOB Sale"), TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_DES_PURCHASE_SLOT("DES Purchase");
+		TYPE_FOB_SALE_SLOT("FOB Sale"), TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_DES_PURCHASE_SLOT("DES Purchase");
 
 		private final String name;
 
@@ -93,7 +93,7 @@ public class CreateStripDialog extends FormDialog {
 
 	// TODO: Derive from type
 	private List<EObject> generatedObjects;
-	private TableViewer previewWiewer;
+	private GridTableViewer previewWiewer;
 	private List<EStructuralFeature> features;
 	private Map<EStructuralFeature, IInlineEditor> editorMap;
 	private final StripType stripType;
@@ -252,7 +252,6 @@ public class CreateStripDialog extends FormDialog {
 
 					@Override
 					public void verifyText(final VerifyEvent e) {
-						// TODO Auto-generated method stub
 						if (e.text == null) {
 							// OK
 						} else if (e.text.isEmpty()) {
@@ -295,7 +294,6 @@ public class CreateStripDialog extends FormDialog {
 
 					@Override
 					public void verifyText(final VerifyEvent e) {
-						// TODO Auto-generated method stub
 						if (e.text == null) {
 							// OK
 						} else if (e.text.isEmpty()) {
@@ -367,10 +365,10 @@ public class CreateStripDialog extends FormDialog {
 
 		// Preview Table with generated options
 		{
-			previewWiewer = new TableViewer(body);
+			previewWiewer = new GridTableViewer(body);
 			previewWiewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-			previewWiewer.getTable().setHeaderVisible(true);
+			previewWiewer.getGrid().setHeaderVisible(true);
 
 			previewWiewer.setContentProvider(new ArrayContentProvider());
 
@@ -381,7 +379,6 @@ public class CreateStripDialog extends FormDialog {
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getSlot_WindowStart());
 
 			refreshPreview();
-
 		}
 
 		// Hook up refresh handlers
@@ -403,8 +400,8 @@ public class CreateStripDialog extends FormDialog {
 		previewWiewer.setInput(this.generatedObjects);
 	}
 
-	private void createColumn(final TableViewer viewer, final EStructuralFeature feature) {
-		final TableViewerColumn col = new TableViewerColumn(viewer, SWT.NONE);
+	private void createColumn(final GridTableViewer viewer, final EStructuralFeature feature) {
+		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
 		col.setLabelProvider(new CellLabelProvider() {
 
 			@Override
