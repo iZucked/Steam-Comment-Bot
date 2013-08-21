@@ -71,6 +71,7 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -419,7 +420,7 @@ public class CreateStripDialog extends FormDialog {
 		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
 		col.setLabelProvider(new ValidationLabelProvider(feature));
 		col.getColumn().setWidth(50);
-		col.getColumn().setText(feature.getName());
+		col.getColumn().setText(EditorUtils.unmangle(feature.getName()));
 	}
 
 	private List<EObject> updateGeneratedObjects() {
