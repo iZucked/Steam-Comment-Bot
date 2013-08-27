@@ -21,7 +21,6 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -137,6 +136,12 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	public EReference getCurrentContainment() {
 		return currentReference;
+	}
+
+	/** Call this method if {@link #init(AdapterFactory, CommandStack, EReference...)} is overridden */
+	public void setCurrentContainerAndContainment(final EObject currentContainer, final EReference currentReference) {
+		this.currentContainer = currentContainer;
+		this.currentReference = currentReference;
 	}
 
 	/**
@@ -377,7 +382,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	/**
 	 * @since 3.1
 	 */
-	public void init(final IStructuredContentProvider contentProvider, final CommandStack commandStack) {
+	public void init(final ITreeContentProvider contentProvider, final CommandStack commandStack) {
 		final GridTreeViewer viewer = this;
 		final Grid grid = viewer.getGrid();
 
@@ -463,20 +468,18 @@ public class EObjectTableViewer extends GridTreeViewer {
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
-				return getElements(parentElement);
+			public Object[] getChildren(final Object parentElement) {
+				return contentProvider.getChildren(parentElement);
 			}
 
 			@Override
-			public Object getParent(Object element) {
-				// TODO Auto-generated method stub
-				return null;
+			public Object getParent(final Object element) {
+				return contentProvider.getParent(element);
 			}
 
 			@Override
-			public boolean hasChildren(Object element) {
-				// TODO Auto-generated method stub
-				return false;
+			public boolean hasChildren(final Object element) {
+				return contentProvider.hasChildren(element);
 			}
 		});
 
@@ -491,7 +494,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	 * @since 3.1
 	 */
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
-		init(new IStructuredContentProvider() {
+		init(new ITreeContentProvider() {
 			@SuppressWarnings("rawtypes")
 			@Override
 			public Object[] getElements(Object object) {
@@ -500,9 +503,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 					for (final EReference ref : path) {
 						object = o.eGet(ref);
 						if (object instanceof EList) {
-							// o.eAdapters().add(adapter);
-							currentContainer = o;
-							currentReference = ref;
+							setCurrentContainerAndContainment(o, ref);
 							return ((EList) object).toArray();
 						}
 						if (object instanceof EObject) {
@@ -525,6 +526,22 @@ public class EObjectTableViewer extends GridTreeViewer {
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 			}
+
+			@Override
+			public Object[] getChildren(final Object parentElement) {
+				return null;
+			}
+
+			@Override
+			public boolean hasChildren(final Object element) {
+				return false;
+			}
+
+			@Override
+			public Object getParent(final Object element) {
+				return null;
+			}
+
 		}, commandStack);
 	}
 
