@@ -19,65 +19,84 @@ import com.mmxlabs.common.ITransformer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
-public class IndexTreeTransformer implements ITransformer<PricingModel, EObject> {
+public class IndexTreeTransformer {
 
 	private final EPackage modelPackage;
-	private final EClass node;
-	private final EReference data;
-	private final EAttribute name = MMXCorePackage.Literals.NAMED_OBJECT__NAME;
+	private final EClass nodeClass;
+	private final EReference dataReference;
+	private final EAttribute expandAttribute;
+	private final EAttribute nameAttribute = MMXCorePackage.Literals.NAMED_OBJECT__NAME;
+	private EObject root;
+	private EObject nodeCharterCurves;
+	private EObject nodeBaseFuels;
+	private EObject nodeCommodity;
 
 	public IndexTreeTransformer() {
-		modelPackage = EcoreFactory.eINSTANCE.createEPackage();
 
-		node = EcoreFactory.eINSTANCE.createEClass();
-		node.getESuperTypes().add(MMXCorePackage.Literals.NAMED_OBJECT);
+		// Create EPackage
+		{
+			modelPackage = EcoreFactory.eINSTANCE.createEPackage();
 
-		data = EcoreFactory.eINSTANCE.createEReference();
-		data.setName("data");
-		data.setContainment(false);
-		data.setUpperBound(-1);
-		data.setLowerBound(0);
-		data.setEType(EcorePackage.Literals.EOBJECT);
+			nodeClass = EcoreFactory.eINSTANCE.createEClass();
+			nodeClass.getESuperTypes().add(MMXCorePackage.Literals.NAMED_OBJECT);
 
-		node.getEStructuralFeatures().add(data);
+			expandAttribute = EcoreFactory.eINSTANCE.createEAttribute();
+			expandAttribute.setName("expand");
+			expandAttribute.setUpperBound(1);
+			expandAttribute.setLowerBound(0);
+			expandAttribute.setEType(EcorePackage.Literals.EBOOLEAN);
 
-		modelPackage.getEClassifiers().add(node);
+			nodeClass.getEStructuralFeatures().add(expandAttribute);
+
+			dataReference = EcoreFactory.eINSTANCE.createEReference();
+			dataReference.setName("data");
+			dataReference.setContainment(false);
+			dataReference.setUpperBound(-1);
+			dataReference.setLowerBound(0);
+			dataReference.setEType(EcorePackage.Literals.EOBJECT);
+
+			nodeClass.getEStructuralFeatures().add(dataReference);
+
+			modelPackage.getEClassifiers().add(nodeClass);
+		}
+		// Create Data model instance
+		{
+
+			root = modelPackage.getEFactoryInstance().create(nodeClass);
+			root.eSet(nameAttribute, "root");
+
+			final List<EObject> nodes = new LinkedList<EObject>();
+			// Commodity
+			{
+				nodeCommodity = modelPackage.getEFactoryInstance().create(nodeClass);
+				nodeCommodity.eSet(nameAttribute, "Commodity Curves");
+				nodeCommodity.eSet(expandAttribute, Boolean.TRUE);
+				nodes.add(nodeCommodity);
+			}
+
+			// Base Fuels
+			{
+				nodeBaseFuels = modelPackage.getEFactoryInstance().create(nodeClass);
+				nodeBaseFuels.eSet(nameAttribute, "Base Fuel Curves");
+				nodes.add(nodeBaseFuels);
+			}
+
+			// Charter Curves
+			{
+				nodeCharterCurves = modelPackage.getEFactoryInstance().create(nodeClass);
+				nodeCharterCurves.eSet(nameAttribute, "Charter Curves");
+				nodes.add(nodeCharterCurves);
+			}
+
+			root.eSet(dataReference, nodes);
+		}
 	}
 
-	@Override
-	public EObject transform(final PricingModel pricingModel) {
+	public void update(final PricingModel pricingModel) {
 
-		final EObject root = modelPackage.getEFactoryInstance().create(node);
-		root.eSet(name, "root");
-
-		final List<EObject> nodes = new LinkedList<EObject>();
-		// Commodity
-		{
-			final EObject n = modelPackage.getEFactoryInstance().create(node);
-			n.eSet(name, "Commodity Curves");
-			n.eSet(data, pricingModel.getCommodityIndices());
-			nodes.add(n);
-		}
-
-		// Base Fuels
-		{
-			final EObject n = modelPackage.getEFactoryInstance().create(node);
-			n.eSet(name, "Base FuelCurves");
-			n.eSet(data, pricingModel.getBaseFuelPrices());
-			nodes.add(n);
-		}
-
-		// Charter Curves
-		{
-			final EObject n = modelPackage.getEFactoryInstance().create(node);
-			n.eSet(name, "Charter Curves");
-			n.eSet(data, pricingModel.getCharterIndices());
-			nodes.add(n);
-		}
-
-		root.eSet(data, nodes);
-
-		return root;
+		nodeCommodity.eSet(dataReference, pricingModel.getCommodityIndices());
+		nodeBaseFuels.eSet(dataReference, pricingModel.getBaseFuelPrices());
+		nodeCharterCurves.eSet(dataReference, pricingModel.getCharterIndices());
 	}
 
 	public EPackage getModelPackage() {
@@ -85,15 +104,19 @@ public class IndexTreeTransformer implements ITransformer<PricingModel, EObject>
 	}
 
 	public EClass getNodeClass() {
-		return node;
+		return nodeClass;
 	}
 
 	public EReference getDataReference() {
-		return data;
+		return dataReference;
 	}
 
 	public EAttribute getNameAttribute() {
-		return name;
+		return nameAttribute;
+	}
+
+	public EAttribute getExpandAttribute() {
+		return expandAttribute;
 	}
 
 	public ITreeContentProvider createContentProvider() {
@@ -114,8 +137,8 @@ public class IndexTreeTransformer implements ITransformer<PricingModel, EObject>
 			@Override
 			public boolean hasChildren(final Object element) {
 
-				if (node.isInstance(element)) {
-					final List<?> children = (List<?>) ((EObject) element).eGet(data);
+				if (nodeClass.isInstance(element)) {
+					final List<?> children = (List<?>) ((EObject) element).eGet(dataReference);
 					if (children != null) {
 						return !children.isEmpty();
 					}
@@ -138,8 +161,8 @@ public class IndexTreeTransformer implements ITransformer<PricingModel, EObject>
 			@Override
 			public Object[] getChildren(final Object parentElement) {
 
-				if (node.isInstance(parentElement)) {
-					final List<?> children = (List<?>) ((EObject) parentElement).eGet(data);
+				if (nodeClass.isInstance(parentElement)) {
+					final List<?> children = (List<?>) ((EObject) parentElement).eGet(dataReference);
 					if (children != null) {
 						Object[] array = children.toArray();
 						for (Object obj : array) {
@@ -152,5 +175,9 @@ public class IndexTreeTransformer implements ITransformer<PricingModel, EObject>
 				return null;
 			}
 		};
+	}
+
+	public EObject getRootObject() {
+		return root;
 	}
 }

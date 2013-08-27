@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.pricing.ui.editorpart;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -88,19 +89,24 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 public class IndexPane extends ScenarioTableViewerPane {
 
 	private enum DataType {
-		Commodity(false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.COMMODITY_INDEX__DATA), BaseFuel(false,
-				PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA), Charter(true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES,
-				PricingPackage.Literals.CHARTER_INDEX__DATA);
+		Commodity(false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.COMMODITY_INDEX__DATA, true),
+
+		BaseFuel(false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
+
+		Charter(true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.CHARTER_INDEX__DATA, false);
 
 		private final boolean useIntegers;
 
 		private final EReference containerFeature;
 		private final EReference indexFeature;
 
-		private DataType(final boolean useIntegers, final EReference containerFeature, final EReference indexFeature) {
+		private boolean expandedByDefault;
+
+		private DataType(final boolean useIntegers, final EReference containerFeature, final EReference indexFeature, final boolean expandedByDefault) {
 			this.useIntegers = useIntegers;
 			this.containerFeature = containerFeature;
 			this.indexFeature = indexFeature;
+			this.expandedByDefault = expandedByDefault;
 		}
 
 		public boolean useIntegers() {
@@ -349,7 +355,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 		@Override
 		protected void doCommandStackChanged() {
-			getScenarioViewer().setInput(transformer.transform(pricingModel));
+			transformer.update(pricingModel);
 			super.doCommandStackChanged();
 		}
 
@@ -689,6 +695,28 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	public void setInput(final PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
-		getScenarioViewer().setInput(transformer.transform(pricingModel));
+		final EObject root = transformer.getRootObject();
+		transformer.update(pricingModel);
+
+		getScenarioViewer().setInput(root);
+
+		setInitialExpandedState();
+	}
+
+	private void setInitialExpandedState() {
+
+		final EObject root = transformer.getRootObject();
+		final List<Object> expandedObjects = new LinkedList<>();
+		// Set initial expanded state
+		final List<?> nodes = (List<?>) root.eGet(transformer.getDataReference());
+		for (final Object obj : nodes) {
+			if (transformer.getNodeClass().isInstance(obj)) {
+				if (Boolean.TRUE.equals(((EObject) obj).eGet(transformer.getExpandAttribute()))) {
+					expandedObjects.add(obj);
+				}
+			}
+		}
+		getScenarioViewer().setExpandedElements(expandedObjects.toArray());
+
 	}
 }
