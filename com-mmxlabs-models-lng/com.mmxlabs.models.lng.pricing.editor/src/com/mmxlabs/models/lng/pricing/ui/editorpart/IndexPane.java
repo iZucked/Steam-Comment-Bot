@@ -91,11 +91,11 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 public class IndexPane extends ScenarioTableViewerPane {
 
 	private enum DataType {
-		Commodity(false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.COMMODITY_INDEX__DATA),
+		Commodity(false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA),
 
 		BaseFuel(false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA),
 
-		Charter(true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.CHARTER_INDEX__DATA);
+		Charter(true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
 
 		private final boolean useIntegers;
 
