@@ -32,7 +32,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -394,8 +394,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private ColumnHandler scheduleColumnHandler;
 
-	protected IStructuredContentProvider getContentProvider() {
-		return new IStructuredContentProvider() {
+	protected ITreeContentProvider getContentProvider() {
+		return new ITreeContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				synchronizerOutput = null;
@@ -469,6 +469,21 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				processInputs(result);
 
 				return result;
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				return null;
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				return null;
+			}
+
+			@Override
+			public boolean hasChildren(Object element) {
+				return false;
 			}
 
 		};
