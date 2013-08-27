@@ -43,12 +43,15 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
@@ -114,12 +117,14 @@ public class CreateStripDialog extends FormDialog {
 	private Text pattern_n;
 	private ComboViewer pattern;
 	private Text pattern_quantity;
+	private DateTime pattern_periodStart;
+	private DateTime pattern_periodEnd;
 
 	private DialogValidationSupport validationSupport;
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
 	private enum Patterns {
-		MONTHLY("Monthly"), N_PER_YEAR("n per year"), EVERY_N_DAYS("Every n days");
+		MONTHLY("Monthly"), N_PER_YEAR("n per year"), EVERY_N_DAYS("Every n days"), N_IN_PERIOD("N in Period");
 		private final String name;
 
 		private Patterns(final String name) {
@@ -321,7 +326,7 @@ public class CreateStripDialog extends FormDialog {
 					public void selectionChanged(final SelectionChangedEvent event) {
 						final int idx = pattern.getCombo().getSelectionIndex();
 						final Patterns p = Patterns.values()[idx];
-						if (p == Patterns.EVERY_N_DAYS || p == Patterns.N_PER_YEAR) {
+						if (p == Patterns.EVERY_N_DAYS || p == Patterns.N_PER_YEAR || p == Patterns.N_IN_PERIOD) {
 							pattern_n.setEnabled(true);
 						} else {
 							pattern_n.setEnabled(false);
@@ -375,6 +380,91 @@ public class CreateStripDialog extends FormDialog {
 					}
 				});
 			}
+
+			{
+				toolkit.createLabel(patternComposite, "From");
+				pattern_periodStart = new DateTime(patternComposite, SWT.DROP_DOWN);
+				toolkit.adapt(pattern_periodStart);
+				final GridData gd = new GridData();
+				gd.widthHint = 100;
+				pattern_periodStart.setLayoutData(gd);
+				pattern_periodStart.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+
+						final Calendar cal = getCalendarFromDateTime(pattern_periodStart);
+
+						sample.eSet(CargoPackage.Literals.SLOT__WINDOW_START, cal.getTime());
+
+						refreshPreview();
+					}
+
+					@Override
+					public void widgetDefaultSelected(final SelectionEvent e) {
+
+					}
+				});
+				pattern.addSelectionChangedListener(new ISelectionChangedListener() {
+
+					@Override
+					public void selectionChanged(final SelectionChangedEvent event) {
+						final int idx = pattern.getCombo().getSelectionIndex();
+						final Patterns p = Patterns.values()[idx];
+						if (p == Patterns.N_IN_PERIOD) {
+
+							final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+							cal.clear();
+							cal.set(Calendar.YEAR, pattern_periodStart.getYear());
+							cal.set(Calendar.MONTH, pattern_periodStart.getMonth());
+							cal.set(Calendar.DAY_OF_MONTH, pattern_periodStart.getDay());
+
+							sample.eSet(CargoPackage.Literals.SLOT__WINDOW_START, cal.getTime());
+
+							pattern_periodStart.setEnabled(true);
+						} else {
+							pattern_periodStart.setEnabled(false);
+						}
+						refreshPreview();
+					}
+				});
+			}
+
+			{
+				toolkit.createLabel(patternComposite, "Tos");
+				pattern_periodEnd = new DateTime(patternComposite, SWT.DROP_DOWN);
+				toolkit.adapt(pattern_periodEnd);
+				final GridData gd = new GridData();
+				gd.widthHint = 100;
+				pattern_periodEnd.setLayoutData(gd);
+				pattern_periodEnd.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						refreshPreview();
+					}
+
+					@Override
+					public void widgetDefaultSelected(final SelectionEvent e) {
+
+					}
+				});
+				pattern.addSelectionChangedListener(new ISelectionChangedListener() {
+
+					@Override
+					public void selectionChanged(final SelectionChangedEvent event) {
+						final int idx = pattern.getCombo().getSelectionIndex();
+						final Patterns p = Patterns.values()[idx];
+						if (p == Patterns.N_IN_PERIOD) {
+							pattern_periodEnd.setEnabled(true);
+						} else {
+							pattern_periodEnd.setEnabled(false);
+						}
+						refreshPreview();
+					}
+				});
+			}
+
 		}
 		final Composite splitPane = toolkit.createComposite(body);
 		splitPane.setLayout(new GridLayout(2, false));
@@ -496,6 +586,18 @@ public class CreateStripDialog extends FormDialog {
 				break;
 			case N_PER_YEAR:
 				calSpacing = 365 / n;
+				calUnit = Calendar.DAY_OF_YEAR;
+				calQuantity = n;
+				break;
+			case N_IN_PERIOD:
+
+				final Calendar toDate = getCalendarFromDateTime(pattern_periodEnd);
+				final Calendar fromDate = getCalendarFromDateTime(pattern_periodStart);
+				// ABS as sanity check...
+				final long diffInMilliseconds = Math.abs(toDate.getTimeInMillis() - fromDate.getTimeInMillis());
+				final int diffInDays = (int) (diffInMilliseconds / 1000l / 60l / 60l / 24l);
+
+				calSpacing = diffInDays / n;
 				calUnit = Calendar.DAY_OF_YEAR;
 				calQuantity = n;
 				break;
@@ -794,4 +896,14 @@ public class CreateStripDialog extends FormDialog {
 			}
 		}
 	}
+
+	private Calendar getCalendarFromDateTime(final DateTime dateTime) {
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		cal.clear();
+		cal.set(Calendar.YEAR, dateTime.getYear());
+		cal.set(Calendar.MONTH, dateTime.getMonth());
+		cal.set(Calendar.DAY_OF_MONTH, dateTime.getDay());
+		return cal;
+	}
+
 }
