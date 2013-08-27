@@ -12,6 +12,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -50,9 +53,8 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 
 			final EObject target = dcsd.getTarget();
-			if (target instanceof Index) {
-				final EStructuralFeature containingFeature = target.eContainingFeature();
-				return (containingFeature == PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES || containingFeature == PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES || containingFeature == PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
+			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex) {
+				return true;
 			}
 			if (target instanceof IndexPoint) {
 				return true;
@@ -72,20 +74,12 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 				target = ((IndexPoint<?>) target).eContainer();
 			}
 
-			if (target instanceof Index<?>) {
-				final Index<?> index = (Index<?>) target;
-				// get container reference
-
-				final EStructuralFeature containingFeature = index.eContainingFeature();
-
-				if (containingFeature == PricingPackage.eINSTANCE.getPricingModel_CharterIndices() || containingFeature == PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()
-						|| containingFeature == PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()) {
-					if (indexPane != null) {
-						editorPart.setActivePage(indexPage);
-						indexPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
-					}
-					return;
+			if (target instanceof CommodityIndex || target instanceof CharterIndex || target instanceof BaseFuelIndex) {
+				if (indexPane != null) {
+					editorPart.setActivePage(indexPage);
+					indexPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 				}
+				return;
 			}
 		}
 	}
