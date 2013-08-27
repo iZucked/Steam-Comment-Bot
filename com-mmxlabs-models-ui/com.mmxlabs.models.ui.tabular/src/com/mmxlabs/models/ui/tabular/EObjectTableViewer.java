@@ -469,7 +469,15 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				return contentProvider.getChildren(parentElement);
+
+				final Object[] elements = contentProvider.getChildren(parentElement);
+				for (final Object o : elements) {
+					if (o instanceof EObject) {
+						currentElements.add((EObject) o);
+					}
+				}
+
+				return elements;
 			}
 
 			@Override
