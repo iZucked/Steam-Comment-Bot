@@ -6,26 +6,28 @@ package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.IOpenListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -38,7 +40,6 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
@@ -47,10 +48,14 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -59,45 +64,78 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.DialogFeatureManipulator;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
+/**
+ * The {@link IndexPane} displays data for various indices in a tree format. The {@link IndexTreeTransformer} is used to combine the different indices into an internal dynamic EObject tree
+ * datastructure.
+ * 
+ * Note - call {@link #setInput(PricingModel)} on {@link IndexPane} rather than the {@link Viewer}.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class IndexPane extends ScenarioTableViewerPane {
 
+	private enum DataType {
+		Commodity(false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.COMMODITY_INDEX__DATA), BaseFuel(false,
+				PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA), Charter(true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES,
+				PricingPackage.Literals.CHARTER_INDEX__DATA);
+
+		private final boolean useIntegers;
+
+		private final EReference containerFeature;
+		private final EReference indexFeature;
+
+		private DataType(final boolean useIntegers, final EReference containerFeature, final EReference indexFeature) {
+			this.useIntegers = useIntegers;
+			this.containerFeature = containerFeature;
+			this.indexFeature = indexFeature;
+		}
+
+		public boolean useIntegers() {
+			return useIntegers;
+		}
+
+		public EReference getContainerFeature() {
+			return containerFeature;
+		}
+
+		public EReference getIndexFeature() {
+			return indexFeature;
+		}
+	}
+
 	private static final Date dateZero = new Date(0);
-	private List<EReference> path = null;
+
 	private Date minDisplayDate = null;
 	private Date maxDisplayDate = null;
 
-	private boolean useIntegers;
+	private final IndexTreeTransformer transformer = new IndexTreeTransformer();
+	private final Map<DataType, SeriesParser> seriesParsers = new EnumMap<>(DataType.class);
+	private PricingModel pricingModel;
 
-	private final EReference indexFeature;
-
-	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars, final EReference indexFeature) {
+	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.indexFeature = indexFeature;
 
 	}
-
-	private SeriesParser seriesParser = null;
-	private EPackage modelPackage;
-	private EClass node;
-	private EReference data;
-	private EAttribute name;
 
 	/**
 	 * Ensures that a given date is visible in the editor column range, as long as the editor is open.
 	 * 
 	 * @param date
 	 */
-	public void selectDateColumn(Date date) {
+	public void selectDateColumn(final Date date) {
 		if (date == null) {
 			return;
 		}
@@ -113,107 +151,67 @@ public class IndexPane extends ScenarioTableViewerPane {
 		((IndexTableViewer) viewer).redisplayDateRange(date);
 	}
 
+	/**
+	 * Hooks the {@link AddDateToIndexAction} to the Add menu
+	 */
 	@Override
 	protected Action createAddAction(final EReference containment) {
-		Action[] actions = new Action[] { new AddDateToIndexAction(this) };
+		final Action[] actions = new Action[] { new AddDateToIndexAction(this) };
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), actions);
+	}
+
+	@Override
+	protected ScenarioTableViewer constructViewer(final Composite parent) {
+		// Add in Check for Tree
+		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
+		result.getGrid().setTreeLinesVisible(true);
+		return result;
 	}
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
+		// Override default content provider
+		getScenarioViewer().init(transformer.createContentProvider(), commandStack);
 
-		this.path = path;
+		// TODO: API subject to change!
+		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
+
+		final GridViewerColumn nameColumn = addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()) {
+			@Override
+			public boolean canEdit(final Object object) {
+				// Skip tree model elements
+				if (transformer.getNodeClass().isInstance(object)) {
+					return false;
+				}
+
+				return super.canEdit(object);
+			}
+		});
+		// Enable the tree controls on this column
+		nameColumn.getColumn().setTree(true);
 
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
-			public String render(final Object object) {
+			public String render(Object object) {
+
+				object = getIndex(object);
+
 				if (object instanceof DerivedIndex) {
 					return "Expression";
-				} else {
+				} else if (object instanceof DataIndex) {
 					return "Data";
 				}
+				return "";
 			}
-		}, indexFeature);
-		addNameManipulator("Name");
-
-		// addTypicalColumn("Content", new IndexValueManipulator());
+		});
 
 		defaultSetTitle("Indices");
 	}
 
-	public void setUseIntegers(final boolean b) {
-		this.useIntegers = b;
-	}
-
-	private class IndexValueManipulator implements ICellRenderer, ICellManipulator {
-		private final BasicAttributeManipulator expressionManipulator = new BasicAttributeManipulator(PricingPackage.eINSTANCE.getDerivedIndex_Expression(), getEditingDomain());
-
-		private final BasicAttributeManipulator dataManipulator = new DialogFeatureManipulator(PricingPackage.eINSTANCE.getDataIndex_Points(), getEditingDomain()) {
-
-			@Override
-			protected String renderValue(final Object value) {
-				if (value == null)
-					return "";
-				return ((List) value).size() + " points";
-			}
-
-			@Override
-			protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
-				return null;
-			}
-		};
-
-		private BasicAttributeManipulator pick(final Object object) {
-			if (object instanceof DataIndex)
-				return dataManipulator;
-			else
-				return expressionManipulator;
-		}
-
-		@Override
-		public void setValue(final Object object, final Object value) {
-			pick(object).setValue(object, value);
-		}
-
-		@Override
-		public CellEditor getCellEditor(final Composite parent, final Object object) {
-			return pick(object).getCellEditor(parent, object);
-		}
-
-		@Override
-		public Object getValue(final Object object) {
-			return pick(object).getValue(object);
-		}
-
-		@Override
-		public boolean canEdit(final Object object) {
-			return pick(object).canEdit(object);
-		}
-
-		@Override
-		public String render(final Object object) {
-			return pick(object).render(object);
-		}
-
-		@Override
-		public Comparable<?> getComparable(final Object object) {
-			return pick(object).getComparable(object);
-		}
-
-		@Override
-		public Object getFilterValue(final Object object) {
-			return pick(object).getFilterValue(object);
-		}
-
-		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
-			return pick(object).getExternalNotifiers(object);
-		}
-
-	}
-
 	/*
+	 * Make method public
+	 * 
 	 * (non-Javadoc)
 	 * 
 	 * @see com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane#defaultSetTitle(java.lang.String)
@@ -223,88 +221,98 @@ public class IndexPane extends ScenarioTableViewerPane {
 		super.defaultSetTitle(string);
 	}
 
-	public void removeColumn(final String title) {
-		// TODO: Implement?
-		// for (final ColumnHandler h : handlers) {
-		// if (h.title.equals(title)) {
-		// viewer.removeColumn(h.column);
-		// handlers.remove(h);
-		// handlersInOrder.remove(h);
-		// break;
-		// }
-		// }
+	private void createSeriesParsers() {
+		// Remove existing parsers
+		seriesParsers.clear();
+
+		for (final DataType dt : DataType.values()) {
+
+			final SeriesParser seriesParser = new SeriesParser();
+			if (pricingModel != null) {
+				@SuppressWarnings("unchecked")
+				final List<EObject> indexObjects = (List<EObject>) pricingModel.eGet(dt.getContainerFeature());
+
+				for (final EObject indexObject : indexObjects) {
+
+					if (!indexObject.eIsSet(dt.getIndexFeature())) {
+						continue;
+					}
+
+					String name = "Unknown";
+					if (indexObject instanceof NamedObject) {
+						final NamedObject namedObject = (NamedObject) indexObject;
+						name = namedObject.getName();
+					}
+
+					final Index<?> idx = (Index<?>) indexObject.eGet(dt.getIndexFeature());
+					if (idx instanceof DataIndex) {
+						PriceIndexUtils.addSeriesDataFromDataIndex(seriesParser, name, dateZero, (DataIndex<? extends Number>) idx);
+					} else if (idx instanceof DerivedIndex) {
+						seriesParser.addSeriesExpression(name, ((DerivedIndex) idx).getExpression());
+					}
+				}
+			}
+			seriesParsers.put(dt, seriesParser);
+		}
 	}
 
-	private SeriesParser createSeriesParser(final PricingModel pricingModel) {
-		final SeriesParser seriesParser = new SeriesParser();
+	private void updateDateRange(final PricingModel pricingModel) {
 
-		Object obj = pricingModel;
-		for (final EReference ref : path) {
-			obj = ((EObject) obj).eGet(ref);
-		}
+		for (final DataType dt : DataType.values()) {
 
-		if (obj instanceof List) {
-			final List<EObject> indexObjects = (List<EObject>) obj;
+			@SuppressWarnings("unchecked")
+			final List<EObject> indexObjects = (List<EObject>) pricingModel.eGet(dt.getContainerFeature());
 
 			for (final EObject indexObject : indexObjects) {
 
-				if (!indexObject.eIsSet(indexFeature)) {
+				if (!indexObject.eIsSet(dt.getIndexFeature())) {
 					continue;
 				}
 
-				String name = "Unknown";
-				if (indexObject instanceof NamedObject) {
-					final NamedObject namedObject = (NamedObject) indexObject;
-					name = namedObject.getName();
+				final Index<?> idx = (Index<?>) indexObject.eGet(dt.getIndexFeature());
+				if (!(idx instanceof DataIndex<?>)) {
+					continue;
 				}
 
-				final Index<?> idx = (Index<?>) indexObject.eGet(indexFeature);
-
-				if (idx instanceof DataIndex) {
-					PriceIndexUtils.addSeriesDataFromDataIndex(seriesParser, name, dateZero, (DataIndex<? extends Number>) idx);
-				} else if (idx instanceof DerivedIndex) {
-					seriesParser.addSeriesExpression(name, ((DerivedIndex) idx).getExpression());
+				for (final Date d : idx.getDates()) {
+					if (minDisplayDate == null || minDisplayDate.after(d)) {
+						minDisplayDate = d;
+					}
+					if (maxDisplayDate == null || maxDisplayDate.before(d)) {
+						maxDisplayDate = d;
+					}
 				}
 			}
 		}
-		return seriesParser;
-
 	}
 
 	protected class IndexTableViewer extends ScenarioTableViewer {
 
-		public IndexTableViewer(Composite parent, int style, IScenarioEditingLocation part) {
+		public IndexTableViewer(final Composite parent, final int style, final IScenarioEditingLocation part) {
 			super(parent, style, part);
 		}
 
 		@Override
 		protected void internalRefresh(final Object element) {
-			final Object input = getInput();
-			if (input instanceof PricingModel) {
-				final PricingModel pricingModel = (PricingModel) input;
-				seriesParser = createSeriesParser(pricingModel);
-			}
+			createSeriesParsers();
 			super.internalRefresh(element);
 		}
 
 		@Override
 		protected void internalRefresh(final Object element, final boolean updateLabels) {
-			final Object input = getInput();
-			if (input instanceof PricingModel) {
-				final PricingModel pricingModel = (PricingModel) input;
-				seriesParser = createSeriesParser(pricingModel);
-			}
+			createSeriesParsers();
 			super.internalRefresh(element, updateLabels);
 		}
 
-		protected void redisplayDateRange(Date selected) {
+		protected void redisplayDateRange(final Date selected) {
 			if (minDisplayDate != null && maxDisplayDate != null) {
-				Grid grid = null;// = ((GridTableViewer) IndexPane.this.viewer).getGrid();
+				Grid grid = null;
 				if (IndexPane.this.viewer instanceof GridTreeViewer) {
 					grid = ((GridTreeViewer) IndexPane.this.viewer).getGrid();
 				} else if (IndexPane.this.viewer instanceof GridTableViewer) {
 					grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
 				}
+
 				if (grid != null) {
 					final int columnCount = grid.getColumnCount();
 					for (int i = columnCount - 1; i > 1; i--) {
@@ -321,7 +329,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					c.set(Calendar.DAY_OF_MONTH, 1);
 
 					while (!c.getTime().after(maxDisplayDate)) {
-						addColumn(c, true, useIntegers);
+						addColumn(c, true);
 						c.add(Calendar.MONTH, 1);
 					}
 				}
@@ -334,52 +342,18 @@ public class IndexPane extends ScenarioTableViewerPane {
 		protected void inputChanged(final Object input, final Object oldInput) {
 			super.inputChanged(input, oldInput);
 
-			if (input instanceof PricingModel) {
-				final PricingModel pricingModel = (PricingModel) input;
-				seriesParser = createSeriesParser(pricingModel);
-
-				Object obj = pricingModel;
-				for (final EReference ref : path) {
-					obj = ((EObject) obj).eGet(ref);
-				}
-
-				if (obj instanceof List) {
-					final List<EObject> indexObjects = (List<EObject>) obj;
-
-					for (final EObject indexObject : indexObjects) {
-
-						if (!indexObject.eIsSet(indexFeature)) {
-							continue;
-						}
-
-						final Index<?> idx = (Index<?>) indexObject.eGet(indexFeature);
-						if (!(idx instanceof DataIndex<?>)) {
-							continue;
-						}
-
-						for (final Date d : idx.getDates()) {
-							if (minDisplayDate == null || minDisplayDate.after(d)) {
-								minDisplayDate = d;
-							}
-							if (maxDisplayDate == null || maxDisplayDate.before(d)) {
-								maxDisplayDate = d;
-							}
-						}
-					}
-
-					redisplayDateRange(null);
-				}
-			}
-
+			createSeriesParsers();
+			updateDateRange(pricingModel);
+			redisplayDateRange(null);
 		}
 
 		@Override
 		protected void doCommandStackChanged() {
-			inputChanged(getInput(), getInput());
+			getScenarioViewer().setInput(transformer.transform(pricingModel));
 			super.doCommandStackChanged();
 		}
 
-		private void addColumn(final Calendar cal, final boolean sortable, final boolean isIntegerBased) {
+		private void addColumn(final Calendar cal, final boolean sortable) {
 
 			final String date = String.format("%4d-%02d", cal.get(Calendar.YEAR), (cal.get(Calendar.MONTH) + 1));
 			final GridViewerColumn col = addSimpleColumn(date, sortable);
@@ -403,46 +377,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public Comparable getComparable(Object element) {
+				public Comparable<?> getComparable(final Object element) {
 
-					// Unwrap index from owner
-					String name = null;
-					if (element instanceof NamedObject) {
-						final NamedObject namedObject = (NamedObject) element;
-						name = namedObject.getName();
-					}
-
-					if (element instanceof EObject) {
-						final EObject eObject = (EObject) element;
-						if (eObject.eIsSet(indexFeature)) {
-							element = eObject.eGet(indexFeature);
-						}
-					}
-
-					if (element instanceof DataIndex) {
-						final DataIndex<?> idx = (DataIndex<?>) element;
-						final Date colDate = (Date) col.getColumn().getData("date");
-						final Object valueAfter = idx.getValueForMonth(colDate);
-						if (valueAfter instanceof Integer) {
-							// return (Integer) valueAfter;
-							return new Double((Integer) valueAfter);
-						} else if (valueAfter instanceof Double) {
-							return (Double) valueAfter;
-						}
-					} else if (element instanceof DerivedIndex) {
-						final Date colDate = (Date) col.getColumn().getData("date");
-						try {
-							final ISeries series = seriesParser.getSeries(name);
-							final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
-							// final Object valueAfter = idx.getValueForMonth(colDate);
-							if (valueAfter instanceof Integer) {
-								// return (Integer) valueAfter;
-								return new Double((Integer) valueAfter);
-							} else if (valueAfter instanceof Double) {
-								return (Double) valueAfter;
-							}
-						} catch (Exception e) {
-
+					final Date colDate = (Date) col.getColumn().getData("date");
+					final Number number = getNumberForElement(element, colDate);
+					if (number != null) {
+						final DataType dt = getDataTypeForElement(element);
+						if (dt.useIntegers) {
+							return number.intValue();
+						} else {
+							return number.doubleValue();
 						}
 					}
 
@@ -456,22 +400,24 @@ public class IndexPane extends ScenarioTableViewerPane {
 				@SuppressWarnings("unchecked")
 				@Override
 				public void setValue(Object element, final Object value) {
-					// Unwrap index from owner
-					if (element instanceof EObject) {
-						final EObject eObject = (EObject) element;
-						if (eObject.eIsSet(indexFeature)) {
-							element = eObject.eGet(indexFeature);
+					final DataType dt = getDataTypeForElement(element);
+					if (dt != null) {
+
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eIsSet(dt.getIndexFeature())) {
+								element = eObject.eGet(dt.getIndexFeature());
+							}
 						}
-					}
-					if (element instanceof DataIndex) {
-						final Date colDate = (Date) col.getColumn().getData("date");
+						if (element instanceof DataIndex) {
+							final Date colDate = (Date) col.getColumn().getData("date");
 
-						if (isIntegerBased) {
-							setIndexPoint((Integer) value, (DataIndex<Integer>) element, colDate);
-
-						} else {
-
-							setIndexPoint((Double) value, (DataIndex<Double>) element, colDate);
+							if (dt.useIntegers()) {
+								setIndexPoint((Integer) value, (DataIndex<Integer>) element, colDate);
+							} else {
+								setIndexPoint((Double) value, (DataIndex<Double>) element, colDate);
+							}
 						}
 					}
 				}
@@ -509,42 +455,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public Object getValue(Object element) {
-					String name = null;
-					if (element instanceof NamedObject) {
-						final NamedObject namedObject = (NamedObject) element;
-						name = namedObject.getName();
-					}
-					// Unwrap index from owner
-					if (element instanceof EObject) {
-						final EObject eObject = (EObject) element;
-						if (eObject.eIsSet(indexFeature)) {
-							element = eObject.eGet(indexFeature);
-						}
-					}
-					if (element instanceof DataIndex) {
-						final DataIndex<?> idx = (DataIndex<?>) element;
-						final Date colDate = (Date) col.getColumn().getData("date");
-						final Object valueAfter = idx.getValueForMonth(colDate);
-						if (valueAfter instanceof Integer) {
-							return (Integer) valueAfter;
-						} else if (valueAfter instanceof Double) {
-							return (Double) valueAfter;
-						}
-					} else if (element instanceof DerivedIndex) {
-						final DerivedIndex<?> idx = (DerivedIndex<?>) element;
-						final Date colDate = (Date) col.getColumn().getData("date");
+				public Object getValue(final Object element) {
 
-						try {
-							final ISeries series = seriesParser.getSeries(name);
-							final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
-							// final Object valueAfter = idx.getValueForMonth(colDate);
-							if (valueAfter instanceof Integer) {
-								return (Integer) valueAfter;
-							} else if (valueAfter instanceof Double) {
-								return (Double) valueAfter;
-							}
-						} catch (Exception e) {
+					final Date colDate = (Date) col.getColumn().getData("date");
+					final Number number = getNumberForElement(element, colDate);
+					if (number != null) {
+						final DataType dt = getDataTypeForElement(element);
+						if (dt.useIntegers) {
+							return number.intValue();
+						} else {
+							return number.doubleValue();
 						}
 					}
 
@@ -554,32 +474,39 @@ public class IndexPane extends ScenarioTableViewerPane {
 				@Override
 				public CellEditor getCellEditor(final Composite parent, final Object object) {
 
-					final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
-					final NumberFormatter formatter;
-					if (isIntegerBased) {
-						formatter = new IntegerFormatter("#,###.###");
-					} else {
-						formatter = new DoubleFormatter("#,###.###");
+					final DataType dt = getDataTypeForElement(object);
+					if (dt != null) {
+						final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
+						final NumberFormatter formatter;
+
+						if (dt.useIntegers()) {
+							formatter = new IntegerFormatter("#,###.###");
+						} else {
+							formatter = new DoubleFormatter("#,###.###");
+						}
+
+						formatter.setFixedLengths(false, false);
+
+						result.setFormatter(formatter);
+
+						return result;
 					}
-
-					formatter.setFixedLengths(false, false);
-
-					result.setFormatter(formatter);
-
-					return result;
+					return null;
 				}
 
 				@Override
 				public boolean canEdit(Object element) {
+					final DataType dt = getDataTypeForElement(element);
+					if (dt != null) {
 
-					// Unwrap index from owner
-					if (element instanceof EObject) {
-						final EObject eObject = (EObject) element;
-						if (eObject.eIsSet(indexFeature)) {
-							element = eObject.eGet(indexFeature);
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eIsSet(dt.getIndexFeature())) {
+								element = eObject.eGet(dt.getIndexFeature());
+							}
 						}
 					}
-
 					return (element instanceof DataIndex<?>);
 				}
 			};
@@ -599,7 +526,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					} else if (viewer instanceof GridTableViewer) {
 						grid = ((GridTableViewer) IndexPane.this.viewer).getGrid();
 					} else if (viewer.getControl() instanceof Composite) {
-						grid = (Composite)viewer.getControl();
+						grid = (Composite) viewer.getControl();
 					}
 					return manipulator.getCellEditor(grid, element);
 
@@ -625,11 +552,15 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 				@Override
 				public Color getForeground(Object element) {
-					// Unwrap index from owner
-					if (element instanceof EObject) {
-						final EObject eObject = (EObject) element;
-						if (eObject.eIsSet(indexFeature)) {
-							element = eObject.eGet(indexFeature);
+
+					final DataType dt = getDataTypeForElement(element);
+					if (dt != null) {
+						// Unwrap index from owner
+						if (element instanceof EObject) {
+							final EObject eObject = (EObject) element;
+							if (eObject.eClass().getEAllStructuralFeatures().contains(dt.getIndexFeature()) && eObject.eIsSet(dt.getIndexFeature())) {
+								element = eObject.eGet(dt.getIndexFeature());
+							}
 						}
 					}
 					if (element instanceof DerivedIndex<?>) {
@@ -639,93 +570,125 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
-				public String getText(Object element) {
+				public String getText(final Object element) {
 
-					String name = null;
-					if (element instanceof NamedObject) {
-						final NamedObject namedObject = (NamedObject) element;
-						name = namedObject.getName();
+					final Date colDate = (Date) col.getColumn().getData("date");
+					final Number number = getNumberForElement(element, colDate);
+					if (number != null) {
+						final DataType dt = getDataTypeForElement(element);
+						if (dt.useIntegers) {
+							return String.format("%d", number.intValue());
+						} else {
+							return String.format("%01.3f", number.doubleValue());
+						}
 					}
 
-					// Unwrap index from owner
-					if (element instanceof EObject) {
-						final EObject eObject = (EObject) element;
-						if (eObject.eIsSet(indexFeature)) {
-							element = eObject.eGet(indexFeature);
-						}
-					}
-					if (element instanceof DataIndex) {
-						final DataIndex<?> idx = (DataIndex<?>) element;
-						final Date colDate = (Date) col.getColumn().getData("date");
-						final Object valueAfter = idx.getValueForMonth(colDate);
-						if (valueAfter != null) {
-							if (valueAfter instanceof Integer) {
-								return String.format("%d", valueAfter);
-							} else {
-								return String.format("%01.3f", valueAfter);
-							}
-						}
-					} else if (element instanceof DerivedIndex) {
-						final Date colDate = (Date) col.getColumn().getData("date");
-						if (name != null && !name.isEmpty()) {
-							try {
-								final ISeries series = seriesParser.getSeries(name);
-								final Number valueAfter = series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
-								// final Object valueAfter = idx.getValueForMonth(colDate);
-								if (valueAfter != null) {
-									if (valueAfter instanceof Integer) {
-										return String.format("%d", valueAfter);
-									} else {
-										return String.format("%01.3f", valueAfter);
-									}
-								}
-							} catch (Exception e) {
-								// Ignore
-							}
-						}
-					}
 					return null;
 				}
 			});
 		}
 	}
 
-	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
-		return result;
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	protected void enableOpenListener() {
+		scenarioViewer.addOpenListener(new IOpenListener() {
+
+			@Override
+			public void open(final OpenEvent event) {
+				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
+					if (structuredSelection.isEmpty() == false) {
+						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+						if (structuredSelection.size() == 1) {
+
+							// Skip tree model elements
+							if (transformer.getNodeClass().isInstance(structuredSelection.getFirstElement())) {
+								return;
+							}
+
+							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler());
+							try {
+								editorLock.claim();
+								scenarioEditingLocation.setDisableUpdates(true);
+								dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
+							} finally {
+								scenarioEditingLocation.setDisableUpdates(false);
+								editorLock.release();
+							}
+						} else {
+							// No multi-edit for indices
+						}
+					}
+				}
+			}
+		});
 	}
 
-	
-	
-	
-	/////////////////
-	
-	private void createModel() {
-		modelPackage = EcoreFactory.eINSTANCE.createEPackage();
+	private @Nullable
+	Index<?> getIndex(@Nullable final Object o) {
+		if (o instanceof CommodityIndex) {
+			return ((CommodityIndex) o).getData();
+		} else if (o instanceof CharterIndex) {
+			return ((CharterIndex) o).getData();
+		} else if (o instanceof BaseFuelIndex) {
+			return ((BaseFuelIndex) o).getData();
+		} else if (o instanceof NamedIndexContainer<?>) {
+			return ((NamedIndexContainer<?>) o).getData();
+		}
+		return null;
 
-		node = EcoreFactory.eINSTANCE.createEClass();
-
-		name = EcoreFactory.eINSTANCE.createEAttribute();
-		name.setName("name");
-		name.setUpperBound(1);
-		name.setLowerBound(0);
-		name.setEType(EcorePackage.Literals.ESTRING);
-
-		node.getEStructuralFeatures().add(name);
-
-		data = EcoreFactory.eINSTANCE.createEReference();
-		data.setName("data");
-		data.setContainment(false);
-		data.setUpperBound(-1);
-		data.setLowerBound(0);
-		data.setEType(EcorePackage.Literals.EOBJECT);
-
-		node.getEStructuralFeatures().add(data);
-
-		modelPackage.getEClassifiers().add(node);
 	}
 
-	
-	
-	
+	private @Nullable
+	DataType getDataTypeForElement(@Nullable final Object element) {
+		if (element instanceof CommodityIndex) {
+			return DataType.Commodity;
+		} else if (element instanceof BaseFuelIndex) {
+			return DataType.BaseFuel;
+		} else if (element instanceof CharterIndex) {
+			return DataType.Commodity;
+		}
+		return null;
+
+	}
+
+	private @Nullable
+	Number getNumberForElement(Object element, final Date colDate) {
+
+		if (transformer.getNodeClass().isInstance(element)) {
+			return null;
+		}
+
+		String name = null;
+		if (element instanceof NamedObject) {
+			final NamedObject namedObject = (NamedObject) element;
+			name = namedObject.getName();
+		}
+
+		final DataType dt = getDataTypeForElement(element);
+		element = getIndex(element);
+
+		if (element instanceof DataIndex) {
+			final DataIndex<?> idx = (DataIndex<?>) element;
+			return (Number) idx.getValueForMonth(colDate);
+		} else if (element instanceof DerivedIndex) {
+
+			final SeriesParser seriesParser = seriesParsers.get(dt);
+			if (seriesParser != null) {
+				final ISeries series = seriesParser.getSeries(name);
+				if (series != null) {
+					return series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+				}
+			}
+		}
+		return null;
+	}
+
+	public void setInput(final PricingModel pricingModel) {
+		this.pricingModel = pricingModel;
+		getScenarioViewer().setInput(transformer.transform(pricingModel));
+	}
 }

@@ -38,8 +38,8 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -278,7 +278,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
 				super.init(adapterFactory, commandStack, path);
 
-				init(new IStructuredContentProvider() {
+				init(new ITreeContentProvider() {
 
 					@Override
 					public void dispose() {
@@ -307,6 +307,21 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					@Override
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
+					}
+
+					@Override
+					public Object[] getChildren(Object parentElement) {
+						return null;
+					}
+
+					@Override
+					public Object getParent(Object element) {
+						return null;
+					}
+
+					@Override
+					public boolean hasChildren(Object element) {
+						return false;
 					}
 
 				}, commandStack);
