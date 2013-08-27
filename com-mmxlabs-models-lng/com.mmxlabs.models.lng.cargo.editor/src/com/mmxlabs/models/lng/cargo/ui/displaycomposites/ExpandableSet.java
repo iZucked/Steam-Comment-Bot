@@ -26,6 +26,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.util.EditorControlFactory;
 
 class ExpandableSet implements DisposeListener {
 
@@ -69,7 +70,7 @@ class ExpandableSet implements DisposeListener {
 		// feature editors
 		boolean visible = false;
 		for (EStructuralFeature[] fs : featureLines) {		
-			SlotDetailComposite.makeControls(root, object, c, fs, feature2Editor, dbc, lp, toolkit);
+			EditorControlFactory.makeControls(root, object, c, fs, feature2Editor, dbc, lp, toolkit);
 			visible = true;
 		}
 		ec.setExpanded(true);
@@ -78,7 +79,6 @@ class ExpandableSet implements DisposeListener {
 		textClient = new Label(ec, SWT.NONE);
 		textClient.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		ec.setTextClient(textClient);
-		makeLabel();
 		updateTextClient(object);
 		// hide if no features
 		ec.setVisible(visible);
@@ -107,10 +107,11 @@ class ExpandableSet implements DisposeListener {
 		if (titleListener!=null) eo.eAdapters().add(titleListener);
 	}
 	
-	protected void updateTextClient(final EObject eo) {}
-	
-	void makeLabel(){
+	public void setExpanded(boolean b){
+		ec.setExpanded(b);
 	}
+	
+	protected void updateTextClient(final EObject eo) {}
 			
 	@Override
 	public void widgetDisposed(DisposeEvent e) {

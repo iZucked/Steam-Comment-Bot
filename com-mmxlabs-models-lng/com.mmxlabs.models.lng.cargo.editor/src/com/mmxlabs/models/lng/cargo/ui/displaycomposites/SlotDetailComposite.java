@@ -16,18 +16,13 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
-import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -46,6 +41,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.util.EditorControlFactory;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 
@@ -60,7 +56,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 	private static final SimpleDateFormat WindowDateFormat = new SimpleDateFormat("dd MMM YYYY");
 
-	ScrolledComposite scrollComposite;
 	Composite contentComposite;
 	private final Map<EStructuralFeature, IInlineEditor> feature2Editor;
 	final ExpandableSet esPricing;
@@ -68,13 +63,14 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private final ExpandableSet esTerms;
 	private ArrayList<EStructuralFeature[]> nameFeatures;
 	private ArrayList<EStructuralFeature[]> pricingFeatures;
+	private HashSet<EStructuralFeature> pricingTitleFeatures;
 	private ArrayList<EStructuralFeature[]> mainFeatures;
 	private ArrayList<EStructuralFeature[]> windowFeatures;
+	private HashSet<EStructuralFeature> windowTitleFeatures;
 	private ArrayList<EStructuralFeature[]> loadTermsFeatures;
 	private ArrayList<EStructuralFeature[]> dischargeTermsFeatures;
 	private ArrayList<EStructuralFeature> missedFeatures;
-	private HashSet<EStructuralFeature> windowTitleFeatures;
-	private HashSet<EStructuralFeature> pricingTitleFeatures;
+	private ArrayList<EStructuralFeature[]> noteFeatures;
 
 	{
 		nameFeatures = new ArrayList<EStructuralFeature[]>();
@@ -99,13 +95,14 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_CargoCV() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
 
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
 
 		missedFeatures = new ArrayList<EStructuralFeature>();
+		
+		noteFeatures = new ArrayList<EStructuralFeature[]>();
+		noteFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
 	}
 
 	public SlotDetailComposite(final Composite parent, final int style, FormToolkit toolkit) {
@@ -180,7 +177,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		esPricing.init(eo);
 		esWindow.init(eo);
 		esTerms.init(eo);
-		scrollComposite.setMinSize(contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	@Override
@@ -198,82 +194,46 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			isLoad = false;
 		}
 
-		scrollComposite = new ScrolledComposite(this, SWT.NONE | SWT.V_SCROLL);
-		toolkit.adapt(scrollComposite, true, true);
-		scrollComposite.setLayout(new FillLayout());
-		scrollComposite.setExpandHorizontal(true);
-		scrollComposite.setExpandVertical(true);
-
-		contentComposite = toolkit.createComposite(scrollComposite);
+		contentComposite = toolkit.createComposite(this);
 		contentComposite.setLayout(new GridLayout(2, false));
-		scrollComposite.setContent(contentComposite);
 
 		for (EStructuralFeature[] fs : nameFeatures) {
-			makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
+			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 
 		for (EStructuralFeature[] fs : mainFeatures) {
-			makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
+			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
-
+		
 		createSpacer();
 		esPricing.setFeatures(pricingFeatures, pricingTitleFeatures);
 		esPricing.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
-		addExpansionListener(esPricing.ec);
+		esPricing.setExpanded(false);
 
-		createSpacer();
+		createSpacer();	
 		esWindow.setFeatures(windowFeatures, windowTitleFeatures);
 		esWindow.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
-		addExpansionListener(esWindow.ec);
+		esWindow.setExpanded(false);
 
 		createSpacer();
 		esTerms.setFeatures(isLoad ? loadTermsFeatures : dischargeTermsFeatures, null);
 		esTerms.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
-		addExpansionListener(esTerms.ec);
+		esTerms.setExpanded(false);
 
-//		for (EStructuralFeature f : missedFeatures) {
-//		}
-		
-		this.addControlListener(new ControlAdapter() {
-			public void controlResized(final ControlEvent e) {
-				scrollComposite.setMinSize(contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-			}
-		});
+		for (EStructuralFeature f : missedFeatures) {
+		}
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
+	
+		for (EStructuralFeature[] fs : noteFeatures) {
+			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
+		}
 	}
 
 	private void createSpacer() {
-		Composite spacer = new Composite(contentComposite, SWT.NONE);
-		spacer.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		Composite spacer = toolkit.createComposite(contentComposite);
 		GridData gd = new GridData();
 		gd.heightHint = 3;
 		spacer.setLayoutData(gd);
-	}
-
-	Composite createExpandable(final ExpandableComposite ec) {
-		ec.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-		addExpansionListener(ec);
-		final Composite inner = toolkit.createComposite(ec);
-		inner.setLayout(new GridLayout(2, false));
-		ec.setClient(inner);
-		return inner;
-	}
-
-	private void addExpansionListener(final ExpandableComposite ec) {
-		ec.addExpansionListener(createExpansionListener(ec));
-	}
-	
-	private ExpansionAdapter createExpansionListener(
-			final ExpandableComposite ec) {
-		return new ExpansionAdapter() {
-			@Override
-			public void expansionStateChanged(final ExpansionEvent e) {
-				final Point p = ec.getSize();
-				final Point p2 = ec.computeSize(p.x, SWT.DEFAULT);
-				ec.setSize(p.x, p2.y);
-				scrollComposite.setMinSize(contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				contentComposite.layout();
-			}
-		};
 	}
 
 	@Override
@@ -281,7 +241,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		final Point p = ec.getSize();
 		final Point p2 = ec.computeSize(p.x, SWT.DEFAULT);
 		ec.setSize(p.x, p2.y);
-		scrollComposite.setMinSize(contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		contentComposite.layout();
 	}
 
@@ -302,42 +261,4 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 		return null;
 	}
-
-	/**
-	 * Make a set of controls for the given []
-	 * 
-	 * @param root
-	 * @param object
-	 * @param c
-	 * @param fs
-	 * @return
-	 */
-	public static Control makeControls(MMXRootObject root, EObject object, Composite c, EStructuralFeature[] fs, Map<EStructuralFeature, IInlineEditor> feature2Editor, EMFDataBindingContext dbc, IDisplayCompositeLayoutProvider layoutProvider, FormToolkit toolkit) {
-
-		Composite holder = c;
-		if (fs.length > 1) {
-			holder = new Composite(c, SWT.NONE);
-			holder.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-			GridData gd = new GridData();
-			gd.horizontalSpan = 5;
-			holder.setLayoutData(gd);
-			GridLayout gl = new GridLayout(2 * fs.length, false);
-			gl.marginWidth = 0;
-			gl.marginHeight = 0;
-			holder.setLayout(gl);
-		}
-		for (EStructuralFeature f : fs) {
-			IInlineEditor editor = feature2Editor.get(f);
-			if (editor != null) {
-			createLabelledEditorControl(root, object, holder, editor, dbc, layoutProvider, toolkit);
-			}
-		}
-		return holder;
-	}
-
-	// private Control makeControl(MMXRootObject root, EObject object, Composite c, EStructuralFeature f, EMFDataBindingContext dbc) {
-	//
-	// IInlineEditor editor = feature2Editor.get(f);
-	// return createLabelledEditorControl(root, object, c, editor, dbc);
-	// }
 }
