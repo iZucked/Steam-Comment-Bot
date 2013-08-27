@@ -22,8 +22,10 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
@@ -51,7 +53,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * @since 4.0
  * 
  */
-public class EObjectTableViewer extends GridTableViewer {
+public class EObjectTableViewer extends GridTreeViewer {
 	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
 
 	protected static final String COLUMN_PATH = "COLUMN_PATH";
@@ -250,7 +252,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
 
 		// create a column
-		final GridTableViewer viewer = this;
+		final GridTreeViewer viewer = this;
 
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		final GridColumn tColumn = column.getColumn();
@@ -319,7 +321,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	public GridViewerColumn addSimpleColumn(final String columnName, final boolean sortable) {
 
 		// create a column
-		final GridTableViewer viewer = this;
+		final GridTreeViewer viewer = this;
 
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		final GridColumn tColumn = column.getColumn();
@@ -376,16 +378,16 @@ public class EObjectTableViewer extends GridTableViewer {
 	 * @since 3.1
 	 */
 	public void init(final IStructuredContentProvider contentProvider, final CommandStack commandStack) {
-		final GridTableViewer viewer = this;
-		final Grid table = viewer.getGrid();
+		final GridTreeViewer viewer = this;
+		final Grid grid = viewer.getGrid();
 
 		currentCommandStack = commandStack;
 		if (currentCommandStack != null) {
 			currentCommandStack.addCommandStackListener(commandStackListener);
 		}
 
-//		table.setRowHeaderVisible(true);
-//		table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
+		// table.setRowHeaderVisible(true);
+		// table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
 
 		// This appears to do nothing in the Nebula Grid case.
 		// See Grid#setItemHeight() instead
@@ -396,19 +398,19 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		};
 
-		table.addListener(SWT.MeasureItem, measureListener);
+		grid.addListener(SWT.MeasureItem, measureListener);
 
-		table.addDisposeListener(new DisposeListener() {
+		grid.addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(final DisposeEvent e) {
-				table.removeListener(SWT.MeasureItem, measureListener);
+				grid.removeListener(SWT.MeasureItem, measureListener);
 				dispose();
 			}
 		});
 
 		viewer.setContentProvider(
 
-		new IStructuredContentProvider() {
+		new ITreeContentProvider() {
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -420,6 +422,10 @@ public class EObjectTableViewer extends GridTableViewer {
 							if (!viewer.getControl().isDisposed()) {
 								if (viewer instanceof GridTableViewer) {
 									for (final GridColumn tc : ((GridTableViewer) viewer).getGrid().getColumns()) {
+										tc.pack();
+									}
+								} else if (viewer instanceof GridTreeViewer) {
+									for (final GridColumn tc : ((GridTreeViewer) viewer).getGrid().getColumns()) {
 										tc.pack();
 									}
 								}
@@ -454,6 +460,23 @@ public class EObjectTableViewer extends GridTableViewer {
 				}
 
 				return elements;
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				return getElements(parentElement);
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public boolean hasChildren(Object element) {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		});
 
