@@ -89,24 +89,21 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 public class IndexPane extends ScenarioTableViewerPane {
 
 	private enum DataType {
-		Commodity(false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.COMMODITY_INDEX__DATA, true),
+		Commodity(false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.COMMODITY_INDEX__DATA),
 
-		BaseFuel(false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
+		BaseFuel(false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA),
 
-		Charter(true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.CHARTER_INDEX__DATA, false);
+		Charter(true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.CHARTER_INDEX__DATA);
 
 		private final boolean useIntegers;
 
 		private final EReference containerFeature;
 		private final EReference indexFeature;
 
-		private boolean expandedByDefault;
-
-		private DataType(final boolean useIntegers, final EReference containerFeature, final EReference indexFeature, final boolean expandedByDefault) {
+		private DataType(final boolean useIntegers, final EReference containerFeature, final EReference indexFeature) {
 			this.useIntegers = useIntegers;
 			this.containerFeature = containerFeature;
 			this.indexFeature = indexFeature;
-			this.expandedByDefault = expandedByDefault;
 		}
 
 		public boolean useIntegers() {
@@ -535,7 +532,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 						grid = (Composite) viewer.getControl();
 					}
 					return manipulator.getCellEditor(grid, element);
-
 				}
 
 				@Override
@@ -717,6 +713,5 @@ public class IndexPane extends ScenarioTableViewerPane {
 			}
 		}
 		getScenarioViewer().setExpandedElements(expandedObjects.toArray());
-
 	}
 }
