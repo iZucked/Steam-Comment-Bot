@@ -15,6 +15,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -63,6 +64,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.ui.actions.AddDateToIndexAction;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -160,7 +162,13 @@ public class IndexPane extends ScenarioTableViewerPane {
 	@Override
 	protected Action createAddAction(final EReference containment) {
 		final Action[] actions = new Action[] { new AddDateToIndexAction(this) };
-		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), actions);
+
+		final List<Pair<EClass, IAddContext>> items = new LinkedList<>();
+		items.add(new Pair<>(PricingPackage.Literals.COMMODITY_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES)));
+		items.add(new Pair<>(PricingPackage.Literals.BASE_FUEL_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES)));
+		items.add(new Pair<>(PricingPackage.Literals.CHARTER_INDEX, getAddContext(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES)));
+
+		return AddModelAction.create(items, actions);
 	}
 
 	@Override
@@ -208,20 +216,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 				return "";
 			}
 		});
-
-		defaultSetTitle("Indices");
-	}
-
-	/*
-	 * Make method public
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane#defaultSetTitle(java.lang.String)
-	 */
-	@Override
-	public void defaultSetTitle(final String string) {
-		super.defaultSetTitle(string);
 	}
 
 	private void createSeriesParsers() {
@@ -691,6 +685,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	public void setInput(final PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
+		
+		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
+		
 		final EObject root = transformer.getRootObject();
 		transformer.update(pricingModel);
 
