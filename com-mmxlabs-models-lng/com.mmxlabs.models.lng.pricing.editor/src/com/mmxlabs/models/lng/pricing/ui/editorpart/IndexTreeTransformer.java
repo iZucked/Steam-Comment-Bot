@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,11 +16,62 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.common.ITransformer;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 public class IndexTreeTransformer {
+
+	/**
+	 * Enum defining the sub-nodes of the {@link PricingModel} representing indicies to show in the same viewer
+	 * 
+	 */
+	public enum DataType {
+		Commodity("Commodity Curves", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, true),
+
+		BaseFuel("Base Fuel Curves", false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
+
+		Charter("Chartering Curves", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false);
+
+		private final String name;
+		private final boolean useIntegers;
+		private final EReference containerFeature;
+		private final EReference indexFeature;
+		private final boolean expandedByDefault;
+
+		private DataType(final String name, final boolean useIntegers, final EReference containerFeature, final EReference indexFeature, final boolean expandedByDefault) {
+			this.name = name;
+			this.useIntegers = useIntegers;
+			this.containerFeature = containerFeature;
+			this.indexFeature = indexFeature;
+			this.expandedByDefault = expandedByDefault;
+		}
+
+		/**
+		 * Integer based or double based
+		 * 
+		 * @return
+		 */
+		public boolean useIntegers() {
+			return useIntegers;
+		}
+
+		public EReference getContainerFeature() {
+			return containerFeature;
+		}
+
+		public EReference getIndexFeature() {
+			return indexFeature;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public boolean isExpandedByDefault() {
+			return expandedByDefault;
+		}
+	}
 
 	private final EPackage modelPackage;
 	private final EClass nodeClass;
@@ -27,9 +79,8 @@ public class IndexTreeTransformer {
 	private final EAttribute expandAttribute;
 	private final EAttribute nameAttribute = MMXCorePackage.Literals.NAMED_OBJECT__NAME;
 	private EObject root;
-	private EObject nodeCharterCurves;
-	private EObject nodeBaseFuels;
-	private EObject nodeCommodity;
+
+	private final Map<DataType, EObject> nodeMap = new EnumMap<>(DataType.class);
 
 	public IndexTreeTransformer() {
 
@@ -66,26 +117,12 @@ public class IndexTreeTransformer {
 			root.eSet(nameAttribute, "root");
 
 			final List<EObject> nodes = new LinkedList<EObject>();
-			// Commodity
-			{
-				nodeCommodity = modelPackage.getEFactoryInstance().create(nodeClass);
-				nodeCommodity.eSet(nameAttribute, "Commodity Curves");
-				nodeCommodity.eSet(expandAttribute, Boolean.TRUE);
-				nodes.add(nodeCommodity);
-			}
-
-			// Base Fuels
-			{
-				nodeBaseFuels = modelPackage.getEFactoryInstance().create(nodeClass);
-				nodeBaseFuels.eSet(nameAttribute, "Base Fuel Curves");
-				nodes.add(nodeBaseFuels);
-			}
-
-			// Charter Curves
-			{
-				nodeCharterCurves = modelPackage.getEFactoryInstance().create(nodeClass);
-				nodeCharterCurves.eSet(nameAttribute, "Charter Curves");
-				nodes.add(nodeCharterCurves);
+			for (final DataType dt : DataType.values()) {
+				final EObject n = modelPackage.getEFactoryInstance().create(nodeClass);
+				n.eSet(nameAttribute, dt.getName());
+				n.eSet(expandAttribute, dt.isExpandedByDefault());
+				nodes.add(n);
+				nodeMap.put(dt, n);
 			}
 
 			root.eSet(dataReference, nodes);
@@ -94,9 +131,12 @@ public class IndexTreeTransformer {
 
 	public void update(final PricingModel pricingModel) {
 
-		nodeCommodity.eSet(dataReference, pricingModel.getCommodityIndices());
-		nodeBaseFuels.eSet(dataReference, pricingModel.getBaseFuelPrices());
-		nodeCharterCurves.eSet(dataReference, pricingModel.getCharterIndices());
+		for (final DataType dt : DataType.values()) {
+			final EObject n = nodeMap.get(dt);
+			if (n != null) {
+				n.eSet(dataReference, new LinkedList<>((List<?>) pricingModel.eGet(dt.getContainerFeature())));
+			}
+		}
 	}
 
 	public EPackage getModelPackage() {
@@ -122,7 +162,7 @@ public class IndexTreeTransformer {
 	public ITreeContentProvider createContentProvider() {
 		return new ITreeContentProvider() {
 
-			private Map<Object, Object> parentMap = new HashMap<>();
+			private final Map<Object, Object> parentMap = new HashMap<>();
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -164,8 +204,8 @@ public class IndexTreeTransformer {
 				if (nodeClass.isInstance(parentElement)) {
 					final List<?> children = (List<?>) ((EObject) parentElement).eGet(dataReference);
 					if (children != null) {
-						Object[] array = children.toArray();
-						for (Object obj : array) {
+						final Object[] array = children.toArray();
+						for (final Object obj : array) {
 							parentMap.put(obj, parentElement);
 						}
 						return array;

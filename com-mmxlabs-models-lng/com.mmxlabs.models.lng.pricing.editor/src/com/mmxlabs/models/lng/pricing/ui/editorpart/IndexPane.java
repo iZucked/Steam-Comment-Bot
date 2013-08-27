@@ -62,6 +62,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.ui.actions.AddDateToIndexAction;
+import com.mmxlabs.models.lng.pricing.ui.editorpart.IndexTreeTransformer.DataType;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
@@ -89,37 +90,6 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  * 
  */
 public class IndexPane extends ScenarioTableViewerPane {
-
-	private enum DataType {
-		Commodity(false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA),
-
-		BaseFuel(false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA),
-
-		Charter(true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
-
-		private final boolean useIntegers;
-
-		private final EReference containerFeature;
-		private final EReference indexFeature;
-
-		private DataType(final boolean useIntegers, final EReference containerFeature, final EReference indexFeature) {
-			this.useIntegers = useIntegers;
-			this.containerFeature = containerFeature;
-			this.indexFeature = indexFeature;
-		}
-
-		public boolean useIntegers() {
-			return useIntegers;
-		}
-
-		public EReference getContainerFeature() {
-			return containerFeature;
-		}
-
-		public EReference getIndexFeature() {
-			return indexFeature;
-		}
-	}
 
 	private static final Date dateZero = new Date(0);
 
@@ -380,7 +350,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
 						final DataType dt = getDataTypeForElement(element);
-						if (dt.useIntegers) {
+						if (dt.useIntegers()) {
 							return number.intValue();
 						} else {
 							return number.doubleValue();
@@ -458,7 +428,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
 						final DataType dt = getDataTypeForElement(element);
-						if (dt.useIntegers) {
+						if (dt.useIntegers()) {
 							return number.intValue();
 						} else {
 							return number.doubleValue();
@@ -572,7 +542,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
 						final DataType dt = getDataTypeForElement(element);
-						if (dt.useIntegers) {
+						if (dt.useIntegers()) {
 							return String.format("%d", number.intValue());
 						} else {
 							return String.format("%01.3f", number.doubleValue());
