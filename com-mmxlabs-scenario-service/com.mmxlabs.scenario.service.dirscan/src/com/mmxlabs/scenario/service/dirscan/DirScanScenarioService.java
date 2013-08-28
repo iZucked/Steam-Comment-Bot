@@ -443,7 +443,14 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void removeFile(final Path file) {
-		final ScenarioInstance c = scenarioMap.remove(file.normalize().toString()).get();
+		if (file == null) {
+			return;
+		}
+		final Path normal = file.normalize();
+		if (normal == null) {
+			return;
+		}
+		final ScenarioInstance c = scenarioMap.remove(normal.toString()).get();
 
 		if (c != null) {
 			detachSubTree(c);
