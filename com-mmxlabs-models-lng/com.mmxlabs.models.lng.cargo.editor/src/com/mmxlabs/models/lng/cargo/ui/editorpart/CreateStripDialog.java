@@ -468,11 +468,12 @@ public class CreateStripDialog extends FormDialog {
 		}
 		final Composite splitPane = toolkit.createComposite(body);
 		splitPane.setLayout(new GridLayout(2, false));
+		splitPane.setLayoutData(new GridData(GridData.FILL_BOTH));
 		{
 			// Template - take defaults from current selection
 			final Group template = new Group(splitPane, SWT.NONE);
 			template.setLayout(new GridLayout(2, false));
-			template.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			template.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 			template.setText("Template");
 			toolkit.adapt(template);

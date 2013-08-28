@@ -1621,7 +1621,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-					final CreateStripDialog d = new CreateStripDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation, stripType, selectedObject);
+					final CreateStripDialog d = new CreateStripDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation, stripType, selectedObject) {
+						@Override
+						protected void configureShell(final Shell newShell) {
+							newShell.setMinimumSize(SWT.DEFAULT, 630);
+							super.configureShell(newShell);
+						}
+					};
 					if (Window.OK == d.open()) {
 						final Command cmd = d.createStrip(scenarioModel.getPortfolioModel().getCargoModel(), getEditingDomain());
 						if (cmd.canExecute()) {
