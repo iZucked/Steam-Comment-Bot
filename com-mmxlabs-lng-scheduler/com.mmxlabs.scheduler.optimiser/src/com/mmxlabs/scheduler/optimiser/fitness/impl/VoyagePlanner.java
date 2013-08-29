@@ -343,7 +343,7 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final int[] arrivalTimes) {
+	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final List<Integer>  arrivalTimes) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		voyagePlanOptimiser.setVessel(vessel, startTime);
@@ -378,7 +378,7 @@ public class VoyagePlanner {
 
 				if (!isShortCargoEnd) {
 					// Available time, as determined by inputs.
-					availableTime = arrivalTimes[idx] - arrivalTimes[idx - 1] - prevVisitDuration;
+					availableTime = arrivalTimes.get(idx) - arrivalTimes.get(idx-1) - prevVisitDuration;
 				} else { // shorts cargo end on shorts sequence
 					int minTravelTime = Integer.MAX_VALUE;
 					for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, prev2Port)) {
@@ -389,7 +389,7 @@ public class VoyagePlanner {
 					}
 					availableTime = minTravelTime;
 
-					shortCargoReturnArrivalTime = arrivalTimes[idx - 1] + prevVisitDuration + availableTime;
+					shortCargoReturnArrivalTime = arrivalTimes.get(idx - 1) + prevVisitDuration + availableTime;
 				}
 
 				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vessel, states[idx], availableTime, element, prevElement, previousOptions, voyagePlanOptimiser, useNBO);
@@ -409,7 +409,7 @@ public class VoyagePlanner {
 			if (isShortsSequence && portType == PortType.Short_Cargo_End) {
 				currentTimes.add(shortCargoReturnArrivalTime);
 			} else {
-				currentTimes.add(arrivalTimes[idx]);
+				currentTimes.add(arrivalTimes.get(idx));
 			}
 			voyageOrPortOptions.add(portOptions);
 
