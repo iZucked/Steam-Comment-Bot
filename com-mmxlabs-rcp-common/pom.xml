@@ -10,7 +10,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>21</version>
+		<version>22</version>
 	</parent>
 
 	<scm>
@@ -49,6 +49,21 @@
 	<build>
 		<!-- Required for some tycho workaround - may no longer be needed -->
 		<sourceDirectory>src</sourceDirectory>
+
+		<pluginManagement>
+			<plugins>
+				<!-- Override default of Java 1.6 -->
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-compiler-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 
 		<plugins>
 

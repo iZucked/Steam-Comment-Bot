@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
@@ -19,6 +20,7 @@ import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,22 @@ public final class LicenseChecker {
 	 * @since 4.0
 	 */
 	public static enum LicenseState {
-		Valid, Expired, Unknown, NotYetValid
+		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid("License is not valid yet. Please contact Minimax Labs."), KeystoreNotFound(
+				"Unable to find license file");
+
+		private final String message;
+
+		private LicenseState() {
+			message = toString();
+		}
+
+		private LicenseState(String message) {
+			this.message = message;
+		}
+
+		public String getMessage() {
+			return message;
+		}
 	}
 
 	// Hardcoded keystore password - only storing public key so not really an issue - although tampering may be an issue
@@ -80,7 +97,7 @@ public final class LicenseChecker {
 			}
 
 			if (licenseKeystore == null) {
-				return LicenseState.Unknown;
+				return LicenseState.KeystoreNotFound;
 			}
 
 			// Hardcoded alias name in the keystore as part of generation process
@@ -222,6 +239,39 @@ public final class LicenseChecker {
 					// Ignore
 				}
 			}
+		}
+		return null;
+
+	}
+
+	/**
+	 * Loads the client license certificate into memory.
+	 * 
+	 * @return The certificate, or null if there were problems other than exceptions
+	 * @throws CertificateException
+	 * @throws FileNotFoundException
+	 * @throws KeyStoreException
+	 */
+	public static @Nullable
+	X509Certificate getClientLicense() throws CertificateException, FileNotFoundException, KeyStoreException {
+		// Load the license file
+		KeyStore licenseKeystore = null;
+		{
+			licenseKeystore = getEclipseHomeLicense();
+			if (licenseKeystore == null) {
+				licenseKeystore = getUserDataLicense();
+			}
+		}
+
+		if (licenseKeystore == null) {
+			return null;
+		}
+
+		// Hardcoded alias name in the keystore as part of generation process
+		final Certificate licenseCertificate = licenseKeystore.getCertificate("1");
+
+		if (licenseCertificate instanceof X509Certificate) {
+			return (X509Certificate) licenseCertificate;
 		}
 		return null;
 
