@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -205,6 +206,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 						minPricePerMMBTu -= 5000;
 						minPrice_Value = evaluateSalesPrice(seq, vessel, arrivalTimes, dischargeIdx, currentSequence, originalDischarge, newSequence, minPricePerMMBTu);
 					}
+					// Do not go below zero
+					minPricePerMMBTu = Math.max(0, minPricePerMMBTu);
+					
 					int maxPricePerMMBTu = 10 * minPricePerMMBTu;
 					long maxPrice_Value = evaluateSalesPrice(seq, vessel, arrivalTimes, dischargeIdx, currentSequence, originalDischarge, newSequence, maxPricePerMMBTu);
 					while (maxPrice_Value < 0) {
@@ -212,6 +216,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 						maxPricePerMMBTu += 5000;
 						maxPrice_Value = evaluateSalesPrice(seq, vessel, arrivalTimes, dischargeIdx, currentSequence, originalDischarge, newSequence, maxPricePerMMBTu);
 					}
+					// $90/mmBTu is max - anything much larger can cause overflow issues
+					maxPricePerMMBTu = Math.min(OptimiserUnitConvertor.convertToInternalPrice(90.0), maxPricePerMMBTu);
 
 					final int breakEvenPricePerMMBtu = search(minPricePerMMBTu, minPrice_Value, maxPricePerMMBTu, maxPrice_Value, seq, vessel, arrivalTimes, dischargeIdx, currentSequence,
 							originalDischarge, newSequence);
