@@ -39,7 +39,10 @@ public final class LicenseChecker {
 	 * @since 4.0
 	 */
 	public static enum LicenseState {
-		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid("License is not valid yet. Please contact Minimax Labs."), KeystoreNotFound(
+		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid("License is not valid yet. Please contact Minimax Labs."), /**
+		 * @since 4.1
+		 */
+		KeystoreNotFound(
 				"Unable to find license file");
 
 		private final String message;
@@ -52,6 +55,9 @@ public final class LicenseChecker {
 			this.message = message;
 		}
 
+		/**
+		 * @since 4.1
+		 */
 		public String getMessage() {
 			return message;
 		}
@@ -251,6 +257,7 @@ public final class LicenseChecker {
 	 * @throws CertificateException
 	 * @throws FileNotFoundException
 	 * @throws KeyStoreException
+	 * @since 4.1
 	 */
 	public static @Nullable
 	X509Certificate getClientLicense() throws CertificateException, FileNotFoundException, KeyStoreException {
