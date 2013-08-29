@@ -6,6 +6,7 @@ package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -27,6 +28,7 @@ import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
@@ -49,6 +51,17 @@ public class NewFolderCommandHandler extends AbstractHandler {
 						final Object input = navigator.getCommonViewer().getInput();
 						if (input instanceof Container) {
 							createFolderInContainer(activePage, (Container) input);
+						} else if (input instanceof ScenarioModel) {
+							final ScenarioModel scenarioModel = (ScenarioModel) input;
+							final List<ScenarioService> services = scenarioModel.getScenarioServices();
+							if (services.size() == 1) {
+								// Exactly 1 - probably filtered out in navigator, so lets compensate
+								createFolderInContainer(activePage, services.get(0));
+							} else {
+								// Zero - nothing to do
+								// > 1 - Service should be shown in navigator
+							}
+
 						}
 						return;
 					}
