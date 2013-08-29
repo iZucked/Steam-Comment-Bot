@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
-import static org.mockito.Mockito.mock;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
@@ -20,8 +18,6 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -50,21 +46,19 @@ import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
 /**
@@ -87,7 +81,8 @@ public class TestCalculations {
 	@Test
 	public void testCalculations1() {
 
-		final SchedulerBuilder builder = createScheduleBuilder();
+		final Injector injector = createTestInjector();
+		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
 		final IPort port1 = builder.createPort("port-1", false, null);
 		final IPort port2 = builder.createPort("port-2", false, null);
@@ -141,36 +136,13 @@ public class TestCalculations {
 
 		final IOptimisationData data = builder.getOptimisationData();
 
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+		final IStartEndRequirementProvider startEndProvider = injector.getInstance(IStartEndRequirementProvider.class);
+
 		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class));
-
-		final IElementDurationProviderEditor durationsProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProviderEditor.class);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portProvider, IPortProvider.class));
-		scheduler.setTimeWindowProvider(data.getDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, ITimeWindowDataComponentProvider.class));
-		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class));
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		scheduler.setVesselProvider(vesselProvider);
-
-		final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-
-		final LNGVoyageCalculator voyageCalculator = new LNGVoyageCalculator();
-		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
-		scheduler.setRouteCostProvider(routeCostProvider);
-		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
-		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
-		voyageCalculator.setPortCVProvider(portCVProvider);
-
-		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
-
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		// This may throw IllegalStateException if not all
-		// the elements are set.
-		scheduler.init();
+		injector.injectMembers(scheduler);
+		final VoyagePlanAnnotator annotator = injector.getInstance(VoyagePlanAnnotator.class);
 
 		final IResource resource = vesselProvider.getResource(vessel1);
 
@@ -183,8 +155,6 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
-		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
-		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, portCostProvider, vesselProvider);
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
@@ -507,7 +477,8 @@ public class TestCalculations {
 	@Test
 	public void testCalculations2() {
 
-		final SchedulerBuilder builder = createScheduleBuilder();
+		final Injector injector = createTestInjector();
+		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
 		final IPort port1 = builder.createPort("port-1", false, null);
 		final IPort port2 = builder.createPort("port-2", false, null);
@@ -566,37 +537,13 @@ public class TestCalculations {
 
 		final IOptimisationData data = builder.getOptimisationData();
 
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+		final IStartEndRequirementProvider startEndProvider = injector.getInstance(IStartEndRequirementProvider.class);
+		final VoyagePlanAnnotator annotator = injector.getInstance(VoyagePlanAnnotator.class);
+
 		final SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
-
-		scheduler.setDistanceProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class));
-		final IElementDurationProviderEditor durationsProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProviderEditor.class);
-
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portProvider, IPortProvider.class));
-		scheduler.setTimeWindowProvider(data.getDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, ITimeWindowDataComponentProvider.class));
-		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class));
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		scheduler.setVesselProvider(vesselProvider);
-
-		final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-
-		final LNGVoyageCalculator voyageCalculator = new LNGVoyageCalculator();
-		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
-		scheduler.setRouteCostProvider(routeCostProvider);
-		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
-
-		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
-		voyageCalculator.setPortCVProvider(portCVProvider);
-
-		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
-
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		// This may throw IllegalStateException if not all
-		// the elements are set.
-		scheduler.init();
+		injector.injectMembers(scheduler);
 
 		final IResource resource = vesselProvider.getResource(vessel1);
 
@@ -609,8 +556,6 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
-		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
-		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, portCostProvider, vesselProvider);
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
@@ -933,7 +878,8 @@ public class TestCalculations {
 	@Test
 	public void testCalculations3() {
 
-		final SchedulerBuilder builder = createScheduleBuilder();
+		final Injector injector = createTestInjector();
+		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
 		final IPort port1 = builder.createPort("port-1", false, null);
 		final IPort port2 = builder.createPort("port-2", false, null);
@@ -991,36 +937,13 @@ public class TestCalculations {
 
 		final IOptimisationData data = builder.getOptimisationData();
 
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
+		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
+		final IStartEndRequirementProvider startEndProvider = injector.getInstance(IStartEndRequirementProvider.class);
+		final VoyagePlanAnnotator annotator = injector.getInstance(VoyagePlanAnnotator.class);
+
 		final SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
-
-		scheduler.setDistanceProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class));
-		final IElementDurationProviderEditor durationsProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProviderEditor.class);
-
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portProvider, IPortProvider.class));
-		scheduler.setTimeWindowProvider(data.getDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, ITimeWindowDataComponentProvider.class));
-		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class));
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		scheduler.setVesselProvider(vesselProvider);
-
-		final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-
-		final LNGVoyageCalculator voyageCalculator = new LNGVoyageCalculator();
-		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
-		scheduler.setRouteCostProvider(routeCostProvider);
-		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
-		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
-		voyageCalculator.setPortCVProvider(portCVProvider);
-
-		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
-
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		// This may throw IllegalStateException if not all
-		// the elements are set.
-		scheduler.init();
+		injector.injectMembers(scheduler);
 
 		final IResource resource = vesselProvider.getResource(vessel1);
 
@@ -1032,9 +955,6 @@ public class TestCalculations {
 		final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 		final ISequence sequence = new ListSequence(sequenceList);
-
-		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
-		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, portCostProvider, vesselProvider);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -1386,24 +1306,19 @@ public class TestCalculations {
 		}
 	}
 
-	private SchedulerBuilder createScheduleBuilder() {
-		final SchedulerBuilder builder = new SchedulerBuilder();
-		final Injector injector = Guice.createInjector(new DataComponentProviderModule());
-		injector.injectMembers(builder);
-		return builder;
-	}
+	private Injector createTestInjector() {
 
-	private VoyagePlanAnnotator createVoyagePlanAnnotator(final IPortSlotProvider portSlotProvider, final IPortCostProvider portCostProvider, final IVesselProvider vesselProvider) {
-
-		return Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new AbstractModule() {
 			@Override
 			protected void configure() {
-				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
-				bind(IPortCostProvider.class).toInstance(portCostProvider);
-				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(VoyagePlanIterator.class);
 				bind(VoyagePlanAnnotator.class);
+				bind(VoyagePlanner.class);
+				bind(SchedulerBuilder.class);
+				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
+				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
 			}
-		}).getInstance(VoyagePlanAnnotator.class);
+		});
+		return injector;
 	}
 }
