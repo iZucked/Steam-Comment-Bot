@@ -7,11 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -40,13 +36,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @since 7.1
  */
 public class VoyagePlanner {
-	private static final Logger log = LoggerFactory.getLogger(VoyagePlanner.class);
-
 	@Inject
 	private IElementDurationProvider durationsProvider;
-
-	@Inject
-	private ITimeWindowDataComponentProvider timeWindowProvider;
 
 	@Inject
 	private IPortProvider portProvider;
