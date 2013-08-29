@@ -5,7 +5,7 @@ Bundle-ManifestVersion: 2
 Bundle-Module: com.mmxlabs.scheduler.optimiser.peaberry.OptimiserService
  Module
 Bundle-Name: Scheduler - Optimiser
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 7.0.1.qualifier
