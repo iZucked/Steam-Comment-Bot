@@ -727,21 +727,21 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			if (lngCommitmentInM3 > cargoCapacityInM3) {
 				// This is a real issue - hit physical constraints - reject
-				// dischargeDetails.setCapacityViolation(CapacityViolationType.VESSEL_CAPACITY, lngConsumed - cargoCapacity);
+				 dischargeDetails.setCapacityViolation(CapacityViolationType.VESSEL_CAPACITY, lngCommitmentInM3 - cargoCapacityInM3);
 				// Should we do this? - Could continue calculations and return a large number
-				return -1;
+//				return -1;
 			}
 
 			violationsCount += checkCargoCapacityViolations(lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3, remainingHeelInM3);
 
 			// Sanity checks
 			assert lngCommitmentInM3 >= 0;
-			assert lngCommitmentInM3 <= cargoCapacityInM3;
+//			assert lngCommitmentInM3 <= cargoCapacityInM3;
 		} else {
 			// was not a Cargo sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 			if (lngCommitmentInM3 > availableHeelinM3) {
-				// TODO: FIXME: Magic constant index 2!
+				// TODO: FIXME: Magic constant index!
 				final PortDetails portDetails = (PortDetails) sequence[0];
 				portDetails.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngCommitmentInM3 - availableHeelinM3);
 				++violationsCount;

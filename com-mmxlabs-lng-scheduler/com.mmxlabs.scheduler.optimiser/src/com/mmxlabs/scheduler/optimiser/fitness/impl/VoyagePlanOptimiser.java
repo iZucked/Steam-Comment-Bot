@@ -411,7 +411,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		if (feasibility >= 0) {
 			return currentPlan;
 		} else {
-			return null;
+			return currentPlan;//null;
 		}
 	}
 

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -92,6 +93,23 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 		vpi.setVoyagePlans(resource, plans, arrivalTimes);
 
 		vpi.reset();
+
+		final ICurve charterCostCurve;
+		switch (vessel.getVesselInstanceType()) {
+		case SPOT_CHARTER:
+			charterCostCurve = vessel.getHourlyCharterInPrice();
+			break;
+		case TIME_CHARTER:
+			charterCostCurve = vessel.getHourlyCharterInPrice();
+			break;
+		case CARGO_SHORTS:
+			charterCostCurve = vessel.getHourlyCharterInPrice();
+			break;
+		default:
+			charterCostCurve = null;
+			break;
+		}
+		final int charterRate = charterCostCurve == null ? 0 : charterCostCurve.getValueAtPoint(arrivalTimes[0]);
 
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
@@ -190,12 +208,11 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				visit.setPortSlot(currentPortSlot);
 
 				visit.setDuration(visitDuration);
-
+				visit.setHireCost(Calculator.quantityFromRateTime(charterRate, visitDuration));
 				solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_visitInfo, visit);
 
 				visit.setStartTime(currentTime); // details.getStartTime()
 				visit.setEndTime(currentTime + visitDuration);
-
 			} else if (e instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) e;
 
@@ -224,7 +241,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				journey.setRouteCost(details.getRouteCost());
 
 				journey.setDuration(travelTime);
-
+				journey.setHireCost(Calculator.quantityFromRateTime(charterRate, travelTime));
 				journey.setSpeed(details.getSpeed());
 
 				for (final FuelComponent fuel : travelFuelComponents) {
@@ -263,6 +280,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					// Calculate revenue
 					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutHourlyRate(), idleTime));
+					charterOut.setHireCost(Calculator.quantityFromRateTime(charterRate, idleTime));
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 
 				} else {
@@ -273,6 +291,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					idle.setStartTime(currentTime + travelTime);
 					idle.setDuration(idleTime);
+					idle.setHireCost(Calculator.quantityFromRateTime(charterRate, idleTime));
 					idle.setEndTime(currentTime + travelTime + idleTime);
 					idle.setSequenceElement(element);
 
@@ -285,17 +304,13 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 							if (unit == fuel.getPricingFuelUnit()) {
 								final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(fuel));
 								idle.setFuelCost(fuel, cost);
-								
+
 								idle.setFuelPriceUnit(fuel, unit);
 								idle.setFuelUnitPrice(fuel, details.getFuelUnitPrice(fuel));
 							}
 						}
 					}
 					idle.setVesselState(details.getOptions().getVesselState());
-
-					if (idle.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
-						idle.setCooldownDuration(Math.min(idleTime, /* vessel.getVesselClass().getCooldownTime() */0));
-					}
 
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);
 				}

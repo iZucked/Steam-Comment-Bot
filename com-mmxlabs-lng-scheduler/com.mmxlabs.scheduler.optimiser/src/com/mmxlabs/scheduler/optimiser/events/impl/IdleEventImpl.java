@@ -4,13 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.events.impl;
 
-import java.util.EnumMap;
-
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
  * Implementation of {@link IIdleEvent}.
@@ -22,8 +18,6 @@ public final class IdleEventImpl extends AbstractFuelUsingEventImpl implements I
 	private IPort port;
 
 	private VesselState vesselState;
-
-	private int cooldownDuration;
 
 	@Override
 	public IPort getPort() {
@@ -41,14 +35,5 @@ public final class IdleEventImpl extends AbstractFuelUsingEventImpl implements I
 
 	public void setVesselState(final VesselState vesselState) {
 		this.vesselState = vesselState;
-	}
-
-	public void setCooldownDuration(final int cooldownDuration) {
-		this.cooldownDuration = cooldownDuration;
-	}
-
-	@Override
-	public int getCooldownDuration() {
-		return cooldownDuration;
 	}
 }

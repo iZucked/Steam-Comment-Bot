@@ -42,8 +42,8 @@ public class RandomInitialSequenceBuilder implements IInitialSequenceBuilder {
 	}
 
 	@Override
-	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, final Map<ISequenceElement, IResource> resourceSuggestion,final 
-			Map<ISequenceElement, ISequenceElement> pairingHints) {
+	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, final Map<ISequenceElement, IResource> resourceSuggestion,
+			final Map<ISequenceElement, ISequenceElement> pairingHints) {
 
 		final List<ISequenceElement> sequenceElements = new ArrayList<ISequenceElement>(data.getSequenceElements());
 

@@ -16,12 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -64,9 +61,6 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 	private static final int INITIAL_MAX_LATENESS = 48;
 
 	private TravelTimeConstraintChecker travelTimeChecker;
-
-	@Inject
-	private Injector injector;
 
 	private List<IPairwiseConstraintChecker> pairwiseCheckers;
 	

@@ -72,17 +72,21 @@ public final class SchedulerConstants {
 	 */
 	public static final String AI_profitAndLoss = "element-profit-and-loss";
 	/**
-	 * @since 2.0
+	 * @since 7.0
 	 */
-	public static final String AI_shippingCost = "element-shipping-cost";
+	public static final String AI_profitAndLossNoTimeCharterRate = "element-profit-and-loss-no-time-charter-rate";
 	/**
 	 * @since 2.0
 	 */
-	public static final String AI_shippingCostWithBoilOff = "element-shipping-cost-inc-boil-off";
+//	public static final String AI_shippingCost = "element-shipping-cost";
 	/**
 	 * @since 2.0
 	 */
 	public static final String AI_charterOutProfitAndLoss = "generated-charter-out-profit-and-loss";
+	/**
+	 * @since 7.0
+	 */
+	public static final String AI_charterOutProfitAndLossNoTimeCharterRate = "generated-charter-out-profit-and-loss-no-time-charter-rate";
 	/**
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
 	 */
