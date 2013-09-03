@@ -74,6 +74,9 @@ public class SlotItemProvider
 			addCargoPropertyDescriptor(object);
 			addPricingDatePropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
+			addEntityPropertyDescriptor(object);
+			addRestrictedContractsPropertyDescriptor(object);
+			addRestrictedPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -387,6 +390,72 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Entity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEntityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_entity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_entity_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Contracts feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedContractsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedContracts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedContracts_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedPorts_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

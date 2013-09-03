@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -19,11 +20,15 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -51,6 +56,9 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -371,6 +379,45 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected String notes = NOTES_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected LegalEntity entity;
+
+	/**
+	 * This is true if the Entity reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean entityESet;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedContracts() <em>Restricted Contracts</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedContracts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Contract> restrictedContracts;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedPorts() <em>Restricted Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Port> restrictedPorts;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -947,6 +994,129 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LegalEntity getEntity() {
+		if (entity != null && entity.eIsProxy()) {
+			InternalEObject oldEntity = (InternalEObject)entity;
+			entity = (LegalEntity)eResolveProxy(oldEntity);
+			if (entity != oldEntity) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__ENTITY, oldEntity, entity));
+			}
+		}
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LegalEntity basicGetEntity() {
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEntity(LegalEntity newEntity) {
+		LegalEntity oldEntity = entity;
+		entity = newEntity;
+		boolean oldEntityESet = entityESet;
+		entityESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__ENTITY, oldEntity, entity, !oldEntityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetEntity() {
+		LegalEntity oldEntity = entity;
+		boolean oldEntityESet = entityESet;
+		entity = null;
+		entityESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__ENTITY, oldEntity, null, oldEntityESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetEntity() {
+		return entityESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Contract> getRestrictedContracts() {
+		if (restrictedContracts == null) {
+			restrictedContracts = new EObjectResolvingEList.Unsettable<Contract>(Contract.class, this, CargoPackage.SLOT__RESTRICTED_CONTRACTS);
+		}
+		return restrictedContracts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetRestrictedContracts() {
+		if (restrictedContracts != null) ((InternalEList.Unsettable<?>)restrictedContracts).unset();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetRestrictedContracts() {
+		return restrictedContracts != null && ((InternalEList.Unsettable<?>)restrictedContracts).isSet();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Port> getRestrictedPorts() {
+		if (restrictedPorts == null) {
+			restrictedPorts = new EObjectResolvingEList.Unsettable<Port>(Port.class, this, CargoPackage.SLOT__RESTRICTED_PORTS);
+		}
+		return restrictedPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetRestrictedPorts() {
+		if (restrictedPorts != null) ((InternalEList.Unsettable<?>)restrictedPorts).unset();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetRestrictedPorts() {
+		return restrictedPorts != null && ((InternalEList.Unsettable<?>)restrictedPorts).isSet();
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -971,6 +1141,33 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public int getSlotOrContractMaxQuantity() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__MAX_QUANTITY);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public LegalEntity getSlotOrContractEntity() {
+		return (LegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Contract> getSlotOrContractRestrictedContracts() {
+		return (EList<Contract>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Port> getSlotOrContractRestrictedPorts() {
+		return (EList<Port>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_PORTS);	
 	}
 
 	/**
@@ -1093,6 +1290,13 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return getNotes();
+			case CargoPackage.SLOT__ENTITY:
+				if (resolve) return getEntity();
+				return basicGetEntity();
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
+				return getRestrictedContracts();
+			case CargoPackage.SLOT__RESTRICTED_PORTS:
+				return getRestrictedPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1147,6 +1351,17 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				setNotes((String)newValue);
 				return;
+			case CargoPackage.SLOT__ENTITY:
+				setEntity((LegalEntity)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
+				getRestrictedContracts().clear();
+				getRestrictedContracts().addAll((Collection<? extends Contract>)newValue);
+				return;
+			case CargoPackage.SLOT__RESTRICTED_PORTS:
+				getRestrictedPorts().clear();
+				getRestrictedPorts().addAll((Collection<? extends Port>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1200,6 +1415,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__ENTITY:
+				unsetEntity();
+				return;
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
+				unsetRestrictedContracts();
+				return;
+			case CargoPackage.SLOT__RESTRICTED_PORTS:
+				unsetRestrictedPorts();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1239,6 +1463,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
+			case CargoPackage.SLOT__ENTITY:
+				return isSetEntity();
+			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
+				return isSetRestrictedContracts();
+			case CargoPackage.SLOT__RESTRICTED_PORTS:
+				return isSetRestrictedPorts();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1326,6 +1556,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowStartWithSlotOrPortTime();
 			case CargoPackage.SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE:
 				return getSlotOrPortWindowSize();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_ENTITY:
+				return getSlotOrContractEntity();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS:
+				return getSlotOrContractRestrictedContracts();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS:
+				return getSlotOrContractRestrictedPorts();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -1380,7 +1616,14 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MinQuantity(), (Integer) 0);
 		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) 140000);
+		} else if (CargoPackage.Literals.SLOT__ENTITY == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
+		} else if (CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedContracts(), null);
+		} else if (CargoPackage.Literals.SLOT__RESTRICTED_PORTS == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedPorts(), null);
 		}
+		
 		return super.getUnsetValueOrDelegate(feature);
 	}	
 	

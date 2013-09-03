@@ -364,6 +364,33 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSlot_Entity() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlot_RestrictedContracts() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlot_RestrictedPorts() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSlot__GetSlotOrPortDuration() {
 		return slotEClass.getEOperations().get(0);
 	}
@@ -411,6 +438,33 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EOperation getSlot__GetSlotOrPortWindowSize() {
 		return slotEClass.getEOperations().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrContractEntity() {
+		return slotEClass.getEOperations().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrContractRestrictedContracts() {
+		return slotEClass.getEOperations().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrContractRestrictedPorts() {
+		return slotEClass.getEOperations().get(8);
 	}
 
 	/**
@@ -504,6 +558,42 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EReference getDischargeSlot_TransferTo() {
 		return (EReference)dischargeSlotEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDischargeSlot_MinCvValue() {
+		return (EAttribute)dischargeSlotEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDischargeSlot_MaxCvValue() {
+		return (EAttribute)dischargeSlotEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getDischargeSlot__GetSlotOrContractMinCv() {
+		return dischargeSlotEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getDischargeSlot__GetSlotOrContractMaxCv() {
+		return dischargeSlotEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -663,12 +753,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(slotEClass, SLOT__CARGO);
 		createEAttribute(slotEClass, SLOT__PRICING_DATE);
 		createEAttribute(slotEClass, SLOT__NOTES);
+		createEReference(slotEClass, SLOT__ENTITY);
+		createEReference(slotEClass, SLOT__RESTRICTED_CONTRACTS);
+		createEReference(slotEClass, SLOT__RESTRICTED_PORTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_DURATION);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_ENTITY);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -681,6 +777,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__FOB_SALE);
 		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE);
 		createEReference(dischargeSlotEClass, DISCHARGE_SLOT__TRANSFER_TO);
+		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__MIN_CV_VALUE);
+		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__MAX_CV_VALUE);
+		createEOperation(dischargeSlotEClass, DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MIN_CV);
+		createEOperation(dischargeSlotEClass, DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MAX_CV);
 
 		cargoModelEClass = createEClass(CARGO_MODEL);
 		createEReference(cargoModelEClass, CARGO_MODEL__LOAD_SLOTS);
@@ -780,6 +880,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getSlot_Cargo(), this.getCargo(), this.getCargo_Slots(), "cargo", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_PricingDate(), ecorePackage.getEDate(), "pricingDate", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlot_Entity(), theCommercialPackage.getLegalEntity(), null, "entity", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlot_RestrictedContracts(), theCommercialPackage.getContract(), null, "restrictedContracts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlot_RestrictedPorts(), thePortPackage.getPort(), null, "restrictedPorts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrPortDuration(), ecorePackage.getEInt(), "getSlotOrPortDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -793,6 +896,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSlotOrPortWindowSize(), ecorePackage.getEInt(), "getSlotOrPortWindowSize", 1, 1, IS_UNIQUE, IS_ORDERED);
 
+		initEOperation(getSlot__GetSlotOrContractEntity(), theCommercialPackage.getLegalEntity(), "getSlotOrContractEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrContractRestrictedContracts(), theCommercialPackage.getContract(), "getSlotOrContractRestrictedContracts", 0, -1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrContractRestrictedPorts(), thePortPackage.getPort(), "getSlotOrContractRestrictedPorts", 0, -1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_ArriveCold(), ecorePackage.getEBoolean(), "arriveCold", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -805,6 +914,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getDischargeSlot_FOBSale(), ecorePackage.getEBoolean(), "FOBSale", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDischargeSlot_PurchaseDeliveryType(), theTypesPackage.getCargoDeliveryType(), "PurchaseDeliveryType", "Any", 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDischargeSlot_TransferTo(), this.getLoadSlot(), this.getLoadSlot_TransferFrom(), "transferTo", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDischargeSlot_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDischargeSlot_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getDischargeSlot__GetSlotOrContractMinCv(), ecorePackage.getEDouble(), "getSlotOrContractMinCv", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getDischargeSlot__GetSlotOrContractMaxCv(), ecorePackage.getEDouble(), "getSlotOrContractMaxCv", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(cargoModelEClass, CargoModel.class, "CargoModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoModel_LoadSlots(), this.getLoadSlot(), null, "loadSlots", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

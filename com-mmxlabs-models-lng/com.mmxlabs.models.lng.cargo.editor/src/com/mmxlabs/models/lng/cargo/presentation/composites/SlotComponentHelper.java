@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -87,6 +88,9 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_durationEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
+		add_restrictedContractsEditor(detailComposite, topClass);
+		add_restrictedPortsEditor(detailComposite, topClass);
 		add_optionalEditor(detailComposite, topClass);
 		add_pricingDateEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
@@ -129,8 +133,34 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NO
 	 */
 	protected void add_notesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__NOTES));
 		detailComposite.addInlineEditor(new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
+	}
+
+	/**
+	 * Create the editor for the entity feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__ENTITY));
+	}
+
+	/**
+	 * Create the editor for the restrictedContracts feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS));
+	}
+
+	/**
+	 * Create the editor for the restrictedPorts feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_PORTS));
 	}
 
 	/**

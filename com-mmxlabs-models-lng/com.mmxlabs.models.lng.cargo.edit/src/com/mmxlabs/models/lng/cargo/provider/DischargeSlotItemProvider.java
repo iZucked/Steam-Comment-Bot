@@ -61,6 +61,8 @@ public class DischargeSlotItemProvider
 			addFOBSalePropertyDescriptor(object);
 			addPurchaseDeliveryTypePropertyDescriptor(object);
 			addTransferToPropertyDescriptor(object);
+			addMinCvValuePropertyDescriptor(object);
+			addMaxCvValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -134,6 +136,50 @@ public class DischargeSlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min Cv Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinCvValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DischargeSlot_minCvValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DischargeSlot_minCvValue_feature", "_UI_DischargeSlot_type"),
+				 CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Cv Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxCvValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DischargeSlot_maxCvValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DischargeSlot_maxCvValue_feature", "_UI_DischargeSlot_type"),
+				 CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns DischargeSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -172,6 +218,8 @@ public class DischargeSlotItemProvider
 		switch (notification.getFeatureID(DischargeSlot.class)) {
 			case CargoPackage.DISCHARGE_SLOT__FOB_SALE:
 			case CargoPackage.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE:
+			case CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE:
+			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

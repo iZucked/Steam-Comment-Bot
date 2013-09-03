@@ -84,6 +84,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		pricingFeatures.add(new EStructuralFeature[] { Contract });
 		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingDate() });
+		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Entity() });
 		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
 
 		windowFeatures = new ArrayList<EStructuralFeature[]>();
@@ -95,9 +96,14 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_CargoCV() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
 
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
 
 		missedFeatures = new ArrayList<EStructuralFeature>();
 		
