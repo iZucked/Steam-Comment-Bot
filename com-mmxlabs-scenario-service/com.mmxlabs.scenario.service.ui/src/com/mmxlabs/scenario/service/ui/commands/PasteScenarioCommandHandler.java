@@ -19,6 +19,8 @@ import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
@@ -30,6 +32,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  */
 public class PasteScenarioCommandHandler extends AbstractHandler {
+	private static final Logger log = LoggerFactory.getLogger(PasteScenarioCommandHandler.class);
 
 	/*
 	 * (non-Javadoc)
@@ -78,8 +81,15 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		if (localData instanceof Iterable) {
 			for (final Object o : (Iterable<?>) localData) {
 				if (o instanceof ScenarioInstance) {
-					System.err.println("Local paste " + ((ScenarioInstance) o).getName());
-					service.duplicate((ScenarioInstance) o, container).setName("Copy of " + ((ScenarioInstance) o).getName());
+					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+					log.debug("Local paste " + scenarioInstance.getName());
+
+					final ScenarioInstance duplicate = service.duplicate(scenarioInstance, container);
+					if (duplicate != null) {
+						duplicate.setName("Copy of " + scenarioInstance.getName());
+					} else {
+						log.error("Unable to paste scenario: " + scenarioInstance.getName(), new RuntimeException());
+					}
 				}
 			}
 			return true;

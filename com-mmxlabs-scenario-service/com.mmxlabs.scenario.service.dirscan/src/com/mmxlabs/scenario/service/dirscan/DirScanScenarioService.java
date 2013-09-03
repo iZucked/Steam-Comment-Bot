@@ -400,8 +400,17 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			} else {
 				folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
 			}
-			final WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-			keys.put(key, dir);
+			try {
+				log.debug("Watching " + dir.toString());
+				final WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+				if (key == null) {
+					log.error("Null watch key created for directory: " + dir.toString(), new RuntimeException());
+				} else {
+					keys.put(key, dir);
+				}
+			} catch (final Exception e) {
+				log.error("Exception thrown attempting to watch directory: " + dir.toString(), e);
+			}
 		}
 	}
 
