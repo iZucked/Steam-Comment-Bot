@@ -79,9 +79,9 @@ public class EntityTransformerExtension implements ITransformerExtension {
 //				if (slot.isSetPriceInfo()) {
 //					slotEntity = slot.getPriceInfo().getEntity();
 //				} else 
-					if (slot.isSetContract()) {
-					slotEntity = slot.getContract().getEntity();
-				} else {
+				slotEntity = slot.getSlotOrContractEntity();
+				
+				if (slotEntity == null) {
 					slotEntity = shipping;
 				}
 

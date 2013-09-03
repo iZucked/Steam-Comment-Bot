@@ -1048,13 +1048,20 @@ public class LNGScenarioTransformer {
 			final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
 
 			final long minCv;
-			final long maxCv;
+			long maxCv;
 
 			if (dischargeSlot.isSetPricingDate()) {
 				dischargeSlot.getPricingDate();
 			}
 			final int pricingDate = dischargeSlot.isSetPricingDate() ? convertTime(earliestTime, dischargeSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
 
+			minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMinCv());
+			maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMaxCv());
+			if (maxCv == 0) {
+				maxCv = Long.MAX_VALUE;
+			}
+
+			/*
 			if (dischargeSlot.isSetContract()) {
 				final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
 
@@ -1073,6 +1080,7 @@ public class LNGScenarioTransformer {
 				minCv = 0;
 				maxCv = Long.MAX_VALUE;
 			}
+			*/
 
 			if (dischargeSlot.isFOBSale()) {
 				discharge = builder.createFOBSaleDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, pricingDate, dischargeSlot.isOptional());
