@@ -60,6 +60,9 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 
 		journey.getFuels().addAll(super.createFuelQuantities(event));
 
+		// set up hire cost
+		journey.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));
+		
 		return journey;
 	}
 }

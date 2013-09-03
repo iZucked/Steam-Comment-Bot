@@ -113,7 +113,7 @@ public class ShippingCalculationsTest {
 		case DURATIONS:
 			return event.getDuration();
 		case HIRE_COSTS:
-			return event.getHireCost();
+			return event.getCharterCost();
 		case FUEL_COSTS: {
 			if (event instanceof FuelUsage)
 				return ((FuelUsage) event).getFuelCost();
@@ -605,7 +605,7 @@ public class ShippingCalculationsTest {
 				} else if (durations[i] != null) {
 					hireCosts[i] = durations[i] * hireRatePerHour;
 				} else {
-					hireCosts[i] = null;
+					hireCosts[i] = 0;
 				}
 
 			}
@@ -1477,12 +1477,12 @@ public class ShippingCalculationsTest {
 	}
 
 	@Test
-	public void testCharterCost_IgnoredForTimeCharter() {
+	public void testCharterCost_TimeCharter() {
 		System.err.println("\n\nTime Charter vessel charter cost ignored.");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		final int charterRatePerDay = 0;
+		final int charterRatePerDay = 240000;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
 		msc.vesselAvailability.setTimeCharterRate(charterRatePerDay);
 
@@ -1497,7 +1497,7 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);
 
 		// change from default scenario: sequence daily hire rate should be set
-		Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
+//		Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
 	}
 
 	@Test
@@ -1554,7 +1554,7 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);
 
 		// change from default scenario: sequence daily hire rate should be set
-		Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
+//		Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
 	}
 
 	/**
@@ -1652,7 +1652,7 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);
 
 		// change from default scenario: sequence daily hire rate should be set
-		Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
+//		Assert.assertEquals("Daily cost for vessel hire", charterRatePerDay, sequence.getDailyHireRate());
 	}
 
 	@Test
@@ -2098,6 +2098,73 @@ public class ShippingCalculationsTest {
 
 	}
 
+	@Test
+	public void testGeneratedCharterOutOnTimeCharterVessel() {
+		System.err.println("\n\nIdle at end should permit generated charter out event.");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96);
+
+		// change from default scenario: set a "return after" date
+		// somewhat later than the end of the discharge window
+		final VesselAvailability av = msc.vesselAvailability;
+		final Date endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+
+		final int charterRatePerDay = 240000;
+		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
+		msc.vesselAvailability.setTimeCharterRate(charterRatePerDay);
+
+		// return 37 hrs after discharge window ends
+		final Date returnDate = new Date(endDischarge.getTime() + 37l * 3600l * 1000l);
+		av.setEndAfter(returnDate);
+		av.unsetEndBy();
+		System.err.println("Vessel to return after: " + returnDate);
+
+		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, GeneratedCharterOut.class,
+				EndEvent.class };
+		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 7, true), new PnlChunkIndexData(8, 9, false) };
+		final SequenceTester checker = getDefaultTester(expectedClasses);
+		checker.setCargoIndices(chunkIndices);
+
+		checker.hireCostPerHour = charterRatePerDay / 24;
+		// change from default: one fewer idle
+
+		// expected durations of idles
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2 });
+
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0 });
+
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10 });
+
+		// expected fuel costs
+		// 0 = no idle
+		// 30 = 21 { LNG cost } * 10 { LNG consumption }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210 });
+
+		// change from default: generated charter out
+		checker.setExpectedValues(Expectations.DURATIONS, GeneratedCharterOut.class, new Integer[] { 36 });
+
+		// expected charter out overhead
+		// -144 = 1.5 { days } * 96 { rate }
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, GeneratedCharterOut.class, new Integer[] { -144 });
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+
+	}
+
+	
 	@Test
 	public void testNotGeneratedCharterOut() {
 		System.err.println("\n\nIdle at end should not permit generated charter out event.");

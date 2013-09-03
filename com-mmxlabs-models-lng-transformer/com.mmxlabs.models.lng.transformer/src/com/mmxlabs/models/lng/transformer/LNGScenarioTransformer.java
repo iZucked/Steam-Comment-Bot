@@ -26,6 +26,9 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.inject.Named;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.slf4j.Logger;
@@ -75,6 +78,8 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -97,6 +102,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -148,7 +154,16 @@ public class LNGScenarioTransformer {
 	private DateAndCurveHelper dateHelper;
 
 	@Inject
-	private SeriesParser indices;
+	@Named(LNGTransformerModule.Parser_BaseFuel)
+	private SeriesParser baseFuelIndices;
+
+	@Inject
+	@Named(LNGTransformerModule.Parser_Charter)
+	private SeriesParser charterIndices;
+
+	@Inject
+	@Named(LNGTransformerModule.Parser_Commodity)
+	private SeriesParser commodityIndices;
 
 	@Inject(optional = true)
 	private List<ITransformerExtension> transformerExtensions;
@@ -203,7 +218,7 @@ public class LNGScenarioTransformer {
 	 * @since 5.0
 	 */
 	@Inject
-	public LNGScenarioTransformer(final LNGScenarioModel rootObject, OptimiserSettings optimiserParameters) {
+	public LNGScenarioTransformer(final LNGScenarioModel rootObject, final OptimiserSettings optimiserParameters) {
 
 		init(rootObject, optimiserParameters);
 	}
@@ -211,7 +226,7 @@ public class LNGScenarioTransformer {
 	/**
 	 * @since 5.0
 	 */
-	protected void init(final LNGScenarioModel rootObject, OptimiserSettings optimiserParameters) {
+	protected void init(final LNGScenarioModel rootObject, final OptimiserSettings optimiserParameters) {
 
 		this.rootObject = rootObject;
 		this.optimiserParameters = optimiserParameters;
@@ -278,44 +293,92 @@ public class LNGScenarioTransformer {
 		 */
 
 		final Association<CommodityIndex, ICurve> commodityIndexAssociation = new Association<CommodityIndex, ICurve>();
+		final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation = new Association<BaseFuelIndex, ICurve>();
+		final Association<CharterIndex, ICurve> charterIndexAssociation = new Association<CharterIndex, ICurve>();
 
 		final PricingModel pricingModel = rootObject.getPricingModel();
+		// For each curve, register with the SeriesParser object
 		for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
 			final Index<Double> index = commodityIndex.getData();
-			if (index instanceof DataIndex) {
-				final DataIndex<Double> di = (DataIndex<Double>) index;
-				final SortedSet<Pair<Date, Number>> vals = new TreeSet<Pair<Date, Number>>(new Comparator<Pair<Date, ?>>() {
-					@Override
-					public int compare(final Pair<Date, ?> o1, final Pair<Date, ?> o2) {
-						return o1.getFirst().compareTo(o2.getFirst());
-					}
-				});
-				for (final IndexPoint<Double> pt : di.getPoints()) {
-					vals.add(new Pair<Date, Number>(pt.getDate(), pt.getValue()));
-				}
-				final int[] times = new int[vals.size()];
-				final Number[] nums = new Number[vals.size()];
-				int k = 0;
-				for (final Pair<Date, Number> e : vals) {
-					times[k] = convertTime(e.getFirst());
-					nums[k++] = e.getSecond();
-				}
-				indices.addSeriesData(commodityIndex.getName(), times, nums);
-			} else if (index instanceof DerivedIndex) {
-				indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
-			}
+			registerIndex(commodityIndex.getName(), index, commodityIndices);
+		}
+		for (final BaseFuelIndex baseFuelIndex : pricingModel.getBaseFuelPrices()) {
+			final Index<Double> index = baseFuelIndex.getData();
+			registerIndex(baseFuelIndex.getName(), index, baseFuelIndices);
+		}
+		for (final CharterIndex charterIndex : pricingModel.getCharterIndices()) {
+			final Index<Integer> index = charterIndex.getData();
+			registerIndex(charterIndex.getName(), index, charterIndices);
 		}
 
+		// Now pre-compute our various curve data objects...
 		for (final CommodityIndex index : pricingModel.getCommodityIndices()) {
 			try {
-				final ISeries parsed = indices.getSeries(index.getName());
+				final ISeries parsed = commodityIndices.getSeries(index.getName());
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				curve.setDefaultValue(0);
-				for (final int i : parsed.getChangePoints()) {
-					curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+				final int[] changePoints = parsed.getChangePoints();
+				if (changePoints.length == 0) {
+					curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+				} else {
+					for (final int i : changePoints) {
+						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+					}
 				}
 				entities.addModelObject(index, curve);
 				commodityIndexAssociation.add(index, curve);
+			} catch (final Exception exception) {
+				log.warn("Error evaluating series " + index.getName(), exception);
+			}
+		}
+
+		for (final BaseFuelIndex index : pricingModel.getBaseFuelPrices()) {
+			try {
+				final ISeries parsed = baseFuelIndices.getSeries(index.getName());
+				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				curve.setDefaultValue(0);
+
+				final int[] changePoints = parsed.getChangePoints();
+				if (changePoints.length == 0) {
+					curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+				} else {
+
+					for (final int i : parsed.getChangePoints()) {
+						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+					}
+				}
+				entities.addModelObject(index, curve);
+				baseFuelIndexAssociation.add(index, curve);
+			} catch (final Exception exception) {
+				log.warn("Error evaluating series " + index.getName(), exception);
+			}
+		}
+
+		for (final CharterIndex index : pricingModel.getCharterIndices()) {
+			try {
+				final ISeries parsed = charterIndices.getSeries(index.getName());
+				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				curve.setDefaultValue(0);
+
+				final int[] changePoints = parsed.getChangePoints();
+				if (changePoints.length == 0) {
+					final long dailyCost = OptimiserUnitConvertor.convertToInternalHourlyCost(parsed.evaluate(0).intValue());
+					if (dailyCost != (int) dailyCost) {
+						throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
+					}
+					curve.setValueAfter(0, (int) dailyCost);
+				} else {
+
+					for (final int i : parsed.getChangePoints()) {
+						final long dailyCost = OptimiserUnitConvertor.convertToInternalHourlyCost(parsed.evaluate(i).intValue());
+						if (dailyCost != (int) dailyCost) {
+							throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
+						}
+						curve.setValueAfter(i - 1, (int) dailyCost);
+					}
+				}
+				entities.addModelObject(index, curve);
+				charterIndexAssociation.add(index, curve);
 			} catch (final Exception exception) {
 				log.warn("Error evaluating series " + index.getName(), exception);
 			}
@@ -369,7 +432,8 @@ public class LNGScenarioTransformer {
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
 		}
 
-		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, entities);
+		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation,
+				entities);
 
 		final CommercialModel commercialModel = rootObject.getCommercialModel();
 
@@ -455,6 +519,32 @@ public class LNGScenarioTransformer {
 		builder.setEarliestDate(earliestTime);
 
 		return builder.getOptimisationData();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void registerIndex(final String name, final Index<? extends Number> index, final SeriesParser indices) {
+		if (index instanceof DataIndex) {
+			final DataIndex<? extends Number> di = (DataIndex<? extends Number>) index;
+			final SortedSet<Pair<Date, Number>> vals = new TreeSet<Pair<Date, Number>>(new Comparator<Pair<Date, ?>>() {
+				@Override
+				public int compare(final Pair<Date, ?> o1, final Pair<Date, ?> o2) {
+					return o1.getFirst().compareTo(o2.getFirst());
+				}
+			});
+			for (final IndexPoint<? extends Number> pt : di.getPoints()) {
+				vals.add(new Pair<Date, Number>(pt.getDate(), pt.getValue()));
+			}
+			final int[] times = new int[vals.size()];
+			final Number[] nums = new Number[vals.size()];
+			int k = 0;
+			for (final Pair<Date, Number> e : vals) {
+				times[k] = convertTime(e.getFirst());
+				nums[k++] = e.getSecond();
+			}
+			indices.addSeriesData(name, times, nums);
+		} else if (index instanceof DerivedIndex) {
+			indices.addSeriesExpression(name, ((DerivedIndex) index).getExpression());
+		}
 	}
 
 	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
@@ -927,7 +1017,7 @@ public class LNGScenarioTransformer {
 			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
 				dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
 			} else {
-				final IExpression<ISeries> expression = indices.parse(priceExpression);
+				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
 				final ISeries parsed = expression.evaluate();
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
@@ -1020,7 +1110,7 @@ public class LNGScenarioTransformer {
 			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
 				loadPriceCalculator = new BreakEvenLoadPriceCalculator();
 			} else {
-				final IExpression<ISeries> expression = indices.parse(priceExpression);
+				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
 				final ISeries parsed = expression.evaluate();
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
@@ -1810,7 +1900,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	private Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> buildFleet(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation,
-			final ModelEntityMap entities) {
+			final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation, final Association<CharterIndex, ICurve> charterIndexAssociation, final ModelEntityMap entities) {
 
 		/*
 		 * Build the fleet model - first we must create the vessel classes from the model
@@ -1826,15 +1916,21 @@ public class LNGScenarioTransformer {
 		// look up prices
 
 		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
-			double baseFuelPrice = 0;
+			int baseFuelPriceInInternalUnits = 0;
 			for (final BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
-					baseFuelPrice = baseFuelCost.getIndex().getPrice();
+					final BaseFuelIndex index = baseFuelCost.getIndex();
+					final ICurve curve = baseFuelIndexAssociation.lookup(index);
+					if (curve != null) {
+						final EList<Date> dates = index.getData().getDates();
+						final int point = dateHelper.convertTime(earliestTime, dates.get(0));
+						baseFuelPriceInInternalUnits = curve.getValueAtPoint(point);
+					}
 					break;
 				}
 			}
 
-			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPrice);
+			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPriceInInternalUnits);
 
 			vesselClassAssociation.add(eVc, vc);
 
@@ -1924,7 +2020,8 @@ public class LNGScenarioTransformer {
 					if (charterCost.getCharterInPrice() == null) {
 						charterInCurve = new ConstantValueCurve(0);
 					} else {
-						charterInCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterInPrice().getData(), 1.0f / 24.0f, false);
+						charterInCurve = charterIndexAssociation.lookup(charterCost.getCharterInPrice());
+						// charterInCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterInPrice().getData(), 1.0f / 24.0f, false);
 					}
 
 					charterCount = charterCost.getSpotCharterCount();
@@ -1935,7 +2032,8 @@ public class LNGScenarioTransformer {
 					}
 
 					if (charterCost.getCharterOutPrice() != null) {
-						final ICurve charterOutCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterOutPrice().getData(), 1.0f / 24.0f, false);
+						// final ICurve charterOutCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterOutPrice().getData(), 1.0f / 24.0f, false);
+						final ICurve charterOutCurve = charterIndexAssociation.lookup(charterCost.getCharterOutPrice());
 						final int minDuration = 24 * charterCost.getMinCharterOutDuration();
 						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve, minDuration);
 					}

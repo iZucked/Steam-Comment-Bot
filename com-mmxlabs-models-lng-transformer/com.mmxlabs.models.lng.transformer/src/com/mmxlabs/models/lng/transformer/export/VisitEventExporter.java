@@ -105,7 +105,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			if (eAllocation == null) {
 				eAllocation = scheduleFactory.createCargoAllocation();
-				for (IPortSlot allocationSlot: allocation.getSlots()) {
+				for (IPortSlot allocationSlot : allocation.getSlots()) {
 					allocations.put(allocationSlot, eAllocation);
 				}
 				// eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
@@ -116,13 +116,13 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				output.getCargoAllocations().add(eAllocation);
 			}
 			eAllocation.getSlotAllocations().add(slotAllocation);
-			
+
 			// for now, only handle single load/discharge case
-//			assert(allocation.getSlots().size() == 2);
-//			final ILoadOption loadSlot = (ILoadOption) allocation.getSlots().get(0);
-//			final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
+			// assert(allocation.getSlots().size() == 2);
+			// final ILoadOption loadSlot = (ILoadOption) allocation.getSlots().get(0);
+			// final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
 			if (slot instanceof ILoadOption) {
-				//final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
+				// final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
 				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), ((ILoadOption) slot).getCargoCVValue());
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
@@ -130,13 +130,13 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				int cargoCV = -1;
 				for (IPortSlot sSlot : allocation.getSlots()) {
 					if (sSlot instanceof ILoadOption) {
-						cargoCV  = ((ILoadOption) sSlot).getCargoCVValue();
+						cargoCV = ((ILoadOption) sSlot).getCargoCVValue();
 					}
 				}
 				if (cargoCV == -1) {
 					throw new IllegalStateException("Discharge Slot without a Load Slot");
 				}
-				//final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
+				// final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
 				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), cargoCV);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
@@ -205,16 +205,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
 
-		if (slot.getPortType() == PortType.Start) {
-			portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime()));
-		} else {
-			portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime()));
-		}
-		if (slot.getPortType() == PortType.End) {
-			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
-		} else {
-			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
-		}
+		portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime()));
+		portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
 
 		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
 		if (capacityViolationAnnotation != null) {
@@ -273,6 +265,9 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				}
 			}
 		}
+
+		// set up hire cost
+		portVisit.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(visitEvent.getCharterCost()));
 
 		return portVisit;
 	}
