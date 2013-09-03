@@ -498,7 +498,11 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		if (normal == null) {
 			return;
 		}
-		final ScenarioInstance c = scenarioMap.remove(normal.toString()).get();
+		final WeakReference<ScenarioInstance> scenarioRef = scenarioMap.remove(normal.toString());
+		if (scenarioRef == null) {
+			return;
+		}
+		final ScenarioInstance c = scenarioRef.get();
 
 		if (c != null) {
 			detachSubTree(c);
