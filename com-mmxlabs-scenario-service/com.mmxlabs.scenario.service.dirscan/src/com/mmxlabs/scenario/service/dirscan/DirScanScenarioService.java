@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -87,6 +89,12 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	private Thread watchThread;
 	private volatile boolean watchThreadRunning;
 
+	/**
+	 * A {@link ReadWriteLock} to co-ordinate access between file system watcher and manipulation code. In this case the "write" lock is the watcher and the read locks belong to the manipulation code.
+	 * Multiple Filesystem change operations are permitted (this may be a flawed assumption) but the filesystem watch code runs exclusively.
+	 */
+	private ReadWriteLock lock = new ReentrantReadWriteLock(true);
+
 	private final EContentAdapter serviceModelAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
@@ -101,14 +109,19 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				final Path path = modelToFilesystemMap.get(c);
 				if (path != null) {
 					final Path newName = path.getParent().resolve(notification.getNewStringValue() + ".lingo");
-					// Remove from tree as file system watcher will re-add
-					if (c instanceof ScenarioInstance) {
-						removeFile(path);
-					} else {
-						removeFolder(path);
-					}
+					lock.readLock().lock();
+					try {
+						// Remove from tree as file system watcher will re-add
+						if (c instanceof ScenarioInstance) {
+							removeFile(path);
+						} else {
+							removeFolder(path);
+						}
 
-					path.toFile().renameTo(newName.toFile());
+						path.toFile().renameTo(newName.toFile());
+					} finally {
+						lock.readLock().unlock();
+					}
 				}
 			}
 		}
@@ -129,19 +142,25 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	@Override
 	public void delete(final Container container) {
 
-		final Path destPath = modelToFilesystemMap.get(container);
-		if (destPath == null) {
-			log.error("Destination is not known to scenario service.", new RuntimeException());
-			return;
-		}
+		lock.readLock().lock();
+		try {
+			final Path destPath = modelToFilesystemMap.get(container);
+			if (destPath == null) {
+				log.error("Destination is not known to scenario service.", new RuntimeException());
+				return;
+			}
 
-		final Path path = modelToFilesystemMap.get(container);
-		if (path != null) {
-			delete(path.toFile());
+			final Path path = modelToFilesystemMap.get(container);
+			if (path != null) {
+				delete(path.toFile());
+			}
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
 	private void delete(final File f) {
+
 		if (f.isDirectory()) {
 			for (final File sub : f.listFiles()) {
 				delete(sub);
@@ -191,8 +210,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	public void start(final Dictionary<?, ?> d) throws IOException {
 
-		// TODO Auto-generated method stub
-		// final String scenarioServiceID = d.get("component.id").toString();
 		final String path = d.get("path").toString();
 		serviceName = d.get("serviceName").toString();
 
@@ -202,11 +219,16 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			throw new IOException("Target folder does not exist: " + dataPath.toString());
 		}
 
-		this.watcher = FileSystems.getDefault().newWatchService();
+		lock.writeLock().lock();
 		try {
-			recursiveAdd(getServiceModel(), dataPath.toPath());
-		} catch (final IOException e) {
-			log.error(e.getMessage(), e);
+			this.watcher = FileSystems.getDefault().newWatchService();
+			try {
+				recursiveAdd(getServiceModel(), dataPath.toPath());
+			} catch (final IOException e) {
+				log.error(e.getMessage(), e);
+			}
+		} finally {
+			lock.writeLock().unlock();
 		}
 
 		watchThreadRunning = true;
@@ -231,62 +253,77 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						continue;
 					}
 
-					final Path dir = keys.get(key);
-					if (dir == null) {
-						System.err.println("WatchKey not recognized!!");
-						continue;
-					}
+					lock.writeLock().lock();
+					try {
+						final Path dir = keys.get(key);
+						if (dir == null) {
+							// note - potential race condition between key being created and added to map and events firing. We typically get here for the source dir of a moveInto operation/
+							// This can happen as the write lock is stalled by the op read lock after the watcher poll() returns an event.
+							final boolean valid = key.reset();
+							if (!valid) {
+								keys.remove(key);
 
-					for (final WatchEvent<?> event : key.pollEvents()) {
-						final Kind<?> kind = event.kind();
-
-						// TBD - provide example of how OVERFLOW event is handled
-						if (kind == OVERFLOW) {
+								// all directories are inaccessible
+								if (keys.isEmpty()) {
+									break;
+								}
+							}
 							continue;
 						}
 
-						// Context for directory entry event is the file name of entry
-						@SuppressWarnings("unchecked")
-						final WatchEvent<Path> ev = (WatchEvent<Path>) (event);
-						// Work out filename - if renamed or deleted, the old name will no longer exist on filesystem.
-						final Path name = ev.context();
-						final Path child = dir.resolve(name);
+						for (final WatchEvent<?> event : key.pollEvents()) {
+							final Kind<?> kind = event.kind();
 
-						// if directory is created, and watching recursively, then
-						// register it and its sub-directories
-						if (kind == ENTRY_CREATE) {
-							try {
-								recursiveAdd(folderMap.get(child.getParent().normalize().toString()).get(), child);
-							} catch (final IOException e) {
-								log.error(e.getMessage(), e);
+							// TBD - provide example of how OVERFLOW event is handled
+							if (kind == OVERFLOW) {
+								continue;
+							}
+
+							// Context for directory entry event is the file name of entry
+							@SuppressWarnings("unchecked")
+							final WatchEvent<Path> ev = (WatchEvent<Path>) (event);
+							// Work out filename - if renamed or deleted, the old name will no longer exist on filesystem.
+							final Path name = ev.context();
+							final Path child = dir.resolve(name);
+
+							// if directory is created, and watching recursively, then
+							// register it and its sub-directories
+							if (kind == ENTRY_CREATE) {
+								try {
+									recursiveAdd(folderMap.get(child.getParent().normalize().toString()).get(), child);
+								} catch (final IOException e) {
+									log.error(e.getMessage(), e);
+								}
+							}
+
+							else if (kind == ENTRY_DELETE) {
+
+								final String pathKey = child.normalize().toString();
+								if (folderMap.containsKey(pathKey)) {
+									removeFolder(child);
+								} else if (scenarioMap.containsKey(pathKey)) {
+									removeFile(child);
+								}
+							} else if (kind == ENTRY_MODIFY) {
+								//
+								if (Files.isRegularFile(child)) {
+									addFile(child);
+								}
 							}
 						}
 
-						else if (kind == ENTRY_DELETE) {
+						// reset key and remove from set if directory no longer accessible
+						final boolean valid = key.reset();
+						if (!valid) {
+							keys.remove(key);
 
-							final String pathKey = child.normalize().toString();
-							if (folderMap.containsKey(pathKey)) {
-								removeFolder(child);
-							} else if (scenarioMap.containsKey(pathKey)) {
-								removeFile(child);
-							}
-						} else if (kind == ENTRY_MODIFY) {
-							//
-							if (Files.isRegularFile(child)) {
-								addFile(child);
+							// all directories are inaccessible
+							if (keys.isEmpty()) {
+								break;
 							}
 						}
-					}
-
-					// reset key and remove from set if directory no longer accessible
-					final boolean valid = key.reset();
-					if (!valid) {
-						keys.remove(key);
-
-						// all directories are inaccessible
-						if (keys.isEmpty()) {
-							break;
-						}
+					} finally {
+						lock.writeLock().unlock();
 					}
 				}
 			};
@@ -346,7 +383,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void removeFolder(final Path dir) {
-
 		final WeakReference<Container> remove = folderMap.remove(dir.normalize().toString());
 		if (remove == null) {
 			return;
@@ -370,6 +406,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void addFolder(final Path dir) throws IOException {
+
 		final String pathKey = dir.normalize().toString();
 		if (!folderMap.containsKey(pathKey)) {
 			// top entry will have no parent....
@@ -415,6 +452,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void addFile(final Path file) {
+
 		// Filter based on file extension
 		if (!(file.toString().endsWith(".lingo") || file.toString().endsWith(".scenario"))) {
 			return;
@@ -452,6 +490,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void removeFile(final Path file) {
+
 		if (file == null) {
 			return;
 		}
@@ -518,73 +557,146 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		}
 
-		final ResourceSet instanceResourceSet = createResourceSet();
-		final URI scenarioURI = URI.createFileURI(dataPath.toString() + sb.toString() + File.separator + original.getName() + ".lingo");
+		lock.readLock().lock();
+		try {
 
-		final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
-		if (original.getInstance() == null) {
-			// Not loaded, copy raw data
-			final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
-			final URI sourceURI = originalService.resolveURI(original.getRootObjectURI());
-			copyURIData(uc, sourceURI, destURI);
-		} else {
-			// Already loaded? Just use the same instance.
-			final EObject rootObject = EcoreUtil.copy(original.getInstance());
-			final Resource instanceResource = instanceResourceSet.createResource(destURI);
-			instanceResource.getContents().add(rootObject);
-			instanceResource.save(null);
+			final ResourceSet instanceResourceSet = createResourceSet();
+			final URI scenarioURI = URI.createFileURI(dataPath.toString() + sb.toString() + File.separator + original.getName() + ".lingo");
+
+			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
+			if (original.getInstance() == null) {
+				// Not loaded, copy raw data
+				final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
+				final URI sourceURI = originalService.resolveURI(original.getRootObjectURI());
+				copyURIData(uc, sourceURI, destURI);
+			} else {
+				// Already loaded? Just use the same instance.
+				final EObject rootObject = EcoreUtil.copy(original.getInstance());
+				final Resource instanceResource = instanceResourceSet.createResource(destURI);
+				instanceResource.getContents().add(rootObject);
+				instanceResource.save(null);
+			}
+
+			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+			manifest.setScenarioType(original.getMetadata().getContentType());
+			manifest.setUUID(original.getUuid());
+			manifest.setScenarioVersion(original.getScenarioVersion());
+			manifest.setVersionContext(original.getVersionContext());
+			final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
+			final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
+
+			manifestResource.getContents().add(manifest);
+
+			manifest.getModelURIs().add("rootObject.xmi");
+			manifestResource.save(null);
+		} finally {
+			lock.readLock().unlock();
 		}
-
-		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
-		manifest.setScenarioType(original.getMetadata().getContentType());
-		manifest.setUUID(original.getUuid());
-		manifest.setScenarioVersion(original.getScenarioVersion());
-		manifest.setVersionContext(original.getVersionContext());
-		final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
-		final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
-
-		manifestResource.getContents().add(manifest);
-
-		manifest.getModelURIs().add("rootObject.xmi");
-		manifestResource.save(null);
-
 		return null;
 	}
 
 	@Override
 	public void moveInto(final List<Container> elements, final Container destination) {
 
-		final Path destPath = modelToFilesystemMap.get(destination);
-		if (destPath == null) {
-			log.error("Destination is not known to scenario service.", new RuntimeException());
-			return;
-		}
-		if (destination instanceof ScenarioInstance) {
-			log.error("Destination is a scenario - cannot move into.", new RuntimeException());
-			return;
-		}
+		lock.readLock().lock();
+		try {
+			final Path destPath = modelToFilesystemMap.get(destination);
+			if (destPath == null) {
+				log.error("Destination is not known to scenario service.", new RuntimeException());
+				return;
+			}
+			if (destination instanceof ScenarioInstance) {
+				log.error("Destination is a scenario - cannot move into.", new RuntimeException());
+				return;
+			}
 
-		// Loop over targets and move (rename)
-		for (final Container c : elements) {
+			// Loop over targets and move (rename)
+			for (final Container c : elements) {
 
-			final Path path = modelToFilesystemMap.get(c);
-			if (path != null) {
-				try {
-					// Generate the new target filename
-					final Path destLoc = destPath.resolve(path.getFileName());
-					Files.move(path, destLoc);
-					// Remove from tree as file system watcher will re-add.
-					// We do this after the move as errors will leave the file in place (TODO: What about folder moves?)
-					if (c instanceof ScenarioInstance) {
-						removeFile(path);
-					} else {
-						removeFolder(path);
+				final Path path = modelToFilesystemMap.get(c);
+				if (path != null) {
+					try {
+						// Generate the new target filename
+						final Path destLoc = destPath.resolve(path.getFileName());
+
+						moveFileTree(path, destLoc);
+						// Files.move(path, destLoc);
+						// Remove from tree as file system watcher will re-add.
+						// We do this after the move as errors will leave the file in place (TODO: What about folder moves?)
+						if (c instanceof ScenarioInstance) {
+							removeFile(path);
+						} else {
+							removeFolder(path);
+						}
+					} catch (final IOException e) {
+						log.error(e.getMessage(), e);
 					}
-				} catch (final IOException e) {
-					log.error(e.getMessage(), e);
 				}
 			}
+		} finally {
+			lock.readLock().unlock();
 		}
+	}
+
+	private void moveFileTree(final Path source, final Path dest) throws IOException {
+
+		// Maps the old file tree to the new file tree
+		final Map<String, Path> oldToNewMap = new HashMap<>();
+		oldToNewMap.put(source.getParent().toString(), dest.getParent());
+
+		// Create a file walker op to move each file individually from one folder to another
+		Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+
+				// Make Folder
+				final Path target = oldToNewMap.get(dir.getParent().toString());
+				if (target == null) {
+					// Error!
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+
+				final Path resolve = target.resolve(dir.getFileName());
+				oldToNewMap.put(dir.toString(), resolve);
+
+				resolve.toFile().mkdirs();
+
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+
+				removeFile(file);
+				final Path target = oldToNewMap.get(file.getParent().toString());
+				if (target == null) {
+					// Error!
+					return FileVisitResult.CONTINUE;
+				}
+
+				final Path resolve = target.resolve(file.getFileName());
+
+				// File.move often appears to tell java the file has moved, but causes delete to fail due to the file still being present in the folder....
+				// Files.move(file, resolve, StandardCopyOption.ATOMIC_MOVE);
+
+				// ... so instead we copy then delete
+				Files.copy(file, resolve);
+				Files.delete(file);
+
+				return super.visitFile(file, attrs);
+			}
+
+			@Override
+			public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+
+				removeFolder(dir);
+
+				Files.delete(dir);
+
+				return super.postVisitDirectory(dir, exc);
+			}
+		});
+
 	}
 
 	@Override
@@ -614,18 +726,22 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			return;
 		}
 
-		final Path path;
-		if (parent == getServiceModel()) {
-			path = dataPath.toPath();
-		} else {
-			path = modelToFilesystemMap.get(parent);
-		}
+		lock.readLock().lock();
+		try {
+			final Path path;
+			if (parent == getServiceModel()) {
+				path = dataPath.toPath();
+			} else {
+				path = modelToFilesystemMap.get(parent);
+			}
 
-		if (path == null) {
-			return;
+			if (path == null) {
+				return;
+			}
+			final Path newFolderPath = path.resolve(name);
+			newFolderPath.toFile().mkdirs();
+		} finally {
+			lock.readLock().unlock();
 		}
-
-		final Path newFolderPath = path.resolve(name);
-		newFolderPath.toFile().mkdirs();
 	}
 }
