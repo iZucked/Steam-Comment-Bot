@@ -13,8 +13,13 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -25,7 +30,6 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -45,10 +49,69 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	private IPortSlotProvider portSlotProvider;
 
 	private LNGScenarioModel rootObject;
+	// TODO: these maps probably don't need to be separate from one another - it would simplify matters to use just one Map<EObject, Collection<ISequenceElement>>
 	private final Map<Contract, Collection<ISequenceElement>> contractMap = new HashMap<Contract, Collection<ISequenceElement>>();
 	private final Map<Port, Collection<ISequenceElement>> portMap = new HashMap<Port, Collection<ISequenceElement>>();
+	private final Map<Slot, Collection<ISequenceElement>> slotMap = new HashMap<Slot, Collection<ISequenceElement>>();
+	
+	private enum RestrictionType { FOLLOWER, PRECEDENT };
+	
 	private final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
 
+	private Collection<ISequenceElement> findAssociatedISequenceElements(Object obj) {
+		if (obj instanceof Contract) {
+			return contractMap.get(obj);
+		}
+		if (obj instanceof Port) {
+			return portMap.get(obj);
+		}
+		if (obj instanceof Slot) {
+			return slotMap.get(obj);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Registers restrictions on which elements can follow or precede one another, using a restrictedElementsProviderEditor.
+	 * 
+	 * @param object The contract with the restricted elements attached.
+	 * @param elements The list of elements which are prohibited (or permitted).
+	 * @param map A map indicating which ISequenceElements are associated with each element (e.g. Contract or Port) from the elements list
+	 * @param type Whether the restriction prevents elements preceding, or following, the ISequenceElement associated with the contract.
+	 */
+	private void registerRestrictedElements(final EObject object, final EList<? extends EObject> elements, boolean isPermissive, final RestrictionType type) {
+		// get the ISequenceElements associated with the source
+		final Collection<ISequenceElement> sourceElements = findAssociatedISequenceElements(object);
+		
+		if (sourceElements != null) {		
+			for (final EObject element : elements) {
+				// get the list of ISequenceElements associated with each restricted element
+				Collection<ISequenceElement> destinationElements = findAssociatedISequenceElements(element);
+				if (destinationElements != null) {
+					// take the complement of the list if the list is a permissive (as opposed to prohibitive) one 
+					if (isPermissive) {
+						final Set<ISequenceElement> permissive = new HashSet<ISequenceElement>(allElements);
+						permissive.removeAll(destinationElements);
+						destinationElements = permissive;
+					}
+					
+					// register each prohibited pair
+					for (final ISequenceElement source : sourceElements) {
+						switch (type) {
+						case FOLLOWER:
+							restrictedElementsProviderEditor.setRestrictedElements(source, null, destinationElements);
+							break;
+						case PRECEDENT:
+							restrictedElementsProviderEditor.setRestrictedElements(source, destinationElements, null);
+							break;							
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * @since 4.0
 	 */
@@ -63,6 +126,9 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		if (commercialModel != null) {
 			// Process purchase contract restrictions - these are the follower restrictions
 			for (final PurchaseContract pc : commercialModel.getPurchaseContracts()) {
+				registerRestrictedElements(pc, pc.getRestrictedContracts(), pc.isRestrictedListsArePermissive(), RestrictionType.FOLLOWER);
+				registerRestrictedElements(pc, pc.getRestrictedPorts(), pc.isRestrictedListsArePermissive(), RestrictionType.FOLLOWER);
+				/*
 				if (contractMap.containsKey(pc)) {
 					final Collection<ISequenceElement> sourceElements = contractMap.get(pc);
 					for (final Contract c : pc.getRestrictedContracts()) {
@@ -93,10 +159,14 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						}
 					}
 				}
+				*/
 			}
 
 			// Process sales contract restrictions - these are the preceding restrictions
 			for (final SalesContract sc : commercialModel.getSalesContracts()) {
+				registerRestrictedElements(sc, sc.getRestrictedContracts(), sc.isRestrictedListsArePermissive(), RestrictionType.PRECEDENT);
+				registerRestrictedElements(sc, sc.getRestrictedPorts(), sc.isRestrictedListsArePermissive(), RestrictionType.PRECEDENT);
+				/*
 				if (contractMap.containsKey(sc)) {
 					final Collection<ISequenceElement> sourceElements = contractMap.get(sc);
 					for (final Contract c : sc.getRestrictedContracts()) {
@@ -127,12 +197,26 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						}
 					}
 				}
+				*/
 			}
+			CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+			
+			for (LoadSlot slot: cargoModel.getLoadSlots()) {
+				registerRestrictedElements(slot, slot.getRestrictedContracts(), slot.isRestrictedListsArePermissive(), RestrictionType.FOLLOWER);
+				registerRestrictedElements(slot, slot.getRestrictedPorts(), slot.isRestrictedListsArePermissive(), RestrictionType.FOLLOWER);				
+			}
+
+			for (DischargeSlot slot: cargoModel.getDischargeSlots()) {
+				registerRestrictedElements(slot, slot.getRestrictedContracts(), slot.isRestrictedListsArePermissive(), RestrictionType.PRECEDENT);
+				registerRestrictedElements(slot, slot.getRestrictedPorts(), slot.isRestrictedListsArePermissive(), RestrictionType.PRECEDENT);				
+			}
+		
 		}
 
 		rootObject = null;
 		contractMap.clear();
 		portMap.clear();
+		slotMap.clear();
 		allElements.clear();
 	}
 
@@ -177,6 +261,16 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 				contractMap.put(contract, contractElements);
 			}
 			contractElements.add(sequenceElement);
+		}
+		{
+			Collection<ISequenceElement> slotElements;
+			if (slotMap.containsKey(modelSlot)) {
+				slotElements = contractMap.get(modelSlot);
+			} else {
+				slotElements = new HashSet<ISequenceElement>();
+				slotMap.put(modelSlot, slotElements);
+			}
+			slotElements.add(sequenceElement);
 		}
 	}
 
