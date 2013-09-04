@@ -319,7 +319,9 @@ public class LNGScenarioTransformer {
 				curve.setDefaultValue(0);
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
-					curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+					if (index instanceof DerivedIndex<?>) {
+						curve.setValueAfter(0, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+					}
 				} else {
 					for (final int i : changePoints) {
 						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
