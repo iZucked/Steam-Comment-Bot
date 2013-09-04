@@ -79,20 +79,21 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_portEditor(detailComposite, topClass);
+		add_minQuantityEditor(detailComposite, topClass);
+		add_maxQuantityEditor(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);
-		add_portEditor(detailComposite, topClass);
+		add_pricingDateEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
 		add_windowStartEditor(detailComposite, topClass);
 		add_windowStartTimeEditor(detailComposite, topClass);
 		add_windowSizeEditor(detailComposite, topClass);
 		add_durationEditor(detailComposite, topClass);
-		add_minQuantityEditor(detailComposite, topClass);
-		add_maxQuantityEditor(detailComposite, topClass);
-		add_entityEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
 		add_restrictedPortsEditor(detailComposite, topClass);
+		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 		add_optionalEditor(detailComposite, topClass);
-		add_pricingDateEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 	}
 
@@ -161,6 +162,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_PORTS));
+	}
+
+	/**
+	 * Create the editor for the restrictedListsArePermissive feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE));
 	}
 
 	/**

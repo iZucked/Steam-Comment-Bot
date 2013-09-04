@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import java.lang.reflect.InvocationTargetException;
@@ -403,19 +404,28 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public double getSlotOrContractMinCv() {
-		return (Double) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE);
+		return (Double) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE);	
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public double getSlotOrContractMaxCv() {
-		return (Double) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE);
+		return (Double) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public CargoDeliveryType getSlotOrContractDeliveryType() {
+		return (CargoDeliveryType) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE);	
 	}
 
 	/**
@@ -559,6 +569,8 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 				return getSlotOrContractMinCv();
 			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MAX_CV:
 				return getSlotOrContractMaxCv();
+			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE:
+				return getSlotOrContractDeliveryType();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -592,7 +604,7 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 		}
 		
 		else if (feature == CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE) {
-			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE, (Integer) 0);			
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE, CargoDeliveryType.ANY);			
 		}
 				
 		else if (feature == CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE) {

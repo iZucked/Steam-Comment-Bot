@@ -266,6 +266,14 @@ public interface DischargeSlot extends Slot {
 	 * @generated
 	 */
 	double getSlotOrContractMaxCv();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	CargoDeliveryType getSlotOrContractDeliveryType();
 } // end of  DischargeSlot
 
 // finish type fixing

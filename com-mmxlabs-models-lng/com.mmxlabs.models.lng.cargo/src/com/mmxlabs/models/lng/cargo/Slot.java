@@ -37,6 +37,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  * </ul>
  * </p>
  *
@@ -775,6 +776,59 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	boolean isSetRestrictedPorts();
 
 	/**
+	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Lists Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedListsArePermissive()
+	 * @see #unsetRestrictedListsArePermissive()
+	 * @see #setRestrictedListsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedListsArePermissive()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	boolean isRestrictedListsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedListsArePermissive()
+	 * @see #unsetRestrictedListsArePermissive()
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedListsArePermissive(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRestrictedListsArePermissive()
+	 * @see #isRestrictedListsArePermissive()
+	 * @see #setRestrictedListsArePermissive(boolean)
+	 * @generated
+	 */
+	void unsetRestrictedListsArePermissive();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Restricted Lists Are Permissive</em>' attribute is set.
+	 * @see #unsetRestrictedListsArePermissive()
+	 * @see #isRestrictedListsArePermissive()
+	 * @see #setRestrictedListsArePermissive(boolean)
+	 * @generated
+	 */
+	boolean isSetRestrictedListsArePermissive();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -845,6 +899,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	EList<Port> getSlotOrContractRestrictedPorts();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrContractRestrictedListsArePermissive();
 
 } // end of  Slot
 

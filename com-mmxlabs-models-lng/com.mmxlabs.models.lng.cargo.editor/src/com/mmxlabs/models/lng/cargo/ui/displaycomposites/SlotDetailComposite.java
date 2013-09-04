@@ -94,21 +94,23 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize);
 
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_CargoCV() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive() });
 
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive() });
 
 		missedFeatures = new ArrayList<EStructuralFeature>();
 		
 		noteFeatures = new ArrayList<EStructuralFeature[]>();
-		noteFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
+		noteFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });		
 	}
 
 	public SlotDetailComposite(final Composite parent, final int style, FormToolkit toolkit) {

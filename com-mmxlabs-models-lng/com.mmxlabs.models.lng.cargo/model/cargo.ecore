@@ -24,6 +24,7 @@
     <eOperations name="getSlotOrContractEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//LegalEntity"/>
     <eOperations name="getSlotOrContractRestrictedContracts" upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
     <eOperations name="getSlotOrContractRestrictedPorts" upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eOperations name="getSlotOrContractRestrictedListsArePermissive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"
         unsettable="true"/>
@@ -61,6 +62,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedPorts" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedListsArePermissive"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//Slot">
     <eOperations name="getSlotOrPortCV" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
@@ -75,6 +78,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="DischargeSlot" eSuperTypes="#//Slot">
     <eOperations name="getSlotOrContractMinCv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eOperations name="getSlotOrContractMaxCv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eOperations name="getSlotOrContractDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="FOBSale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="Any" unsettable="true"/>

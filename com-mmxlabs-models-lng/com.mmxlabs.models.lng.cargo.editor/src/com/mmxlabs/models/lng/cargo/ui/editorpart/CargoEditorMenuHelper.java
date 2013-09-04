@@ -536,22 +536,22 @@ public class CargoEditorMenuHelper {
 	 * @return
 	 */
 	private boolean checkSourceContractConstraints(final Slot source, final Slot target) {
-		if (source.getContract() != null) {
-			final Contract sourceContract = source.getContract();
-			if (!sourceContract.getRestrictedPorts().isEmpty()) {
-				if (sourceContract.getRestrictedPorts().contains(target.getPort()) != sourceContract.isRestrictedListsArePermissive()) {
-					// Trying to pair to a restricted port - skip
-					return false;
-				}
-			}
-
-			if (!sourceContract.getRestrictedContracts().isEmpty() && target.getContract() != null) {
-				if (sourceContract.getRestrictedContracts().contains(target.getContract()) != sourceContract.isRestrictedListsArePermissive()) {
-					// Trying to pair to a restricted contract - skip
-					return false;
-				}
+		final EList<Port> restrictedPorts = source.getRestrictedPorts();
+		final EList<Contract> restrictedContracts = source.getRestrictedContracts();
+		final boolean areRestrictedListsPermissive = source.getSlotOrContractRestrictedListsArePermissive();
+		
+		if (restrictedContracts != null) {
+			if (restrictedContracts.contains(target.getContract()) != areRestrictedListsPermissive) {
+				return false;
 			}
 		}
+		
+		if (restrictedPorts != null) {
+			if (restrictedPorts.contains(target.getPort()) != areRestrictedListsPermissive) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 

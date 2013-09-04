@@ -59,6 +59,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  * </ul>
  * </p>
  *
@@ -418,6 +419,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected EList<Port> restrictedPorts;
+
+	/**
+	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
+	 * This is true if the Restricted Lists Are Permissive attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedListsArePermissiveESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1117,6 +1147,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isRestrictedListsArePermissive() {
+		return restrictedListsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
+		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
+		restrictedListsArePermissive = newRestrictedListsArePermissive;
+		boolean oldRestrictedListsArePermissiveESet = restrictedListsArePermissiveESet;
+		restrictedListsArePermissiveESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, restrictedListsArePermissive, !oldRestrictedListsArePermissiveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetRestrictedListsArePermissive() {
+		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
+		boolean oldRestrictedListsArePermissiveESet = restrictedListsArePermissiveESet;
+		restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
+		restrictedListsArePermissiveESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT, oldRestrictedListsArePermissiveESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetRestrictedListsArePermissive() {
+		return restrictedListsArePermissiveESet;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -1155,7 +1231,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public EList<Contract> getSlotOrContractRestrictedContracts() {
 		return (EList<Contract>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS);	
@@ -1164,10 +1240,19 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public EList<Port> getSlotOrContractRestrictedPorts() {
 		return (EList<Port>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_PORTS);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean getSlotOrContractRestrictedListsArePermissive() {
+		return (Boolean) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE);	
 	}
 
 	/**
@@ -1297,6 +1382,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getRestrictedContracts();
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				return getRestrictedPorts();
+			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				return isRestrictedListsArePermissive();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1362,6 +1449,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				getRestrictedPorts().clear();
 				getRestrictedPorts().addAll((Collection<? extends Port>)newValue);
 				return;
+			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				setRestrictedListsArePermissive((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1424,6 +1514,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				unsetRestrictedPorts();
 				return;
+			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				unsetRestrictedListsArePermissive();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1469,6 +1562,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetRestrictedContracts();
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
 				return isSetRestrictedPorts();
+			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				return isSetRestrictedListsArePermissive();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1562,6 +1657,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrContractRestrictedContracts();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS:
 				return getSlotOrContractRestrictedPorts();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE:
+				return getSlotOrContractRestrictedListsArePermissive();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -1599,6 +1696,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (pricingDateESet) result.append(pricingDate); else result.append("<unset>");
 		result.append(", notes: ");
 		result.append(notes);
+		result.append(", restrictedListsArePermissive: ");
+		if (restrictedListsArePermissiveESet) result.append(restrictedListsArePermissive); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
