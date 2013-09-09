@@ -43,7 +43,7 @@ public interface SalesContract extends Contract {
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	//double getMinCvValue();
+	double getMinCvValue();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.SalesContract#getMinCvValue <em>Min Cv Value</em>}' attribute.
@@ -100,7 +100,7 @@ public interface SalesContract extends Contract {
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	//double getMaxCvValue();
+	double getMaxCvValue();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.SalesContract#getMaxCvValue <em>Max Cv Value</em>}' attribute.
@@ -158,7 +158,7 @@ public interface SalesContract extends Contract {
 	 * @model default="Any"
 	 * @generated
 	 */
-	//CargoDeliveryType getPurchaseDeliveryType();
+	CargoDeliveryType getPurchaseDeliveryType();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}' attribute.
