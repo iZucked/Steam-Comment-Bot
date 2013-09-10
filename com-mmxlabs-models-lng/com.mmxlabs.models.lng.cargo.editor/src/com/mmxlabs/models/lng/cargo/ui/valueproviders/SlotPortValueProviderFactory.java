@@ -81,23 +81,30 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 						final Slot slot = (Slot) target;
 
 						PortCapability capability = null;
-						
-						final boolean isTransferSlot = (target instanceof LoadSlot && ((LoadSlot) target).getTransferFrom() != null) 
+
+						final boolean isTransferSlot = (target instanceof LoadSlot && ((LoadSlot) target).getTransferFrom() != null)
 								|| (target instanceof DischargeSlot && ((DischargeSlot) target).getTransferTo() != null);
-								
+
 						if (isTransferSlot) {
 							capability = PortCapability.TRANSFER;
-						}
-						else {
+						} else {
 							// If FOB or DES, then only one port is permitted - this should be set by the CargoTypeUpdatingCommandProvider
+							// -- However if the slot is not linked, then we are free to change
 							if (target instanceof LoadSlot) {
 								if (!((LoadSlot) target).isDESPurchase()) {
 									capability = PortCapability.LOAD;
+								} else {
+									if (((Slot) target).getCargo() == null) {
+										capability = PortCapability.DISCHARGE;
+									}
 								}
-							}
-							if (target instanceof DischargeSlot) {
+							} else if (target instanceof DischargeSlot) {
 								if (!((DischargeSlot) target).isFOBSale()) {
 									capability = PortCapability.DISCHARGE;
+								} else {
+									if (((Slot) target).getCargo() == null) {
+										capability = PortCapability.LOAD;
+									}
 								}
 							}
 						}
@@ -124,9 +131,9 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 						if (contract == null) {
 							return filterOne;
 						}
-						
+
 						Set<Port> ports = SetUtils.getObjects(contract.getAllowedPorts());
-						
+
 						if (ports != null && !ports.isEmpty()) {
 							for (final Pair<String, EObject> value : filterOne) {
 								if (ports.contains(value.getSecond())) {

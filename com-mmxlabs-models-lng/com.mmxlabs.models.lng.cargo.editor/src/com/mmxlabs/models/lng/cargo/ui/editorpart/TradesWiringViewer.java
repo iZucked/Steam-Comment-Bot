@@ -41,6 +41,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -71,6 +72,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ScrollBar;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -98,6 +100,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootD
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.CreateStripDialog.StripType;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -111,9 +114,13 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.ui.ImageConstants;
+import com.mmxlabs.models.lng.ui.LngUIActivator;
+import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -931,7 +938,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 										// Currently unable to edit mixed content!
 									}
 								} else {
-									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX);
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX) {
+										@Override
+										protected void configureShell(final Shell newShell) {
+											newShell.setMinimumSize(SWT.DEFAULT, 630);
+											super.configureShell(newShell);
+										}
+									};
 									dcd.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), editorTargets, scenarioViewer.isLocked());
 								}
 							} finally {
@@ -1268,6 +1281,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				};
 				addActionToMenu(newFOBSale, menu);
 			}
+
 			{
 				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo");
 				addActionToMenu(newComplexCargo, menu);
@@ -1461,5 +1475,183 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		public void mouseUp(final MouseEvent e) {
 			dragging = false;
 		}
+	}
+
+	private class CreateStripMenuAction extends Action implements IMenuCreator {
+
+		private Menu lastMenu;
+
+		public CreateStripMenuAction(final String label) {
+			super(label, IAction.AS_DROP_DOWN_MENU);
+			setImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE));
+			setDisabledImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE_DISABLED));
+		}
+
+		@Override
+		public void dispose() {
+			if ((lastMenu != null) && (lastMenu.isDisposed() == false)) {
+				lastMenu.dispose();
+			}
+			lastMenu = null;
+		}
+
+		@Override
+		public IMenuCreator getMenuCreator() {
+			return this;
+		}
+
+		@Override
+		public Menu getMenu(final Control parent) {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+
+			populate(lastMenu);
+
+			return lastMenu;
+		}
+
+		protected void addActionToMenu(final Action a, final Menu m) {
+			final ActionContributionItem aci = new ActionContributionItem(a);
+			aci.fill(m, -1);
+		}
+
+		/**
+		 * Subclasses should fill their menu with actions here.
+		 * 
+		 * @param menu
+		 *            the menu which is about to be displayed
+		 */
+		protected void populate(final Menu menu) {
+
+			final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
+			// Translate into real objects, not just row object!
+			final List<Object> selectedObjects = new LinkedList<Object>();
+			if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+				final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
+
+				final Iterator<?> itr = structuredSelection.iterator();
+				while (itr.hasNext()) {
+					final Object o = itr.next();
+					if (o instanceof RowData) {
+						final RowData rowData = (RowData) o;
+						// TODO: Check logic, a row may contain two distinct items
+						if (rowData.cargo != null) {
+							selectedObjects.add(rowData.cargo);
+							continue;
+						}
+						if (rowData.loadSlot != null) {
+							selectedObjects.add(rowData.loadSlot);
+						}
+						if (rowData.dischargeSlot != null) {
+							selectedObjects.add(rowData.dischargeSlot);
+						}
+					}
+				}
+			}
+
+			result.selectionChanged(new SelectionChangedEvent(scenarioViewer, new StructuredSelection(selectedObjects)));
+			addActionToMenu(result, menu);
+
+			for (final CreateStripDialog.StripType stripType : CreateStripDialog.StripType.values()) {
+				final Action stripAction = new CreateStripAction(stripType.toString(), stripType);
+				addActionToMenu(stripAction, menu);
+			}
+		}
+
+		@Override
+		public Menu getMenu(final Menu parent) {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+
+			populate(lastMenu);
+
+			return lastMenu;
+		}
+
+	}
+
+	private class CreateStripAction extends Action {
+
+		private final CreateStripDialog.StripType stripType;
+
+		protected CreateStripAction(final String text, final StripType stripType) {
+			super(text);
+			this.stripType = stripType;
+		}
+
+		@Override
+		public void run() {
+
+			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+			try {
+				editorLock.claim();
+				scenarioEditingLocation.setDisableUpdates(true);
+
+				final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+				if (rootObject instanceof LNGScenarioModel) {
+
+					Slot selectedObject = null;
+					final ISelection selection = TradesWiringViewer.this.getScenarioViewer().getSelection();
+					if (selection instanceof IStructuredSelection) {
+						final IStructuredSelection ss = (IStructuredSelection) selection;
+
+						final Iterator<?> itr = ss.iterator();
+						while (itr.hasNext()) {
+							Object o = itr.next();
+
+							if (o instanceof RowData) {
+								final RowData rowData = (RowData) o;
+								if (stripType == StripType.TYPE_FOB_PURCHASE_SLOT || stripType == StripType.TYPE_DES_PURCHASE_SLOT) {
+									o = rowData.loadSlot;
+								} else if (stripType == StripType.TYPE_FOB_SALE_SLOT || stripType == StripType.TYPE_DES_SALE_SLOT) {
+									o = rowData.dischargeSlot;
+								}
+							}
+
+							if (o instanceof Slot) {
+								selectedObject = (Slot) o;
+								break;
+							}
+
+						}
+					}
+
+					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+					final CreateStripDialog d = new CreateStripDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation, stripType, selectedObject) {
+						@Override
+						protected void configureShell(final Shell newShell) {
+							newShell.setMinimumSize(SWT.DEFAULT, 630);
+							super.configureShell(newShell);
+						}
+					};
+					if (Window.OK == d.open()) {
+						final Command cmd = d.createStrip(scenarioModel.getPortfolioModel().getCargoModel(), getEditingDomain());
+						if (cmd.canExecute()) {
+							getEditingDomain().getCommandStack().execute(cmd);
+						}
+					}
+
+				} else {
+					setEnabled(false);
+				}
+
+			} finally {
+				scenarioEditingLocation.setDisableUpdates(false);
+				editorLock.release();
+			}
+		}
+	}
+
+	/**
+	 * Return an action which duplicates the selection
+	 * 
+	 * @return
+	 */
+	protected Action createDuplicateAction() {
+		return new CreateStripMenuAction("Duplicate");
 	}
 }
