@@ -35,7 +35,8 @@ import com.mmxlabs.models.ui.properties.extensions.DetailPropertyFactoryExtensio
  */
 public class DetailPropertyFactoryRegistry {
 
-	private final Map<String, Map<EClass, DetailPropertyFactoryExtensionPoint>> factories = new HashMap<>();
+	// Category -> EClass -> Ext point
+	private final Map<String, Map<String, DetailPropertyFactoryExtensionPoint>> factories = new HashMap<>();
 
 	/**
 	 * This method is called by the Guice/Peaberry frameworks to inject the known DetailPropertyFactory extensions into this instance.
@@ -46,10 +47,10 @@ public class DetailPropertyFactoryRegistry {
 	public void init(final Iterable<DetailPropertyFactoryExtensionPoint> factoryExtPoints) {
 
 		for (final DetailPropertyFactoryExtensionPoint ext : factoryExtPoints) {
-			final EClass eClass = ext.getEClass();
+			final String eClass = ext.getEClass();
 			final String category = ext.getCategory();
 
-			final Map<EClass, DetailPropertyFactoryExtensionPoint> map;
+			final Map<String, DetailPropertyFactoryExtensionPoint> map;
 			if (factories.containsKey(category)) {
 				map = factories.get(category);
 			} else {
@@ -62,7 +63,7 @@ public class DetailPropertyFactoryRegistry {
 
 	public @Nullable
 	IDetailPropertyFactory getFactory(@NonNull final String category, @NonNull final EClass eClass) {
-		final Map<EClass, DetailPropertyFactoryExtensionPoint> map;
+		final Map<String, DetailPropertyFactoryExtensionPoint> map;
 		if (factories.containsKey(category)) {
 			map = factories.get(category);
 		} else {
@@ -70,8 +71,8 @@ public class DetailPropertyFactoryRegistry {
 		}
 
 		final DetailPropertyFactoryExtensionPoint ext;
-		if (map.containsKey(eClass)) {
-			ext = map.get(eClass);
+		if (map.containsKey(eClass.getInstanceClassName())) {
+			ext = map.get(eClass.getInstanceClassName());
 		} else {
 			return null;
 		}

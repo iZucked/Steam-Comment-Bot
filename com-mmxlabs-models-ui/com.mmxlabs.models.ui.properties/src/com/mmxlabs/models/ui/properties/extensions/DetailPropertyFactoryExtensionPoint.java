@@ -1,6 +1,5 @@
 package com.mmxlabs.models.ui.properties.extensions;
 
-import org.eclipse.emf.ecore.EClass;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
@@ -19,7 +18,7 @@ public interface DetailPropertyFactoryExtensionPoint {
 	String getCategory();
 
 	@MapName("EClass")
-	EClass getEClass();
+	String getEClass();
 
 	@MapName("factory")
 	IDetailPropertyFactory createDetailPropertyFactory();
