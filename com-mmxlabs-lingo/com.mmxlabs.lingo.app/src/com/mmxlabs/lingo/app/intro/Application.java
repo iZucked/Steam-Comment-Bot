@@ -40,7 +40,7 @@ public class Application implements IApplication {
 		LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
 
-			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license " + validity.name());
+			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license: " + validity.getMessage());
 
 			display.dispose();
 			return IApplication.EXIT_OK;
