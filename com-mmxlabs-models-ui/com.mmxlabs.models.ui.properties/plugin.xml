@@ -5,7 +5,7 @@
 -->
 
 <plugin>
-   <extension-point id="IDetailPropertyFactory" name="DetailPropertyFactory" schema="schema/DetailPropertyFactory.exsd"/>
+   <extension-point id="DetailPropertyFactory" name="DetailPropertyFactory" schema="schema/DetailPropertyFactory.exsd"/>
    <extension-point id="DetailPropertyCategory" name="DetailPropertyCategory" schema="schema/DetailPropertyCategory.exsd"/>
 
 
