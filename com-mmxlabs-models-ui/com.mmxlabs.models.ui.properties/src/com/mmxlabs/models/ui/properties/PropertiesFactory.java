@@ -22,6 +22,15 @@ public interface PropertiesFactory extends EFactory {
 	PropertiesFactory eINSTANCE = com.mmxlabs.models.ui.properties.impl.PropertiesFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Detail Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Detail Property</em>'.
+	 * @generated
+	 */
+	DetailProperty createDetailProperty();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

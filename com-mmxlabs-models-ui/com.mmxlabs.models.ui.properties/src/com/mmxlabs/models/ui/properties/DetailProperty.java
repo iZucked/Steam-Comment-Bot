@@ -27,7 +27,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  * </p>
  *
  * @see com.mmxlabs.models.ui.properties.PropertiesPackage#getDetailProperty()
- * @model abstract="true"
+ * @model
  * @generated
  */
 public interface DetailProperty extends EObject {
