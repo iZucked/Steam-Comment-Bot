@@ -29,6 +29,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.util.EditorControlFactory;
 
 /**
  * The default detail composite implementation; does not do anything about having child composites.
@@ -63,13 +64,15 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 	
 	@Override
-	public void addInlineEditor(IInlineEditor editor) {
+	public IInlineEditor addInlineEditor(IInlineEditor editor) {
 		
 		editor = wrapper.wrap(editor);
 		if (editor != null) {
 			editor.setCommandHandler(commandHandler);
 			editors.add(editor);
 		}
+		
+		return editor;
 	}
 
 	/**
@@ -155,18 +158,8 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		this.layoutProvider = layoutProvider;
 	}
 
-	/**
-	 * @since 6.1
-	 */
+	/** @deprecated */
 	protected Control createLabelledEditorControl(MMXRootObject root, EObject object, Composite c, IInlineEditor editor, EMFDataBindingContext dbc) {
-		final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(c, SWT.NONE) : null;
-		if (label != null) label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		editor.setLabel(label);
-		final Control control = editor.createControl(c, dbc, toolkit);
-		control.setLayoutData(layoutProvider.createEditorLayoutData(root, object, editor, control));
-		control.setData(LABEL_CONTROL_KEY, label);
-		control.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		if (label != null) label.setLayoutData(layoutProvider.createLabelLayoutData(root, object, editor, control, label));
-		return control;
+		return EditorControlFactory.createLabelledEditorControl(root, object, c, editor, dbc, layoutProvider, toolkit);
 	}
 }
