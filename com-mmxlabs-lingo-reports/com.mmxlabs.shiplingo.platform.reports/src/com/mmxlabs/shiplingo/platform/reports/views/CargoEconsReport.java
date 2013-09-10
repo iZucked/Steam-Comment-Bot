@@ -15,11 +15,12 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -62,6 +63,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.properties.DetailProperty;
+import com.mmxlabs.models.ui.properties.ui.DelegatingDetailPropertyContentProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -79,7 +82,7 @@ public class CargoEconsReport extends ViewPart {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
-	private GridTableViewer viewer;
+	private GridTreeViewer viewer;
 	private ISelectionListener selectionListener;
 
 	/**
@@ -89,7 +92,7 @@ public class CargoEconsReport extends ViewPart {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new GridTableViewer(parent);
+		viewer = new GridTreeViewer(parent);
 
 		// Add the name column
 		{
@@ -102,7 +105,7 @@ public class CargoEconsReport extends ViewPart {
 		// All other columns dynamically added.
 
 		// Array content provider as we pass in an array of enums
-		viewer.setContentProvider(new ArrayContentProvider());
+		viewer.setContentProvider(new DelegatingDetailPropertyContentProvider(new FieldTypeContentProvider(), "pnl"));
 		// Our input!
 		viewer.setInput(FieldType.values());
 
@@ -589,6 +592,9 @@ public class CargoEconsReport extends ViewPart {
 			if (element instanceof FieldType) {
 				final FieldType fieldType = (FieldType) element;
 				return fieldType.getName(); // + " (" + fieldType.getUnit() + ")";
+			} else if (element instanceof DetailProperty) {
+				DetailProperty detailProperty = (DetailProperty) element;
+				return detailProperty.getName();
 			}
 			return null;
 		}
@@ -622,6 +628,9 @@ public class CargoEconsReport extends ViewPart {
 		public String getText(final Object element) {
 			if (element instanceof FieldType) {
 				return fieldTypeMapper.getText((FieldType) element);
+			} else if (element instanceof DetailProperty) {
+				DetailProperty detailProperty = (DetailProperty) element;
+				return detailProperty.format();
 			}
 			return null;
 		}
@@ -815,7 +824,6 @@ public class CargoEconsReport extends ViewPart {
 		return (int) groupProfitAndLoss.getProfitAndLoss();
 	}
 
-	
 	/**
 	 * Get total cargo PNL value excluding time charter rate
 	 * 
@@ -896,4 +904,37 @@ public class CargoEconsReport extends ViewPart {
 		return sum;
 	}
 
+	private class FieldTypeContentProvider implements ITreeContentProvider {
+
+		@Override
+		public void dispose() {
+
+		}
+
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+
+		}
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+
+			return FieldType.values();
+		}
+
+		@Override
+		public Object[] getChildren(Object parentElement) {
+			return null;
+		}
+
+		@Override
+		public Object getParent(Object element) {
+			return null;
+		}
+
+		@Override
+		public boolean hasChildren(Object element) {
+			return false;
+		}
+	}
 }
