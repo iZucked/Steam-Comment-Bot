@@ -26,8 +26,14 @@
       <genFeatures createChild="false" propertyDescription="The typical size (in hours) of a load / discharge time window at this port (can be overridden by the cargo)"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/defaultWindowSize"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Port/location"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/atobviacCode"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/dataloyCode"/>
+      <genFeatures createChild="false" propertyDescription="A to B via C's Port ID"
+          ecoreFeature="ecore:EAttribute port.ecore#//Port/atobviacCode"/>
+      <genFeatures createChild="false" propertyDescription="Dataloy's Port ID" ecoreFeature="ecore:EAttribute port.ecore#//Port/dataloyCode"/>
+      <genFeatures createChild="false" propertyDescription="Veson's Port ID" ecoreFeature="ecore:EAttribute port.ecore#//Port/vesonCode"/>
+      <genFeatures createChild="false" propertyDescription="Other external port ID"
+          ecoreFeature="ecore:EAttribute port.ecore#//Port/externalCode"/>
+      <genFeatures createChild="false" propertyDescription="UN/LOCODE of the Port"
+          ecoreFeature="ecore:EAttribute port.ecore#//Port/UNLocode"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Route">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>
@@ -43,6 +49,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/from"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/to"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//RouteLine/distance"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//RouteLine/vias"/>
+      <genOperations ecoreOperation="port.ecore#//RouteLine/getFullDistance"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//PortModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/ports"/>

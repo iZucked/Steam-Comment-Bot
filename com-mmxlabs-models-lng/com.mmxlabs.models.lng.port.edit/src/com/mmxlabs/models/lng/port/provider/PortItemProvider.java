@@ -73,6 +73,9 @@ public class PortItemProvider
 			addDefaultWindowSizePropertyDescriptor(object);
 			addAtobviacCodePropertyDescriptor(object);
 			addDataloyCodePropertyDescriptor(object);
+			addVesonCodePropertyDescriptor(object);
+			addExternalCodePropertyDescriptor(object);
+			addUNLocodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -289,7 +292,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_atobviacCode_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_atobviacCode_feature", "_UI_Port_type"),
+				 getString("_UI_Port_atobviacCode_description"),
 				 PortPackage.Literals.PORT__ATOBVIAC_CODE,
 				 true,
 				 false,
@@ -312,8 +315,74 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_dataloyCode_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_dataloyCode_feature", "_UI_Port_type"),
+				 getString("_UI_Port_dataloyCode_description"),
 				 PortPackage.Literals.PORT__DATALOY_CODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Veson Code feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesonCodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_vesonCode_feature"),
+				 getString("_UI_Port_vesonCode_description"),
+				 PortPackage.Literals.PORT__VESON_CODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the External Code feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addExternalCodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_externalCode_feature"),
+				 getString("_UI_Port_externalCode_description"),
+				 PortPackage.Literals.PORT__EXTERNAL_CODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the UN Locode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUNLocodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_UNLocode_feature"),
+				 getString("_UI_Port_UNLocode_description"),
+				 PortPackage.Literals.PORT__UN_LOCODE,
 				 true,
 				 false,
 				 false,
@@ -400,6 +469,9 @@ public class PortItemProvider
 			case PortPackage.PORT__DEFAULT_WINDOW_SIZE:
 			case PortPackage.PORT__ATOBVIAC_CODE:
 			case PortPackage.PORT__DATALOY_CODE:
+			case PortPackage.PORT__VESON_CODE:
+			case PortPackage.PORT__EXTERNAL_CODE:
+			case PortPackage.PORT__UN_LOCODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.PORT__LOCATION:
