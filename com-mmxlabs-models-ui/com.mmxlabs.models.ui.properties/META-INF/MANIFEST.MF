@@ -19,6 +19,7 @@ Export-Package: com.mmxlabs.models.ui.properties,
  com.mmxlabs.models.ui.properties.extensions,
  com.mmxlabs.models.ui.properties.factory,
  com.mmxlabs.models.ui.properties.impl,
+ com.mmxlabs.models.ui.properties.ui,
  com.mmxlabs.models.ui.properties.util
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0"
