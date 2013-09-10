@@ -13,9 +13,9 @@
           ecoreFeature="ecore:EAttribute port.ecore#//Port/capabilities"/>
       <genFeatures createChild="false" propertyDescription="The timezone that this port is in, for displaying localised dates"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/timeZone"/>
-      <genFeatures createChild="false" propertyDescription="The time in hours required to load a cargo at this port (can be overriden by cargo)"
+      <genFeatures createChild="false" propertyDescription="The time in hours required to load a cargo at this port (can be overridden by cargo)"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/loadDuration"/>
-      <genFeatures createChild="false" propertyDescription="The time in hours required to discharge a cargo at this port (can be overriden by cargo)"
+      <genFeatures createChild="false" propertyDescription="The time in hours required to discharge a cargo at this port (can be overridden by cargo)"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/dischargeDuration"/>
       <genFeatures createChild="false" propertyDescription="The CV value of gas from this port"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/cvValue"/>
