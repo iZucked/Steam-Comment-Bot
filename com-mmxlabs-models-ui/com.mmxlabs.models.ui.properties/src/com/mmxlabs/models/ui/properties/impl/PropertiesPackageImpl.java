@@ -261,7 +261,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(detailPropertyEClass, DetailProperty.class, "DetailProperty", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(detailPropertyEClass, DetailProperty.class, "DetailProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDetailProperty_Parent(), this.getDetailProperty(), this.getDetailProperty_Children(), "parent", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDetailProperty_Children(), this.getDetailProperty(), this.getDetailProperty_Parent(), "children", null, 0, -1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDetailProperty_Name(), ecorePackage.getEString(), "name", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

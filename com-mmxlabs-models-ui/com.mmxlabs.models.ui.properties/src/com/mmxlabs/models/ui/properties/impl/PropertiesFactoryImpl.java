@@ -59,6 +59,7 @@ public class PropertiesFactoryImpl extends EFactoryImpl implements PropertiesFac
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case PropertiesPackage.DETAIL_PROPERTY: return createDetailProperty();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -92,6 +93,16 @@ public class PropertiesFactoryImpl extends EFactoryImpl implements PropertiesFac
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DetailProperty createDetailProperty() {
+		DetailPropertyImpl detailProperty = new DetailPropertyImpl();
+		return detailProperty;
 	}
 
 	/**

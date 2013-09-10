@@ -45,7 +45,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  *
  * @generated
  */
-public abstract class DetailPropertyImpl extends MinimalEObjectImpl.Container implements DetailProperty {
+public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements DetailProperty {
 	/**
 	 * The cached value of the '{@link #getChildren() <em>Children</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
