@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.shiplingo.platform.feature"
       label="Shiplingo Platform Feature"
-      version="4.4.2.qualifier"
+      version="4.5.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description url="http://www.minimaxlabs.com/">
