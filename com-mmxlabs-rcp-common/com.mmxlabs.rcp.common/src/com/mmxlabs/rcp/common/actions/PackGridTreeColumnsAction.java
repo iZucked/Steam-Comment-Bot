@@ -10,6 +10,9 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 
 import com.mmxlabs.rcp.common.internal.Activator;
 
+/**
+ * @since 4.1
+ */
 public class PackGridTreeColumnsAction extends Action {
 
 	private final GridTreeViewer viewer;
