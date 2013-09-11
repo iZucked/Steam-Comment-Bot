@@ -138,7 +138,8 @@ public class EObjectTableViewer extends GridTreeViewer {
 		return currentReference;
 	}
 
-	/** Call this method if {@link #init(AdapterFactory, CommandStack, EReference...)} is overridden */
+	/** Call this method if {@link #init(AdapterFactory, CommandStack, EReference...)} is overridden 
+	 * @since 7.0*/
 	public void setCurrentContainerAndContainment(final EObject currentContainer, final EReference currentReference) {
 		this.currentContainer = currentContainer;
 		this.currentReference = currentReference;
@@ -380,7 +381,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 3.1
+	 * @since 7.0
 	 */
 	public void init(final ITreeContentProvider contentProvider, final CommandStack commandStack) {
 		final GridTreeViewer viewer = this;

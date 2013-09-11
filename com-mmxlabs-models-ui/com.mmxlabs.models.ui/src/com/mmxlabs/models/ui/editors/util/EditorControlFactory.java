@@ -20,6 +20,9 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 
 import static com.mmxlabs.models.ui.editors.IDisplayComposite.LABEL_CONTROL_KEY;;
 
+/**
+ * @since 7.0
+ */
 public class EditorControlFactory {
 
 	/**
