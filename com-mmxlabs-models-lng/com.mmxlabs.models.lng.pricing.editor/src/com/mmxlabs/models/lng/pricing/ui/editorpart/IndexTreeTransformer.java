@@ -23,15 +23,15 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 public class IndexTreeTransformer {
 
 	/**
-	 * Enum defining the sub-nodes of the {@link PricingModel} representing indicies to show in the same viewer
+	 * Enum defining the sub-nodes of the {@link PricingModel} representing indices to show in the same viewer
 	 * 
 	 */
 	public enum DataType {
-		Commodity("Commodity Curves", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, true),
+		Commodity("Commodity", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, true),
 
-		BaseFuel("Base Fuel Curves", false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
+		BaseFuel("Base Fuel", false, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false),
 
-		Charter("Chartering Curves", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false);
+		Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA, false);
 
 		private final String name;
 		private final boolean useIntegers;

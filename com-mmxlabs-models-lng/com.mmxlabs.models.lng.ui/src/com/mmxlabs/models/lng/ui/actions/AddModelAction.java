@@ -101,9 +101,10 @@ class SingleAddAction extends LockableAction {
 	/**
 	 * @param iModelFactory
 	 * @param context
-	 */
+	 */	
 	public SingleAddAction(final IModelFactory factory, final IAddContext context) {
-		super("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		super(factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		setToolTipText("Create new " + factory.getLabel());
 		this.factory = factory;
 		this.context = context;
 	}
