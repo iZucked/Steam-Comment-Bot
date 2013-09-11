@@ -48,6 +48,7 @@ public class EObjectTableViewerSortingSupport {
 	 * @param viewer
 	 * @param column
 	 * @param tColumn
+	 * @since 7.0
 	 */
 	public void addSortableColumn(final ColumnViewer viewer, final GridViewerColumn column, final GridColumn tColumn) {
 		columnSortOrder.add(tColumn);

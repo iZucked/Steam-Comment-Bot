@@ -47,6 +47,9 @@ public class EObjectTableViewerValidationSupport {
 
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
+	/**
+	 * @since 7.0
+	 */
 	public EObjectTableViewerValidationSupport(ColumnViewer viewer) {
 		this.viewer = viewer;
 	}
