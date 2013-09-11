@@ -68,6 +68,9 @@ public final class AddModelAction {
 			return new MenuAddAction(factories, context);
 	}
 
+	/**
+	 * @since 7.0
+	 */
 	public final static Action create(final List<Pair<EClass, IAddContext>> items, final Action[] additionalActions) {
 
 		final List<Pair<IModelFactory, IAddContext>> factoryPairs = new LinkedList<>();

@@ -655,9 +655,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	public void setInput(final PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
-		
+
 		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
-		
+
 		final EObject root = transformer.getRootObject();
 		transformer.update(pricingModel);
 

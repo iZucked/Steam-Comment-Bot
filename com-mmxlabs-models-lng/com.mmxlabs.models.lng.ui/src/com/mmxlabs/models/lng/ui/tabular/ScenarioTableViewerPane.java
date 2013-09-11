@@ -332,6 +332,9 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		return scenarioEditingLocation;
 	}
 
+	/**
+	 * @since 7.0
+	 */
 	protected GridViewerColumn addNameManipulator(final String nameName) {
 		return addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
 	}
