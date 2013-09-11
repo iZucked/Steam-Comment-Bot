@@ -330,6 +330,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * If the meaning of the '<em>Veson Code</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Veson Code</em>' attribute.
 	 * @see #setVesonCode(String)
@@ -342,6 +343,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getVesonCode <em>Veson Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Veson Code</em>' attribute.
 	 * @see #getVesonCode()
@@ -356,6 +358,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * If the meaning of the '<em>External Code</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>External Code</em>' attribute.
 	 * @see #setExternalCode(String)
@@ -368,6 +371,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getExternalCode <em>External Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>External Code</em>' attribute.
 	 * @see #getExternalCode()
@@ -382,6 +386,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * If the meaning of the '<em>UN Locode</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>UN Locode</em>' attribute.
 	 * @see #setUNLocode(String)
@@ -394,6 +399,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getUNLocode <em>UN Locode</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>UN Locode</em>' attribute.
 	 * @see #getUNLocode()

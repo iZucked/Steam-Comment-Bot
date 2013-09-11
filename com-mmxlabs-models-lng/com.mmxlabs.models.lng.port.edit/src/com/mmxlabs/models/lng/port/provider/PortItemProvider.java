@@ -328,6 +328,7 @@ public class PortItemProvider
 	/**
 	 * This adds a property descriptor for the Veson Code feature.
 	 * <!-- begin-user-doc -->
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -350,6 +351,7 @@ public class PortItemProvider
 	/**
 	 * This adds a property descriptor for the External Code feature.
 	 * <!-- begin-user-doc -->
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -372,6 +374,7 @@ public class PortItemProvider
 	/**
 	 * This adds a property descriptor for the UN Locode feature.
 	 * <!-- begin-user-doc -->
+	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

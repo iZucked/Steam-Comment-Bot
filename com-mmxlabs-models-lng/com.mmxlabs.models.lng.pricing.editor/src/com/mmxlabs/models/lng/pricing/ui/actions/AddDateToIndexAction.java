@@ -33,11 +33,11 @@ public class AddDateToIndexAction extends Action {
 	
 
 	public AddDateToIndexAction(final IndexPane pane) {
-		super("Add Date");
+		super("Extend dates");
 		this.pane = pane;
-		setText("Add Date");
-		setDescription("Adds a new date column");
-		setToolTipText("Adds a new date column");
+		setText("Extend dates");
+		setDescription("Adds new date columns");
+		setToolTipText("Adds new date columns");
 
 		//setImageDescriptor(Activator.getImageDescriptor("/icons/add.gif"));
 		
@@ -66,12 +66,12 @@ public class AddDateToIndexAction extends Action {
 				} catch (ParseException e) {
 				}
 				
-				return "Please enter a date of the form YYYY-MM";
+				return "Please use the form yyyy-MM";
 			}
 			
 		};
 		
-		InputDialog dialog = new InputDialog(null, "Enter date", "Enter a date for the new column.", "yyyy-MM", validator);
+		InputDialog dialog = new InputDialog(null, "Extend date range", "Enter a new start or end date.", "yyyy-MM", validator);
 		
 		if (dialog.open() == Window.OK) {
 			try {

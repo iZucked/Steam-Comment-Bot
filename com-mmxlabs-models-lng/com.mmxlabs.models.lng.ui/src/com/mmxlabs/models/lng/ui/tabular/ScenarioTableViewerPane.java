@@ -35,6 +35,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -78,7 +79,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
-import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class ScenarioTableViewerPane extends ViewerPane {
@@ -331,8 +332,11 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		return scenarioEditingLocation;
 	}
 
-	protected void addNameManipulator(final String nameName) {
-		addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
+	/**
+	 * @since 7.0
+	 */
+	protected GridViewerColumn addNameManipulator(final String nameName) {
+		return addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
 	}
 
 	/**
@@ -405,7 +409,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		toolbar.add(new GroupMarker(EDIT_GROUP));
 		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
 		toolbar.add(new GroupMarker(VIEW_GROUP));
-		toolbar.appendToGroup(VIEW_GROUP, new PackGridTableColumnsAction(scenarioViewer));
+		toolbar.appendToGroup(VIEW_GROUP, new PackGridTreeColumnsAction(scenarioViewer));
 
 		final ActionContributionItem filter = filterField.getContribution();
 
@@ -456,6 +460,8 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			copyToClipboardAction = new CopyTreeToClipboardAction(((TreeViewer) viewer).getTree());
 		} else if (viewer instanceof GridTableViewer) {
 			copyToClipboardAction = new CopyGridToClipboardAction(((GridTableViewer) viewer).getGrid());
+		} else if (viewer instanceof GridTreeViewer) {
+			copyToClipboardAction = new CopyGridToClipboardAction(((GridTreeViewer) viewer).getGrid());
 		}
 
 		if (copyToClipboardAction != null) {

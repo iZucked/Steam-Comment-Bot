@@ -42,7 +42,7 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 		fleetCostPane.getViewer().setInput(modelObject);
 
 		indexPage = editorPart.addPage(fleetCostPane.getControl());
-		editorPart.setPageText(indexPage, "Charter Markets");
+		editorPart.setPageText(indexPage, "Charters");
 	}
 
 	private void addSpotCargoMarketPage(final Composite parent) {

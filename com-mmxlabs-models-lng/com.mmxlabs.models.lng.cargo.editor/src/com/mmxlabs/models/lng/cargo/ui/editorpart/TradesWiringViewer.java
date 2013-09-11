@@ -38,8 +38,8 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -49,6 +49,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
@@ -140,7 +141,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -277,7 +278,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
 				super.init(adapterFactory, commandStack, path);
 
-				init(new IStructuredContentProvider() {
+				init(new ITreeContentProvider() {
 
 					@Override
 					public void dispose() {
@@ -306,6 +307,21 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					@Override
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
+					}
+
+					@Override
+					public Object[] getChildren(Object parentElement) {
+						return null;
+					}
+
+					@Override
+					public Object getParent(Object element) {
+						return null;
+					}
+
+					@Override
+					public boolean hasChildren(Object element) {
+						return false;
 					}
 
 				}, commandStack);
@@ -553,7 +569,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		toolbar.add(new GroupMarker(EDIT_GROUP));
 		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
 		toolbar.add(new GroupMarker(VIEW_GROUP));
-		toolbar.appendToGroup(VIEW_GROUP, new PackGridTableColumnsAction(scenarioViewer));
+		toolbar.appendToGroup(VIEW_GROUP, new PackGridTreeColumnsAction(scenarioViewer));
 
 		final ActionContributionItem filter = filterField.getContribution();
 
@@ -602,6 +618,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			copyToClipboardAction = new CopyTreeToClipboardAction(((TreeViewer) viewer).getTree());
 		} else if (viewer instanceof GridTableViewer) {
 			copyToClipboardAction = new CopyGridToClipboardAction(((GridTableViewer) viewer).getGrid());
+		} else if (viewer instanceof GridTreeViewer) {
+			copyToClipboardAction = new CopyGridToClipboardAction(((GridTreeViewer) viewer).getGrid());
 		}
 
 		if (copyToClipboardAction != null) {
