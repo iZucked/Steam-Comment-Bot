@@ -12,7 +12,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
@@ -337,10 +337,10 @@ public class SchedulePnLReport extends EMFReportView {
 	}
 
 	@Override
-	protected IStructuredContentProvider getContentProvider() {
-		final IStructuredContentProvider superProvider = super.getContentProvider();
+	protected ITreeContentProvider getContentProvider() {
+		final ITreeContentProvider superProvider = super.getContentProvider();
 
-		return new IStructuredContentProvider() {
+		return new ITreeContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				superProvider.inputChanged(viewer, oldInput, newInput);
@@ -384,6 +384,21 @@ public class SchedulePnLReport extends EMFReportView {
 			@Override
 			public Object[] getElements(final Object object) {
 				return superProvider.getElements(object);
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				return superProvider.getChildren(parentElement);
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				return superProvider.getParent(element);
+			}
+
+			@Override
+			public boolean hasChildren(Object element) {
+				return superProvider.hasChildren(element);
 			}
 		};
 	}

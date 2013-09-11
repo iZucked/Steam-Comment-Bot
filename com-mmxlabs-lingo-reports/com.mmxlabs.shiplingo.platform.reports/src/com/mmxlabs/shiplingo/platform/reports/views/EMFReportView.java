@@ -32,7 +32,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -62,7 +62,7 @@ import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
@@ -394,8 +394,11 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private ColumnHandler scheduleColumnHandler;
 
-	protected IStructuredContentProvider getContentProvider() {
-		return new IStructuredContentProvider() {
+	/**
+	 * @since 5.0
+	 */
+	protected ITreeContentProvider getContentProvider() {
+		return new ITreeContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				synchronizerOutput = null;
@@ -469,6 +472,21 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				processInputs(result);
 
 				return result;
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				return null;
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				return null;
+			}
+
+			@Override
+			public boolean hasChildren(Object element) {
+				return false;
 			}
 
 		};
@@ -658,7 +676,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackGridTableColumnsAction(viewer);
+		packColumnsAction = new PackGridTreeColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}

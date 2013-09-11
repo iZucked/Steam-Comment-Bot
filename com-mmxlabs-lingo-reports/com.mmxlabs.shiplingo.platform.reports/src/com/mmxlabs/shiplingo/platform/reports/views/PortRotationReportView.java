@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -248,49 +249,13 @@ public class PortRotationReportView extends EMFReportView {
 	}
 
 	@Override
-	protected IStructuredContentProvider getContentProvider() {
-		final IStructuredContentProvider superProvider = super.getContentProvider();
-		return new IStructuredContentProvider() {
+	protected ITreeContentProvider getContentProvider() {
+		final ITreeContentProvider superProvider = super.getContentProvider();
+		return new ITreeContentProvider() {
 
 			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 				superProvider.inputChanged(viewer, oldInput, newInput);
-				// Display.getCurrent().asyncExec(new Runnable() {
-				// @Override
-				// public void run() {
-				// if (viewer.getControl().isDisposed()) {
-				// return;
-				// }
-				// final Set<Scenario> scenarios = new HashSet<Scenario>();
-				// if (newInput instanceof Iterable) {
-				// for (final Object element : ((Iterable<?>) newInput)) {
-				// if (element instanceof Schedule) {
-				// // find all referenced entities
-				// for (final String s : entityColumnNames) {
-				// removeColumn(s);
-				// }
-				// entityColumnNames.clear();
-				//
-				// EObject o = (EObject) element;
-				// while ((o != null) && !(o instanceof Scenario)) {
-				// o = o.eContainer();
-				// }
-				//
-				// if (o != null) {
-				// scenarios.add((Scenario) o);
-				// }
-				// }
-				// }
-				//
-				// }
-				// for (final Scenario scenario : scenarios) {
-				// addEntityColumns(scenario);
-				// }
-				// viewer.refresh();
-				// }
-				//
-				// });
-
 			}
 
 			@Override
@@ -299,9 +264,19 @@ public class PortRotationReportView extends EMFReportView {
 			}
 
 			@Override
-			public Object[] getElements(final Object object) {
+			public boolean hasChildren(Object element) {
+				return superProvider.hasChildren(element);
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				return superProvider.getParent(element);
+			}
+
+			@Override
+			public Object[] getElements(Object inputElement) {
 				clearInputEquivalents();
-				final Object[] result = superProvider.getElements(object);
+				final Object[] result = superProvider.getElements(inputElement);
 
 				for (final Object event : result) {
 					if (event instanceof SlotVisit) {
@@ -314,6 +289,11 @@ public class PortRotationReportView extends EMFReportView {
 				}
 
 				return result;
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				return superProvider.getChildren(parentElement);
 			}
 		};
 	}
