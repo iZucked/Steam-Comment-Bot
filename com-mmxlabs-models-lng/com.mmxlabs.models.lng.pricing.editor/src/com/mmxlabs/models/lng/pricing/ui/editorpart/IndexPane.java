@@ -644,9 +644,11 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 			final SeriesParser seriesParser = seriesParsers.get(dt);
 			if (seriesParser != null) {
-				final ISeries series = seriesParser.getSeries(name);
-				if (series != null) {
-					return series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+				if (name != null && !name.isEmpty()) {
+					final ISeries series = seriesParser.getSeries(name);
+					if (series != null) {
+						return series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+					}
 				}
 			}
 		}
