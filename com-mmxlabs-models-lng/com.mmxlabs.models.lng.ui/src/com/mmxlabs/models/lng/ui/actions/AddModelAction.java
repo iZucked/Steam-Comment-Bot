@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.ui.actions;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CommandStack;
@@ -22,6 +23,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
@@ -65,18 +67,30 @@ public final class AddModelAction {
 		else
 			return new MenuAddAction(factories, context);
 	}
-	
+
+	public final static Action create(final List<Pair<EClass, IAddContext>> items, final Action[] additionalActions) {
+
+		final List<Pair<IModelFactory, IAddContext>> factoryPairs = new LinkedList<>();
+		for (final Pair<EClass, IAddContext> p : items) {
+			final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(p.getFirst());
+			for (final IModelFactory f : factories) {
+				factoryPairs.add(new Pair<>(f, p.getSecond()));
+			}
+		}
+		return new MultiAddContextAction(factoryPairs, additionalActions);
+	}
+
 	/**
 	 * @since 5.0
 	 */
-	public final static Action create(final EClass eClass, final IAddContext context, Action [] additionalActions) {
+	public final static Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(eClass);
 
 		if (factories.isEmpty())
 			return null;
 		else
 			return new MenuAddAction(factories, context, additionalActions);
-		
+
 	}
 }
 
@@ -146,14 +160,13 @@ class SingleAddAction extends LockableAction {
 class MenuAddAction extends AbstractMenuAction {
 	private final List<IModelFactory> factories;
 	private final IAddContext context;
-	private final Action [] additionalActions;
+	private final Action[] additionalActions;
 
 	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context) {
-		this (factories, context, new Action[0]);
+		this(factories, context, new Action[0]);
 	}
 
-	public MenuAddAction(List<IModelFactory> factories, IAddContext context,
-			Action[] additionalActions) {
+	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context, final Action[] additionalActions) {
 		super("Create new element");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		this.context = context;
@@ -166,7 +179,33 @@ class MenuAddAction extends AbstractMenuAction {
 		for (final IModelFactory factory : factories) {
 			addActionToMenu(new SingleAddAction(factory, context), menu);
 		}
-		for (Action action: additionalActions) {
+		for (final Action action : additionalActions) {
+			addActionToMenu(action, menu);
+		}
+	}
+}
+
+class MultiAddContextAction extends AbstractMenuAction {
+	private final List<Pair<IModelFactory, IAddContext>> factories;
+	private final Action[] additionalActions;
+
+	public MultiAddContextAction(final List<Pair<IModelFactory, IAddContext>> factories) {
+		this(factories, new Action[0]);
+	}
+
+	public MultiAddContextAction(final List<Pair<IModelFactory, IAddContext>> factories, final Action[] additionalActions) {
+		super("Create new element");
+		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		this.factories = factories;
+		this.additionalActions = additionalActions;
+	}
+
+	@Override
+	protected void populate(final Menu menu) {
+		for (final Pair<IModelFactory, IAddContext> p : factories) {
+			addActionToMenu(new SingleAddAction(p.getFirst(), p.getSecond()), menu);
+		}
+		for (final Action action : additionalActions) {
 			addActionToMenu(action, menu);
 		}
 	}

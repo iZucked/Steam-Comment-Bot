@@ -579,56 +579,6 @@ public interface PricingPackage extends EPackage {
 	int COMMODITY_INDEX = 11;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__UUID = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Data</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX__DATA = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Commodity Index</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMODITY_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterIndexImpl <em>Charter Index</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -638,56 +588,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	int CHARTER_INDEX = 12;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__UUID = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Data</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX__DATA = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Charter Index</em>' class.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl <em>Named Index Container</em>}' class.
@@ -749,6 +649,106 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int NAMED_INDEX_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_INDEX__EXTENSIONS = NAMED_INDEX_CONTAINER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_INDEX__UUID = NAMED_INDEX_CONTAINER__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_INDEX__NAME = NAMED_INDEX_CONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Data</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
+
+	/**
+	 * The number of structural features of the '<em>Commodity Index</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_INDEX__EXTENSIONS = NAMED_INDEX_CONTAINER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_INDEX__UUID = NAMED_INDEX_CONTAINER__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_INDEX__NAME = NAMED_INDEX_CONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Data</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
+
+	/**
+	 * The number of structural features of the '<em>Charter Index</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
@@ -1223,18 +1223,6 @@ public interface PricingPackage extends EPackage {
 	EClass getCommodityIndex();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.CommodityIndex#getData <em>Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Data</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.CommodityIndex#getData()
-	 * @see #getCommodityIndex()
-	 * @generated
-	 */
-	EReference getCommodityIndex_Data();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CharterIndex <em>Charter Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -1244,18 +1232,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getCharterIndex();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.CharterIndex#getData <em>Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Data</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.CharterIndex#getData()
-	 * @see #getCharterIndex()
-	 * @generated
-	 */
-	EReference getCharterIndex_Data();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.BaseFuelIndex <em>Base Fuel Index</em>}'.
@@ -1645,15 +1621,6 @@ public interface PricingPackage extends EPackage {
 		EClass COMMODITY_INDEX = eINSTANCE.getCommodityIndex();
 
 		/**
-		 * The meta object literal for the '<em><b>Data</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 5.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COMMODITY_INDEX__DATA = eINSTANCE.getCommodityIndex_Data();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterIndexImpl <em>Charter Index</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * @since 5.0
@@ -1663,15 +1630,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CHARTER_INDEX = eINSTANCE.getCharterIndex();
-
-		/**
-		 * The meta object literal for the '<em><b>Data</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 5.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHARTER_INDEX__DATA = eINSTANCE.getCharterIndex_Data();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelIndexImpl <em>Base Fuel Index</em>}' class.
