@@ -100,21 +100,21 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
 
 		missedFeatures = new ArrayList<EStructuralFeature>();
-		
+
 		noteFeatures = new ArrayList<EStructuralFeature[]>();
 		noteFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
 	}
 
-	public SlotDetailComposite(final Composite parent, final int style, FormToolkit toolkit) {
+	public SlotDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style, toolkit);
 		feature2Editor = new HashMap<EStructuralFeature, IInlineEditor>();
 
-		esPricing = new ExpandableSet("Pricing", this){
+		esPricing = new ExpandableSet("Pricing", this) {
 
 			@Override
-			protected void updateTextClient(EObject eo) {
+			protected void updateTextClient(final EObject eo) {
 
-				MMXObject mmxEo = (MMXObject) eo;
+				final MMXObject mmxEo = (MMXObject) eo;
 				final Contract c = (Contract) mmxEo.eGet(Contract);
 				final String pe = (String) mmxEo.eGet(PriceExpression);
 				String text = "";
@@ -128,15 +128,15 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			}
 		};
 
-		esWindow = new ExpandableSet("Window", this){
+		esWindow = new ExpandableSet("Window", this) {
 
 			@Override
-			protected void updateTextClient(EObject eo) {
+			protected void updateTextClient(final EObject eo) {
 
-				MMXObject mmxEo = (MMXObject) eo;
+				final MMXObject mmxEo = (MMXObject) eo;
 				final Date d = (Date) mmxEo.eGet(CargoFeatures.getSlot_WindowStart());
-				int time = (Integer) mmxEo.eGetWithDefault(CargoFeatures.getSlot_WindowStartTime());
-				int wsize = (Integer) mmxEo.eGetWithDefault(CargoFeatures.getSlot_WindowSize());
+				final int time = (Integer) mmxEo.eGetWithDefault(CargoFeatures.getSlot_WindowStartTime());
+				final int wsize = (Integer) mmxEo.eGetWithDefault(CargoFeatures.getSlot_WindowSize());
 				textClient.setText(WindowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours");
 			}
 		};
@@ -150,6 +150,21 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			@Override
 			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
 				return new FillLayout();
+			}
+
+			@Override
+			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
+
+				// Special case for min/max volumes - ensure text box has enough width for around 7 digits.
+				// Note: Should really render the font to get width - this is ok on my system, but other systems (default font & size, resolution, dpi etc) could make this wrong
+				final EStructuralFeature feature = editor.getFeature();
+				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					gd.widthHint = 80;
+					return gd;
+				}
+
+				return super.createEditorLayoutData(root, value, editor, control);
 			}
 		};
 	}
@@ -173,7 +188,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
 		super.display(location, root, object, range, dbc);
-		MMXObject eo = (MMXObject) object;
+		final MMXObject eo = (MMXObject) object;
 		esPricing.init(eo);
 		esWindow.init(eo);
 		esTerms.init(eo);
@@ -197,20 +212,20 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		contentComposite = toolkit.createComposite(this);
 		contentComposite.setLayout(new GridLayout(2, false));
 
-		for (EStructuralFeature[] fs : nameFeatures) {
+		for (final EStructuralFeature[] fs : nameFeatures) {
 			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 
-		for (EStructuralFeature[] fs : mainFeatures) {
+		for (final EStructuralFeature[] fs : mainFeatures) {
 			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
-		
+
 		createSpacer();
 		esPricing.setFeatures(pricingFeatures, pricingTitleFeatures);
 		esPricing.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
 		esPricing.setExpanded(false);
 
-		createSpacer();	
+		createSpacer();
 		esWindow.setFeatures(windowFeatures, windowTitleFeatures);
 		esWindow.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
 		esWindow.setExpanded(false);
@@ -220,24 +235,24 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		esTerms.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
 		esTerms.setExpanded(false);
 
-		for (EStructuralFeature f : missedFeatures) {
+		for (final EStructuralFeature f : missedFeatures) {
 		}
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
-	
-		for (EStructuralFeature[] fs : noteFeatures) {
+
+		for (final EStructuralFeature[] fs : noteFeatures) {
 			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 	}
 
 	private void createSpacer() {
-		Composite spacer = toolkit.createComposite(contentComposite);
-		GridData gd = new GridData();
+		final Composite spacer = toolkit.createComposite(contentComposite);
+		final GridData gd = new GridData();
 		gd.heightHint = 3;
 		spacer.setLayoutData(gd);
 	}
 
 	@Override
-	public void expansionStateChanged(final ExpansionEvent e, ExpandableComposite ec) {
+	public void expansionStateChanged(final ExpansionEvent e, final ExpandableComposite ec) {
 		final Point p = ec.getSize();
 		final Point p2 = ec.computeSize(p.x, SWT.DEFAULT);
 		ec.setSize(p.x, p2.y);
