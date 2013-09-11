@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.jface.viewers.ColumnViewer;
 
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
@@ -25,7 +25,7 @@ import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
  */
 public class EObjectTableViewerValidationSupport {
 
-	private final GridTableViewer viewer;
+	private final ColumnViewer viewer;
 
 	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
 
@@ -47,7 +47,10 @@ public class EObjectTableViewerValidationSupport {
 
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
-	public EObjectTableViewerValidationSupport(EObjectTableViewer viewer) {
+	/**
+	 * @since 7.0
+	 */
+	public EObjectTableViewerValidationSupport(ColumnViewer viewer) {
 		this.viewer = viewer;
 	}
 

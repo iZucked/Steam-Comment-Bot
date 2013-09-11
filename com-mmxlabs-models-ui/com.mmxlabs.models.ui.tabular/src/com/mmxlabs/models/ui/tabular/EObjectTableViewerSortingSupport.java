@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -47,8 +48,9 @@ public class EObjectTableViewerSortingSupport {
 	 * @param viewer
 	 * @param column
 	 * @param tColumn
+	 * @since 7.0
 	 */
-	public void addSortableColumn(final GridTableViewer viewer, final GridViewerColumn column, final GridColumn tColumn) {
+	public void addSortableColumn(final ColumnViewer viewer, final GridViewerColumn column, final GridColumn tColumn) {
 		columnSortOrder.add(tColumn);
 
 		column.getColumn().addSelectionListener(new SelectionListener() {
