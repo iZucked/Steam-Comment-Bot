@@ -394,6 +394,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private ColumnHandler scheduleColumnHandler;
 
+	/**
+	 * @since 5.0
+	 */
 	protected ITreeContentProvider getContentProvider() {
 		return new ITreeContentProvider() {
 			@Override
