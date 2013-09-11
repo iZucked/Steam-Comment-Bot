@@ -23,7 +23,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 public class IndexTreeTransformer {
 
 	/**
-	 * Enum defining the sub-nodes of the {@link PricingModel} representing indicies to show in the same viewer
+	 * Enum defining the sub-nodes of the {@link PricingModel} representing indices to show in the same viewer
 	 * 
 	 */
 	public enum DataType {
