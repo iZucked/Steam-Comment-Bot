@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.google.common.collect.Lists;
@@ -166,13 +167,14 @@ public class LatenessReportView extends EMFReportView {
 		return null;
 	}
 
+
 	@Override
-	protected IStructuredContentProvider getContentProvider() {
-		final IStructuredContentProvider superProvider = super.getContentProvider();
-		return new IStructuredContentProvider() {
+	protected ITreeContentProvider getContentProvider() {
+		final ITreeContentProvider superProvider = super.getContentProvider();
+		return new ITreeContentProvider() {
 
 			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 				superProvider.inputChanged(viewer, oldInput, newInput);
 			}
 
@@ -182,10 +184,19 @@ public class LatenessReportView extends EMFReportView {
 			}
 
 			@Override
-			public Object[] getElements(final Object object) {
+			public boolean hasChildren(Object element) {
+				return superProvider.hasChildren(element);
+			}
 
+			@Override
+			public Object getParent(Object element) {
+				return superProvider.getParent(element);
+			}
+
+			@Override
+			public Object[] getElements(Object inputElement) {
 				clearInputEquivalents();
-				final Object[] result = superProvider.getElements(object);
+				final Object[] result = superProvider.getElements(inputElement);
 				for (final Object e : result) {
 					if (e instanceof SlotVisit) {
 						final SlotVisit visit = (SlotVisit) e;
@@ -204,9 +215,14 @@ public class LatenessReportView extends EMFReportView {
 
 				return result;
 			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				return superProvider.getChildren(parentElement);
+			}
 		};
 	}
-
+	
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduledEventCollector() {
