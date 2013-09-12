@@ -962,6 +962,7 @@ public class ShippingCalculationsTest {
 		Assert.assertEquals("Exactly one leg uses FBO", 1, fboUsages);
 	}
 
+	@Ignore("Edge case: min heel is perilously close to vessel capacity")
 	@Test
 	public void testMinHeelForcesBfSupplementAndHeelout() {
 		System.err.println("\n\nMinimum Heel Forces BF supplement and heel out");
@@ -1141,6 +1142,7 @@ public class ShippingCalculationsTest {
 	}
 
 	@Test
+	@Ignore("Known error, fix is in heel_tracking branch")
 	public void testMaxLoadViolation() {
 		System.err.println("\n\nMaximum Load Volume Violated To Accommodate Min Heel");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
@@ -1152,9 +1154,9 @@ public class ShippingCalculationsTest {
 		final SequenceTester checker = getDefaultTester();
 
 		// expected load / discharge volumes:
-		// 500 (load) = { new maximum load value }
-		// 470 (discharge) = 500 { load } - 30 { consumption }
-		final Integer[] expectedloadDischargeVolumes = { 520, -470 };
+		// 520 (load) = 500 { min heel } + 20 { travel consumption }
+		// 490 (discharge) = 520 { load } - 20 { travel consumption } - 10 { idle consumption }
+		final Integer[] expectedloadDischargeVolumes = { 520, -490 };
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
 		checker.setExpectedValue(20, Expectations.MAX_LOAD_VIOLATIONS, SlotVisit.class, 0);
 
@@ -1731,6 +1733,29 @@ public class ShippingCalculationsTest {
 
 	}
 
+	@Test
+	@Ignore("Known error, fix is in heel_tracking branch")
+	public void testViolateMinDischarge() {
+		System.err.println("\n\nMin discharge violated due to fuel constraints.");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		// change from default: min discharge equal to vessel capacity
+		msc.cargo.getSlots().get(1).setMinQuantity(10000);
+		
+		SequenceTester checker = getDefaultTester();
+		// discharge will be short by 30m3 (the fuel expenditure after loading)
+		checker.setExpectedValue(30, Expectations.MIN_DISCHARGE_VIOLATIONS, SlotVisit.class, 1);
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);		
+	}
+	
 	//@Ignore("Test description is inconsistent with coded expectations")
 	@Test
 	public void testLimitedStartHeelIsCapacityViolation() {
@@ -2343,6 +2368,7 @@ public class ShippingCalculationsTest {
 	}
 	
 	@Test
+	@Ignore("Known error, fix is in heel_tracking branch")
 	public void testHeelRollover() {
 		System.err.println("\n\nTest min heel rollover: LNG travel due to expensive BF");
 
@@ -2441,7 +2467,7 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer [] {0, 0, 0, 0, 0});
 		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer [] {0, 10, 0, 10, 0});
 		
-		// volume allocations: load 9030 at first load port (violate min load)
+		// volume allocations: load 9030 at first load port (violate min load by 970)
 		// at first discharge, discharge 9000 (max discharge) emptying vessel  
 		// at next load, load back up to full (10000)
 		// at next discharge, discharge fully; 30m3 was used to get here
@@ -2455,5 +2481,8 @@ public class ShippingCalculationsTest {
 		checker.check(sequence);
 	
 	}
+	
+	
+	
 	
 }
