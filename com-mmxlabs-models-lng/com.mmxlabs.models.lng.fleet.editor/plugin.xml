@@ -250,7 +250,7 @@
           category="com.mmxlabs.models.lng.views.physical"
           class="com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView"
           id="com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView"
-          name="Vessels + Classes"
+          name="Vessels"
           restorable="true">
     </view>
     <view
