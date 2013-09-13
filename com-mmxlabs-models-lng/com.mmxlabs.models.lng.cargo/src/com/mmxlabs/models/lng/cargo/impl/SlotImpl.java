@@ -1721,7 +1721,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedContracts(), null);
 		} else if (CargoPackage.Literals.SLOT__RESTRICTED_PORTS == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedPorts(), null);
-		}
+		} else if (CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedListsArePermissive(), (Boolean) false);
+		} 
 		
 		return super.getUnsetValueOrDelegate(feature);
 	}	
