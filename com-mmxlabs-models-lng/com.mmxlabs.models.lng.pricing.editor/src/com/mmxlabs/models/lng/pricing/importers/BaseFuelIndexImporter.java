@@ -64,6 +64,7 @@ public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 		};
 	}
 	
+	@Override
 	protected Map<String, String>  getNonDateFields(BaseFuelIndex target, Index<? extends Number> index) {
 		Map<String, String> result = super.getNonDateFields(target, index);
 		result.put(NAME, target.getName());

@@ -562,28 +562,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCommodityIndex_Data() {
-		return (EReference)commodityIndexEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getCharterIndex() {
 		return charterIndexEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCharterIndex_Data() {
-		return (EReference)charterIndexEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -693,10 +673,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(cooldownPriceEClass, COOLDOWN_PRICE__INDEX);
 
 		commodityIndexEClass = createEClass(COMMODITY_INDEX);
-		createEReference(commodityIndexEClass, COMMODITY_INDEX__DATA);
 
 		charterIndexEClass = createEClass(CHARTER_INDEX);
-		createEReference(charterIndexEClass, CHARTER_INDEX__DATA);
 
 		baseFuelIndexEClass = createEClass(BASE_FUEL_INDEX);
 
@@ -757,10 +735,14 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		baseFuelCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cooldownPriceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		commodityIndexEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		commodityIndexEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		charterIndexEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		charterIndexEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		g1 = createEGenericType(this.getNamedIndexContainer());
+		g2 = createEGenericType(ecorePackage.getEDoubleObject());
+		g1.getETypeArguments().add(g2);
+		commodityIndexEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getNamedIndexContainer());
+		g2 = createEGenericType(ecorePackage.getEIntegerObject());
+		g1.getETypeArguments().add(g2);
+		charterIndexEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getNamedIndexContainer());
 		g2 = createEGenericType(ecorePackage.getEDoubleObject());
 		g1.getETypeArguments().add(g2);
@@ -849,16 +831,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getCooldownPrice_Index(), this.getCommodityIndex(), null, "index", null, 1, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(commodityIndexEClass, CommodityIndex.class, "CommodityIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getIndex());
-		g2 = createEGenericType(ecorePackage.getEDoubleObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getCommodityIndex_Data(), g1, null, "data", null, 0, 1, CommodityIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterIndexEClass, CharterIndex.class, "CharterIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getIndex());
-		g2 = createEGenericType(ecorePackage.getEIntegerObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getCharterIndex_Data(), g1, null, "data", null, 0, 1, CharterIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(baseFuelIndexEClass, BaseFuelIndex.class, "BaseFuelIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

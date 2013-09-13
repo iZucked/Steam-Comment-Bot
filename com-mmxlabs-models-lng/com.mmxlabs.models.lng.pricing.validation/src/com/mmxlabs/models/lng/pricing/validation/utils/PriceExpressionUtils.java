@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.text.DefaultEditorKit.InsertBreakAction;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -123,6 +125,11 @@ public class PriceExpressionUtils {
 			return;
 		}
 		
+		// Break even symbol
+		if (priceExpression.equals("?")) {
+			return;
+		}
+		
 		SeriesParser parser = getParser(date);
 		try {
 			final IExpression<ISeries> expression = parser.parse(priceExpression);
@@ -144,7 +151,10 @@ public class PriceExpressionUtils {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			final String message = String.format("Price expression is not valid: %s", priceExpression);
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+			dsd.addEObjectAndFeature(object, feature);
+			failures.add(dsd);
 		}
 
 	}

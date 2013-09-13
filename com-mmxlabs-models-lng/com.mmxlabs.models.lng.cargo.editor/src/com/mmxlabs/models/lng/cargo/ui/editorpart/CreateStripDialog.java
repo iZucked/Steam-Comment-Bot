@@ -84,6 +84,7 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  * This dialog is used to create a strip of {@link Slot}s with consistent parameters but with varying date according to some kind of pattern.
  * 
  * @author Simon Goodall
+ * @since 7.0
  * 
  */
 public class CreateStripDialog extends FormDialog {

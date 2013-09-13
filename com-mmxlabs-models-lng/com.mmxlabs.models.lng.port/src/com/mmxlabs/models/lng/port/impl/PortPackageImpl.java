@@ -255,6 +255,36 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_VesonCode() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_ExternalCode() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_UNLocode() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -492,6 +522,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(portEClass, PORT__LOCATION);
 		createEAttribute(portEClass, PORT__ATOBVIAC_CODE);
 		createEAttribute(portEClass, PORT__DATALOY_CODE);
+		createEAttribute(portEClass, PORT__VESON_CODE);
+		createEAttribute(portEClass, PORT__EXTERNAL_CODE);
+		createEAttribute(portEClass, PORT__UN_LOCODE);
 
 		routeEClass = createEClass(ROUTE);
 		createEReference(routeEClass, ROUTE__LINES);
@@ -586,6 +619,9 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getPort_Location(), this.getLocation(), null, "location", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_AtobviacCode(), ecorePackage.getEString(), "atobviacCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DataloyCode(), ecorePackage.getEString(), "dataloyCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_VesonCode(), ecorePackage.getEString(), "vesonCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_ExternalCode(), ecorePackage.getEString(), "externalCode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_UNLocode(), ecorePackage.getEString(), "UNLocode", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(routeEClass, Route.class, "Route", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoute_Lines(), this.getRouteLine(), null, "lines", null, 0, -1, Route.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -44,6 +44,9 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getAtobviacCode <em>Atobviac Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDataloyCode <em>Dataloy Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getVesonCode <em>Veson Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getExternalCode <em>External Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getUNLocode <em>UN Locode</em>}</li>
  * </ul>
  * </p>
  *
@@ -253,6 +256,72 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected String dataloyCode = DATALOY_CODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVesonCode() <em>Veson Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @see #getVesonCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VESON_CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVesonCode() <em>Veson Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @see #getVesonCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String vesonCode = VESON_CODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getExternalCode() <em>External Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @see #getExternalCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String EXTERNAL_CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getExternalCode() <em>External Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @see #getExternalCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String externalCode = EXTERNAL_CODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getUNLocode() <em>UN Locode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @see #getUNLocode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String UN_LOCODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getUNLocode() <em>UN Locode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @see #getUNLocode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String unLocode = UN_LOCODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -536,6 +605,75 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getVesonCode() {
+		return vesonCode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesonCode(String newVesonCode) {
+		String oldVesonCode = vesonCode;
+		vesonCode = newVesonCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__VESON_CODE, oldVesonCode, vesonCode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getExternalCode() {
+		return externalCode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setExternalCode(String newExternalCode) {
+		String oldExternalCode = externalCode;
+		externalCode = newExternalCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__EXTERNAL_CODE, oldExternalCode, externalCode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getUNLocode() {
+		return unLocode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUNLocode(String newUNLocode) {
+		String oldUNLocode = unLocode;
+		unLocode = newUNLocode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__UN_LOCODE, oldUNLocode, unLocode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -580,6 +718,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getAtobviacCode();
 			case PortPackage.PORT__DATALOY_CODE:
 				return getDataloyCode();
+			case PortPackage.PORT__VESON_CODE:
+				return getVesonCode();
+			case PortPackage.PORT__EXTERNAL_CODE:
+				return getExternalCode();
+			case PortPackage.PORT__UN_LOCODE:
+				return getUNLocode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -631,6 +775,15 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__DATALOY_CODE:
 				setDataloyCode((String)newValue);
 				return;
+			case PortPackage.PORT__VESON_CODE:
+				setVesonCode((String)newValue);
+				return;
+			case PortPackage.PORT__EXTERNAL_CODE:
+				setExternalCode((String)newValue);
+				return;
+			case PortPackage.PORT__UN_LOCODE:
+				setUNLocode((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -679,6 +832,15 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__DATALOY_CODE:
 				setDataloyCode(DATALOY_CODE_EDEFAULT);
 				return;
+			case PortPackage.PORT__VESON_CODE:
+				setVesonCode(VESON_CODE_EDEFAULT);
+				return;
+			case PortPackage.PORT__EXTERNAL_CODE:
+				setExternalCode(EXTERNAL_CODE_EDEFAULT);
+				return;
+			case PortPackage.PORT__UN_LOCODE:
+				setUNLocode(UN_LOCODE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -715,6 +877,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return ATOBVIAC_CODE_EDEFAULT == null ? atobviacCode != null : !ATOBVIAC_CODE_EDEFAULT.equals(atobviacCode);
 			case PortPackage.PORT__DATALOY_CODE:
 				return DATALOY_CODE_EDEFAULT == null ? dataloyCode != null : !DATALOY_CODE_EDEFAULT.equals(dataloyCode);
+			case PortPackage.PORT__VESON_CODE:
+				return VESON_CODE_EDEFAULT == null ? vesonCode != null : !VESON_CODE_EDEFAULT.equals(vesonCode);
+			case PortPackage.PORT__EXTERNAL_CODE:
+				return EXTERNAL_CODE_EDEFAULT == null ? externalCode != null : !EXTERNAL_CODE_EDEFAULT.equals(externalCode);
+			case PortPackage.PORT__UN_LOCODE:
+				return UN_LOCODE_EDEFAULT == null ? unLocode != null : !UN_LOCODE_EDEFAULT.equals(unLocode);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -783,6 +951,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		result.append(atobviacCode);
 		result.append(", dataloyCode: ");
 		result.append(dataloyCode);
+		result.append(", vesonCode: ");
+		result.append(vesonCode);
+		result.append(", externalCode: ");
+		result.append(externalCode);
+		result.append(", UNLocode: ");
+		result.append(unLocode);
 		result.append(')');
 		return result.toString();
 	}

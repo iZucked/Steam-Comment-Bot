@@ -35,9 +35,11 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 
 /**
- * Custom import logic for loading a commodity index.
+ * Generic import logic for loading index data. 
+ * Currently implemented by BaseFuelIndexImporter.
+ * TODO: change CharterIndexImporter and CommodityIndexImporter to implement this class. 
  * 
- * @author Simon Goodall, hinton
+ * @author Simon McGregor
  * @since 5.0
  * 
  */
@@ -157,7 +159,7 @@ abstract public class GenericIndexImporter<TargetClass> implements IClassImporte
 	
 	abstract protected Index<? extends Number> getIndexFromObject(TargetClass target);
 	 
-	protected Map<String, String>  getNonDateFields(Object target, Index<? extends Number> index) {
+	protected Map<String, String>  getNonDateFields(TargetClass target, Index<? extends Number> index) {
 		final HashMap<String, String> result = new HashMap<String,String>();
 		if (index instanceof DerivedIndex) {
 			result.put(EXPRESSION, ((DerivedIndex<? extends Number>) index).getExpression());
@@ -187,12 +189,12 @@ abstract public class GenericIndexImporter<TargetClass> implements IClassImporte
 
 			if (index instanceof DataIndex) {
 				final Map<String, String> row = new TreeMap<String, String>(getFieldNameOrderComparator());
-				row.putAll(getNonDateFields(obj, index));
+				row.putAll(getNonDateFields((TargetClass) obj, index));
 				row.putAll(getDateFields((DataIndex<? extends Number>) index));
 				result.add(row);
 			} else if (index instanceof DerivedIndex) {
 				final Map<String, String> row = new LinkedHashMap<String, String>();
-				row.putAll(getNonDateFields(obj, index));
+				row.putAll(getNonDateFields((TargetClass) obj, index));
 				result.add(row);
 			}
 		}

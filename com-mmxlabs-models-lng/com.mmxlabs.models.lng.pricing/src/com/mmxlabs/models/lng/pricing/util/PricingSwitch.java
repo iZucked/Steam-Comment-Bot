@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -163,8 +164,9 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.COMMODITY_INDEX: {
 				CommodityIndex commodityIndex = (CommodityIndex)theEObject;
 				T result = caseCommodityIndex(commodityIndex);
-				if (result == null) result = caseNamedObject(commodityIndex);
+				if (result == null) result = caseNamedIndexContainer(commodityIndex);
 				if (result == null) result = caseUUIDObject(commodityIndex);
+				if (result == null) result = caseNamedObject(commodityIndex);
 				if (result == null) result = caseMMXObject(commodityIndex);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -172,8 +174,9 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.CHARTER_INDEX: {
 				CharterIndex charterIndex = (CharterIndex)theEObject;
 				T result = caseCharterIndex(charterIndex);
-				if (result == null) result = caseNamedObject(charterIndex);
+				if (result == null) result = caseNamedIndexContainer(charterIndex);
 				if (result == null) result = caseUUIDObject(charterIndex);
+				if (result == null) result = caseNamedObject(charterIndex);
 				if (result == null) result = caseMMXObject(charterIndex);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

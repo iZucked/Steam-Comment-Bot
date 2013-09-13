@@ -29,6 +29,9 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getVesonCode <em>Veson Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getExternalCode <em>External Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getUNLocode <em>UN Locode</em>}</li>
  * </ul>
  * </p>
  *
@@ -319,4 +322,88 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @generated
 	 */
 	void setDataloyCode(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Veson Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Veson Code</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Veson Code</em>' attribute.
+	 * @see #setVesonCode(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_VesonCode()
+	 * @model
+	 * @generated
+	 */
+	String getVesonCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getVesonCode <em>Veson Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Veson Code</em>' attribute.
+	 * @see #getVesonCode()
+	 * @generated
+	 */
+	void setVesonCode(String value);
+
+	/**
+	 * Returns the value of the '<em><b>External Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>External Code</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>External Code</em>' attribute.
+	 * @see #setExternalCode(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_ExternalCode()
+	 * @model
+	 * @generated
+	 */
+	String getExternalCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getExternalCode <em>External Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>External Code</em>' attribute.
+	 * @see #getExternalCode()
+	 * @generated
+	 */
+	void setExternalCode(String value);
+
+	/**
+	 * Returns the value of the '<em><b>UN Locode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>UN Locode</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>UN Locode</em>' attribute.
+	 * @see #setUNLocode(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_UNLocode()
+	 * @model
+	 * @generated
+	 */
+	String getUNLocode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getUNLocode <em>UN Locode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>UN Locode</em>' attribute.
+	 * @see #getUNLocode()
+	 * @generated
+	 */
+	void setUNLocode(String value);
 } // Port
