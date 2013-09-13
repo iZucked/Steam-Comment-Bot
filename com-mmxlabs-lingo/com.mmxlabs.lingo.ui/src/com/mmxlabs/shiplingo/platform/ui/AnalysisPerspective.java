@@ -16,6 +16,7 @@ import com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.KPIReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView;
+import com.mmxlabs.shiplingo.platform.reports.views.NinetyDayCargoReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport;
 import com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView;
@@ -44,6 +45,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		reportsFolder.addView(SchedulerView.ID);
 		// reportsFolder.addView(CargoPnLReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
+		reportsFolder.addPlaceholder(NinetyDayCargoReportView.ID);
 		reportsFolder.addPlaceholder(TotalsReportView.ID);
 		reportsFolder.addPlaceholder(BasicCargoReportView.ID);
 		reportsFolder.addPlaceholder(SchedulePnLReport.ID);
@@ -56,6 +58,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 
 		layout.addShowViewShortcut(KPIReportView.ID);
 		layout.addShowViewShortcut(CargoReportView.ID);
+		layout.addShowViewShortcut(NinetyDayCargoReportView.ID);
 		layout.addShowViewShortcut(CargoPnLReportView.ID);
 		layout.addShowViewShortcut(SchedulePnLReport.ID);
 		layout.addShowViewShortcut(SchedulerView.ID);
