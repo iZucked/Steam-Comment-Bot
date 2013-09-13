@@ -144,6 +144,13 @@
              id="com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView"
              name="Capacity Violations">
        </view>
+       <view
+             category="com.mmxlabs.shiplingo.platform.reports"
+             class="com.mmxlabs.shiplingo.platform.reports.views.NinetyDayCargoReportView"
+             icon="icons/cview16/exec_statistic_view.gif"
+             id="com.mmxlabs.shiplingo.platform.reports.views.NinetyDayCargoReportView"
+             name="&apos;90 Day&apos; Cargo">
+       </view>
    </extension>
    <extension
          point="org.eclipse.help.contexts">
