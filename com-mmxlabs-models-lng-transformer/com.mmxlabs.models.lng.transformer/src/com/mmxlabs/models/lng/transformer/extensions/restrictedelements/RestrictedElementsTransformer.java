@@ -24,8 +24,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -125,10 +123,10 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		final CommercialModel commercialModel = rootObject.getCommercialModel();
 		if (commercialModel != null) {
 			// Process purchase contract restrictions - these are the follower restrictions
+			/*
 			for (final PurchaseContract pc : commercialModel.getPurchaseContracts()) {
 				registerRestrictedElements(pc, pc.getRestrictedContracts(), pc.isRestrictedListsArePermissive(), RestrictionType.FOLLOWER);
 				registerRestrictedElements(pc, pc.getRestrictedPorts(), pc.isRestrictedListsArePermissive(), RestrictionType.FOLLOWER);
-				/*
 				if (contractMap.containsKey(pc)) {
 					final Collection<ISequenceElement> sourceElements = contractMap.get(pc);
 					for (final Contract c : pc.getRestrictedContracts()) {
@@ -159,14 +157,14 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						}
 					}
 				}
-				*/
 			}
+				*/
 
 			// Process sales contract restrictions - these are the preceding restrictions
+			/*
 			for (final SalesContract sc : commercialModel.getSalesContracts()) {
 				registerRestrictedElements(sc, sc.getRestrictedContracts(), sc.isRestrictedListsArePermissive(), RestrictionType.PRECEDENT);
 				registerRestrictedElements(sc, sc.getRestrictedPorts(), sc.isRestrictedListsArePermissive(), RestrictionType.PRECEDENT);
-				/*
 				if (contractMap.containsKey(sc)) {
 					final Collection<ISequenceElement> sourceElements = contractMap.get(sc);
 					for (final Contract c : sc.getRestrictedContracts()) {
@@ -197,18 +195,18 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						}
 					}
 				}
-				*/
 			}
+				*/
 			CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 			
 			for (LoadSlot slot: cargoModel.getLoadSlots()) {
-				registerRestrictedElements(slot, slot.getRestrictedContracts(), slot.isRestrictedListsArePermissive(), RestrictionType.FOLLOWER);
-				registerRestrictedElements(slot, slot.getRestrictedPorts(), slot.isRestrictedListsArePermissive(), RestrictionType.FOLLOWER);				
+				registerRestrictedElements(slot, slot.getSlotOrContractRestrictedContracts(), slot.getSlotOrContractRestrictedListsArePermissive(), RestrictionType.FOLLOWER);
+				registerRestrictedElements(slot, slot.getSlotOrContractRestrictedPorts(), slot.getSlotOrContractRestrictedListsArePermissive(), RestrictionType.FOLLOWER);				
 			}
 
 			for (DischargeSlot slot: cargoModel.getDischargeSlots()) {
-				registerRestrictedElements(slot, slot.getRestrictedContracts(), slot.isRestrictedListsArePermissive(), RestrictionType.PRECEDENT);
-				registerRestrictedElements(slot, slot.getRestrictedPorts(), slot.isRestrictedListsArePermissive(), RestrictionType.PRECEDENT);				
+				registerRestrictedElements(slot, slot.getSlotOrContractRestrictedContracts(), slot.getSlotOrContractRestrictedListsArePermissive(), RestrictionType.PRECEDENT);
+				registerRestrictedElements(slot, slot.getSlotOrContractRestrictedPorts(), slot.getSlotOrContractRestrictedListsArePermissive(), RestrictionType.PRECEDENT);				
 			}
 		
 		}
