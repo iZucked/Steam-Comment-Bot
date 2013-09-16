@@ -23,31 +23,31 @@ public final class CopyToClipboardActionFactory {
 
 	}
 
-	public CopyGridToClipboardAction createCopyToClipboardAction(final Grid grid) {
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final Grid grid) {
 		return new CopyGridToClipboardAction(grid);
 	}
 
-	public CopyTreeToClipboardAction createCopyToClipboardAction(final TreeViewer viewer) {
+	public static CopyTreeToClipboardAction createCopyToClipboardAction(final TreeViewer viewer) {
 		return new CopyTreeToClipboardAction(viewer.getTree());
 	}
 
-	public CopyTreeToClipboardAction createCopyToClipboardAction(final Tree tree) {
+	public static CopyTreeToClipboardAction createCopyToClipboardAction(final Tree tree) {
 		return new CopyTreeToClipboardAction(tree);
 	}
 
-	public CopyTableToClipboardAction createCopyToClipboardAction(final TableViewer viewer) {
+	public static CopyTableToClipboardAction createCopyToClipboardAction(final TableViewer viewer) {
 		return new CopyTableToClipboardAction(viewer.getTable());
 	}
 
-	public CopyTableToClipboardAction createCopyToClipboardAction(final Table table) {
+	public static CopyTableToClipboardAction createCopyToClipboardAction(final Table table) {
 		return new CopyTableToClipboardAction(table);
 	}
 
-	public CopyGridToClipboardAction createCopyToClipboardAction(final GridTreeViewer viewer) {
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTreeViewer viewer) {
 		return new CopyGridToClipboardAction(viewer.getGrid());
 	}
 
-	public CopyGridToClipboardAction createCopyToClipboardAction(final GridTableViewer viewer) {
+	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTableViewer viewer) {
 		return new CopyGridToClipboardAction(viewer.getGrid());
 	}
 }

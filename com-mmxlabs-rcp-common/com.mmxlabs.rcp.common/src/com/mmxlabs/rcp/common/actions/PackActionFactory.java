@@ -20,19 +20,19 @@ public final class PackActionFactory {
 
 	}
 
-	public PackGridTableColumnsAction createPackColumnsAction(final GridTableViewer viewer) {
+	public static PackGridTableColumnsAction createPackColumnsAction(final GridTableViewer viewer) {
 		return new PackGridTableColumnsAction(viewer);
 	}
 
-	public PackGridTreeColumnsAction createPackColumnsAction(final GridTreeViewer viewer) {
+	public static PackGridTreeColumnsAction createPackColumnsAction(final GridTreeViewer viewer) {
 		return new PackGridTreeColumnsAction(viewer);
 	}
 
-	public PackTableColumnsAction createPackColumnsAction(final TableViewer viewer) {
+	public static PackTableColumnsAction createPackColumnsAction(final TableViewer viewer) {
 		return new PackTableColumnsAction(viewer);
 	}
 
-	public PackTreeColumnsAction createPackColumnsAction(final TreeViewer viewer) {
+	public static PackTreeColumnsAction createPackColumnsAction(final TreeViewer viewer) {
 		return new PackTreeColumnsAction(viewer);
 	}
 }
