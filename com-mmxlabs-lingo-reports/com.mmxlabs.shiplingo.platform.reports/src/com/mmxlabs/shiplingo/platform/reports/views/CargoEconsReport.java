@@ -7,10 +7,12 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
@@ -64,6 +66,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.ui.properties.DetailProperty;
+import com.mmxlabs.models.ui.properties.factory.IDetailPropertyFactory;
 import com.mmxlabs.models.ui.properties.ui.DelegatingDetailPropertyContentProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -935,6 +938,60 @@ public class CargoEconsReport extends ViewPart {
 		@Override
 		public boolean hasChildren(Object element) {
 			return false;
+		}
+	}
+
+	class Row {
+
+		private List<DetailProperty> properties;
+
+		public String getDetailPropertyName() {
+			return properties.get(0).getName();
+		}
+
+		public DetailProperty getDetailProperty(int idx) {
+			return properties.get(idx);
+		}
+
+		Row[] getChildren();
+	}
+
+	private class EconsTransformer {
+
+		IDetailPropertyFactory factory;
+
+		private int numCols;
+
+		Row transform(DetailProperty[] properties) {
+
+			// Match up all the child elements where possible.
+			Map<String, DetailProperty[]> childElements = new HashMap<>();
+			for (int idx = 0; idx < numCols; ++idx) {
+				DetailProperty obj = properties[idx];
+				if (obj != null) {
+					EList<DetailProperty> children = obj.getChildren();
+					for (DetailProperty p : children) {
+						final DetailProperty[] props;
+						String id = p.getID();
+						if (childElements.containsKey(id)) {
+							props = childElements.get(id);
+						} else {
+							props = new DetailProperty[numCols];
+							childElements.put(id, props);
+						}
+					}
+
+				}
+			}
+
+			// Generate the sub-tree
+			for (Map.Entry<String, DetailProperty[]> e : childElements.entrySet()) {
+				DetailProperty[] props = e.getValue();
+				// Recurse!
+				Object result  = transform(props);
+				// Do something with result
+				parent.getChildren().add(result);
+			}
 		}
 	}
 }
