@@ -62,6 +62,7 @@ import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -679,7 +680,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackGridTreeColumnsAction(viewer);
+		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
