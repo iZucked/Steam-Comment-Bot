@@ -9,6 +9,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView;
+import com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CargoPnLReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CargoReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView;
@@ -69,6 +70,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(LatenessReportView.ID);
 		layout.addShowViewShortcut(CooldownReportView.ID);
 		layout.addShowViewShortcut(FitnessReportView.ID);
+		layout.addShowViewShortcut(CapacityViolationReportView.ID);
 
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
