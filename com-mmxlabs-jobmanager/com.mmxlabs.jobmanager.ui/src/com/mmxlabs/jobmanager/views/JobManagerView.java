@@ -60,6 +60,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.ui.Activator;
+import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 
 /**
@@ -499,7 +500,7 @@ public class JobManagerView extends ViewPart {
 
 	private void makeActions() {
 
-		packAction = new PackTreeColumnsAction(viewer);
+		packAction = PackActionFactory.createPackColumnsAction(viewer);
 
 		startAction = new Action() {
 			@Override
