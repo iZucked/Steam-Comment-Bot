@@ -175,7 +175,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 	}
 
-	protected interface IFormatter {
+	/**
+	 * @since 5.0
+	 */
+	public interface IFormatter {
 		public String format(final Object object);
 
 		public Comparable getComparable(final Object object);
