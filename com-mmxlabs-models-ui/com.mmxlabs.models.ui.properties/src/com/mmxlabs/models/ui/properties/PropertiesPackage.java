@@ -87,13 +87,22 @@ public interface PropertiesPackage extends EPackage {
 	int DETAIL_PROPERTY__CHILDREN = 1;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAIL_PROPERTY__ID = 2;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY__NAME = 2;
+	int DETAIL_PROPERTY__NAME = 3;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -102,7 +111,7 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY__DESCRIPTION = 3;
+	int DETAIL_PROPERTY__DESCRIPTION = 4;
 
 	/**
 	 * The feature id for the '<em><b>Units</b></em>' attribute.
@@ -111,7 +120,7 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY__UNITS = 4;
+	int DETAIL_PROPERTY__UNITS = 5;
 
 	/**
 	 * The feature id for the '<em><b>Object</b></em>' attribute.
@@ -120,7 +129,7 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY__OBJECT = 5;
+	int DETAIL_PROPERTY__OBJECT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Label Provider</b></em>' attribute.
@@ -129,7 +138,7 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY__LABEL_PROVIDER = 6;
+	int DETAIL_PROPERTY__LABEL_PROVIDER = 7;
 
 	/**
 	 * The number of structural features of the '<em>Detail Property</em>' class.
@@ -138,7 +147,7 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY_FEATURE_COUNT = 7;
+	int DETAIL_PROPERTY_FEATURE_COUNT = 8;
 
 	/**
 	 * The operation id for the '<em>Format</em>' operation.
@@ -200,6 +209,17 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDetailProperty_Children();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.ui.properties.DetailProperty#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see com.mmxlabs.models.ui.properties.DetailProperty#getId()
+	 * @see #getDetailProperty()
+	 * @generated
+	 */
+	EAttribute getDetailProperty_Id();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.ui.properties.DetailProperty#getName <em>Name</em>}'.
@@ -325,6 +345,14 @@ public interface PropertiesPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DETAIL_PROPERTY__CHILDREN = eINSTANCE.getDetailProperty_Children();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DETAIL_PROPERTY__ID = eINSTANCE.getDetailProperty_Id();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.

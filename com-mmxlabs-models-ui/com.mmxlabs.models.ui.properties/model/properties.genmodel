@@ -11,6 +11,8 @@
     <genClasses image="false" ecoreClass="properties.ecore#//DetailProperty">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference properties.ecore#//DetailProperty/parent"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference properties.ecore#//DetailProperty/children"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="An ID representing the type of property. This can be used to associate instances containing the same data"
+          ecoreFeature="ecore:EAttribute properties.ecore#//DetailProperty/id"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute properties.ecore#//DetailProperty/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute properties.ecore#//DetailProperty/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute properties.ecore#//DetailProperty/units"/>

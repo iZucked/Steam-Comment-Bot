@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  * <ul>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getChildren <em>Children</em>}</li>
+ *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getId <em>Id</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnits <em>Units</em>}</li>
@@ -76,6 +77,32 @@ public interface DetailProperty extends EObject {
 	 * @generated
 	 */
 	EList<DetailProperty> getChildren();
+
+	/**
+	 * Returns the value of the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Id</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Id</em>' attribute.
+	 * @see #setId(String)
+	 * @see com.mmxlabs.models.ui.properties.PropertiesPackage#getDetailProperty_Id()
+	 * @model
+	 * @generated
+	 */
+	String getId();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.ui.properties.DetailProperty#getId <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Id</em>' attribute.
+	 * @see #getId()
+	 * @generated
+	 */
+	void setId(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.

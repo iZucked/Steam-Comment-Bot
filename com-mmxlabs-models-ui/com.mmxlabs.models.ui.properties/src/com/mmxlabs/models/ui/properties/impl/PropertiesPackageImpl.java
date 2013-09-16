@@ -131,7 +131,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDetailProperty_Name() {
+	public EAttribute getDetailProperty_Id() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -140,7 +140,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDetailProperty_Description() {
+	public EAttribute getDetailProperty_Name() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -149,7 +149,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDetailProperty_Units() {
+	public EAttribute getDetailProperty_Description() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -158,7 +158,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDetailProperty_Object() {
+	public EAttribute getDetailProperty_Units() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -167,8 +167,17 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDetailProperty_LabelProvider() {
+	public EAttribute getDetailProperty_Object() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDetailProperty_LabelProvider() {
+		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -220,6 +229,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 		detailPropertyEClass = createEClass(DETAIL_PROPERTY);
 		createEReference(detailPropertyEClass, DETAIL_PROPERTY__PARENT);
 		createEReference(detailPropertyEClass, DETAIL_PROPERTY__CHILDREN);
+		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__ID);
 		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__NAME);
 		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__DESCRIPTION);
 		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__UNITS);
@@ -264,6 +274,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 		initEClass(detailPropertyEClass, DetailProperty.class, "DetailProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDetailProperty_Parent(), this.getDetailProperty(), this.getDetailProperty_Children(), "parent", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDetailProperty_Children(), this.getDetailProperty(), this.getDetailProperty_Parent(), "children", null, 0, -1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDetailProperty_Id(), ecorePackage.getEString(), "id", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDetailProperty_Name(), ecorePackage.getEString(), "name", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDetailProperty_Description(), ecorePackage.getEString(), "description", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDetailProperty_Units(), ecorePackage.getEString(), "units", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

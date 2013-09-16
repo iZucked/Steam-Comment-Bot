@@ -35,6 +35,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  * <ul>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getChildren <em>Children</em>}</li>
+ *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getUnits <em>Units</em>}</li>
@@ -55,6 +56,26 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * @ordered
 	 */
 	protected EList<DetailProperty> children;
+
+	/**
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ID_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected String id = ID_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -226,6 +247,27 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 			children = new EObjectContainmentWithInverseEList<DetailProperty>(DetailProperty.class, this, PropertiesPackage.DETAIL_PROPERTY__CHILDREN, PropertiesPackage.DETAIL_PROPERTY__PARENT);
 		}
 		return children;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setId(String newId) {
+		String oldId = id;
+		id = newId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PropertiesPackage.DETAIL_PROPERTY__ID, oldId, id));
 	}
 
 	/**
@@ -412,6 +454,8 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 				return getParent();
 			case PropertiesPackage.DETAIL_PROPERTY__CHILDREN:
 				return getChildren();
+			case PropertiesPackage.DETAIL_PROPERTY__ID:
+				return getId();
 			case PropertiesPackage.DETAIL_PROPERTY__NAME:
 				return getName();
 			case PropertiesPackage.DETAIL_PROPERTY__DESCRIPTION:
@@ -441,6 +485,9 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 			case PropertiesPackage.DETAIL_PROPERTY__CHILDREN:
 				getChildren().clear();
 				getChildren().addAll((Collection<? extends DetailProperty>)newValue);
+				return;
+			case PropertiesPackage.DETAIL_PROPERTY__ID:
+				setId((String)newValue);
 				return;
 			case PropertiesPackage.DETAIL_PROPERTY__NAME:
 				setName((String)newValue);
@@ -475,6 +522,9 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 			case PropertiesPackage.DETAIL_PROPERTY__CHILDREN:
 				getChildren().clear();
 				return;
+			case PropertiesPackage.DETAIL_PROPERTY__ID:
+				setId(ID_EDEFAULT);
+				return;
 			case PropertiesPackage.DETAIL_PROPERTY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -506,6 +556,8 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 				return getParent() != null;
 			case PropertiesPackage.DETAIL_PROPERTY__CHILDREN:
 				return children != null && !children.isEmpty();
+			case PropertiesPackage.DETAIL_PROPERTY__ID:
+				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 			case PropertiesPackage.DETAIL_PROPERTY__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case PropertiesPackage.DETAIL_PROPERTY__DESCRIPTION:
@@ -544,7 +596,9 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		result.append(" (id: ");
+		result.append(id);
+		result.append(", name: ");
 		result.append(name);
 		result.append(", description: ");
 		result.append(description);
