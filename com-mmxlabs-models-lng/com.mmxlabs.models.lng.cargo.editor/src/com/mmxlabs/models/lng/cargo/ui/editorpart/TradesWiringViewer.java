@@ -1236,9 +1236,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		
 		public void setFilterValue(EMFPath path, EObject value) {
 			// adding a particular filter value resets all others
-			filterValues.clear();
+			filterValues.clear();			
 			if (value != null) {
 				filterValues.put(path, value);
+			}
+			else {
+				filterValues.remove(path);
 			}
 		}
 		
