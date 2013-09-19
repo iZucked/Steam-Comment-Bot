@@ -80,10 +80,10 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 	 */
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
-		setWindowTitle("CSV Import Wizard"); // NON-NLS-1
+		setWindowTitle("Shared Scenario Data Import"); // NON-NLS-1
 		setNeedsProgressMonitor(true);
 		sourcePage = new SharedDataScenariosSelectionPage(selection);
-		destinationPage = new ScenarioSelectionPage("CSV Files", currentScenario);
+		destinationPage = new ScenarioSelectionPage("Scenario Selection", currentScenario);
 	}
 
 	/*

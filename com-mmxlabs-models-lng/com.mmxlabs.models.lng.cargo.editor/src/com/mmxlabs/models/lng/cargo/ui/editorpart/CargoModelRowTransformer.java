@@ -193,26 +193,27 @@ public class CargoModelRowTransformer {
 				}
 				if (loadRowData == null && dischargeRowData == null) {
 					loadRowData = new RowData();
-					loadRowData.primaryRecord = i == 0;
 					dischargeRowData = loadRowData;
 				} else if (loadRowData == null && loadSlot != null) {
 					loadRowData = new RowData();
-					loadRowData.primaryRecord = i == 0;
 				} else if (dischargeRowData == null && dischargeSlot != null) {
 					dischargeRowData = new RowData();
-					dischargeRowData.primaryRecord = i == 0;
 				}
 
 				if (loadRowData == null && dischargeRowData == null) {
 					// We shouldn't really get here
 					continue;
 				}
+
 				// In some cases where we only have one slot (e.g. as part of LDD) we can end up with a null row data object, so use the other half as the reference for the rest of the loop
 				if (loadRowData == null) {
 					loadRowData = dischargeRowData;
 				} else if (dischargeRowData == null) {
 					dischargeRowData = loadRowData;
 				}
+				// Attempt to determine primary record. TODO: Confirm this is correct for LDD case
+				loadRowData.primaryRecord = i == 0;
+				dischargeRowData.primaryRecord = i == 0;
 
 				loadRowData.loadSlot = loadSlot;
 				dischargeRowData.dischargeSlot = dischargeSlot;

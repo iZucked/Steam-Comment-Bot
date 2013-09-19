@@ -215,8 +215,9 @@
     <eLiterals name="MAX_DISCHARGE" value="1"/>
     <eLiterals name="MIN_LOAD" value="2"/>
     <eLiterals name="MIN_DISCHARGE" value="3"/>
-    <eLiterals name="MAX_HEEL" value="4" literal=""/>
+    <eLiterals name="MAX_HEEL" value="4" literal="MAX_HEEL"/>
     <eLiterals name="FORCED_COOLDOWN" value="5"/>
+    <eLiterals name="VESSEL_CAPACITY" value="6" literal="VESSEL_CAPACITY"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Calendar" instanceClassName="java.util.Calendar"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">
