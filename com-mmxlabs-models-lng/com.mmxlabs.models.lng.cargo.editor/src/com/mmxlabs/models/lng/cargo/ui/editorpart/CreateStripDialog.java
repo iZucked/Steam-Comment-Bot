@@ -492,15 +492,6 @@ public class CreateStripDialog extends FormDialog {
 			refreshPreview();
 		}
 
-		// Hook up refresh handlers
-		final EContentAdapter changedAdapter = new EContentAdapter() {
-			public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
-
-				super.notifyChanged(notification);
-				refreshPreview();
-			}
-		};
-		sample.eAdapters().add(changedAdapter);
 
 		repeatType.setSelection(new StructuredSelection(RepeatType.Periodic));
 		intervalType.setSelection(new StructuredSelection(IntervalType.Days));
@@ -518,6 +509,17 @@ public class CreateStripDialog extends FormDialog {
 		pattern_periodStart.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
 		pattern_periodEnd.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
 
+		// Hook up refresh handlers
+		final EContentAdapter changedAdapter = new EContentAdapter() {
+			public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
+				
+				super.notifyChanged(notification);
+				refreshPreview();
+			}
+		};
+		sample.eAdapters().add(changedAdapter);
+		
+		refreshPreview();
 	}
 
 	private void refreshPreview() {
