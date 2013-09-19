@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -889,6 +890,13 @@ public class CargoModelRowTransformer {
 			return super.get(root, depth);
 		}
 
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = super.hashCode();
+			result = prime * result + (type.hashCode());
+			return result;
+		}	
 	}
 
 	public enum Type {
@@ -953,4 +961,6 @@ public class CargoModelRowTransformer {
 			}
 		}
 	}
+	
+	
 }
