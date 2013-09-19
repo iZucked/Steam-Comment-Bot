@@ -492,7 +492,6 @@ public class CreateStripDialog extends FormDialog {
 			refreshPreview();
 		}
 
-
 		repeatType.setSelection(new StructuredSelection(RepeatType.Periodic));
 		intervalType.setSelection(new StructuredSelection(IntervalType.Days));
 
@@ -512,13 +511,13 @@ public class CreateStripDialog extends FormDialog {
 		// Hook up refresh handlers
 		final EContentAdapter changedAdapter = new EContentAdapter() {
 			public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
-				
+
 				super.notifyChanged(notification);
 				refreshPreview();
 			}
 		};
 		sample.eAdapters().add(changedAdapter);
-		
+
 		refreshPreview();
 	}
 
@@ -539,7 +538,15 @@ public class CreateStripDialog extends FormDialog {
 	}
 
 	private List<EObject> updateGeneratedObjects() {
-
+		// Sync dates
+		{
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			// Only valid for slots
+			if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
+				cal.setTime((Date) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart()));
+				pattern_periodStart.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+			}
+		}
 		final List<Date> dates = new LinkedList<Date>();
 		// Generate the dates
 
@@ -555,6 +562,7 @@ public class CreateStripDialog extends FormDialog {
 
 		final Calendar toDate = getCalendarFromDateTime(pattern_periodEnd);
 		final Calendar fromDate = getCalendarFromDateTime(pattern_periodStart);
+
 		// ABS as sanity check...
 		final long diffInMilliseconds = Math.abs(toDate.getTimeInMillis() - fromDate.getTimeInMillis());
 		final int diffInDays = (int) (diffInMilliseconds / 1000l / 60l / 60l / 24l);
@@ -624,7 +632,6 @@ public class CreateStripDialog extends FormDialog {
 			final int sampleKey = sampleDate.getYear() * 100 + sampleDate.getMonth();
 			final int pricingKey = pricingDate.getYear() * 100 + pricingDate.getMonth();
 			pricingMonthDiff = pricingKey - sampleKey;
-
 		}
 
 		// Generate the slots
