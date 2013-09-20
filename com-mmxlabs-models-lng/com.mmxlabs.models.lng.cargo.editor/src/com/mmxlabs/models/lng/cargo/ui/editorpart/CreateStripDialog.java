@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
@@ -116,27 +117,23 @@ public class CreateStripDialog extends FormDialog {
 	private final IScenarioEditingLocation scenarioEditingLocation;
 	private EObject sample;
 	private Text pattern_n;
-	private ComboViewer pattern;
-	private Text pattern_quantity;
+	private Label label1;
+	private Label label2;
+	private ComboViewer repeatType;
+	private ComboViewer intervalType;
 	private DateTime pattern_periodStart;
 	private DateTime pattern_periodEnd;
 
 	private DialogValidationSupport validationSupport;
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
-	private enum Patterns {
-		MONTHLY("Monthly"), N_PER_YEAR("n per year"), EVERY_N_DAYS("Every n days"), N_IN_PERIOD("N in Period");
-		private final String name;
+	private enum RepeatType {
+		Periodic, Distributed
+	};
 
-		private Patterns(final String name) {
-			this.name = name;
-		}
-
-		public String toString() {
-			return name;
-		}
-
-	}
+	private enum IntervalType {
+		Days, Weeks, Months
+	};
 
 	public CreateStripDialog(@NonNull final IShellProvider parentShell, @NonNull final IScenarioEditingLocation originalScenarioEditingLocation, @NonNull final StripType stripType,
 			@Nullable final EObject selectedObject) {
@@ -273,27 +270,45 @@ public class CreateStripDialog extends FormDialog {
 
 		validationSupport = new DialogValidationSupport(scenarioEditingLocation.getExtraValidationContext());
 
+		final Composite patternComposite = toolkit.createComposite(body);
 		{
-			final Composite patternComposite = toolkit.createComposite(body);
-			patternComposite.setLayout(new GridLayout(4, false));
+			// Break out into rows!
+			patternComposite.setLayout(new GridLayout(1, false));
 			patternComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-			toolkit.createLabel(patternComposite, "Frequency");
-			pattern = new ComboViewer(patternComposite);
+			final Composite topRow = toolkit.createComposite(patternComposite);
+			topRow.setLayout(new GridLayout(4, false));
+			topRow.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+			toolkit.createLabel(topRow, "Pattern");
+
 			{
-				final GridData gd = new GridData(GridData.GRAB_HORIZONTAL);
-				gd.horizontalSpan = 3;
-				pattern.getControl().setLayoutData(gd);
+				repeatType = new ComboViewer(topRow);
+				{
+					final GridData gd = new GridData(GridData.GRAB_HORIZONTAL);
+					gd.horizontalSpan = 3;
+					repeatType.getControl().setLayoutData(gd);
+				}
+				toolkit.adapt(repeatType.getControl(), true, true);
+
+				repeatType.setContentProvider(new ArrayContentProvider());
+				repeatType.setLabelProvider(new LabelProvider());
+
+				repeatType.setInput(RepeatType.values());
 			}
-			toolkit.adapt(pattern.getControl(), true, true);
 
-			pattern.setContentProvider(new ArrayContentProvider());
-			pattern.setLabelProvider(new LabelProvider());
-
-			pattern.setInput(Patterns.values());
+			final Composite frequencyRow = toolkit.createComposite(patternComposite);
+			frequencyRow.setLayout(new GridLayout(4, false));
+			frequencyRow.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			{
-				toolkit.createLabel(patternComposite, "n");
-				pattern_n = toolkit.createText(patternComposite, "1");
+				label1 = toolkit.createLabel(frequencyRow, "Every");
+				final GridData gd = new GridData();
+				gd.widthHint = 30;
+				label1.setLayoutData(gd);
+			}
+
+			{
+				pattern_n = toolkit.createText(frequencyRow, "1");
 				final GridData gd = new GridData();
 				gd.widthHint = 20;
 				pattern_n.setLayoutData(gd);
@@ -321,70 +336,72 @@ public class CreateStripDialog extends FormDialog {
 						refreshPreview();
 					}
 				});
-				pattern.addSelectionChangedListener(new ISelectionChangedListener() {
-
-					@Override
-					public void selectionChanged(final SelectionChangedEvent event) {
-						final int idx = pattern.getCombo().getSelectionIndex();
-						final Patterns p = Patterns.values()[idx];
-						if (p == Patterns.EVERY_N_DAYS || p == Patterns.N_PER_YEAR || p == Patterns.N_IN_PERIOD) {
-							pattern_n.setEnabled(true);
-						} else {
-							pattern_n.setEnabled(false);
-						}
-						refreshPreview();
-					}
-				});
 			}
 			{
-				toolkit.createLabel(patternComposite, "quantity");
-				pattern_quantity = toolkit.createText(patternComposite, "1");
+				label2 = toolkit.createLabel(frequencyRow, "slot(s) between:");
 				final GridData gd = new GridData();
-				gd.widthHint = 20;
-				pattern_quantity.setLayoutData(gd);
-				pattern_quantity.addVerifyListener(new VerifyListener() {
-
-					@Override
-					public void verifyText(final VerifyEvent e) {
-						if (e.text == null) {
-							// OK
-						} else if (e.text.isEmpty()) {
-							// OK
-						} else {
-							try {
-								Integer.parseInt(e.text);
-							} catch (final NumberFormatException nfe) {
-								e.doit = false;
-							}
-						}
-					}
-				});
-				pattern_quantity.addModifyListener(new ModifyListener() {
-
-					@Override
-					public void modifyText(final ModifyEvent e) {
-						refreshPreview();
-					}
-				});
-				pattern.addSelectionChangedListener(new ISelectionChangedListener() {
-
-					@Override
-					public void selectionChanged(final SelectionChangedEvent event) {
-						final int idx = pattern.getCombo().getSelectionIndex();
-						final Patterns p = Patterns.values()[idx];
-						if (p == Patterns.EVERY_N_DAYS || p == Patterns.MONTHLY) {
-							pattern_quantity.setEnabled(true);
-						} else {
-							pattern_quantity.setEnabled(false);
-						}
-						refreshPreview();
-					}
-				});
+				gd.widthHint = 80;
+				label2.setLayoutData(gd);
 			}
 
 			{
-				toolkit.createLabel(patternComposite, "From");
-				pattern_periodStart = new DateTime(patternComposite, SWT.DROP_DOWN);
+				intervalType = new ComboViewer(frequencyRow);
+				{
+					final GridData gd = new GridData(GridData.GRAB_HORIZONTAL);
+					intervalType.getControl().setLayoutData(gd);
+				}
+				toolkit.adapt(intervalType.getControl(), true, true);
+
+				intervalType.setContentProvider(new ArrayContentProvider());
+				intervalType.setLabelProvider(new LabelProvider());
+
+				intervalType.setInput(IntervalType.values());
+
+			}
+			repeatType.addSelectionChangedListener(new ISelectionChangedListener() {
+
+				@Override
+				public void selectionChanged(final SelectionChangedEvent event) {
+					final int idx = repeatType.getCombo().getSelectionIndex();
+					final RepeatType rt = RepeatType.values()[idx];
+					if (rt == RepeatType.Periodic) {
+						label1.setVisible(true);
+						label2.setVisible(false);
+						intervalType.getControl().setVisible(true);
+
+						((GridData) label1.getLayoutData()).exclude = false;
+						((GridData) label2.getLayoutData()).exclude = true;
+						((GridData) intervalType.getControl().getLayoutData()).exclude = false;
+					} else {
+						assert rt == RepeatType.Distributed;
+						label1.setVisible(false);
+						label2.setVisible(true);
+						intervalType.getControl().setVisible(false);
+
+						((GridData) label1.getLayoutData()).exclude = true;
+						((GridData) label2.getLayoutData()).exclude = false;
+						((GridData) intervalType.getControl().getLayoutData()).exclude = true;
+					}
+					frequencyRow.pack();
+
+					refreshPreview();
+				}
+			});
+			intervalType.addSelectionChangedListener(new ISelectionChangedListener() {
+
+				@Override
+				public void selectionChanged(final SelectionChangedEvent event) {
+
+					refreshPreview();
+				}
+			});
+
+			final Composite dateRow = toolkit.createComposite(patternComposite);
+			dateRow.setLayout(new GridLayout(4, false));
+			dateRow.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			{
+				toolkit.createLabel(dateRow, "From");
+				pattern_periodStart = new DateTime(dateRow, SWT.DROP_DOWN);
 				toolkit.adapt(pattern_periodStart);
 				final GridData gd = new GridData();
 				gd.widthHint = 100;
@@ -406,34 +423,11 @@ public class CreateStripDialog extends FormDialog {
 
 					}
 				});
-				pattern.addSelectionChangedListener(new ISelectionChangedListener() {
-
-					@Override
-					public void selectionChanged(final SelectionChangedEvent event) {
-						final int idx = pattern.getCombo().getSelectionIndex();
-						final Patterns p = Patterns.values()[idx];
-						if (p == Patterns.N_IN_PERIOD) {
-
-							final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-							cal.clear();
-							cal.set(Calendar.YEAR, pattern_periodStart.getYear());
-							cal.set(Calendar.MONTH, pattern_periodStart.getMonth());
-							cal.set(Calendar.DAY_OF_MONTH, pattern_periodStart.getDay());
-
-							sample.eSet(CargoPackage.Literals.SLOT__WINDOW_START, cal.getTime());
-
-							pattern_periodStart.setEnabled(true);
-						} else {
-							pattern_periodStart.setEnabled(false);
-						}
-						refreshPreview();
-					}
-				});
 			}
 
 			{
-				toolkit.createLabel(patternComposite, "Tos");
-				pattern_periodEnd = new DateTime(patternComposite, SWT.DROP_DOWN);
+				toolkit.createLabel(dateRow, "To");
+				pattern_periodEnd = new DateTime(dateRow, SWT.DROP_DOWN);
 				toolkit.adapt(pattern_periodEnd);
 				final GridData gd = new GridData();
 				gd.widthHint = 100;
@@ -448,20 +442,6 @@ public class CreateStripDialog extends FormDialog {
 					@Override
 					public void widgetDefaultSelected(final SelectionEvent e) {
 
-					}
-				});
-				pattern.addSelectionChangedListener(new ISelectionChangedListener() {
-
-					@Override
-					public void selectionChanged(final SelectionChangedEvent event) {
-						final int idx = pattern.getCombo().getSelectionIndex();
-						final Patterns p = Patterns.values()[idx];
-						if (p == Patterns.N_IN_PERIOD) {
-							pattern_periodEnd.setEnabled(true);
-						} else {
-							pattern_periodEnd.setEnabled(false);
-						}
-						refreshPreview();
 					}
 				});
 			}
@@ -512,6 +492,22 @@ public class CreateStripDialog extends FormDialog {
 			refreshPreview();
 		}
 
+		repeatType.setSelection(new StructuredSelection(RepeatType.Periodic));
+		intervalType.setSelection(new StructuredSelection(IntervalType.Days));
+
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		// Only valid for slots
+		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
+			cal.setTime((Date) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart()));
+		} else {
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+		}
+		pattern_periodStart.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+		pattern_periodEnd.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+
 		// Hook up refresh handlers
 		final EContentAdapter changedAdapter = new EContentAdapter() {
 			public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
@@ -522,7 +518,7 @@ public class CreateStripDialog extends FormDialog {
 		};
 		sample.eAdapters().add(changedAdapter);
 
-		pattern.setSelection(new StructuredSelection(Patterns.N_PER_YEAR));
+		refreshPreview();
 	}
 
 	private void refreshPreview() {
@@ -542,73 +538,77 @@ public class CreateStripDialog extends FormDialog {
 	}
 
 	private List<EObject> updateGeneratedObjects() {
-
+		// Sync dates
+		{
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			// Only valid for slots
+			if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
+				cal.setTime((Date) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart()));
+				pattern_periodStart.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+			}
+		}
 		final List<Date> dates = new LinkedList<Date>();
 		// Generate the dates
 
 		int calUnit = Calendar.MONTH;
 		int calSpacing = 1;
-		int calQuantity = 1;
+		try {
+			calSpacing = Integer.parseInt(pattern_n.getText());
+		} catch (final NumberFormatException nfe) {
+			// Ignore
+		}
+		// Min of 1 element
+		calSpacing = Math.max(1, calSpacing);
+
+		final Calendar toDate = getCalendarFromDateTime(pattern_periodEnd);
+		final Calendar fromDate = getCalendarFromDateTime(pattern_periodStart);
+
+		// ABS as sanity check...
+		final long diffInMilliseconds = Math.abs(toDate.getTimeInMillis() - fromDate.getTimeInMillis());
+		final int diffInDays = (int) (diffInMilliseconds / 1000l / 60l / 60l / 24l);
 
 		{
-			int n = 1;
-			try {
-				n = Integer.parseInt(pattern_n.getText());
-			} catch (final NumberFormatException nfe) {
-				// Ignore
-			}
-			// Min of 1 element
-			n = Math.max(1, n);
 
-			int quantity = 1;
-			try {
-				quantity = Integer.parseInt(pattern_quantity.getText());
-			} catch (final NumberFormatException nfe) {
-				// Ignore
-			}
-			// Min of 1 element
-			quantity = Math.max(1, quantity);
-
-			final int selectionIndex = pattern.getCombo().getSelectionIndex();
-			if (selectionIndex < 0) {
+			final int rtIdx = repeatType.getCombo().getSelectionIndex();
+			if (rtIdx < 0) {
 				return Collections.emptyList();
 			}
-
-			final Patterns p = Patterns.values()[selectionIndex];
-			switch (p) {
-			case EVERY_N_DAYS:
-				calSpacing = n;
+			final RepeatType rt = RepeatType.values()[rtIdx];
+			switch (rt) {
+			case Distributed: {
 				calUnit = Calendar.DAY_OF_YEAR;
-				calQuantity = quantity;
+				calSpacing = diffInDays / calSpacing;
+				calSpacing = Math.max(1, calSpacing);
+			}
 				break;
-			case MONTHLY:
-				calSpacing = 1;
-				calUnit = Calendar.MONTH;
-				calQuantity = quantity;
-				break;
-			case N_PER_YEAR:
-				calSpacing = 365 / n;
+			case Periodic: {
 				calUnit = Calendar.DAY_OF_YEAR;
-				calQuantity = n;
-				break;
-			case N_IN_PERIOD:
-
-				final Calendar toDate = getCalendarFromDateTime(pattern_periodEnd);
-				final Calendar fromDate = getCalendarFromDateTime(pattern_periodStart);
-				// ABS as sanity check...
-				final long diffInMilliseconds = Math.abs(toDate.getTimeInMillis() - fromDate.getTimeInMillis());
-				final int diffInDays = (int) (diffInMilliseconds / 1000l / 60l / 60l / 24l);
-
-				calSpacing = diffInDays / n;
-				calUnit = Calendar.DAY_OF_YEAR;
-				calQuantity = n;
+				final int itIdx = intervalType.getCombo().getSelectionIndex();
+				if (itIdx < 0) {
+					return Collections.emptyList();
+				}
+				final IntervalType it = IntervalType.values()[itIdx];
+				switch (it) {
+				case Days:
+					calUnit = Calendar.DAY_OF_YEAR;
+					break;
+				case Months:
+					calUnit = Calendar.MONTH;
+					break;
+				case Weeks:
+					calUnit = Calendar.WEEK_OF_YEAR;
+					break;
+				default:
+					break;
+				}
+			}
 				break;
 			default:
 				break;
+
 			}
 		}
 
-		// TODO: - Derive from pattern
 		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		// Only valid for slots
 		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
@@ -620,7 +620,7 @@ public class CreateStripDialog extends FormDialog {
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 		}
 		final Date sampleDate = cal.getTime();
-		for (int i = 0; i < calQuantity; ++i) {
+		while (toDate.getTime().after(cal.getTime())) {
 			dates.add(cal.getTime());
 			cal.add(calUnit, calSpacing);
 		}
@@ -632,7 +632,6 @@ public class CreateStripDialog extends FormDialog {
 			final int sampleKey = sampleDate.getYear() * 100 + sampleDate.getMonth();
 			final int pricingKey = pricingDate.getYear() * 100 + pricingDate.getMonth();
 			pricingMonthDiff = pricingKey - sampleKey;
-
 		}
 
 		// Generate the slots
@@ -907,5 +906,4 @@ public class CreateStripDialog extends FormDialog {
 		cal.set(Calendar.DAY_OF_MONTH, dateTime.getDay());
 		return cal;
 	}
-
 }

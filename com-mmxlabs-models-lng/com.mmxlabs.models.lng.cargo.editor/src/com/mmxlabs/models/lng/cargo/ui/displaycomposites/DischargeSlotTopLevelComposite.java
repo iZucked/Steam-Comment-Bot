@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -44,13 +44,15 @@ public class DischargeSlotTopLevelComposite extends DefaultTopLevelComposite {
 		toolkit.adapt(g);
 
 		String groupName = EditorUtils.unmangle(eClass.getName());
-		if (object instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) object;
+		if (object instanceof DischargeSlot) {
+			final DischargeSlot dischargeSlot = (DischargeSlot) object;
 
-			if (loadSlot.getTransferFrom() != null) {
-				groupName = "STS: Load";
+			if (dischargeSlot.getTransferTo() != null) {
+				groupName = "STS: Discharge";
+			} else if (dischargeSlot.isFOBSale()) {
+				groupName = "FOB Sale";
 			} else {
-				groupName = "Load";
+				groupName = "Discharge";
 			}
 		}
 

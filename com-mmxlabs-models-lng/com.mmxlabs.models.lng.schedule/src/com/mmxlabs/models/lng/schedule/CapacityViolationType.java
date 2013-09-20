@@ -69,7 +69,7 @@ public enum CapacityViolationType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	MAX_HEEL(4, "MAX_HEEL", ""),
+	MAX_HEEL(4, "MAX_HEEL", "MAX_HEEL"),
 
 	/**
 	 * The '<em><b>FORCED COOLDOWN</b></em>' literal object.
@@ -79,7 +79,16 @@ public enum CapacityViolationType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	FORCED_COOLDOWN(5, "FORCED_COOLDOWN", "FORCED_COOLDOWN");
+	FORCED_COOLDOWN(5, "FORCED_COOLDOWN", "FORCED_COOLDOWN"), /**
+	 * The '<em><b>VESSEL CAPACITY</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @see #VESSEL_CAPACITY_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	VESSEL_CAPACITY(6, "VESSEL_CAPACITY", "VESSEL_CAPACITY");
 
 	/**
 	 * The '<em><b>MAX LOAD</b></em>' literal value.
@@ -150,7 +159,7 @@ public enum CapacityViolationType implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #MAX_HEEL
-	 * @model literal=""
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
@@ -172,6 +181,22 @@ public enum CapacityViolationType implements Enumerator {
 	public static final int FORCED_COOLDOWN_VALUE = 5;
 
 	/**
+	 * The '<em><b>VESSEL CAPACITY</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>VESSEL CAPACITY</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @see #VESSEL_CAPACITY
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int VESSEL_CAPACITY_VALUE = 6;
+
+	/**
 	 * An array of all the '<em><b>Capacity Violation Type</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -185,6 +210,7 @@ public enum CapacityViolationType implements Enumerator {
 			MIN_DISCHARGE,
 			MAX_HEEL,
 			FORCED_COOLDOWN,
+			VESSEL_CAPACITY,
 		};
 
 	/**
@@ -241,6 +267,7 @@ public enum CapacityViolationType implements Enumerator {
 			case MIN_DISCHARGE_VALUE: return MIN_DISCHARGE;
 			case MAX_HEEL_VALUE: return MAX_HEEL;
 			case FORCED_COOLDOWN_VALUE: return FORCED_COOLDOWN;
+			case VESSEL_CAPACITY_VALUE: return VESSEL_CAPACITY;
 		}
 		return null;
 	}

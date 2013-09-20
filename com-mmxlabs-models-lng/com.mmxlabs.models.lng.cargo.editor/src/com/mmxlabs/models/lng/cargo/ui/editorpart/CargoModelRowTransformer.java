@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -192,26 +193,27 @@ public class CargoModelRowTransformer {
 				}
 				if (loadRowData == null && dischargeRowData == null) {
 					loadRowData = new RowData();
-					loadRowData.primaryRecord = i == 0;
 					dischargeRowData = loadRowData;
 				} else if (loadRowData == null && loadSlot != null) {
 					loadRowData = new RowData();
-					loadRowData.primaryRecord = i == 0;
 				} else if (dischargeRowData == null && dischargeSlot != null) {
 					dischargeRowData = new RowData();
-					dischargeRowData.primaryRecord = i == 0;
 				}
 
 				if (loadRowData == null && dischargeRowData == null) {
 					// We shouldn't really get here
 					continue;
 				}
+
 				// In some cases where we only have one slot (e.g. as part of LDD) we can end up with a null row data object, so use the other half as the reference for the rest of the loop
 				if (loadRowData == null) {
 					loadRowData = dischargeRowData;
 				} else if (dischargeRowData == null) {
 					dischargeRowData = loadRowData;
 				}
+				// Attempt to determine primary record. TODO: Confirm this is correct for LDD case
+				loadRowData.primaryRecord = i == 0;
+				dischargeRowData.primaryRecord = i == 0;
 
 				loadRowData.loadSlot = loadSlot;
 				dischargeRowData.dischargeSlot = dischargeSlot;
@@ -888,6 +890,13 @@ public class CargoModelRowTransformer {
 			return super.get(root, depth);
 		}
 
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = super.hashCode();
+			result = prime * result + (type.hashCode());
+			return result;
+		}	
 	}
 
 	public enum Type {
@@ -952,4 +961,6 @@ public class CargoModelRowTransformer {
 			}
 		}
 	}
+	
+	
 }
