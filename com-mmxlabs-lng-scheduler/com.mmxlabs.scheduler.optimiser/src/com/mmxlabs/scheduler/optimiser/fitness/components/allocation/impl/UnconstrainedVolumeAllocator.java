@@ -21,9 +21,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * Returns x, capped by y; if x has the special value 0, it is considered undefined and y is returned.
 	 * 
 	 * @return
-	 * @since 7.1
 	 */
-	protected final static long capValueWithZeroDefault(long x, long y) {
+	private final static long capValueWithZeroDefault(long x, long y) {
 		return x == 0 ? y : Math.min(x, y);
 	}
 
@@ -39,9 +38,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * @return
 	 * 
 	 * @author Simon McGregor
-	 * @since 7.1
 	 */
-	protected final static void allocateBasicSlotVolumes(AllocationRecord constraint) {
+	private final static void allocateBasicSlotVolumes(AllocationRecord constraint) {
 		// TODO: the logic for reporting constraint violations should be moved into this method
 		final IPortSlot[] slots = constraint.slots;
 		final long[] result = constraint.allocations;
