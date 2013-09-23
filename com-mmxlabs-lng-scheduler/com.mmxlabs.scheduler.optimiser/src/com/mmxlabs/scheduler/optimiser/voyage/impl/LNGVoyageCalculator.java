@@ -912,7 +912,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				assert sequence[i] instanceof VoyageDetails;
 
 				final VoyageDetails details = (VoyageDetails) sequence[i];
-//				final IPort port = details.getOptions().getToPortSlot().getPort();
 
 				final boolean shouldBeCold = details.getOptions().shouldBeCold();
 				final long fuelConsumption = details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
