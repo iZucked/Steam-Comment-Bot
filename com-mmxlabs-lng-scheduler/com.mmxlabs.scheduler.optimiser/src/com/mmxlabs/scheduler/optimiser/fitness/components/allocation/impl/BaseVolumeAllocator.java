@@ -44,9 +44,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
  * 
  */
 public abstract class BaseVolumeAllocator implements IVolumeAllocator {
-	
+
 	/**
-	 * Record class for allocation constraints per  
+	 * Record class for allocation constraints per
+	 * 
 	 * @author Simon McGregor
 	 */
 	static final class AllocationRecord {
@@ -638,6 +639,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	}
 
 	protected abstract void allocateSpareVolume();
+	
 
 	public void solve() {
 		allocateSpareVolume();

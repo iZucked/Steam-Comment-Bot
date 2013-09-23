@@ -11,10 +11,6 @@ syntax: regexp
 ^com\.mmxlabs\.scheduler\.p2/\.project$
 
 syntax: regexp
-^com\.mmxlabs\.scheduler\.optimiser/\.settings$
-syntax: regexp
-^com\.mmxlabs\.scheduler\.optimiser\.tests/\.settings$
-syntax: regexp
 ^target-definition/\.settings$
 syntax: regexp
 ^com\.mmxlabs\.scheduler\.optimiser\.feature/\.settings$

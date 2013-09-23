@@ -10,6 +10,7 @@ import java.util.Map;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 
 public class SchedulerComponentsInjectorService implements IOptimiserInjectorService {
@@ -22,6 +23,7 @@ public class SchedulerComponentsInjectorService implements IOptimiserInjectorSer
 			protected void configure() {
 				bind(VoyagePlanAnnotator.class);
 				bind(VoyagePlanIterator.class);
+				bind(VoyagePlanner.class);
 			}
 		};
 	}
