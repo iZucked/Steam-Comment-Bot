@@ -46,7 +46,7 @@ public class LingoMigrateToV5 implements IMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -5;
+		return 5;
 	}
 
 	@Override
