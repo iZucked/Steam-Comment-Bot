@@ -208,13 +208,43 @@ public interface PortPackage extends EPackage {
 	int PORT__DATALOY_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Veson Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__VESON_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>External Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__EXTERNAL_CODE = TypesPackage.APORT_SET_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>UN Locode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__UN_LOCODE = TypesPackage.APORT_SET_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 12;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -718,6 +748,42 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_DataloyCode();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getVesonCode <em>Veson Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Veson Code</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getVesonCode()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_VesonCode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getExternalCode <em>External Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>External Code</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getExternalCode()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_ExternalCode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getUNLocode <em>UN Locode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>UN Locode</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getUNLocode()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_UNLocode();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Route <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1075,6 +1141,33 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__DATALOY_CODE = eINSTANCE.getPort_DataloyCode();
+
+		/**
+		 * The meta object literal for the '<em><b>Veson Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 7.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__VESON_CODE = eINSTANCE.getPort_VesonCode();
+
+		/**
+		 * The meta object literal for the '<em><b>External Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 7.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__EXTERNAL_CODE = eINSTANCE.getPort_ExternalCode();
+
+		/**
+		 * The meta object literal for the '<em><b>UN Locode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 7.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__UN_LOCODE = eINSTANCE.getPort_UNLocode();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.

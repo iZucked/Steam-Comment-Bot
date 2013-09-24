@@ -25,6 +25,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="atobviacCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataloyCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesonCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="UNLocode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
       <eTypeArguments eClassifier="#//Port"/>
     </eGenericSuperTypes>

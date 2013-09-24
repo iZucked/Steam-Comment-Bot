@@ -200,7 +200,7 @@
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Commodity Data Index"
+          label="Commodity Index"
           targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
           replacementEReference="data"
           replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
@@ -208,7 +208,7 @@
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.expressionFactory"
            factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Commodity Expression Index"
+          label="Commodity Index Expression"
           targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
           replacementEReference="data"
           replacementEClass="com.mmxlabs.models.lng.pricing.DerivedIndex">
@@ -228,7 +228,7 @@
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.charterIndex"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Charter Data Index"
+          label="Charter Index"
           targetEClass="com.mmxlabs.models.lng.pricing.CharterIndex"
           replacementEReference="data"
           replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
@@ -236,7 +236,7 @@
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.baseFuelIndex"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Base Fuel Data Index"
+          label="Base Fuel Index"
           targetEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
           replacementEReference="data"
           replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">

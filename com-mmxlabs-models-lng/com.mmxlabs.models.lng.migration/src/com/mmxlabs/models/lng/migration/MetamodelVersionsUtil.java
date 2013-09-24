@@ -273,7 +273,7 @@ public class MetamodelVersionsUtil {
 	}
 	
 	/**
-	 * @since 6.0
+	 * @since 7.0
 	 */
 	public static MetamodelLoader createV5Loader(final Map<URI, PackageData> extraPackages) {
 		return createCurrentLoader(extraPackages);

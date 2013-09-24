@@ -22,6 +22,10 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -72,10 +76,20 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.EnumCheckboxEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 import com.mmxlabs.models.ui.editors.impl.TimezoneInlineEditor;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -141,6 +155,9 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_locationEditor(detailComposite, topClass);
 		add_atobviacCodeEditor(detailComposite, topClass);
 		add_dataloyCodeEditor(detailComposite, topClass);
+		add_vesonCodeEditor(detailComposite, topClass);
+		add_externalCodeEditor(detailComposite, topClass);
+		add_UNLocodeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -291,6 +308,33 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_dataloyCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DATALOY_CODE));
+	}
+
+	/**
+	 * Create the editor for the vesonCode feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_vesonCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__VESON_CODE));
+	}
+
+	/**
+	 * Create the editor for the externalCode feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_externalCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__EXTERNAL_CODE));
+	}
+
+	/**
+	 * Create the editor for the UNLocode feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_UNLocodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__UN_LOCODE));
 	}
 
 	/**

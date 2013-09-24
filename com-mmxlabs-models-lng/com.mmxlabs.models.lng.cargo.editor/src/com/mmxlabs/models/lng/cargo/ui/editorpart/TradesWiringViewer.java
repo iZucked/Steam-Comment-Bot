@@ -4,14 +4,18 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
@@ -19,9 +23,11 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -35,11 +41,12 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -47,8 +54,10 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
@@ -84,6 +93,7 @@ import org.eclipse.ui.menus.IMenuService;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -101,6 +111,10 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CreateStripDialog.StripType;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -121,6 +135,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -140,7 +155,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -182,6 +197,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final Image lockedImage;
 
 	private IStatusChangedListener statusChangedListener;
+	
+	private final TradesFilter tradesFilter = new TradesFilter();
 
 	private Action resetSortOrder;
 
@@ -277,7 +294,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
 				super.init(adapterFactory, commandStack, path);
 
-				init(new IStructuredContentProvider() {
+				init(new ITreeContentProvider() {
 
 					@Override
 					public void dispose() {
@@ -308,6 +325,21 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					}
 
+					@Override
+					public Object[] getChildren(Object parentElement) {
+						return null;
+					}
+
+					@Override
+					public Object getParent(Object element) {
+						return null;
+					}
+
+					@Override
+					public boolean hasChildren(Object element) {
+						return false;
+					}
+
 				}, commandStack);
 				// Get default comparator
 				final ViewerComparator vc = getComparator();
@@ -332,6 +364,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						}
 					}
 				});
+				
+				addFilter(tradesFilter);
 			}
 
 			protected EObjectTableViewerValidationSupport createValidationSupport() {
@@ -553,15 +587,26 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		toolbar.add(new GroupMarker(EDIT_GROUP));
 		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
 		toolbar.add(new GroupMarker(VIEW_GROUP));
-		toolbar.appendToGroup(VIEW_GROUP, new PackGridTableColumnsAction(scenarioViewer));
+		toolbar.appendToGroup(VIEW_GROUP, new PackGridTreeColumnsAction(scenarioViewer));
 
+		/*
 		final ActionContributionItem filter = filterField.getContribution();
 
 		toolbar.appendToGroup(VIEW_GROUP, filter);
+		*/
 
 		final Action addAction = new AddAction("Add");
 		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
+
+		final Action filterAction = new FilterMenuAction("Filter");
+		try {
+			filterAction.setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		toolbar.appendToGroup(VIEW_GROUP, filterAction);
 
 		// add extension points to toolbar
 		{
@@ -602,6 +647,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			copyToClipboardAction = new CopyTreeToClipboardAction(((TreeViewer) viewer).getTree());
 		} else if (viewer instanceof GridTableViewer) {
 			copyToClipboardAction = new CopyGridToClipboardAction(((GridTableViewer) viewer).getGrid());
+		} else if (viewer instanceof GridTreeViewer) {
+			copyToClipboardAction = new CopyGridToClipboardAction(((GridTreeViewer) viewer).getGrid());
 		}
 
 		if (copyToClipboardAction != null) {
@@ -1131,12 +1178,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		super.setLocked(locked);
 		wiringDiagram.setLocked(locked);
 	}
-
-	private class AddAction extends Action implements IMenuCreator {
-
+	
+	private abstract class DefaultMenuCreatorAction extends Action implements IMenuCreator {
 		private Menu lastMenu;
 
-		public AddAction(final String label) {
+		public DefaultMenuCreatorAction(String label) {
 			super(label, IAction.AS_DROP_DOWN_MENU);
 		}
 
@@ -1164,10 +1210,162 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			return lastMenu;
 		}
+		
+		abstract protected void populate(Menu menu);
+		
+		@Override
+		public Menu getMenu(final Menu parent) {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
 
+			populate(lastMenu);
+
+			return lastMenu;
+		}
+		
 		protected void addActionToMenu(final Action a, final Menu m) {
 			final ActionContributionItem aci = new ActionContributionItem(a);
 			aci.fill(m, -1);
+		}
+
+	}
+	
+	private class TradesFilter extends ViewerFilter {
+		final private Map<EMFPath, EObject> filterValues = new HashMap<EMFPath, EObject>();
+		
+		public void setFilterValue(EMFPath path, EObject value) {
+			// adding a particular filter value resets all others
+			filterValues.clear();			
+			if (value != null) {
+				filterValues.put(path, value);
+			}
+			else {
+				filterValues.remove(path);
+			}
+		}
+		
+		public EObject getFilterValue(EMFPath path) {
+			return filterValues.get(path);
+		}
+		
+		@Override
+		public boolean select(Viewer viewer, Object parentElement,
+				Object element) {
+			// TODO Auto-generated method stub
+			if (element instanceof EObject) {
+				EObject object = (EObject) element;
+				
+				for (Entry<EMFPath, EObject> entry: filterValues.entrySet()) {
+					Object value = entry.getKey().get(object);
+					if (value != entry.getValue()) {
+						return false;
+					}
+				}
+			}
+			
+			return true;
+		}
+		
+		public void clear() {
+			filterValues.clear();
+		}
+	}
+	
+	private class FilterMenuAction extends DefaultMenuCreatorAction {
+		/**
+		 * A holder for a menu list of filter actions on different fields for the trades wiring table.
+		 * @param label The label to show in the UI for this menu.
+		 */
+		public FilterMenuAction(String label) {
+			super(label);
+		}
+
+		/**
+		 * Add the filterable fields to the menu for this item.
+		 */
+		@Override
+		protected void populate(Menu menu) {
+			LNGScenarioModel scenario = ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
+			CommercialModel commercialModel = scenario.getCommercialModel();
+			FleetModel fleetModel = scenario.getFleetModel();
+			
+			EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
+			EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
+			EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.ASSIGNMENT, AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
+			
+			Action clearAction = new Action("Clear Filter") {
+				@Override
+				public void run() {
+					tradesFilter.clear();
+					scenarioViewer.refresh(false);
+				}
+			};
+			
+			addActionToMenu(clearAction, menu);
+			addActionToMenu(new FilterAction("Purchase Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, purchaseContractPath), menu);
+			addActionToMenu(new FilterAction("Sales Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, salesContractPath), menu);
+			addActionToMenu(new FilterAction("Vessels", fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, vesselPath), menu);
+			
+		}
+	}
+	
+	private class FilterAction extends DefaultMenuCreatorAction {
+		final private EObject sourceObject;
+		final private EStructuralFeature sourceFeature;
+		final private EMFPath filterPath;
+		
+		/**
+		 * An action which updates the filter on the trades wiring table and refreshes the table.
+		 * 
+		 * @param label The label to associate with this action (the feature from the cargo row it represents).
+		 * @param sourceObject The source object in the EMF model which holds the list of possible values for the filter.
+		 * @param sourceFeature The EMF feature of the source object where the list of possible values resides. 
+		 * @param filterPath The path within a cargo row object of the field which the table is being filtered on.
+		 */
+		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final EMFPath filterPath) {
+			super(label);
+			this.sourceObject = sourceObject;
+			this.sourceFeature = sourceFeature;
+			this.filterPath = filterPath;
+		}
+		
+		/**
+		 * Add actions to the submenu associated with this action.
+		 */
+		@Override
+		protected void populate(Menu menu) {
+			// Get the labels to populate the menu from the source object in the EMF model  
+			final EList<NamedObject> values = (EList<NamedObject>) sourceObject.eGet(sourceFeature);
+			
+			// Show the list of labels (one for each item in the source object feature)   
+			for (final NamedObject value: values) {
+				// WEIRD: action returns wrong value from isChecked() so set the checked value here
+				// A label is checked if it is the value already selected in the trades filter
+				final boolean checked = tradesFilter.getFilterValue(filterPath) == value;
+				final Action action = new Action(value.getName(), IAction.AS_RADIO_BUTTON) {
+					@Override
+					public void run() {
+						// When we select a checked option, we want to turn the filter off
+						EObject newValue = (checked) ? null : value;
+						tradesFilter.setFilterValue(filterPath, newValue);
+						scenarioViewer.refresh(false);
+					}					
+				};
+				addActionToMenu(action, menu);
+				action.setChecked(checked);
+			}
+			
+		}
+
+		
+	}	
+	
+	private class AddAction extends DefaultMenuCreatorAction {
+
+		public AddAction(String label) {
+			super(label);
 		}
 
 		/**
@@ -1303,18 +1501,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					newSlot.setWindowStart(secondarySortSlot.getWindowStart());
 				}
 			}
-		}
-
-		@Override
-		public Menu getMenu(final Menu parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			populate(lastMenu);
-
-			return lastMenu;
 		}
 
 	}

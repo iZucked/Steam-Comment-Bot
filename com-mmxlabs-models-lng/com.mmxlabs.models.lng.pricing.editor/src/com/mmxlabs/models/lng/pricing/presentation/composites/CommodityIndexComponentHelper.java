@@ -11,10 +11,17 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -45,8 +52,7 @@ public class CommodityIndexComponentHelper extends BaseComponentHelper {
 	 */
 	public CommodityIndexComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(PricingPackage.Literals.NAMED_INDEX_CONTAINER));
 	}
 	
 	/**
@@ -67,14 +73,5 @@ public class CommodityIndexComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_dataEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the data feature on CommodityIndex
-	 *
-	 * @generated
-	 */
-	protected void add_dataEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COMMODITY_INDEX__DATA));
 	}
 }
