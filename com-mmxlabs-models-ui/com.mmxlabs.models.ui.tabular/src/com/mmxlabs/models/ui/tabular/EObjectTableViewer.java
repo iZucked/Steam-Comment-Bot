@@ -21,9 +21,10 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
@@ -51,7 +52,7 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * @since 4.0
  * 
  */
-public class EObjectTableViewer extends GridTableViewer {
+public class EObjectTableViewer extends GridTreeViewer {
 	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
 
 	protected static final String COLUMN_PATH = "COLUMN_PATH";
@@ -135,6 +136,13 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	public EReference getCurrentContainment() {
 		return currentReference;
+	}
+
+	/** Call this method if {@link #init(AdapterFactory, CommandStack, EReference...)} is overridden 
+	 * @since 7.0*/
+	public void setCurrentContainerAndContainment(final EObject currentContainer, final EReference currentReference) {
+		this.currentContainer = currentContainer;
+		this.currentReference = currentReference;
 	}
 
 	/**
@@ -250,7 +258,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
 
 		// create a column
-		final GridTableViewer viewer = this;
+		final GridTreeViewer viewer = this;
 
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		final GridColumn tColumn = column.getColumn();
@@ -319,7 +327,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	public GridViewerColumn addSimpleColumn(final String columnName, final boolean sortable) {
 
 		// create a column
-		final GridTableViewer viewer = this;
+		final GridTreeViewer viewer = this;
 
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		final GridColumn tColumn = column.getColumn();
@@ -373,19 +381,19 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	/**
-	 * @since 3.1
+	 * @since 7.0
 	 */
-	public void init(final IStructuredContentProvider contentProvider, final CommandStack commandStack) {
-		final GridTableViewer viewer = this;
-		final Grid table = viewer.getGrid();
+	public void init(final ITreeContentProvider contentProvider, final CommandStack commandStack) {
+		final GridTreeViewer viewer = this;
+		final Grid grid = viewer.getGrid();
 
 		currentCommandStack = commandStack;
 		if (currentCommandStack != null) {
 			currentCommandStack.addCommandStackListener(commandStackListener);
 		}
 
-//		table.setRowHeaderVisible(true);
-//		table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
+		// table.setRowHeaderVisible(true);
+		// table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
 
 		// This appears to do nothing in the Nebula Grid case.
 		// See Grid#setItemHeight() instead
@@ -396,19 +404,19 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		};
 
-		table.addListener(SWT.MeasureItem, measureListener);
+		grid.addListener(SWT.MeasureItem, measureListener);
 
-		table.addDisposeListener(new DisposeListener() {
+		grid.addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(final DisposeEvent e) {
-				table.removeListener(SWT.MeasureItem, measureListener);
+				grid.removeListener(SWT.MeasureItem, measureListener);
 				dispose();
 			}
 		});
 
 		viewer.setContentProvider(
 
-		new IStructuredContentProvider() {
+		new ITreeContentProvider() {
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -420,6 +428,10 @@ public class EObjectTableViewer extends GridTableViewer {
 							if (!viewer.getControl().isDisposed()) {
 								if (viewer instanceof GridTableViewer) {
 									for (final GridColumn tc : ((GridTableViewer) viewer).getGrid().getColumns()) {
+										tc.pack();
+									}
+								} else if (viewer instanceof GridTreeViewer) {
+									for (final GridColumn tc : ((GridTreeViewer) viewer).getGrid().getColumns()) {
 										tc.pack();
 									}
 								}
@@ -455,6 +467,29 @@ public class EObjectTableViewer extends GridTableViewer {
 
 				return elements;
 			}
+
+			@Override
+			public Object[] getChildren(final Object parentElement) {
+
+				final Object[] elements = contentProvider.getChildren(parentElement);
+				for (final Object o : elements) {
+					if (o instanceof EObject) {
+						currentElements.add((EObject) o);
+					}
+				}
+
+				return elements;
+			}
+
+			@Override
+			public Object getParent(final Object element) {
+				return contentProvider.getParent(element);
+			}
+
+			@Override
+			public boolean hasChildren(final Object element) {
+				return contentProvider.hasChildren(element);
+			}
 		});
 
 		viewer.setComparator(sortingSupport.createViewerComparer());
@@ -468,7 +503,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	 * @since 3.1
 	 */
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
-		init(new IStructuredContentProvider() {
+		init(new ITreeContentProvider() {
 			@SuppressWarnings("rawtypes")
 			@Override
 			public Object[] getElements(Object object) {
@@ -477,9 +512,7 @@ public class EObjectTableViewer extends GridTableViewer {
 					for (final EReference ref : path) {
 						object = o.eGet(ref);
 						if (object instanceof EList) {
-							// o.eAdapters().add(adapter);
-							currentContainer = o;
-							currentReference = ref;
+							setCurrentContainerAndContainment(o, ref);
 							return ((EList) object).toArray();
 						}
 						if (object instanceof EObject) {
@@ -502,6 +535,22 @@ public class EObjectTableViewer extends GridTableViewer {
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 			}
+
+			@Override
+			public Object[] getChildren(final Object parentElement) {
+				return null;
+			}
+
+			@Override
+			public boolean hasChildren(final Object element) {
+				return false;
+			}
+
+			@Override
+			public Object getParent(final Object element) {
+				return null;
+			}
+
 		}, commandStack);
 	}
 
