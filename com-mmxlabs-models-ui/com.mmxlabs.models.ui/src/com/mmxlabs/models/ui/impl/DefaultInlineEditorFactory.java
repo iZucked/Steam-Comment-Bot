@@ -20,6 +20,7 @@ import com.mmxlabs.models.ui.editors.impl.MultiReferenceInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.YesNoInlineEditor;
 
 /**
  * The inline editor factory which creates the normal editors for:
@@ -61,7 +62,17 @@ public class DefaultInlineEditorFactory implements IInlineEditorFactory {
 				attributeType == ecore.getEFloat()) {
 				return new NumberInlineEditor(feature);
 			} else if (attributeType == ecore.getEBoolean()) {
-				return new BooleanInlineEditor(feature);
+				if (feature.isUnsettable()) {
+					/* 
+					 * an unsettable boolean needs to be a "yes / no" list
+					 * because the check box determines whether it is set or not
+					 */
+					return new YesNoInlineEditor(attribute);
+				}
+				else {
+					/* regular boolean can just be a check box */
+					return new BooleanInlineEditor(feature);
+				}					
 			} else if (attributeType == ecore.getEChar()) {
 				return null;
 			} else if (attributeType == ecore.getEByte()) {
