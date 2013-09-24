@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="4"
+            latestVersion="-5"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -44,6 +44,13 @@
             from="3"
             to="4">
       </MigrationUnit>
+      <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV5"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV4"
+            context="com.mmxlabs.lingo"
+            from="4"
+            to="-5">
+      </MigrationUnit>      
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
