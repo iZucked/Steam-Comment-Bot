@@ -41,7 +41,7 @@ public class MigrateToV5 extends AbstractMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -5;
+		return 5;
 	}
 
 	@Override
