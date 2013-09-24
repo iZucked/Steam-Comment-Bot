@@ -2,21 +2,21 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Reports
 Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.reports;singleton:=true
-Bundle-Version: 4.5.0.qualifier
+Bundle-Version: 5.0.0.qualifier
 Bundle-Activator: com.mmxlabs.shiplingo.platform.reports.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.google.guava;bundle-version="11.0.1",
  org.slf4j.api;bundle-version="1.6.4",
  org.eclipse.emf.edit.ui;bundle-version="2.7.0",
- com.mmxlabs.rcp.common;bundle-version="[4.0.0,5.0.0)",
+ com.mmxlabs.rcp.common;bundle-version="[4.2.0,5.0.0)",
  com.mmxlabs.jobmanager;bundle-version="[1.1.0,2.0.0)",
  com.mmxlabs.models.util;bundle-version="[7.0.0,8.0.0)",
  com.mmxlabs.models.ui.tabular;bundle-version="[7.0.0,8.0.0)",
  com.mmxlabs.scenario.service.ui;bundle-version="[5.0.0,6.0.0)",
  com.mmxlabs.scenario.service.model;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.models.lng.scenario.model.edit;bundle-version="[6.1.0,7.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+ com.mmxlabs.models.lng.scenario.model.edit;bundle-version="[7.0.0,8.0.0)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.shiplingo.platform.reports,
  com.mmxlabs.shiplingo.platform.reports.properties,

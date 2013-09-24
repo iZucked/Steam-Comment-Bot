@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -34,9 +34,7 @@ public class CooldownReportView extends EMFReportView {
 		super("com.mmxlabs.shiplingo.platform.reports.CooldownReportView");
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
-		addColumn("Vessel", objectFormatter, 
-				MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(),
-				SchedulePackage.eINSTANCE.getSequence__GetName());
+		addColumn("Vessel", objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), SchedulePackage.eINSTANCE.getSequence__GetName());
 		addColumn("Cause ID", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
@@ -99,11 +97,12 @@ public class CooldownReportView extends EMFReportView {
 	}
 
 	@Override
-	protected IStructuredContentProvider getContentProvider() {
-		final IStructuredContentProvider superProvider = super.getContentProvider();
-		return new IStructuredContentProvider() {
+	protected ITreeContentProvider getContentProvider() {
+		final ITreeContentProvider superProvider = super.getContentProvider();
+		return new ITreeContentProvider() {
+
 			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 				superProvider.inputChanged(viewer, oldInput, newInput);
 			}
 
@@ -113,9 +112,24 @@ public class CooldownReportView extends EMFReportView {
 			}
 
 			@Override
-			public Object[] getElements(final Object inputElement) {
+			public boolean hasChildren(Object element) {
+				return superProvider.hasChildren(element);
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				return superProvider.getParent(element);
+			}
+
+			@Override
+			public Object[] getElements(Object inputElement) {
 				clearInputEquivalents();
 				return superProvider.getElements(inputElement);
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				return superProvider.getChildren(parentElement);
 			}
 		};
 	}
