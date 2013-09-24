@@ -233,6 +233,9 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				case MAX_HEEL:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.MAX_HEEL;
 					break;
+				case VESSEL_CAPACITY:
+					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.VESSEL_CAPACITY;
+					break;
 				}
 
 				long volume = OptimiserUnitConvertor.convertToExternalVolume(violation.getVolume());
