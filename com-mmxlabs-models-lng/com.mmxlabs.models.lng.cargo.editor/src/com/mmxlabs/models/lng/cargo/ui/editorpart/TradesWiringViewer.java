@@ -80,7 +80,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
@@ -94,6 +93,7 @@ import org.eclipse.ui.menus.IMenuService;
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -113,6 +113,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CreateStripDialog.StripType;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -1266,6 +1267,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			
 			return true;
 		}
+		
+		public void clear() {
+			filterValues.clear();
+		}
 	}
 	
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
@@ -1284,12 +1289,24 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		protected void populate(Menu menu) {
 			LNGScenarioModel scenario = ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
 			CommercialModel commercialModel = scenario.getCommercialModel();
+			FleetModel fleetModel = scenario.getFleetModel();
 			
 			EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
 			EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
+			EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.ASSIGNMENT, AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
 			
+			Action clearAction = new Action("Clear Filter") {
+				@Override
+				public void run() {
+					tradesFilter.clear();
+					scenarioViewer.refresh(false);
+				}
+			};
+			
+			addActionToMenu(clearAction, menu);
 			addActionToMenu(new FilterAction("Purchase Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, purchaseContractPath), menu);
 			addActionToMenu(new FilterAction("Sales Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, salesContractPath), menu);
+			addActionToMenu(new FilterAction("Vessels", fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, vesselPath), menu);
 			
 		}
 	}
