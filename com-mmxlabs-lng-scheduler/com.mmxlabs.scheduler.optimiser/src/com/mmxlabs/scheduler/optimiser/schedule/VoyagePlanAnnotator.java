@@ -139,6 +139,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					recordCapacityViolation(details, entries, CapacityViolationType.MIN_LOAD);
 					recordCapacityViolation(details, entries, CapacityViolationType.MAX_LOAD);
 					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
+					recordCapacityViolation(details, entries, CapacityViolationType.VESSEL_CAPACITY);
 
 					if (!entries.isEmpty()) {
 						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
@@ -169,6 +170,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
 					recordCapacityViolation(details, entries, CapacityViolationType.MAX_HEEL);
 					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
+					recordCapacityViolation(details, entries, CapacityViolationType.VESSEL_CAPACITY);
 
 					if (!entries.isEmpty()) {
 						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
