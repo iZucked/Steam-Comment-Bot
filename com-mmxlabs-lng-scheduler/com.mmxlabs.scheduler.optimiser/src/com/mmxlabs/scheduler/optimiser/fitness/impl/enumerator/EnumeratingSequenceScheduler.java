@@ -37,7 +37,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -504,7 +503,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
 	 * @param maxValue
-	 * 
+s	 * 
 	 * @param sequence
 	 * @return
 	 */
@@ -512,7 +511,6 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		final ISequence sequence = sequences.getSequence(sequenceIndex);
 		final IResource resource = sequences.getResources().get(sequenceIndex);
 
-		final IVesselProvider vesselProvider = super.getVesselProvider();
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return;
