@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class DESPurchaseSpotMarketView extends ScenarioTableViewerView<SpotMarketGroupPane> {
-	public static final String ID = "com.mmxlabs.models.lng.pricing.editor.DESPurchaseSpotMarketView";
+	public static final String ID = "com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView";
 
 	@Override
 	protected SpotMarketGroupPane createViewerPane() {
