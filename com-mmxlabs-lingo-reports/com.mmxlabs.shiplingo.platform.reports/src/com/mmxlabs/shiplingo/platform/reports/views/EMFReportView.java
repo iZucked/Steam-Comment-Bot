@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
@@ -33,6 +34,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -40,6 +42,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
@@ -63,7 +66,6 @@ import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
-import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
@@ -479,17 +481,17 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				return null;
 			}
 
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				return null;
 			}
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				return false;
 			}
 
@@ -577,9 +579,26 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			@Override
 			protected List<?> getSelectionFromWidget() {
 
-				List<?> list = super.getSelectionFromWidget();
+				final List<?> list = super.getSelectionFromWidget();
 
 				return adaptSelectionFromWidget(list);
+			}
+
+			/**
+			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
+			 */
+			@Override
+			protected TreePath getTreePathFromItem(Item item) {
+				final LinkedList<Object> segments = new LinkedList<>();
+				while (item != null) {
+					final Object segment = item.getData();
+					Assert.isNotNull(segment);
+					segments.addFirst(segment);
+					item = getParentItem(item);
+				}
+				final List<?> l = adaptSelectionFromWidget(segments);
+
+				return new TreePath(l.toArray());
 			}
 		};
 
@@ -832,7 +851,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * 
 	 * @since 4.0
 	 */
-	protected List<?> adaptSelectionFromWidget(List<?> selection) {
+	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return selection;
 	}
 }
