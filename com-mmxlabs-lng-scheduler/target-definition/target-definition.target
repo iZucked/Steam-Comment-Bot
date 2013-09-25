@@ -67,14 +67,14 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.2.1.RELEASE/com.mmxlabs.common.util.p2-2.2.1.RELEASE-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.optimiser.optimiser-common.source" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core.source" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga.source" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso.source" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.1.1.201212131159"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso" version="0.0.0"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/optimiser/optimiser-p2/1.1.1.RELEASE/optimiser-p2-1.1.1.RELEASE-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 </locations>
