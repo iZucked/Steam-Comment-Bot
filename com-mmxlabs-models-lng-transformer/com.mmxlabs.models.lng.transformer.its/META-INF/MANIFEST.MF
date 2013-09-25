@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Shiplingo Transformer Tests
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.its
-Bundle-Version: 6.1.0.qualifier
+Bundle-Version: 6.1.1.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit;bundle-version="4.8.1",
@@ -31,7 +31,7 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.scheduler.optimiser;bundle-version="7.0.0",
  com.mmxlabs.models.lng.spotmarkets.editor;bundle-version="7.0.0",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[7.0.0,8.0.0)",
- com.mmxlabs.scheduler.optimiser;bundle-version="4.0.0",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[7.1.1,8.0.0)",
  com.mmxlabs.models.lng.scenario.model;bundle-version="3.0.0"
 Bundle-ClassPath: .
 Import-Package: javax.inject;version="1.0.0",
