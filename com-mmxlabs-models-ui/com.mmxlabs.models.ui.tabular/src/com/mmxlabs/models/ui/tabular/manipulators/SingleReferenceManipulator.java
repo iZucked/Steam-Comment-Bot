@@ -67,7 +67,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public String render(final Object object) {
-		Object superValue = super.getValue(object);
+		final Object superValue = super.getValue(object);
 		if (super.getValue(object) == SetCommand.UNSET_VALUE) {
 			if (object instanceof MMXObject) {
 				final Object defaultValue = ((MMXObject) object).getUnsetValue(field);
@@ -105,9 +105,10 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public Object getValue(final Object object) {
-		final int x = valueList.indexOf(super.getValue(object));
+		final Object value = super.getValue(object);
+		final int x = valueList.indexOf(value);
 		if (x == -1) {
-			log.warn("Index of " + object + " to be selected is -1, so it is not a legal option in the control");
+			log.warn(String.format("Index of %s (value: %s) to be selected is -1, so it is not a legal option in the control", object, value));
 		}
 		return x;
 	}
