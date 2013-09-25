@@ -36,9 +36,12 @@ public class EditingPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.PortCostsView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.CooldownCostsView");
 		layout.addShowViewShortcut("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
-		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView");
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
+		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView");
+		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView");
+
+		
 		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.optimisation");
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
 	}

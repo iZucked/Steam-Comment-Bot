@@ -52,6 +52,8 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		reportsFolder.addPlaceholder(LatenessReportView.ID);
 		reportsFolder.addPlaceholder(CooldownReportView.ID);
 		reportsFolder.addPlaceholder(FitnessReportView.ID);
+		reportsFolder.addPlaceholder(CapacityViolationReportView.ID);
+
 
 		// layout.addView(CargoEconsReport.ID, IPageLayout.RIGHT, 0.85f, IPageLayout.ID_EDITOR_AREA);
 
