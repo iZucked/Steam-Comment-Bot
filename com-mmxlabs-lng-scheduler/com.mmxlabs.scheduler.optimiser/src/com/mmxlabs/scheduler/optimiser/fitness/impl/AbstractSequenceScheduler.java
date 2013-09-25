@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,17 +11,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
-import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -33,9 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -115,16 +102,6 @@ public abstract class AbstractSequenceScheduler extends AbstractLoggingSequenceS
 	}
 
 	/**
-	 * 
-	 * @deprecated Use {@link VoyagePlanner#getVoyageOptionsAndSetVpoChoices(IVessel, VesselState, int, ISequenceElement, ISequenceElement, VoyageOptions, IVoyagePlanOptimiser, boolean)}
-	@Deprecated
-	 * 
-	 * @deprecated Use {@link VoyagePlanner#findSequenceBreaks(ISequence)}
-	 * @deprecated Use {@link VoyagePlanner#findVesselStates(ISequence)}
-	@Deprecated
-	 * 
-	 * @deprecated Use {@link VoyagePlanner#makeVoyagePlans(IResource, ISequence, int[])}
-	@Deprecated
 	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
 	 * between elements may be too short (i.e. because the vessel is already travelling at max speed). In such cases, if adjustArrivals is true, then arrival times will be adjusted in the
 	 * {@link VoyagePlan}s. Otherwise null will be returned.
@@ -163,18 +140,4 @@ public abstract class AbstractSequenceScheduler extends AbstractLoggingSequenceS
 
 		return new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes);
 	}
-	 * @deprecated Use {@link VoyagePlanner#getOptimisedVoyagePlan(List, List, IVoyagePlanOptimiser)}
-	@Deprecated
-		return voyagePlanner.getOptimisedVoyagePlan(voyageOrPortOptionsSubsequence, arrivalTimes, optimiser);
-	/**
-	 * 
-	 * @param voyagePlans
-	 * @param currentSequence
-	 * @param currentTimes
-	 * @param optimiser
-	 * @return
-	 * 
-	 * @deprecated Use {@link VoyagePlanner#optimiseSequence(List, List, List, IVoyagePlanOptimiser)}
-	 */
-	@Deprecated
 }

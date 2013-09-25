@@ -37,6 +37,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -152,6 +153,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Inject
 	private IElementDurationProvider durationProvider;
+	
+	@Inject
+	private IVesselProvider vesselProvider;
 
 	/**
 	 * Resize one of the integer buffers above
