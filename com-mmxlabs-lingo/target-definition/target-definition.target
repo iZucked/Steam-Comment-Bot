@@ -115,7 +115,7 @@
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/4.2.0-SNAPSHOT/com.mmxlabs.rcp.common.p2-4.2.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/4.2.0.RELEASE/com.mmxlabs.rcp.common.p2-4.2.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="0.0.0"/>
@@ -130,29 +130,29 @@
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/7.0.0-SNAPSHOT/com.mmxlabs.models.ui.p2-7.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/7.0.0.RELEASE/com.mmxlabs.models.ui.p2-7.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.lng.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/lng/com.mmxlabs.models.lng.p2/7.0.0-SNAPSHOT/com.mmxlabs.models.lng.p2-7.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/lng/com.mmxlabs.models.lng.p2/7.0.0.RELEASE/com.mmxlabs.models.lng.p2-7.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.datasources.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.datasources.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/datasources/com.mmxlabs.datasources.p2/4.1.0-SNAPSHOT/com.mmxlabs.datasources.p2-4.1.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/datasources/com.mmxlabs.datasources.p2/4.1.0.RELEASE/com.mmxlabs.datasources.p2-4.1.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.transformer.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.transformer.its.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.transformer.its.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/lng/transformer/com.mmxlabs.models.lng.transformer.p2/6.1.0-SNAPSHOT/com.mmxlabs.models.lng.transformer.p2-6.1.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/models/lng/transformer/com.mmxlabs.models.lng.transformer.p2/6.1.0.RELEASE/com.mmxlabs.models.lng.transformer.p2-6.1.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.shiplingo.platform.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.shiplingo.platform.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/shiplingo/platform/com.mmxlabs.shiplingo.platform.p2/5.0.0-SNAPSHOT/com.mmxlabs.shiplingo.platform.p2-5.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/shiplingo/platform/com.mmxlabs.shiplingo.platform.p2/5.0.0.RELEASE/com.mmxlabs.shiplingo.platform.p2-5.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.RELEASE"/>
