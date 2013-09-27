@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -30,7 +29,6 @@ import javax.inject.Named;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +46,6 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -102,6 +99,8 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.transformer.inject.IDESPurchaseSlotBindingsGenerator;
+import com.mmxlabs.models.lng.transformer.inject.ISlotTimeWindowGenerator;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -168,6 +167,13 @@ public class LNGScenarioTransformer {
 	@Inject(optional = true)
 	private List<ITransformerExtension> transformerExtensions;
 
+	@Inject(optional = true)
+	private ISlotTimeWindowGenerator slotTimeWindowGenerator;
+
+	@Inject(optional = true)
+	private IDESPurchaseSlotBindingsGenerator desPurchaseSlotBindingsGenerator;
+
+	
 	@Inject
 	private ISchedulerBuilder builder;
 
@@ -863,18 +869,11 @@ public class LNGScenarioTransformer {
 							}
 							builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 						} else {
-							if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
-								// Redirection contracts can go to anywhere
-								builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
-							} else {
-								// final Set<IPort> ports = new LinkedHashSet<IPort>();
-								// for (final IDischargeOption discharge : dischargeOptions) {
-								// ports.add(discharge.getPort());
-								// }
+							if (desPurchaseSlotBindingsGenerator == null) {
 								final Set<IPort> ports = Collections.singleton(load.getPort());
 								builder.bindDischargeSlotsToDESPurchase(load, ports);
-								// // Bind to this port -- TODO: Fix to discharge?
-								// builder.constrainSlotAdjacency(load, secondSlot);
+							} else {
+								desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, loadSlot, load, dischargePorts);
 							}
 						}
 					}
@@ -967,12 +966,11 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
-					if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
-						// Redirection contracts can go to anywhere
-						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
+					if (desPurchaseSlotBindingsGenerator == null) {
+						final Set<IPort> ports = Collections.singleton(load.getPort());
+						builder.bindDischargeSlotsToDESPurchase(load, ports);
 					} else {
-						// Bind to this port -- TODO: Fix to discharge?
-						builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(load.getPort()));
+						desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, loadSlot, load, dischargePorts);
 					}
 				}
 			}
@@ -1137,28 +1135,11 @@ public class LNGScenarioTransformer {
 		final int slotPricingDate = loadSlot.isSetPricingDate() ? convertTime(earliestTime, loadSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
 
 		if (loadSlot.isDESPurchase()) {
-
 			final ITimeWindow localTimeWindow;
-			// FIXME: This should not really be in the builder, but need better API to permit this kind of transformation.
-			if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
-				// Redirection contracts can go to anywhere, so need larger window for compatibility
-				final int extraTime = 24 * 60; // approx 2 months
-				Date originalDate = null;
-				for (final UUIDObject ext : loadSlot.getExtensions()) {
-					if (ext.getClass().getSimpleName().equals("RedirectionContractOriginalDate")) {
-						// final RedirectionContractOriginalDate originalDateExt = (RedirectionContractOriginalDate) ext;
-						final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(loadSlot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-						final EStructuralFeature feature = ext.eClass().getEStructuralFeature("date");
-						final Date originalDateExt = (Date) ext.eGet(feature);
-						calendar.setTime(originalDateExt);
-						originalDate = calendar.getTime();
-					}
-				}
-				final Date startTime = originalDate == null ? loadSlot.getWindowStart() : originalDate;
-
-				localTimeWindow = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, startTime) + extraTime);
-			} else {
+			if (slotTimeWindowGenerator == null) {
 				localTimeWindow = loadWindow;
+			} else {
+				localTimeWindow = slotTimeWindowGenerator.generateTimeWindow(builder, loadSlot, earliestTime, loadWindow);
 			}
 			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), localTimeWindow,
 					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
