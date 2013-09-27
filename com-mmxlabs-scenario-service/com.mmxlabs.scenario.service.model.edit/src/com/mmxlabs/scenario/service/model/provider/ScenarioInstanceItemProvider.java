@@ -23,6 +23,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -221,12 +222,19 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 */
 	@Override
 	public Object getImage(Object object) {
-		boolean locked = ((ScenarioInstance) object).isLocked();
+		final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+		final boolean locked = scenarioInstance.isLocked();
 
 		final List<Object> images = new ArrayList<Object>(3);
 		images.add(getResourceLocator().getImage("full/obj16/ScenarioInstance"));
 		if (locked) {
-			images.add(getResourceLocator().getImage("overlays/lock"));
+			final ScenarioLock optLock = scenarioInstance.getLock(ScenarioLock.OPTIMISER);
+			final ScenarioLock evalLock = scenarioInstance.getLock(ScenarioLock.EVALUATOR);
+			if (optLock.isClaimed() || evalLock.isClaimed()) {
+				images.add(getResourceLocator().getImage("overlays/lock_optimising"));
+			} else {
+				images.add(getResourceLocator().getImage("overlays/lock"));
+			}
 
 		}
 		//		boolean archived = ((ScenarioInstance) object).isLocked();
