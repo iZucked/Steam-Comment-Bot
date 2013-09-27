@@ -6,7 +6,9 @@ package com.mmxlabs.models.ui.validation.views;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -58,6 +60,7 @@ public class ValidationProblemsView extends ViewPart {
 	private TreeViewer viewer;
 
 	private final Map<ScenarioInstance, IStatus> statusMap = new HashMap<ScenarioInstance, IStatus>();
+	private final Set<ScenarioInstance> notifierInstances = new HashSet<>();
 	private ScenarioInstance currentInstance = null;
 	private IEditorPart editorPart;
 	private final IPartListener partListener = new IPartListener() {
@@ -79,7 +82,7 @@ public class ValidationProblemsView extends ViewPart {
 					releaseScenarioInstance(currentInstance);
 					currentInstance = null;
 				}
-				viewer.refresh();
+				refreshViewer();
 			}
 		}
 
@@ -102,7 +105,7 @@ public class ValidationProblemsView extends ViewPart {
 
 					}
 				}
-				viewer.refresh();
+				refreshViewer();
 			}
 		}
 
@@ -126,7 +129,7 @@ public class ValidationProblemsView extends ViewPart {
 
 					}
 				}
-				viewer.refresh();
+				refreshViewer();
 			}
 		}
 	};
@@ -142,7 +145,7 @@ public class ValidationProblemsView extends ViewPart {
 				} else {
 					statusMap.put(instance, (IStatus) instance.getAdapters().get(IStatus.class));
 				}
-				viewer.refresh();
+				refreshViewer();
 			}
 		}
 	};
@@ -212,6 +215,9 @@ public class ValidationProblemsView extends ViewPart {
 	@Override
 	public void dispose() {
 		getSite().getPage().removePartListener(partListener);
+		for (final ScenarioInstance instance : notifierInstances) {
+			instance.eAdapters().remove(scenarioInstanceChangedListener);
+		}
 
 		super.dispose();
 	}
@@ -223,6 +229,7 @@ public class ValidationProblemsView extends ViewPart {
 
 	private void hookScenarioInstance(final ScenarioInstance instance) {
 		instance.eAdapters().add(scenarioInstanceChangedListener);
+		notifierInstances.add(instance);
 		if (instance.getValidationStatusCode() != IStatus.OK) {
 			final Map<Class<?>, Object> adapters = instance.getAdapters();
 			if (adapters != null) {
@@ -234,6 +241,8 @@ public class ValidationProblemsView extends ViewPart {
 	private void releaseScenarioInstance(final ScenarioInstance instance) {
 		if (instance != null) {
 			instance.eAdapters().remove(scenarioInstanceChangedListener);
+			notifierInstances.add(instance);
+
 			statusMap.remove(instance);
 		}
 	}
@@ -328,6 +337,12 @@ public class ValidationProblemsView extends ViewPart {
 				// TODO: How to determine content i.e. which scenario instance?
 				gotor.openStatus(status);
 			}
+		}
+	}
+
+	private void refreshViewer() {
+		if (!viewer.getControl().isDisposed()) {
+			viewer.refresh();
 		}
 	}
 }
