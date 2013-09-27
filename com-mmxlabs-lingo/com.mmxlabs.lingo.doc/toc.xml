@@ -7,7 +7,7 @@
 -->
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="ShipLingo Docmentation" topic="html/toc.html">
+<toc label="LiNGO Docmentation" topic="html/toc.html">
    <topic label="Getting Started">
       <anchor id="gettingstarted"/>
    </topic>
