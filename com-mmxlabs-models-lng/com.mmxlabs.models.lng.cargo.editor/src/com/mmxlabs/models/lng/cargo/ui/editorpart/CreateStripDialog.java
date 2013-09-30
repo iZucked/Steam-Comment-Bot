@@ -95,7 +95,7 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 public class CreateStripDialog extends FormDialog {
 
 	public static enum StripType {
-		TYPE_FOB_SALE_SLOT("FOB Sale"), TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_DES_PURCHASE_SLOT("DES Purchase");
+		TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_PURCHASE_SLOT("DES Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_FOB_SALE_SLOT("FOB Sale");
 
 		private final String name;
 
@@ -137,7 +137,7 @@ public class CreateStripDialog extends FormDialog {
 	};
 
 	private enum IntervalType {
-		Days, Weeks, Months
+		days, weeks, months
 	};
 
 	public CreateStripDialog(@NonNull final IShellProvider parentShell, @NonNull final IScenarioEditingLocation originalScenarioEditingLocation, @NonNull final StripType stripType,
@@ -214,7 +214,7 @@ public class CreateStripDialog extends FormDialog {
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
 
-		String title = "Create Strip of ";
+		String title = "Create strip of ";
 		switch (stripType) {
 		case TYPE_DES_PURCHASE_SLOT:
 			referenceClass = CargoPackage.eINSTANCE.getLoadSlot();
@@ -489,7 +489,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 
 		repeatType.setSelection(new StructuredSelection(RepeatType.Periodic));
-		intervalType.setSelection(new StructuredSelection(IntervalType.Days));
+		intervalType.setSelection(new StructuredSelection(IntervalType.days));
 
 		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		// Only valid for slots
@@ -585,13 +585,13 @@ public class CreateStripDialog extends FormDialog {
 				}
 				final IntervalType it = IntervalType.values()[itIdx];
 				switch (it) {
-				case Days:
+				case days:
 					calUnit = Calendar.DAY_OF_YEAR;
 					break;
-				case Months:
+				case months:
 					calUnit = Calendar.MONTH;
 					break;
-				case Weeks:
+				case weeks:
 					calUnit = Calendar.WEEK_OF_YEAR;
 					break;
 				default:

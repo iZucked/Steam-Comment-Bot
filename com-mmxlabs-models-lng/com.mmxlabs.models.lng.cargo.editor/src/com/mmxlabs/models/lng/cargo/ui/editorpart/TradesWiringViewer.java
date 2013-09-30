@@ -1419,10 +1419,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				addActionToMenu(newLoad, menu);
 			}
 			{
-				final Action newLoad = new Action("FOB purchase") {
+				final Action newLoad = new Action("FOB Purchase") {
 					public void run() {
 
-						final CompoundCommand cmd = new CompoundCommand("FOB purchase");
+						final CompoundCommand cmd = new CompoundCommand("FOB Purchase");
 
 						final LoadSlot newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 						newLoad.setDESPurchase(false);
@@ -1434,10 +1434,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				addActionToMenu(newLoad, menu);
 			}
 			{
-				final Action newDESPurchase = new Action("DES purchase") {
+				final Action newDESPurchase = new Action("DES Purchase") {
 					public void run() {
 
-						final CompoundCommand cmd = new CompoundCommand("DES purchase");
+						final CompoundCommand cmd = new CompoundCommand("DES Purchase");
 
 						final LoadSlot newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 						newLoad.setDESPurchase(true);
@@ -1449,10 +1449,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				addActionToMenu(newDESPurchase, menu);
 			}
 			{
-				final Action newDischarge = new Action("DES sale") {
+				final Action newDischarge = new Action("DES Sale") {
 					public void run() {
 
-						final CompoundCommand cmd = new CompoundCommand("DES sale");
+						final CompoundCommand cmd = new CompoundCommand("DES Sale");
 
 						final DischargeSlot newDischarge = cec.createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 						newDischarge.setFOBSale(false);
