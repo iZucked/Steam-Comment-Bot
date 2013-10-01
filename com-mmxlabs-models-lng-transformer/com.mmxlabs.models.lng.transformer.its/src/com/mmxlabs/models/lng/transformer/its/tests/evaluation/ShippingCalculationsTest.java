@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -2325,7 +2326,9 @@ public class ShippingCalculationsTest {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
+		// create an additional cargo
 		msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
+		// and send the vessel back to the origin port at end of itinerary
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
 		msc.vc.setMinHeel(500);
@@ -2371,6 +2374,75 @@ public class ShippingCalculationsTest {
 
 		final Sequence sequence = schedule.getSequences().get(0);
 		checker.check(sequence);
+	}
+	
+	public void testStartHeelRollover() {
+		
+	}
+	
+
+	@Test
+	@Ignore("This doesn't actually test anything yet - and involves a known issue.")
+	public void testEventHeelRollover() {
+		System.err.println("\n\nTest min heel rollover for maintenance event: LNG travel due to expensive BF");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		// create a maintenance event after the cargo
+		Port eventPort = msc.loadPort;
+				
+		msc.createDefaultMaintenanceEvent("Maintenance", eventPort, null);
+
+		// and recalculate the vessel availability
+		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+
+		// force a heel rollover at the maintenance port
+		msc.vc.setMinHeel(500);
+
+		final PricingModel pricingModel = scenario.getPricingModel();
+		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+
+		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+
+		// base fuel is now 10x more expensive, so FBO is economical
+		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		/*
+		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, // start to load
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to load
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to end
+				EndEvent.class };
+
+		SequenceTester checker = getDefaultTester(classes);
+
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 2, 1 });
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 0, 0, 0, 0 });
+		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer[] { 0, 10, 10, 10, 5 });
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 20, 20, 10 });
+
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 2, 2, 0 });
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 });
+		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 });
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 10, 10, 0 });
+
+		// volume allocations: load 10000 at first load port (loading from empty)
+		// at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here
+		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
+		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9430, 9510, -9445 });
+
+		checker.baseFuelPricePerM3 = 100;
+		checker.setupOrdinaryFuelCosts();
+
+		final Sequence sequence = schedule.getSequences().get(0);
+		checker.check(sequence);
+		*/
 	}
 
 	@Test
