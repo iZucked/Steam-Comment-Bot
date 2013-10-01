@@ -2296,6 +2296,62 @@ public class ShippingCalculationsTest {
 
 		checker.check(sequence);
 	}
+	
+	@Test
+	public void testCharterOutRollover() {
+		System.err.println("\n\nTest LNG heel from early charter out event is rolled over.");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		// add a charter out event prior to the first cargo.
+		final Date startLoad = msc.getFirstAppointment().getSecond();
+		final Date charterStartByDate = msc.addHours(startLoad, -25);
+		final Date charterStartAfterDate = msc.addHours(startLoad, -25);
+		int charterOutRate = 24;
+		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", msc.originPort, msc.originPort, charterStartByDate, charterStartAfterDate, charterOutRate);
+
+		// set the charter out required end heel to 5000 (and set some other things)
+		event.getHeelOptions().setVolumeAvailable(5000);
+		event.getHeelOptions().setCvValue(21);
+		event.getHeelOptions().setPricePerMMBTU(1);
+		
+		// recalculate the vessel availability based on the new timetable
+		msc.setDefaultAvailability(msc.originPort, msc.originPort);
+		
+		// we now expect an idle and a vessel event visit before the first journey
+		Class<?>[] expectedClasses = { StartEvent.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
+
+		SequenceTester checker = getDefaultTester(expectedClasses);
+
+		// expected charter out duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+
+		// expected charter out revenue
+		// 24 { revenue per day } * 1 { days }
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
+
+		// new idle event at the start of the itinerary 
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] {0, 0, 2, 0} );
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] {0, 0, 10, 0});
+		
+		// first journey runs on NBO and BF
+		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
+		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);		
+		
+		// expected load volume reduced due to roll over from LNG left at end of charter out
+		// 5010 = 10000 [vessel capacity] - (5000 [leftover heel] - 10 [journey boiloff])
+		checker.setExpectedValue(5010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
+		
+		checker.setupOrdinaryFuelCosts();
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+	}
 
 	// test doesn't work yet
 	public void testStsVoyage() {
