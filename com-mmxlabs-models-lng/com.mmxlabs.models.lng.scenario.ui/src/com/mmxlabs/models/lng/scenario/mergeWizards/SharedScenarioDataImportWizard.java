@@ -62,12 +62,8 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 
 		try {
 			getContainer().run(true, true, job);
-		} catch (final InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (final InvocationTargetException | InterruptedException e) {
+			log.error(e.getMessage(), e);
 		}
 
 		return true;
