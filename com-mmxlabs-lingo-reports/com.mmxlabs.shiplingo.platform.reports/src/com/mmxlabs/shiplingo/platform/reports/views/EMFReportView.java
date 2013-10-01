@@ -260,6 +260,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * Formatter to format a floating point number to a given number of decimal places.
 	 * 
 	 * @author Simon Goodall
+	 * @since 5.1
 	 * 
 	 */
 	public class NumberOfDPFormatter implements IFormatter {
