@@ -104,7 +104,6 @@ import com.mmxlabs.models.lng.transformer.inject.ISlotTimeWindowGenerator;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -173,7 +172,6 @@ public class LNGScenarioTransformer {
 	@Inject(optional = true)
 	private IDESPurchaseSlotBindingsGenerator desPurchaseSlotBindingsGenerator;
 
-	
 	@Inject
 	private ISchedulerBuilder builder;
 
@@ -797,13 +795,6 @@ public class LNGScenarioTransformer {
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
 
-		final Collection<IPort> dischargePorts = new ArrayList<IPort>();
-		for (final Port o : entities.getAllModelObjects(Port.class)) {
-			if (o.getCapabilities().contains(PortCapability.DISCHARGE)) {
-				dischargePorts.add(entities.getOptimiserObject(o, IPort.class));
-			}
-		}
-
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 		final Map<Slot, IPortSlot> transferSlotMap = new HashMap<Slot, IPortSlot>();
 
@@ -873,7 +864,7 @@ public class LNGScenarioTransformer {
 								final Set<IPort> ports = Collections.singleton(load.getPort());
 								builder.bindDischargeSlotsToDESPurchase(load, ports);
 							} else {
-								desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, loadSlot, load, dischargePorts);
+								desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, loadSlot, load);
 							}
 						}
 					}
@@ -970,7 +961,7 @@ public class LNGScenarioTransformer {
 						final Set<IPort> ports = Collections.singleton(load.getPort());
 						builder.bindDischargeSlotsToDESPurchase(load, ports);
 					} else {
-						desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, loadSlot, load, dischargePorts);
+						desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, loadSlot, load);
 					}
 				}
 			}
