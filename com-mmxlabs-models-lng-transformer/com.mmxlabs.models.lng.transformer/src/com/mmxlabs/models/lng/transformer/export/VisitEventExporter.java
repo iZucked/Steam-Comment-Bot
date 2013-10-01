@@ -105,7 +105,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			if (eAllocation == null) {
 				eAllocation = scheduleFactory.createCargoAllocation();
-				for (IPortSlot allocationSlot : allocation.getSlots()) {
+				for (final IPortSlot allocationSlot : allocation.getSlots()) {
 					allocations.put(allocationSlot, eAllocation);
 				}
 				// eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
@@ -128,7 +128,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			} else {
 				int cargoCV = -1;
-				for (IPortSlot sSlot : allocation.getSlots()) {
+				for (final IPortSlot sSlot : allocation.getSlots()) {
 					if (sSlot instanceof ILoadOption) {
 						cargoCV = ((ILoadOption) sSlot).getCargoCVValue();
 					}
@@ -210,10 +210,10 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
 		if (capacityViolationAnnotation != null) {
-			Collection<ICapacityEntry> capacityViolations = capacityViolationAnnotation.getEntries();
-			for (ICapacityEntry violation : capacityViolations) {
+			final Collection<ICapacityEntry> capacityViolations = capacityViolationAnnotation.getEntries();
+			for (final ICapacityEntry violation : capacityViolations) {
 				com.mmxlabs.models.lng.schedule.CapacityViolationType type = null;
-				CapacityViolationType x = violation.getType();
+				final CapacityViolationType x = violation.getType();
 				switch (x) {
 				case FORCED_COOLDOWN:
 					type = com.mmxlabs.models.lng.schedule.CapacityViolationType.FORCED_COOLDOWN;
@@ -238,7 +238,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 					break;
 				}
 
-				long volume = OptimiserUnitConvertor.convertToExternalVolume(violation.getVolume());
+				final long volume = OptimiserUnitConvertor.convertToExternalVolume(violation.getVolume());
 				portVisit.getViolations().put(type, volume);
 			}
 		}
@@ -253,9 +253,27 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			// FOB/DES can only be a two element pairing
 			if (eAllocation.getSlotAllocations().size() == 2) {
 
-				// Two elements - must be load then discharge
-				final SlotAllocation loadAllocation = eAllocation.getSlotAllocations().get(0);
-				final SlotAllocation dischargeAllocation = eAllocation.getSlotAllocations().get(1);
+				// Two elements - must be load and discharge, order undefined
+				SlotAllocation loadAllocation = null;
+				SlotAllocation dischargeAllocation = null;
+
+				for (final SlotAllocation slotAllocation : eAllocation.getSlotAllocations()) {
+					final Slot s = slotAllocation.getSlot();
+					if (s instanceof LoadSlot) {
+						if (loadAllocation != null) {
+							throw new IllegalStateException("Multiple load slots found in LD cargo");
+						}
+						loadAllocation = slotAllocation;
+					} else if (s instanceof DischargeSlot) {
+						if (dischargeAllocation != null) {
+							throw new IllegalStateException("Multiple discharge slots found in LD cargo");
+						}
+						dischargeAllocation = slotAllocation;
+					}
+				}
+
+				assert loadAllocation != null;
+				assert dischargeAllocation != null;
 
 				if (((LoadSlot) loadAllocation.getSlot()).isDESPurchase()) {
 					loadAllocation.getSlotVisit().setPort(dischargeAllocation.getSlotVisit().getPort());
