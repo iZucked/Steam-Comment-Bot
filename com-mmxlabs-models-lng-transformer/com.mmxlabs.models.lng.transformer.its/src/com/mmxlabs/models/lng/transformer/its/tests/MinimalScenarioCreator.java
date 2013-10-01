@@ -6,21 +6,27 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.util.Date;
 
+import javax.management.timer.Timer;
+
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
 public class MinimalScenarioCreator extends DefaultScenarioCreator {
@@ -94,14 +100,14 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	 * @return
 	 */
 	public Cargo createDefaultCargo(final Port loadPort, final Port dischargePort) {
+		final Pair<Port, Date> appointment = getLastAppointment();
 		final Date loadTime;
-		final Slot lastSlot = getLastCargoSlot();
 		
-		if (lastSlot == null) {
+		if (appointment == null) {
 			loadTime = null;
 		}
 		else {
-			loadTime = addHours(lastSlot.getWindowEndWithSlotOrPortTime(), getMarginHours(lastSlot.getPort(), loadPort));
+			loadTime = addHours(appointment.getSecond(), getMarginHours(appointment.getFirst(), loadPort));
 		}
 				
 		return cargoCreator.createDefaultCargo(null, loadPort, dischargePort, loadTime, getMarginHours(loadPort, dischargePort));
@@ -111,38 +117,116 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		return 2 * getTravelTime(loadPort, dischargePort, null, (int) vc.getMaxSpeed());
 	}	
 	
-	public void setDefaultAvailability(Port startPort, Port endPort) {		
-		Slot firstSlot = getFirstCargoSlot();
-		Slot lastSlot = getLastCargoSlot();
+	public void setDefaultAvailability(Port startPort, Port endPort) {
+		Pair<Port, Date> firstAppointment = getFirstAppointment();
+		Pair<Port, Date> lastAppointment = getLastAppointment();
 				
-		final Date firstLoadDate = firstSlot.getWindowStartWithSlotOrPortTime();
-		final Date lastDischargeDate = lastSlot.getWindowEndWithSlotOrPortTime();
+		final Date firstLoadDate = firstAppointment.getSecond();
+		final Date lastDischargeDate = lastAppointment.getSecond();
 		
-		final Date startDate = addHours(firstLoadDate, -getMarginHours(startPort, loadPort));
-		final Date endDate = addHours(lastDischargeDate, getMarginHours(dischargePort, endPort));
+		final Date startDate = addHours(firstLoadDate, -getMarginHours(startPort, firstAppointment.getFirst()));
+		final Date endDate = addHours(lastDischargeDate, getMarginHours(dischargePort, lastAppointment.getFirst()));
 		
 		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
 		this.vesselAvailability = fleetCreator.setAvailability(scenarioFleetModel, vessel, originPort, startDate, originPort, endDate);
 	}
+
+	public VesselEvent createDefaultMaintenanceEvent(final String name, final Port port, Date startDate) {
+		if (startDate == null) {
+			final Pair<Port, Date> last = getLastAppointment();
+			startDate = addHours(last.getSecond(), getMarginHours(last.getFirst(), port));
+		}
+		
+		VesselEvent result = FleetFactory.eINSTANCE.createMaintenanceEvent();
+		result.setName(name);
+		result.setPort(port);
+		
+		result.setStartAfter(startDate);
+		result.setStartBy(startDate);
+
+		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
+		final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
+		
+		scenarioFleetModel.getVesselEvents().add(result);
+		
+		return result;
+	}
+
+	public Pair<Port, Date> getLastAppointment() {
+		Date date = null;
+		Port port = null;
+		
+		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
+		for (Cargo cargo: cargoes) {
+			final EList<Slot> slots = cargo.getSortedSlots();
+			final Slot slot = slots.get(slots.size()-1);
+			final Date slotDate = slot.getWindowEndWithSlotOrPortTime();
+			
+			if (date == null || date.before(slotDate)) {
+				date = slotDate;
+				port = slot.getPort();
+			}
+		}
+		
+		EList<VesselEvent> events = scenario.getPortfolioModel().getScenarioFleetModel().getVesselEvents();
+		for (VesselEvent event: events) {
+			Date eventDate = event.getStartBy();
+			if (eventDate == null) {
+				eventDate = event.getStartAfter();
+			}
+			if (eventDate != null) {
+				eventDate = new Date(eventDate.getTime() + Timer.ONE_DAY * event.getDurationInDays());
 	
-	public Slot getFirstCargoSlot() {
-		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
-		if (cargoes.isEmpty()) {
+				if (date == null || date.before(eventDate)) {
+					date = eventDate;
+					port = event.getPort();
+				}
+			}
+		}
+		
+		if (date == null && port == null) {
 			return null;
 		}
-		final EList<Slot> slots = cargoes.get(0).getSortedSlots();
-		return slots.get(0);
-	}
 		
-	public Slot getLastCargoSlot() {
+		return new Pair<Port, Date>(port, date);
+	}
+	
+	public Pair<Port, Date> getFirstAppointment() {
+		Date date = null;
+		Port port = null;
+		
 		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
-		if (cargoes.isEmpty()) {
+		for (Cargo cargo: cargoes) {
+			final EList<Slot> slots = cargo.getSortedSlots();
+			final Slot slot = slots.get(slots.size()-1);
+			final Date slotDate = slot.getWindowEndWithSlotOrPortTime();
+			
+			if (date == null || date.after(slotDate)) {
+				date = slotDate;
+				port = slot.getPort();
+			}
+		}
+		
+		EList<VesselEvent> events = scenario.getPortfolioModel().getScenarioFleetModel().getVesselEvents();
+		for (VesselEvent event: events) {
+			Date eventDate = event.getStartAfter();
+			if (eventDate == null) {
+				eventDate = event.getStartBy();
+			}
+			if (eventDate != null) {
+				if (date == null || date.after(eventDate)) {
+					date = eventDate;
+					port = event.getPort();
+				}
+			}
+		}
+		
+		if (date == null && port == null) {
 			return null;
 		}
-		final EList<Slot> slots = cargoes.get(cargoes.size() - 1).getSortedSlots();
-		return slots.get(slots.size()-1);
-	}
 		
+		return new Pair<Port, Date>(port, date);
+	}
 	
 	/**
 	 * Sets up a cooldown pricing model including an index

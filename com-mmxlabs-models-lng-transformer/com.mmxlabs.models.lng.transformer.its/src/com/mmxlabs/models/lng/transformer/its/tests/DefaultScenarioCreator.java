@@ -393,7 +393,7 @@ public class DefaultScenarioCreator {
 			}
 			return null;
 		}
-
+		
 		public void assignDefaultCanalData(final VesselClass vc, final Route route) {
 			assignRouteParameters(vc, route);
 			setCanalCost(vc, route, defaultCanalCost, defaultCanalCost);
