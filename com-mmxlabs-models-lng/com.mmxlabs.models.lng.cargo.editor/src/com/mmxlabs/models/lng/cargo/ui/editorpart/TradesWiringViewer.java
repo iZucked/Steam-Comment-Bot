@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,7 +39,6 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -89,6 +86,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
@@ -600,12 +598,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
 		final Action filterAction = new FilterMenuAction("Filter");
-		try {
-			filterAction.setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
-		} catch (final MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
 		toolbar.appendToGroup(VIEW_GROUP, filterAction);
 
 		// add extension points to toolbar
