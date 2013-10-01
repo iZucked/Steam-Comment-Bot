@@ -102,12 +102,14 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public Cargo createDefaultCargo(final Port loadPort, final Port dischargePort) {
 		final Pair<Port, Date> appointment = getLastAppointment();
 		final Date loadTime;
-		
+
 		if (appointment == null) {
 			loadTime = null;
 		}
 		else {
-			loadTime = addHours(appointment.getSecond(), getMarginHours(appointment.getFirst(), loadPort));
+			Date date = appointment.getSecond();
+			Port port = appointment.getFirst();
+			loadTime = addHours(date, getMarginHours(port, loadPort));
 		}
 				
 		return cargoCreator.createDefaultCargo(null, loadPort, dischargePort, loadTime, getMarginHours(loadPort, dischargePort));
@@ -118,14 +120,15 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	}	
 	
 	public void setDefaultAvailability(Port startPort, Port endPort) {
+				
 		Pair<Port, Date> firstAppointment = getFirstAppointment();
 		Pair<Port, Date> lastAppointment = getLastAppointment();
-				
+
 		final Date firstLoadDate = firstAppointment.getSecond();
 		final Date lastDischargeDate = lastAppointment.getSecond();
 		
 		final Date startDate = addHours(firstLoadDate, -getMarginHours(startPort, firstAppointment.getFirst()));
-		final Date endDate = addHours(lastDischargeDate, getMarginHours(dischargePort, lastAppointment.getFirst()));
+		final Date endDate = addHours(lastDischargeDate, getMarginHours(lastAppointment.getFirst(), endPort));
 		
 		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
 		this.vesselAvailability = fleetCreator.setAvailability(scenarioFleetModel, vessel, originPort, startDate, originPort, endDate);
@@ -152,6 +155,26 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		return result;
 	}
 
+	/*
+	public Slot getFirstCargoSlot() {
+		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
+		if (cargoes.isEmpty()) {
+			return null;
+		}
+		final EList<Slot> slots = cargoes.get(0).getSortedSlots();
+		return slots.get(0);
+	}
+		
+	public Slot getLastCargoSlot() {
+		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
+		if (cargoes.isEmpty()) {
+			return null;
+		}
+		final EList<Slot> slots = cargoes.get(cargoes.size() - 1).getSortedSlots();
+		return slots.get(slots.size()-1);
+	}
+	*/	
+	
 	public Pair<Port, Date> getLastAppointment() {
 		Date date = null;
 		Port port = null;
@@ -198,8 +221,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
 		for (Cargo cargo: cargoes) {
 			final EList<Slot> slots = cargo.getSortedSlots();
-			final Slot slot = slots.get(slots.size()-1);
-			final Date slotDate = slot.getWindowEndWithSlotOrPortTime();
+			final Slot slot = slots.get(0);
+			final Date slotDate = slot.getWindowStartWithSlotOrPortTime();
 			
 			if (date == null || date.after(slotDate)) {
 				date = slotDate;
