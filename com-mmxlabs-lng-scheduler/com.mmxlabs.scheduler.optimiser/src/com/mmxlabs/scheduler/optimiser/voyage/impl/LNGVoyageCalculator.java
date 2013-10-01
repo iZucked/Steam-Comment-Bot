@@ -716,7 +716,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.DISCHARGE);
 					} else {
 						// Add heel to the voyage consumed quantity for capacity constraint purposes. However it is not tracked otherwise
-						// TODO: Roll over into new voyage plan
+						
+						// following line was in default branch but not in heel_tracking - why? 
+						// lngCommitmentInM3 += remainingHeelInM3;
 						voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.END);
 					}
 				}
@@ -733,11 +735,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		} else {
 			// was not a Cargo sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
-			if (lngCommitmentInM3 > availableHeelinM3) {
+			long remainingHeelInM3 = availableHeelinM3 - lngCommitmentInM3;
+
+			// if our fuel requirements exceed our onboard fuel 
+			if (remainingHeelInM3 < 0) {
 				// TODO: FIXME: Magic constant index!
 				final PortDetails portDetails = (PortDetails) sequence[0];
-				portDetails.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngCommitmentInM3 - availableHeelinM3);
+				portDetails.setCapacityViolation(CapacityViolationType.MAX_HEEL, -remainingHeelInM3);
 				++violationsCount;
+			}
+			else if (remainingHeelInM3 > 0) {
+				voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.END);
 			}
 
 			// Look up the heel options CV value if present
