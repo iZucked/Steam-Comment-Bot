@@ -9,6 +9,8 @@ import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
 
@@ -24,9 +26,9 @@ public class TransformerActivatorModule extends PeaberryActivationModule {
 	@Override
 	protected void configure() {
 		install(new RestrictedElementsModule());
+		install(new ShippingTypeRequirementModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
-		bindService(RestrictedElementsTransformerFactory.class).export();
 		
 		bindService(EntityTransformerExtensionFactory.class).export();
 		bindService(TradingExporterExtensionFactory.class).export();
