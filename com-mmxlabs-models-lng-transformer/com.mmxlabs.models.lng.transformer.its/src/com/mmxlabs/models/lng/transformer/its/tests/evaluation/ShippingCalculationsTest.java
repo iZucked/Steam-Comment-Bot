@@ -861,14 +861,14 @@ public class ShippingCalculationsTest {
 
 	@Test
 	public void testPlentyStartHeel() {
-		System.err.println("\n\nGenerous Start Heel Means NBO on First Voyage");
+		System.err.println("\n\nGenerous Start Heel Means NBO on First Voyage and LNG Rollover");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
 
 		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setVolumeAvailable(1000);
+		vesselAvailability.getStartHeel().setVolumeAvailable(5000);
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 
 		final SequenceTester checker = getDefaultTester();
@@ -879,6 +879,11 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(0, Expectations.FBO_USAGE, Journey.class, 0);
 		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
 
+		// change from default scenario
+		// first load should be only 5010 
+		// 5010 = 10000 [vessel capacity] - (5000 [start heel] - 10 [journey boiloff])
+		checker.setExpectedValue(5010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
+		
 		// cost of first journey should be changed accordingly
 		// 10m3 * 21 (CV) * 1 (price) = 210
 		// 5mt * 10 (price) = 50
@@ -1030,6 +1035,10 @@ public class ShippingCalculationsTest {
 
 		// cost of first journey should be changed accordingly
 		checker.setExpectedValue(260, Expectations.FUEL_COSTS, Journey.class, 0);
+
+		// first load amount is reduced because of leftover fuel from the start heel
+		// 9010 = 10000 [ vessel capacity ] - (1000 [ start heel ] - 10 [boiloff] )
+		checker.setExpectedValue(9010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);				
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -2375,11 +2384,6 @@ public class ShippingCalculationsTest {
 		final Sequence sequence = schedule.getSequences().get(0);
 		checker.check(sequence);
 	}
-	
-	public void testStartHeelRollover() {
-		
-	}
-	
 
 	@Test
 	@Ignore("This doesn't actually test anything yet - and involves a known issue.")
