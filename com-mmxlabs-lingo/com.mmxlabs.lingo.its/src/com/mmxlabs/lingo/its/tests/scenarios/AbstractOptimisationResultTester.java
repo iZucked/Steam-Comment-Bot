@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
@@ -39,6 +40,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
@@ -128,7 +130,12 @@ public class AbstractOptimisationResultTester {
 
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
 		final LNGScenarioModel copy = duplicate(originalScenario);
-
+		if (false) {
+			final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
+			final String context = migrationRegistry.getDefaultMigrationContext();
+			final int version = migrationRegistry.getLastReleaseVersion(context);
+			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
+		}
 		// Create two scenario runners.
 		// TODO are two necessary?
 		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
