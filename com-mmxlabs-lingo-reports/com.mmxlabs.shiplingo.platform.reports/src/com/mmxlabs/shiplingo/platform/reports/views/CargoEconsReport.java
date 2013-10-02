@@ -255,7 +255,7 @@ public class CargoEconsReport extends ViewPart {
 		 */
 		String getText(FieldType fieldType);
 
-		public abstract boolean isSpot();
+		public abstract boolean isFleet();
 	}
 
 	/**
@@ -421,9 +421,9 @@ public class CargoEconsReport extends ViewPart {
 		}
 
 		@Override
-		public boolean isSpot() {
+		public boolean isFleet() {
 
-			return cargoAllocation.getSequence().isSpotVessel();
+			return !(cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel());
 		}
 
 		@Override
@@ -551,8 +551,8 @@ public class CargoEconsReport extends ViewPart {
 		}
 
 		@Override
-		public boolean isSpot() {
-			return true;
+		public boolean isFleet() {
+			return false;
 		}
 
 		@Override
@@ -648,7 +648,7 @@ public class CargoEconsReport extends ViewPart {
 		public Color getForeground(final Object element) {
 			if (element instanceof FieldType) {
 				final FieldType ft = ((FieldType) element);
-				if (ft == FieldType.SHIPPING_BOIL_OFF_COST_TOTAL || (ft == FieldType.SHIPPING_CHARTER_COST_TOTAL && !fieldTypeMapper.isSpot())) {
+				if (ft == FieldType.SHIPPING_BOIL_OFF_COST_TOTAL || (ft == FieldType.SHIPPING_CHARTER_COST_TOTAL && fieldTypeMapper.isFleet())) {
 					return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 				}
 			}
@@ -886,7 +886,7 @@ public class CargoEconsReport extends ViewPart {
 		}
 
 		// Add on chartering costs
-		if (cargoAllocation.getSequence().isSpotVessel()) {
+		if (cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel()) {
 			shippingCost += charterCost;
 		}
 		return shippingCost;

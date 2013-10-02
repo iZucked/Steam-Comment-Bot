@@ -103,7 +103,7 @@ public class PortRotationReportView extends EMFReportView {
 			}
 
 		});
-		addColumn("Speed", objectFormatter, sp.getJourney_Speed());
+		addColumn("Speed", new NumberOfDPFormatter(1), sp.getJourney_Speed());
 		addColumn("Distance", integerFormatter, sp.getJourney_Distance());
 		addColumn("From Port", objectFormatter, sp.getEvent_Port(), name);
 		addColumn("To Port", objectFormatter, sp.getJourney_Destination(), name);

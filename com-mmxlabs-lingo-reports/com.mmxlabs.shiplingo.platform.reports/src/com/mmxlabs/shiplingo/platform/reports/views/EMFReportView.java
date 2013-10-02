@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
@@ -33,6 +34,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -40,6 +42,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
@@ -47,11 +50,13 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.wizards.preferences.PreferencesContentProvider;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import com.google.common.base.Preconditions;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -62,7 +67,7 @@ import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
@@ -175,7 +180,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 	}
 
-	protected interface IFormatter {
+	/**
+	 * @since 5.0
+	 */
+	public interface IFormatter {
 		public String format(final Object object);
 
 		public Comparable getComparable(final Object object);
@@ -238,6 +246,56 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			final Integer x = getIntValue(object);
 			if (x == null) {
 				return -Integer.MAX_VALUE;
+			}
+			return x;
+		}
+
+		@Override
+		public Object getFilterable(final Object object) {
+			return getComparable(object);
+		}
+	}
+
+	/**
+	 * Formatter to format a floating point number to a given number of decimal places.
+	 * 
+	 * @author Simon Goodall
+	 * @since 5.1
+	 * 
+	 */
+	public class NumberOfDPFormatter implements IFormatter {
+
+		private final int dp;
+
+		public NumberOfDPFormatter(int dp) {
+			Preconditions.checkArgument(dp >= 0);
+			this.dp = dp;
+		}
+
+		public Double getDoubleValue(final Object object) {
+			if (object == null) {
+				return null;
+			}
+			return ((Number) object).doubleValue();
+		}
+
+		@Override
+		public String format(final Object object) {
+			if (object == null) {
+				return "";
+			}
+			final Double x = getDoubleValue(object);
+			if (x == null) {
+				return "";
+			}
+			return String.format("%,." + dp + "f", x);
+		}
+
+		@Override
+		public Comparable getComparable(final Object object) {
+			final Double x = getDoubleValue(object);
+			if (x == null) {
+				return -Double.MAX_VALUE;
 			}
 			return x;
 		}
@@ -475,17 +533,17 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				return null;
 			}
 
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				return null;
 			}
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				return false;
 			}
 
@@ -573,9 +631,26 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			@Override
 			protected List<?> getSelectionFromWidget() {
 
-				List<?> list = super.getSelectionFromWidget();
+				final List<?> list = super.getSelectionFromWidget();
 
 				return adaptSelectionFromWidget(list);
+			}
+
+			/**
+			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
+			 */
+			@Override
+			protected TreePath getTreePathFromItem(Item item) {
+				final LinkedList<Object> segments = new LinkedList<>();
+				while (item != null) {
+					final Object segment = item.getData();
+					Assert.isNotNull(segment);
+					segments.addFirst(segment);
+					item = getParentItem(item);
+				}
+				final List<?> l = adaptSelectionFromWidget(segments);
+
+				return new TreePath(l.toArray());
 			}
 		};
 
@@ -676,7 +751,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackGridTreeColumnsAction(viewer);
+		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
@@ -828,7 +903,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * 
 	 * @since 4.0
 	 */
-	protected List<?> adaptSelectionFromWidget(List<?> selection) {
+	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return selection;
 	}
 }
