@@ -22,8 +22,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -94,6 +96,8 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 			}
 		});
 		getToolBarManager().update(true);
+		
+		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
 	class BaseFuelEditorAction extends AbstractMenuAction {

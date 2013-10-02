@@ -20,8 +20,7 @@ import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class FOBSalesSpotMarketView extends ScenarioTableViewerView<SpotMarketGroupPane> {
-	public static final String ID = "com.mmxlabs.models.lng.pricing.editor.FOBSalesSpotMarketView";
-
+	public static final String ID = "com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView";
 	@Override
 	protected SpotMarketGroupPane createViewerPane() {
 		return new SpotMarketGroupPane(getSite().getPage(), this, this, getViewSite().getActionBars(), SpotType.FOB_SALE);

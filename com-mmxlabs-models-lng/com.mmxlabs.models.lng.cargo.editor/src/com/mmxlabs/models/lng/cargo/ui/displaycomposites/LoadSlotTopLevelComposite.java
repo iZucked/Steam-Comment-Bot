@@ -49,6 +49,8 @@ public class LoadSlotTopLevelComposite extends DefaultTopLevelComposite {
 
 			if (loadSlot.getTransferFrom() != null) {
 				groupName = "STS: Load";
+			} else if (loadSlot.isDESPurchase()) {
+				groupName = "DES Purchase";
 			} else {
 				groupName = "Load";
 			}

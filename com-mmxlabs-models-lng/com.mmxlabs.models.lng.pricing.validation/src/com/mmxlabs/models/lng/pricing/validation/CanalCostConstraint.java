@@ -115,7 +115,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 				return dcsd;
 			} else {
 				if (vesselClassCost.getLadenCost() == 0 || vesselClassCost.getBallastCost() == 0) {
-					final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClassCost.getVesselClass().getName(), vesselClassCost.getRoute()
+					final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClassCost.getVesselClass().getName(), vesselClassCost.getRoute() == null ? "unknown" : vesselClassCost.getRoute()
 							.getName());
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 

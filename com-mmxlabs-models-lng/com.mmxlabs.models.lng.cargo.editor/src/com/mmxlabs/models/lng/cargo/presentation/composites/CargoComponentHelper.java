@@ -6,12 +6,10 @@ package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.notify.Notification;
@@ -21,18 +19,14 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
 
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.editor.editors.CargoTypeInlineEditor;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -41,8 +35,6 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -80,7 +72,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);
 	}
 
 	/**
@@ -94,7 +86,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 			helper.addEditorsToComposite(detailComposite, topClass);
 
 		// This line is not auto-generated
-//		add_cargoTypeEditor(detailComposite, topClass);
+		// add_cargoTypeEditor(detailComposite, topClass);
 		add_loadSlotEditor(detailComposite, topClass);
 		add_dischargeSlotEditor(detailComposite, topClass);
 		add_allowRewiringEditor(detailComposite, topClass);
@@ -179,10 +171,39 @@ public class CargoComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the slots feature on Cargo
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_slotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__SLOTS));
+	}
+
+	@Override
+	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
+		final Set<EObject> external = new LinkedHashSet<EObject>(super.getExternalEditingRange(root, value));
+
+		if (value instanceof Cargo) {
+			final Cargo cargo = (Cargo) value;
+
+			final Set<Slot> slots = new LinkedHashSet<Slot>();
+			for (final Slot slot : cargo.getSortedSlots()) {
+				slots.add(slot);
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					if (loadSlot.getTransferFrom() != null) {
+						slots.add(loadSlot.getTransferFrom());
+					}
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					if (dischargeSlot.getTransferTo() != null) {
+						slots.add(dischargeSlot.getTransferTo());
+					}
+				}
+				external.addAll(super.getExternalEditingRange(root, slot));
+			}
+			external.addAll(slots);
+		}
+
+		return new ArrayList<EObject>(external);
 	}
 }

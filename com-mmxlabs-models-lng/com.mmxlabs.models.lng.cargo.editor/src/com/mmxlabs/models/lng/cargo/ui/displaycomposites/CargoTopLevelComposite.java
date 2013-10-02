@@ -53,24 +53,24 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	 * {@link Composite} to contain the sub editors
 	 */
 	private Composite middle;
+
 	/**
 	 * {@link IDisplayComposite} to contain elements for the bottom of the editor
 	 * 
 	 * @param toolkit
 	 */
-//	protected IDisplayComposite bottomLevel = null;
+	// protected IDisplayComposite bottomLevel = null;
 
 	public CargoTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, FormToolkit toolkit) {
 		super(parent, style, location, toolkit);
-		setLayoutProvider(new DefaultDisplayCompositeLayoutProvider(){
+		setLayoutProvider(new DefaultDisplayCompositeLayoutProvider() {
 			// used for children in "middle" composite
 			@Override
-			public Object createTopLayoutData(MMXRootObject root,
-					EObject value, EObject detail) {
+			public Object createTopLayoutData(MMXRootObject root, EObject value, EObject detail) {
 				return new GridData(GridData.FILL_BOTH);
 			}
 		});
-		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
+		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 	}
 
 	@Override
@@ -89,11 +89,11 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		g.setText(groupName);
 		g.setLayout(new FillLayout());
 		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
+		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		// Create the directly rather than go through the registry. True indicates this is the top section. The bottom will be created later on
 		topLevel = new CargoDetailComposite(g, SWT.NONE, true, toolkit);
-		
+
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
@@ -104,21 +104,21 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		// We know there are n slots, so n columns
 		middle.setLayout(new GridLayout(childObjects.size(), true));
 		middle.setLayoutData(new GridData(GridData.FILL_BOTH));
-		middle.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
+		middle.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		// Additional Group for the bottom section
-//		final Group g2 = new Group(this, SWT.NONE);
-//		toolkit.adapt(g2);
+		// final Group g2 = new Group(this, SWT.NONE);
+		// toolkit.adapt(g2);
 		// g2.setText(EditorUtils.unmangle(eClass.getName()));
-//		g2.setLayout(new FillLayout());
-//		g2.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		// g2.setLayout(new FillLayout());
+		// g2.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		// Create the directly rather than go through the registry. True indicates this is the bottom section.
-//		bottomLevel = new CargoDetailComposite(g2, SWT.NONE, false);
-//		bottomLevel.setCommandHandler(commandHandler);
-//		bottomLevel.setEditorWrapper(editorWrapper);
+		// bottomLevel = new CargoDetailComposite(g2, SWT.NONE, false);
+		// bottomLevel.setCommandHandler(commandHandler);
+		// bottomLevel.setEditorWrapper(editorWrapper);
 
 		topLevel.display(location, root, object, range, dbc);
-//		bottomLevel.display(location, root, object, range);
+		// bottomLevel.display(location, root, object, range);
 
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
@@ -138,17 +138,17 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
-//		bottomLevel.displayValidationStatus(status);
+		// bottomLevel.displayValidationStatus(status);
 		super.displayValidationStatus(status);
 	}
 
-//	@Override
-//	public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
-//		if (bottomLevel != null) {
-//			bottomLevel.setEditorWrapper(wrapper);
-//		}
-//		super.setEditorWrapper(wrapper);
-//	}
+	// @Override
+	// public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
+	// if (bottomLevel != null) {
+	// bottomLevel.setEditorWrapper(wrapper);
+	// }
+	// super.setEditorWrapper(wrapper);
+	// }
 
 	@Override
 	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
@@ -159,6 +159,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 					final LoadSlot loadSlot = (LoadSlot) value;
 					if (loadSlot.getTransferFrom() != null) {
 						g2.setText("Load: STS");
+					} else if (loadSlot.isDESPurchase()) {
+						g2.setText("DES Purchase");
 					} else {
 						g2.setText("Load");
 					}
@@ -166,6 +168,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 					final DischargeSlot dischargeSlot = (DischargeSlot) value;
 					if (dischargeSlot.getTransferTo() != null) {
 						g2.setText("Discharge: STS");
+					} else if (dischargeSlot.isFOBSale()) {
+						g2.setText("FOB Sale");
 					} else {
 						g2.setText("Discharge");
 
@@ -179,7 +183,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 			}
 			g2.setLayout(new FillLayout());
 			g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
-			g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));		
+			g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 			toolkit.adapt(g2);
 
 			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass())

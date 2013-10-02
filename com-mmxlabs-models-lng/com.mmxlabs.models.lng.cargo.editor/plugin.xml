@@ -226,6 +226,16 @@
           </EClassExtends>
        </OwnerAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.ArriveColdInlineEditorFactory"
+          featureNameEquals="arriveCold"
+          id="com.mmxlabs.models.lng.cargo.editor.editors.ArriveColdInlineEditorFactory">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
