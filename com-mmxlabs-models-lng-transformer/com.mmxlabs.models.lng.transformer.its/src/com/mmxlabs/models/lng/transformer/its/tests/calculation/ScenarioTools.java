@@ -84,6 +84,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.its.internal.Activator;
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
@@ -700,7 +701,8 @@ public class ScenarioTools {
 		// Code to dump out the scenario to disk
 		if (false) {
 			try {
-				storeToFile(scenario, new File("c:/temp/test.lingo"));
+				// TODO: Specify correct version fields
+				storeToFile(scenario, new File("c:/temp/test.lingo"), "migrationContext", 0);
 			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -716,7 +718,8 @@ public class ScenarioTools {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		return LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, entities, startSolution, 0);// Solution(ed, scenario, schedule, scenario.getSubModel(InputModel.class),
+		return LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, entities, startSolution, 0);// Solution(ed, scenario, schedule,
+																																							// scenario.getSubModel(InputModel.class),
 	}
 
 	/**
@@ -909,12 +912,14 @@ public class ScenarioTools {
 		}
 	}
 
-	public static void storeToFile(final MMXRootObject instance, final File file) throws IOException {
+	public static void storeToFile(final MMXRootObject instance, final File file, String versionContext, int scenarioVersion) throws IOException {
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
 
 		manifest.setScenarioType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
+		manifest.setScenarioVersion(scenarioVersion);
+		manifest.setVersionContext(versionContext);
 		// manifest.setUUID(instance.getUuid());
 		final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/MANIFEST.xmi");
 		final Resource manifestResource = resourceSet.createResource(manifestURI);
@@ -930,10 +935,10 @@ public class ScenarioTools {
 		r2.save(null);
 		manifestResource.save(null);
 	}
-	
+
 	public static BaseFuelCost createBaseFuelCost(BaseFuel baseFuel, double price) {
 		BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
-		
+
 		final BaseFuelIndex bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
 		bfi.setName(baseFuel.getName());
 		final DataIndex<Double> indexData = PricingFactory.eINSTANCE.createDataIndex();
@@ -943,7 +948,7 @@ public class ScenarioTools {
 		point.setDate(new Date());
 		indexData.getPoints().add(point);
 		bfc.setIndex(bfi);
-		
+
 		bfc.setFuel(baseFuel);
 		return bfc;
 	}
