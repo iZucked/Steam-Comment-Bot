@@ -936,10 +936,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 					if (structuredSelection.isEmpty() == false) {
 
-						boolean mixedContent = false;
 						final List<EObject> editorTargets = new ArrayList<EObject>();
 						final Iterator<?> itr = structuredSelection.iterator();
-						EClass firstType = null;
 						while (itr.hasNext()) {
 							final Object obj = itr.next();
 							EObject target = null;
@@ -956,13 +954,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							if (target != null) {
 								editorTargets.add(target);
 							}
-							if (editorTargets.size() == 1) {
-								firstType = target.eClass();
-							} else {
-								if (firstType != target.eClass()) {
-									mixedContent = true;
-								}
-							}
 						}
 						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
 							final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
@@ -970,13 +961,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
 								if (editorTargets.size() > 1) {
-									if (!mixedContent) {
-										final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
-												.getDefaultCommandHandler());
-										mdd.open(scenarioEditingLocation, editorTargets);
-									} else {
-										// Currently unable to edit mixed content!
-									}
+									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
+											.getDefaultCommandHandler());
+									mdd.open(scenarioEditingLocation, editorTargets);
 								} else {
 									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX) {
 										@Override
