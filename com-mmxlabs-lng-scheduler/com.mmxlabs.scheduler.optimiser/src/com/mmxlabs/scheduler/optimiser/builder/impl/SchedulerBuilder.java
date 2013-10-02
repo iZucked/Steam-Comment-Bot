@@ -1514,6 +1514,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final HashSet<IPortSlot> unrestrictedSlots = new HashSet<IPortSlot>();
 		unrestrictedSlots.addAll(loadSlots);
 		unrestrictedSlots.addAll(dischargeSlots);
+		// Note this might not be the correct behaviour for event slots - although typically we expect them to be part of the restrictedSlots array.
 		unrestrictedSlots.addAll(vesselEvents);
 		unrestrictedSlots.removeAll(unshippedElements);
 		unrestrictedSlots.removeAll(restrictedSlots);
