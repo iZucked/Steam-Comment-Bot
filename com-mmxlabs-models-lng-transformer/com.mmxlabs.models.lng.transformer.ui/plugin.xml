@@ -8,6 +8,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="ParameterMode" name="ParameterMode" schema="schema/ParameterMode.exsd"/>
+   <extension-point id="ParameterModeExtender" name="ParameterModeExtender" schema="schema/ParameterModeExtender.exsd"/>
 	<extension
             point="org.eclipse.ui.handlers">
          <handler

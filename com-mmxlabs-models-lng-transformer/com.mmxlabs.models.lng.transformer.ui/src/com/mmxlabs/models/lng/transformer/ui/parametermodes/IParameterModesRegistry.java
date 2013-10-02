@@ -8,10 +8,16 @@ import java.util.Collection;
 
 /**
  * @since 5.0
+ * @noimplement This interface is not intended to be implemented by clients.
  */
 public interface IParameterModesRegistry {
 
 	IParameterModeCustomiser getCustomiser(String name);
 
 	Collection<String> getParameterModes();
+
+	/**
+	 * @since 6.2
+	 */
+	Collection<IParameterModeExtender> getExtenders();
 }
