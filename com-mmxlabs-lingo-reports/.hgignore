@@ -16,8 +16,6 @@ syntax: regexp
 syntax: regexp
 ^.*/target$
 
-syntax: regexp
-^.*/\.settings$
 
 syntax: regexp
 ^target-definition/\.settings$
@@ -32,12 +30,8 @@ syntax: regexp
 ^com\.mmxlabs\.rcp\.common\.tests/screenshots$
 syntax: regexp
 ^com\.mmxlabs\.shiplingo\.platform\.doc/\.classpath$
-syntax: regexp
-^\.settings$
 
 syntax: regexp
 ^com\.mmxlabs\.shiplingo\.platform\.doc/index$
 syntax: regexp
 ^com\.mmxlabs\.shiplingo\.platform\.doc/workspace$
-syntax: regexp
-^\.settings$
