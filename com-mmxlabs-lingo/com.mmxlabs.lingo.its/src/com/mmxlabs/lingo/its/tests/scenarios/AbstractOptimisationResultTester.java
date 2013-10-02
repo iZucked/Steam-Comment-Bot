@@ -134,7 +134,6 @@ public class AbstractOptimisationResultTester {
 		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
 		originalScenarioRunner.init();
 		final EList<Fitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitnesses();
-		ScenarioTools.storeToFile(originalScenario, new File("c:/temp/test2.scenario"));
 
 		if (!storeFitnessMap) {
 
