@@ -8,8 +8,4 @@ syntax: regexp
 syntax: regexp
 ^.*/target$
 
-syntax: regexp
-^.*/\.settings$
-
 .project
-.settings/
