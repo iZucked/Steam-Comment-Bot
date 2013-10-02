@@ -9,8 +9,6 @@ syntax: regexp
 .*~$
 
 syntax: regexp
-^\.settings$
-syntax: regexp
 ^target-definition/\.settings$
 syntax: regexp
 ^target-definition/\.project$
