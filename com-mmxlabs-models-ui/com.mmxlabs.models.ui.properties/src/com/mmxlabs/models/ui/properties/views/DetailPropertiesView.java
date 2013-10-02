@@ -26,7 +26,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
-public class DetailPropertiesView extends ViewPart {
+public abstract class DetailPropertiesView extends ViewPart {
 
 	private GridTreeViewer viewer;
 	private ISelectionListener selectionListener;
