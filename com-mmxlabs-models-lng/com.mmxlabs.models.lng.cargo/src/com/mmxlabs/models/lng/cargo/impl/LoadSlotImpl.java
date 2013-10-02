@@ -495,7 +495,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__CARGO_CV) {
 			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__CV_VALUE, (Double) 24.0);
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD) {
-			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__ALLOW_COOLDOWN, (Boolean) true);
+			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__ALLOW_COOLDOWN, Boolean.TRUE);
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

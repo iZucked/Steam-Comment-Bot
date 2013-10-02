@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,7 +39,6 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -89,6 +86,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
@@ -197,7 +195,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final Image lockedImage;
 
 	private IStatusChangedListener statusChangedListener;
-	
+
 	private final TradesFilter tradesFilter = new TradesFilter();
 
 	private Action resetSortOrder;
@@ -326,17 +324,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 					@Override
-					public Object[] getChildren(Object parentElement) {
+					public Object[] getChildren(final Object parentElement) {
 						return null;
 					}
 
 					@Override
-					public Object getParent(Object element) {
+					public Object getParent(final Object element) {
 						return null;
 					}
 
 					@Override
-					public boolean hasChildren(Object element) {
+					public boolean hasChildren(final Object element) {
 						return false;
 					}
 
@@ -364,7 +362,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						}
 					}
 				});
-				
+
 				addFilter(tradesFilter);
 			}
 
@@ -590,22 +588,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		toolbar.appendToGroup(VIEW_GROUP, new PackGridTreeColumnsAction(scenarioViewer));
 
 		/*
-		final ActionContributionItem filter = filterField.getContribution();
-
-		toolbar.appendToGroup(VIEW_GROUP, filter);
-		*/
+		 * final ActionContributionItem filter = filterField.getContribution();
+		 * 
+		 * toolbar.appendToGroup(VIEW_GROUP, filter);
+		 */
 
 		final Action addAction = new AddAction("Add");
 		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
 		final Action filterAction = new FilterMenuAction("Filter");
-		try {
-			filterAction.setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
 		toolbar.appendToGroup(VIEW_GROUP, filterAction);
 
 		// add extension points to toolbar
@@ -943,10 +936,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 					if (structuredSelection.isEmpty() == false) {
 
-						boolean mixedContent = false;
 						final List<EObject> editorTargets = new ArrayList<EObject>();
 						final Iterator<?> itr = structuredSelection.iterator();
-						EClass firstType = null;
 						while (itr.hasNext()) {
 							final Object obj = itr.next();
 							EObject target = null;
@@ -963,13 +954,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							if (target != null) {
 								editorTargets.add(target);
 							}
-							if (editorTargets.size() == 1) {
-								firstType = target.eClass();
-							} else {
-								if (firstType != target.eClass()) {
-									mixedContent = true;
-								}
-							}
 						}
 						if (!editorTargets.isEmpty() && scenarioViewer.isLocked() == false) {
 							final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
@@ -977,13 +961,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
 								if (editorTargets.size() > 1) {
-									if (!mixedContent) {
-										final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
-												.getDefaultCommandHandler());
-										mdd.open(scenarioEditingLocation, editorTargets);
-									} else {
-										// Currently unable to edit mixed content!
-									}
+									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
+											.getDefaultCommandHandler());
+									mdd.open(scenarioEditingLocation, editorTargets);
 								} else {
 									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX) {
 										@Override
@@ -1056,6 +1036,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					cargoesToKeep.add(c);
 					slotsToKeep.add(loadSide.loadSlot);
 
+					// Kept cargoes should not force fixed wiring after a change
+					setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
+
 					setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSide.dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
 
 					cec.appendFOBDESCommands(setCommands, deleteCommands, scenarioEditingLocation.getEditingDomain(), assignmentModel, c, loadSide.loadSlot, dischargeSide.getDischargeSlot());
@@ -1079,6 +1062,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 									}
 								}
 								cargoesToRemove.add(dischargeCargo);
+							} else {
+								// Kept cargoes should not force fixed wiring after a change
+								setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeCargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
 							}
 						}
 					}
@@ -1178,11 +1164,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		super.setLocked(locked);
 		wiringDiagram.setLocked(locked);
 	}
-	
+
 	private abstract class DefaultMenuCreatorAction extends Action implements IMenuCreator {
 		private Menu lastMenu;
 
-		public DefaultMenuCreatorAction(String label) {
+		public DefaultMenuCreatorAction(final String label) {
 			super(label, IAction.AS_DROP_DOWN_MENU);
 		}
 
@@ -1210,9 +1196,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			return lastMenu;
 		}
-		
+
 		abstract protected void populate(Menu menu);
-		
+
 		@Override
 		public Menu getMenu(final Menu parent) {
 			if (lastMenu != null) {
@@ -1224,61 +1210,61 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			return lastMenu;
 		}
-		
+
 		protected void addActionToMenu(final Action a, final Menu m) {
 			final ActionContributionItem aci = new ActionContributionItem(a);
 			aci.fill(m, -1);
 		}
 
 	}
-	
+
 	private class TradesFilter extends ViewerFilter {
 		final private Map<EMFPath, EObject> filterValues = new HashMap<EMFPath, EObject>();
-		
-		public void setFilterValue(EMFPath path, EObject value) {
+
+		public void setFilterValue(final EMFPath path, final EObject value) {
 			// adding a particular filter value resets all others
-			filterValues.clear();			
+			filterValues.clear();
 			if (value != null) {
 				filterValues.put(path, value);
-			}
-			else {
+			} else {
 				filterValues.remove(path);
 			}
 		}
-		
-		public EObject getFilterValue(EMFPath path) {
+
+		public EObject getFilterValue(final EMFPath path) {
 			return filterValues.get(path);
 		}
-		
+
 		@Override
-		public boolean select(Viewer viewer, Object parentElement,
-				Object element) {
+		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 			// TODO Auto-generated method stub
 			if (element instanceof EObject) {
-				EObject object = (EObject) element;
-				
-				for (Entry<EMFPath, EObject> entry: filterValues.entrySet()) {
-					Object value = entry.getKey().get(object);
+				final EObject object = (EObject) element;
+
+				for (final Entry<EMFPath, EObject> entry : filterValues.entrySet()) {
+					final Object value = entry.getKey().get(object);
 					if (value != entry.getValue()) {
 						return false;
 					}
 				}
 			}
-			
+
 			return true;
 		}
-		
+
 		public void clear() {
 			filterValues.clear();
 		}
 	}
-	
+
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 		/**
 		 * A holder for a menu list of filter actions on different fields for the trades wiring table.
-		 * @param label The label to show in the UI for this menu.
+		 * 
+		 * @param label
+		 *            The label to show in the UI for this menu.
 		 */
-		public FilterMenuAction(String label) {
+		public FilterMenuAction(final String label) {
 			super(label);
 		}
 
@@ -1286,43 +1272,47 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * Add the filterable fields to the menu for this item.
 		 */
 		@Override
-		protected void populate(Menu menu) {
-			LNGScenarioModel scenario = ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
-			CommercialModel commercialModel = scenario.getCommercialModel();
-			FleetModel fleetModel = scenario.getFleetModel();
-			
-			EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
-			EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
-			EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.ASSIGNMENT, AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
-			
-			Action clearAction = new Action("Clear Filter") {
+		protected void populate(final Menu menu) {
+			final LNGScenarioModel scenario = ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
+			final CommercialModel commercialModel = scenario.getCommercialModel();
+			final FleetModel fleetModel = scenario.getFleetModel();
+
+			final EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
+			final EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
+			final EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.ASSIGNMENT, AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
+
+			final Action clearAction = new Action("Clear Filter") {
 				@Override
 				public void run() {
 					tradesFilter.clear();
 					scenarioViewer.refresh(false);
 				}
 			};
-			
+
 			addActionToMenu(clearAction, menu);
 			addActionToMenu(new FilterAction("Purchase Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, purchaseContractPath), menu);
 			addActionToMenu(new FilterAction("Sales Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, salesContractPath), menu);
 			addActionToMenu(new FilterAction("Vessels", fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, vesselPath), menu);
-			
+
 		}
 	}
-	
+
 	private class FilterAction extends DefaultMenuCreatorAction {
 		final private EObject sourceObject;
 		final private EStructuralFeature sourceFeature;
 		final private EMFPath filterPath;
-		
+
 		/**
 		 * An action which updates the filter on the trades wiring table and refreshes the table.
 		 * 
-		 * @param label The label to associate with this action (the feature from the cargo row it represents).
-		 * @param sourceObject The source object in the EMF model which holds the list of possible values for the filter.
-		 * @param sourceFeature The EMF feature of the source object where the list of possible values resides. 
-		 * @param filterPath The path within a cargo row object of the field which the table is being filtered on.
+		 * @param label
+		 *            The label to associate with this action (the feature from the cargo row it represents).
+		 * @param sourceObject
+		 *            The source object in the EMF model which holds the list of possible values for the filter.
+		 * @param sourceFeature
+		 *            The EMF feature of the source object where the list of possible values resides.
+		 * @param filterPath
+		 *            The path within a cargo row object of the field which the table is being filtered on.
 		 */
 		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final EMFPath filterPath) {
 			super(label);
@@ -1330,17 +1320,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			this.sourceFeature = sourceFeature;
 			this.filterPath = filterPath;
 		}
-		
+
 		/**
 		 * Add actions to the submenu associated with this action.
 		 */
 		@Override
-		protected void populate(Menu menu) {
-			// Get the labels to populate the menu from the source object in the EMF model  
+		protected void populate(final Menu menu) {
+			// Get the labels to populate the menu from the source object in the EMF model
 			final EList<NamedObject> values = (EList<NamedObject>) sourceObject.eGet(sourceFeature);
-			
-			// Show the list of labels (one for each item in the source object feature)   
-			for (final NamedObject value: values) {
+
+			// Show the list of labels (one for each item in the source object feature)
+			for (final NamedObject value : values) {
 				// WEIRD: action returns wrong value from isChecked() so set the checked value here
 				// A label is checked if it is the value already selected in the trades filter
 				final boolean checked = tradesFilter.getFilterValue(filterPath) == value;
@@ -1348,23 +1338,22 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					@Override
 					public void run() {
 						// When we select a checked option, we want to turn the filter off
-						EObject newValue = (checked) ? null : value;
+						final EObject newValue = (checked) ? null : value;
 						tradesFilter.setFilterValue(filterPath, newValue);
 						scenarioViewer.refresh(false);
-					}					
+					}
 				};
 				addActionToMenu(action, menu);
 				action.setChecked(checked);
 			}
-			
+
 		}
 
-		
-	}	
-	
+	}
+
 	private class AddAction extends DefaultMenuCreatorAction {
 
-		public AddAction(String label) {
+		public AddAction(final String label) {
 			super(label);
 		}
 
