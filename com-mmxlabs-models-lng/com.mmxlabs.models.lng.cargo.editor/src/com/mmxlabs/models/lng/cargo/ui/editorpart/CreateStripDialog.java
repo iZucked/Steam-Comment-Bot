@@ -95,7 +95,7 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 public class CreateStripDialog extends FormDialog {
 
 	public static enum StripType {
-		TYPE_FOB_SALE_SLOT("FOB Sale"), TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_DES_PURCHASE_SLOT("DES Purchase");
+		TYPE_FOB_PURCHASE_SLOT("FOB Purchase"), TYPE_DES_PURCHASE_SLOT("DES Purchase"), TYPE_DES_SALE_SLOT("DES Sale"), TYPE_FOB_SALE_SLOT("FOB Sale");
 
 		private final String name;
 
@@ -123,6 +123,7 @@ public class CreateStripDialog extends FormDialog {
 	private Text pattern_n;
 	private Label label1;
 	private Label label2;
+	private Label label3;
 	private ComboViewer repeatType;
 	private ComboViewer intervalType;
 	private DateTime pattern_periodStart;
@@ -136,7 +137,7 @@ public class CreateStripDialog extends FormDialog {
 	};
 
 	private enum IntervalType {
-		Days, Weeks, Months
+		days, weeks, months
 	};
 
 	public CreateStripDialog(@NonNull final IShellProvider parentShell, @NonNull final IScenarioEditingLocation originalScenarioEditingLocation, @NonNull final StripType stripType,
@@ -213,7 +214,7 @@ public class CreateStripDialog extends FormDialog {
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
 
-		String title = "Create Strip of ";
+		String title = "Create strip of ";
 		switch (stripType) {
 		case TYPE_DES_PURCHASE_SLOT:
 			referenceClass = CargoPackage.eINSTANCE.getLoadSlot();
@@ -276,23 +277,13 @@ public class CreateStripDialog extends FormDialog {
 
 		final Composite patternComposite = toolkit.createComposite(body);
 		{
-			// Break out into rows!
-			patternComposite.setLayout(new GridLayout(1, false));
+			patternComposite.setLayout(new GridLayout(10, false));
 			patternComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-			final Composite topRow = toolkit.createComposite(patternComposite);
-			topRow.setLayout(new GridLayout(4, false));
-			topRow.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-			toolkit.createLabel(topRow, "Pattern");
+			toolkit.createLabel(patternComposite, "Pattern");
 
 			{
-				repeatType = new ComboViewer(topRow);
-				{
-					final GridData gd = new GridData(GridData.GRAB_HORIZONTAL);
-					gd.horizontalSpan = 3;
-					repeatType.getControl().setLayoutData(gd);
-				}
+				repeatType = new ComboViewer(patternComposite);
 				toolkit.adapt(repeatType.getControl(), true, true);
 
 				repeatType.setContentProvider(new ArrayContentProvider());
@@ -301,18 +292,22 @@ public class CreateStripDialog extends FormDialog {
 				repeatType.setInput(RepeatType.values());
 			}
 
-			final Composite frequencyRow = toolkit.createComposite(patternComposite);
-			frequencyRow.setLayout(new GridLayout(4, false));
-			frequencyRow.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			{
-				label1 = toolkit.createLabel(frequencyRow, "Every");
+				Label spacer = toolkit.createLabel(patternComposite, "");
 				final GridData gd = new GridData();
-				gd.widthHint = 30;
+				gd.widthHint = 10;
+				spacer.setLayoutData(gd);
+			}
+			
+			{
+				label1 = toolkit.createLabel(patternComposite, "Every");
+				final GridData gd = new GridData();
+				gd.widthHint = 36;
 				label1.setLayoutData(gd);
 			}
 
 			{
-				pattern_n = toolkit.createText(frequencyRow, "1");
+				pattern_n = toolkit.createText(patternComposite, "1");
 				final GridData gd = new GridData();
 				gd.widthHint = 20;
 				pattern_n.setLayoutData(gd);
@@ -342,18 +337,14 @@ public class CreateStripDialog extends FormDialog {
 				});
 			}
 			{
-				label2 = toolkit.createLabel(frequencyRow, "slot(s) between:");
+				label2 = toolkit.createLabel(patternComposite, "slot(s) between");
 				final GridData gd = new GridData();
 				gd.widthHint = 80;
 				label2.setLayoutData(gd);
 			}
 
 			{
-				intervalType = new ComboViewer(frequencyRow);
-				{
-					final GridData gd = new GridData(GridData.GRAB_HORIZONTAL);
-					intervalType.getControl().setLayoutData(gd);
-				}
+				intervalType = new ComboViewer(patternComposite);
 				toolkit.adapt(intervalType.getControl(), true, true);
 
 				intervalType.setContentProvider(new ArrayContentProvider());
@@ -369,24 +360,28 @@ public class CreateStripDialog extends FormDialog {
 					final int idx = repeatType.getCombo().getSelectionIndex();
 					final RepeatType rt = RepeatType.values()[idx];
 					if (rt == RepeatType.Periodic) {
-						label1.setVisible(true);
+						label1.setText("Create slots every");
+						((GridData) label1.getLayoutData()).widthHint = 96;						
 						label2.setVisible(false);
+						label3.setVisible(true);
 						intervalType.getControl().setVisible(true);
 
-						((GridData) label1.getLayoutData()).exclude = false;
 						((GridData) label2.getLayoutData()).exclude = true;
+						((GridData) label3.getLayoutData()).exclude = false;
 						((GridData) intervalType.getControl().getLayoutData()).exclude = false;
 					} else {
 						assert rt == RepeatType.Distributed;
-						label1.setVisible(false);
+						label1.setText("Create");
+						((GridData) label1.getLayoutData()).widthHint = 36;						
 						label2.setVisible(true);
+						label3.setVisible(false);
 						intervalType.getControl().setVisible(false);
 
-						((GridData) label1.getLayoutData()).exclude = true;
 						((GridData) label2.getLayoutData()).exclude = false;
+						((GridData) label3.getLayoutData()).exclude = true;
 						((GridData) intervalType.getControl().getLayoutData()).exclude = true;
 					}
-					frequencyRow.pack();
+					patternComposite.pack();
 
 					refreshPreview();
 				}
@@ -400,12 +395,9 @@ public class CreateStripDialog extends FormDialog {
 				}
 			});
 
-			final Composite dateRow = toolkit.createComposite(patternComposite);
-			dateRow.setLayout(new GridLayout(4, false));
-			dateRow.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			{
-				toolkit.createLabel(dateRow, "From");
-				pattern_periodStart = new DateTime(dateRow, SWT.DROP_DOWN);
+				label3 = toolkit.createLabel(patternComposite, "between");
+				pattern_periodStart = new DateTime(patternComposite, SWT.DROP_DOWN);
 				toolkit.adapt(pattern_periodStart);
 				final GridData gd = new GridData();
 				gd.widthHint = 100;
@@ -430,8 +422,8 @@ public class CreateStripDialog extends FormDialog {
 			}
 
 			{
-				toolkit.createLabel(dateRow, "To");
-				pattern_periodEnd = new DateTime(dateRow, SWT.DROP_DOWN);
+				toolkit.createLabel(patternComposite, "and");
+				pattern_periodEnd = new DateTime(patternComposite, SWT.DROP_DOWN);
 				toolkit.adapt(pattern_periodEnd);
 				final GridData gd = new GridData();
 				gd.widthHint = 100;
@@ -497,7 +489,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 
 		repeatType.setSelection(new StructuredSelection(RepeatType.Periodic));
-		intervalType.setSelection(new StructuredSelection(IntervalType.Days));
+		intervalType.setSelection(new StructuredSelection(IntervalType.days));
 
 		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		// Only valid for slots
@@ -593,13 +585,13 @@ public class CreateStripDialog extends FormDialog {
 				}
 				final IntervalType it = IntervalType.values()[itIdx];
 				switch (it) {
-				case Days:
+				case days:
 					calUnit = Calendar.DAY_OF_YEAR;
 					break;
-				case Months:
+				case months:
 					calUnit = Calendar.MONTH;
 					break;
-				case Weeks:
+				case weeks:
 					calUnit = Calendar.WEEK_OF_YEAR;
 					break;
 				default:
