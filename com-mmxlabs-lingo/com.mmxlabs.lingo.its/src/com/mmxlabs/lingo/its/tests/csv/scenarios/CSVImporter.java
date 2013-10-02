@@ -95,7 +95,7 @@ public class CSVImporter {
 		dataMap.put(FleetModelImporter.GROUPS_KEY, baseFileName + "/" + "Vessel Groups.csv");
 		dataMap.put(FleetModelImporter.VESSEL_CLASSES_KEY, baseFileName + "/" + "Vessel Classes.csv");
 		dataMap.put(FleetModelImporter.VESSELS_KEY, baseFileName + "/" + "Vessels.csv");
-		dataMap.put(ScenarioFleetModelImporter.EVENTS_KEY, baseFileName + "/" + "Vessel Events.csv");
+		dataMap.put(ScenarioFleetModelImporter.EVENTS_KEY, baseFileName + "/" + "Events.csv");
 		dataMap.put(ScenarioFleetModelImporter.VESSEL_AVAILABILITY_KEY, baseFileName + "/" + "Vessel Availability.csv");
 
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, baseFileName + "/" + "Assignments.csv");
