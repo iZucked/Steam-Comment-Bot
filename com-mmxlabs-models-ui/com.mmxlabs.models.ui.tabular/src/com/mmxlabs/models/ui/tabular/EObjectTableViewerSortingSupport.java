@@ -140,6 +140,11 @@ public class EObjectTableViewerSortingSupport {
 					
 					final Comparable left = renderer.getComparable(leftOwner);
 					final Comparable right = renderer.getComparable(rightOwner);
+					
+					if (left == right) {
+						return 0;
+					}
+					
 					if (left == null) {
 						return -1;
 					} else if (right == null) {

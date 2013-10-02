@@ -6,11 +6,14 @@ package com.mmxlabs.models.ui.editors.dialogs;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.runtime.IStatus;
@@ -43,11 +46,13 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -215,37 +220,97 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	private void createProxies() {
 		final List<List<EObject>> ranges = new ArrayList<List<EObject>>(editedObjects.size());
 
+		List<Class<?>> classes = null;
+
 		for (final EObject object : editedObjects) {
-			// NOTE: it is important that each object produces the smae type of array. That is the same number of elements and each element at a given index is of the same type in all ranges.
-			final List<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, object);
+			// NOTE: it is important that each object produces the same type of array. That is the same number of elements and each element at a given index is of the same type in all ranges.
+			final List<IComponentHelper> componentHelpers = Activator.getDefault().getComponentHelperRegistry().getComponentHelpers(object.eClass());
+			final List<EObject> range = new LinkedList<>();
+			for (final IComponentHelper h : componentHelpers) {
+				range.addAll(h.getExternalEditingRange(rootObject, object));
+			}
+
+			// final List<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, object);
 			// Remove existing copies of the object
 			while (range.contains(object)) {
 				range.remove(object);
 			}
 			range.add(object);
 			ranges.add(range);
+
+			// Find the common classes in the ranges
+			if (classes == null) {
+				// First time - add all
+				classes = new LinkedList<>();
+				for (final Object o : range) {
+					classes.add(o.getClass());
+				}
+			} else {
+				// Get the list of classes in this object
+				final List<Class<?>> rangeClasses = new LinkedList<>();
+				for (final Object o : range) {
+					rangeClasses.add(o.getClass());
+				}
+
+				// Next determine the intersection. Note we could have the same class instance appear twice in the list, thus we cannot use retainAll()
+				final Set<Class<?>> missingClasses = new HashSet<>();
+				for (final Class<?> c : classes) {
+					if (rangeClasses.contains(c)) {
+						// Found match, remove from range
+						rangeClasses.remove(c);
+					} else {
+						// Not found, remove from common class list
+						missingClasses.add(c);
+					}
+				}
+
+				// Reduce classes list to the common classes
+				for (final Class<?> c : missingClasses) {
+					classes.remove(c);
+				}
+
+				// Break out early
+				if (classes.isEmpty()) {
+					throw new IllegalArgumentException("Unable to multi-edit - data has nothing common");
+				}
+			}
+		}
+
+		if (classes == null) {
+			throw new IllegalArgumentException("Unable to multi-edit - no data");
 		}
 
 		final List<EObject> range0 = ranges.get(0);
-		proxies.addAll(EcoreUtil.copyAll(range0));
+		// Extract common object references in order of first element
+		final EObject[] commonRange = new EObject[classes.size()];
+		{
+			// Take a copy of this array so we can remove elements to get correct indices in case of duplicate classes
+			final List<Class<?>> classesCpy = new ArrayList<>(classes);
+			for (final EObject o : range0) {
+				final int idx = classesCpy.indexOf(o.getClass());
+				commonRange[idx] = o;
+				classesCpy.set(idx, null);
+			}
+		}
 
-		// clear attributes on proxies
+		proxies.addAll(EcoreUtil.copyAll(Lists.newArrayList(commonRange)));
 
 		// now set equal attributes.
 		for (int i = 0; i < proxies.size(); i++) {
 			final EObject proxy = proxies.get(i);
 			final ArrayList<EObject> originals = new ArrayList<EObject>(editedObjects.size());
 			for (final List<EObject> range : ranges) {
-				if (range.size() != proxies.size()) {
-					throw new UnsupportedOperationException("Selected object have differing numbers of related objects. Cannot edit.");
+
+				// Ensure originals array is in the same order as all other arrays.
+				for (final EObject obj : range) {
+					if (obj.getClass().equals(classes.get(i))) {
+						originals.add(obj);
+						// Remove so as to avoid picking it again if we have duplicate classes
+						range.remove(obj);
+						break;
+					}
 				}
-				if (proxy.getClass() != range.get(i).getClass()) {
-					throw new UnsupportedOperationException("Selected object have differing types. Cannot edit.");
-				}
-				originals.add(range.get(i));
 			}
-			// final Pair<EObject, EReference> c = ValidationSupport.getInstance().getContainer(range0.get(i));
-			// ValidationSupport.getInstance().setContainers(Collections.singleton(proxies.get(i)), c.getFirst(), c.getSecond());
 			setSameValues(proxy, originals);
 			setCounterparts(proxy, originals);
 		}
@@ -402,7 +467,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				};
 
 				@Override
-				public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit) {
+				public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 					final Composite composite = toolkit.createComposite(parent);
 
 					final GridLayout layout = new GridLayout(2, false);
@@ -493,7 +558,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				}
 
 				@Override
-				public void setEditorLocked(boolean locked) {
+				public void setEditorLocked(final boolean locked) {
 					proxy.setEditorLocked(locked);
 
 				}
@@ -509,7 +574,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				}
 
 				@Override
-				public void setEditorVisible(boolean visible) {
+				public void setEditorVisible(final boolean visible) {
 					proxy.setEditorVisible(visible);
 				}
 
@@ -519,13 +584,13 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				}
 
 				@Override
-				public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+				public void addNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
 					// TODO Auto-generated method stub
 
 				}
 
 				@Override
-				public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+				public void removeNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
 					// TODO Auto-generated method stub
 
 				}

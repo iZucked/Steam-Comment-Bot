@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,11 +22,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
+import org.eclipse.emf.edit.EMFEditPlugin;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.google.common.base.Preconditions;
@@ -280,79 +288,202 @@ public class EMFModelMergeTools {
 	 * @return
 	 */
 	public static Command applyMappingDescriptors(final EditingDomain domain, final EObject rootObject, final List<IMappingDescriptor> descriptors) {
-		final Collection<EObject> emfObjectsToSearch = Collections.singleton(rootObject);
 
-		final Set<EObject> objectsOfInterest = new HashSet<EObject>();
+		// final Collection<EObject> emfObjectsToSearch = Collections.singleton(rootObject);
+		//
+		// final Set<EObject> objectsOfInterest = new HashSet<EObject>();
+		//
+		// final Map<EObject, EObject> bigMapOfDestinationToSource = new HashMap<EObject, EObject>();
+		// for (final IMappingDescriptor descriptor : descriptors) {
+		// bigMapOfDestinationToSource.putAll(descriptor.getDestinationToSourceMap());
+		// }
+		// objectsOfInterest.addAll(bigMapOfDestinationToSource.keySet());
+		//
+		// final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(objectsOfInterest, emfObjectsToSearch);
+		// final CompoundCommand cmd = new CompoundCommand();
+		// // Perform replacements
+		// for (final Map.Entry<EObject, EObject> e : bigMapOfDestinationToSource.entrySet()) {
+		// final EObject source = e.getValue();
+		// final EObject dest = e.getKey();
+		// // Update cross-references
+		// final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(dest);
+		// if (usages != null) {
+		// for (final EStructuralFeature.Setting setting : usages) {
+		// if (setting.getEStructuralFeature().isMany()) {
+		// cmd.append(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), dest, Collections.<EObject> singleton(source)));
+		// } else {
+		// cmd.append(SetCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), source));
+		// }
+		// }
+		// }
+		// // Update containers
+		// if (dest.eContainmentFeature().isMany()) {
+		// cmd.append(ReplaceCommand.create(domain, dest.eContainer(), dest.eContainmentFeature(), dest, Collections.<EObject> singleton(source)));
+		// } else {
+		// cmd.append(SetCommand.create(domain, dest.eContainer(), dest.eContainmentFeature(), source));
+		// }
+		// }
+		//
+		// // Perform additions
+		// for (final IMappingDescriptor descriptor : descriptors) {
+		//
+		// final EReference ref = descriptor.getReference();
+		// if (ref.isContainment() && ref.isMany()) {
+		// final List<EObject> addedObjects = descriptor.getAddedObjects();
+		// if (!addedObjects.isEmpty()) {
+		// cmd.append(AddCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), addedObjects));
+		// }
+		// }
+		// }
+		//
+		// // Perform deletions
+		// for (final IMappingDescriptor descriptor : descriptors) {
+		//
+		// final EReference ref = descriptor.getReference();
+		// if (ref.isContainment() && ref.isMany()) {
+		// final Collection<EObject> removedObjects = descriptor.getRemovedObjects();
+		// if (!removedObjects.isEmpty()) {
+		// cmd.append(DeleteCommand.create(domain, removedObjects));
+		// }
+		// }
+		// }
+		//
+		// // Update other refs
+		// for (final IMappingDescriptor descriptor : descriptors) {
+		// final EReference ref = descriptor.getReference();
+		// if (!ref.isContainment() && !ref.isMany()) {
+		// if (descriptor.getAddedObjects().isEmpty()) {
+		// cmd.append(SetCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), SetCommand.UNSET_VALUE));
+		// } else {
+		// Preconditions.checkState(descriptor.getAddedObjects().size() == 1);
+		// cmd.append(SetCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), descriptor.getAddedObjects().get(0)));
+		// }
+		// }
+		// }
 
-		final Map<EObject, EObject> bigMapOfDestinationToSource = new HashMap<EObject, EObject>();
-		for (final IMappingDescriptor descriptor : descriptors) {
-			bigMapOfDestinationToSource.putAll(descriptor.getDestinationToSourceMap());
+		return new MergeCommand(domain, rootObject, descriptors);
+	}
+
+	private static class MergeCommand extends CompoundCommand {
+
+		/**
+		 * This caches the label.
+		 */
+		protected static final String LABEL = "Scenario Data Merge";
+
+		/**
+		 * This caches the description.
+		 */
+		protected static final String DESCRIPTION = "Merge data between scenarios";
+
+		/**
+		 * This constructs a command that deletes the objects in the given collection.
+		 */
+		public MergeCommand(EditingDomain domain, final EObject rootObject, final List<IMappingDescriptor> descriptors) {
+			super(0, LABEL, DESCRIPTION);
+			this.domain = domain;
+			this.rootObject = rootObject;
+			this.descriptors = descriptors;
 		}
-		objectsOfInterest.addAll(bigMapOfDestinationToSource.keySet());
 
-		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(objectsOfInterest, emfObjectsToSearch);
-		final CompoundCommand cmd = new CompoundCommand();
-		// Perform replacements
-		for (final Map.Entry<EObject, EObject> e : bigMapOfDestinationToSource.entrySet()) {
-			final EObject source = e.getValue();
-			final EObject dest = e.getKey();
-			// Update cross-references
-			final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(dest);
-			if (usages != null) {
-				for (final EStructuralFeature.Setting setting : usages) {
-					if (setting.getEStructuralFeature().isMany()) {
-						cmd.append(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), dest, Collections.<EObject> singleton(source)));
-					} else {
-						cmd.append(SetCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), source));
+		protected EditingDomain domain;
+		protected EObject rootObject;
+		protected List<IMappingDescriptor> descriptors;
+
+		@Override
+		protected boolean prepare() {
+			prepareCommand();
+			if (commandList.isEmpty() && descriptors.isEmpty()) {
+				return false;
+			} else {
+				for (Command command : commandList) {
+					if (!command.canExecute()) {
+						return false;
+					}
+				}
+
+				return true;
+			}
+		}
+
+		protected void prepareCommand() {
+			// Perform additions
+			for (final IMappingDescriptor descriptor : descriptors) {
+
+				final EReference ref = descriptor.getReference();
+				if (ref.isContainment() && ref.isMany()) {
+					final List<EObject> addedObjects = descriptor.getAddedObjects();
+					if (!addedObjects.isEmpty()) {
+						append(AddCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), addedObjects));
 					}
 				}
 			}
-			// Update containers
-			if (dest.eContainmentFeature().isMany()) {
-				cmd.append(ReplaceCommand.create(domain, dest.eContainer(), dest.eContainmentFeature(), dest, Collections.<EObject> singleton(source)));
-			} else {
-				cmd.append(SetCommand.create(domain, dest.eContainer(), dest.eContainmentFeature(), source));
-			}
+
 		}
 
-		// Perform additions
-		for (final IMappingDescriptor descriptor : descriptors) {
+		@Override
+		public void execute() {
+			super.execute();
 
-			final EReference ref = descriptor.getReference();
-			if (ref.isContainment() && ref.isMany()) {
-				final List<EObject> addedObjects = descriptor.getAddedObjects();
-				if (!addedObjects.isEmpty()) {
-					cmd.append(AddCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), addedObjects));
+			final Collection<EObject> emfObjectsToSearch = Collections.singleton(rootObject);
+
+			final Set<EObject> objectsOfInterest = new HashSet<EObject>();
+
+			final Map<EObject, EObject> bigMapOfDestinationToSource = new HashMap<EObject, EObject>();
+			for (final IMappingDescriptor descriptor : descriptors) {
+				bigMapOfDestinationToSource.putAll(descriptor.getDestinationToSourceMap());
+			}
+			objectsOfInterest.addAll(bigMapOfDestinationToSource.keySet());
+
+			final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(objectsOfInterest, emfObjectsToSearch);
+			// Perform replacements
+			for (final Map.Entry<EObject, EObject> e : bigMapOfDestinationToSource.entrySet()) {
+				final EObject source = e.getValue();
+				final EObject dest = e.getKey();
+				// Update cross-references
+				final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(dest);
+				if (usages != null) {
+					for (final EStructuralFeature.Setting setting : usages) {
+						if (setting.getEStructuralFeature().isMany()) {
+							appendAndExecute(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), dest, Collections.<EObject> singleton(source)));
+						} else {
+							appendAndExecute(SetCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), source));
+						}
+					}
 				}
-			}
-		}
-
-		// Perform deletions
-		for (final IMappingDescriptor descriptor : descriptors) {
-
-			final EReference ref = descriptor.getReference();
-			if (ref.isContainment() && ref.isMany()) {
-				final Collection<EObject> removedObjects = descriptor.getRemovedObjects();
-				if (!removedObjects.isEmpty()) {
-					cmd.append(DeleteCommand.create(domain, removedObjects));
-				}
-			}
-		}
-
-		// Update other refs
-		for (final IMappingDescriptor descriptor : descriptors) {
-			final EReference ref = descriptor.getReference();
-			if (!ref.isContainment() && !ref.isMany()) {
-				if (descriptor.getAddedObjects().isEmpty()) {
-					cmd.append(SetCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), SetCommand.UNSET_VALUE));
+				// Update containers
+				if (dest.eContainmentFeature().isMany()) {
+					appendAndExecute(ReplaceCommand.create(domain, dest.eContainer(), dest.eContainmentFeature(), dest, Collections.<EObject> singleton(source)));
 				} else {
-					Preconditions.checkState(descriptor.getAddedObjects().size() == 1);
-					cmd.append(SetCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), descriptor.getAddedObjects().get(0)));
+					appendAndExecute(SetCommand.create(domain, dest.eContainer(), dest.eContainmentFeature(), source));
+				}
+			}
+
+			// Update other refs
+			for (final IMappingDescriptor descriptor : descriptors) {
+				final EReference ref = descriptor.getReference();
+				if (!ref.isContainment() && !ref.isMany()) {
+					if (descriptor.getAddedObjects().isEmpty()) {
+						appendAndExecute(SetCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), SetCommand.UNSET_VALUE));
+					} else {
+						Preconditions.checkState(descriptor.getAddedObjects().size() == 1);
+						appendAndExecute(SetCommand.create(domain, descriptor.getDestinationContainer(), descriptor.getReference(), descriptor.getAddedObjects().get(0)));
+					}
+				}
+			}
+
+			// Perform deletions
+			for (final IMappingDescriptor descriptor : descriptors) {
+
+				final EReference ref = descriptor.getReference();
+				if (ref.isContainment() && ref.isMany()) {
+					final Collection<EObject> removedObjects = descriptor.getRemovedObjects();
+					if (!removedObjects.isEmpty()) {
+						appendAndExecute(DeleteCommand.create(domain, removedObjects));
+					}
 				}
 			}
 		}
-
-		return cmd;
 	}
 
 }
