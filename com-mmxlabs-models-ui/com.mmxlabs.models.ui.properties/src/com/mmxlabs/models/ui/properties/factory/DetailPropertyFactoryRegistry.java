@@ -1,15 +1,15 @@
 package com.mmxlabs.models.ui.properties.factory;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.ops4j.peaberry.Peaberry;
-import org.ops4j.peaberry.eclipse.EclipseRegistry;
 
 import com.google.inject.Module;
 import com.mmxlabs.models.ui.properties.extensions.DetailPropertyFactoryExtensionPoint;
@@ -70,12 +70,22 @@ public class DetailPropertyFactoryRegistry {
 			return null;
 		}
 
-		final DetailPropertyFactoryExtensionPoint ext;
-		if (map.containsKey(eClass.getInstanceClassName())) {
-			ext = map.get(eClass.getInstanceClassName());
-		} else {
-			return null;
+		final Set<EClass> searchClasses = new HashSet<EClass>();
+		searchClasses.add(eClass);
+		while (!searchClasses.isEmpty()) {
+			final EClass cls = searchClasses.iterator().next();
+			searchClasses.remove(cls);
+			final String instanceClassName = cls.getInstanceClassName();
+			if (map.containsKey(instanceClassName)) {
+				final DetailPropertyFactoryExtensionPoint ext = map.get(instanceClassName);
+				if (ext != null) {
+					return ext.createDetailPropertyFactory();
+				}
+			} else {
+				searchClasses.addAll(cls.getEAllSuperTypes());
+			}
 		}
-		return ext.createDetailPropertyFactory();
+
+		return null;
 	}
 }
