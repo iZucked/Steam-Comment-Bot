@@ -10,15 +10,3 @@ syntax: regexp
 syntax: regexp
 ^\.project$
 
-syntax: regexp
-^com\.mmxlabs\.model\.service/\.settings$
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.feature/\.settings$
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.workspace/\.settings$
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.util/\.settings$
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.manifest/\.settings$
-syntax: regexp
-^com\.mmxlabs\.scenario\.service\.manifest\.edit/\.settings$
