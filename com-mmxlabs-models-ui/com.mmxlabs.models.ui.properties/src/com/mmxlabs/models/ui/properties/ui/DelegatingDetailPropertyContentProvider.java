@@ -41,13 +41,13 @@ public class DelegatingDetailPropertyContentProvider implements ITreeContentProv
 	public DelegatingDetailPropertyContentProvider(@NonNull final ITreeContentProvider delegate, @NonNull final String category, @NonNull final DetailPropertyFactoryRegistry registry) {
 		this.delegate = delegate;
 		this.category = category;
-		this.registry = createRegistry();
+		this.registry = registry;
 	}
 
 	public DelegatingDetailPropertyContentProvider(@NonNull final ITreeContentProvider delegate, @NonNull final String category) {
 		this.delegate = delegate;
 		this.category = category;
-		this.registry = createRegistry();
+		this.registry = DetailPropertyFactoryRegistry.createRegistry();
 	}
 
 	@Override
@@ -142,24 +142,5 @@ public class DelegatingDetailPropertyContentProvider implements ITreeContentProv
 
 		return a;
 
-	}
-
-	/**
-	 * Create a {@link DetailPropertyFactoryRegistry} and initialise it with known extension points.
-	 * 
-	 * @return
-	 */
-	private DetailPropertyFactoryRegistry createRegistry() {
-		final BundleContext bc = FrameworkUtil.getBundle(getClass()).getBundleContext();
-		final Injector injector = Guice.createInjector(new AbstractModule() {
-
-			@Override
-			protected void configure() {
-				install(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()));
-				bind(TypeLiterals.iterable(DetailPropertyFactoryExtensionPoint.class)).toProvider(Peaberry.service(DetailPropertyFactoryExtensionPoint.class).multiple());
-				bind(DetailPropertyFactoryRegistry.class);
-			}
-		});
-		return injector.getInstance(DetailPropertyFactoryRegistry.class);
 	}
 }

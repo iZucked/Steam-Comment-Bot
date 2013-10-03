@@ -10,7 +10,15 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.ops4j.peaberry.Peaberry;
+import org.ops4j.peaberry.eclipse.EclipseRegistry;
+import org.ops4j.peaberry.util.TypeLiterals;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.models.ui.properties.extensions.DetailPropertyFactoryExtensionPoint;
 
@@ -87,5 +95,24 @@ public class DetailPropertyFactoryRegistry {
 		}
 
 		return null;
+	}
+	
+	/**
+	 * Create a {@link DetailPropertyFactoryRegistry} and initialise it with known extension points.
+	 * 
+	 * @return
+	 */
+	public static DetailPropertyFactoryRegistry createRegistry() {
+		final BundleContext bc = FrameworkUtil.getBundle(DetailPropertyFactoryRegistry.class).getBundleContext();
+		final Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				install(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()));
+				bind(TypeLiterals.iterable(DetailPropertyFactoryExtensionPoint.class)).toProvider(Peaberry.service(DetailPropertyFactoryExtensionPoint.class).multiple());
+				bind(DetailPropertyFactoryRegistry.class);
+			}
+		});
+		return injector.getInstance(DetailPropertyFactoryRegistry.class);
 	}
 }
