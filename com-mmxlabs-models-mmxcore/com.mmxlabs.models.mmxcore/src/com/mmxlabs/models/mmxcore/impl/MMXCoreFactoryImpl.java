@@ -32,7 +32,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	 */
 	public static MMXCoreFactory init() {
 		try {
-			MMXCoreFactory theMMXCoreFactory = (MMXCoreFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/mmxcore/1/"); 
+			MMXCoreFactory theMMXCoreFactory = (MMXCoreFactory)EPackage.Registry.INSTANCE.getEFactory(MMXCorePackage.eNS_URI);
 			if (theMMXCoreFactory != null) {
 				return theMMXCoreFactory;
 			}

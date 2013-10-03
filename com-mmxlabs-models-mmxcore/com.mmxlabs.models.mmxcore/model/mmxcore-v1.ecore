@@ -10,8 +10,7 @@
     </eOperations>
     <eOperations name="eContainerOp" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" ordered="false"
-        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
-        containment="true"/>
+        upperBound="-1" eType="#//UUIDObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamedObject" eSuperTypes="#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

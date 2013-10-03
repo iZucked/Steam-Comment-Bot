@@ -7,13 +7,17 @@ package com.mmxlabs.models.mmxcore.impl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -33,14 +37,14 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  */
 public abstract class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	/**
-	 * The cached value of the '{@link #getExtensions() <em>Extensions</em>}' reference list.
+	 * The cached value of the '{@link #getExtensions() <em>Extensions</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getExtensions()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<UUIDObject> extensions;
+	protected EList<EObject> extensions;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -66,9 +70,9 @@ public abstract class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<UUIDObject> getExtensions() {
+	public EList<EObject> getExtensions() {
 		if (extensions == null) {
-			extensions = new EObjectResolvingEList<UUIDObject>(UUIDObject.class, this, MMXCorePackage.MMX_OBJECT__EXTENSIONS);
+			extensions = new EObjectContainmentEList<EObject>(EObject.class, this, MMXCorePackage.MMX_OBJECT__EXTENSIONS);
 		}
 		return extensions;
 	}
@@ -136,6 +140,20 @@ public abstract class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case MMXCorePackage.MMX_OBJECT__EXTENSIONS:
+				return ((InternalEList<?>)getExtensions()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case MMXCorePackage.MMX_OBJECT__EXTENSIONS:
@@ -155,7 +173,7 @@ public abstract class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		switch (featureID) {
 			case MMXCorePackage.MMX_OBJECT__EXTENSIONS:
 				getExtensions().clear();
-				getExtensions().addAll((Collection<? extends UUIDObject>)newValue);
+				getExtensions().addAll((Collection<? extends EObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
