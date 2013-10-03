@@ -33,7 +33,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getShippingEntity <em>Shipping Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getPurchaseContracts <em>Purchase Contracts</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.CommercialModelImpl#getContractSlotExtensions <em>Contract Slot Extensions</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,17 +78,6 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * @ordered
 	 */
 	protected EList<PurchaseContract> purchaseContracts;
-
-	/**
-	 * The cached value of the '{@link #getContractSlotExtensions() <em>Contract Slot Extensions</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see #getContractSlotExtensions()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<UUIDObject> contractSlotExtensions;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -186,19 +174,6 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<UUIDObject> getContractSlotExtensions() {
-		if (contractSlotExtensions == null) {
-			contractSlotExtensions = new EObjectContainmentEList<UUIDObject>(UUIDObject.class, this, CommercialPackage.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS);
-		}
-		return contractSlotExtensions;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -211,8 +186,6 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return ((InternalEList<?>)getSalesContracts()).basicRemove(otherEnd, msgs);
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				return ((InternalEList<?>)getPurchaseContracts()).basicRemove(otherEnd, msgs);
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS:
-				return ((InternalEList<?>)getContractSlotExtensions()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -234,8 +207,6 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return basicGetShippingEntity();
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				return getPurchaseContracts();
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS:
-				return getContractSlotExtensions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -264,10 +235,6 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				getPurchaseContracts().clear();
 				getPurchaseContracts().addAll((Collection<? extends PurchaseContract>)newValue);
 				return;
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS:
-				getContractSlotExtensions().clear();
-				getContractSlotExtensions().addAll((Collection<? extends UUIDObject>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -292,9 +259,6 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				getPurchaseContracts().clear();
 				return;
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS:
-				getContractSlotExtensions().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -315,8 +279,6 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return shippingEntity != null;
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				return purchaseContracts != null && !purchaseContracts.isEmpty();
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS:
-				return contractSlotExtensions != null && !contractSlotExtensions.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

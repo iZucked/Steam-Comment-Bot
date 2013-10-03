@@ -124,23 +124,13 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Contract Slot Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
-
-	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -839,18 +829,6 @@ public interface CommercialPackage extends EPackage {
 	EReference getCommercialModel_PurchaseContracts();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getContractSlotExtensions <em>Contract Slot Extensions</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Contract Slot Extensions</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getContractSlotExtensions()
-	 * @see #getCommercialModel()
-	 * @generated
-	 */
-	EReference getCommercialModel_ContractSlotExtensions();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1185,15 +1163,6 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMMERCIAL_MODEL__PURCHASE_CONTRACTS = eINSTANCE.getCommercialModel_PurchaseContracts();
-
-		/**
-		 * The meta object literal for the '<em><b>Contract Slot Extensions</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS = eINSTANCE.getCommercialModel_ContractSlotExtensions();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.

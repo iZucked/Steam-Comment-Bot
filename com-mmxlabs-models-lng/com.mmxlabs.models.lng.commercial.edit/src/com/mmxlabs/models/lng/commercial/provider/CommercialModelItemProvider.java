@@ -104,7 +104,6 @@ public class CommercialModelItemProvider
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS);
 		}
 		return childrenFeatures;
 	}
@@ -162,7 +161,6 @@ public class CommercialModelItemProvider
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
 			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
-			case CommercialPackage.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -194,96 +192,6 @@ public class CommercialModelItemProvider
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createPurchaseContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createCommercialModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createLegalEntity()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createSalesContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createPurchaseContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 MMXCoreFactory.eINSTANCE.createUUIDObject()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 MMXCoreFactory.eINSTANCE.createMMXRootObject()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 PortFactory.eINSTANCE.createPort()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 PortFactory.eINSTANCE.createRoute()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 PortFactory.eINSTANCE.createPortGroup()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 PortFactory.eINSTANCE.createPortModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 PortFactory.eINSTANCE.createCapabilityGroup()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES ||
-			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS ||
-			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS ||
-			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

@@ -11,10 +11,17 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -75,7 +82,6 @@ public class CommercialModelComponentHelper extends BaseComponentHelper {
 		add_salesContractsEditor(detailComposite, topClass);
 		add_shippingEntityEditor(detailComposite, topClass);
 		add_purchaseContractsEditor(detailComposite, topClass);
-		add_contractSlotExtensionsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the entities feature on CommercialModel
@@ -110,14 +116,5 @@ public class CommercialModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_purchaseContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS));
-	}
-
-	/**
-	 * Create the editor for the contractSlotExtensions feature on CommercialModel
-	 *
-	 * @generated
-	 */
-	protected void add_contractSlotExtensionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS));
 	}
 }

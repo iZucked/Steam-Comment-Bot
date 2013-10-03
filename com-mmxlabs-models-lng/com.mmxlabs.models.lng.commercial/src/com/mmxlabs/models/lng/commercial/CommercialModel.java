@@ -19,7 +19,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getSalesContracts <em>Sales Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getShippingEntity <em>Shipping Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getPurchaseContracts <em>Purchase Contracts</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getContractSlotExtensions <em>Contract Slot Extensions</em>}</li>
  * </ul>
  * </p>
  *
@@ -101,23 +100,6 @@ public interface CommercialModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<PurchaseContract> getPurchaseContracts();
-
-	/**
-	 * Returns the value of the '<em><b>Contract Slot Extensions</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.mmxcore.UUIDObject}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Contract Slot Extensions</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contract Slot Extensions</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getCommercialModel_ContractSlotExtensions()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<UUIDObject> getContractSlotExtensions();
 
 } // end of  CommercialModel
 
