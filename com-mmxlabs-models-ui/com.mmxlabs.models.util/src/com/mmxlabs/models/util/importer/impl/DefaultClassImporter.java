@@ -24,9 +24,11 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
@@ -106,7 +108,11 @@ public class DefaultClassImporter implements IClassImporter {
 				for (final EClassifier classifier : ePackage2.getEClassifiers()) {
 					if (classifier instanceof EClass) {
 						final EClass possibleSubClass = (EClass) classifier;
-						if (outputEClass.isSuperTypeOf(possibleSubClass) && (possibleSubClass.isAbstract() == false) && possibleSubClass.getName().equalsIgnoreCase(kind)) {
+						// EObject is not listed in supertypes?
+						final boolean superTypeOf = outputEClass == EcorePackage.Literals.EOBJECT || outputEClass.isSuperTypeOf(possibleSubClass);
+						final boolean b = possibleSubClass.isAbstract() == false;
+						final boolean equalsIgnoreCase = possibleSubClass.getName().equalsIgnoreCase(kind);
+						if (superTypeOf && b && equalsIgnoreCase) {
 							return (EClass) classifier;
 						}
 					}
@@ -166,25 +172,28 @@ public class DefaultClassImporter implements IClassImporter {
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 
 				if (reference.isMany()) {
-					// continue;
-					if (subKeys.containsKey("count")) {
-						final int count = Integer.parseInt(subKeys.get("count"));
-						final List<EObject> references = new LinkedList<EObject>();
-						for (int i = 0; i < count; ++i) {
-							final IFieldMap childMap = subKeys.getSubMap(i + DOT);
-							final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
-							final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), childMap, context);
-							final Iterator<EObject> iterator = values.iterator();
-							final EObject importObject = iterator.next();
-							references.add(importObject);
-							if (reference.isContainment() == false) {
-								results.add(importObject);
+					if (reference == MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS) {
+						if (subKeys.containsKey("count")) {
+							final int count = Integer.parseInt(subKeys.get("count"));
+							final List<EObject> references = new LinkedList<EObject>();
+							for (int i = 0; i < count; ++i) {
+								final IFieldMap childMap = subKeys.getSubMap(i + DOT);
+								final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
+								final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), childMap, context);
+								final Iterator<EObject> iterator = values.iterator();
+								final EObject importObject = iterator.next();
+								references.add(importObject);
+								if (reference.isContainment() == false) {
+									results.add(importObject);
+								}
+								while (iterator.hasNext()) {
+									results.add(importObject);
+								}
 							}
-							while (iterator.hasNext()) {
-								results.add(importObject);
-							}
+							instance.eSet(reference, references);
 						}
-						instance.eSet(reference, references);
+					} else {
+						continue;
 					}
 				} else {
 
@@ -412,22 +421,43 @@ public class DefaultClassImporter implements IClassImporter {
 			}
 		} else {
 			if (reference.isMany()) {
-				@SuppressWarnings("unchecked")
-				final List<? extends Object> values = (List<? extends Object>) object.eGet(reference);
-				final StringBuffer sb = new StringBuffer();
-				boolean comma = false;
-				for (final Object o : values) {
-					if (o instanceof NamedObject) {
-						final NamedObject no = (NamedObject) o;
-						if (comma) {
-							sb.append(",");
-						}
-						comma = true;
-						sb.append(no.getName());
-					}
-				}
+				if (reference == MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS) {
 
-				result.put(reference.getName(), sb.toString());
+					final List<EObject> extensions = ((MMXObject) object).getExtensions();
+					if (extensions != null) {
+						int count = 0;
+						for (final EObject extension : extensions) {
+							final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(extension.eClass());
+							if (importer != null) {
+								final Map<String, String> subMap = importer.exportObjects(Collections.singleton(extension), root).iterator().next();
+								for (final Map.Entry<String, String> e : subMap.entrySet()) {
+									result.put(reference.getName() + DOT + count + DOT + e.getKey(), e.getValue());
+								}
+								++count;
+							}
+						}
+						if (count > 0) {
+							result.put(reference.getName() + DOT + "count", Integer.toString(count));
+						}
+					}
+				} else {
+					@SuppressWarnings("unchecked")
+					final List<? extends Object> values = (List<? extends Object>) object.eGet(reference);
+					final StringBuffer sb = new StringBuffer();
+					boolean comma = false;
+					for (final Object o : values) {
+						if (o instanceof NamedObject) {
+							final NamedObject no = (NamedObject) o;
+							if (comma) {
+								sb.append(",");
+							}
+							comma = true;
+							sb.append(no.getName());
+						}
+					}
+
+					result.put(reference.getName(), sb.toString());
+				}
 			} else {
 				final Object o = object.eGet(reference);
 				if (o instanceof NamedObject) {
@@ -439,7 +469,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
-		return !(feature == MMXCorePackage.eINSTANCE.getMMXObject_Extensions() || feature == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid());
+		return !(feature == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid());
 	}
 
 	protected boolean shouldFlattenReference(final EReference reference) {
