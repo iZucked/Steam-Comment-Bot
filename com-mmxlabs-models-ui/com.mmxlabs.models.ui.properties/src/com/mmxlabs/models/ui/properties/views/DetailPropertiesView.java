@@ -61,16 +61,19 @@ public abstract class DetailPropertiesView extends ViewPart {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Attribute");
 			gvc.getColumn().setTree(true);
+			gvc.getColumn().setWidth(100);
 			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.ATTRIBUTE, gvc));
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Value");
+			gvc.getColumn().setWidth(100);
 			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.VALUE, gvc));
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Units");
+			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.UNITS, gvc));
 		}
 
@@ -93,9 +96,14 @@ public abstract class DetailPropertiesView extends ViewPart {
 	}
 
 	protected void makeActions() {
-		Action packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
-		Action copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
+		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
+		final Action copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
+
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
+
+		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
+		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
+		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
 	@Override
