@@ -20,8 +20,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface ObjectSet<T extends ObjectSet<T, U>, U> extends UUIDObject,
-		NamedObject {
+public interface ObjectSet<T extends ObjectSet<T, U>, U> extends UUIDObject, NamedObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

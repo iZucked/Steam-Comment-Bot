@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.types.util;
 
+import com.mmxlabs.models.lng.types.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -186,8 +187,7 @@ public class TypesSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T extends ObjectSet<T, U>, U> T1 caseObjectSet(
-			ObjectSet<T, U> object) {
+	public <T extends ObjectSet<T, U>, U> T1 caseObjectSet(ObjectSet<T, U> object) {
 		return null;
 	}
 

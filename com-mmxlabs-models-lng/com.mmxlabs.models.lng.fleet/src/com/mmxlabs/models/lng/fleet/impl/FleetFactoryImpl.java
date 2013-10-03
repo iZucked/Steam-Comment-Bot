@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 
+import com.mmxlabs.models.lng.fleet.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -45,7 +46,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 */
 	public static FleetFactory init() {
 		try {
-			FleetFactory theFleetFactory = (FleetFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/fleet/1/"); 
+			FleetFactory theFleetFactory = (FleetFactory)EPackage.Registry.INSTANCE.getEFactory(FleetPackage.eNS_URI);
 			if (theFleetFactory != null) {
 				return theFleetFactory;
 			}

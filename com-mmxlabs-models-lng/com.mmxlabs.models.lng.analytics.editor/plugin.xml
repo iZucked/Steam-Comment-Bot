@@ -170,4 +170,16 @@
        </FeatureAnyOf>
     </editorFactory>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated analytics -->
+      <editor
+            id="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditorID"
+            name="%_UI_AnalyticsEditor_label"
+            icon="icons/full/obj16/AnalyticsModelFile.gif"
+            extensions="analytics"
+            class="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditor"
+            contributorClass="com.mmxlabs.models.lng.analytics.presentation.AnalyticsActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>

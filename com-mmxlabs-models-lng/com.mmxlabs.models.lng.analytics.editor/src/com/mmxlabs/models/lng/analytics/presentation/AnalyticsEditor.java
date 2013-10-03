@@ -176,7 +176,7 @@ public class AnalyticsEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PropertySheetPage propertySheetPage;
+	protected List<PropertySheetPage> propertySheetPages = new ArrayList<PropertySheetPage>();
 
 	/**
 	 * This is the viewer that shadows the selection in the content outline.
@@ -236,7 +236,6 @@ public class AnalyticsEditor
 	 */
 	protected IPartListener partListener =
 		new IPartListener() {
-			@Override
 			public void partActivated(IWorkbenchPart p) {
 				if (p instanceof ContentOutline) {
 					if (((ContentOutline)p).getCurrentPage() == contentOutlinePage) {
@@ -246,7 +245,7 @@ public class AnalyticsEditor
 					}
 				}
 				else if (p instanceof PropertySheet) {
-					if (((PropertySheet)p).getCurrentPage() == propertySheetPage) {
+					if (propertySheetPages.contains(((PropertySheet)p).getCurrentPage())) {
 						getActionBarContributor().setActiveEditor(AnalyticsEditor.this);
 						handleActivate();
 					}
@@ -255,19 +254,15 @@ public class AnalyticsEditor
 					handleActivate();
 				}
 			}
-			@Override
 			public void partBroughtToTop(IWorkbenchPart p) {
 				// Ignore.
 			}
-			@Override
 			public void partClosed(IWorkbenchPart p) {
 				// Ignore.
 			}
-			@Override
 			public void partDeactivated(IWorkbenchPart p) {
 				// Ignore.
 			}
-			@Override
 			public void partOpened(IWorkbenchPart p) {
 				// Ignore.
 			}
@@ -340,8 +335,7 @@ public class AnalyticsEditor
 							if (updateProblemIndication) {
 								getSite().getShell().getDisplay().asyncExec
 									(new Runnable() {
-										 @Override
-										public void run() {
+										 public void run() {
 											 updateProblemIndication();
 										 }
 									 });
@@ -363,6 +357,15 @@ public class AnalyticsEditor
 			@Override
 			protected void unsetTarget(Resource target) {
 				basicUnsetTarget(target);
+				resourceToDiagnosticMap.remove(target);
+				if (updateProblemIndication) {
+					getSite().getShell().getDisplay().asyncExec
+						(new Runnable() {
+							 public void run() {
+								 updateProblemIndication();
+							 }
+						 });
+				}
 			}
 		};
 
@@ -374,7 +377,6 @@ public class AnalyticsEditor
 	 */
 	protected IResourceChangeListener resourceChangeListener =
 		new IResourceChangeListener() {
-			@Override
 			public void resourceChanged(IResourceChangeEvent event) {
 				IResourceDelta delta = event.getDelta();
 				try {
@@ -383,7 +385,6 @@ public class AnalyticsEditor
 						protected Collection<Resource> changedResources = new ArrayList<Resource>();
 						protected Collection<Resource> removedResources = new ArrayList<Resource>();
 
-						@Override
 						public boolean visit(IResourceDelta delta) {
 							if (delta.getResource().getType() == IResource.FILE) {
 								if (delta.getKind() == IResourceDelta.REMOVED ||
@@ -398,6 +399,7 @@ public class AnalyticsEditor
 										}
 									}
 								}
+								return false;
 							}
 
 							return true;
@@ -418,8 +420,7 @@ public class AnalyticsEditor
 					if (!visitor.getRemovedResources().isEmpty()) {
 						getSite().getShell().getDisplay().asyncExec
 							(new Runnable() {
-								 @Override
-								public void run() {
+								 public void run() {
 									 removedResources.addAll(visitor.getRemovedResources());
 									 if (!isDirty()) {
 										 getSite().getPage().closeEditor(AnalyticsEditor.this, false);
@@ -431,8 +432,7 @@ public class AnalyticsEditor
 					if (!visitor.getChangedResources().isEmpty()) {
 						getSite().getShell().getDisplay().asyncExec
 							(new Runnable() {
-								 @Override
-								public void run() {
+								 public void run() {
 									 changedResources.addAll(visitor.getChangedResources());
 									 if (getSite().getPage().getActiveEditor() == AnalyticsEditor.this) {
 										 handleActivate();
@@ -629,12 +629,10 @@ public class AnalyticsEditor
 		//
 		commandStack.addCommandStackListener
 			(new CommandStackListener() {
-				 @Override
-				public void commandStackChanged(final EventObject event) {
+				 public void commandStackChanged(final EventObject event) {
 					 getContainer().getDisplay().asyncExec
 						 (new Runnable() {
-							  @Override
-							public void run() {
+							  public void run() {
 								  firePropertyChange(IEditorPart.PROP_DIRTY);
 
 								  // Try to select the affected objects.
@@ -643,8 +641,14 @@ public class AnalyticsEditor
 								  if (mostRecentCommand != null) {
 									  setSelectionToViewer(mostRecentCommand.getAffectedObjects());
 								  }
-								  if (propertySheetPage != null && !propertySheetPage.getControl().isDisposed()) {
-									  propertySheetPage.refresh();
+								  for (Iterator<PropertySheetPage> i = propertySheetPages.iterator(); i.hasNext(); ) {
+									  PropertySheetPage propertySheetPage = i.next();
+									  if (propertySheetPage.getControl().isDisposed()) {
+										  i.remove();
+									  }
+									  else {
+										  propertySheetPage.refresh();
+									  }
 								  }
 							  }
 						  });
@@ -680,7 +684,6 @@ public class AnalyticsEditor
 		if (theSelection != null && !theSelection.isEmpty()) {
 			Runnable runnable =
 				new Runnable() {
-					@Override
 					public void run() {
 						// Try to select the items in the current content viewer of the editor.
 						//
@@ -783,7 +786,6 @@ public class AnalyticsEditor
 					new ISelectionChangedListener() {
 						// This just notifies those things that are affected by the section.
 						//
-						@Override
 						public void selectionChanged(SelectionChangedEvent selectionChangedEvent) {
 							setSelection(selectionChangedEvent.getSelection());
 						}
@@ -938,8 +940,7 @@ public class AnalyticsEditor
 
 			getSite().getShell().getDisplay().asyncExec
 				(new Runnable() {
-					 @Override
-					public void run() {
+					 public void run() {
 						 setActivePage(0);
 					 }
 				 });
@@ -963,8 +964,7 @@ public class AnalyticsEditor
 
 		getSite().getShell().getDisplay().asyncExec
 			(new Runnable() {
-				 @Override
-				public void run() {
+				 public void run() {
 					 updateProblemIndication();
 				 }
 			 });
@@ -1099,8 +1099,7 @@ public class AnalyticsEditor
 				(new ISelectionChangedListener() {
 					 // This ensures that we handle selections correctly.
 					 //
-					 @Override
-					public void selectionChanged(SelectionChangedEvent event) {
+					 public void selectionChanged(SelectionChangedEvent event) {
 						 handleContentOutlineSelection(event.getSelection());
 					 }
 				 });
@@ -1116,23 +1115,22 @@ public class AnalyticsEditor
 	 * @generated
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		if (propertySheetPage == null) {
-			propertySheetPage =
-				new ExtendedPropertySheetPage(editingDomain) {
-					@Override
-					public void setSelectionToViewer(List<?> selection) {
-						AnalyticsEditor.this.setSelectionToViewer(selection);
-						AnalyticsEditor.this.setFocus();
-					}
+		PropertySheetPage propertySheetPage =
+			new ExtendedPropertySheetPage(editingDomain) {
+				@Override
+				public void setSelectionToViewer(List<?> selection) {
+					AnalyticsEditor.this.setSelectionToViewer(selection);
+					AnalyticsEditor.this.setFocus();
+				}
 
-					@Override
-					public void setActionBars(IActionBars actionBars) {
-						super.setActionBars(actionBars);
-						getActionBarContributor().shareGlobalActions(this, actionBars);
-					}
-				};
-			propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
-		}
+				@Override
+				public void setActionBars(IActionBars actionBars) {
+					super.setActionBars(actionBars);
+					getActionBarContributor().shareGlobalActions(this, actionBars);
+				}
+			};
+		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
+		propertySheetPages.add(propertySheetPage);
 
 		return propertySheetPage;
 	}
@@ -1239,7 +1237,7 @@ public class AnalyticsEditor
 
 	/**
 	 * This returns whether something has been persisted to the URI of the specified resource.
-	 * The implementation uses the URI converter from the editor's resource set to try to open an input stream. 
+	 * The implementation uses the URI converter from the editor's resource set to try to open an input stream.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1312,20 +1310,9 @@ public class AnalyticsEditor
 	 */
 	@Override
 	public void gotoMarker(IMarker marker) {
-		try {
-			if (marker.getType().equals(EValidator.MARKER)) {
-				String uriAttribute = marker.getAttribute(EValidator.URI_ATTRIBUTE, null);
-				if (uriAttribute != null) {
-					URI uri = URI.createURI(uriAttribute);
-					EObject eObject = editingDomain.getResourceSet().getEObject(uri, true);
-					if (eObject != null) {
-					  setSelectionToViewer(Collections.singleton(editingDomain.getWrapper(eObject)));
-					}
-				}
-			}
-		}
-		catch (CoreException exception) {
-			AnalyticsEditorPlugin.INSTANCE.log(exception);
+		List<?> targetObjects = markerHelper.getTargetObjects(editingDomain, marker);
+		if (!targetObjects.isEmpty()) {
+			setSelectionToViewer(targetObjects);
 		}
 	}
 
@@ -1516,7 +1503,7 @@ public class AnalyticsEditor
 			getActionBarContributor().setActiveEditor(null);
 		}
 
-		if (propertySheetPage != null) {
+		for (PropertySheetPage propertySheetPage : propertySheetPages) {
 			propertySheetPage.dispose();
 		}
 

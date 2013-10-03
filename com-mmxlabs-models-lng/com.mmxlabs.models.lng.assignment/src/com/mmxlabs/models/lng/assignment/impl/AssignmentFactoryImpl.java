@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.assignment.impl;
 
+import com.mmxlabs.models.lng.assignment.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -32,7 +33,7 @@ public class AssignmentFactoryImpl extends EFactoryImpl implements AssignmentFac
 	 */
 	public static AssignmentFactory init() {
 		try {
-			AssignmentFactory theAssignmentFactory = (AssignmentFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/assignment/1/"); 
+			AssignmentFactory theAssignmentFactory = (AssignmentFactory)EPackage.Registry.INSTANCE.getEFactory(AssignmentPackage.eNS_URI);
 			if (theAssignmentFactory != null) {
 				return theAssignmentFactory;
 			}

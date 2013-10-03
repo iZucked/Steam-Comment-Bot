@@ -73,4 +73,16 @@
           id="com.mmxlabs.models.lng.assignment.commands.ElementAssignmentCommandProvider">
     </ModelCommandProvider>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated assignment -->
+      <editor
+            id="com.mmxlabs.models.lng.assignment.presentation.AssignmentEditorID"
+            name="%_UI_AssignmentEditor_label"
+            icon="icons/full/obj16/AssignmentModelFile.gif"
+            extensions="assignment"
+            class="com.mmxlabs.models.lng.assignment.presentation.AssignmentEditor"
+            contributorClass="com.mmxlabs.models.lng.assignment.presentation.AssignmentActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>
