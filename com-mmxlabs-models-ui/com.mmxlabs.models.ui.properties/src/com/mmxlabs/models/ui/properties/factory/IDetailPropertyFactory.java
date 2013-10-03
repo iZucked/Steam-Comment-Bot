@@ -2,6 +2,7 @@ package com.mmxlabs.models.ui.properties.factory;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.properties.DetailProperty;
@@ -18,5 +19,5 @@ public interface IDetailPropertyFactory {
 	DetailProperty createProperties(@NonNull EObject eObject);
 
 	@NonNull
-	DetailProperty createProperties(@NonNull EObject eObject, @NonNull MMXRootObject rootObject);
+	DetailProperty createProperties(@NonNull EObject eObject, @Nullable MMXRootObject rootObject);
 }
