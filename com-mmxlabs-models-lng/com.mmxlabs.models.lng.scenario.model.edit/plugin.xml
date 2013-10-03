@@ -29,9 +29,6 @@
       <extender
             uri="http://www.mmxlabs.com/models/lng/analytics/1/"
             class="com.mmxlabs.models.lng.scenario.model.provider.LNGScenarioItemProviderAdapterFactory$AnalyticsChildCreationExtender"/>
-      <extender
-            uri="http://www.mmxlabs.com/models/lng/commercial/1/"
-            class="com.mmxlabs.models.lng.scenario.model.provider.LNGScenarioItemProviderAdapterFactory$CommercialChildCreationExtender"/>
    </extension>
 
    <extension point="org.eclipse.emf.edit.childCreationExtenders">
