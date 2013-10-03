@@ -22,7 +22,6 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -109,6 +108,8 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CreateStripDialog.StripType;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -167,6 +168,8 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  * 
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
+
+	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
 
 	private TradesWiringDiagram wiringDiagram;
 
@@ -431,6 +434,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		};
 		final MenuManager mgr = new MenuManager();
+
+		contextMenuExtensions = TradesTableContextMenuExtensionUtil.getContextMenuExtensions();
+
 		scenarioViewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
 
 			private Menu menu;
@@ -463,18 +469,42 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						if (rowDataItem.loadSlot != null) {
 							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
 							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = rootData.getLoadSlots().get(idx);
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(getEditingDomain(), slot, mgr);
+								}
+							}
 						} else {
 							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
 							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = rootData.getDischargeSlots().get(idx);
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(getEditingDomain(), slot, mgr);
+								}
+							}
 						}
 					}
 					if (dischargeColumns.contains(column)) {
 						if (rowDataItem.dischargeSlot != null) {
 							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
 							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = rootData.getDischargeSlots().get(idx);
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(getEditingDomain(), slot, mgr);
+								}
+							}
 						} else if (rowDataItem.loadSlot != null) {
 							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
 							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = rootData.getLoadSlots().get(idx);
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(getEditingDomain(), slot, mgr);
+								}
+							}
 						}
 					}
 

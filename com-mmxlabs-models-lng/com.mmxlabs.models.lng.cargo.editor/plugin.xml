@@ -15,6 +15,7 @@
 -->
 
 <plugin>
+   <extension-point id="TradesTableContextMenuExtension" name="TradesTableContextMenuExtension" schema="schema/TradesTableContextMenuExtension.exsd"/>
 
 
 
