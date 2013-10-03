@@ -17,9 +17,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.cargo.editor;bundle-version="[7.0.0,8.0.0)",
  com.mmxlabs.models.ui;bundle-version="[7.0.0,8.0.0)",
  com.mmxlabs.models.util;bundle-version="[7.0.0,8.0.0)",
- com.mmxlabs.scenario.service.manifest;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.scenario.service.ui;bundle-version="[5.0.0,6.0.0)",
+ com.mmxlabs.scenario.service.manifest;bundle-version="[5.1.0,6.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[5.1.0,6.0.0)",
+ com.mmxlabs.scenario.service.ui;bundle-version="[5.1.0,6.0.0)",
  com.mmxlabs.models.migration;bundle-version="[3.3.0,4.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.scenario.internal.Activator
