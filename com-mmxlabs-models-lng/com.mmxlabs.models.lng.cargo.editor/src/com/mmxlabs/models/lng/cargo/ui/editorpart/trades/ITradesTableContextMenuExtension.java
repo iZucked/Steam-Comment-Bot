@@ -7,7 +7,7 @@ import org.eclipse.jface.action.MenuManager;
 import com.mmxlabs.models.lng.cargo.Slot;
 
 /**
- * @since 7.0
+ * @since 8.0
  */
 public interface ITradesTableContextMenuExtension {
 

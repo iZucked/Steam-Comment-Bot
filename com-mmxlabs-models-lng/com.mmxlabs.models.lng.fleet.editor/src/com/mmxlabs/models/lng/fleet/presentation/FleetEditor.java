@@ -169,6 +169,7 @@ public class FleetEditor
 	/**
 	 * This is the property sheet page.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
