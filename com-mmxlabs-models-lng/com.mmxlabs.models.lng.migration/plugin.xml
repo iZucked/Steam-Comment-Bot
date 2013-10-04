@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="5"
+            latestVersion="-6"
             name="com.mmxlabs.models.lng">
       </MigrationContext>
    </extension>
@@ -50,6 +50,13 @@
             from="4"
             id="com.mmxlabs.models.lng.migration.units.MigrateToV5"
             to="5">
+      </MigrationUnit>
+       <MigrationUnit
+            class="com.mmxlabs.models.lng.migration.units.MigrateToV6"
+            context="com.mmxlabs.models.lng"
+            from="5"
+            id="com.mmxlabs.models.lng.migration.units.MigrateToV6"
+            to="-6">
       </MigrationUnit>
    </extension>
 </plugin>
