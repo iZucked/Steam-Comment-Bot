@@ -50,7 +50,14 @@
             context="com.mmxlabs.lingo"
             from="4"
             to="5">
-      </MigrationUnit>      
+      </MigrationUnit>
+        <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV6"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV6"
+            context="com.mmxlabs.lingo"
+            from="5"
+            to="-6">
+      </MigrationUnit>            
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
