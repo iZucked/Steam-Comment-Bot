@@ -5,4 +5,4 @@ Bundle-SymbolicName: com.mmxlabs.lingo.doc;singleton:=true
 Bundle-Version: 3.2.0.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.help;bundle-version="3.5.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

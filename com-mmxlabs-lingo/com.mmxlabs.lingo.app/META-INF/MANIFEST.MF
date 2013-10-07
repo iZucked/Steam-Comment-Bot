@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.rcp.common;bundle-version="[4.1.0,5.0.0)",
  org.apache.shiro.core;bundle-version="1.2.0",
  com.mmxlabs.license.features;bundle-version="[4.1.0,5.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.app,
  com.mmxlabs.lingo.app.intro
