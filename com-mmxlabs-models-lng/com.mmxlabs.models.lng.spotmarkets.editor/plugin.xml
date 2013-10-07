@@ -153,6 +153,14 @@
           referenceEClass="com.mmxlabs.models.lng.pricing.CharterIndex">
     </valueProvider>
  </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMartketsModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel"
+          subModelImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter">
+    </submodelImporter>
+ </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated spotmarkets -->
       <editor
