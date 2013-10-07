@@ -9,13 +9,7 @@
    <feature id="com.mmxlabs.lingo.feature" version="0.0.0">
       <category name="all"/>
    </feature>
-   <feature id="com.mmxlabs.lingo.feature.source" version="0.0.0">
-      <category name="all"/>
-   </feature>
     <feature id="com.mmxlabs.lingo.its.feature" version="0.0.0">
-      <category name="all"/>
-   </feature>
-   <feature id="com.mmxlabs.lingo.its.feature.source" version="0.0.0">
       <category name="all"/>
    </feature>
    <category-def name="all" label="LiNGO"/>
