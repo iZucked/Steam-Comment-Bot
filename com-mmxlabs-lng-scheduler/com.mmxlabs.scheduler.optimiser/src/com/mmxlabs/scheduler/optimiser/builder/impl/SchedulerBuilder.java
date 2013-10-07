@@ -948,6 +948,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Create charter out elements
 		buildVesselEvents();
 
+		// Generate DES Purchase and FOB Sale slot bindings before applying vessel restriction constraints
+		doBindDischargeSlotsToDESPurchase();
+		doBindLoadSlotsToFOBSale();
+
 		// configure constraints
 		applyAdjacencyConstraints();
 		applyVesselRestrictionConstraints();
@@ -1571,39 +1575,50 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portCostProvider.setPortCost(port, vessel, portType, cost);
 	}
 
+	private Map<IDischargeOption, Collection<IPort>> fobSalesToLoadPorts = new HashMap<>();
+	private Map<ILoadOption, Collection<IPort>> desPurchasesToDischargePorts = new HashMap<>();
+
 	@Override
 	public void bindDischargeSlotsToDESPurchase(final ILoadOption desPurchase, final Collection<IPort> dischargePorts) {
+		desPurchasesToDischargePorts.put(desPurchase, new ArrayList<>(dischargePorts));
 
-		final ISequenceElement desElement = portSlotsProvider.getElement(desPurchase);
+	}
 
-		// Look up virtual vessel
-		final IVessel virtualVessel = virtualVesselMap.get(desElement);
-		if (virtualVessel == null) {
-			throw new IllegalArgumentException("DES Purchase is not linked to a virtual vesssel");
-		}
+	private void doBindDischargeSlotsToDESPurchase() {
+		for (Map.Entry<ILoadOption, Collection<IPort>> e : desPurchasesToDischargePorts.entrySet()) {
+			final ILoadOption desPurchase = e.getKey();
+			final Collection<IPort> dischargePorts = e.getValue();
 
-		final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(desPurchase));
-		for (final IDischargeOption option : dischargeSlots) {
+			final ISequenceElement desElement = portSlotsProvider.getElement(desPurchase);
 
-			if (option instanceof DischargeSlot) {
+			// Look up virtual vessel
+			final IVessel virtualVessel = virtualVesselMap.get(desElement);
+			if (virtualVessel == null) {
+				throw new IllegalArgumentException("DES Purchase is not linked to a virtual vesssel");
+			}
 
-				if (dischargePorts.contains(option.getPort())) {
-					// Get current allocation
+			final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(desPurchase));
+			for (final IDischargeOption option : dischargeSlots) {
 
-					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-					if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+				if (option instanceof DischargeSlot) {
 
-						Set<IVessel> set = slotVesselRestrictions.get(option);
-						if (set == null || set.isEmpty()) {
-							set = new HashSet<IVessel>(realVessels);
+					if (dischargePorts.contains(option.getPort())) {
+						// Get current allocation
+
+						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
+						if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+
+							Set<IVessel> set = slotVesselRestrictions.get(option);
+							if (set == null || set.isEmpty()) {
+								set = new HashSet<IVessel>(realVessels);
+							}
+							set.add(virtualVessel);
+
+							constrainSlotToVessels(option, set);
 						}
-						set.add(virtualVessel);
-
-						constrainSlotToVessels(option, set);
 					}
 				}
 			}
-
 		}
 	}
 
@@ -1612,36 +1627,44 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public void bindLoadSlotsToFOBSale(final IDischargeOption fobSale, final Collection<IPort> loadPorts) {
+		fobSalesToLoadPorts.put(fobSale, new ArrayList<>(loadPorts));
+	}
 
-		final ISequenceElement desElement = portSlotsProvider.getElement(fobSale);
+	private void doBindLoadSlotsToFOBSale() {
 
-		// Look up virtual vessel
-		final IVessel virtualVessel = virtualVesselMap.get(desElement);
-		if (virtualVessel == null) {
-			throw new IllegalArgumentException("FOB Sale is not linked to a virtual vesssel");
-		}
-		final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(fobSale));
+		for (Map.Entry<IDischargeOption, Collection<IPort>> e : fobSalesToLoadPorts.entrySet()) {
+			final IDischargeOption fobSale = e.getKey();
+			final Collection<IPort> loadPorts = e.getValue();
 
-		for (final ILoadOption option : loadSlots) {
+			final ISequenceElement desElement = portSlotsProvider.getElement(fobSale);
 
-			if (option instanceof LoadSlot) {
+			// Look up virtual vessel
+			final IVessel virtualVessel = virtualVesselMap.get(desElement);
+			if (virtualVessel == null) {
+				throw new IllegalArgumentException("FOB Sale is not linked to a virtual vesssel");
+			}
+			final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(fobSale));
 
-				if (loadPorts.contains(option.getPort())) {
-					// Get current allocation
+			for (final ILoadOption option : loadSlots) {
 
-					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-					if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
-						Set<IVessel> set = slotVesselRestrictions.get(option);
-						if (set == null || set.isEmpty()) {
-							set = new HashSet<IVessel>(realVessels);
+				if (option instanceof LoadSlot) {
+
+					if (loadPorts.contains(option.getPort())) {
+						// Get current allocation
+
+						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
+						if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+							Set<IVessel> set = slotVesselRestrictions.get(option);
+							if (set == null || set.isEmpty()) {
+								set = new HashSet<IVessel>(realVessels);
+							}
+							set.add(virtualVessel);
+
+							constrainSlotToVessels(option, set);
 						}
-						set.add(virtualVessel);
-
-						constrainSlotToVessels(option, set);
 					}
 				}
 			}
-
 		}
 	}
 
