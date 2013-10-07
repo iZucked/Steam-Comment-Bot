@@ -235,7 +235,7 @@ public class SchedulePnLReport extends EMFReportView {
 		addColumn("Type", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
-				if (object instanceof SlotVisit) {
+				if (object instanceof SlotVisit || object instanceof CargoAllocation) {
 					return "Cargo";
 				} else if (object instanceof StartEvent) {
 					return "Start";
@@ -587,7 +587,7 @@ public class SchedulePnLReport extends EMFReportView {
 		}
 		return nodes;
 	}
-	
+
 	/**
 	 * @since 4.0
 	 */
