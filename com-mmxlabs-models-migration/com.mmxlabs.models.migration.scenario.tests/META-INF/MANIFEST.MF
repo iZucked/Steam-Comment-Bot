@@ -4,7 +4,7 @@ Bundle-Name: Scenario Migration Tests
 Bundle-SymbolicName: com.mmxlabs.models.migration.scenario.tests
 Bundle-Version: 3.4.0.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Fragment-Host: com.mmxlabs.models.migration.scenario
 Require-Bundle: org.junit;bundle-version="4.8.2",
  com.google.guava;bundle-version="13.0.1",
