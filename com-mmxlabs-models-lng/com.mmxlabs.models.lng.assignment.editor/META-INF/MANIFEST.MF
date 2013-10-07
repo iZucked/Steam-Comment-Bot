@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.assignment.presentation.AssignmentEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.mmxlabs.models.lng.assignment.editor.utils,
  com.mmxlabs.models.lng.assignment.importers,
  com.mmxlabs.models.lng.assignment.presentation
