@@ -6,7 +6,7 @@ Bundle-Version: 5.0.5.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.mmxlabs.scenario.service,
  com.mmxlabs.scenario.service.impl,
  com.mmxlabs.scenario.service.model,
