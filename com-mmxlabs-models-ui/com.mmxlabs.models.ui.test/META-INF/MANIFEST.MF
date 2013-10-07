@@ -7,7 +7,7 @@ Bundle-Version: 7.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.mmxlabs.models.ui.test.model,
  com.mmxlabs.models.ui.test.model.impl,
  com.mmxlabs.models.ui.test.model.util

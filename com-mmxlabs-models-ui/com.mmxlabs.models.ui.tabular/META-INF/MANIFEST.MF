@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.mmxcore;bundle-version="[5.0.0,6.0.0)",
  com.mmxlabs.scenario.service.model;bundle-version="[5.0.0,6.0.0)",
  com.mmxlabs.models.ui.validation;bundle-version="[7.1.0,8.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui.tabular,
  com.mmxlabs.models.ui.tabular.filter,
