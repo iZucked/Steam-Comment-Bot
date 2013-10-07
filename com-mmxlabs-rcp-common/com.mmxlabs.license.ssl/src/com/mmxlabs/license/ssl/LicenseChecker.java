@@ -40,10 +40,10 @@ public final class LicenseChecker {
 	 */
 	public static enum LicenseState {
 		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid("License is not valid yet. Please contact Minimax Labs."), /**
-		 * @since 4.1
+		 * @since
+		 *        4.1
 		 */
-		KeystoreNotFound(
-				"Unable to find license file");
+		KeystoreNotFound("Unable to find license file");
 
 		private final String message;
 
@@ -65,8 +65,6 @@ public final class LicenseChecker {
 
 	// Hardcoded keystore password - only storing public key so not really an issue - although tampering may be an issue
 	private static final String password = "Lok3pDTS";
-
-	// private static final char[] password = new char[] { '1', '2', '3', '4', '5', '6' };
 
 	private static String CACERTS_PATH = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security" + File.separatorChar + "cacerts"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
 	private static String CACERTS_TYPE = "JKS"; //$NON-NLS-1$
