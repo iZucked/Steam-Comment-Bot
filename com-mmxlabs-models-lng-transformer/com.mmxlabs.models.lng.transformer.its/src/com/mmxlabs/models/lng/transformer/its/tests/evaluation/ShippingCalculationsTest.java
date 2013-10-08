@@ -20,9 +20,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.TimeUnitConvert;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -238,7 +236,7 @@ public class ShippingCalculationsTest {
 		return 0;
 	}
 
-	public Long getEventPnl(Event event) {
+	private GroupProfitAndLoss getPnlGroup(Event event) {
 		ProfitAndLossContainer container = null;
 		if (event instanceof SlotVisit) {
 			// and find the cargo associated with it
@@ -248,15 +246,65 @@ public class ShippingCalculationsTest {
 		if (event instanceof ProfitAndLossContainer) {
 			container = (ProfitAndLossContainer) event;
 		}
-
+		
 		if (container != null) {
 			final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
-			if (data != null) {
-				return data.getProfitAndLoss();
-			}
+			return data;
+		}
+		
+		return null;		
+	}
+	
+	public Long getEventPnl(Event event) {
+		final GroupProfitAndLoss data = getPnlGroup(event);
+		
+		if (data != null) {
+			return data.getProfitAndLoss();
 		}
 
 		return null;
+	}
+	
+	/**
+	 * Figure out the separate PnL groups in the itinerary 
+	 * @param events
+	 * @return
+	 */
+	public PnlChunkIndexData[] getPnlChunks(final List<? extends Event> events) {
+		ArrayList<Integer> boundaries = new ArrayList<Integer>();
+		int index = 0;
+		GroupProfitAndLoss lastGroup = null;
+		
+		// find the boundaries at which the PnL group changes
+		for (Event event: events) {
+			final GroupProfitAndLoss data = getPnlGroup(event);
+			if  (data != null && data != lastGroup) {
+				boundaries.add(index);
+				lastGroup = data;
+			}
+			index++;
+		}
+		
+		boundaries.add(index-1);
+		
+		PnlChunkIndexData[] result = new PnlChunkIndexData[boundaries.size()-1];
+		// construct Pnl chunks from the boundaries
+		for (int i = 0; i < boundaries.size()-1; i++) {
+			int start = boundaries.get(i);
+			int end = boundaries.get(i+1)-1;
+
+			// check if this chunk is a cargo
+			boolean isCargo = false;
+			for (int j = start; j < end; j++) {
+				if (events.get(j) instanceof SlotVisit) {
+					isCargo = true;
+				}
+			}
+			
+			result[i] = new PnlChunkIndexData(start, end, isCargo);
+		}
+		
+		return result;
 	}
 
 	public List<String> checkPnlValues(final List<? extends Event> events, final PnlChunkIndexData[] indices, final Integer[] pnls) {
@@ -324,8 +372,7 @@ public class ShippingCalculationsTest {
 
 	public SequenceTester getDefaultTester(final Class<?>[] expectedClasses) {
 
-		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 8, true) };
-		final SequenceTester checker = new SequenceTester(expectedClasses, chunkIndices);
+		final SequenceTester checker = new SequenceTester(expectedClasses);
 
 		// set default expected values to zero
 		for (final Expectations field : Expectations.values()) {
@@ -391,8 +438,7 @@ public class ShippingCalculationsTest {
 	private SequenceTester getStsTesterLoad() {
 		Class<?>[] expectedClasses = { StartEvent.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
 
-		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 8, true) };
-		final SequenceTester checker = new SequenceTester(expectedClasses, chunkIndices);
+		final SequenceTester checker = new SequenceTester(expectedClasses);
 
 		// set default expected values to zero
 		for (final Expectations field : Expectations.values()) {
@@ -456,9 +502,13 @@ public class ShippingCalculationsTest {
 	}
 
 	public class SequenceTester {
+		/** The expected values for each event in the sequence, keyed by expected field */
 		private final Map<Expectations, Integer[]> expectedArrays = new HashMap<Expectations, Integer[]>();
+		/** The expected PnL values for each PnL group */
 		private Integer[] expectedPnlValues = null;
+		/** The expected classes of each event in the sequence */
 		private Class<?>[] classes;
+		/** Information on where each PnL group starts & ends, and whether it is a cargo or not */
 		private PnlChunkIndexData[] cargoIndices;
 
 		public float baseFuelPricePerM3 = 10;
@@ -467,9 +517,8 @@ public class ShippingCalculationsTest {
 
 		public int hireCostPerHour = 0;
 
-		public SequenceTester(final Class<?>[] classes, final PnlChunkIndexData[] cargoIndices) {
+		public SequenceTester(final Class<?>[] classes) {
 			setClasses(classes);
-			setCargoIndices(cargoIndices);
 		}
 
 		public void setCargoIndices(final PnlChunkIndexData[] cargoIndices) {
@@ -576,7 +625,8 @@ public class ShippingCalculationsTest {
 
 			checkClasses(events, classes);
 
-			setupExpectedHireCosts(hireCostPerHour);
+			setupExpectedHireCosts(hireCostPerHour);		
+			setCargoIndices(getPnlChunks(events));
 
 			for (final Class<?> clazz : new HashSet<Class<?>>(Arrays.asList(classes))) {
 				final List<?> objects = extractObjectsOfClass(events, clazz);
@@ -1386,8 +1436,6 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 
-		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(0, 3, false), new PnlChunkIndexData(4, 9, true) });
-
 		// change from default: cooldown time
 		final Integer[] expectedCooldownTimes = { 1 };
 		checker.setExpectedValues(Expectations.DURATIONS, Cooldown.class, expectedCooldownTimes);
@@ -1443,8 +1491,6 @@ public class ShippingCalculationsTest {
 				EndEvent.class };
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
-		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(0, 3, false), new PnlChunkIndexData(4, 9, true) });
-
 		// change from default: cooldown time
 		final Integer[] expectedCooldownTimes = { 0 };
 		checker.setExpectedValues(Expectations.DURATIONS, Cooldown.class, expectedCooldownTimes);
@@ -1553,8 +1599,7 @@ public class ShippingCalculationsTest {
 	 */
 	public SequenceTester getTestCharterCost_SpotCharterInTester(final Class<?>[] expectedClasses) {
 
-		final PnlChunkIndexData[] cargoIndices = { new PnlChunkIndexData(0, 4, true) };
-		final SequenceTester checker = new SequenceTester(expectedClasses, cargoIndices);
+		final SequenceTester checker = new SequenceTester(expectedClasses);
 
 		// set default expected values to zero
 		for (final Expectations field : Expectations.values()) {
@@ -1655,7 +1700,6 @@ public class ShippingCalculationsTest {
 
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 		// Missing the journey so shift default indices by one
-		checker.setCargoIndices(new PnlChunkIndexData[] { new PnlChunkIndexData(0, 1, false), new PnlChunkIndexData(2, 7, true) });
 
 		// expected durations of journeys
 		final Integer[] expectedJourneyDurations = { 2, 1 };
@@ -1767,9 +1811,6 @@ public class ShippingCalculationsTest {
 		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class,
 				Journey.class, Idle.class, EndEvent.class };
 		final SequenceTester checker = getDefaultTester(classes);
-
-		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 8, true), new PnlChunkIndexData(9, 11, false) };
-		checker.setCargoIndices(chunkIndices);
 
 		// expected durations of journeys
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 1 });
@@ -2023,9 +2064,7 @@ public class ShippingCalculationsTest {
 
 		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, GeneratedCharterOut.class,
 				EndEvent.class };
-		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 7, true), new PnlChunkIndexData(8, 9, false) };
 		final SequenceTester checker = getDefaultTester(expectedClasses);
-		checker.setCargoIndices(chunkIndices);
 
 		// change from default: one fewer idle
 
@@ -2088,9 +2127,7 @@ public class ShippingCalculationsTest {
 
 		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, GeneratedCharterOut.class,
 				EndEvent.class };
-		final PnlChunkIndexData[] chunkIndices = { new PnlChunkIndexData(0, 2, false), new PnlChunkIndexData(3, 7, true), new PnlChunkIndexData(8, 9, false) };
 		final SequenceTester checker = getDefaultTester(expectedClasses);
-		checker.setCargoIndices(chunkIndices);
 
 		checker.hireCostPerHour = charterRatePerDay / 24;
 		// change from default: one fewer idle
@@ -2323,7 +2360,7 @@ public class ShippingCalculationsTest {
 		Class<?>[] expectedClasses = { StartEvent.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
 
 		SequenceTester checker = getDefaultTester(expectedClasses);
-
+		
 		// expected charter out duration
 		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
 
@@ -2349,7 +2386,7 @@ public class ShippingCalculationsTest {
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
-
+		
 		checker.check(sequence);
 	}
 
@@ -2385,7 +2422,6 @@ public class ShippingCalculationsTest {
 	}
 
 	@Test
-	@Ignore("Known error, fix is in heel_tracking branch")
 	public void testHeelRollover() {
 		System.err.println("\n\nTest min heel rollover: LNG travel due to expensive BF");
 
@@ -2456,7 +2492,6 @@ public class ShippingCalculationsTest {
 		msc.createDefaultMaintenanceEvent("Maintenance", eventPort, null);
 
 		// and recalculate the vessel availability
-	@Ignore("Heel tracking Branch")
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
 		// force a heel rollover at the maintenance port
@@ -2498,9 +2533,6 @@ public class ShippingCalculationsTest {
 		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
 		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9430, 9510, -9445 });
-	@Ignore("Heel tracking Branch")
-	@Ignore("Heel tracking Branch")
-	@Ignore("Heel tracking Branch")
 
 		checker.baseFuelPricePerM3 = 100;
 		checker.setupOrdinaryFuelCosts();
