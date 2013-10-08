@@ -36,7 +36,6 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
-import com.mmxlabs.scheduler.optimiser.annotations.IShippingCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;

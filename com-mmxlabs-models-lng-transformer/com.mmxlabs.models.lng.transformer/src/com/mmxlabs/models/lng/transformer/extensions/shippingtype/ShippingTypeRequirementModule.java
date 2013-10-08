@@ -32,8 +32,9 @@ public class ShippingTypeRequirementModule extends PeaberryActivationModule {
 	@Override
 	protected void configure() {
 
-		bindService(RestrictedElementsConstraintCheckerFactory.class).export();
+		bindService(ShippingTypeRequirementConstraintCheckerFactory.class).export();
 		bindService(DesPermissionInjectorService.class).export();
+		bindService(ShippingTypeRequirementTransformerFactory.class).export();
 	}
 
 	/**
