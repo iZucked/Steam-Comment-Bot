@@ -58,7 +58,7 @@ public class FileScenarioService extends AbstractScenarioService {
 	private URI storeURI;
 
 	public FileScenarioService() {
-		super("Local Scenarios");
+		super("My Scenarios");
 		options = new HashMap<Object, Object>();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 	}
