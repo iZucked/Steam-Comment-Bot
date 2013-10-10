@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
@@ -84,6 +85,11 @@ public class CargoImporter extends DefaultClassImporter {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
+			if (object instanceof Cargo && attribute == MMXCorePackage.Literals.NAMED_OBJECT__NAME) {
+				// Skip and pull from load slot name
+				continue;
+			}
+			
 			if (shouldExportFeature(attribute)) {
 				exportAttribute(object, attribute, result);
 			}
@@ -261,6 +267,8 @@ public class CargoImporter extends DefaultClassImporter {
 		} else {
 			cargo.getSlots().add(load);
 			cargo.getSlots().add(discharge);
+			// Sync up cargo name
+			cargo.setName(load.getName());
 		}
 		// Always return cargo object for LDD style cargo import
 		newResults.add(cargo);
