@@ -84,7 +84,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
-import com.mmxlabs.models.lng.transformer.its.internal.Activator;
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;

@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.management.timer.Timer;
-import javax.script.ScriptContext;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
@@ -59,7 +57,6 @@ import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -75,7 +72,6 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
