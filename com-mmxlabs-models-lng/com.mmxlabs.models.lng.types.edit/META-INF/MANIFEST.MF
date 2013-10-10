@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.mmxlabs.models.lng.types.provider
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.types;visibility:=reexport;bundle-version="[8.0.0,9.0.0)",
