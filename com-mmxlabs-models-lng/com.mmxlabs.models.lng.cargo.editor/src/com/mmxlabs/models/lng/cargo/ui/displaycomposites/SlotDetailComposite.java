@@ -160,7 +160,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				final EStructuralFeature feature = editor.getFeature();
 				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					gd.widthHint = 80;
+					// 64 - magic constant from MultiDetailDialog
+					gd.widthHint = 80 + 64;
 					return gd;
 				}
 

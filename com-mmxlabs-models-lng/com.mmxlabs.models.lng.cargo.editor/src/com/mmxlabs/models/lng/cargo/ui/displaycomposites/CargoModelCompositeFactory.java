@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,7 +48,7 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
-		final List<EObject> external = super.getExternalEditingRange(root, value);
+		final Set<EObject> external = new LinkedHashSet<EObject>(super.getExternalEditingRange(root, value));
 
 		if (value instanceof Cargo) {
 			final Cargo cargo = (Cargo) value;
@@ -66,10 +67,11 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 						slots.add(dischargeSlot.getTransferTo());
 					}
 				}
+				external.addAll(super.getExternalEditingRange(root, slot));
 			}
 			external.addAll(slots);
 		}
 
-		return external;
+		return new ArrayList<EObject>(external);
 	}
 }

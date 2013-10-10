@@ -294,6 +294,8 @@ public class CargoEditingCommands {
 				}
 			}
 			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
+			// Force allow re-wiring on a change
+			setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), Boolean.TRUE));
 
 			// Optional market slots can be removed.
 			for (final Slot s : cargo.getSlots()) {
