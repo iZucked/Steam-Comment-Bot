@@ -89,7 +89,7 @@ public class HorizontalKPIReportView extends ViewPart {
 					rtn = (d.pnl != null ? d.pnl - (pinD != null ? pinD.pnl : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
 				case 2:
-					return "P&L (MtM)";
+					return "MtM P&L";
 				case 3:
 					rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
