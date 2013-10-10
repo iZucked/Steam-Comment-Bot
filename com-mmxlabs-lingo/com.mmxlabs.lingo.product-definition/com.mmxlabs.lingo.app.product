@@ -49,6 +49,7 @@ Build: {1}
 
    <features>
       <feature id="com.mmxlabs.lingo.feature"/>
+      <feature id="jre.feature" version="7.25.0"/>
    </features>
 
    <configurations>
@@ -56,15 +57,14 @@ Build: {1}
       <plugin id="com.mmxlabs.datasources.dataloy" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.lingo.extensions" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.liveevaluator" autoStart="true" startLevel="0" />
-      <plugin id="com.mmxlabs.scenario.service.dirscan" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.transformer" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.transformer.ui" autoStart="true" startLevel="0" />
-      <plugin id="com.mmxlabs.models.ui.validation" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.migration" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.migration.scenario" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.ui.validation" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.scenario.service.dirscan" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="false" startLevel="2" />
