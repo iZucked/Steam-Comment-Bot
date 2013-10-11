@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>com.mmxlabs.shiplingo.platform</groupId>
 		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
-		<version>5.0.2.RELEASE</version>
+		<version>5.0.3-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mmxlabs.shiplingo.platform.feature</groupId>
 	<artifactId>com.mmxlabs.shiplingo.platform.feature</artifactId>
-	<version>5.0.2.RELEASE</version>
+	<version>5.0.3-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 	<build>
