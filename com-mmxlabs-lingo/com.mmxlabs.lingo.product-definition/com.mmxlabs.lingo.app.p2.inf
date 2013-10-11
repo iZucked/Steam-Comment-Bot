@@ -1,11 +1,17 @@
 # tell pde.build not to generate start levels
 org.eclipse.pde.build.append.startlevels=false
 
-# add requirement on org.eclipse.platform.ide
-#requires.1.namespace=org.eclipse.equinox.p2.iu
-#requires.1.name=org.eclipse.platform.ide
-#requires.1.range=[3.5.0.I20090522-1710,3.5.0.I20090522-1710]
-#requires.1.greedy=true
+requires.1.namespace=org.eclipse.equinox.p2.iu
+requires.1.name=configure.com.mmxlabs.lingo.product.configuration.win32.x86_64
+requires.1.range=[1.0.0,1.0.0]
+requires.1.greedy=true
+requires.1.filter=(&(osgi.os=win32) (osgi.arch=x86_64))
+
+requires.2.namespace=org.eclipse.equinox.p2.iu
+requires.2.name=configure.com.mmxlabs.lingo.product.configuration.win32.x86
+requires.2.range=[1.0.0,1.0.0]
+requires.2.greedy=true
+requires.2.filter=(&(osgi.os=win32) (osgi.arch=x86))
 
 # disable listing of feature in any category
 properties.1.name=org.eclipse.equinox.p2.type.category
@@ -17,10 +23,38 @@ org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#
 org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo, enabled:true);\
 org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/testing/,name:Lingo Testing, enabled:false);\
 org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/testing/,name:Lingo Testing, enabled:false);
+#
+#instructions.unconfigure=\
+#org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo);\
+#org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo);\
+#org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/testing/,name:Lingo Testing);\
+#org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/testing/,name:Lingo Testing);
 
-instructions.unconfigure=\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo);\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/,name:Lingo);\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:0,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/testing/,name:Lingo Testing);\
-org.eclipse.equinox.p2.touchpoint.eclipse.removeRepository(type:1,location:https${#58}//server1.mmxlabs.com/updates/LiNGO/testing/,name:Lingo Testing);
+units.1.id=configure.com.mmxlabs.lingo.product.configuration.win32.x86_64
+units.1.version=1.0.0
+units.1.provides.1.namespace=org.eclipse.equinox.p2.iu
+units.1.provides.1.name=configure.com.mmxlabs.lingo.product.configuration.win32.x86_64
+units.1.provides.1.version=1.0.0
+units.1.filter=(&(osgi.os=win32) (osgi.arch=x86_64))
+units.1.touchpoint.id=org.eclipse.equinox.p2.osgi
+units.1.touchpoint.version=1.0.0
+units.1.instructions.configure=addJvmArg(jvmArg:-Xmx2048m);
+units.1.instructions.unconfigure=removeJvmArg(jvmArg:-Xmx2048m);
+units.1.instructions.configure.import= \
+	org.eclipse.equinox.p2.touchpoint.eclipse.addJvmArg, \
+	org.eclipse.equinox.p2.touchpoint.eclipse.removeJvmArg
+
+units.2.id=configure.com.mmxlabs.lingo.product.configuration.win32.x86
+units.2.version=1.0.0
+units.2.provides.1.namespace=org.eclipse.equinox.p2.iu
+units.2.provides.1.name=configure.com.mmxlabs.lingo.product.configuration.win32.x86
+units.2.provides.1.version=1.0.0
+units.2.filter=(&(osgi.os=win32) (osgi.arch=x86))
+units.2.touchpoint.id=org.eclipse.equinox.p2.osgi
+units.2.touchpoint.version=1.0.0
+units.2.instructions.configure=addJvmArg(jvmArg:-Xmx768m);
+units.2.instructions.unconfigure=removeJvmArg(jvmArg:-Xmx768m);
+units.2.instructions.configure.import= \
+	org.eclipse.equinox.p2.touchpoint.eclipse.addJvmArg, \
+	org.eclipse.equinox.p2.touchpoint.eclipse.removeJvmArg
 
