@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import java.util.List;
+
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -36,7 +38,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 * @since 2.0
 	 */
 	@Override
-	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
+	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
 			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 		final int loadPricingDate = loadSlot == null ? IPortSlot.NO_PRICING_DATE : loadSlot.getPricingDate();
 		final int pricingDate = (loadPricingDate == IPortSlot.NO_PRICING_DATE ? loadTime : loadPricingDate);
@@ -67,8 +69,14 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 * @since 2.0
 	 */
 	@Override
-	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int salesPricePerMMBTu, final long transferVolume,
+	public int calculateLoadPricePerMMBTu(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int salesPricePerMMBTu, final long transferVolume,
 			final IDetailTree annotations) {
 		return calculateSimpleUnitPrice(transferTime);
+	}
+	
+	@Override
+	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumes, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
+			IDetailTree annotations) {
+		return 0;
 	}
 }

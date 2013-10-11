@@ -84,8 +84,26 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		long revenue = 0;
 		long cost = 0;
+		long additionProfitAndLoss = 0;
 
 		int taxTime = -1;
+		int[] dischargePricesPerMMBTu = new int[slots.size()];
+		long[] slotVolumesInM3 = new long[slots.size()];
+		int[] arrivalTimes = new int[slots.size()];
+		// Extract data
+		int idx = 0;
+		for (final IPortSlot slot : slots) {
+			if (slot instanceof IDischargeOption) {
+				dischargePricesPerMMBTu[idx] = currentAllocation.getSlotPricePerMMBTu(slot);
+			} else {
+				dischargePricesPerMMBTu[idx] = Integer.MAX_VALUE;
+			}
+			arrivalTimes[idx] = currentAllocation.getSlotTime(slot);
+			slotVolumesInM3[idx] = currentAllocation.getSlotVolumeInM3(slot);
+
+			idx++;
+		}
+
 		for (final IPortSlot slot : slots) {
 
 			// Determined by volume allocator
@@ -98,7 +116,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long value = Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
 
 			if (slot instanceof ILoadOption) {
+				ILoadOption loadOption = (ILoadOption) slot;
 				cost += value;
+				additionProfitAndLoss += loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel, plan, null);
 			} else if (slot instanceof IDischargeOption) {
 				revenue += value;
 			}
@@ -109,7 +129,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long result;
 		{
 			final long shippingCosts = getShippingCosts(plan, vessel, false, includeTimeCharterInFitness, vesselStartTime, null);
-			final long shippingTotalPretaxProfit = revenue - cost - shippingCosts;
+			final long shippingTotalPretaxProfit = revenue + additionProfitAndLoss - cost - shippingCosts;
 			final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
 
 			final long generatedCharterOutCosts = getGeneratedCharterOutCosts(plan, vessel, includeTimeCharterInFitness, vesselStartTime, null);

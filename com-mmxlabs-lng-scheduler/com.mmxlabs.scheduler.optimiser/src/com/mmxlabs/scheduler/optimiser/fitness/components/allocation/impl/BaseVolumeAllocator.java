@@ -55,50 +55,51 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		 * The capacity of the vessel carrying the cargo
 		 */
 		final long vesselCapacityInM3;
-		
+
 		/** The quantity of LNG which <em>must</em> be loaded for a given cargo (for fuel) */
 		final long requiredFuelVolumeInM3;
 
 		/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
 		final long minEndVolumeInM3;
-		
-		//final long maxEndVolumeInM3;
-		
-		/** 
-		 * Hack: magic number calculated by LNGVoyageCalculator representing the amount of heel which should be
-		 * present after the load -> discharge voyage but can be discharged after idling. Should be
+
+		// final long maxEndVolumeInM3;
+
+		/**
+		 * Hack: magic number calculated by LNGVoyageCalculator representing the amount of heel which should be present after the load -> discharge voyage but can be discharged after idling. Should be
 		 * equal to the minimum heel value minus the idle consumption. There must be a better way of doing this.
 		 */
 		final long dischargeHeelInM3;
-		
+
 		/** The LNG volume which will actually remain at the end of the voyage */
 		long allocatedEndVolumeInM3;
-		
+
 		/** Prices of LNG at each load / discharge slot in the cargo */
-		final int [] slotPricesPerM3;
-		
-		final int [] slotTimes;
-		
+		final int[] slotPricesPerM3;
+		final int[] slotPricesPerMMBTu;
+
+		final int[] slotTimes;
+
 		/** Slots in the cargo */
-		final IPortSlot [] slots;
-		
-		final long [] allocations; 
+		final IPortSlot[] slots;
+
+		final long[] allocations;
 
 		final VoyagePlan voyagePlan;
-		
-		public AllocationRecord(long capacity, long forced, long heel, long dischargeHeel, IPortSlot [] slots, int [] prices, int [] times, VoyagePlan plan) {
+
+		public AllocationRecord(long capacity, long forced, long heel, long dischargeHeel, IPortSlot[] slots, int[] pricesPerM3, int[] pricesPerMMBTu, int[] times, VoyagePlan plan) {
 			vesselCapacityInM3 = capacity;
 			requiredFuelVolumeInM3 = forced;
 			minEndVolumeInM3 = heel;
 			dischargeHeelInM3 = dischargeHeel;
-			slotPricesPerM3 = prices;
+			slotPricesPerM3 = pricesPerM3;
+			slotPricesPerMMBTu = pricesPerMMBTu;
 			slotTimes = times;
 			this.slots = slots;
 			voyagePlan = plan;
 
-			allocations = new long [slots.length];
+			allocations = new long[slots.length];
 		}
-		
+
 		public AllocationAnnotation createAllocationAnnotation() {
 			final AllocationAnnotation annotation = new AllocationAnnotation();
 
@@ -107,13 +108,15 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 			// TODO recompute load price here; this is not necessarily right
 			// final int[] prices = priceIterator.next();
-			final int[] prices = slotPricesPerM3;
+			final int[] pricesPerM3 = slotPricesPerM3;
+			final int[] pricesPerMMBTu = slotPricesPerMMBTu;
 
-			//annotation.getSlots().clear();
-			assert slots.length == prices.length;
+			// annotation.getSlots().clear();
+			assert slots.length == pricesPerM3.length;
 			for (int i = 0; i < slots.length; i++) {
 				annotation.getSlots().add(slots[i]);
-				annotation.setSlotPricePerM3(slots[i], prices[i]);
+				annotation.setSlotPricePerM3(slots[i], pricesPerM3[i]);
+				annotation.setSlotPricePerMMBTu(slots[i], pricesPerMMBTu[i]);
 				annotation.setSlotTime(slots[i], slotTimes[i]);
 			}
 
@@ -129,20 +132,20 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					annotation.setSlotVolumeInM3(discharge, discharge.getMaxDischargeVolume());
 				}
 			}
-			
-			return annotation;		
+
+			return annotation;
 		}
-		
-		public AllocationRecord(IPortSlot [] slots, int [] prices, int [] times, VoyagePlan plan) {
-			this(Long.MAX_VALUE, 0l, 0l, 0l, slots, prices, times, plan);
+
+		public AllocationRecord(IPortSlot[] slots, int[] pricesPerM3, int[] pricesPerMMBTu, int[] times, VoyagePlan plan) {
+			this(Long.MAX_VALUE, 0l, 0l, 0l, slots, pricesPerM3, pricesPerMMBTu, times, plan);
 		}
 	}
-	
+
 	/**
 	 * All the constraints to take into account, indexed bu cargo
 	 */
 	final ArrayList<AllocationRecord> constraints = new ArrayList<AllocationRecord>();
-	
+
 	@Inject
 	ITotalVolumeLimitProvider cargoAllocationProvider;
 
@@ -153,7 +156,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	int cargoCount;
 
-	//private long[] allocation;
+	// private long[] allocation;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -315,6 +318,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		int dischargePricePerM3 = 0;
 		int loadPricePerM3 = 0;
+		int dischargePricePerMMBTu = 0;
+		int loadPricePerMMBTu = 0;
 		long maximumDischargeVolumeInM3 = 0;
 		int idx = -1;
 		for (final Object object : plan.getSequence()) {
@@ -347,19 +352,19 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 						// compute purchase price from contract
 						// this is not ideal.
-						final int dischargePricePerMMBTu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, dischargeTime);
+						dischargePricePerMMBTu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, dischargeTime);
 						long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
 						if (maxLoadVolumeInM3 == 0) {
 							maxLoadVolumeInM3 = vesselCapacityInM3;
 						}
 						maximumDischargeVolumeInM3 = Math.min(vesselCapacityInM3 - forcedLoadVolumeInM3, maxLoadVolumeInM3 - forcedLoadVolumeInM3);
 
-						// TODO this value is incorrect for netback and profit sharing cases
+						// TODO this value is incorrect for netback and profit sharing cases where FOB price changes
 						// the load CV price is the notional maximum price
 						// if we load less, it might actually be worth less
 
 						final long loadVolumeInM3 = maximumDischargeVolumeInM3 + forcedLoadVolumeInM3;
-						final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadSlot, (IDischargeSlot) dischargeSlot, loadTime, dischargeTime,
+						loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu((ILoadSlot) loadSlot, (IDischargeSlot) dischargeSlot, loadTime, dischargeTime,
 								dischargePricePerMMBTu, loadVolumeInM3, maximumDischargeVolumeInM3, vessel, plan, null);
 
 						dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBTu, cargoCVValue);
@@ -406,14 +411,14 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 				// compute purchase price from contract
 				// this is not ideal.
-				final int dischargePricePerMMBTu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, time);
+				dischargePricePerMMBTu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, time);
 
 				// TODO this value is incorrect for netback and profit sharing cases
 				// the load price per MMBTu is the notional maximum price
 				// if we load less, it might actually be worth less
 				maximumDischargeVolumeInM3 = Math.max(loadSlot.getMaxLoadVolume(), dischargeSlot.getMaxDischargeVolume());
 				final long loadVolumeInM3 = maximumDischargeVolumeInM3;
-				final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, dischargePricePerMMBTu, loadVolumeInM3, null);
+				loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadPricePerMMBTu(loadSlot, dischargeSlot, time, dischargePricePerMMBTu, loadVolumeInM3, null);
 				dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBTu, cargoCVValue);
 				loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
@@ -429,7 +434,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		// TODO recompute load price here; this is not necessarily right
 		annotation.setSlotPricePerM3(loadSlot, loadPricePerM3);
+		annotation.setSlotPricePerM3(loadSlot, loadPricePerMMBTu);
 		annotation.setSlotPricePerM3(dischargeSlot, dischargePricePerM3);
+		annotation.setSlotPricePerM3(dischargeSlot, dischargePricePerMMBTu);
 		annotation.setSlotTime(loadSlot, loadTime);
 		annotation.setSlotTime(dischargeSlot, dischargeTime);
 		annotation.setSlotVolumeInM3(dischargeSlot, maximumDischargeVolumeInM3);
@@ -474,7 +481,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		final IPortSlot[] slots = { loadSlot, dischargeSlot };
 
-		final long  endHeelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l;
+		final long endHeelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l;
 		final long dischargeHeelRequired = plan.getRemainingHeelType() == HeelType.DISCHARGE ? plan.getRemainingHeelInM3() : 0l;
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
@@ -494,17 +501,17 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		// FIXME: Why do we pass in max discharge value?
 		final long loadVolumeInM3 = maximumDischargeVolumeInM3 + requiredFuelVolumeInM3;
-		final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBtu, loadVolumeInM3,
+		final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBtu, loadVolumeInM3,
 				maximumDischargeVolumeInM3, vessel, plan, null);
-
 		final int dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBtu, cargoCVValue);
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
-		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
-		final int [] times = { loadTime, dischargeTime };
+		final int[] pricesPerM3 = { loadPricePerM3, dischargePricePerM3 };
+		final int[] pricesPerMMBTu = { loadPricePerMMBTu, dischargePricePerMMBtu };
+		final int[] times = { loadTime, dischargeTime };
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, endHeelRequired, dischargeHeelRequired, slots, prices, times, plan));
-		
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, pricesPerMMBTu, times, plan));
+
 		cargoCount++;
 	}
 
@@ -542,7 +549,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		slotTimes.put(dischargeSlot, time);
 
 		final IPortSlot[] slots = { loadSlot, dischargeSlot };
-		
+
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
 		// compute purchase price from contract
@@ -556,13 +563,14 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final long loadVolumeInM3 = Math.max(loadSlot.getMaxLoadVolume(), dischargeSlot.getMaxDischargeVolume());
 
 		final int dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBTu, cargoCVValue);
-		final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, dischargePricePerMMBTu, loadVolumeInM3, null);
+		final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadPricePerMMBTu(loadSlot, dischargeSlot, time, dischargePricePerMMBTu, loadVolumeInM3, null);
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
-		final int[] prices = { loadPricePerM3, dischargePricePerM3 };
-		final int [] times = { time, time };
-		
-		constraints.add(new AllocationRecord(slots, prices, times, plan));
+		final int[] pricesPerM3 = { loadPricePerM3, dischargePricePerM3 };
+		final int[] pricesPerMMBTu = { loadPricePerMMBTu, dischargePricePerMMBTu };
+		final int[] times = { time, time };
+
+		constraints.add(new AllocationRecord(slots, pricesPerM3, pricesPerMMBTu, times, plan));
 
 		cargoCount++;
 	}
@@ -575,21 +583,21 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final long vesselCapacityInM3 = vessel.getCargoCapacity();
 		final IPortSlot[] slots = new IPortSlot[portDetails.length];
 
-		final int [] slotTimes = new int [slots.length];
-		
+		final int[] slotTimes = new int[slots.length];
+
 		for (int i = 0; i < slots.length; i++) {
 			slots[i] = portDetails[i].getOptions().getPortSlot();
 			slotTimes[i] = times[i];
 		}
 
-		final long endHeelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l; 
+		final long endHeelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l;
 		final long dischargeHeelRequired = plan.getRemainingHeelType() == HeelType.DISCHARGE ? plan.getRemainingHeelInM3() : 0l;
 
-		
 		final ILoadSlot firstLoadSlot = (ILoadSlot) slots[0];
 		final int cargoCVValue = firstLoadSlot.getCargoCVValue();
 
 		final int[] pricesPerM3 = new int[slots.length];
+		final int[] pricesPerMMBTu = new int[slots.length];
 		final long[] volumesInM3 = new long[slots.length];
 
 		{
@@ -612,6 +620,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				final int dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBtu, cargoCVValue);
 
 				pricesPerM3[i] = dischargePricePerM3;
+				pricesPerMMBTu[i] = dischargePricePerMMBtu;
 			}
 
 			final ILoadSlot loadSlot = (ILoadSlot) slots[0];
@@ -619,21 +628,21 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			final ILoadPriceCalculator calculator = loadSlot.getLoadPriceCalculator();
 			assert (calculator instanceof SimpleContract);
 
-			final int loadPricePerMMBTu = calculator.calculateLoadUnitPrice(null, null, times[0], 0, 0, 0, 0, null, null, null);
+			final int loadPricePerMMBTu = calculator.calculateFOBPricePerMMBTu(null, null, times[0], 0, 0, 0, 0, null, null, null);
 
 			final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 			final long loadVolumeInM3 = totalDischargeVolume + requiredFuelVolumeInM3;
 
 			volumesInM3[0] = loadVolumeInM3;
 			pricesPerM3[0] = loadPricePerM3;
+			pricesPerMMBTu[0] = loadPricePerMMBTu;
 		}
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3,  endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, slotTimes, plan));
+		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, pricesPerMMBTu, slotTimes, plan));
 		cargoCount++;
 	}
 
 	protected abstract long[] allocateSpareVolume();
-	
 
 	public void solve() {
 		allocateSpareVolume();

@@ -27,6 +27,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	public class SlotAllocationAnnotation {
 		public long volumeInM3;
 		public int pricePerM3;
+		public int pricePerMMBTu;
 		public int startTime;
 	}
 
@@ -132,12 +133,29 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		// TODO: throw an exception instead of returning magic value
 		return -1;
 	}
+	
+	@Override
+	public int getSlotPricePerMMBTu(final IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+		if (allocation != null) {
+			return allocation.pricePerMMBTu;
+		}
+		// TODO: throw an exception instead of returning magic value
+		return -1;
+	}
 
 	/**
 	 * @since 5.0
 	 */
 	public void setSlotPricePerM3(final IPortSlot slot, final int price) {
 		getOrCreateSlotAllocation(slot).pricePerM3 = price;
+	}
+	
+	/**
+	 * @since 5.0
+	 */
+	public void setSlotPricePerMMBTu(final IPortSlot slot, final int price) {
+		getOrCreateSlotAllocation(slot).pricePerMMBTu = price;
 	}
 
 	/**

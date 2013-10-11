@@ -98,10 +98,10 @@ public class TestPriceExpressionContract {
 		final VoyagePlan plan = new VoyagePlan();
 		final IDetailTree annotations = mock(IDetailTree.class);
 		
-		final int loadPriceWithPricingDate = contract.calculateLoadUnitPrice(loadSlotWithPricingDate, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu,
+		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu,
 				loadVolumeInM3, dischargeVolumeInM3, vessel, plan, annotations);
 
-		final int loadPriceNoPricingDate = contract.calculateLoadUnitPrice(loadSlotNoPricingDate, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu,
+		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu,
 				loadVolumeInM3, dischargeVolumeInM3, vessel, plan, annotations);
 
 		verify(curve).getValueAtPoint(loadPricingDate);

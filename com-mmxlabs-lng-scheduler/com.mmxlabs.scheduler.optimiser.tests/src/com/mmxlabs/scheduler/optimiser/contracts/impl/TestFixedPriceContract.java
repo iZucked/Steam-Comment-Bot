@@ -14,6 +14,6 @@ public class TestFixedPriceContract {
 	@Test
 	public void testComputeFixedPrice() {
 		final FixedPriceContract contract = new FixedPriceContract(35353);
-		assert (contract.calculateLoadUnitPrice(null, null, 0, 0, 0, 0, 0, null, null, null) == 35353);
+		assert (contract.calculateFOBPricePerMMBTu(null, null, 0, 0, 0, 0, 0, null, null, null) == 35353);
 	}
 }

@@ -60,4 +60,7 @@ public interface IAllocationAnnotation {
 	 * @since 5.0
 	 */
 	int getSlotPricePerM3(IPortSlot slot);
+	
+	
+	int getSlotPricePerMMBTu(IPortSlot slot);
 }
