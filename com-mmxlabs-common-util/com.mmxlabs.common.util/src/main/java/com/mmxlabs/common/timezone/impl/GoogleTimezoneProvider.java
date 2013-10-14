@@ -63,8 +63,8 @@ public class GoogleTimezoneProvider implements ITimezoneProvider {
 		InputStreamReader in = null;
 		try {
 			final URL requestURL = new URL(buildQueryURL(latitude, longitude));
-			in = new InputStreamReader(requestStream);
 			requestStream = requestURL.openStream();
+			in = new InputStreamReader(requestStream);
 			final Object result = JSONValue.parse(in);
 			if (result instanceof JSONObject) {
 				final JSONObject jsonObject = (JSONObject) result;
