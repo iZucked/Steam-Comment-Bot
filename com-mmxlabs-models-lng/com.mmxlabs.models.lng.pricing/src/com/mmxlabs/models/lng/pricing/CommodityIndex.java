@@ -6,9 +6,6 @@
  */
 package com.mmxlabs.models.lng.pricing;
 
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Commodity Index</b></em>'.
