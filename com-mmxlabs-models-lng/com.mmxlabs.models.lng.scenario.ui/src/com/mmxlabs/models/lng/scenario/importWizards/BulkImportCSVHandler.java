@@ -46,7 +46,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * @since 3.0
  * 
  */
-public class BulkImportCSVHandler extends AbstractHandler {
+public abstract class BulkImportCSVHandler extends AbstractHandler {
 	public ImportAction getImportAction(final int importTarget, final ImportAction.ImportHooksProvider ihp) {
 		final MMXRootObject root = ihp.getRootObject();
 		if (root instanceof LNGScenarioModel) {
@@ -144,7 +144,7 @@ public class BulkImportCSVHandler extends AbstractHandler {
 		Shell shell = HandlerUtil.getActiveShell(event);
 		IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
 
-		BulkImportWizard wizard = new BulkImportWizard(editor.getScenarioInstance());
+		BulkImportWizard wizard = new BulkImportWizard(editor.getScenarioInstance(), getFieldToImport());
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		WizardDialog dialog = new WizardDialog(shell, wizard);
@@ -217,5 +217,7 @@ public class BulkImportCSVHandler extends AbstractHandler {
 		}
 
 	}
+	
+	public abstract int getFieldToImport();
 
 }

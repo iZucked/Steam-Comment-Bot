@@ -24,18 +24,19 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private List<ScenarioInstance> selectedScenarios;
 	private String importFilename;
 	private char csvSeparator;
-	private int importedField;
 	final private ScenarioInstance currentScenario;
+	private int importedField;
 	
 	
-	public BulkImportWizard(ScenarioInstance scenarioInstance) {
+	public BulkImportWizard(ScenarioInstance scenarioInstance, int fieldToImport) {
 		currentScenario = scenarioInstance;
+		importedField = fieldToImport;
 		setWindowTitle("Bulk data import");
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		bip = new BulkImportPage("selectScenarios", currentScenario);
+		bip = new BulkImportPage("selectScenarios", getImportedField(), currentScenario);
 		this.setForcePreviousAndNextButtons(false);
 	}
 
@@ -51,7 +52,6 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		selectedScenarios = bip.getSelectedScenarios();
 		importFilename = bip.getImportFilename();
 		csvSeparator = bip.getCsvSeparator();
-		importedField = bip.getImportedField();
 		return true;
 	}
 

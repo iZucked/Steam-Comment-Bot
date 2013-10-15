@@ -141,8 +141,17 @@
                allPopups="false"
                locationURI="menu:data?after=additions">
             <command
-                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
                   label="Bulk import price curves"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=additions">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
+                  label="Bulk import cargoes"
                   style="push">
             </command>
          </menuContribution>
@@ -170,9 +179,14 @@
                name="Export Scenario as CSV">
          </command>
          <command
-               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
-               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCSVHandler"
-               name="Bulk Import from CSV">
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
+               name="Bulk Import Prices from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
+               name="Bulk Import Cargoes from CSV">
          </command>
            <command
                defaultHandler="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImportWizardHandler"

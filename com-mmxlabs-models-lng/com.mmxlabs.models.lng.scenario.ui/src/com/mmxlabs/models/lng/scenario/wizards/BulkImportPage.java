@@ -52,7 +52,10 @@ public class BulkImportPage extends WizardPage {
 	protected RadioSelectionGroup csvSelectionGroup;
 	protected CheckboxTreeViewer scenarioTreeViewer;
 	protected FileFieldEditor importFileEditor;
+	final protected int importField;
+	
 	final protected ScenarioInstance currentScenario;
+	
 	
 	public final static int CHOICE_COMMODITY_INDICES = 0;
 	public final static int CHOICE_CARGOES = CHOICE_COMMODITY_INDICES + 1;
@@ -64,9 +67,10 @@ public class BulkImportPage extends WizardPage {
 	public final static int CHOICE_CURRENT_SCENARIO = CHOICE_ALL_SCENARIOS + 1;
 	public final static int CHOICE_SELECTED_SCENARIOS = CHOICE_CURRENT_SCENARIO + 1;
 	
-	public BulkImportPage(String pageName, ScenarioInstance currentScenario) {
+	public BulkImportPage(String pageName, final int field, ScenarioInstance currentScenario) {
 		super(pageName);
 		this.currentScenario = currentScenario;
+		this.importField = field;
 		setTitle("Select data and scenarios");
 		setDescription("Choose scenario(s) and a file for bulk data import.");
 	}
@@ -267,7 +271,7 @@ public class BulkImportPage extends WizardPage {
 	}
 	
 	public int getImportedField() {
-		return BulkImportPage.CHOICE_COMMODITY_INDICES;
+		return importField;
 	}
 	
 	/**
