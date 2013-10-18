@@ -33,11 +33,17 @@
 		<module>com.mmxlabs.models.ui.validation</module>
 		<module>com.mmxlabs.models.ui.tabular</module>
 		<module>com.mmxlabs.models.util</module>
-		<module>com.mmxlabs.models.ui.p2</module>
-		<module>com.mmxlabs.models.ui.runtime.feature</module>
+		<module>com.mmxlabs.models.ui.properties</module>
+		<module>com.mmxlabs.models.ui.properties.edit</module>
 		<module>com.mmxlabs.models.mmxcore.validation</module>
+
+		<module>com.mmxlabs.models.ui.runtime.feature</module>
+
+		<module>com.mmxlabs.models.ui.p2</module>
+
 		<module>com.mmxlabs.models.ui.validation.tests</module>
 		<module>com.mmxlabs.models.ui.validation.views</module>
+
 	</modules>
 
 	<build>
