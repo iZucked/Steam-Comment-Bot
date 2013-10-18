@@ -16,6 +16,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.ui;bundle-version="[5.1.0,6.0.0)",
  com.mmxlabs.scenario.service.model;bundle-version="[5.1.0,6.0.0)",
  com.mmxlabs.models.lng.scenario.model.edit;bundle-version="[8.0.0,9.0.0)"
+ com.mmxlabs.models.lng.scenario.model.edit;bundle-version="[7.0.0,8.0.0)",
+ com.mmxlabs.models.ui.properties;bundle-version="7.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.shiplingo.platform.reports,
