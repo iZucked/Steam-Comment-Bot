@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
+import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -26,7 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface ProfitAndLossContainer extends EObject {
+public interface ProfitAndLossContainer extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

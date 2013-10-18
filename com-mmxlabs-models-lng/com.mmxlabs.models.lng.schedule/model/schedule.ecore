@@ -177,7 +177,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//CapacityViolationType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossContainer">
+  <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossContainer" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLoss" eType="#//GroupProfitAndLoss"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLossNoTimeCharter"
