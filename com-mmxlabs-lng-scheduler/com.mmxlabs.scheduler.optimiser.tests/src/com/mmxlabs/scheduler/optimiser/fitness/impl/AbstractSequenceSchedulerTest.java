@@ -15,6 +15,10 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -54,7 +58,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
@@ -161,13 +164,6 @@ public final class AbstractSequenceSchedulerTest {
 		portTypeProvider.setPortType(element3, PortType.Load);
 		portTypeProvider.setPortType(element4, PortType.Discharge);
 
-		// Set data providers
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
 
 		final IResource resource = new Resource(index);
 		final Vessel vessel = new Vessel(index);
@@ -181,19 +177,32 @@ public final class AbstractSequenceSchedulerTest {
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
 		vesselProvider.setVesselResource(resource, vessel);
-		scheduler.setVesselProvider(vesselProvider);
 
 		final List<ISequenceElement> elements = CollectionsUtil.makeArrayList(element1, element2, element3, element4);
 		final ISequence sequence = new ListSequence(elements);
 
 		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		scheduler.setRouteCostProvider(routeCostProvider);
+
+		// Set data providers
+		Injector injector = Guice.createInjector(new AbstractModule() {
+			@Override
+			public void configure() {
+				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
+				}).toInstance(distanceProvider);
+				bind(IElementDurationProvider.class).toInstance(durationsProvider);
+				bind(IPortProvider.class).toInstance(portProvider);
+				bind(ITimeWindowDataComponentProvider.class).toInstance(timeWindowProvider);
+				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
+				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+				bind(IVesselProviderEditor.class).toInstance(vesselProvider);
+				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
+				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
+			}
+		});
 
 		// Init scheduler and ensure all required components are in place
-		scheduler.init();
+		injector.injectMembers(scheduler);
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
@@ -413,14 +422,6 @@ public final class AbstractSequenceSchedulerTest {
 		portTypeProvider.setPortType(element2, PortType.Discharge);
 		portTypeProvider.setPortType(element3, PortType.Load);
 
-		// Set data providers
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-
 		final IResource resource = new Resource(index);
 		final Vessel vessel = new Vessel(index);
 		vessel.setName("Schedule2Vessel");
@@ -432,20 +433,35 @@ public final class AbstractSequenceSchedulerTest {
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
 		vesselProvider.setVesselResource(resource, vessel);
-		scheduler.setVesselProvider(vesselProvider);
 
 		final List elements = CollectionsUtil.makeArrayList(element1, element2, element3);
 		final ISequence sequence = new ListSequence(elements);
 
 		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
 
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-		scheduler.setRouteCostProvider(routeCostProvider);
+
+		// Set data providers
+		Injector injector = Guice.createInjector(new AbstractModule() {
+			@Override
+			public void configure() {
+				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
+				}).toInstance(distanceProvider);
+				bind(IElementDurationProvider.class).toInstance(durationsProvider);
+				bind(IPortProvider.class).toInstance(portProvider);
+				bind(ITimeWindowDataComponentProvider.class).toInstance(timeWindowProvider);
+				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
+				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+				bind(IVesselProviderEditor.class).toInstance(vesselProvider);
+				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
+				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
+			}
+		});
 
 		// Init scheduler and ensure all required components are in place
-		scheduler.init();
+		injector.injectMembers(scheduler);
 
+		
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
 		expectedVoyageOptions1.setFromPortSlot(loadSlot1);
@@ -577,318 +593,6 @@ public final class AbstractSequenceSchedulerTest {
 		// Assert.assertEquals(15,
 		// ((PortDetails) outputSequence[4]).getStartTime());
 		Assert.assertEquals(1, ((PortDetails) outputSequence[4]).getOptions().getVisitDuration());
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test
-	public void testDispose() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-		scheduler.setRouteCostProvider(routeCostProvider);
-
-		scheduler.init();
-
-		// sss.dispose();
-		scheduler.dispose();
-
-		// assert null method returns
-		Assert.assertNull(scheduler.getDistanceProvider());
-		Assert.assertNull(scheduler.getDurationsProvider());
-		Assert.assertNull(scheduler.getPortProvider());
-		Assert.assertNull(scheduler.getPortSlotProvider());
-		Assert.assertNull(scheduler.getPortTypeProvider());
-		Assert.assertNull(scheduler.getTimeWindowProvider());
-		Assert.assertNull(scheduler.getVesselProvider());
-		Assert.assertNull(scheduler.getVoyagePlanOptimiser());
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test
-	public void testInit1() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-		scheduler.setRouteCostProvider(routeCostProvider);
-
-		scheduler.init();
-	}
-
-	@Test(expected = IllegalStateException.class)
-	public void testInit2() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		// IMatrixProvider distanceProvider =
-		// Mockito.mock(IMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		// scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test(expected = IllegalStateException.class)
-	public void testInit3() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		// IElementDurationProvider durationsProvider =
-		// Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		// scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test(expected = IllegalStateException.class)
-	public void testInit4() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		// IPortProvider portProvider =Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		// scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test(expected = IllegalStateException.class)
-	public void testInit5() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		// IPortSlotProvider portSlotProvider =
-		// Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		// scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test(expected = IllegalStateException.class)
-	public void testInit7() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		// IPortTypeProvider portTypeProvider =
-		// Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		// scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test(expected = IllegalStateException.class)
-	public void testInit8() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		// ITimeWindowDataComponentProvider timeWindowProvider =
-		// Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		// scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test(expected = IllegalStateException.class)
-	public void testInit9() {
-
-		// Mock objects
-		// IVesselProvider vesselProvider =Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		final IVoyagePlanOptimiser voyagePlanOptimiser = Mockito.mock(IVoyagePlanOptimiser.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		// scheduler.setVesselProvider(vesselProvider);
-		scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test(expected = IllegalStateException.class)
-	public void testInit10() {
-
-		// Mock objects
-		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
-		final IPortProvider portProvider = Mockito.mock(IPortProvider.class);
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-		final IElementDurationProvider durationsProvider = Mockito.mock(IElementDurationProvider.class);
-		final IMultiMatrixProvider distanceProvider = Mockito.mock(IMultiMatrixProvider.class);
-		final ITimeWindowDataComponentProvider timeWindowProvider = Mockito.mock(ITimeWindowDataComponentProvider.class);
-		// IVoyagePlanOptimiser voyagePlanOptimiser =
-		// Mockito.mock(IVoyagePlanOptimiser.class);
-
-		// Set on SSS
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-
-		scheduler.setDistanceProvider(distanceProvider);
-		scheduler.setDurationsProvider(durationsProvider);
-		scheduler.setPortProvider(portProvider);
-		scheduler.setPortSlotProvider(portSlotProvider);
-		scheduler.setPortTypeProvider(portTypeProvider);
-		scheduler.setTimeWindowProvider(timeWindowProvider);
-		scheduler.setVesselProvider(vesselProvider);
-		// scheduler.setVoyagePlanOptimiser(voyagePlanOptimiser);
-
-		scheduler.init();
 	}
 
 	/**
