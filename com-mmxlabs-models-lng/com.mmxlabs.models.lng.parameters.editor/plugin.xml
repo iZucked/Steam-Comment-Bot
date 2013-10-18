@@ -63,14 +63,6 @@
 		
 	</extension>
  <extension
-       point="com.mmxlabs.models.util.import.submodels">
-   `<submodelImporter
-          ID="com.mmxlabs.models.lng.parameters.editor.parametersModelImporter"
-          subModelClassName="com.mmxlabs.models.lng.parameters.ParametersModel"
-          subModelImporterClass="com.mmxlabs.models.lng.parameters.importers.ParametersModelImporter">
-    </submodelImporter>
- </extension>
- <extension
        point="com.mmxlabs.models.ui.modelfactories">
     <factory
           ID="com.mmxlabs.models.lng.parameters.editor.settingsFactory"
