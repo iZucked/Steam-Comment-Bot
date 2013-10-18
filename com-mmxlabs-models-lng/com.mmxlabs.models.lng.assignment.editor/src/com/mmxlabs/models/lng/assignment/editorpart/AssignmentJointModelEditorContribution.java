@@ -88,7 +88,20 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 				public int compare(final CollectedAssignment o1, final CollectedAssignment o2) {
 					final int spotCompare = ((Boolean) o1.isSpotVessel()).compareTo(o2.isSpotVessel());
 					if (spotCompare == 0) {
-						return o1.getVesselOrClass().getName().compareTo(o2.getVesselOrClass().getName());
+						final String s1 = o1.getVesselOrClass() == null ? null : o1.getVesselOrClass().getName();
+						final String s2 = o2.getVesselOrClass() == null ? null : o2.getVesselOrClass().getName();
+						
+						if (s1 == s2) {
+							return 0;
+						}
+						if (s1 == null) {
+							return -1;
+						}
+						if (s2 == null) {
+							return 1;
+						}
+						
+						return s1.compareTo(s2);
 					} else {
 						return spotCompare;
 					}
