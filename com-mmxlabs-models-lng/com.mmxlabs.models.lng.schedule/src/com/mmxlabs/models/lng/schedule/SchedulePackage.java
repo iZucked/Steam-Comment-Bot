@@ -671,6 +671,15 @@ public interface SchedulePackage extends EPackage {
 	int PROFIT_AND_LOSS_CONTAINER = 22;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -678,7 +687,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = 0;
+	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
@@ -688,7 +697,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = 1;
+	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
@@ -698,7 +707,34 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = 2;
+	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Profit And Loss Container</em>' class.
@@ -708,7 +744,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT = 0;
+	int PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl <em>Market Allocation</em>}' class.
@@ -720,6 +756,15 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	int MARKET_ALLOCATION = 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION__EXTENSIONS = PROFIT_AND_LOSS_CONTAINER__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
@@ -800,6 +845,33 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKET_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION___ECONTAINER_OP = PROFIT_AND_LOSS_CONTAINER___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Market Allocation</em>' class.

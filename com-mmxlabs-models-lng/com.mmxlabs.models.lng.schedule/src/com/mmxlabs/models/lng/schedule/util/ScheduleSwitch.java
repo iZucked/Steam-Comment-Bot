@@ -124,8 +124,8 @@ public class ScheduleSwitch<T> extends Switch<T> {
 			case SchedulePackage.CARGO_ALLOCATION: {
 				CargoAllocation cargoAllocation = (CargoAllocation)theEObject;
 				T result = caseCargoAllocation(cargoAllocation);
-				if (result == null) result = caseMMXObject(cargoAllocation);
 				if (result == null) result = caseProfitAndLossContainer(cargoAllocation);
+				if (result == null) result = caseMMXObject(cargoAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -133,6 +133,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				MarketAllocation marketAllocation = (MarketAllocation)theEObject;
 				T result = caseMarketAllocation(marketAllocation);
 				if (result == null) result = caseProfitAndLossContainer(marketAllocation);
+				if (result == null) result = caseMMXObject(marketAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -292,6 +293,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER: {
 				ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer)theEObject;
 				T result = caseProfitAndLossContainer(profitAndLossContainer);
+				if (result == null) result = caseMMXObject(profitAndLossContainer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
