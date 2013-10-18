@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
+import java.util.List;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ICurve;
@@ -24,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -313,7 +316,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int actualSalesPricePerMMBTu, final long transferVolumeInM3,
+	public int calculateLoadPricePerMMBTu(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int actualSalesPricePerMMBTu, final long transferVolumeInM3,
 			final IDetailTree annotations) {
 
 		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(transferTime);
@@ -410,5 +413,12 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	public int getNotionalSpeed() {
 		return notionalSpeed;
+	}
+
+	@Override
+	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumes, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
+			IDetailTree annotations) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

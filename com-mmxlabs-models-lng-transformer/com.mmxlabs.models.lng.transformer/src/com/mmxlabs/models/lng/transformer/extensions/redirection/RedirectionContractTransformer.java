@@ -110,7 +110,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 	@Override
 	public ILoadPriceCalculator transformPurchasePriceParameters(final LNGPriceCalculatorParameters pc) {
-		if (redirectionPriceParamtersClass.isAssignableFrom(pc)) {
+		if (redirectionPriceParamtersClass.isInstance(pc)) {
 			return createRedirectionContract(redirectionPriceParamtersClass.cast(pc));
 		}
 		return null;

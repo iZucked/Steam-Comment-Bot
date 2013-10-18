@@ -11,6 +11,7 @@ import java.util.Set;
 
 import com.google.inject.Inject;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.IDESPurchaseSlotBindingsGenerator;
@@ -19,17 +20,19 @@ import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
-public class RedirectionDESPurchaseBindingsGenerator implements IDESPurchaseSlotBindingsGenerator {
+public abstract class RedirectionDESPurchaseBindingsGenerator implements IDESPurchaseSlotBindingsGenerator {
 
 	@Inject
 	private ModelEntityMap map;
 
 	private Set<IPort> dischargePorts = null;
 
+	private Class<? extends LNGPriceCalculatorParameters> redirectionPriceParametersClass;
+
 	@Override
 	public void bindDischargeSlotsToDESPurchase(ISchedulerBuilder builder, LoadSlot loadSlot, ILoadOption load) {
 
-		if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo() instanceof RedirectionPriceParameters) {
+		if (loadSlot.isSetContract() && redirectionPriceParametersClass.isInstance(loadSlot.getContract().getPriceInfo())) {
 			// Redirection contracts can go to anywhere
 			builder.bindDischargeSlotsToDESPurchase(load, getAllDischargePorts());
 		} else {
@@ -53,5 +56,13 @@ public class RedirectionDESPurchaseBindingsGenerator implements IDESPurchaseSlot
 		}
 		return dischargePorts;
 
+	}
+
+	protected Class<? extends LNGPriceCalculatorParameters> getRedirectionPriceParametersClass() {
+		return redirectionPriceParametersClass;
+	}
+
+	protected void setRedirectionPriceParametersClass(Class<? extends LNGPriceCalculatorParameters> redirectionPriceParametersClass) {
+		this.redirectionPriceParametersClass = redirectionPriceParametersClass;
 	}
 }
