@@ -49,7 +49,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * Redirection contract. A combination of both the {@link NetbackContract} and {@link ProfitSharingContract}.
+ * Sample Redirection contract. A combination of both the {@link NetbackContract} and {@link ProfitSharingContract}.
  * 
  * @author Simon Goodall
  * 

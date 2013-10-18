@@ -27,8 +27,12 @@ public abstract class RedirectionDESPurchaseBindingsGenerator implements IDESPur
 
 	private Set<IPort> dischargePorts = null;
 
-	private Class<? extends LNGPriceCalculatorParameters> redirectionPriceParametersClass;
+	private final Class<? extends LNGPriceCalculatorParameters> redirectionPriceParametersClass;
 
+	protected RedirectionDESPurchaseBindingsGenerator(final Class<? extends LNGPriceCalculatorParameters> redirectionPriceParametersClass) {
+		this.redirectionPriceParametersClass = redirectionPriceParametersClass;
+	}
+	
 	@Override
 	public void bindDischargeSlotsToDESPurchase(ISchedulerBuilder builder, LoadSlot loadSlot, ILoadOption load) {
 
@@ -60,9 +64,5 @@ public abstract class RedirectionDESPurchaseBindingsGenerator implements IDESPur
 
 	protected Class<? extends LNGPriceCalculatorParameters> getRedirectionPriceParametersClass() {
 		return redirectionPriceParametersClass;
-	}
-
-	protected void setRedirectionPriceParametersClass(Class<? extends LNGPriceCalculatorParameters> redirectionPriceParametersClass) {
-		this.redirectionPriceParametersClass = redirectionPriceParametersClass;
 	}
 }
