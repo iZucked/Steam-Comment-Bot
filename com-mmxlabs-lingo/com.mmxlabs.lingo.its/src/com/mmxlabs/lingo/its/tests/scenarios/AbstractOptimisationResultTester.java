@@ -115,6 +115,19 @@ public class AbstractOptimisationResultTester {
 		runScenario(originalScenario, url);
 	}
 
+	public ScenarioRunner evaluateScenario(final URL url) throws Exception {
+
+		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+
+		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, false);
+
+		MigrationHelper.migrateAndLoad(instance);
+
+		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+
+		return evaluateScenario(originalScenario, url);
+	}
+
 	/**
 	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
 	 * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
@@ -198,6 +211,24 @@ public class AbstractOptimisationResultTester {
 			// testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
 			testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 		}
+	}
+
+	public ScenarioRunner evaluateScenario(final LNGScenarioModel originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
+
+		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
+		if (false) {
+			final LNGScenarioModel copy = duplicate(originalScenario);
+			final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
+			final String context = migrationRegistry.getDefaultMigrationContext();
+			final int version = migrationRegistry.getLastReleaseVersion(context);
+			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
+		}
+		// Create two scenario runners.
+		// TODO are two necessary?
+		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
+		originalScenarioRunner.init();
+
+		return originalScenarioRunner;
 	}
 
 	/**
