@@ -118,7 +118,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (slot instanceof ILoadOption) {
 				ILoadOption loadOption = (ILoadOption) slot;
 				cost += value;
-				additionProfitAndLoss += loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel, plan, null);
+				additionProfitAndLoss += loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel, plan,
+						null);
 			} else if (slot instanceof IDischargeOption) {
 				revenue += value;
 			}
@@ -151,10 +152,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 			{
 				// Calculate P&L with TC rates
-				generateAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, cost, taxTime, generatedCharterOutRevenue, firstSlot, exportElement, false, true);
+				generateCargoAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, cost, additionProfitAndLoss, taxTime, exportElement, false, true, currentAllocation);
+				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot, true);
 
 				// Calculate P&L without TC rates
-				generateAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, cost, taxTime, generatedCharterOutRevenue, firstSlot, exportElement, false, false);
+				generateCargoAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, cost, additionProfitAndLoss, taxTime, exportElement, false, false,
+						currentAllocation);
+				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot, false);
+
 			}
 		}
 
@@ -198,8 +203,16 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final ISequenceElement exportElement = slotProvider.getElement(firstSlot);
 
 			// We include LNG costs here, but this may not be desirable - this depends on whether or not we consider the LNG a sunk cost...
-			generateAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, generatedCharterOutRevenue, firstSlot, exportElement, true, true);
-			generateAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, generatedCharterOutRevenue, firstSlot, exportElement, true, false);
+			// Cost is zero as shipping cost is recalculated to obtain annotation
+
+			// Calculate P&L with TC rates
+			generateShippingAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true, true);
+			generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot, true);
+
+			// Calculate P&L without TC rates
+			generateShippingAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true, false);
+			generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot, false);
+
 		}
 
 		return value;
@@ -315,6 +328,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 
+		
 		final ICurve hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
@@ -380,12 +394,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return planDuration;
 	}
 
-	private void generateAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
-			final long revenue, final long cost, final int taxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot, final ISequenceElement exportElement, final boolean includeLNG,
-			final boolean includeTimeCharterRates) {
+	public void generateShippingAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
+			final long revenue, final long cost, final int taxTime, final ISequenceElement exportElement, final boolean includeLNG, final boolean includeTimeCharterRates) {
 		{
 			final long shippingCosts = getShippingCosts(plan, vessel, includeLNG, includeTimeCharterRates, vesselStartTime, null);
-			final long shippingTotalPretaxProfit = revenue - cost - shippingCosts;
+			final long shippingTotalPretaxProfit = revenue /* +additionProfitAndLoss */- cost - shippingCosts;
 			final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
 
 			final DetailTree shippingDetails = new DetailTree();
@@ -398,6 +411,62 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final String label = includeTimeCharterRates ? SchedulerConstants.AI_profitAndLoss : SchedulerConstants.AI_profitAndLossNoTimeCharterRate;
 			annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
 		}
+	}
+
+	public void generateCargoAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
+			final long revenue, final long cost, long additionProfitAndLoss, final int taxTime, final ISequenceElement exportElement, final boolean includeLNG, final boolean includeTimeCharterRates,
+			IAllocationAnnotation currentAllocation) {
+		{
+
+			// Recalculate this data to avoid an even bigger method signature....
+
+			// get each entity
+			final List<IPortSlot> slots = currentAllocation.getSlots();
+
+			int[] dischargePricesPerMMBTu = new int[slots.size()];
+			long[] slotVolumesInM3 = new long[slots.size()];
+			int[] arrivalTimes = new int[slots.size()];
+			// Extract data
+			int idx = 0;
+			for (final IPortSlot slot : slots) {
+				if (slot instanceof IDischargeOption) {
+					dischargePricesPerMMBTu[idx] = currentAllocation.getSlotPricePerMMBTu(slot);
+				} else {
+					dischargePricesPerMMBTu[idx] = Integer.MAX_VALUE;
+				}
+				arrivalTimes[idx] = currentAllocation.getSlotTime(slot);
+				slotVolumesInM3[idx] = currentAllocation.getSlotVolumeInM3(slot);
+
+				idx++;
+			}
+
+			final long shippingCosts = getShippingCosts(plan, vessel, includeLNG, includeTimeCharterRates, vesselStartTime, null);
+			final long shippingTotalPretaxProfit = revenue + additionProfitAndLoss - cost - shippingCosts;
+			final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
+
+			final DetailTree shippingDetails = new DetailTree();
+
+			final IDetailTree[] detailsRef = new IDetailTree[1];
+			getShippingCosts(plan, vessel, true, true, vesselStartTime, detailsRef);
+
+			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingDetails);
+
+			for (final IPortSlot slot : slots) {
+
+				if (slot instanceof ILoadOption) {
+					ILoadOption loadOption = (ILoadOption) slot;
+					loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel, plan, entry.getDetails());
+				}
+			}
+
+			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
+			final String label = includeTimeCharterRates ? SchedulerConstants.AI_profitAndLoss : SchedulerConstants.AI_profitAndLossNoTimeCharterRate;
+			annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
+		}
+	}
+
+	public void generateCharterOutAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
+			final int taxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot, final boolean includeTimeCharterRates) {
 		if (generatedCharterOutRevenue != 0) {
 
 			final long charterOutCosts = getGeneratedCharterOutCosts(plan, vessel, includeTimeCharterRates, vesselStartTime, null);
