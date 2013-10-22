@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -46,7 +47,8 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 public class CargoModelRowTransformer {
 	private final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 	private final Color darkRed = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
-	private final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+
+	private final Color validTerminalColour = TradesWiringDiagram.Light_Green;
 	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
@@ -241,8 +243,8 @@ public class CargoModelRowTransformer {
 				}
 
 				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
-				loadRowData.loadTerminalColour = green;
-				dischargeRowData.dischargeTerminalColour = green;
+				loadRowData.loadTerminalColour = validTerminalColour;
+				dischargeRowData.dischargeTerminalColour = validTerminalColour;
 
 				// patch up the WireData information with the new RowData objects
 				for (final WireData wire : group.getWires()) {
@@ -282,7 +284,7 @@ public class CargoModelRowTransformer {
 				rowDataMap.put(slot, row);
 
 				if (slot.isOptional()) {
-					row.loadTerminalColour = green;
+					row.loadTerminalColour = validTerminalColour;
 				} else {
 					row.loadTerminalColour = red;
 				}
@@ -315,7 +317,7 @@ public class CargoModelRowTransformer {
 				rowDataMap.put(slot, row);
 
 				if (slot.isOptional()) {
-					row.dischargeTerminalColour = green;
+					row.dischargeTerminalColour = validTerminalColour;
 				} else {
 					row.dischargeTerminalColour = red;
 				}
@@ -638,7 +640,7 @@ public class CargoModelRowTransformer {
 					row.loadSlot = (LoadSlot) slot;
 
 					if (slot.isOptional()) {
-						row.loadTerminalColour = green;
+						row.loadTerminalColour = validTerminalColour;
 					} else {
 						row.loadTerminalColour = red;
 					}
@@ -647,7 +649,7 @@ public class CargoModelRowTransformer {
 					row.dischargeSlot = (DischargeSlot) slot;
 
 					if (slot.isOptional()) {
-						row.dischargeTerminalColour = green;
+						row.dischargeTerminalColour = validTerminalColour;
 					} else {
 						row.dischargeTerminalColour = red;
 					}
@@ -749,8 +751,8 @@ public class CargoModelRowTransformer {
 				}
 
 				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
-				row.loadTerminalColour = green;
-				row.dischargeTerminalColour = green;
+				row.loadTerminalColour = validTerminalColour;
+				row.dischargeTerminalColour = validTerminalColour;
 			}
 		}
 
