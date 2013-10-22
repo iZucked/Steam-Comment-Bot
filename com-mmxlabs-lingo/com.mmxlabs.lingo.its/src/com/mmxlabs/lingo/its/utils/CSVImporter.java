@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.tests.csv.scenarios;
+package com.mmxlabs.lingo.its.utils;
 
 import java.io.IOException;
 import java.util.Collection;

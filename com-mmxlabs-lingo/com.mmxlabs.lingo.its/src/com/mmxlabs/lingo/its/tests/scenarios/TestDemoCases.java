@@ -8,6 +8,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
+import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+
 public class TestDemoCases extends AbstractOptimisationResultTester {
 
 	@Test

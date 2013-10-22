@@ -9,7 +9,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
-import com.mmxlabs.lingo.its.tests.scenarios.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 

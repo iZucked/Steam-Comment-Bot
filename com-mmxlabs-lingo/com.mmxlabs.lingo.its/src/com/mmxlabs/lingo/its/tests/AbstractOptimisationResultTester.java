@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.tests.scenarios;
+package com.mmxlabs.lingo.its.tests;
 
 import java.io.File;
 import java.io.FileOutputStream;
