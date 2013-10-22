@@ -34,29 +34,30 @@ public class CSVReader implements Closeable {
 	private final Map<String, String> originalHeaderLine = new HashMap<String, String>();
 
 	private final Set<String> unusedHeaders = new HashSet<String>();
-	
+
 	private final char separator;
 
 	public CSVReader(final File file) throws IOException {
 		this(file, ',');
 	}
+
 	/**
 	 * @since 3.1
 	 */
-	public CSVReader(final File file, char separator) throws IOException {
+	public CSVReader(final File file, final char separator) throws IOException {
 		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString(), separator);
 	}
-
 
 	public CSVReader(final String base, final String inputFileName) throws IOException {
 		this(base, inputFileName, ',');
 	}
+
 	/**
 	 * @param inputFileName
 	 * @throws IOException
 	 * @since 3.1
 	 */
-	public CSVReader(final String base, final String inputFileName, char separator) throws IOException {
+	public CSVReader(final String base, final String inputFileName, final char separator) throws IOException {
 		this.separator = separator;
 		this.base = base;
 		filename = inputFileName;
@@ -82,7 +83,7 @@ public class CSVReader implements Closeable {
 	}
 
 	public String[] readLine() throws IOException {
-		final String line = reader.readLine();
+		String line = reader.readLine();
 		lineNumber++;
 		if (line == null) {
 			return null;
@@ -90,37 +91,48 @@ public class CSVReader implements Closeable {
 		final LinkedList<String> fields = new LinkedList<String>();
 		StringBuffer temp = new StringBuffer();
 		State state = State.NORMAL;
-		for (int i = 0; i < line.length(); i++) {
-			final char c = line.charAt(i);
-			switch (state) {
-			case NORMAL:
-				if (c == separator) {
-					fields.add(temp.toString().trim());
-					temp = new StringBuffer();
-				} else if (c == '"') {
-					state = State.ESCAPED;
-				} else {
-					temp.append(c);
-				}
-				break;
-			case ESCAPED:
-				if (c == '"') {
-					state = State.AFTER_QUOTE;
-				} else {
-					temp.append(c);
-				}
-				break;
-			case AFTER_QUOTE:
-				if (c == '"') {
-					temp.append(c);
-				} else {
-					state = State.NORMAL;
+		boolean firstTry = true;
+
+		// Loop round when a newline occurs within a quoted string (ESCAPED)
+		while (firstTry || state == State.ESCAPED && line != null) {
+			if (firstTry == false) {
+				line = reader.readLine();
+				lineNumber++;
+				temp.append("\n");
+			}
+			firstTry = false;
+			for (int i = 0; i < line.length(); i++) {
+				final char c = line.charAt(i);
+				switch (state) {
+				case NORMAL:
 					if (c == separator) {
 						fields.add(temp.toString().trim());
 						temp = new StringBuffer();
+					} else if (c == '"') {
+						state = State.ESCAPED;
+					} else {
+						temp.append(c);
 					}
+					break;
+				case ESCAPED:
+					if (c == '"') {
+						state = State.AFTER_QUOTE;
+					} else {
+						temp.append(c);
+					}
+					break;
+				case AFTER_QUOTE:
+					if (c == '"') {
+						temp.append(c);
+					} else {
+						state = State.NORMAL;
+						if (c == separator) {
+							fields.add(temp.toString().trim());
+							temp = new StringBuffer();
+						}
+					}
+					break;
 				}
-				break;
 			}
 		}
 		fields.add(temp.toString().trim());
