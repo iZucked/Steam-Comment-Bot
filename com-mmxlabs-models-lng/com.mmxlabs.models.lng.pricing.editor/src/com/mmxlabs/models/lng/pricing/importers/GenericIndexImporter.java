@@ -18,10 +18,12 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -68,16 +70,16 @@ abstract public class GenericIndexImporter<TargetClass> implements IClassImporte
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected Index<Double> importDoubleIndex(final Map<String, String> row, final IImportContext context) {
-		return (Index<Double>) importIndex(false, row, context);	
+	protected Index<Double> importDoubleIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore,@NonNull final IImportContext context) {
+		return (Index<Double>) importIndex(false, row, columnsToIgnore, context);	
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected Index<Integer> importIntIndex(final Map<String, String> row, final IImportContext context) {
-		return (Index<Integer>) importIndex(true, row, context);	
+	protected Index<Integer> importIntIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore,@NonNull  final IImportContext context) {
+		return (Index<Integer>) importIndex(true, row, columnsToIgnore, context);	
 	}
 	
-	protected Index<? extends Number> importIndex(boolean parseAsInt, final Map<String, String> row, final IImportContext context) {
+	protected Index<? extends Number> importIndex(boolean parseAsInt, @NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
 		// for expression indices, return a derived index
 		if (row.containsKey(EXPRESSION) && row.get(EXPRESSION).isEmpty() == false) {
 			final DerivedIndex<Number> di = PricingFactory.eINSTANCE.createDerivedIndex();
@@ -101,6 +103,9 @@ abstract public class GenericIndexImporter<TargetClass> implements IClassImporte
 		if (result instanceof DataIndex) {
 			final DataIndex<Number> data = (DataIndex<Number>) result;
 			for (final String s : row.keySet()) {
+				if (columnsToIgnore.contains(s)) {
+					continue;
+				}
 				try {
 					final Date date = dateParser.parseDate(s);
 					final Calendar c = Calendar.getInstance();

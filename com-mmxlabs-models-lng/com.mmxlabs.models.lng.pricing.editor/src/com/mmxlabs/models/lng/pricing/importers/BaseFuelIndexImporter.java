@@ -37,7 +37,7 @@ public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 			context.addProblem(context.createProblem("BaseFuelIndex name is missing", true, true, true));
 		}
 		
-		final Index<Double> indexData = importDoubleIndex(row, context);
+		final Index<Double> indexData = importDoubleIndex(row, Collections.singleton(NAME), context);
 		result.setData(indexData);
 
 		context.registerNamedObject(result);
