@@ -105,7 +105,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		// if this entity is the shipping entity, set it as the shipping entity
 		String shipping = row.get(SHIPPING_KEY);
 		// this will require importing later, when the submodels have been built
-		if (shipping != null && !shipping.equals("")) {
+		if ( shipping != null && (shipping.equalsIgnoreCase("Y") || shipping.equalsIgnoreCase("TRUE")) ) {
 			if (shippingEntity != null) {
 				final IImportProblem problem = context.createProblem("The importer is trying to set more than one shipping entity.", true, true, true);
 				context.addProblem(problem);
