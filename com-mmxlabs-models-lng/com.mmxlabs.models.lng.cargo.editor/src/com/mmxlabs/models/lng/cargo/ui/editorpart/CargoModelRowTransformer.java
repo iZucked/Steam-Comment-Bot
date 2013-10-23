@@ -46,10 +46,10 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * 
  */
 public class CargoModelRowTransformer {
-	private final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	static final Color InvalidTerminalColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 	private final Color darkRed = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 
-	private final Color validTerminalColour = TradesWiringDiagram.Light_Green;
+	static final Color ValidTerminalColour = TradesWiringDiagram.Light_Green;
 	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
@@ -244,8 +244,8 @@ public class CargoModelRowTransformer {
 				}
 
 				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
-				loadRowData.loadTerminalColour = validTerminalColour;
-				dischargeRowData.dischargeTerminalColour = validTerminalColour;
+				loadRowData.loadTerminalColour = ValidTerminalColour;
+				dischargeRowData.dischargeTerminalColour = ValidTerminalColour;
 
 				// patch up the WireData information with the new RowData objects
 				for (final WireData wire : group.getWires()) {
@@ -285,12 +285,12 @@ public class CargoModelRowTransformer {
 				rowDataMap.put(slot, row);
 
 				if (slot.isOptional()) {
-					row.loadTerminalColour = validTerminalColour;
+					row.loadTerminalColour = ValidTerminalColour;
 				} else {
-					row.loadTerminalColour = red;
+					row.loadTerminalColour = InvalidTerminalColour;
 				}
 				if (row.dischargeSlot == null) {
-					row.dischargeTerminalColour = red;
+					row.dischargeTerminalColour = InvalidTerminalColour;
 				}
 			}
 		}
@@ -318,12 +318,12 @@ public class CargoModelRowTransformer {
 				rowDataMap.put(slot, row);
 
 				if (slot.isOptional()) {
-					row.dischargeTerminalColour = validTerminalColour;
+					row.dischargeTerminalColour = ValidTerminalColour;
 				} else {
-					row.dischargeTerminalColour = red;
+					row.dischargeTerminalColour = InvalidTerminalColour;
 				}
 				if (row.loadSlot == null) {
-					row.loadTerminalColour = red;
+					row.loadTerminalColour = InvalidTerminalColour;
 				}
 			}
 		}
@@ -641,20 +641,20 @@ public class CargoModelRowTransformer {
 					row.loadSlot = (LoadSlot) slot;
 
 					if (slot.isOptional()) {
-						row.loadTerminalColour = validTerminalColour;
+						row.loadTerminalColour = ValidTerminalColour;
 					} else {
-						row.loadTerminalColour = red;
+						row.loadTerminalColour = InvalidTerminalColour;
 					}
-					row.dischargeTerminalColour = red;
+					row.dischargeTerminalColour = InvalidTerminalColour;
 				} else if (slot instanceof DischargeSlot) {
 					row.dischargeSlot = (DischargeSlot) slot;
 
 					if (slot.isOptional()) {
-						row.dischargeTerminalColour = validTerminalColour;
+						row.dischargeTerminalColour = ValidTerminalColour;
 					} else {
-						row.dischargeTerminalColour = red;
+						row.dischargeTerminalColour = InvalidTerminalColour;
 					}
-					row.loadTerminalColour = red;
+					row.loadTerminalColour = InvalidTerminalColour;
 				}
 
 			}
@@ -752,8 +752,8 @@ public class CargoModelRowTransformer {
 				}
 
 				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
-				row.loadTerminalColour = validTerminalColour;
-				row.dischargeTerminalColour = validTerminalColour;
+				row.loadTerminalColour = ValidTerminalColour;
+				row.dischargeTerminalColour = ValidTerminalColour;
 			}
 		}
 

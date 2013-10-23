@@ -233,6 +233,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				continue;
 			}
 
+			int linewidth = graphics.getLineWidth();
+			
 			final RowData row = root.getRows().get(i);
 			// Draw left hand terminal
 			if (row.loadSlot != null) {
@@ -243,12 +245,13 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				if(row.loadSlot.isDESPurchase()){
 					outlineColour = row.loadTerminalColour;
 					fillColour = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-					extraRadius = 2;
+					extraRadius = 1;
+					graphics.setLineWidth(2);
 				}
-				graphics.setForeground(outlineColour);
+				graphics.setForeground(row.loadTerminalColour == CargoModelRowTransformer.InvalidTerminalColour ? CargoModelRowTransformer.InvalidTerminalColour : outlineColour);
 				graphics.setBackground(fillColour);
 				int centreX = ca.x + terminalSize - extraRadius/2;
-				int centreY = (int) (midpoint - (terminalSize  )/ 2 - 1 - extraRadius/2);
+				int centreY = (int) (midpoint - (terminalSize)/ 2 - 1 - extraRadius/2);
 				graphics.fillOval(centreX, centreY, terminalSize + extraRadius, terminalSize + extraRadius);
 				graphics.drawOval(centreX, centreY, terminalSize + extraRadius, terminalSize + extraRadius);
 				if (row.loadSlot.isOptional()) {
@@ -256,7 +259,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 					graphics.fillOval(ca.x + terminalSize + 4, (int) midpoint - (terminalSize / 2) + 3, 4, 4);
 				}
 			}
-
+			graphics.setLineWidth(linewidth);
+			
 			// Draw right hand terminal
 			if (row.dischargeSlot != null) {
 				Color outlineColour = Green;//Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
@@ -266,9 +270,10 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				if(row.dischargeSlot.isFOBSale()){
 					outlineColour = row.dischargeTerminalColour;
 					fillColour = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-					extraRadius = 2;
+					extraRadius = 1;
+					graphics.setLineWidth(2);
 				}
-				graphics.setForeground(outlineColour);
+				graphics.setForeground(row.dischargeTerminalColour == CargoModelRowTransformer.InvalidTerminalColour ? CargoModelRowTransformer.InvalidTerminalColour : outlineColour);
 				graphics.setBackground(fillColour);
 				int centreX = ca.x + ca.width - 2 * terminalSize - extraRadius/2;
 				int centreY = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius/2);
@@ -278,6 +283,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 					graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 					graphics.fillOval(centreX + 4 + extraRadius/2, (int) (midpoint - terminalSize / 2) + 3, 4, 4);
 				}
+				graphics.setLineWidth(linewidth);
 			}
 			rawI++;
 		}
