@@ -40,54 +40,63 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
-			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 
-				// String builder to store cargo type
-				final StringBuilder sb = new StringBuilder();
+			// String builder to store cargo type
+			final StringBuilder sb = new StringBuilder();
 
-				Type prevSlotType = null;
-				Slot prevSlot = null;
-				EList<Slot> sortedSlots = cargo.getSortedSlots();
-				for (final Slot slot : sortedSlots) {
-					final Type slotType;
-					if (slot instanceof LoadSlot) {
-						slotType = Type.Load;
-						sb.append("L");
-					} else if (slot instanceof DischargeSlot) {
-						slotType = Type.Discharge;
-						sb.append("D");
-					} else {
-						sb.append("U");
-						// Unknown type
-						slotType = null;
-					}
-
-					// This should only permit a single load followed by zero or more discharge slots
-
-					if (slotType == Type.Load && prevSlotType != null) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
-								+ "' - The load slot should be the first slot in the cargo."));
-						dsd.addEObjectAndFeature(prevSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-						failures.add(dsd);
-					}
-
-					if (slotType == Type.Discharge && prevSlotType == null) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
-								+ "' - A load slot should be the first slot in the cargo."));
-						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-						failures.add(dsd);
-					}
-
-					prevSlot = slot;
-					prevSlotType = slotType;
+			Type prevSlotType = null;
+			Slot prevSlot = null;
+			EList<Slot> sortedSlots = cargo.getSortedSlots();
+			for (final Slot slot : sortedSlots) {
+				final Type slotType;
+				if (slot instanceof LoadSlot) {
+					slotType = Type.Load;
+					sb.append("L");
+				} else if (slot instanceof DischargeSlot) {
+					slotType = Type.Discharge;
+					sb.append("D");
+				} else {
+					sb.append("U");
+					// Unknown type
+					slotType = null;
 				}
 
+				// This should only permit a single load followed by zero or more discharge slots
+
+				if (slotType == Type.Load && prevSlotType != null) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
+							+ "' - The load slot should be the first slot in the cargo."));
+					dsd.addEObjectAndFeature(prevSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+					failures.add(dsd);
+				}
+
+				if (slotType == Type.Discharge && prevSlotType == null) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
+							+ "' - A load slot should be the first slot in the cargo."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+					failures.add(dsd);
+				}
+
+				prevSlot = slot;
+				prevSlotType = slotType;
+			}
+
+			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 				// Examine string for valid slot combinations
 				final String cargoType = sb.toString();
 				if (!(cargoType.equals("LD") || cargoType.equals("LDD"))) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
 							+ "' - Cargo should be LD or LDD."));
+					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
+					failures.add(dsd);
+				}
+			} else {
+				// Examine string for valid slot combinations
+				final String cargoType = sb.toString();
+				if (!cargoType.equals("LD")) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
+							+ "' - Cargo should be LD."));
 					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
 					failures.add(dsd);
 				}
