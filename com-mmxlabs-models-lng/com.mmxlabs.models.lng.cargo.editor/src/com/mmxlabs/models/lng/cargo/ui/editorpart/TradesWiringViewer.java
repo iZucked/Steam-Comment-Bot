@@ -846,7 +846,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				// TODO: Get col number
 				foundColumn = false;
 				final int[] columnOrder = getScenarioViewer().getGrid().getColumnOrder();
-				for (int ii = getScenarioViewer().getGrid().getHorizontalBar().getSelection(); ii < columnOrder.length; ++ii) {
+				for (int ii = 0; ii < columnOrder.length; ++ii) {
 					final int idx = columnOrder[ii];
 					if (idx == wiringColumnIndex) {
 						foundColumn = true;
@@ -857,7 +857,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (!foundColumn) {
 					return null;
 				}
-
+				// This used to be based in column index, now for some reason it is px based. If the old behaviour re-appears, then this value is the second for loop initialiser value.
+				offset -= getScenarioViewer().getGrid().getHorizontalBar().getSelection();
 				// TODO: Take into account h scroll final int colWidth = getScenarioViewer().getGrid().getColumn(wiringColumnIndex).getWidth();
 				final Rectangle r = new Rectangle(area.x + offset, area.y + getScenarioViewer().getGrid().getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 
