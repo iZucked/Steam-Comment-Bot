@@ -12,6 +12,9 @@ import javax.management.timer.Timer;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.series.ISeries;
+import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -101,6 +104,28 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
+	public StepwiseIntegerCurve generateExpressionCurve(final String priceExpression, SeriesParser indices) {
+
+		if (priceExpression == null || priceExpression.isEmpty()) {
+			return new StepwiseIntegerCurve();
+		}
+
+		final IExpression<ISeries> expression = indices.parse(priceExpression);
+		final ISeries parsed = expression.evaluate();
+
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		if (parsed.getChangePoints().length == 0) {
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+		} else {
+
+			curve.setDefaultValue(0);
+			for (final int i : parsed.getChangePoints()) {
+				curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+			}
+		}
+		return curve;
+	}
+	
 	public int convertTime(final Date startTime) {
 		assert earliestTime != null;
 		return convertTime(earliestTime, startTime);
