@@ -90,7 +90,11 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 										SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, dischargeSlot, cmd);
 									} else {
 										cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
-										cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+										if (dischargeSlot.isSetWindowStartTime()) {
+											cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+										} else {
+											cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), SetCommand.UNSET_VALUE));
+										}
 									}
 									return cmd;
 								}
@@ -158,7 +162,11 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 										SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, loadSlot, cmd);
 									} else {
 										cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
-										cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+										if (loadSlot.isSetWindowStartTime()) {
+											cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+										} else {
+											cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), SetCommand.UNSET_VALUE));
+										}
 									}
 									return cmd;
 								}

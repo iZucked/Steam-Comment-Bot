@@ -244,7 +244,11 @@ public class CargoEditingCommands {
 				}
 			} else {
 				setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
-				setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+				if (dischargeSlot.isSetWindowStartTime()) {
+					setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+				} else {
+					setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), SetCommand.UNSET_VALUE));
+				}
 			}
 		} else if (dischargeSlot.isFOBSale()) {
 			deleteCommands.add(AssignmentEditorHelper.unassignElement(editingDomain, assignmentModel, cargo));
@@ -258,7 +262,11 @@ public class CargoEditingCommands {
 				}
 			} else {
 				setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
-				setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+				if (loadSlot.isSetWindowStartTime()) {
+					setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+				} else {
+					setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), SetCommand.UNSET_VALUE));
+				}
 			}
 		}
 	}
