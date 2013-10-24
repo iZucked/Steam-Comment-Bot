@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.cargo.editor.editors;
+package com.mmxlabs.models.lng.cargo.editor;
 
 import java.util.Collection;
 

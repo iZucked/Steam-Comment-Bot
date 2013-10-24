@@ -8,7 +8,8 @@ Bundle-Activator: com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin$Im
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: com.mmxlabs.models.lng.cargo.importer,
+Export-Package: com.mmxlabs.models.lng.cargo.editor,
+ com.mmxlabs.models.lng.cargo.importer,
  com.mmxlabs.models.lng.cargo.presentation,
  com.mmxlabs.models.lng.cargo.ui.editorpart,
  com.mmxlabs.models.lng.cargo.ui.editorpart.trades
