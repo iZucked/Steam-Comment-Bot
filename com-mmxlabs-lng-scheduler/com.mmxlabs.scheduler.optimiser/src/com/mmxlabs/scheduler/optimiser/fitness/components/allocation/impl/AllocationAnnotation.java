@@ -163,17 +163,6 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	 */
 	@Override
 	public long getSlotVolumeInM3(final IPortSlot slot) {
-		// TODO: remove this horrible hack!
-		if (slot instanceof ILoadOption) {
-			// assume just one load option, and assume it is the first slot in the itinerary
-			long result = remainingHeelVolumeInM3 + fuelVolumeInM3;
-			for (final Entry<IPortSlot, SlotAllocationAnnotation> entry : slotAllocations.entrySet()) {
-				if (entry.getKey() instanceof IDischargeOption) {
-					result += entry.getValue().volumeInM3;
-				}
-			}
-			return result;
-		}
 
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {
