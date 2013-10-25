@@ -50,17 +50,17 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * 
 	 * @author Simon McGregor
 	 */
-	static final class AllocationRecord {
+	public static final class AllocationRecord {
 		/**
 		 * The capacity of the vessel carrying the cargo
 		 */
-		final long vesselCapacityInM3;
+		public final long vesselCapacityInM3;
 
 		/** The quantity of LNG which <em>must</em> be loaded for a given cargo (for fuel) */
-		final long requiredFuelVolumeInM3;
+		public 		final long requiredFuelVolumeInM3;
 
 		/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
-		final long minEndVolumeInM3;
+		public final long minEndVolumeInM3;
 
 		// final long maxEndVolumeInM3;
 
@@ -68,23 +68,23 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		 * Hack: magic number calculated by LNGVoyageCalculator representing the amount of heel which should be present after the load -> discharge voyage but can be discharged after idling. Should be
 		 * equal to the minimum heel value minus the idle consumption. There must be a better way of doing this.
 		 */
-		final long dischargeHeelInM3;
+		public final long dischargeHeelInM3;
 
 		/** The LNG volume which will actually remain at the end of the voyage */
-		long allocatedEndVolumeInM3;
+		public long allocatedEndVolumeInM3;
 
 		/** Prices of LNG at each load / discharge slot in the cargo */
-		final int[] slotPricesPerM3;
-		final int[] slotPricesPerMMBTu;
+		public final int[] slotPricesPerM3;
+		public final int[] slotPricesPerMMBTu;
 
-		final int[] slotTimes;
+		public final int[] slotTimes;
 
 		/** Slots in the cargo */
-		final IPortSlot[] slots;
+		public final IPortSlot[] slots;
 
-		final long[] allocations;
+		public final long[] allocations;
 
-		final VoyagePlan voyagePlan;
+		public final VoyagePlan voyagePlan;
 
 		public AllocationRecord(long capacity, long forced, long heel, long dischargeHeel, IPortSlot[] slots, int[] pricesPerM3, int[] pricesPerMMBTu, int[] times, VoyagePlan plan) {
 			vesselCapacityInM3 = capacity;
