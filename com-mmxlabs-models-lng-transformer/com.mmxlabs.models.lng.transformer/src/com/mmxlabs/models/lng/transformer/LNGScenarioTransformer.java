@@ -445,15 +445,6 @@ public class LNGScenarioTransformer {
 
 		// Any NPE's in the following code are likely due to missing associations between a IContractTransformer and the EMF AContract object. IContractTransformer instances are typically OSGi
 		// services. Ensure their bundles have been started!
-		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
-			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
-			if (transformer == null) {
-				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
-			}
-			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c.getPriceInfo());
-			entities.addModelObject(c, calculator);
-		}
-
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
 			if (transformer == null) {
@@ -463,6 +454,15 @@ public class LNGScenarioTransformer {
 			if (calculator == null) {
 				throw new IllegalStateException("Unable to transform contract");
 			}
+			entities.addModelObject(c, calculator);
+		}
+
+		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
+			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
+			if (transformer == null) {
+				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
+			}
+			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c.getPriceInfo());
 			entities.addModelObject(c, calculator);
 		}
 
