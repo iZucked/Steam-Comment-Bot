@@ -9,12 +9,12 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[8.0.0,9.0.0)",
  com.mmxlabs.models.ui.validation;bundle-version="[7.1.0,8.0.0)",
- com.mmxlabs.models.lng.assignment.editor;bundle-version="[8.0.0,9.0.0)"
+ com.mmxlabs.models.lng.assignment.editor;bundle-version="[8.0.0,9.0.0)",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[7.1.0,8.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.common;version="2.0.0",
  com.mmxlabs.common.parser;version="2.0.0",
  com.mmxlabs.common.parser.series;version="2.0.0",
  com.mmxlabs.models.lng.pricing.validation.utils,
- com.mmxlabs.models.lng.commercial.parseutils,
- com.mmxlabs.scheduler.optimiser;version="1.0.0"
+ com.mmxlabs.models.lng.commercial.parseutils
