@@ -51,10 +51,10 @@ public class SimpleEntity extends Entity {
 	public long getTaxedProfit(final long pretax, final int time) {
 		final int taxRate = taxCurve.getValueAtPoint(time);
 
-		final long flip = Calculator.HighScaleFactor - taxRate;
+		final int flip = Calculator.ScaleFactor - taxRate;
 
 		final long ownershipValue = ((long) ownership * (long) flip) / Calculator.HighScaleFactor;
-		final long taxedValue = Calculator.costFromConsumption(pretax , ownershipValue);
+		final long taxedValue = Calculator.multiply(pretax, ownershipValue);
 		return taxedValue;
 	}
 
