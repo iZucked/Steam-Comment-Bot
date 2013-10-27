@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -140,7 +141,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(final LNGPriceCalculatorParameters priceParameters) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
@@ -148,7 +149,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(final LNGPriceCalculatorParameters priceParameters) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 

@@ -450,7 +450,7 @@ public class LNGScenarioTransformer {
 			if (transformer == null) {
 				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
 			}
-			final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(c.getPriceInfo());
+			final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(c, c.getPriceInfo());
 			if (calculator == null) {
 				throw new IllegalStateException("Unable to transform contract");
 			}
@@ -462,7 +462,7 @@ public class LNGScenarioTransformer {
 			if (transformer == null) {
 				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
 			}
-			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c.getPriceInfo());
+			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c, c.getPriceInfo());
 			entities.addModelObject(c, calculator);
 		}
 
@@ -1223,7 +1223,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final IContractTransformer transformer = contractTransformersByEClass.get(desPurchaseMarket.getPriceInfo().eClass());
-						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(desPurchaseMarket.getPriceInfo());
+						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(null, desPurchaseMarket.getPriceInfo());
 
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
@@ -1342,7 +1342,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final IContractTransformer transformer = contractTransformersByEClass.get(fobSaleMarket.getPriceInfo().eClass());
-						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(fobSaleMarket.getPriceInfo());
+						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(null, fobSaleMarket.getPriceInfo());
 
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
@@ -1453,7 +1453,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final IContractTransformer transformer = contractTransformersByEClass.get(desSalesMarket.getPriceInfo().eClass());
-						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(desSalesMarket.getPriceInfo());
+						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(null, desSalesMarket.getPriceInfo());
 
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
@@ -1570,7 +1570,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final IContractTransformer transformer = contractTransformersByEClass.get(fobPurchaseMarket.getPriceInfo().eClass());
-						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(fobPurchaseMarket.getPriceInfo());
+						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(null, fobPurchaseMarket.getPriceInfo());
 
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
@@ -1692,7 +1692,7 @@ public class LNGScenarioTransformer {
 					}
 
 					final IContractTransformer transformer = contractTransformersByEClass.get(desPurchaseMarket.getPriceInfo().eClass());
-					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(desPurchaseMarket.getPriceInfo());
+					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(null, desPurchaseMarket.getPriceInfo());
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
@@ -1726,7 +1726,7 @@ public class LNGScenarioTransformer {
 					}
 
 					final IContractTransformer transformer = contractTransformersByEClass.get(desSalesMarket.getPriceInfo().eClass());
-					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(desSalesMarket.getPriceInfo());
+					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(null, desSalesMarket.getPriceInfo());
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
@@ -1758,7 +1758,7 @@ public class LNGScenarioTransformer {
 					}
 
 					final IContractTransformer transformer = contractTransformersByEClass.get(fobSalesMarket.getPriceInfo().eClass());
-					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(fobSalesMarket.getPriceInfo());
+					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(null, fobSalesMarket.getPriceInfo());
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
@@ -1788,7 +1788,7 @@ public class LNGScenarioTransformer {
 					}
 
 					final IContractTransformer transformer = contractTransformersByEClass.get(fobPurchaseMarket.getPriceInfo().eClass());
-					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(fobPurchaseMarket.getPriceInfo());
+					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(null, fobPurchaseMarket.getPriceInfo());
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}

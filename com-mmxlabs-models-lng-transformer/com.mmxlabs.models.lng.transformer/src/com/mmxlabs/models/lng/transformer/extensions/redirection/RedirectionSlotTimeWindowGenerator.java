@@ -19,24 +19,24 @@ public class RedirectionSlotTimeWindowGenerator implements ISlotTimeWindowGenera
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
 
-	@Inject
-	private IRedirectionContractDetailsProvider redirectionContractDetailsProvider;
+//	@Inject
+//	private IRedirectionContractDetailsProvider redirectionContractDetailsProvider;
 
 	@Override
 	public ITimeWindow generateTimeWindow(final ISchedulerBuilder builder, final Slot slot, final Date earliestTime, final ITimeWindow defaultTimeWindow) {
-
-		if (slot instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) slot;
-			if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo() instanceof RedirectionContract) {
-				// Redirection contracts can go to anywhere, so need larger window for compatibility
-				final int extraTime = redirectionContractDetailsProvider.getWindow(loadSlot);
-				Date originalDate = redirectionContractDetailsProvider.getOriginalDate(loadSlot);
-
-				final Date startTime = originalDate == null ? loadSlot.getWindowStart() : originalDate;
-
-				return builder.createTimeWindow(dateAndCurveHelper.convertTime(earliestTime, startTime), dateAndCurveHelper.convertTime(earliestTime, startTime) + extraTime);
-			}
-		}
+//
+//		if (slot instanceof LoadSlot) {
+//			final LoadSlot loadSlot = (LoadSlot) slot;
+//			if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo() instanceof RedirectionContract) {
+//				// Redirection contracts can go to anywhere, so need larger window for compatibility
+//				final int extraTime = redirectionContractDetailsProvider.getWindow(loadSlot);
+//				Date originalDate = redirectionContractDetailsProvider.getOriginalDate(loadSlot);
+//
+//				final Date startTime = originalDate == null ? loadSlot.getWindowStart() : originalDate;
+//
+//				return builder.createTimeWindow(dateAndCurveHelper.convertTime(earliestTime, startTime), dateAndCurveHelper.convertTime(earliestTime, startTime) + extraTime);
+//			}
+//		}
 		return defaultTimeWindow;
 	}
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -108,12 +109,12 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 	}
 
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(final LNGPriceCalculatorParameters sc) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, final LNGPriceCalculatorParameters sc) {
 		return null;
 	}
 
 	@Override
-	public abstract ILoadPriceCalculator transformPurchasePriceParameters(final LNGPriceCalculatorParameters pc);
+	public abstract ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, final LNGPriceCalculatorParameters pc);
 //	{
 //		if (redirectionPriceParamtersClass.isInstance(pc)) {
 //			return createRedirectionContract(redirectionPriceParamtersClass.cast(pc));
