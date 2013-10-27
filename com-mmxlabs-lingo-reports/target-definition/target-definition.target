@@ -90,7 +90,7 @@
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.scheduler.optimiser.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.scheduler.optimiser.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/6.0.0.RELEASE/com.mmxlabs.scheduler.p2-6.0.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/7.1.2-SNAPSHOT/com.mmxlabs.scheduler.p2-7.1.2-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="0.0.0"/>
