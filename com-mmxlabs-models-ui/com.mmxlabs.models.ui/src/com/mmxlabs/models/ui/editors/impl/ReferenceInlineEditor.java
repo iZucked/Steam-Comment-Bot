@@ -152,7 +152,10 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
-		return valueProvider.updateOnChangeToFeature(changedFeature);
+		if (valueProvider != null) {
+			return valueProvider.updateOnChangeToFeature(changedFeature);
+		}
+		return false;
 	}
 
 	@Override
