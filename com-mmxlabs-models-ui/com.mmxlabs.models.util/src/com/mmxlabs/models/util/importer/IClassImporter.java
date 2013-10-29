@@ -38,7 +38,7 @@ public interface IClassImporter {
 	 * @param context
 	 * @return
 	 */
-	public Collection<EObject> importObject(final EClass targetClass, final Map<String, String> row, final IImportContext context);
+	public Collection<EObject> importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 	/**
 	 * Turn the given collection of objects into a bunch of key-value maps, for export to something like a CSV writer.
 	 * @param objects

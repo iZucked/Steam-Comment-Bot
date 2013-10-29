@@ -153,7 +153,7 @@ public class CSVReader implements Closeable {
 	 * @return
 	 * @throws IOException
 	 */
-	public IFieldMap readRow() throws IOException {
+	public Map<String, String> readRowFields() throws IOException {
 		final Map<String, String> row = new HashMap<String, String>() {
 			private static final long serialVersionUID = -4630946181378550729L;
 
@@ -170,7 +170,26 @@ public class CSVReader implements Closeable {
 		for (int i = 0; (i < headerLine.length) && (i < fields.length); i++) {
 			row.put(headerLine[i], fields[i]);
 		}
-		return (currentLine = new FieldMap(row));
+		return row;
+		//return (currentLine = new FieldMap(row));
+	}
+
+	/**
+	 * Reads the next row of the CSV file as an IFieldMap.
+	 * @param ignoreBlank Whether or not to ignore blank rows when selecting the next row
+	 * @return An IFieldMap representing the contents of the row.
+	 * @throws IOException
+	 */
+	public IFieldMap readRow(final boolean ignoreBlankRows) throws IOException {
+		Map<String, String> result;
+		while ((result = readRowFields()) != null) {
+			for (String value: result.values()) {
+				if (value.equals("") == false || ignoreBlankRows == false) {
+					return (currentLine = new FieldMap(result));
+				}
+			}
+		}
+		return null;
 	}
 
 	/**

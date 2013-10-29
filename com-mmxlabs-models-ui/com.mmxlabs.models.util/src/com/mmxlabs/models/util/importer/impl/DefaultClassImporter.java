@@ -68,8 +68,8 @@ public class DefaultClassImporter implements IClassImporter {
 			try {
 				context.pushReader(reader);
 				Map<String, String> row;
-				while ((row = reader.readRow()) != null) {
-					results.addAll(importObject(importClass, row, context));
+				while ((row = reader.readRow(true)) != null) {
+					results.addAll(importObject(null, importClass, row, context));
 				}
 			} finally {
 				reader.close();
@@ -125,7 +125,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public Collection<EObject> importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
 		try {
 			final EObject instance = rowClass.getEPackage().getEFactoryInstance().create(rowClass);
@@ -179,7 +179,7 @@ public class DefaultClassImporter implements IClassImporter {
 							for (int i = 0; i < count; ++i) {
 								final IFieldMap childMap = subKeys.getSubMap(i + DOT);
 								final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
-								final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), childMap, context);
+								final Collection<EObject> values = classImporter.importObject(instance, reference.getEReferenceType(), childMap, context);
 								final Iterator<EObject> iterator = values.iterator();
 								final EObject importObject = iterator.next();
 								references.add(importObject);
@@ -209,7 +209,7 @@ public class DefaultClassImporter implements IClassImporter {
 						context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 					} else {
 						final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
-						final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), subKeys, context);
+						final Collection<EObject> values = classImporter.importObject(instance, reference.getEReferenceType(), subKeys, context);
 						final Iterator<EObject> iterator = values.iterator();
 						if (iterator.hasNext()) {
 							instance.eSet(reference, iterator.next());
@@ -230,7 +230,7 @@ public class DefaultClassImporter implements IClassImporter {
 		return true;
 	}
 
-	private void notifyMissingFields(final EObject blank, final IImportProblem delegate, final IImportContext context) {
+	protected void notifyMissingFields(final EObject blank, final IImportProblem delegate, final IImportContext context) {
 		if (blank == null) {
 			return;
 		}
