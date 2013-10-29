@@ -16,6 +16,9 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -66,7 +69,29 @@ public class AssignmentImporter {
 								if (im != null) {
 									// Loop over all named objects and find the first object which can be used.
 									for (final NamedObject o : context.getNamedObjects(aon.trim())) {
-										if (o instanceof Cargo || o instanceof VesselEvent) {
+
+										boolean found = o instanceof VesselEvent;
+										if (!found) {
+											if (o instanceof LoadSlot) {
+												LoadSlot loadSlot = (LoadSlot) o;
+												if (loadSlot.isDESPurchase()) {
+													found = true;
+												}
+											}
+										}
+										if (!found) {
+											if (o instanceof DischargeSlot) {
+												DischargeSlot dischargeSlot = (DischargeSlot) o;
+												if (dischargeSlot.isFOBSale()) {
+													found = true;
+												}
+											}
+										}
+										if (o instanceof Cargo) {
+											found = true;
+										}
+
+										if (found) {
 											final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
 											ea.setAssignedObject((UUIDObject) o);
 											ea.setSequence(seq);

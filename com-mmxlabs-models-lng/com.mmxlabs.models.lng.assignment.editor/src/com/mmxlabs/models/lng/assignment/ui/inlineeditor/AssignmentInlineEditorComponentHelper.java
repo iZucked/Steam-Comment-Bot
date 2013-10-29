@@ -296,8 +296,14 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		public void updateDisplay(final EObject object) {
 			ElementAssignment assignment = null;
 			for (final EObject r : range) {
-				if (r instanceof ElementAssignment)
+				if (r instanceof ElementAssignment) {
 					assignment = (ElementAssignment) r;
+					if (assignment.getAssignedObject() == object) {
+						break;
+					} else {
+						assignment = null;
+					}
+				}
 
 			}
 

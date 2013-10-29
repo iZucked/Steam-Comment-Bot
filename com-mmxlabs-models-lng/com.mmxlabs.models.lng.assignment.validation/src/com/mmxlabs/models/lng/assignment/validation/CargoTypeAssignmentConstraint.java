@@ -56,18 +56,18 @@ public class CargoTypeAssignmentConstraint extends AbstractModelConstraint {
 			} else if (uuidObject instanceof Cargo) {
 				cargo = (Cargo) uuidObject;
 			}
-			if (cargo != null) {
-				if (cargo.getCargoType() != CargoType.FLEET) {
-					if (!vessels.isEmpty()) {
-
-						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
-								+ " is assigned to a vessel " + vessels.toString()));
-						failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
-
-						failures.add(failure);
-					}
-				}
-			}
+//			if (cargo != null) {
+//				if (cargo.getCargoType() != CargoType.FLEET) {
+//					if (!vessels.isEmpty()) {
+//						
+//						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
+//								+ " is assigned to a vessel " + vessels.toString()));
+//						failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+//
+//						failures.add(failure);
+//					}
+//				}
+//			}
 		}
 		if (failures.isEmpty()) {
 			return ctx.createSuccessStatus();
