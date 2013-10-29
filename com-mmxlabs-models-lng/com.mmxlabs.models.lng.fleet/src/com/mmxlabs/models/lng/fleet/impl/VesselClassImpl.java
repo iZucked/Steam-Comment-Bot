@@ -44,7 +44,6 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMaxSpeed <em>Max Speed</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getServiceSpeed <em>Service Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinHeel <em>Min Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getWarmingTime <em>Warming Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
@@ -175,26 +174,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @ordered
 	 */
 	protected double maxSpeed = MAX_SPEED_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getServiceSpeed() <em>Service Speed</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getServiceSpeed()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double SERVICE_SPEED_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getServiceSpeed() <em>Service Speed</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getServiceSpeed()
-	 * @generated
-	 * @ordered
-	 */
-	protected double serviceSpeed = SERVICE_SPEED_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getMinHeel() <em>Min Heel</em>}' attribute.
@@ -530,27 +509,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getServiceSpeed() {
-		return serviceSpeed;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setServiceSpeed(double newServiceSpeed) {
-		double oldServiceSpeed = serviceSpeed;
-		serviceSpeed = newServiceSpeed;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__SERVICE_SPEED, oldServiceSpeed, serviceSpeed));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getMinHeel() {
 		return minHeel;
 	}
@@ -707,8 +665,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return getMinSpeed();
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 				return getMaxSpeed();
-			case FleetPackage.VESSEL_CLASS__SERVICE_SPEED:
-				return getServiceSpeed();
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL:
 				return getMinHeel();
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
@@ -756,9 +712,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return;
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 				setMaxSpeed((Double)newValue);
-				return;
-			case FleetPackage.VESSEL_CLASS__SERVICE_SPEED:
-				setServiceSpeed((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL:
 				setMinHeel((Integer)newValue);
@@ -812,9 +765,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 				setMaxSpeed(MAX_SPEED_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL_CLASS__SERVICE_SPEED:
-				setServiceSpeed(SERVICE_SPEED_EDEFAULT);
-				return;
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL:
 				setMinHeel(MIN_HEEL_EDEFAULT);
 				return;
@@ -858,8 +808,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return minSpeed != MIN_SPEED_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
 				return maxSpeed != MAX_SPEED_EDEFAULT;
-			case FleetPackage.VESSEL_CLASS__SERVICE_SPEED:
-				return serviceSpeed != SERVICE_SPEED_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL:
 				return minHeel != MIN_HEEL_EDEFAULT;
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
@@ -892,8 +840,6 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		result.append(minSpeed);
 		result.append(", maxSpeed: ");
 		result.append(maxSpeed);
-		result.append(", serviceSpeed: ");
-		result.append(serviceSpeed);
 		result.append(", minHeel: ");
 		result.append(minHeel);
 		result.append(", warmingTime: ");

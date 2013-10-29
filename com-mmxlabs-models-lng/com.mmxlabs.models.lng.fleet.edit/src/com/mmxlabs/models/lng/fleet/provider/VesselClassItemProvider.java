@@ -67,7 +67,6 @@ public class VesselClassItemProvider
 			addFillCapacityPropertyDescriptor(object);
 			addMinSpeedPropertyDescriptor(object);
 			addMaxSpeedPropertyDescriptor(object);
-			addServiceSpeedPropertyDescriptor(object);
 			addMinHeelPropertyDescriptor(object);
 			addWarmingTimePropertyDescriptor(object);
 			addCoolingVolumePropertyDescriptor(object);
@@ -201,28 +200,6 @@ public class VesselClassItemProvider
 				 getString("_UI_VesselClass_maxSpeed_feature"),
 				 getString("_UI_VesselClass_maxSpeed_description"),
 				 FleetPackage.Literals.VESSEL_CLASS__MAX_SPEED,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Service Speed feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addServiceSpeedPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselClass_serviceSpeed_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_serviceSpeed_feature", "_UI_VesselClass_type"),
-				 FleetPackage.Literals.VESSEL_CLASS__SERVICE_SPEED,
 				 true,
 				 false,
 				 false,
@@ -414,7 +391,6 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__FILL_CAPACITY:
 			case FleetPackage.VESSEL_CLASS__MIN_SPEED:
 			case FleetPackage.VESSEL_CLASS__MAX_SPEED:
-			case FleetPackage.VESSEL_CLASS__SERVICE_SPEED:
 			case FleetPackage.VESSEL_CLASS__MIN_HEEL:
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:

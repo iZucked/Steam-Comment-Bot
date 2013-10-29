@@ -20,6 +20,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleBaseRate <em>Idle Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortBaseRate <em>In Port Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getFuelConsumption <em>Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed <em>Service Speed</em>}</li>
  * </ul>
  * </p>
  *
@@ -151,6 +152,33 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @generated
 	 */
 	EList<FuelConsumption> getFuelConsumption();
+
+	/**
+	 * Returns the value of the '<em><b>Service Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Service Speed</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Service Speed</em>' attribute.
+	 * @see #setServiceSpeed(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_ServiceSpeed()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts'"
+	 * @generated
+	 */
+	double getServiceSpeed();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed <em>Service Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Service Speed</em>' attribute.
+	 * @see #getServiceSpeed()
+	 * @generated
+	 */
+	void setServiceSpeed(double value);
 
 } // end of  VesselStateAttributes
 

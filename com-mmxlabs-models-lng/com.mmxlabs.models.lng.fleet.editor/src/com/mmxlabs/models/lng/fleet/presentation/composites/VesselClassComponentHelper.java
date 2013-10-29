@@ -11,10 +11,17 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -79,7 +86,6 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 		add_ballastAttributesEditor(detailComposite, topClass);
 		add_minSpeedEditor(detailComposite, topClass);
 		add_maxSpeedEditor(detailComposite, topClass);
-		add_serviceSpeedEditor(detailComposite, topClass);
 		add_minHeelEditor(detailComposite, topClass);
 		add_warmingTimeEditor(detailComposite, topClass);
 		add_coolingVolumeEditor(detailComposite, topClass);
@@ -150,15 +156,6 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	protected void add_maxSpeedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__MAX_SPEED));
 	}
-	/**
-	 * Create the editor for the serviceSpeed feature on VesselClass
-	 *
-	 * @generated
-	 */
-	protected void add_serviceSpeedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__SERVICE_SPEED));
-	}
-
 	/**
 	 * Create the editor for the minHeel feature on VesselClass
 	 *
