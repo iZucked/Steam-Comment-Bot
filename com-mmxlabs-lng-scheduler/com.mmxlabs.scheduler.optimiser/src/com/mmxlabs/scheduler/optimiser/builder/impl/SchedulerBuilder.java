@@ -719,78 +719,79 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vessel.setCargoCapacity(cargoCapacity);
 
-		vessels.add(vessel);
-		if (vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) {
-			realVessels.add(vessel);
-		}
-
 		final IResource resource = new Resource(indexingContext, name);
-		resources.add(resource);
 
 		// Register with provider
 		vesselProvider.setVesselResource(resource, vessel);
-
-		// If no time requirement is specified then the time window is at the
-		// very start of the job
-		final ITimeWindow startWindow = start.hasTimeRequirement() ? start.getTimeWindow() : createTimeWindow(0, 0);
-
-		final StartPortSlot startSlot = new StartPortSlot(heelLimit, heelCVValue, heelUnitPrice);
-		startSlot.setId("start-" + name);
-		startSlot.setPort((start.hasPortRequirement() && start.getLocation() != null) ? start.getLocation() : ANYWHERE);
-
-		startSlot.setTimeWindow(startWindow);
-
-		final EndPortSlot endSlot = new EndPortSlot();
-		endSlot.setId("end-" + name);
-		endSlot.setPort((end.hasPortRequirement() && end.getLocation() != null) ? end.getLocation() : ANYWHERE);
-
-		// Create start/end sequence elements for this route
-		final SequenceElement startElement = new SequenceElement(indexingContext);
-		final SequenceElement endElement = new SequenceElement(indexingContext);
-
-		sequenceElements.add(startElement);
-		sequenceElements.add(endElement);
-		elementDurationsProvider.setElementDuration(endElement, 0);
-		elementDurationsProvider.setElementDuration(startElement, 0);
-
-		if (end.hasTimeRequirement() == false) {
-			// put end slot into list of slots to patch up later.
-			// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
-			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
-				endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement, endSlot));
+		if (vesselInstanceType != VesselInstanceType.REFERENCE) {
+			vessels.add(vessel);
+			if (vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) {
+				realVessels.add(vessel);
 			}
-		} else {
-			endSlot.setTimeWindow(end.getTimeWindow());
+
+			resources.add(resource);
+
+			// If no time requirement is specified then the time window is at the
+			// very start of the job
+			final ITimeWindow startWindow = start.hasTimeRequirement() ? start.getTimeWindow() : createTimeWindow(0, 0);
+
+			final StartPortSlot startSlot = new StartPortSlot(heelLimit, heelCVValue, heelUnitPrice);
+			startSlot.setId("start-" + name);
+			startSlot.setPort((start.hasPortRequirement() && start.getLocation() != null) ? start.getLocation() : ANYWHERE);
+
+			startSlot.setTimeWindow(startWindow);
+
+			final EndPortSlot endSlot = new EndPortSlot();
+			endSlot.setId("end-" + name);
+			endSlot.setPort((end.hasPortRequirement() && end.getLocation() != null) ? end.getLocation() : ANYWHERE);
+
+			// Create start/end sequence elements for this route
+			final SequenceElement startElement = new SequenceElement(indexingContext);
+			final SequenceElement endElement = new SequenceElement(indexingContext);
+
+			sequenceElements.add(startElement);
+			sequenceElements.add(endElement);
+			elementDurationsProvider.setElementDuration(endElement, 0);
+			elementDurationsProvider.setElementDuration(startElement, 0);
+
+			if (end.hasTimeRequirement() == false) {
+				// put end slot into list of slots to patch up later.
+				// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
+				if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
+					endSlots.add(new Pair<ISequenceElement, PortSlot>(endElement, endSlot));
+				}
+			} else {
+				endSlot.setTimeWindow(end.getTimeWindow());
+			}
+
+			timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startSlot.getTimeWindow()));
+
+			if (end.hasTimeRequirement()) {
+				timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endSlot.getTimeWindow()));
+			} // otherwise this will be set in getOptimisationData().
+
+			startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
+			endElement.setName(endSlot.getId() + "-" + endSlot.getPort().getName());
+
+			portProvider.setPortForElement(startSlot.getPort(), startElement);
+			portProvider.setPortForElement(endSlot.getPort(), endElement);
+
+			portTypeProvider.setPortType(startElement, PortType.Start);
+			portTypeProvider.setPortType(endElement, PortType.End);
+
+			portSlotsProvider.setPortSlot(startElement, startSlot);
+			portSlotsProvider.setPortSlot(endElement, endSlot);
+
+			resourceAllocationProvider.setAllowedResources(startElement, Collections.singleton(resource));
+			// BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
+
+			// resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
+
+			startEndRequirementProvider.setStartEndRequirements(resource, start, end);
+			startEndRequirementProvider.setStartEndElements(resource, startElement, endElement);
+
+			// TODO specify initial vessel state?
 		}
-
-		timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(startSlot.getTimeWindow()));
-
-		if (end.hasTimeRequirement()) {
-			timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(endSlot.getTimeWindow()));
-		} // otherwise this will be set in getOptimisationData().
-
-		startElement.setName(startSlot.getId() + "-" + startSlot.getPort().getName());
-		endElement.setName(endSlot.getId() + "-" + endSlot.getPort().getName());
-
-		portProvider.setPortForElement(startSlot.getPort(), startElement);
-		portProvider.setPortForElement(endSlot.getPort(), endElement);
-
-		portTypeProvider.setPortType(startElement, PortType.Start);
-		portTypeProvider.setPortType(endElement, PortType.End);
-
-		portSlotsProvider.setPortSlot(startElement, startSlot);
-		portSlotsProvider.setPortSlot(endElement, endSlot);
-
-		resourceAllocationProvider.setAllowedResources(startElement, Collections.singleton(resource));
-		// BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
-
-		// resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
-
-		startEndRequirementProvider.setStartEndRequirements(resource, start, end);
-		startEndRequirementProvider.setStartEndElements(resource, startElement, endElement);
-
-		// TODO specify initial vessel state?
-
 		return vessel;
 	}
 
