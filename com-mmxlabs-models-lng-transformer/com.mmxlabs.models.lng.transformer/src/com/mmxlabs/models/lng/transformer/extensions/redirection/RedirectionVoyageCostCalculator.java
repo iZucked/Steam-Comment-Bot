@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -32,101 +33,57 @@ public class RedirectionVoyageCostCalculator implements IVoyageCostCalculator {
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
-	private final ICurve salesPriceCurve;
-
-	
-	public RedirectionVoyageCostCalculator(ICurve salesPrice) {
-		salesPriceCurve = salesPrice;	
-	}
 	
 	@Override
-	public VoyagePlan calculateShippingCosts(
-			ILoadPriceCalculator loadPriceCalculator, IPort loadPort,
-			IPort dischargePort, int loadTime, long loadVolumeInM3,
-			IVessel vessel, int cargoCVValue, String route) {
-	
+	public VoyagePlan calculateShippingCosts(IPort loadPort,
+			IPort dischargePort, int loadTime, int dischargeTime,
+			IVessel vessel, int notionalSpeed, int cargoCVValue, String route,
+			ISalesPriceCalculator salesPrice) {
+
 		final VoyagePlan notionalPlan = new VoyagePlan();
-	
+		
 		final Integer distance = distanceProvider.get(route).get(loadPort, dischargePort);
 		if (distance == null || distance.intValue() == Integer.MAX_VALUE) {
 			return null;
 		}
 	
 		// Generate a notional voyage plan
-		final int travelTime = getNotionalSpeed() == 0 ? 0 : Calculator.getTimeFromSpeedDistance(getNotionalSpeed(), distance);
+		final int travelTime = Calculator.getTimeFromSpeedDistance(notionalSpeed, distance);
 		// TODO: Extend API to contain port default
 		final int notionalLoadDuration = 24;// durationProvider.getDefaultValue();
 		final int notionalDischargeDuration = 24;// durationProvider.getDefaultValue();
 	
 		// Determine notional port visit times.
-		final int notionalDischargeTime = loadTime + notionalLoadDuration + travelTime;
-		final int notionalReturnTime = notionalDischargeTime + notionalDischargeDuration + travelTime;
-		final int[] arrivalTimes = new int[] { loadTime, notionalDischargeTime, notionalReturnTime };
+		final int notionalReturnTime = dischargeTime + notionalDischargeDuration + travelTime;
+		final int[] arrivalTimes = new int[] { loadTime, dischargeTime, notionalReturnTime };
 	
 		final LoadSlot notionalLoadSlot = new LoadSlot();
 		notionalLoadSlot.setPort(loadPort);
 		notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
-		notionalLoadSlot.setLoadPriceCalculator(loadPriceCalculator);
 		notionalLoadSlot.setCargoCVValue(cargoCVValue);
 		notionalLoadSlot.setCooldownForbidden(true);
-		notionalLoadSlot.setMaxLoadVolume(loadVolumeInM3);
-		notionalLoadSlot.setMinLoadVolume(loadVolumeInM3);
+		notionalLoadSlot.setMaxLoadVolume(vessel.getCargoCapacity());
+		notionalLoadSlot.setMinLoadVolume(vessel.getCargoCapacity());
 	
 		final DischargeSlot notionalDischargeSlot = new DischargeSlot();
 		notionalDischargeSlot.setPort(dischargePort);
-		notionalDischargeSlot.setTimeWindow(new TimeWindow(notionalDischargeTime, notionalDischargeTime));
-		notionalDischargeSlot.setDischargePriceCalculator(new MarketPriceContract(salesPriceCurve, 0, OptimiserUnitConvertor.convertToInternalConversionFactor(1)));
+		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
+		notionalDischargeSlot.setDischargePriceCalculator(salesPrice);
 	
 		final PortSlot notionalReturnSlot = new EndPortSlot();
 		notionalReturnSlot.setPort(loadPort);
 		notionalReturnSlot.setTimeWindow(new TimeWindow(notionalReturnTime, notionalReturnTime));
 	
 		// Calculate new voyage requirements
-		// TODO: Optimise over fuel choices using a VPO?
 		{
-			final VoyageDetails ladenDetails = new VoyageDetails();
-			{
-				final VoyageOptions ladenOptions = new VoyageOptions();
-				ladenOptions.setAvailableTime(travelTime);
-				ladenOptions.setAllowCooldown(false);
-				ladenOptions.setAvailableLNG(travelTime);
-				ladenOptions.setDistance(distance);
-				ladenOptions.setFromPortSlot(notionalLoadSlot);
-				ladenOptions.setNBOSpeed(getNotionalSpeed());
-				ladenOptions.setRoute(route);
-				ladenOptions.setShouldBeCold(true);
-				ladenOptions.setToPortSlot(notionalDischargeSlot);
-				ladenOptions.setUseFBOForSupplement(false);
-				ladenOptions.setUseNBOForIdle(true);
-				ladenOptions.setUseNBOForTravel(true);
-				ladenOptions.setVessel(vessel);
-				ladenOptions.setVesselState(VesselState.Laden);
-				ladenOptions.setWarm(false);
-	
-				voyageCalculator.calculateVoyageFuelRequirements(ladenOptions, ladenDetails);
-			}
-			final VoyageDetails ballastDetails = new VoyageDetails();
-			{
-				final VoyageOptions ballastOptions = new VoyageOptions();
-				ballastOptions.setAvailableTime(travelTime);
-				ballastOptions.setAllowCooldown(false);
-				ballastOptions.setAvailableLNG(travelTime);
-				ballastOptions.setDistance(distance);
-				ballastOptions.setFromPortSlot(notionalDischargeSlot);
-				ballastOptions.setNBOSpeed(getNotionalSpeed());
-				ballastOptions.setRoute(route);
-				ballastOptions.setShouldBeCold(true);
-				ballastOptions.setToPortSlot(notionalReturnSlot);
-				ballastOptions.setUseFBOForSupplement(false);
-				ballastOptions.setUseNBOForIdle(true);
-				ballastOptions.setUseNBOForTravel(true);
-				ballastOptions.setVessel(vessel);
-				ballastOptions.setVesselState(VesselState.Ballast);
-				ballastOptions.setWarm(false);
-	
-				voyageCalculator.calculateVoyageFuelRequirements(ballastOptions, ballastDetails);
-			}
-	
+			final VoyageDetails ladenDetails = calcLadenVoyageDetails(VesselState.Laden, vessel,
+					route, distance, notionalSpeed, dischargeTime - notionalLoadDuration - loadTime, notionalLoadSlot,
+					notionalDischargeSlot);
+
+			final VoyageDetails ballastDetails = calcLadenVoyageDetails(VesselState.Ballast, vessel,
+					route, distance, notionalSpeed, notionalReturnTime - notionalDischargeDuration - dischargeTime,
+					notionalDischargeSlot, notionalReturnSlot);
+			
 			final PortDetails loadDetails = new PortDetails();
 			loadDetails.setOptions(new PortOptions());
 			loadDetails.getOptions().setPortSlot(notionalLoadSlot);
@@ -151,10 +108,31 @@ public class RedirectionVoyageCostCalculator implements IVoyageCostCalculator {
 	
 	}
 
+	public VoyageDetails calcLadenVoyageDetails(VesselState vesselState,IVessel vessel, String route,
+			final int distance, int speed, int availableTime,
+			final PortSlot from,
+			final PortSlot to) {
+		final VoyageDetails ladenDetails = new VoyageDetails();
+		{
+			final VoyageOptions ladenOptions = new VoyageOptions();
+			ladenOptions.setAvailableTime(availableTime);
+			ladenOptions.setAllowCooldown(false);
+			ladenOptions.setAvailableLNG(vessel.getCargoCapacity());
+			ladenOptions.setDistance(distance);
+			ladenOptions.setFromPortSlot(from);
+			ladenOptions.setNBOSpeed(vessel.getVesselClass().getMinNBOSpeed(vesselState));
+			ladenOptions.setRoute(route);
+			ladenOptions.setShouldBeCold(true);
+			ladenOptions.setToPortSlot(to);
+			ladenOptions.setUseFBOForSupplement(true);
+			ladenOptions.setUseNBOForIdle(true);
+			ladenOptions.setUseNBOForTravel(true);
+			ladenOptions.setVessel(vessel);
+			ladenOptions.setVesselState(vesselState);
+			ladenOptions.setWarm(false);
 
-	private int getNotionalSpeed() {
-		// TODO Auto-generated method stub
-		return 0;
+			voyageCalculator.calculateVoyageFuelRequirements(ladenOptions, ladenDetails);
+		}
+		return ladenDetails;
 	}
-
 }
