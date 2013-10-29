@@ -196,6 +196,7 @@ public class LNGScenarioTransformer {
 	private final Map<VesselClass, List<IVessel>> spotVesselsByClass = new HashMap<VesselClass, List<IVessel>>();
 
 	private final ArrayList<IVessel> allVessels = new ArrayList<IVessel>();
+	private final ArrayList<IVessel> allReferenceVessels = new ArrayList<IVessel>();
 
 	// private OptimiserSettings defaultSettings = null;
 
@@ -492,6 +493,13 @@ public class LNGScenarioTransformer {
 							for (final IVessel v : allVessels) {
 								// TODO should the builder handle the application of costs to vessel classes?
 								final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(vesselAssociations.getFirst().reverseLookup(v.getVesselClass()),
+										entry.getActivity()));
+								builder.setPortCost(portAssociation.lookup((Port) port), v, type, activityCost);
+							}
+							for (final IVessel v : allReferenceVessels) {
+								// TODO should the builder handle the application of costs to vessel classes?
+								VesselClass reverseLookup = vesselAssociations.getFirst().reverseLookup(v.getVesselClass());
+								final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(reverseLookup,
 										entry.getActivity()));
 								builder.setPortCost(portAssociation.lookup((Port) port), v, type, activityCost);
 							}
@@ -1941,9 +1949,12 @@ public class LNGScenarioTransformer {
 		 * Now create each vessel
 		 */
 		// for (final VesselAvailability vesselAvailability : fleetModel.getScenarioFleetModel().getVesselAvailabilities()) {
+
+		Set<Vessel> seenVessels = new HashSet<>();
+
 		for (final VesselAvailability vesselAvailability : sortedAvailabilities) {
 			final Vessel eV = vesselAvailability.getVessel();
-
+			seenVessels.add(eV);
 			vesselAvailabiltyMap.put(eV, vesselAvailability);
 
 			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, vesselAvailability.isSetStartAfter() ? vesselAvailability.getStartAfter() : null,
@@ -1970,6 +1981,40 @@ public class LNGScenarioTransformer {
 
 			entities.addModelObject(vesselAvailability, vessel);
 			allVessels.add(vessel);
+
+			/*
+			 * set up inaccessible ports by applying resource allocation constraints
+			 */
+			final Set<IPort> inaccessiblePorts = new HashSet<IPort>();
+			for (final Port ePort : SetUtils.getObjects(eV.getInaccessiblePorts())) {
+				inaccessiblePorts.add(portAssociation.lookup((Port) ePort));
+			}
+
+			if (inaccessiblePorts.isEmpty() == false) {
+				builder.setVesselInaccessiblePorts(vessel, inaccessiblePorts);
+			}
+		}
+
+		// Reference vessels
+		for (final Vessel eV : fleetModel.getVessels()) {
+			if (seenVessels.contains(eV)) {
+				continue;
+			}
+
+			// TODO: Hook up once charter out opt implemented
+			final int dailyCharterInPrice = 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
+
+			final long heelLimit = 0;
+
+			final int hourlyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalHourlyCost(dailyCharterInPrice);
+			final ICurve hourlyCharterInCurve = new ConstantValueCurve(hourlyCharterInRate);
+
+			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), hourlyCharterInCurve, VesselInstanceType.REFERENCE, null, null, heelLimit, 0,
+					0, OptimiserUnitConvertor.convertToInternalVolume((int) (eV.getVesselOrVesselClassCapacity() * eV.getVesselOrVesselClassFillCapacity())));
+			vesselAssociation.add(eV, vessel);
+
+			entities.addModelObject(eV, vessel);
+			allReferenceVessels.add(vessel);
 
 			/*
 			 * set up inaccessible ports by applying resource allocation constraints
