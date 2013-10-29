@@ -75,8 +75,6 @@ public interface ISchedulerBuilder {
 	 *            Minimum vessel speed in scaled knots
 	 * @param maxSpeed
 	 *            Maximum vessel speed in scaled knots
-	 * @param serviceSpeed
-	 *            Service speed of vessel in scaled knots
 	 * @param capacity
 	 *            Maximum loadable cargo quantity in scaled M3
 	 * @param minHeel
@@ -88,7 +86,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 5.0
 	 */
-	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, int serviceSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
+	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
 			int warmupTimeInHours, long cooldownVolumeInM3);
 
 	/**
@@ -107,11 +105,12 @@ public interface ISchedulerBuilder {
 	 * @param consumptionRateCalculatorInMTPerHour
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
 	 * @param nboSpeed
-	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling.
+	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling. * @param serviceSpeed Service speed of vessel in scaled knots
+	 * 
 	 * @since 2.0
 	 */
 	void setVesselClassStateParameters(IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
+			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed, int serviceSpeed);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
@@ -128,10 +127,12 @@ public interface ISchedulerBuilder {
 	 *            Hourly scale MT of base fuel consumption when in port.
 	 * @param consumptionRateCalculatorInMTPerHour
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
+	 * @param nboSpeed
+	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling. * @param serviceSpeed Service speed of vessel in scaled knots
 	 * @since 2.0
 	 */
 	void setVesselClassStateParameters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
+			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int serviceSpeed);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link PortType}.

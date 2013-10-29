@@ -335,7 +335,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		});
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0);
 	}
 
 	/**
@@ -343,7 +343,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator loadContract,
-			final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, int pricingDate, final boolean optional) {
+			final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, final int pricingDate, final boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -427,7 +427,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final long minCvValue, final long maxCvValue,
-			final ISalesPriceCalculator priceCalculator, int pricingDate, final boolean slotIsOptional) {
+			final ISalesPriceCalculator priceCalculator, final int pricingDate, final boolean slotIsOptional) {
 
 		if (port == null) {
 			port = ANYWHERE;
@@ -445,7 +445,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private ISequenceElement configureDischargeOption(final DischargeOption slot, final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, int pricingDate, final boolean optional) {
+			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int pricingDate, final boolean optional) {
 		slot.setId(id);
 		slot.setPort(port);
 		slot.setTimeWindow(window);
@@ -1120,16 +1120,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 5.0
 	 */
 	@Override
-	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final int serviceSpeed, final long capacityInM3, final long minHeelInM3,
-			final int baseFuelUnitPricePerMT, final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3) {
+	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long minHeelInM3, final int baseFuelUnitPricePerMT,
+			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
 
 		vesselClass.setMinSpeed(minSpeed);
 		vesselClass.setMaxSpeed(maxSpeed);
-
-		vesselClass.setServiceSpeed(serviceSpeed);
 
 		vesselClass.setCargoCapacity(capacityInM3);
 		vesselClass.setMinHeel(minHeelInM3);
@@ -1152,7 +1150,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public void setVesselClassStateParameters(final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
-			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed) {
+			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed, final int serviceSpeed) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -1170,6 +1168,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
 		vc.setMinNBOSpeed(state, nboSpeed);
+		vc.setServiceSpeed(state, serviceSpeed);
 
 	}
 
@@ -1187,14 +1186,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void setVesselClassStateParameters(final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour, final int idleConsumptionRateInMTPerHour,
-			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
+			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour, final int serviceSpeed) {
 
 		// Convert rate to MT equivalent per hour
 		final int nboRateInMTPerHour = (int) Calculator.convertM3ToMT(nboRateInM3PerHour, vc.getBaseFuelConversionFactor());
 
 		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
 
-		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour, nboSpeed);
+		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour, nboSpeed, serviceSpeed);
 	}
 
 	/**
@@ -1578,8 +1577,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portCostProvider.setPortCost(port, vessel, portType, cost);
 	}
 
-	private Map<IDischargeOption, Collection<IPort>> fobSalesToLoadPorts = new HashMap<>();
-	private Map<ILoadOption, Collection<IPort>> desPurchasesToDischargePorts = new HashMap<>();
+	private final Map<IDischargeOption, Collection<IPort>> fobSalesToLoadPorts = new HashMap<>();
+	private final Map<ILoadOption, Collection<IPort>> desPurchasesToDischargePorts = new HashMap<>();
 
 	@Override
 	public void bindDischargeSlotsToDESPurchase(final ILoadOption desPurchase, final Collection<IPort> dischargePorts) {
@@ -1588,7 +1587,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private void doBindDischargeSlotsToDESPurchase() {
-		for (Map.Entry<ILoadOption, Collection<IPort>> e : desPurchasesToDischargePorts.entrySet()) {
+		for (final Map.Entry<ILoadOption, Collection<IPort>> e : desPurchasesToDischargePorts.entrySet()) {
 			final ILoadOption desPurchase = e.getKey();
 			final Collection<IPort> dischargePorts = e.getValue();
 
@@ -1635,7 +1634,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private void doBindLoadSlotsToFOBSale() {
 
-		for (Map.Entry<IDischargeOption, Collection<IPort>> e : fobSalesToLoadPorts.entrySet()) {
+		for (final Map.Entry<IDischargeOption, Collection<IPort>> e : fobSalesToLoadPorts.entrySet()) {
 			final IDischargeOption fobSale = e.getKey();
 			final Collection<IPort> loadPorts = e.getValue();
 
@@ -1790,7 +1789,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 6.0
 	 */
 	@Override
-	public IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator) {
+	public IMarkToMarket createFOBPurchaseMTM(@NonNull final Set<IPort> marketPorts, final int cargoCVValue, @NonNull final ILoadPriceCalculator priceCalculator) {
 		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue);
 
 		for (final IPort port : marketPorts) {
@@ -1803,7 +1802,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 6.0
 	 */
 	@Override
-	public IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator) {
+	public IMarkToMarket createDESSalesMTM(@NonNull final Set<IPort> marketPorts, @NonNull final ISalesPriceCalculator priceCalculator) {
 		final MarkToMarket mtm = new MarkToMarket(priceCalculator);
 
 		for (final IPort port : marketPorts) {
