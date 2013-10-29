@@ -56,6 +56,18 @@
           inheritable="false"
           modelClass="com.mmxlabs.models.lng.fleet.VesselEvent">
     </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.assignment.ui.inlineeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.assignment.editor.loadSlotAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+    </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.assignment.ui.inlineeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.assignment.editor.dischargeSlotAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+    </componentHelper>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">

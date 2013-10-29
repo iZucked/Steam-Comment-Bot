@@ -18,6 +18,8 @@ import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
@@ -50,9 +52,9 @@ public class ElementAssignmentConstraint extends AbstractModelConstraint {
 				return ctx.createSuccessStatus();
 			}
 
-			if (!(assignedObject instanceof Cargo || assignedObject instanceof VesselEvent)) {
+			if (!isValidObject(assignedObject)) {
 				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-						"Element Assignment has unexpected assigned object of type %s. Expected Cargo or VesselEvent object type.", assignedObject.eClass().getName())));
+						"Element Assignment has unexpected assigned object of type %s.", assignedObject.eClass().getName())));
 				failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_AssignedObject());
 
 				failures.add(failure);
@@ -62,7 +64,9 @@ public class ElementAssignmentConstraint extends AbstractModelConstraint {
 
 			boolean found = false;
 
-			if (vessel instanceof Vessel) {
+			// This check only applies to cargoes and vessel events. DES Purchases and FOB Sales can use non-fleet assignments
+			// TODO: Forbid fleet assignments to DES Purchases & FOB Sales
+			if (vessel instanceof Vessel && (assignedObject instanceof Cargo || assignedObject instanceof VesselEvent)) {
 				final LNGScenarioModel root = (LNGScenarioModel) evc.getRootObject();
 
 				final ScenarioFleetModel fleet = root.getPortfolioModel().getScenarioFleetModel();
@@ -93,5 +97,19 @@ public class ElementAssignmentConstraint extends AbstractModelConstraint {
 			}
 			return multi;
 		}
+	}
+
+	private boolean isValidObject(EObject eObj) {
+		boolean allowedObject = (eObj instanceof Cargo || eObj instanceof VesselEvent);
+
+		if (!allowedObject && eObj instanceof LoadSlot) {
+			LoadSlot loadSlot = (LoadSlot) eObj;
+			allowedObject = loadSlot.isDESPurchase();
+		}
+		if (!allowedObject && eObj instanceof DischargeSlot) {
+			DischargeSlot DischargeSlot = (DischargeSlot) eObj;
+			allowedObject = DischargeSlot.isFOBSale();
+		}
+		return allowedObject;
 	}
 }

@@ -23,6 +23,9 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -38,8 +41,22 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		// Check for correct owner. For example we do not want to trigger this for cargoes being added to cargo groups.
-		if (parameter.getOwner() == null || parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel|| parameter.getOwner() instanceof ScenarioFleetModel) {
+		if (parameter.getOwner() == null || parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel || parameter.getOwner() instanceof ScenarioFleetModel) {
 			return super.provideAdditionalCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
+		}
+
+		else if (parameter.getOwner() instanceof LoadSlot) {
+			LoadSlot loadSlot = (LoadSlot) parameter.getOwner();
+			if (loadSlot.isDESPurchase()) {
+				return super.provideAdditionalCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
+			}
+		}
+
+		else if (parameter.getOwner() instanceof DischargeSlot) {
+			DischargeSlot dischargeSlot = (DischargeSlot) parameter.getOwner();
+			if (dischargeSlot.isFOBSale()) {
+				return super.provideAdditionalCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
+			}
 		}
 
 		return null;
@@ -47,7 +64,20 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 
 	@Override
 	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		if (addedObject instanceof Cargo || addedObject instanceof VesselEvent) {
+
+		boolean checkObject = false;
+
+		checkObject = addedObject instanceof Cargo || addedObject instanceof VesselEvent;
+		if (!checkObject && addedObject instanceof LoadSlot) {
+			LoadSlot loadSlot = (LoadSlot) addedObject;
+			checkObject = loadSlot.isDESPurchase();
+		}
+		if (!checkObject && addedObject instanceof DischargeSlot) {
+			DischargeSlot DischargeSlot = (DischargeSlot) addedObject;
+			checkObject = DischargeSlot.isFOBSale();
+		}
+
+		if (checkObject) {
 
 			for (final EObject entry : editSet) {
 				if (entry instanceof ElementAssignment) {
@@ -67,7 +97,17 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 
 	@Override
 	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
-		return (deletedObject instanceof Cargo || deletedObject instanceof VesselEvent || deletedObject instanceof VesselAvailability);
+		boolean shouldHandleDeletion = (deletedObject instanceof Cargo || deletedObject instanceof VesselEvent || deletedObject instanceof VesselAvailability);
+
+		if (!shouldHandleDeletion && deletedObject instanceof LoadSlot) {
+			LoadSlot loadSlot = (LoadSlot) deletedObject;
+			shouldHandleDeletion = loadSlot.isDESPurchase();
+		}
+		if (!shouldHandleDeletion && deletedObject instanceof DischargeSlot) {
+			DischargeSlot DischargeSlot = (DischargeSlot) deletedObject;
+			shouldHandleDeletion = DischargeSlot.isFOBSale();
+		}
+		return shouldHandleDeletion;
 	}
 
 	@Override
@@ -102,7 +142,7 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 				}
 			}
 			// if a cargo or vessel event was deleted, delete any associated element assignment
-			else if (deleted instanceof Cargo || deleted instanceof VesselEvent) {
+			else if (deleted instanceof Cargo || deleted instanceof VesselEvent || deleted instanceof Slot) {
 				final ElementAssignment ea = AssignmentEditorHelper.getElementAssignment(assignmentModel, (UUIDObject) deleted);
 				if (ea != null) {
 					return DeleteCommand.create(domain, ea);

@@ -22,6 +22,8 @@ import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.impl.CargoImpl;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -62,6 +64,8 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 					// get a list of globally permissible values
 					final List<Pair<String, EObject>> baseResult = super.getAllowedValues(target, field);
 
+				
+					
 					Set<Vessel> scenarioVessels = new HashSet<Vessel>();
 					for (VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
 						scenarioVessels.add(va.getVessel());
@@ -93,6 +97,14 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 							currentValue = assignment.getAssignment();
 					}
 
+					boolean useScenarioVessel = true;
+					if (target instanceof LoadSlot) {
+						useScenarioVessel = !((LoadSlot) target).isDESPurchase();
+					}
+					else if (target instanceof DischargeSlot) {
+						useScenarioVessel = !((DischargeSlot) target).isFOBSale();
+					}
+					
 					final EList<AVesselSet<Vessel>> allowedVessels;
 
 					// populate the list of allowed vessels for the target object
@@ -149,7 +161,7 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 						// Filter out non-scenario vessels
 						if (display) {
 							if (vessel instanceof Vessel) {
-								if (!scenarioVessels.contains(vessel)) {
+								if (useScenarioVessel && !scenarioVessels.contains(vessel)) {
 									display = false;
 								}
 							}

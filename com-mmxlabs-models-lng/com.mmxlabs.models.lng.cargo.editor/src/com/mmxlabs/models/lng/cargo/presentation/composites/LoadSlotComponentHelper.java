@@ -141,6 +141,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 			if (loadSlot.getTransferFrom() != null) {
 				external.add(loadSlot.getTransferFrom());
 			}
+			external.addAll(loadSlot.getExtensions());
 		}
 		external.addAll(super.getExternalEditingRange(root, value));
 

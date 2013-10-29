@@ -129,6 +129,11 @@ public class AssignmentJointModelEditorContribution extends BaseJointModelEditor
 
 	@Override
 	public void addPages(final Composite parent) {
+		
+		if (true){
+			return;
+		}
+		
 		final Composite outer = new Composite(parent, SWT.NONE);
 		final GridLayout outerLayout = new GridLayout(4, false);
 		outerLayout.marginHeight = outerLayout.marginWidth = 4;
