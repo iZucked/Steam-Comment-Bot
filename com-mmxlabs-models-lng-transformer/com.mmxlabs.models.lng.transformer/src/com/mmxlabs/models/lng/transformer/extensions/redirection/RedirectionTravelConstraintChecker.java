@@ -30,7 +30,7 @@ public class RedirectionTravelConstraintChecker implements IPairwiseConstraintCh
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
 	@Inject
-	private RedirectionGroupProvider redirectionGroupProvider;
+	private RedirectionInformationProvider redirectionGroupProvider;
 
 	@Override
 	public String getName() {

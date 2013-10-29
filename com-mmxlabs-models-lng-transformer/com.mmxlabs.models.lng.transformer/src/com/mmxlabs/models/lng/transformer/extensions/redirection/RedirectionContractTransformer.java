@@ -82,7 +82,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 	private transient List<ITransformerExtension> transformerExtensions = null;
 
 	@Inject
-	private RedirectionGroupProvider redirectionGroupProvider;
+	private RedirectionInformationProvider redirectionGroupProvider;
 
 	@Inject
 	private IDESPurchaseSlotBindingsGenerator desPurchaseSlotBindingsGenerator;
