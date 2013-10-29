@@ -7,6 +7,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
@@ -51,7 +52,8 @@ public abstract class DetailPropertiesView extends ViewPart {
 		// Set defaults
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(true);
-
+		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+		
 		viewer.setContentProvider(createContentProvider());
 
 		ColumnViewerToolTipSupport.enableFor(viewer);
