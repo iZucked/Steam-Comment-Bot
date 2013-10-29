@@ -107,6 +107,12 @@ public interface IVesselClass {
 	 * @return
 	 */
 	int getMinSpeed();
+	
+	/**
+	 * Returns the vessels "service" speed. Used in e.g. P&L based calculations
+	 * @return
+	 */
+	int getServiceSpeed();
 
 	/**
 	 * Returns the rate of NBO when the vessel is travelling. Units are M3 Per Hour

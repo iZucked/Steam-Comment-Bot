@@ -21,6 +21,8 @@ public final class VesselClass implements IVesselClass {
 	private int minSpeed;
 
 	private int maxSpeed;
+	
+	private int serviceSpeed;
 
 	private int baseFuelUnitPrice;
 
@@ -90,6 +92,15 @@ public final class VesselClass implements IVesselClass {
 		this.maxSpeed = maxSpeed;
 	}
 
+	public void setServiceSpeed(final int serviceSpeed) {
+		this.serviceSpeed = serviceSpeed;
+	}
+
+	@Override
+	public int getServiceSpeed() {
+		return serviceSpeed;
+	}
+	
 	@Override
 	public long getIdleConsumptionRate(final VesselState vesselState) {
 		return CollectionsUtil.getValue(idleConsumptionRate, vesselState, 0l);

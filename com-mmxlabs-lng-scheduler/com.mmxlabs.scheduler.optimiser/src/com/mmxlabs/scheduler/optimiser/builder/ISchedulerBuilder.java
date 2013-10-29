@@ -75,6 +75,8 @@ public interface ISchedulerBuilder {
 	 *            Minimum vessel speed in scaled knots
 	 * @param maxSpeed
 	 *            Maximum vessel speed in scaled knots
+	 * @param serviceSpeed
+	 *            Service speed of vessel in scaled knots
 	 * @param capacity
 	 *            Maximum loadable cargo quantity in scaled M3
 	 * @param minHeel
@@ -86,7 +88,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 5.0
 	 */
-	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
+	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, int serviceSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
 			int warmupTimeInHours, long cooldownVolumeInM3);
 
 	/**
