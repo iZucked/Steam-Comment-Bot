@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getBallastAttributes <em>Ballast Attributes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinSpeed <em>Min Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMaxSpeed <em>Max Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getServiceSpeed <em>Service Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel <em>Min Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getWarmingTime <em>Warming Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume <em>Cooling Volume</em>}</li>
@@ -240,6 +241,33 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	void setMaxSpeed(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Service Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Service Speed</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Service Speed</em>' attribute.
+	 * @see #setServiceSpeed(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_ServiceSpeed()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts'"
+	 * @generated
+	 */
+	double getServiceSpeed();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getServiceSpeed <em>Service Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Service Speed</em>' attribute.
+	 * @see #getServiceSpeed()
+	 * @generated
+	 */
+	void setServiceSpeed(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Min Heel</b></em>' attribute.

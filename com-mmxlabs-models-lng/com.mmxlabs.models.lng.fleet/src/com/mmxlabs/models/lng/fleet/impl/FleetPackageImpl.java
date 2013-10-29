@@ -358,7 +358,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselClass_MinHeel() {
+	public EAttribute getVesselClass_ServiceSpeed() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -367,7 +367,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselClass_WarmingTime() {
+	public EAttribute getVesselClass_MinHeel() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -376,7 +376,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselClass_CoolingVolume() {
+	public EAttribute getVesselClass_WarmingTime() {
 		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -385,8 +385,17 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getVesselClass_CoolingVolume() {
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getVesselClass_RouteParameters() {
-		return (EReference)vesselClassEClass.getEStructuralFeatures().get(11);
+		return (EReference)vesselClassEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -395,7 +404,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EAttribute getVesselClass_PilotLightRate() {
-		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(12);
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -992,6 +1001,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEReference(vesselClassEClass, VESSEL_CLASS__BALLAST_ATTRIBUTES);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MIN_SPEED);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MAX_SPEED);
+		createEAttribute(vesselClassEClass, VESSEL_CLASS__SERVICE_SPEED);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__MIN_HEEL);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__WARMING_TIME);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__COOLING_VOLUME);
@@ -1164,6 +1174,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVesselClass_BallastAttributes(), this.getVesselStateAttributes(), null, "ballastAttributes", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MinSpeed(), ecorePackage.getEDouble(), "minSpeed", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MaxSpeed(), ecorePackage.getEDouble(), "maxSpeed", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClass_ServiceSpeed(), ecorePackage.getEDouble(), "serviceSpeed", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_MinHeel(), ecorePackage.getEInt(), "minHeel", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_WarmingTime(), ecorePackage.getEInt(), "warmingTime", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_CoolingVolume(), ecorePackage.getEInt(), "coolingVolume", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1300,6 +1311,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   });		
 		addAnnotation
 		  (getVesselClass_MaxSpeed(), 
+		   source, 
+		   new String[] {
+			 "unit", "kts"
+		   });		
+		addAnnotation
+		  (getVesselClass_ServiceSpeed(), 
 		   source, 
 		   new String[] {
 			 "unit", "kts"

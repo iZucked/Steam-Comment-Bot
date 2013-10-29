@@ -118,8 +118,8 @@ public class AssignmentImporter {
 											if (v != null) {
 												ea.setAssignment((Vessel) v);
 											} else {
+												// ...then generic set
 												final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
-												// Then generic set
 												if (v2 instanceof VesselClass) {
 													ea.setSpotIndex(spotIndex);
 													ea.setAssignment((VesselClass) v2);
@@ -155,6 +155,8 @@ public class AssignmentImporter {
 			row.put("vessels", ca.getVesselOrClass().getName());
 			final StringBuilder sb = new StringBuilder();
 
+			// TODO: Export column "type" to indicate Vessel or Vessel Class?
+			
 			boolean comma = false;
 			for (final UUIDObject u : ca.getAssignedObjects()) {
 				if (comma)

@@ -403,13 +403,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__MAX_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Service Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__SERVICE_SPEED = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
+
+	/**
 	 * The feature id for the '<em><b>Min Heel</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 8;
+	int VESSEL_CLASS__MIN_HEEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Warming Time</b></em>' attribute.
@@ -418,7 +427,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 9;
+	int VESSEL_CLASS__WARMING_TIME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Cooling Volume</b></em>' attribute.
@@ -427,7 +436,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 10;
+	int VESSEL_CLASS__COOLING_VOLUME = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Route Parameters</b></em>' containment reference list.
@@ -436,7 +445,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 11;
+	int VESSEL_CLASS__ROUTE_PARAMETERS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Pilot Light Rate</b></em>' attribute.
@@ -445,7 +454,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
+	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
@@ -454,7 +463,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
@@ -1561,6 +1570,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_MaxSpeed();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getServiceSpeed <em>Service Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Service Speed</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getServiceSpeed()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_ServiceSpeed();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinHeel <em>Min Heel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2398,6 +2418,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__MAX_SPEED = eINSTANCE.getVesselClass_MaxSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Service Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__SERVICE_SPEED = eINSTANCE.getVesselClass_ServiceSpeed();
 
 		/**
 		 * The meta object literal for the '<em><b>Min Heel</b></em>' attribute feature.
