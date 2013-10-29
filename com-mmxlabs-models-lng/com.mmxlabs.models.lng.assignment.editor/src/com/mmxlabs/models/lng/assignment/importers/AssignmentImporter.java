@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -68,12 +69,12 @@ public class AssignmentImporter {
 								final AssignmentModel im = lngScenarioModel.getPortfolioModel().getAssignmentModel();
 								if (im != null) {
 									// Loop over all named objects and find the first object which can be used.
-									for (final NamedObject o : context.getNamedObjects(aon.trim())) {
+									for (NamedObject o : context.getNamedObjects(aon.trim())) {
 
 										boolean found = o instanceof VesselEvent;
 										if (!found) {
 											if (o instanceof LoadSlot) {
-												LoadSlot loadSlot = (LoadSlot) o;
+												final LoadSlot loadSlot = (LoadSlot) o;
 												if (loadSlot.isDESPurchase()) {
 													found = true;
 												}
@@ -81,7 +82,7 @@ public class AssignmentImporter {
 										}
 										if (!found) {
 											if (o instanceof DischargeSlot) {
-												DischargeSlot dischargeSlot = (DischargeSlot) o;
+												final DischargeSlot dischargeSlot = (DischargeSlot) o;
 												if (dischargeSlot.isFOBSale()) {
 													found = true;
 												}
@@ -89,6 +90,22 @@ public class AssignmentImporter {
 										}
 										if (o instanceof Cargo) {
 											found = true;
+											final Cargo cargo = (Cargo) o;
+											for (final Slot s : cargo.getSlots()) {
+												if (s instanceof LoadSlot) {
+													final LoadSlot loadSlot = (LoadSlot) s;
+													if (loadSlot.isDESPurchase()) {
+														o = s;
+														break;
+													}
+												} else if (s instanceof DischargeSlot) {
+													final DischargeSlot dischargeSlot = (DischargeSlot) s;
+													if (dischargeSlot.isFOBSale()) {
+														o = s;
+														break;
+													}
+												}
+											}
 										}
 
 										if (found) {
@@ -96,15 +113,18 @@ public class AssignmentImporter {
 											ea.setAssignedObject((UUIDObject) o);
 											ea.setSequence(seq);
 
-											final NamedObject v = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
-											if (v instanceof Vessel) {
+											// Try named vessel first...
+											final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
+											if (v != null) {
 												ea.setAssignment((Vessel) v);
-											} else if (v instanceof VesselClass) {
-
-												ea.setSpotIndex(spotIndex);
-												ea.setAssignment((VesselClass) v);
+											} else {
+												final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
+												// Then generic set
+												if (v2 instanceof VesselClass) {
+													ea.setSpotIndex(spotIndex);
+													ea.setAssignment((VesselClass) v2);
+												}
 											}
-
 											im.getElementAssignments().add(ea);
 											break;
 										}
