@@ -86,10 +86,10 @@ public class LegalEntityImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(EClass targetClass, Map<String, String> row, IImportContext context) {
+	public Collection<EObject> importObject(final EObject parent, EClass targetClass, Map<String, String> row, IImportContext context) {
 
 		// use the default importer to import the object's usual attributes
-		final Collection<EObject> result = super.importObject(targetClass, row, context);
+		final Collection<EObject> result = super.importObject(parent, targetClass, row, context);
 
 		// pick the legal entity which was created by the default importer
 		LegalEntity entity = null;

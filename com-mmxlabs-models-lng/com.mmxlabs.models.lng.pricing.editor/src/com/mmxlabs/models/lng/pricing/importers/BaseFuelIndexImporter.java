@@ -28,7 +28,7 @@ public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 	private static final String NAME = "name";
 
 	@Override
-	public Collection<EObject> importObject(final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public Collection<EObject> importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		BaseFuelIndex result = PricingFactory.eINSTANCE.createBaseFuelIndex();
 
 		if (row.containsKey(NAME)) {

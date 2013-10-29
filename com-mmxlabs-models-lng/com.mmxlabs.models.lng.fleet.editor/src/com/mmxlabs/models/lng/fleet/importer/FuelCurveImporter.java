@@ -43,7 +43,7 @@ public class FuelCurveImporter {
 		Map<String, String> row = null;
 		try {
 			context.pushReader(reader);
-			while (null != (row = reader.readRow())) {
+			while (null != (row = reader.readRow(true))) {
 				final String className = row.get("class");
 				final String stateName = row.get("state");
 				

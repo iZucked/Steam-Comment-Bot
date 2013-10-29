@@ -67,8 +67,8 @@ public class VesselClassImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(EClass eClass, Map<String, String> row, IImportContext context) {
-		final Collection<EObject> result = super.importObject(eClass, row, context);
+	public Collection<EObject> importObject(final EObject parent, EClass eClass, Map<String, String> row, IImportContext context) {
+		final Collection<EObject> result = super.importObject(parent, eClass, row, context);
 		final VesselClass vc = (VesselClass) result.iterator().next();
 		final HashSet<String> pricedCanals = new HashSet<String>();
 		final HashSet<String> parameterisedCanals = new HashSet<String>();
@@ -94,7 +94,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 						subMap.put("route", canalName);
 						if (row.containsKey("name"))
 							subMap.put("vesselclass", row.get("name"));
-						final RouteCost cost = (RouteCost) routeCostImporter.importObject(PricingPackage.eINSTANCE.getRouteCost(), subMap, context).iterator().next();
+						final RouteCost cost = (RouteCost) routeCostImporter.importObject(parent, PricingPackage.eINSTANCE.getRouteCost(), subMap, context).iterator().next();
 
 						context.doLater(new IDeferment() {
 							@Override
@@ -134,7 +134,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 						subMap.put("route", canalName);
 
 						final VesselClassRouteParameters parameters = (VesselClassRouteParameters) parameterImporter
-								.importObject(FleetPackage.eINSTANCE.getVesselClassRouteParameters(), subMap, context).iterator().next();
+								.importObject(parent, FleetPackage.eINSTANCE.getVesselClassRouteParameters(), subMap, context).iterator().next();
 
 						context.doLater(new IDeferment() {
 							@Override

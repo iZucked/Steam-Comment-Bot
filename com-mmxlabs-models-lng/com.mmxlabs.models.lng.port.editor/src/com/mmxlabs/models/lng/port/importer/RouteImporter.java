@@ -46,7 +46,7 @@ public class RouteImporter {
 			context.pushReader(reader);
 			Map<String, String> row = null;
 			final LinkedList<RouteLine> lines = new LinkedList<RouteLine>();
-			while (null != (row = reader.readRow())) {
+			while (null != (row = reader.readRow(true))) {
 				// TODO: Should we not look up from "from" key?
 				String fromName = null;
 				for (final Map.Entry<String, String> entry : row.entrySet()) {

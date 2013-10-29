@@ -226,8 +226,8 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
-		final Collection<EObject> result = importRawObject(eClass, row, context);
+	public Collection<EObject> importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+		final Collection<EObject> result = importRawObject(parent, eClass, row, context);
 		LoadSlot load = null;
 		DischargeSlot discharge = null;
 		Cargo cargo = null;
@@ -276,9 +276,9 @@ public class CargoImporter extends DefaultClassImporter {
 				context.pushReader(reader);
 				Map<String, String> row;
 				final Map<String, Cargo> cargoMap = new HashMap<String, Cargo>();
-				while ((row = reader.readRow()) != null) {
+				while ((row = reader.readRow(true)) != null) {
 					// Import Row Data
-					final Collection<EObject> result = importObject(importClass, row, context);
+					final Collection<EObject> result = importObject(null, importClass, row, context);
 
 					// Find the individual objects
 					LoadSlot load = null;
@@ -429,9 +429,9 @@ public class CargoImporter extends DefaultClassImporter {
 
 	}
 
-	public Collection<EObject> importRawObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
-		objects.addAll(super.importObject(eClass, row, context));
+		objects.addAll(super.importObject(parent, eClass, row, context));
 
 		// Special case for load and discharge slots. These are not under the correct reference type string - so fake it here
 		final IFieldMap fieldMap = new FieldMap(row);
@@ -442,7 +442,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 			final EClass referenceType = CargoPackage.eINSTANCE.getLoadSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
-			final Collection<EObject> values = classImporter.importObject(referenceType, subKeys, context);
+			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context);
 			objects.addAll(values);
 		}
 		{
@@ -451,7 +451,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 			final EClass referenceType = CargoPackage.eINSTANCE.getDischargeSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
-			final Collection<EObject> values = classImporter.importObject(referenceType, subKeys, context);
+			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context);
 			objects.addAll(values);
 		}
 		return objects;

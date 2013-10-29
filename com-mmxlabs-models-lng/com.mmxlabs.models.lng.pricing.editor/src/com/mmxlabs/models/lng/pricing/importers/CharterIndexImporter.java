@@ -55,8 +55,8 @@ public class CharterIndexImporter implements IClassImporter {
 		Map<String, String> row;
 		try {
 			context.pushReader(reader);
-			while (null != (row = reader.readRow())) {
-				result.addAll(importObject(targetClass, row, context));
+			while (null != (row = reader.readRow(true))) {
+				result.addAll(importObject(null, targetClass, row, context));
 			}
 		} catch (final IOException e) {
 			context.addProblem(context.createProblem("IO Error " + e.getMessage(), true, true, false));
@@ -68,7 +68,7 @@ public class CharterIndexImporter implements IClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public Collection<EObject> importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		CharterIndex result = PricingFactory.eINSTANCE.createCharterIndex();
 
 		final Index<Integer> indexData;

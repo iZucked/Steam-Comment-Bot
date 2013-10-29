@@ -33,8 +33,8 @@ public class BaseFuelImporter extends DefaultClassImporter {
 	private static String indexKey = "index";
 	
 	@Override
-	public Collection<EObject> importObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
-		final Collection<EObject> result = super.importObject(eClass, row, context);
+	public Collection<EObject> importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+		final Collection<EObject> result = super.importObject(parent, eClass, row, context);
 		final BaseFuel fuel = (BaseFuel) result.iterator().next();
 
 		if (row.containsKey(indexKey)) {

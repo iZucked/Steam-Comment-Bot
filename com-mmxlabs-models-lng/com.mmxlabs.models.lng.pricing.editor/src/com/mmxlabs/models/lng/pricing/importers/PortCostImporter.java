@@ -24,9 +24,9 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  */
 public class PortCostImporter extends DefaultClassImporter {
 	@Override
-	public Collection<EObject> importObject(EClass eClass,
+	public Collection<EObject> importObject(final EObject parent, EClass eClass,
 			Map<String, String> row, IImportContext context) {
-		final PortCost cost = (PortCost) super.importObject(eClass, row, context).iterator().next();
+		final PortCost cost = (PortCost) super.importObject(parent, eClass, row, context).iterator().next();
 		
 		for (final PortCapability pc : PortCapability.values()) {
 			final PortCostEntry pce = PricingFactory.eINSTANCE.createPortCostEntry();

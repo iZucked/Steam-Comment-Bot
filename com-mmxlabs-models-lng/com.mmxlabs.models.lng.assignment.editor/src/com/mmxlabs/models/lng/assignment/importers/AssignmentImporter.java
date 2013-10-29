@@ -39,7 +39,7 @@ public class AssignmentImporter {
 	public void importAssignments(final CSVReader reader, final IImportContext context) {
 		IFieldMap row;
 		try {
-			while ((row = reader.readRow()) != null) {
+			while ((row = reader.readRow(true)) != null) {
 				final String vesselName = row.get("vessels");
 				final String assignedObjects = row.get("assignedobjects");
 				final String spotIndexStr = row.get("spotindex");
