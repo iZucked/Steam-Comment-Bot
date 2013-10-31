@@ -6,12 +6,10 @@ package com.mmxlabs.models.lng.assignment.validation;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.query.conditions.eobjects.structuralfeatures.EObjectReferencerCondition;
@@ -19,7 +17,6 @@ import org.eclipse.emf.query.statements.FROM;
 import org.eclipse.emf.query.statements.IQueryResult;
 import org.eclipse.emf.query.statements.SELECT;
 import org.eclipse.emf.query.statements.WHERE;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -33,19 +30,14 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-public class VesselAssignmentConstraint extends AbstractModelConstraint {
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
-	 */
-	@Override
-	public IStatus validate(final IValidationContext ctx) {
-		final EObject object = ctx.getTarget();
+public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 
-		final List<IStatus> failures = new LinkedList<IStatus>();
+	@Override
+	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+		final EObject object = ctx.getTarget();
 
 		if (object instanceof ElementAssignment) {
 			final ElementAssignment assignment = (ElementAssignment) object;
@@ -53,7 +45,7 @@ public class VesselAssignmentConstraint extends AbstractModelConstraint {
 			final UUIDObject assignedObject = assignment.getAssignedObject();
 
 			if (assignment.getAssignment() == null) {
-				return ctx.createSuccessStatus();
+				return Activator.PLUGIN_ID;
 			}
 
 			final Set<Vessel> vessels = SetUtils.getObjects(assignment.getAssignment());
@@ -64,7 +56,7 @@ public class VesselAssignmentConstraint extends AbstractModelConstraint {
 				final EList<APortSet<Port>> inaccessiblePorts = vessel.getInaccessiblePorts();
 				if (inaccessiblePorts.isEmpty()) {
 					// At least one vessel has no restrictions.
-					return ctx.createSuccessStatus();
+					return Activator.PLUGIN_ID;
 				} else {
 					final Set<Port> ports = SetUtils.getObjects(inaccessiblePorts);
 					if (firstPass) {
@@ -78,7 +70,7 @@ public class VesselAssignmentConstraint extends AbstractModelConstraint {
 
 			// Multiple vessels have different restrictions, but between them they can visit any port.
 			if (restrictedPorts.isEmpty()) {
-				return ctx.createSuccessStatus();
+				return Activator.PLUGIN_ID;
 			}
 
 			// Next stage, check the cargoes, slots and events to see if they contain a restricted port.
@@ -109,16 +101,6 @@ public class VesselAssignmentConstraint extends AbstractModelConstraint {
 				}
 			}
 		}
-		if (failures.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
-		}
+		return Activator.PLUGIN_ID;
 	}
 }

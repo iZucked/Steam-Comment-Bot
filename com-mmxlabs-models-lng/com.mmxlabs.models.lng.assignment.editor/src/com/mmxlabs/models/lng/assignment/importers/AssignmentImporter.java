@@ -66,8 +66,8 @@ public class AssignmentImporter {
 							if (root instanceof LNGScenarioModel) {
 								final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) root;
 
-								final AssignmentModel im = lngScenarioModel.getPortfolioModel().getAssignmentModel();
-								if (im != null) {
+								final AssignmentModel assignmentModel = lngScenarioModel.getPortfolioModel().getAssignmentModel();
+								if (assignmentModel != null) {
 									// Loop over all named objects and find the first object which can be used.
 									for (NamedObject o : context.getNamedObjects(aon.trim())) {
 
@@ -125,7 +125,7 @@ public class AssignmentImporter {
 													ea.setAssignment((VesselClass) v2);
 												}
 											}
-											im.getElementAssignments().add(ea);
+											assignmentModel.getElementAssignments().add(ea);
 											break;
 										}
 									}

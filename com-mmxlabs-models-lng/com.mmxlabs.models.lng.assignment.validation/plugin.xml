@@ -41,25 +41,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.assignment.validation.CargoTypeAssignmentConstraint"
-                  id="com.mmxlabs.models.lng.input.validation.CargoTypeAssignmentConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="Cargo Type Assignment Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <description>
-                  description body text
-               </description>
-               <target
-                     class="ElementAssignment">
-               </target>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.assignment.validation.LockedAssignmentWiringConstraint"
                   id="com.mmxlabs.models.lng.input.validation.LockedAssignmentWiringConstraint"
                   isEnabledByDefault="true"
@@ -90,9 +71,6 @@
                <message>
                   {0}
                </message>
-               <description>
-                  description body text
-               </description>
                <target
                      class="ElementAssignment">
                </target>
