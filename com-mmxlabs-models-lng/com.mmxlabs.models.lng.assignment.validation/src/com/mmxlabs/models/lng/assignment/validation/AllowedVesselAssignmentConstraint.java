@@ -5,15 +5,12 @@
 package com.mmxlabs.models.lng.assignment.validation;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.slf4j.Logger;
@@ -31,26 +28,20 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * Constraint to check the Assigned Vessel is in the allowed vessel list, if specified.
  * 
  */
-public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
+public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstraint {
 
 	private static final Logger log = LoggerFactory.getLogger(AllowedVesselAssignmentConstraint.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
-	 */
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
-
-		final List<IStatus> failures = new LinkedList<IStatus>();
 
 		if (object instanceof ElementAssignment) {
 			final ElementAssignment assignment = (ElementAssignment) object;
@@ -63,16 +54,17 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("Vessel events must have a vessel assigned to them."));
 					status.addEObjectAndFeature(assignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
-					return status;
+					failures.add(status);
+					return Activator.PLUGIN_ID;
 				} else
-					return ctx.createSuccessStatus();
+					return Activator.PLUGIN_ID;
 			}
 
 			// This will be a single vessel or a vessel class
 			if (!(vesselAssignment instanceof Vessel || vesselAssignment instanceof VesselClass)) {
 				// Unsupported case - bail out!
 				log.error("Assignment is not a Vessel or VesselClass - unable to validate");
-				return ctx.createSuccessStatus();
+				return Activator.PLUGIN_ID;
 			}
 
 			EList<AVesselSet<Vessel>> allowedVessels = null;
@@ -84,7 +76,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 				allowedVessels = vesselEvent.getAllowedVessels();
 			}
 			if (allowedVessels == null || allowedVessels.isEmpty()) {
-				return ctx.createSuccessStatus();
+				return Activator.PLUGIN_ID;
 			}
 
 			// Expand out VesselGroups
@@ -136,16 +128,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 				failures.add(failure);
 			}
 		}
-		if (failures.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
-		}
+
+		return Activator.PLUGIN_ID;
 	}
 }
