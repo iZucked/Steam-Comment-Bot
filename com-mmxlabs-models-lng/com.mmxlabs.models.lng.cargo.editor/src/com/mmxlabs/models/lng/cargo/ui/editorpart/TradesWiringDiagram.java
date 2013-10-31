@@ -56,7 +56,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	static final Color Green = new Color(Display.getCurrent(), new RGB(0, 180, 50));
 	static final Color Light_Green = new Color(Display.getCurrent(), new RGB(100, 255, 100));
-
+	static final Color White = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+	
 	/**
 	 * The actual wiring permutation; if the ith element is j, left hand terminal i is wired to right hand terminal j. If the ith element is -1, the ith element is not connected to anywhere.
 	 */
@@ -144,13 +145,46 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		// Clip to reported client area to avoid overdraw
 		graphics.setClipping(ca);
+		int rawI = 0;
+		for (final float midpoint : terminalPositions) {
+			// Map back between current row (sorted) and data (unsorted)
+			final int i = (reverseSortedIndices == null || rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
+			// -1 indicates filtered row
+			if (i == -1) {
+				continue;
+			}
+
+			int linewidth = graphics.getLineWidth();
+			
+			graphics.setLineWidth(2);
+			// Draw terminal background discs
+			final RowData row = root.getRows().get(i);
+			graphics.setBackground(White);
+			// Left
+			if (row.loadSlot != null) {
+				int extraRadius = 1;
+				int x = ca.x + terminalSize - extraRadius/2;
+				int y = (int) (midpoint - (terminalSize)/ 2 - 1 - extraRadius/2);
+				graphics.fillOval(x - 2, y-2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
+			}
+			// Right
+			if (row.dischargeSlot != null) {
+				int extraRadius = 0;
+				extraRadius = 1;
+				int x = ca.x + ca.width - 2 * terminalSize - extraRadius/2;
+				int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius/2);
+				graphics.setBackground(White);
+				graphics.fillOval(x - 2, y-2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
+				graphics.setLineWidth(linewidth);
+			}
+			rawI++;
+		}
 
 		graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		// Fill whole area - not for use in a table
 		// graphics.fillRectangle(0, 0, ca.width, ca.height);
-
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-		graphics.setLineWidth(2);
+//		graphics.setLineWidth(2);
 
 		// draw paths
 		for (final GroupData groupData : root.getGroups()) {
@@ -224,7 +258,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		// draw terminal blobs
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		graphics.setLineWidth(borderWidth);
-		int rawI = 0;
+		rawI = 0;
 		for (final float midpoint : terminalPositions) {
 			// Map back between current row (sorted) and data (unsorted)
 			final int i = (reverseSortedIndices == null || rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
@@ -238,54 +272,48 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			final RowData row = root.getRows().get(i);
 			// Draw left hand terminal
 			if (row.loadSlot != null) {
-				Color outlineColour = Green;//Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
-				Color fillColour = row.loadTerminalColour;
-				// make non-shipped a bit bigger, but hollow
-				int extraRadius = 0; 
-				if(row.loadSlot.isDESPurchase()){
-					outlineColour = row.loadTerminalColour;
-					fillColour = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-					extraRadius = 1;
-					graphics.setLineWidth(2);
-				}
-				graphics.setForeground(row.loadTerminalColour == CargoModelRowTransformer.InvalidTerminalColour ? CargoModelRowTransformer.InvalidTerminalColour : outlineColour);
-				graphics.setBackground(fillColour);
-				int centreX = ca.x + terminalSize - extraRadius/2;
-				int centreY = (int) (midpoint - (terminalSize)/ 2 - 1 - extraRadius/2);
-				graphics.fillOval(centreX, centreY, terminalSize + extraRadius, terminalSize + extraRadius);
-				graphics.drawOval(centreX, centreY, terminalSize + extraRadius, terminalSize + extraRadius);
-				if (row.loadSlot.isOptional()) {
-					graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-					graphics.fillOval(ca.x + terminalSize + 4, (int) midpoint - (terminalSize / 2) + 3, 4, 4);
-				}
+				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), ca, graphics, midpoint);
 			}
 			graphics.setLineWidth(linewidth);
-			
 			// Draw right hand terminal
 			if (row.dischargeSlot != null) {
-				Color outlineColour = Green;//Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
-				Color fillColour = row.dischargeTerminalColour;
-				// make non-shipped a bit bigger, but hollow
-				int extraRadius = 0;
-				if(row.dischargeSlot.isFOBSale()){
-					outlineColour = row.dischargeTerminalColour;
-					fillColour = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-					extraRadius = 1;
-					graphics.setLineWidth(2);
-				}
-				graphics.setForeground(row.dischargeTerminalColour == CargoModelRowTransformer.InvalidTerminalColour ? CargoModelRowTransformer.InvalidTerminalColour : outlineColour);
-				graphics.setBackground(fillColour);
-				int centreX = ca.x + ca.width - 2 * terminalSize - extraRadius/2;
-				int centreY = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius/2);
-				graphics.fillOval(centreX, centreY, terminalSize+ extraRadius, terminalSize+ extraRadius);
-				graphics.drawOval(centreX, centreY, terminalSize+ extraRadius, terminalSize+ extraRadius);
-				if (row.dischargeSlot.isOptional()) {
-					graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-					graphics.fillOval(centreX + 4 + extraRadius/2, (int) (midpoint - terminalSize / 2) + 3, 4, 4);
-				}
-				graphics.setLineWidth(linewidth);
+				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), ca, graphics, midpoint);
 			}
 			rawI++;
+		}
+	}
+
+	private void drawTerminal(boolean isLeft, boolean hollow, Color terminalColour, boolean isOptional, final Rectangle ca, final GC graphics,
+			final float midpoint) {
+		Color outlineColour = Green;
+		Color fillColour = terminalColour;
+		// make non-shipped a bit bigger, but hollow
+		int extraRadius = 1; 
+		if(hollow){
+			outlineColour = terminalColour;
+			fillColour = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+		}
+		graphics.setLineWidth(2);
+		int x = 0;
+		if(isLeft){
+			x = ca.x + terminalSize - extraRadius/2;
+		} else{
+			x = ca.x + ca.width - 2 * terminalSize - extraRadius/2;
+		}
+		int y = (int) (midpoint - (terminalSize)/ 2 - 1 - extraRadius/2);			
+		graphics.setForeground(terminalColour == CargoModelRowTransformer.InvalidTerminalColour ? CargoModelRowTransformer.InvalidTerminalColour : outlineColour);
+		graphics.setBackground(fillColour);
+		graphics.fillOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
+		graphics.drawOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
+		// draw internal dot for optional slots
+		if (isOptional) {
+			graphics.setBackground(Green);
+			y = (int) midpoint - (terminalSize / 2) + 3;
+			if(isLeft){
+				graphics.fillOval(ca.x + terminalSize + 4, y, 4, 4);				
+			} else {
+				graphics.fillOval(x + 4 + extraRadius/2, y, 4, 4);				
+			}
 		}
 	}
 
