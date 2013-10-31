@@ -313,9 +313,6 @@ public class CargoEditorMenuHelper {
 						reassignMenuManager.add(new AssignAction(p.getFirst(), (AVesselSet<Vessel>) p.getSecond()));
 					}
 				}
-				for (final VesselAvailability vesselAvailability : fleetModel.getVesselAvailabilities()) {
-					final Vessel vessel = vesselAvailability.getVessel();
-				}
 			}
 		}
 
