@@ -114,13 +114,22 @@ public interface PropertiesPackage extends EPackage {
 	int DETAIL_PROPERTY__DESCRIPTION = 4;
 
 	/**
-	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * The feature id for the '<em><b>Units Prefix</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY__UNITS = 5;
+	int DETAIL_PROPERTY__UNITS_PREFIX = 5;
+
+	/**
+	 * The feature id for the '<em><b>Units Suffix</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DETAIL_PROPERTY__UNITS_SUFFIX = 6;
 
 	/**
 	 * The feature id for the '<em><b>Object</b></em>' attribute.
@@ -129,7 +138,7 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY__OBJECT = 6;
+	int DETAIL_PROPERTY__OBJECT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Label Provider</b></em>' attribute.
@@ -138,7 +147,7 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY__LABEL_PROVIDER = 7;
+	int DETAIL_PROPERTY__LABEL_PROVIDER = 8;
 
 	/**
 	 * The number of structural features of the '<em>Detail Property</em>' class.
@@ -147,7 +156,7 @@ public interface PropertiesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DETAIL_PROPERTY_FEATURE_COUNT = 8;
+	int DETAIL_PROPERTY_FEATURE_COUNT = 9;
 
 	/**
 	 * The operation id for the '<em>Format</em>' operation.
@@ -244,15 +253,26 @@ public interface PropertiesPackage extends EPackage {
 	EAttribute getDetailProperty_Description();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnits <em>Units</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnitsPrefix <em>Units Prefix</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Units</em>'.
-	 * @see com.mmxlabs.models.ui.properties.DetailProperty#getUnits()
+	 * @return the meta object for the attribute '<em>Units Prefix</em>'.
+	 * @see com.mmxlabs.models.ui.properties.DetailProperty#getUnitsPrefix()
 	 * @see #getDetailProperty()
 	 * @generated
 	 */
-	EAttribute getDetailProperty_Units();
+	EAttribute getDetailProperty_UnitsPrefix();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnitsSuffix <em>Units Suffix</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Units Suffix</em>'.
+	 * @see com.mmxlabs.models.ui.properties.DetailProperty#getUnitsSuffix()
+	 * @see #getDetailProperty()
+	 * @generated
+	 */
+	EAttribute getDetailProperty_UnitsSuffix();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.ui.properties.DetailProperty#getObject <em>Object</em>}'.
@@ -371,12 +391,20 @@ public interface PropertiesPackage extends EPackage {
 		EAttribute DETAIL_PROPERTY__DESCRIPTION = eINSTANCE.getDetailProperty_Description();
 
 		/**
-		 * The meta object literal for the '<em><b>Units</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Units Prefix</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute DETAIL_PROPERTY__UNITS = eINSTANCE.getDetailProperty_Units();
+		EAttribute DETAIL_PROPERTY__UNITS_PREFIX = eINSTANCE.getDetailProperty_UnitsPrefix();
+
+		/**
+		 * The meta object literal for the '<em><b>Units Suffix</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DETAIL_PROPERTY__UNITS_SUFFIX = eINSTANCE.getDetailProperty_UnitsSuffix();
 
 		/**
 		 * The meta object literal for the '<em><b>Object</b></em>' attribute feature.

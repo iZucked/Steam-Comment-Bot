@@ -21,7 +21,8 @@ import org.eclipse.jface.viewers.ILabelProvider;
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getId <em>Id</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getDescription <em>Description</em>}</li>
- *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnits <em>Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnitsPrefix <em>Units Prefix</em>}</li>
+ *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnitsSuffix <em>Units Suffix</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getObject <em>Object</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.DetailProperty#getLabelProvider <em>Label Provider</em>}</li>
  * </ul>
@@ -157,30 +158,56 @@ public interface DetailProperty extends EObject {
 	void setDescription(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Units</b></em>' attribute.
+	 * Returns the value of the '<em><b>Units Prefix</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Units</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Units Prefix</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Units</em>' attribute.
-	 * @see #setUnits(String)
-	 * @see com.mmxlabs.models.ui.properties.PropertiesPackage#getDetailProperty_Units()
+	 * @return the value of the '<em>Units Prefix</em>' attribute.
+	 * @see #setUnitsPrefix(String)
+	 * @see com.mmxlabs.models.ui.properties.PropertiesPackage#getDetailProperty_UnitsPrefix()
 	 * @model
 	 * @generated
 	 */
-	String getUnits();
+	String getUnitsPrefix();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnits <em>Units</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnitsPrefix <em>Units Prefix</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Units</em>' attribute.
-	 * @see #getUnits()
+	 * @param value the new value of the '<em>Units Prefix</em>' attribute.
+	 * @see #getUnitsPrefix()
 	 * @generated
 	 */
-	void setUnits(String value);
+	void setUnitsPrefix(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Units Suffix</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Units Suffix</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Units Suffix</em>' attribute.
+	 * @see #setUnitsSuffix(String)
+	 * @see com.mmxlabs.models.ui.properties.PropertiesPackage#getDetailProperty_UnitsSuffix()
+	 * @model
+	 * @generated
+	 */
+	String getUnitsSuffix();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.ui.properties.DetailProperty#getUnitsSuffix <em>Units Suffix</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Units Suffix</em>' attribute.
+	 * @see #getUnitsSuffix()
+	 * @generated
+	 */
+	void setUnitsSuffix(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Object</b></em>' attribute.

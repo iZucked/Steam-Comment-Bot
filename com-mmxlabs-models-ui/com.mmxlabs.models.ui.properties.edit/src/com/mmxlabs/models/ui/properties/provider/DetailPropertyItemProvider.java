@@ -66,7 +66,8 @@ public class DetailPropertyItemProvider
 			addIdPropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
 			addDescriptionPropertyDescriptor(object);
-			addUnitsPropertyDescriptor(object);
+			addUnitsPrefixPropertyDescriptor(object);
+			addUnitsSuffixPropertyDescriptor(object);
 			addObjectPropertyDescriptor(object);
 			addLabelProviderPropertyDescriptor(object);
 		}
@@ -140,19 +141,41 @@ public class DetailPropertyItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Units feature.
+	 * This adds a property descriptor for the Units Prefix feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addUnitsPropertyDescriptor(Object object) {
+	protected void addUnitsPrefixPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_DetailProperty_units_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_DetailProperty_units_feature", "_UI_DetailProperty_type"),
-				 PropertiesPackage.Literals.DETAIL_PROPERTY__UNITS,
+				 getString("_UI_DetailProperty_unitsPrefix_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DetailProperty_unitsPrefix_feature", "_UI_DetailProperty_type"),
+				 PropertiesPackage.Literals.DETAIL_PROPERTY__UNITS_PREFIX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Units Suffix feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUnitsSuffixPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DetailProperty_unitsSuffix_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DetailProperty_unitsSuffix_feature", "_UI_DetailProperty_type"),
+				 PropertiesPackage.Literals.DETAIL_PROPERTY__UNITS_SUFFIX,
 				 true,
 				 false,
 				 false,
@@ -264,7 +287,8 @@ public class DetailPropertyItemProvider
 			case PropertiesPackage.DETAIL_PROPERTY__ID:
 			case PropertiesPackage.DETAIL_PROPERTY__NAME:
 			case PropertiesPackage.DETAIL_PROPERTY__DESCRIPTION:
-			case PropertiesPackage.DETAIL_PROPERTY__UNITS:
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_PREFIX:
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_SUFFIX:
 			case PropertiesPackage.DETAIL_PROPERTY__OBJECT:
 			case PropertiesPackage.DETAIL_PROPERTY__LABEL_PROVIDER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

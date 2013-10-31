@@ -17,14 +17,23 @@ public class DetailPropertyLabelProvider extends ColumnLabelProvider {
 	public String getText(Object element) {
 
 		if (element instanceof DetailProperty) {
-			final DetailProperty detailProperty = (DetailProperty) element;
+			final DetailProperty dp = (DetailProperty) element;
+			String pre = dp.getUnitsPrefix()!=null ? dp.getUnitsPrefix() : "";
+			String val = dp.format()!=null ? dp.format() : "";
+			String post = dp.getUnitsSuffix()!=null ? dp.getUnitsSuffix() : "";
 			switch (columnType) {
 			case ATTRIBUTE:
-				return detailProperty.getName();
-			case UNITS:
-				return detailProperty.getUnits();
+				return dp.getName();
+			case UNIT:
+				return pre + post;
 			case VALUE:
-				return detailProperty.format();
+				return val;
+			case DIMENSIONED_VALUE:
+				if(!pre.isEmpty() && val.startsWith("-")){
+					val = val.substring(1);
+					pre = "-" + pre;
+				}
+				return pre + val + post;
 			default:
 				break;
 			}

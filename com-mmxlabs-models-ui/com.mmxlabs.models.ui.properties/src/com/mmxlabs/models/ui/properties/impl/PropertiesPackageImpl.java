@@ -158,7 +158,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDetailProperty_Units() {
+	public EAttribute getDetailProperty_UnitsPrefix() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -167,7 +167,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDetailProperty_Object() {
+	public EAttribute getDetailProperty_UnitsSuffix() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -176,8 +176,17 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getDetailProperty_LabelProvider() {
+	public EAttribute getDetailProperty_Object() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDetailProperty_LabelProvider() {
+		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -232,7 +241,8 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__ID);
 		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__NAME);
 		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__DESCRIPTION);
-		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__UNITS);
+		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__UNITS_PREFIX);
+		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__UNITS_SUFFIX);
 		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__OBJECT);
 		createEAttribute(detailPropertyEClass, DETAIL_PROPERTY__LABEL_PROVIDER);
 		createEOperation(detailPropertyEClass, DETAIL_PROPERTY___FORMAT);
@@ -277,7 +287,8 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 		initEAttribute(getDetailProperty_Id(), ecorePackage.getEString(), "id", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDetailProperty_Name(), ecorePackage.getEString(), "name", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDetailProperty_Description(), ecorePackage.getEString(), "description", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDetailProperty_Units(), ecorePackage.getEString(), "units", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDetailProperty_UnitsPrefix(), ecorePackage.getEString(), "unitsPrefix", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDetailProperty_UnitsSuffix(), ecorePackage.getEString(), "unitsSuffix", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDetailProperty_Object(), ecorePackage.getEJavaObject(), "object", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDetailProperty_LabelProvider(), this.getILabelProvider(), "labelProvider", null, 0, 1, DetailProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

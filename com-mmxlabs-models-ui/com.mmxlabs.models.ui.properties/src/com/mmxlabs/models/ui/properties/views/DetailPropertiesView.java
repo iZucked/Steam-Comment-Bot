@@ -70,13 +70,13 @@ public abstract class DetailPropertiesView extends ViewPart {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Value");
 			gvc.getColumn().setWidth(100);
-			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.VALUE, gvc));
+			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.DIMENSIONED_VALUE, gvc));
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Units");
 			gvc.getColumn().setWidth(50);
-			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.UNITS, gvc));
+			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.UNIT, gvc));
 		}
 
 		// Hook up selection listener

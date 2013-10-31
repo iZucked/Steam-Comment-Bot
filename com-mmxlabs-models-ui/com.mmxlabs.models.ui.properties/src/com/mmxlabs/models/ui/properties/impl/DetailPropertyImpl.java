@@ -38,7 +38,8 @@ import org.eclipse.jface.viewers.ILabelProvider;
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getDescription <em>Description</em>}</li>
- *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getUnits <em>Units</em>}</li>
+ *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getUnitsPrefix <em>Units Prefix</em>}</li>
+ *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getUnitsSuffix <em>Units Suffix</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getObject <em>Object</em>}</li>
  *   <li>{@link com.mmxlabs.models.ui.properties.impl.DetailPropertyImpl#getLabelProvider <em>Label Provider</em>}</li>
  * </ul>
@@ -118,24 +119,44 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	protected String description = DESCRIPTION_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getUnits() <em>Units</em>}' attribute.
+	 * The default value of the '{@link #getUnitsPrefix() <em>Units Prefix</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getUnits()
+	 * @see #getUnitsPrefix()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String UNITS_EDEFAULT = null;
+	protected static final String UNITS_PREFIX_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getUnits() <em>Units</em>}' attribute.
+	 * The cached value of the '{@link #getUnitsPrefix() <em>Units Prefix</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getUnits()
+	 * @see #getUnitsPrefix()
 	 * @generated
 	 * @ordered
 	 */
-	protected String units = UNITS_EDEFAULT;
+	protected String unitsPrefix = UNITS_PREFIX_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getUnitsSuffix() <em>Units Suffix</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnitsSuffix()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String UNITS_SUFFIX_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getUnitsSuffix() <em>Units Suffix</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnitsSuffix()
+	 * @generated
+	 * @ordered
+	 */
+	protected String unitsSuffix = UNITS_SUFFIX_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getObject() <em>Object</em>}' attribute.
@@ -203,7 +224,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 */
 	public DetailProperty getParent() {
 		if (eContainerFeatureID() != PropertiesPackage.DETAIL_PROPERTY__PARENT) return null;
-		return (DetailProperty)eInternalContainer();
+		return (DetailProperty)eContainer();
 	}
 
 	/**
@@ -317,8 +338,8 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getUnits() {
-		return units;
+	public String getUnitsPrefix() {
+		return unitsPrefix;
 	}
 
 	/**
@@ -326,11 +347,32 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setUnits(String newUnits) {
-		String oldUnits = units;
-		units = newUnits;
+	public void setUnitsPrefix(String newUnitsPrefix) {
+		String oldUnitsPrefix = unitsPrefix;
+		unitsPrefix = newUnitsPrefix;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PropertiesPackage.DETAIL_PROPERTY__UNITS, oldUnits, units));
+			eNotify(new ENotificationImpl(this, Notification.SET, PropertiesPackage.DETAIL_PROPERTY__UNITS_PREFIX, oldUnitsPrefix, unitsPrefix));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getUnitsSuffix() {
+		return unitsSuffix;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUnitsSuffix(String newUnitsSuffix) {
+		String oldUnitsSuffix = unitsSuffix;
+		unitsSuffix = newUnitsSuffix;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PropertiesPackage.DETAIL_PROPERTY__UNITS_SUFFIX, oldUnitsSuffix, unitsSuffix));
 	}
 
 	/**
@@ -460,8 +502,10 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 				return getName();
 			case PropertiesPackage.DETAIL_PROPERTY__DESCRIPTION:
 				return getDescription();
-			case PropertiesPackage.DETAIL_PROPERTY__UNITS:
-				return getUnits();
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_PREFIX:
+				return getUnitsPrefix();
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_SUFFIX:
+				return getUnitsSuffix();
 			case PropertiesPackage.DETAIL_PROPERTY__OBJECT:
 				return getObject();
 			case PropertiesPackage.DETAIL_PROPERTY__LABEL_PROVIDER:
@@ -495,8 +539,11 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 			case PropertiesPackage.DETAIL_PROPERTY__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
-			case PropertiesPackage.DETAIL_PROPERTY__UNITS:
-				setUnits((String)newValue);
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_PREFIX:
+				setUnitsPrefix((String)newValue);
+				return;
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_SUFFIX:
+				setUnitsSuffix((String)newValue);
 				return;
 			case PropertiesPackage.DETAIL_PROPERTY__OBJECT:
 				setObject(newValue);
@@ -531,8 +578,11 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 			case PropertiesPackage.DETAIL_PROPERTY__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
-			case PropertiesPackage.DETAIL_PROPERTY__UNITS:
-				setUnits(UNITS_EDEFAULT);
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_PREFIX:
+				setUnitsPrefix(UNITS_PREFIX_EDEFAULT);
+				return;
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_SUFFIX:
+				setUnitsSuffix(UNITS_SUFFIX_EDEFAULT);
 				return;
 			case PropertiesPackage.DETAIL_PROPERTY__OBJECT:
 				setObject(OBJECT_EDEFAULT);
@@ -562,8 +612,10 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case PropertiesPackage.DETAIL_PROPERTY__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
-			case PropertiesPackage.DETAIL_PROPERTY__UNITS:
-				return UNITS_EDEFAULT == null ? units != null : !UNITS_EDEFAULT.equals(units);
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_PREFIX:
+				return UNITS_PREFIX_EDEFAULT == null ? unitsPrefix != null : !UNITS_PREFIX_EDEFAULT.equals(unitsPrefix);
+			case PropertiesPackage.DETAIL_PROPERTY__UNITS_SUFFIX:
+				return UNITS_SUFFIX_EDEFAULT == null ? unitsSuffix != null : !UNITS_SUFFIX_EDEFAULT.equals(unitsSuffix);
 			case PropertiesPackage.DETAIL_PROPERTY__OBJECT:
 				return OBJECT_EDEFAULT == null ? object != null : !OBJECT_EDEFAULT.equals(object);
 			case PropertiesPackage.DETAIL_PROPERTY__LABEL_PROVIDER:
@@ -602,8 +654,10 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 		result.append(name);
 		result.append(", description: ");
 		result.append(description);
-		result.append(", units: ");
-		result.append(units);
+		result.append(", unitsPrefix: ");
+		result.append(unitsPrefix);
+		result.append(", unitsSuffix: ");
+		result.append(unitsSuffix);
 		result.append(", object: ");
 		result.append(object);
 		result.append(", labelProvider: ");
