@@ -31,7 +31,7 @@ import com.mmxlabs.models.ui.properties.views.DetailPropertiesView;
 public class PNLDetailsReport extends DetailPropertiesView {
 
 	public PNLDetailsReport() {
-		super("pnl", "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
+		super("pnl", "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", false);
 	}
 
 	@Override
