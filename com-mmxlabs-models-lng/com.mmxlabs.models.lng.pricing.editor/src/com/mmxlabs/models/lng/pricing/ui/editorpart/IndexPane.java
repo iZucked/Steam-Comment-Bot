@@ -615,7 +615,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		} else if (element instanceof BaseFuelIndex) {
 			return DataType.BaseFuel;
 		} else if (element instanceof CharterIndex) {
-			return DataType.Commodity;
+			return DataType.Charter;
 		}
 		return null;
 
