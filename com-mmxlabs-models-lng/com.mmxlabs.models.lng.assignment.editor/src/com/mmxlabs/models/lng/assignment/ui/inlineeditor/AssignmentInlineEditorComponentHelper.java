@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -79,6 +80,9 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		private ElementAssignment elementAssignment;
 		private MMXRootObject rootObject;
 
+		private boolean editorAppliesToObject = false;
+		private boolean showLockControl = false;
+
 		/**
 		 * {@link ControlDecoration} used to show validation messages.
 		 */
@@ -101,6 +105,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		private boolean editorLocked = false;
 		private boolean editorEnabled = true;
 		private boolean editorVisible = true;
+		private Composite editorComposite;
 
 		public AssignmentInlineEditor() {
 			disposeListener = new DisposeListener() {
@@ -253,8 +258,6 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 		@Override
 		public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
-			label.setText("Assigned to");
-
 			if (inputObject != null) {
 				inputObject.eAdapters().remove(AssignmentInlineEditor.this);
 			}
@@ -263,6 +266,27 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 					obj.eAdapters().remove(AssignmentInlineEditor.this);
 				}
 			}
+
+			editorAppliesToObject = false;
+			showLockControl = false;
+			if (object instanceof VesselEvent) {
+				editorAppliesToObject = true;
+				showLockControl = true;
+			} else if (object instanceof Cargo) {
+				final Cargo cargo = (Cargo) object;
+				if (cargo.getCargoType() == CargoType.FLEET) {
+					editorAppliesToObject = true;
+					showLockControl = true;
+				}
+			} else if (object instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) object;
+				editorAppliesToObject = loadSlot.isDESPurchase();
+			} else if (object instanceof DischargeSlot) {
+				final DischargeSlot dischargeSlot = (DischargeSlot) object;
+				editorAppliesToObject = dischargeSlot.isFOBSale();
+			}
+
+			label.setText("Assigned to");
 
 			this.inputObject = object;
 			this.rootObject = scenario;
@@ -284,12 +308,30 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 			combo.addDisposeListener(disposeListener);
 
-			if (object instanceof Cargo) {
+			setEditorEnabled(editorAppliesToObject);
+			setEditorVisible(editorAppliesToObject);
+			this.lock.setVisible(showLockControl);
+			recursiveShowHide(editorComposite, editorAppliesToObject);
+			editorComposite.pack();
+			// this.
+		}
 
-				final Cargo cargo = (Cargo) object;
-				if (cargo.getCargoType() != CargoType.FLEET) {
-					setEditorEnabled(false);
+		/**
+		 * Recursively process the control and children to find {@link GridData} layout data objects and set the exclude flag.
+		 * @param control
+		 * @param editorAppliesToObject
+		 */
+		private void recursiveShowHide(final Control control, final boolean editorAppliesToObject) {
+			if (control instanceof Composite) {
+				final Composite composite = (Composite) control;
+				for (final Control c : composite.getChildren()) {
+					recursiveShowHide(c, editorAppliesToObject);
 				}
+			}
+			final Object layoutData = control.getLayoutData();
+			if (layoutData instanceof GridData) {
+				final GridData gridData = (GridData) layoutData;
+				gridData.exclude = !editorAppliesToObject;
 			}
 		}
 
@@ -304,7 +346,6 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 						assignment = null;
 					}
 				}
-
 			}
 
 			final EObject target = (assignment == null ? object : assignment);
@@ -323,7 +364,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 			if (assignment != null) {
 				this.elementAssignment = assignment;
-				Object theAssignment = assignment.getAssignment();
+				final Object theAssignment = assignment.getAssignment();
 				final int index = valueList.indexOf(theAssignment);
 				combo.setText(nameList.get(index));
 				combo.select(index);
@@ -334,18 +375,18 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		@Override
 		public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 
-			final Composite sub = toolkit.createComposite(parent);
+			editorComposite = toolkit.createComposite(parent);
 			final GridLayout layout = new GridLayout(2, false);
 			layout.marginHeight = layout.marginWidth = 0;
-			sub.setLayout(layout);
+			editorComposite.setLayout(layout);
 
-			final Combo combo = new Combo(sub, SWT.READ_ONLY);
+			final Combo combo = new Combo(editorComposite, SWT.READ_ONLY);
 			this.combo = combo;
 			toolkit.adapt(combo);
 
 			combo.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-			final Button lock = toolkit.createButton(sub, "locked", SWT.CHECK);
+			final Button lock = toolkit.createButton(editorComposite, "locked", SWT.CHECK);
 			this.lock = lock;
 			lock.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
@@ -400,7 +441,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 				}
 			});
 
-			return wrapControl(sub);
+			return wrapControl(editorComposite);
 		}
 
 		private void setControlsEnabled(final boolean enabled) {
@@ -429,7 +470,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 			setEditorEnabled(enabled);
 
-			Object feature = notification.getFeature();
+			final Object feature = notification.getFeature();
 			if (valueProvider.updateOnChangeToFeature(feature))
 				updateDisplay(inputObject);
 
@@ -447,7 +488,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		}
 
 		@Override
-		public void setEditorLocked(boolean locked) {
+		public void setEditorLocked(final boolean locked) {
 			this.editorLocked = locked;
 			setControlsEnabled(isEditorEnabled() && !isEditorLocked());
 		}
@@ -469,10 +510,11 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		}
 
 		@Override
-		public void setEditorVisible(boolean visible) {
+		public void setEditorVisible(final boolean visible) {
 			this.editorVisible = visible;
 			this.combo.setVisible(visible);
 			this.lock.setVisible(visible);
+			this.label.setVisible(visible);
 		}
 
 		@Override
@@ -481,13 +523,13 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		}
 
 		@Override
-		public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+		public void addNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
 			// TODO Auto-generated method stub
 
 		}
 
 		@Override
-		public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+		public void removeNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
 			// TODO Auto-generated method stub
 
 		}
