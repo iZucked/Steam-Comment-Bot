@@ -21,10 +21,11 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.impl.CargoImpl;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
@@ -96,6 +97,23 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 							currentValue = assignment.getAssignment();
 					}
 
+					if (target instanceof Cargo) {
+						final Cargo cargo = (Cargo) target;
+						for (final Slot s : cargo.getSlots()) {
+							if (s instanceof LoadSlot) {
+								final LoadSlot loadSlot = (LoadSlot) s;
+								if (loadSlot.isDESPurchase()) {
+									target = loadSlot;
+								}
+							} else if (s instanceof DischargeSlot) {
+								final DischargeSlot dischargeSlot = (DischargeSlot) s;
+								if (dischargeSlot.isFOBSale()) {
+									target = dischargeSlot;
+								}
+							}
+						}
+					}
+
 					boolean useScenarioVessel = true;
 					if (target instanceof LoadSlot) {
 						useScenarioVessel = !((LoadSlot) target).isDESPurchase();
@@ -106,8 +124,8 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 					final EList<AVesselSet<Vessel>> allowedVessels;
 
 					// populate the list of allowed vessels for the target object
-					if (target instanceof CargoImpl) {
-						final CargoImpl cargo = (CargoImpl) target;
+					if (target instanceof Cargo) {
+						final Cargo cargo = (Cargo) target;
 						allowedVessels = cargo.getAllowedVessels();
 					} else if (target instanceof VesselEvent) {
 						final VesselEvent event = (VesselEvent) target;
