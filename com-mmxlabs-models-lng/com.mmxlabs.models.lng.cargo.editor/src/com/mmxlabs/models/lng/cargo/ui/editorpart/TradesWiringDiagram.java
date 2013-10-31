@@ -49,7 +49,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireD
  * 
  *         FIXME: Fork of {@link WiringDiagram} as which this does work as is, partial re-paints do not work - bg fill is ok, but terminals and lines are only partially drawn if at all. Unknown why
  *         this is the case as it is the same listener code on a canvas, but the objects are separated. Disabling double buffer does not help. Only idea is that some methods are synchronized - it
- *         maybe by splitting the classes code which was previously synchronious can now be executed in parallel.
+ *         maybe by splitting the classes code which was previously synchronous can now be executed in parallel.
  * @since 3.0
  */
 public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener, KeyListener {
@@ -143,6 +143,9 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		graphics.setAntialias(SWT.ON);
 
+		int linewidth = graphics.getLineWidth();
+		graphics.setLineWidth(2);
+
 		// Clip to reported client area to avoid overdraw
 		graphics.setClipping(ca);
 		int rawI = 0;
@@ -154,9 +157,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				continue;
 			}
 
-			int linewidth = graphics.getLineWidth();
 			
-			graphics.setLineWidth(2);
 			// Draw terminal background discs
 			final RowData row = root.getRows().get(i);
 			graphics.setBackground(White);
@@ -175,7 +176,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius/2);
 				graphics.setBackground(White);
 				graphics.fillOval(x - 2, y-2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
-				graphics.setLineWidth(linewidth);
 			}
 			rawI++;
 		}
@@ -267,8 +267,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				continue;
 			}
 
-			int linewidth = graphics.getLineWidth();
-			
 			final RowData row = root.getRows().get(i);
 			// Draw left hand terminal
 			if (row.loadSlot != null) {

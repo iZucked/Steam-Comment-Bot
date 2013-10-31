@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Equality;
@@ -46,11 +47,12 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  */
 public class CargoModelRowTransformer {
 	static final Color InvalidTerminalColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-	private final Color darkRed = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
+	private final Color InvalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 
+	private final Color Grey = new Color(Display.getCurrent(), new RGB(64, 64, 64));
 	static final Color ValidTerminalColour = TradesWiringDiagram.Light_Green;
-	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+	private final Color RewirableColour = Grey;//Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	/**
 	 * @since 5.0
@@ -667,7 +669,7 @@ public class CargoModelRowTransformer {
 			// and add a wire to the group, showing the ship-to-ship transfer
 			final WireData wire = new WireData();
 			getWires().add(wire);
-			wire.colour = gray;
+			wire.colour = FixedWireColour;
 			wire.dashed = true;
 
 			LoadSlot loadSlot = null;
@@ -970,7 +972,7 @@ public class CargoModelRowTransformer {
 		}
 		if (c != null) {
 			for (final WireData wire : g.getWires()) {
-				wire.colour = validWire ? (c.isAllowRewiring() ? gray : black) : darkRed;
+				wire.colour = validWire ? (c.isAllowRewiring() ? RewirableColour : FixedWireColour) : InvalidWireColour;
 			}
 		}
 	}
