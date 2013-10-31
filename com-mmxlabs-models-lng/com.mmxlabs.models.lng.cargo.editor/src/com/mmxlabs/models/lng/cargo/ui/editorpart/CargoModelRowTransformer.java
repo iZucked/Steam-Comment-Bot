@@ -885,6 +885,16 @@ public class CargoModelRowTransformer {
 					return result != null ? result : get(rowData.loadSlot, depth);
 
 				}
+				case CARGO_OR_SLOT: {
+					Object result = get(rowData.cargo, depth);
+					if (result == null) {
+						result = get(rowData.loadSlot, depth);
+					}
+					if (result == null) {
+						result = get(rowData.dischargeSlot, depth);
+					}
+					return result;
+				}
 
 				}
 			}
@@ -897,7 +907,7 @@ public class CargoModelRowTransformer {
 			int result = super.hashCode();
 			result = prime * result + (type.hashCode());
 			return result;
-		}	
+		}
 	}
 
 	public enum Type {
@@ -905,7 +915,7 @@ public class CargoModelRowTransformer {
 		/**
 		 * @since 4.0
 		 */
-		DISCHARGE_OR_LOAD,
+		 DISCHARGE_OR_LOAD,
 		/**
 		 * @since 4.0
 		 */
@@ -918,7 +928,9 @@ public class CargoModelRowTransformer {
 		/**
 		 * @since 5.0
 		 */
-		CARGO_OR_MARKET_ALLOCATION
+		CARGO_OR_MARKET_ALLOCATION,
+
+		CARGO_OR_SLOT
 	}
 
 	/**
@@ -962,6 +974,5 @@ public class CargoModelRowTransformer {
 			}
 		}
 	}
-	
-	
+
 }
