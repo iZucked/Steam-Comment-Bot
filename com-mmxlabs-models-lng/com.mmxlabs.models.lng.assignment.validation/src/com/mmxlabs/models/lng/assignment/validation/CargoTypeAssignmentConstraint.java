@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
@@ -32,6 +33,11 @@ import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
+/**
+ * Validation constraint to check the type of vessel assigned. FOB/DES cargoes are either unassigned or a vessel not part of the "scenario" data - that is vessels in the FleetModel but do not have a
+ * VesselAvailability. Fleet cargoes can be only scenario vessels or vessel class assignments.
+ * 
+ */
 public class CargoTypeAssignmentConstraint extends AbstractModelMultiConstraint {
 	@Override
 	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
@@ -47,26 +53,30 @@ public class CargoTypeAssignmentConstraint extends AbstractModelMultiConstraint 
 			final AVesselSet<Vessel> vessel = assignment.getAssignment();
 
 			Cargo cargo = null;
+			Slot slot = null;
 			if (uuidObject instanceof LoadSlot) {
-				cargo = ((LoadSlot) uuidObject).getCargo();
+				slot = (LoadSlot) uuidObject;
+				cargo = slot.getCargo();
 			} else if (uuidObject instanceof DischargeSlot) {
-				cargo = ((DischargeSlot) uuidObject).getCargo();
+				slot = (DischargeSlot) uuidObject;
+				cargo = slot.getCargo();
 			} else if (uuidObject instanceof Cargo) {
 				cargo = (Cargo) uuidObject;
 			}
-			if (cargo != null) {
 
-				final Set<Vessel> scenarioVessels = new HashSet<>();
-				final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-				final MMXRootObject rootObject = extraValidationContext.getRootObject();
-				if (rootObject instanceof LNGScenarioModel) {
-					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-					final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-					final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
-					for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
-						scenarioVessels.add(va.getVessel());
-					}
+			final Set<Vessel> scenarioVessels = new HashSet<>();
+			final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
+			final MMXRootObject rootObject = extraValidationContext.getRootObject();
+			if (rootObject instanceof LNGScenarioModel) {
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
+				final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
+				for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+					scenarioVessels.add(va.getVessel());
 				}
+			}
+
+			if (cargo != null) {
 
 				if (cargo.getCargoType() == CargoType.FLEET) {
 					if (vessel instanceof Vessel) {
@@ -89,6 +99,33 @@ public class CargoTypeAssignmentConstraint extends AbstractModelMultiConstraint 
 						}
 					} else if (vessel != null) {
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
+								+ " can only be assigned to a specific vessel"));
+						failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+
+						failures.add(failure);
+					}
+				}
+			} else if (slot != null) {
+				// TODO:
+				boolean check = false;
+				if (slot instanceof LoadSlot) {
+					LoadSlot loadSlot = (LoadSlot) slot;
+					check = loadSlot.isDESPurchase();
+				} else if (slot instanceof DischargeSlot) {
+					DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					check = dischargeSlot.isFOBSale();
+				}
+				if (check) {
+					if (vessel instanceof Vessel) {
+						if (scenarioVessels.contains(vessel)) {
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot " + slot.getName()
+									+ " is assigned to scenario vessel " + vessel.getName() + "."));
+							failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+
+							failures.add(failure);
+						}
+					} else if (vessel != null) {
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot " + slot.getName()
 								+ " can only be assigned to a specific vessel"));
 						failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
 
