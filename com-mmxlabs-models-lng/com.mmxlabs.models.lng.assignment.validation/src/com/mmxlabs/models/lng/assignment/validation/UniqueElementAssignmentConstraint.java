@@ -18,6 +18,8 @@ import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -43,6 +45,10 @@ public class UniqueElementAssignmentConstraint extends AbstractModelMultiConstra
 					final String message;
 					if (assignedObject instanceof Cargo) {
 						message = String.format("Element Assignment already exists for Cargo %s.", ((Cargo) assignedObject).getName());
+					} else if (assignedObject instanceof LoadSlot) {
+						message = String.format("Element Assignment already exists for DES Purchase Slot %s.", ((LoadSlot) assignedObject).getName());
+					} else if (assignedObject instanceof DischargeSlot) {
+						message = String.format("Element Assignment already exists for FOB Sale Slot %s.", ((DischargeSlot) assignedObject).getName());
 					} else if (assignedObject instanceof VesselEvent) {
 						message = String.format("Element Assignment already exists for Vessel Event %s.", ((VesselEvent) assignedObject).getName());
 					} else {
