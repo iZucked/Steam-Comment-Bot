@@ -34,14 +34,17 @@ public abstract class DetailPropertiesView extends ViewPart {
 
 	private final String category;
 	private final String helpContextId;
+	
+	boolean showUnitsInColumn;
 
 	protected DetailPropertiesView(@NonNull final String category) {
-		this(category, null);
+		this(category, null, true);
 	}
 
-	protected DetailPropertiesView(@NonNull final String category, @Nullable final String helpContextId) {
+	protected DetailPropertiesView(@NonNull final String category, @Nullable final String helpContextId, boolean showUnitsInSeparateColumn) {
 		this.category = category;
 		this.helpContextId = helpContextId;
+		showUnitsInColumn = showUnitsInSeparateColumn;
 	}
 
 	@Override
@@ -70,9 +73,9 @@ public abstract class DetailPropertiesView extends ViewPart {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Value");
 			gvc.getColumn().setWidth(100);
-			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.DIMENSIONED_VALUE, gvc));
+			gvc.setLabelProvider(createLabelProvider(showUnitsInColumn ? DetailPropertyColumnType.VALUE: DetailPropertyColumnType.DIMENSIONED_VALUE, gvc));
 		}
-		{
+		if(showUnitsInColumn){
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Units");
 			gvc.getColumn().setWidth(50);
