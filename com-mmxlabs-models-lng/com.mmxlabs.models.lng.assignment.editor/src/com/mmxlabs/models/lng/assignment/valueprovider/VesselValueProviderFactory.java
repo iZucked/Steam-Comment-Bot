@@ -64,10 +64,9 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 					// get a list of globally permissible values
 					final List<Pair<String, EObject>> baseResult = super.getAllowedValues(target, field);
 
-				
-					
-					Set<Vessel> scenarioVessels = new HashSet<Vessel>();
-					for (VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+					// All scenario vessels - though we use to ship ourselves
+					final Set<Vessel> scenarioVessels = new HashSet<>();
+					for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
 						scenarioVessels.add(va.getVessel());
 					}
 
@@ -100,11 +99,10 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 					boolean useScenarioVessel = true;
 					if (target instanceof LoadSlot) {
 						useScenarioVessel = !((LoadSlot) target).isDESPurchase();
-					}
-					else if (target instanceof DischargeSlot) {
+					} else if (target instanceof DischargeSlot) {
 						useScenarioVessel = !((DischargeSlot) target).isFOBSale();
 					}
-					
+
 					final EList<AVesselSet<Vessel>> allowedVessels;
 
 					// populate the list of allowed vessels for the target object
@@ -161,9 +159,9 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 						// Filter out non-scenario vessels
 						if (display) {
 							if (vessel instanceof Vessel) {
-								if (useScenarioVessel && !scenarioVessels.contains(vessel)) {
-									display = false;
-								}
+								display = useScenarioVessel == scenarioVessels.contains(vessel);
+							} else if (vessel instanceof VesselClass) {
+								display = useScenarioVessel;
 							}
 						}
 
