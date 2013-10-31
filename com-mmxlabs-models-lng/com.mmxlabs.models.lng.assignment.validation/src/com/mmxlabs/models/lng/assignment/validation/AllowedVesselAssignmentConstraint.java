@@ -33,6 +33,10 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
+/**
+ * Constraint to check the Assigned Vessel is in the allowed vessel list, if specified.
+ * 
+ */
 public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 
 	private static final Logger log = LoggerFactory.getLogger(AllowedVesselAssignmentConstraint.class);
