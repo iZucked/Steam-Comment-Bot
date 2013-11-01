@@ -23,6 +23,8 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -40,6 +42,27 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 	@Override
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
+
+		// These could change the cargo type!
+		if (parameter.getFeature() == CargoPackage.Literals.CARGO__SLOTS || parameter.getFeature() == CargoPackage.Literals.SLOT__CARGO) {
+			// TODO: Here we need to see what state the cargo will be in after command execution and determine whether or not to update the element assignment.
+			// TODO: However this may occur before other commands being executed so we may not be creating the correct thing...
+			// TODO: We probably need a custom command to check the current state during command execution rather than creation
+			
+//			if (parameter.getOwner() instanceof Cargo) {
+//				Cargo cargo = (Cargo) parameter.getOwner();
+//				return updateCargoType(editingDomain, rootObject, overrides, editSet, cargo);
+//			} else if (parameter.getOwner() instanceof Slot) {
+//				Slot slot = (Slot) parameter.getOwner();
+//				if (parameter.get)
+//				if (cargo.getCargoType() == CargoType.FLEET) {
+//					return objectAdded(editingDomain, rootObject, cargo, overrides, editSet);
+//				} else {
+//					return objectDeleted(editingDomain, rootObject, cargo, overrides, editSet);
+//				}
+//			}
+		}
+
 		// Check for correct owner. For example we do not want to trigger this for cargoes being added to cargo groups.
 		if (parameter.getOwner() == null || parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel || parameter.getOwner() instanceof ScenarioFleetModel) {
 			return super.provideAdditionalCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
@@ -62,12 +85,24 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<O
 		return null;
 	}
 
+	public Command updateCargoType(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet, Cargo cargo) {
+		if (cargo.getCargoType() == CargoType.FLEET) {
+			return objectAdded(editingDomain, rootObject, cargo, overrides, editSet);
+		} else {
+			return objectDeleted(editingDomain, rootObject, cargo, overrides, editSet);
+		}
+	}
+
 	@Override
 	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 
 		boolean checkObject = false;
 
-		checkObject = addedObject instanceof Cargo || addedObject instanceof VesselEvent;
+		checkObject = addedObject instanceof VesselEvent;
+		if (!checkObject && addedObject instanceof Cargo) {
+			Cargo cargo = (Cargo) addedObject;
+			checkObject = cargo.getCargoType() == CargoType.FLEET;
+		}
 		if (!checkObject && addedObject instanceof LoadSlot) {
 			LoadSlot loadSlot = (LoadSlot) addedObject;
 			checkObject = loadSlot.isDESPurchase();
