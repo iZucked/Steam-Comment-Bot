@@ -18,6 +18,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -156,6 +157,7 @@ public class ValidationProblemsView extends ViewPart {
 
 		viewer.getTree().setLinesVisible(true);
 		// viewer.getTree().setHeaderVisible(true);
+		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
 		final ValidationStatusContentProvider contentProvider = new ValidationStatusContentProvider();
 		viewer.setContentProvider(contentProvider);
@@ -173,7 +175,6 @@ public class ValidationProblemsView extends ViewPart {
 		partListener.partActivated(getSite().getPage().getActiveEditor());
 
 		viewer.setInput(statusMap);
-		viewer.expandAll();
 
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -343,6 +344,7 @@ public class ValidationProblemsView extends ViewPart {
 	private void refreshViewer() {
 		if (!viewer.getControl().isDisposed()) {
 			viewer.refresh();
+			viewer.expandAll();
 		}
 	}
 }
