@@ -173,6 +173,16 @@
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.commercial.editorfactories.ContractTypeValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.commercial.editorfactories.ContractTypeValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="ContractType"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated commercial -->

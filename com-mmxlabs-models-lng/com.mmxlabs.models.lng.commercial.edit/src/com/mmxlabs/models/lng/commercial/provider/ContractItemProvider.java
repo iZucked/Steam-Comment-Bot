@@ -72,6 +72,7 @@ public class ContractItemProvider
 			addRestrictedContractsPropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
+			addContractTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -302,6 +303,28 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Contract Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContractTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_contractType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_contractType_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -373,6 +396,7 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CommercialPackage.CONTRACT__NOTES:
+			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:
