@@ -192,7 +192,7 @@ public class LNGScenarioTransformer {
 	private final Map<VesselClass, List<IVessel>> spotVesselsByClass = new HashMap<VesselClass, List<IVessel>>();
 
 	private final ArrayList<IVessel> allVessels = new ArrayList<IVessel>();
-	private final ArrayList<IVessel> allReferenceVessels = new ArrayList<IVessel>();
+	private final Map<Vessel, IVessel> allReferenceVessels = new HashMap<>();
 
 	// private OptimiserSettings defaultSettings = null;
 
@@ -492,7 +492,7 @@ public class LNGScenarioTransformer {
 										entry.getActivity()));
 								builder.setPortCost(portAssociation.lookup((Port) port), v, type, activityCost);
 							}
-							for (final IVessel v : allReferenceVessels) {
+							for (final IVessel v : allReferenceVessels.values()) {
 								// TODO should the builder handle the application of costs to vessel classes?
 								final VesselClass reverseLookup = vesselAssociations.getFirst().reverseLookup(v.getVesselClass());
 								final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(reverseLookup, entry.getActivity()));
@@ -514,6 +514,8 @@ public class LNGScenarioTransformer {
 
 		buildMarkToMarkets(builder, portAssociation, contractTransformers, entities);
 
+		setNominatedVessels(builder, entities);
+		
 		// buildDiscountCurves(builder);
 
 		// freezeStartSequences(builder, entities);
@@ -553,6 +555,25 @@ public class LNGScenarioTransformer {
 			indices.addSeriesData(name, times, nums);
 		} else if (index instanceof DerivedIndex) {
 			indices.addSeriesExpression(name, ((DerivedIndex) index).getExpression());
+		}
+	}
+
+	private void setNominatedVessels(final ISchedulerBuilder builder, final ModelEntityMap entities) {
+
+		final AssignmentModel assignmentModel = rootObject.getPortfolioModel().getAssignmentModel();
+		if (assignmentModel != null) {
+
+			for (final ElementAssignment assignment : assignmentModel.getElementAssignments()) {
+				final UUIDObject o = assignment.getAssignedObject();
+
+				if (o instanceof Slot) {
+					IPortSlot portSlot = entities.getOptimiserObject(o, IPortSlot.class);
+					final IVessel vessel = allReferenceVessels.get(assignment.getAssignment());
+					if (vessel != null && portSlot != null) {
+						builder.setNominatedVessel(portSlot, vessel);
+					}
+				}
+			}
 		}
 	}
 
@@ -2022,7 +2043,7 @@ public class LNGScenarioTransformer {
 			vesselAssociation.add(eV, vessel);
 
 			entities.addModelObject(eV, vessel);
-			allReferenceVessels.add(vessel);
+			allReferenceVessels.put(eV, vessel);
 
 			/*
 			 * set up inaccessible ports by applying resource allocation constraints
