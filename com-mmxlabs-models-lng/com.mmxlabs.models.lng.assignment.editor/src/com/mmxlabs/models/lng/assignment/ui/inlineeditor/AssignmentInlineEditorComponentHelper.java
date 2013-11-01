@@ -451,24 +451,6 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
-			final Object input = notification.getNotifier();
-			boolean enabled = true;
-
-			Cargo cargo = null;
-			if (input instanceof LoadSlot) {
-				cargo = ((LoadSlot) input).getCargo();
-			} else if (input instanceof DischargeSlot) {
-				cargo = ((DischargeSlot) input).getCargo();
-			}
-
-			if (cargo != null) {
-
-				if (cargo.getCargoType() != CargoType.FLEET) {
-					enabled = false;
-				}
-			}
-
-			setEditorEnabled(enabled);
 
 			final Object feature = notification.getFeature();
 			if (valueProvider.updateOnChangeToFeature(feature))
