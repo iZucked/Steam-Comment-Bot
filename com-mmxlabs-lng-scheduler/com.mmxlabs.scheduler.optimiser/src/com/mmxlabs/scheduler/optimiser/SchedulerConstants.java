@@ -78,7 +78,7 @@ public final class SchedulerConstants {
 	/**
 	 * @since 2.0
 	 */
-//	public static final String AI_shippingCost = "element-shipping-cost";
+	// public static final String AI_shippingCost = "element-shipping-cost";
 	/**
 	 * @since 2.0
 	 */
@@ -106,4 +106,6 @@ public final class SchedulerConstants {
 	 * @since 6.0
 	 */
 	public static final String DCP_markToMarketElementProvider = "provider-mark-to-market";
+
+	public static final String DCP_nominatedVesselProvider = "provider-nominated-vessel";
 }

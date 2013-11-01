@@ -707,4 +707,6 @@ public interface ISchedulerBuilder {
 	 */
 	IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
 
+	void setNominatedVessel(@NonNull IPortSlot slot, @NonNull IVessel vessel);
+
 }

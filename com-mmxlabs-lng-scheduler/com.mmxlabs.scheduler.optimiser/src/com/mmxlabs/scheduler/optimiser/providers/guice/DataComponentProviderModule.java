@@ -54,6 +54,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -87,6 +89,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProvid
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
@@ -250,31 +253,35 @@ public class DataComponentProviderModule extends AbstractModule {
 		final LazyDateKeyProviderEditor dateKeyProviderEditor = new LazyDateKeyProviderEditor(SchedulerConstants.DCP_dateKeyProvider);
 		bind(IDateKeyProvider.class).toInstance(dateKeyProviderEditor);
 		bind(IDateKeyProviderEditor.class).toInstance(dateKeyProviderEditor);
-		
+
 		final HashMapShortCargoReturnElementProviderEditor shortCargoReturnElementProvider = new HashMapShortCargoReturnElementProviderEditor(SchedulerConstants.DCP_shortCargoReturnElementProvider);
 		bind(IShortCargoReturnElementProvider.class).toInstance(shortCargoReturnElementProvider);
 		bind(IShortCargoReturnElementProviderEditor.class).toInstance(shortCargoReturnElementProvider);
-		
+
 		final HashMapCharterMarketProviderEditor charterMarketProviderEditor = new HashMapCharterMarketProviderEditor(SchedulerConstants.DCP_charterMarketProvider);
 		bind(ICharterMarketProvider.class).toInstance(charterMarketProviderEditor);
 		bind(ICharterMarketProviderEditor.class).toInstance(charterMarketProviderEditor);
-		
+
 		final HashMapPortCVProviderEditor portCVProviderEditor = new HashMapPortCVProviderEditor(SchedulerConstants.DCP_portCVProvider);
 		bind(IPortCVProvider.class).toInstance(portCVProviderEditor);
 		bind(IPortCVProviderEditor.class).toInstance(portCVProviderEditor);
-		
+
 		final HashMapAlternativeElementProviderEditor alternativeElementProviderEditor = new HashMapAlternativeElementProviderEditor(SchedulerConstants.DCP_alternativeElementProvider);
 		bind(IAlternativeElementProvider.class).toInstance(alternativeElementProviderEditor);
 		bind(IAlternativeElementProviderEditor.class).toInstance(alternativeElementProviderEditor);
-		
+
 		final HashMapShipToShipBindingProviderEditor shipToShipProviderEditor = new HashMapShipToShipBindingProviderEditor(SchedulerConstants.DCP_shipToShipElementProvider);
 		bind(IShipToShipBindingProvider.class).toInstance(shipToShipProviderEditor);
 		bind(IShipToShipBindingProviderEditor.class).toInstance(shipToShipProviderEditor);
-		
+
 		final HashMapMarkToMarketProviderEditor markToMarketEditor = new HashMapMarkToMarketProviderEditor(SchedulerConstants.DCP_markToMarketElementProvider);
 		bind(IMarkToMarketProvider.class).toInstance(markToMarketEditor);
 		bind(IMarkToMarketProviderEditor.class).toInstance(markToMarketEditor);
-	
+
+		final HashMapNominatedVesselProvider nominatedVesselProviderEditor = new HashMapNominatedVesselProvider(SchedulerConstants.DCP_nominatedVesselProvider);
+		bind(INominatedVesselProvider.class).toInstance(nominatedVesselProviderEditor);
+		bind(INominatedVesselProviderEditor.class).toInstance(nominatedVesselProviderEditor);
+
 	}
 
 	/**

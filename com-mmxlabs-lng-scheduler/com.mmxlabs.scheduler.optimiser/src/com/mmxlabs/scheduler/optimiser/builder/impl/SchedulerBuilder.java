@@ -96,6 +96,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
@@ -279,6 +280,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IMarkToMarketProviderEditor markToMarketProviderEditor;
+
+	@Inject
+	private INominatedVesselProviderEditor nominatedVesselProviderEditor;
 
 	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
 	private final Map<IPort, MarkToMarket> desSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
@@ -1841,5 +1845,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void setNominatedVessel(@NonNull final IPortSlot slot, @NonNull final IVessel vessel) {
+		final ISequenceElement element = portSlotsProvider.getElement(slot);
+		nominatedVesselProviderEditor.setNominatedVessel(element, vessel);
 	}
 }
