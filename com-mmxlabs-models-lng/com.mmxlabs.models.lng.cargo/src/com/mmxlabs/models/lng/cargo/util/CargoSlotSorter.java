@@ -14,6 +14,8 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 
 /**
@@ -33,6 +35,12 @@ public class CargoSlotSorter {
 		@Override
 		public int compare(final Slot o1, final Slot o2) {
 
+			// Implicit Loads followed by discharges - does not support LDLD cargoes
+			final int c = getSlotType(o1) - getSlotType(o2);
+			if (c != 0) {
+				return c;
+			}
+
 			final Date d1 = o1.getWindowStartWithSlotOrPortTime();
 			final Date d2 = o2.getWindowStartWithSlotOrPortTime();
 			if (d1 == null) {
@@ -42,6 +50,16 @@ public class CargoSlotSorter {
 			}
 
 			return d1.compareTo(d2);
+		}
+
+		private int getSlotType(final Slot s) {
+			if (s instanceof LoadSlot) {
+				return 1;
+			}
+			if (s instanceof DischargeSlot) {
+				return 2;
+			}
+			return 10;
 		}
 	}
 
