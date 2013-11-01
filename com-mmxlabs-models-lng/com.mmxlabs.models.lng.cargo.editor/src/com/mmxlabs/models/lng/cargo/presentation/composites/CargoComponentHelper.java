@@ -165,7 +165,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS);
-		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
 

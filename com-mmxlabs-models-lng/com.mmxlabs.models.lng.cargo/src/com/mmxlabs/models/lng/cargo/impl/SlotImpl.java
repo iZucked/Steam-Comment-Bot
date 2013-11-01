@@ -51,6 +51,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  * </ul>
  * </p>
  *
@@ -371,6 +372,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected String notes = NOTES_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingDaysRestriction()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SHIPPING_DAYS_RESTRICTION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShippingDaysRestriction()
+	 * @generated
+	 * @ordered
+	 */
+	protected int shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -947,6 +968,27 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getShippingDaysRestriction() {
+		return shippingDaysRestriction;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShippingDaysRestriction(int newShippingDaysRestriction) {
+		int oldShippingDaysRestriction = shippingDaysRestriction;
+		shippingDaysRestriction = newShippingDaysRestriction;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION, oldShippingDaysRestriction, shippingDaysRestriction));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -1093,6 +1135,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return getNotes();
+			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
+				return getShippingDaysRestriction();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1147,6 +1191,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				setNotes((String)newValue);
 				return;
+			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
+				setShippingDaysRestriction((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1200,6 +1247,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
+				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1239,6 +1289,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
+			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
+				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1363,6 +1415,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (pricingDateESet) result.append(pricingDate); else result.append("<unset>");
 		result.append(", notes: ");
 		result.append(notes);
+		result.append(", shippingDaysRestriction: ");
+		result.append(shippingDaysRestriction);
 		result.append(')');
 		return result.toString();
 	}

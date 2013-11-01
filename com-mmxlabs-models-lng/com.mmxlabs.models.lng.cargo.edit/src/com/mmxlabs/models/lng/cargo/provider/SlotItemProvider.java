@@ -74,6 +74,7 @@ public class SlotItemProvider
 			addCargoPropertyDescriptor(object);
 			addPricingDatePropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
+			addShippingDaysRestrictionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -392,6 +393,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Shipping Days Restriction feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShippingDaysRestrictionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_shippingDaysRestriction_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_shippingDaysRestriction_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__SHIPPING_DAYS_RESTRICTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -439,6 +462,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 			case CargoPackage.SLOT__PRICING_DATE:
 			case CargoPackage.SLOT__NOTES:
+			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
