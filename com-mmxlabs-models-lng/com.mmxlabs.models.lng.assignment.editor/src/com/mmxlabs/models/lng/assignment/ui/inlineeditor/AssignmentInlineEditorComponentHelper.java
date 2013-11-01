@@ -459,7 +459,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			if (feature == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
 				updateDisplay(inputObject);
 			}
-			if (feature == CargoPackage.eINSTANCE.getDischargeSlot()) {
+			if (feature == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
 				updateDisplay(inputObject);
 			}
 		}
