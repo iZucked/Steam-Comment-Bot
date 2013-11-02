@@ -33,40 +33,40 @@ public class SlotInlineEditorChangedListener implements IInlineEditorExternalNot
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
-			if (input instanceof LoadSlot) {
-				editor.setEditorEnabled(!((LoadSlot) input).isDESPurchase());
-			}
-
-		}
-		if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
-			if (input instanceof DischargeSlot) {
-				editor.setEditorEnabled(!((DischargeSlot) input).isFOBSale());
-			}
-		}
-		if (notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Cargo()) {
-			if (input instanceof DischargeSlot) {
-				final DischargeSlot slot = (DischargeSlot) input;
-				editor.setEditorEnabled(!(slot.isFOBSale() && slot.getCargo() != null));
-			} else if (input instanceof LoadSlot) {
-				final LoadSlot slot = (LoadSlot) input;
-				editor.setEditorEnabled(!(slot.isDESPurchase() && slot.getCargo() != null));
-			}
-		}
+//		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+//			if (input instanceof LoadSlot) {
+//				editor.setEditorEnabled(!((LoadSlot) input).isDESPurchase());
+//			}
+//
+//		}
+//		if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+//			if (input instanceof DischargeSlot) {
+//				editor.setEditorEnabled(!((DischargeSlot) input).isFOBSale());
+//			}
+//		}
+//		if (notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Cargo()) {
+//			if (input instanceof DischargeSlot) {
+//				final DischargeSlot slot = (DischargeSlot) input;
+//				editor.setEditorEnabled(!(slot.isFOBSale() && slot.getCargo() != null));
+//			} else if (input instanceof LoadSlot) {
+//				final LoadSlot slot = (LoadSlot) input;
+//				editor.setEditorEnabled(!(slot.isDESPurchase() && slot.getCargo() != null));
+//			}
+//		}
 	}
 
 	@Override
 	public void postDisplay(final IInlineEditor editor, final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
-		this.editor = editor;
-		this.input = object;
-		if (input instanceof LoadSlot) {
-			final LoadSlot slot = (LoadSlot) input;
-			editor.setEditorEnabled(!(slot.isDESPurchase() && slot.getCargo() != null));
-		} else if (input instanceof DischargeSlot) {
-			final DischargeSlot slot = (DischargeSlot) input;
-			editor.setEditorEnabled(!(slot.isFOBSale() && slot.getCargo() != null));
-		} else if (input instanceof Cargo) {
-			editor.setEditorEnabled(((Cargo) input).getCargoType() == CargoType.FLEET);
-		}
+//		this.editor = editor;
+//		this.input = object;
+//		if (input instanceof LoadSlot) {
+//			final LoadSlot slot = (LoadSlot) input;
+//			editor.setEditorEnabled(!(slot.isDESPurchase() && slot.getCargo() != null));
+//		} else if (input instanceof DischargeSlot) {
+//			final DischargeSlot slot = (DischargeSlot) input;
+//			editor.setEditorEnabled(!(slot.isFOBSale() && slot.getCargo() != null));
+//		} else if (input instanceof Cargo) {
+//			editor.setEditorEnabled(((Cargo) input).getCargoType() == CargoType.FLEET);
+//		}
 	}
 }

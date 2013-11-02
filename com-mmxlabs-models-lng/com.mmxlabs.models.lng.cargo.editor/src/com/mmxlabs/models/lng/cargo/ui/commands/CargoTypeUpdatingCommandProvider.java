@@ -43,6 +43,11 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 	@Override
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
+		
+		if (true) {
+			return null;
+		}
+		
 		if (commandClass == SetCommand.class) {
 			{
 				Set<EObject> seenObjects = getContext();

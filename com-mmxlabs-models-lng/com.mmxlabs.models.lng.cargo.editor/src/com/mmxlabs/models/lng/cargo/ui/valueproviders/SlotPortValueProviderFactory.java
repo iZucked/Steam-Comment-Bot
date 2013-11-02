@@ -79,6 +79,7 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 
 					if (target instanceof Slot) {
 						final Slot slot = (Slot) target;
+						final Contract contract = slot.getContract();
 
 						PortCapability capability = null;
 
@@ -91,26 +92,28 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 							// If FOB or DES, then only one port is permitted - this should be set by the CargoTypeUpdatingCommandProvider
 							// -- However if the slot is not linked, then we are free to change
 							if (target instanceof LoadSlot) {
-								if (!((LoadSlot) target).isDESPurchase()) {
+								LoadSlot loadSlot = (LoadSlot) target;
+								if (!loadSlot.isDESPurchase()) {
 									capability = PortCapability.LOAD;
 								} else {
-									if (((Slot) target).getCargo() == null) {
-										capability = PortCapability.DISCHARGE;
+									if (loadSlot.getCargo() == null) {
+//										capability = PortCapability.DISCHARGE;
 									}
 								}
 							} else if (target instanceof DischargeSlot) {
-								if (!((DischargeSlot) target).isFOBSale()) {
+								DischargeSlot dischargeSlot = (DischargeSlot) target;
+								if (!dischargeSlot.isFOBSale()) {
 									capability = PortCapability.DISCHARGE;
 								} else {
-									if (((Slot) target).getCargo() == null) {
-										capability = PortCapability.LOAD;
+									if (dischargeSlot.getCargo() == null) {
+//										capability = PortCapability.LOAD;
 									}
 								}
 							}
 						}
 						final ArrayList<Pair<String, EObject>> filterOne = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> p : delegateValue) {
-							if (((Port) p.getSecond()).getCapabilities().contains(capability)) {
+							if (capability == null || ((Port) p.getSecond()).getCapabilities().contains(capability)) {
 								filterOne.add(p);
 							}
 						}
@@ -127,7 +130,6 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 						}
 
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
-						final Contract contract = slot.getContract();
 						if (contract == null) {
 							return filterOne;
 						}

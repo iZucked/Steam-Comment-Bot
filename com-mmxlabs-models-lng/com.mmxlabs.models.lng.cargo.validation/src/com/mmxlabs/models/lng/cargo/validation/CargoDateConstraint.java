@@ -92,6 +92,13 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @return
 	 */
 	private void validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, Slot from, Slot to, final int availableTime, final boolean inDialog, List<IStatus> failures) {
+		
+		// Skip for FOB/DES cargoes. 
+		// TODO: Roll in common des redirection travel time
+		if (cargo.getCargoType() != CargoType.FLEET) {
+			return;
+		}
+		
 		if (availableTime >= 0) {
 
 			final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
@@ -203,7 +210,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) object;
 			// final Slot loadSlot = cargo.getLoadSlot();
 			// final Slot dischargeSlot = cargo.getDischargeSlot();
-			if (cargo.getCargoType().equals(CargoType.FLEET)) {
+//			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 
 				// && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
 				// }
@@ -233,7 +240,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					}
 					prevSlot = slot;
 				}
-			}
+//			}
 		}
 
 		return Activator.PLUGIN_ID;

@@ -229,6 +229,9 @@ public class CargoEditingCommands {
 	public void appendFOBDESCommands(final List<Command> setCommands, final List<Command> deleteCommands, final EditingDomain editingDomain, final AssignmentModel assignmentModel, final Cargo cargo,
 			final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 
+		if (true) {
+			return;
+		}
 		if (loadSlot.isDESPurchase()) {
 			deleteCommands.add(AssignmentEditorHelper.unassignElement(editingDomain, assignmentModel, cargo));
 

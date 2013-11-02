@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.commercial;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -321,13 +322,22 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__CONTRACT_TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -460,6 +470,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__NOTES = CONTRACT__NOTES;
+
+	/**
+	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -633,6 +652,15 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__NOTES = CONTRACT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -773,6 +801,16 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.ContractType
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
+	 * @generated
+	 */
+	int CONTRACT_TYPE = 8;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -976,6 +1014,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_Notes();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Contract Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getContractType()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_ContractType();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1099,6 +1148,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getExpressionPriceParameters_PriceExpression();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Contract Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ContractType
+	 * @generated
+	 */
+	EEnum getContractType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1279,6 +1338,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute CONTRACT__NOTES = eINSTANCE.getContract_Notes();
 
 		/**
+		 * The meta object literal for the '<em><b>Contract Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__CONTRACT_TYPE = eINSTANCE.getContract_ContractType();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1384,6 +1451,16 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = eINSTANCE.getExpressionPriceParameters_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.ContractType
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
+		 * @generated
+		 */
+		EEnum CONTRACT_TYPE = eINSTANCE.getContractType();
 
 	}
 

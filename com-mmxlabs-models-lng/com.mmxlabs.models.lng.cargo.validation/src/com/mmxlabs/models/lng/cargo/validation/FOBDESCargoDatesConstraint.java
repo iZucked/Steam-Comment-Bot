@@ -24,6 +24,11 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
+		
+		if (true) {
+			return ctx.createSuccessStatus();
+		}
+		
 		final EObject object = ctx.getTarget();
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
