@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,10 +16,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.internal.win32.WNDCLASS;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,6 +44,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
@@ -56,7 +62,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
 
-	private static final SimpleDateFormat WindowDateFormat = new SimpleDateFormat("dd MMM YYYY");
+	private static final String WindowDateFormatString = "dd MMM YYYY";
 
 	Composite contentComposite;
 	private final Map<EStructuralFeature, IInlineEditor> feature2Editor;
@@ -141,16 +147,20 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			}
 		};
 
+
 		esWindow = new ExpandableSet("Window", this) {
 
 			@Override
 			protected void updateTextClient(final EObject eo) {
 
-				final MMXObject mmxEo = (MMXObject) eo;
-				final Date d = (Date) mmxEo.eGet(CargoFeatures.getSlot_WindowStart());
-				final int time = (Integer) mmxEo.eGetWithDefault(CargoFeatures.getSlot_WindowStartTime());
-				final int wsize = (Integer) mmxEo.eGetWithDefault(CargoFeatures.getSlot_WindowSize());
-				textClient.setText(WindowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours");
+				final SimpleDateFormat windowDateFormat = new SimpleDateFormat(WindowDateFormatString);
+				windowDateFormat.setTimeZone(LocalDateUtil.getTimeZone(eo, null));
+
+				final MMXObject mmxEo = (MMXObject) eo;				
+				final Date d = (Date) mmxEo.eGet(WindowStart);
+				final int time = (Integer) mmxEo.eGetWithDefault(WindowStartTime);
+				final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
+				textClient.setText(windowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours");
 			}
 		};
 
