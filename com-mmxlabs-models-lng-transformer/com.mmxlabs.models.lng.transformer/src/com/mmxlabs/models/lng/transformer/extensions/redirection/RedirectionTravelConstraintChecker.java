@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.transformer.extensions.redirection;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -15,11 +17,14 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 
 public class RedirectionTravelConstraintChecker implements IPairwiseConstraintChecker {
 
@@ -30,7 +35,13 @@ public class RedirectionTravelConstraintChecker implements IPairwiseConstraintCh
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
 	@Inject
-	private RedirectionInformationProvider redirectionGroupProvider;
+	private INominatedVesselProvider nominatedVesselProvider;
+
+	@Inject
+	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
+
+	@Inject
+	private IElementDurationProvider durationProvider;
 
 	@Override
 	public String getName() {
@@ -44,10 +55,10 @@ public class RedirectionTravelConstraintChecker implements IPairwiseConstraintCh
 
 	@Override
 	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
-		ISequenceElement prevElement = null;
-		for (IResource resource : sequences.getResources()) {
-			ISequence sequence = sequences.getSequence(resource);
-			for (ISequenceElement element : sequence) {
+		final ISequenceElement prevElement = null;
+		for (final IResource resource : sequences.getResources()) {
+			final ISequence sequence = sequences.getSequence(resource);
+			for (final ISequenceElement element : sequence) {
 				if (prevElement != null) {
 					if (!checkPairwiseConstraint(prevElement, element, resource)) {
 						return false;
@@ -67,55 +78,84 @@ public class RedirectionTravelConstraintChecker implements IPairwiseConstraintCh
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
-		final IPortSlot portSlot = portSlotProvider.getPortSlot(first);
-		if (portSlot instanceof ILoadOption) {
-			final ILoadOption loadOption = (ILoadOption) portSlot;
-			if (loadOption.getLoadPriceCalculator() instanceof RedirectionContract) {
+		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
+		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 
-				final RedirectionContract redirectionContract = (RedirectionContract) loadOption.getLoadPriceCalculator();
+		// Check if FOB/DES
+		// Check if ports are different
+		// Check distances using injected provider, or actual/max speed.
 
-				final IPortSlot nextSlot = portSlotProvider.getPortSlot(second);
-				if (nextSlot instanceof IDischargeOption) {
-					final IDischargeOption dischargeOption = (IDischargeOption) nextSlot;
+		if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeSlot) {
+			// DES Purchase
+			final ILoadOption desPurchase = (ILoadOption) firstSlot;
+			final IDischargeSlot desSlot = (IDischargeSlot) secondSlot;
 
-					// TODO: Take time windows into account
-					final Integer shippingHours = redirectionGroupProvider.getShippingHours(loadOption);
-					final Integer fobLoadDate = redirectionGroupProvider.getFOBLoadTime(loadOption);
+			if (desPurchase.getPort() != desSlot.getPort()) {
 
-					if (fobLoadDate == null) {
-						throw new IllegalStateException("Redirection LoadSlot must have FOB Load date");
-					}
-
-					if (shippingHours == null) {
-						throw new IllegalStateException("Redirection LoadSlot must have shipping days limit");
-					}
-
-					// Amount of time between load and discharge windows.
-					final int availableTime = dischargeOption.getTimeWindow().getStart() - fobLoadDate.intValue();
-					if (availableTime > shippingHours) {
-						// The slots are too far apart to be compatible.
-						return false;
-					}
-
-					final int distance = distanceProvider.getMinimumValue(loadOption.getPort(), dischargeOption.getPort());
-					if (distance < 0 || distance == Integer.MAX_VALUE) {
-						// Bad distance
-						return false;
-					}
-
-					// Get notional speed
-					final int speed = redirectionContract.getNotionalSpeed();
-
-					// Calculate sailing time.
-					final int sailingTime = Calculator.getTimeFromSpeedDistance(speed, distance);
-					final int sailingTimeLimit;
-					// Accept if travel time is less than or equal to available time
-					return sailingTime <= availableTime;
-				} else {
-					// Unexpected combination
+				// TODO: Take time windows into account
+				final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(first);
+				if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
+					// No
 					return false;
 				}
+				final ITimeWindow fobLoadDate = shippingHoursRestrictionProvider.getBaseTime(first);
+				if (fobLoadDate == null) {
+					// Should have a date!
+					return false;
+				}
+
+				// Check laden leg is within available time -> Add to lateness constraint checker
+				// Check load Time + laden leg + discharge time + ballast leg is <= shippingHours
+
+				final int ladenDistance = distanceProvider.getMinimumValue(desPurchase.getPort(), desSlot.getPort());
+				if (ladenDistance < 0 || ladenDistance == Integer.MAX_VALUE) {
+					// Bad distance
+					return false;
+				}
+
+				final int ballastDistance = distanceProvider.getMinimumValue(desSlot.getPort(), desPurchase.getPort());
+				if (ballastDistance < 0 || ballastDistance == Integer.MAX_VALUE) {
+					// Bad distance
+					return false;
+				}
+
+				final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(first);
+				if (nominatedVessel == null) {
+					return false;
+				}
+				// Get notional speed
+				final int maxSpeed = nominatedVessel.getVesselClass().getMaxSpeed();
+
+				final int loadDuration = durationProvider.getElementDuration(first, nominatedVessel);
+				final int dischargeDuration = durationProvider.getElementDuration(second, nominatedVessel);
+				final int ballastSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ballastDistance);
+
+				// This is the upper bound on laden travel time
+				final int availableLadenTime = shippingHours - loadDuration + dischargeDuration + ballastSailingTime;
+
+				// It will take at least this amount of time to get between ports - check shipping days is big enough
+				final int minLadenSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ladenDistance);
+				if (minLadenSailingTime > availableLadenTime) {
+					// Can't go fast enough
+					return false;
+				}
+				
+				// It will take at least this amount of time to get between ports - check time windows
+				final int maxWindowLength = desSlot.getTimeWindow().getEnd()  - fobLoadDate.getStart();
+				if (minLadenSailingTime > maxWindowLength) {
+					// Lateness!
+					return false;
+				}
+				// Laden leg is at least this amount of time due to windows
+				final int minWindowLength = desSlot.getTimeWindow().getStart()  - fobLoadDate.getEnd();
+				if (minWindowLength > availableLadenTime) {
+					// Windows too far apart for shipping restriction
+					return false;
+				}
+				
+				return true;
 			}
+			// TODO: FOB Sale
 		}
 
 		return true;
