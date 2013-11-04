@@ -98,11 +98,11 @@ public class DefaultScenarioCreator {
 	public float purchasePrice = 0.5f;
 
 	// will need at least one sales contract and purchase contract for any completed transactions
-	SalesContract salesContract;
-	PurchaseContract purchaseContract;
+	public SalesContract salesContract;
+	public PurchaseContract purchaseContract;
 	// will need a contract entity and a shipping entity
-	LegalEntity contractEntity;
-	LegalEntity shippingEntity;
+	public LegalEntity contractEntity;
+	public LegalEntity shippingEntity;
 
 	public final DefaultFleetCreator fleetCreator = new DefaultFleetCreator();
 	public final DefaultPortCreator portCreator = new DefaultPortCreator();

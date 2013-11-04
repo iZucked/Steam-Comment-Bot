@@ -79,15 +79,9 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 		else if (modelSlot instanceof DischargeSlot) {
 			DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
 			CargoDeliveryType cargoType = CargoDeliveryType.ANY;
+			
+			cargoType = dischargeSlot.getSlotOrContractDeliveryType();
 
-			if (dischargeSlot.isSetPurchaseDeliveryType()) {
-				cargoType = dischargeSlot.getPurchaseDeliveryType();
-			} else {
-				Contract contract = dischargeSlot.getContract();
-				if (contract instanceof SalesContract) {
-					cargoType = ((SalesContract) contract).getPurchaseDeliveryType();
-				}
-			}
 			if (cargoType != CargoDeliveryType.ANY) {
 				desPermissionProviderEditor.setSalesSlotRequiredPurchaseType(sequenceElement, cargoType);
 			}
