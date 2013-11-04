@@ -582,7 +582,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	public EObject getElementForNotificationTarget(EObject source) {
-		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null))
+		while (source != null && !(currentElements.contains(source)) && ((source = source.eContainer()) != null))
 			;
 		return source;
 	}
