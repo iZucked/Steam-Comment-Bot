@@ -83,7 +83,7 @@ public class UpdateElementAssignmentCommand extends CompoundCommand {
 				}
 				// Create cargo assignment if missing
 				final Cargo cargo = loadSlot.getCargo();
-				if (cargo != null) {
+				if (cargo != null&& cargo.getCargoType() == CargoType.FLEET) {
 					createElementAssignment(cargo);
 				}
 			}
@@ -106,7 +106,7 @@ public class UpdateElementAssignmentCommand extends CompoundCommand {
 				}
 				// Create cargo assignment if missing
 				final Cargo cargo = dischargeSlot.getCargo();
-				if (cargo != null) {
+				if (cargo != null && cargo.getCargoType() == CargoType.FLEET) {
 					createElementAssignment(cargo);
 				}
 			}

@@ -44,7 +44,8 @@ public class ElementAssignmentCommandProvider extends AbstractModelCommandProvid
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 
 		// These could change the cargo type!
-		if (commandClass == SetCommand.class && (parameter.getFeature() == CargoPackage.Literals.CARGO__SLOTS || parameter.getFeature() == CargoPackage.Literals.SLOT__CARGO)) {
+		if (parameter.getFeature() == CargoPackage.Literals.CARGO__SLOTS || parameter.getFeature() == CargoPackage.Literals.SLOT__CARGO
+				|| parameter.getFeature() == CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE || parameter.getFeature() == CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE) {
 			if (parameter.getOwner() instanceof UUIDObject) {
 				return executeCommand(editingDomain, rootObject, (UUIDObject) parameter.getOwner());
 			}
@@ -93,21 +94,30 @@ public class ElementAssignmentCommandProvider extends AbstractModelCommandProvid
 					}
 				}
 			}
-		} else if (commandClass == SetCommand.class) {
-			if (parameter.getOwner() instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) parameter.getOwner();
-				return executeCommand(editingDomain, rootObject, loadSlot);
-			} else if (parameter.getOwner() instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) parameter.getOwner();
-				return executeCommand(editingDomain, rootObject, dischargeSlot);
-			} else if (parameter.getOwner() instanceof Cargo) {
-				final Cargo cargo = (Cargo) parameter.getOwner();
-				return executeCommand(editingDomain, rootObject, cargo);
-			} else if (parameter.getOwner() instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) parameter.getOwner();
-				return executeCommand(editingDomain, rootObject, vesselEvent);
-			}
 		}
+		// else if (commandClass == SetCommand.class) {
+		//
+		// if (fe)
+		//
+		// Object owner = parameter.getOwner();
+		// if (overrides.containsKey(owner)) {
+		// owner = overrides.get(owner);
+		// }
+		//
+		// if (owner instanceof LoadSlot) {
+		// final LoadSlot loadSlot = (LoadSlot) owner;
+		// return executeCommand(editingDomain, rootObject, loadSlot);
+		// } else if (owner instanceof DischargeSlot) {
+		// final DischargeSlot dischargeSlot = (DischargeSlot) owner;
+		// return executeCommand(editingDomain, rootObject, dischargeSlot);
+		// } else if (owner instanceof Cargo) {
+		// final Cargo cargo = (Cargo) owner;
+		// return executeCommand(editingDomain, rootObject, cargo);
+		// } else if (owner instanceof VesselEvent) {
+		// final VesselEvent vesselEvent = (VesselEvent) owner;
+		// return executeCommand(editingDomain, rootObject, vesselEvent);
+		// }
+		// }
 		return null;
 	}
 
