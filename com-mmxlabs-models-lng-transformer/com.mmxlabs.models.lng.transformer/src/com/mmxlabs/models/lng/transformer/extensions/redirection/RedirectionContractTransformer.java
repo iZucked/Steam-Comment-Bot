@@ -82,7 +82,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 	private transient List<ITransformerExtension> transformerExtensions = null;
 
 	@Inject
-	private RedirectionInformationProvider redirectionGroupProvider;
+	private RedirectionGroupProvider redirectionGroupProvider;
 
 	private final Class<? extends LNGPriceCalculatorParameters> redirectionPriceParamtersClass;
 

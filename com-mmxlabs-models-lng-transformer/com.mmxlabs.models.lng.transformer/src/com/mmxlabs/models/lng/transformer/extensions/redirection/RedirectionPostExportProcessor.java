@@ -37,7 +37,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public class RedirectionPostExportProcessor implements IPostExportProcessor {
 
 	@Inject
-	private RedirectionInformationProvider redirectionGroupProvider;
+	private RedirectionGroupProvider redirectionGroupProvider;
 
 	@Override
 	public void postProcess(final EditingDomain ed, final MMXRootObject rootObject, final Schedule scheduleModel, final AssignmentModel assignmentModel, final CompoundCommand commands) {
