@@ -16,6 +16,8 @@ import javax.inject.Inject;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -24,6 +26,8 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -222,7 +226,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(final LNGPriceCalculatorParameters priceParameters) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull  final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
@@ -230,7 +234,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(final LNGPriceCalculatorParameters priceParameters) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
