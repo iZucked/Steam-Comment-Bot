@@ -707,6 +707,20 @@ public interface ISchedulerBuilder {
 	 */
 	IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
 
+	/**
+	 * For DES Purchases and FOB Sales specify the nominated vessel
+	 * 
+	 * @param slot
+	 * @param hours
+	 */
 	void setNominatedVessel(@NonNull IPortSlot slot, @NonNull IVessel vessel);
+
+	/**
+	 * For DES Purchases and FOB Sales specify the restriction on shipping for redirection basis.
+	 * 
+	 * @param slot
+	 * @param hours
+	 */
+	void setShippingHoursRestriction(@NonNull IPortSlot slot, int hours);
 
 }

@@ -105,6 +105,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
@@ -283,6 +284,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private INominatedVesselProviderEditor nominatedVesselProviderEditor;
+	
+	@Inject
+	private IShippingHoursRestrictionProviderEditor shippingHoursRestrictionProviderEditor;
+
 
 	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
 	private final Map<IPort, MarkToMarket> desSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
@@ -1851,5 +1856,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public void setNominatedVessel(@NonNull final IPortSlot slot, @NonNull final IVessel vessel) {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
 		nominatedVesselProviderEditor.setNominatedVessel(element, vessel);
+	}
+	
+	@Override
+	public void setShippingHoursRestriction(@NonNull final IPortSlot slot, final int hours) {
+		final ISequenceElement element = portSlotsProvider.getElement(slot);
+		shippingHoursRestrictionProviderEditor.setShippingHoursRestriction(element, hours);
 	}
 }
