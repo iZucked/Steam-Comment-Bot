@@ -515,7 +515,7 @@ public class LNGScenarioTransformer {
 		buildMarkToMarkets(builder, portAssociation, contractTransformers, entities);
 
 		setNominatedVessels(builder, entities);
-		
+
 		// buildDiscountCurves(builder);
 
 		// freezeStartSequences(builder, entities);
@@ -567,7 +567,7 @@ public class LNGScenarioTransformer {
 				final UUIDObject o = assignment.getAssignedObject();
 
 				if (o instanceof Slot) {
-					IPortSlot portSlot = entities.getOptimiserObject(o, IPortSlot.class);
+					final IPortSlot portSlot = entities.getOptimiserObject(o, IPortSlot.class);
 					final IVessel vessel = allReferenceVessels.get(assignment.getAssignment());
 					if (vessel != null && portSlot != null) {
 						builder.setNominatedVessel(portSlot, vessel);
@@ -882,7 +882,7 @@ public class LNGScenarioTransformer {
 					isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
+					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
 					configureDischargeSlotRestrictions(builder, allDischargePorts, dischargeSlot, discharge);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
 				}
@@ -970,7 +970,7 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allDischargePorts, final DischargeSlot dischargeSlot, IDischargeOption discharge) {
+	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allDischargePorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge) {
 		if (dischargeSlot.isFOBSale()) {
 			if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
 				// Bind to all loads
@@ -1081,25 +1081,13 @@ public class LNGScenarioTransformer {
 			}
 
 			/*
-			if (dischargeSlot.isSetContract()) {
-				final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
-
-				if (salesContract.isSetMinCvValue()) {
-					minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
-				} else {
-					minCv = 0;
-				}
-
-				if (salesContract.isSetMaxCvValue()) {
-					maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMaxCvValue());
-				} else {
-					maxCv = Long.MAX_VALUE;
-				}
-			} else {
-				minCv = 0;
-				maxCv = Long.MAX_VALUE;
-			}
-			*/
+			 * if (dischargeSlot.isSetContract()) { final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
+			 * 
+			 * if (salesContract.isSetMinCvValue()) { minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue()); } else { minCv = 0; }
+			 * 
+			 * if (salesContract.isSetMaxCvValue()) { maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMaxCvValue()); } else { maxCv = Long.MAX_VALUE; } } else { minCv
+			 * = 0; maxCv = Long.MAX_VALUE; }
+			 */
 
 			if (dischargeSlot.isFOBSale()) {
 				final ITimeWindow localTimeWindow;
@@ -1110,6 +1098,10 @@ public class LNGScenarioTransformer {
 					localTimeWindow = dischargeWindow;
 				}
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, pricingDate, dischargeSlot.isOptional());
+
+				if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
+				}
 			} else {
 				discharge = builder.createDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(), pricingDate,
 						dischargeSlot.isOptional());
@@ -1180,6 +1172,10 @@ public class LNGScenarioTransformer {
 			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), localTimeWindow,
 					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
 					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrPortCV()), slotPricingDate, loadSlot.isOptional());
+
+			if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
+				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
+			}
 		} else {
 			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow,
 					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
