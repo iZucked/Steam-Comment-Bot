@@ -65,6 +65,7 @@ public class RedirectionPostExportProcessor implements IPostExportProcessor {
 					for (final Slot slot : group) {
 						if (slot == slotAllocation.getSlot()) {
 							// Keep this slot
+							// TODO: Make sure extensions are transferred over, or replace existing with selected data
 							if (slot instanceof LoadSlot) {
 								final LoadSlot loadSlot = (LoadSlot) slot;
 								if (loadSlot.isDESPurchase()) {
