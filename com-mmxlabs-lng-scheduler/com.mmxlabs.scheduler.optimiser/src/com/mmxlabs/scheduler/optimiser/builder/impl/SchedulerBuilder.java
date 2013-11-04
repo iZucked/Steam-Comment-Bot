@@ -284,10 +284,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private INominatedVesselProviderEditor nominatedVesselProviderEditor;
-	
+
 	@Inject
 	private IShippingHoursRestrictionProviderEditor shippingHoursRestrictionProviderEditor;
-
 
 	private final Map<IPort, MarkToMarket> desPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
 	private final Map<IPort, MarkToMarket> desSaleMTMPortMap = new HashMap<IPort, MarkToMarket>();
@@ -1857,10 +1856,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
 		nominatedVesselProviderEditor.setNominatedVessel(element, vessel);
 	}
-	
+
 	@Override
-	public void setShippingHoursRestriction(@NonNull final IPortSlot slot, final int hours) {
+	public void setShippingHoursRestriction(@NonNull final IPortSlot slot, @NonNull final ITimeWindow baseTime, final int hours) {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
-		shippingHoursRestrictionProviderEditor.setShippingHoursRestriction(element, hours);
+		shippingHoursRestrictionProviderEditor.setShippingHoursRestriction(element, baseTime, hours);
 	}
 }

@@ -721,6 +721,6 @@ public interface ISchedulerBuilder {
 	 * @param slot
 	 * @param hours
 	 */
-	void setShippingHoursRestriction(@NonNull IPortSlot slot, int hours);
+	void setShippingHoursRestriction(@NonNull IPortSlot slot, @NonNull ITimeWindow baseTime, int hours);
 
 }
