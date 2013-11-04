@@ -89,7 +89,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProvid
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
@@ -98,6 +98,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShipToShipBindingProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
@@ -278,7 +279,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IMarkToMarketProvider.class).toInstance(markToMarketEditor);
 		bind(IMarkToMarketProviderEditor.class).toInstance(markToMarketEditor);
 
-		final HashMapNominatedVesselProvider nominatedVesselProviderEditor = new HashMapNominatedVesselProvider(SchedulerConstants.DCP_nominatedVesselProvider);
+		final HashMapNominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor(SchedulerConstants.DCP_nominatedVesselProvider);
 		bind(INominatedVesselProvider.class).toInstance(nominatedVesselProviderEditor);
 		bind(INominatedVesselProviderEditor.class).toInstance(nominatedVesselProviderEditor);
 

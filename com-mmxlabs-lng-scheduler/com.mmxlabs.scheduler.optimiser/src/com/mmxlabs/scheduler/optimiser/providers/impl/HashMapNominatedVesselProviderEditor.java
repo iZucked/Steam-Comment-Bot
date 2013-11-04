@@ -10,13 +10,13 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 
-public class HashMapNominatedVesselProvider implements INominatedVesselProviderEditor {
+public class HashMapNominatedVesselProviderEditor implements INominatedVesselProviderEditor {
 
 	private final String name;
 
 	private final Map<ISequenceElement, IVessel> map = new HashMap<>();
 
-	public HashMapNominatedVesselProvider(final String name) {
+	public HashMapNominatedVesselProviderEditor(final String name) {
 		this.name = name;
 	}
 
@@ -40,5 +40,4 @@ public class HashMapNominatedVesselProvider implements INominatedVesselProviderE
 	public void setNominatedVessel(@NonNull ISequenceElement element, @NonNull IVessel vessel) {
 		map.put(element, vessel);
 	}
-
 }
