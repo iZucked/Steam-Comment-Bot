@@ -138,8 +138,11 @@ public class EObjectTableViewer extends GridTreeViewer {
 		return currentReference;
 	}
 
-	/** Call this method if {@link #init(AdapterFactory, CommandStack, EReference...)} is overridden 
-	 * @since 7.0*/
+	/**
+	 * Call this method if {@link #init(AdapterFactory, CommandStack, EReference...)} is overridden
+	 * 
+	 * @since 7.0
+	 */
 	public void setCurrentContainerAndContainment(final EObject currentContainer, final EReference currentReference) {
 		this.currentContainer = currentContainer;
 		this.currentReference = currentReference;
@@ -582,6 +585,8 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	public EObject getElementForNotificationTarget(EObject source) {
+		// Add assert to catch issues during development - normally shouldn't get a null object here unless overriding methods have bugs.
+		assert (source != null);
 		while (source != null && !(currentElements.contains(source)) && ((source = source.eContainer()) != null))
 			;
 		return source;
