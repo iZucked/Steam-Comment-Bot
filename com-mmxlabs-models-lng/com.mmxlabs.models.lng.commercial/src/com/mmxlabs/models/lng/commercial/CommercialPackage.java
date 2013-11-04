@@ -803,6 +803,25 @@ public interface CommercialPackage extends EPackage {
 	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
+	 * @generated
+	 */
+	int SLOT_CONTRACT_PARAMS = 8;
+
+	/**
+	 * The number of structural features of the '<em>Slot Contract Params</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_CONTRACT_PARAMS_FEATURE_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -810,7 +829,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 8;
+	int CONTRACT_TYPE = 9;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -1150,6 +1169,16 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getExpressionPriceParameters_PriceExpression();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SlotContractParams <em>Slot Contract Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot Contract Params</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SlotContractParams
+	 * @generated
+	 */
+	EClass getSlotContractParams();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1451,6 +1480,16 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = eINSTANCE.getExpressionPriceParameters_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
+		 * @generated
+		 */
+		EClass SLOT_CONTRACT_PARAMS = eINSTANCE.getSlotContractParams();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

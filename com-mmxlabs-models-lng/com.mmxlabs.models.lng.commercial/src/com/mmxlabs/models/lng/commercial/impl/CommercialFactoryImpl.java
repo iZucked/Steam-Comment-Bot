@@ -37,7 +37,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 */
 	public static CommercialFactory init() {
 		try {
-			CommercialFactory theCommercialFactory = (CommercialFactory)EPackage.Registry.INSTANCE.getEFactory(CommercialPackage.eNS_URI);
+			CommercialFactory theCommercialFactory = (CommercialFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/commercial/1/"); 
 			if (theCommercialFactory != null) {
 				return theCommercialFactory;
 			}

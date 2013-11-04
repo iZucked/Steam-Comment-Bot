@@ -148,6 +148,12 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.SLOT_CONTRACT_PARAMS: {
+				SlotContractParams slotContractParams = (SlotContractParams)theEObject;
+				T result = caseSlotContractParams(slotContractParams);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -272,6 +278,21 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseExpressionPriceParameters(ExpressionPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Slot Contract Params</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Slot Contract Params</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSlotContractParams(SlotContractParams object) {
 		return null;
 	}
 

@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -89,6 +90,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass expressionPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass slotContractParamsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -451,6 +459,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getSlotContractParams() {
+		return slotContractParamsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getContractType() {
 		return contractTypeEEnum;
 	}
@@ -521,6 +538,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		expressionPriceParametersEClass = createEClass(EXPRESSION_PRICE_PARAMETERS);
 		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
+
+		slotContractParamsEClass = createEClass(SLOT_CONTRACT_PARAMS);
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
@@ -613,6 +632,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(expressionPriceParametersEClass, ExpressionPriceParameters.class, "ExpressionPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExpressionPriceParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(slotContractParamsEClass, SlotContractParams.class, "SlotContractParams", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");
