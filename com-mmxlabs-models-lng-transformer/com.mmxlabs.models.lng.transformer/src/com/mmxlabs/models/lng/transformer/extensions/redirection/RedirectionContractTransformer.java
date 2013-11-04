@@ -72,9 +72,6 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 	@Inject
 	private SeriesParser indices;
 
-	@Inject
-	private IOriginalDateProviderEditor originalDateProviderEditor;
-
 	private final Set<IPortSlot> generatedOptions = new HashSet<IPortSlot>();
 
 	private ISchedulerBuilder builder;
@@ -168,7 +165,6 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 					boolean swappable = true;
 
 					final ISequenceElement elementA = portSlotProvider.getElement(optimiserSlot);
-					originalDateProviderEditor.setOriginalDate(elementA, originalLoadTime);
 
 					final Set<Slot> redirectionGroup = new HashSet<>();
 					redirectionGroup.add(modelSlot);
@@ -259,7 +255,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 						}
 
 						// Bind the current and generated slots together and pass into the redirection group provider. The post export processor and constraint checker need this information.
-						redirectionGroupProvider.createRedirectionGroup(redirectionGroup, originalLoadTime, shippingHours);
+						redirectionGroupProvider.createRedirectionGroup(redirectionGroup);
 
 						// final ISequenceElement elementA = portSlotProvider.getElement(optimiserSlot);
 						final ISequenceElement elementB = portSlotProvider.getElement(alternativeSlot);

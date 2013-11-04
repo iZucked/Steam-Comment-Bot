@@ -13,6 +13,7 @@ import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.common.detailtree.impl.UnitPriceDetailElement;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.providers.IOriginalDataProvider;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -30,7 +31,9 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -44,7 +47,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class RedirectionContract implements ILoadPriceCalculator {
 
 	private RedirectionVoyageCostCalculator redirVCC;
-	
+
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
@@ -64,15 +67,13 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	private IOriginalDataProvider originalDateProvider;
+	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
-	/**
-	 * A dummy vessel for purposes of notional shipping cost calculations.
-	 */
-	private Vessel vessel;
+	@Inject
+	private INominatedVesselProvider nominatedVesselProvider;
 
 	private final ICurve purchasePriceCurve;
-//	private final ICurve salesPriceCurve;
+	// private final ICurve salesPriceCurve;
 	private final int notionalSpeed;
 	private final IPort baseSalesMarketPort;
 	private final IPort sourcePurchasePort;
@@ -81,30 +82,13 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			final IVesselClass templateClass, final ICurve charterInCurve) {
 		super();
 		this.purchasePriceCurve = purchasePriceCurve;
-//		this.salesPriceCurve = salesPriceCurve;
-		
+		// this.salesPriceCurve = salesPriceCurve;
+
 		redirVCC = new RedirectionVoyageCostCalculator(salesPriceCurve);
-		
+
 		this.notionalSpeed = notionalSpeed;
 		this.baseSalesMarketPort = baseSalesMarketPort;
 		this.sourcePurchasePort = sourcePurchasePort;
-
-		// Create vessel with dummy indexing context.
-		this.vessel = new Vessel(new IIndexingContext() {
-
-			@Override
-			public void registerType(final Class<? extends Object> type) {
-
-			}
-
-			@Override
-			public int assignIndex(final Object indexedObject) {
-				return 0;
-			}
-		});
-		vessel.setVesselInstanceType(VesselInstanceType.SPOT_CHARTER);
-		vessel.setVesselClass(templateClass);
-		vessel.setHourlyCharterInPrice(charterInCurve);
 	}
 
 	@Override
@@ -115,7 +99,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadSlot);
-		final int originalLoadTime = originalDateProvider.getOriginalDate(loadElement);
+		final ITimeWindow baseTimeWindow = shippingHoursRestrictionProvider.getBaseTime(loadElement);
 
 		if (baseSalesMarketPort.equals(dischargeSlot.getPort())) {
 			return marketPurchasePricePerMMBTu;
@@ -131,10 +115,9 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			}
 
 			for (final String route : distanceProvider.getKeys()) {
-				// Notional Costs - Hammerfest -> Dragon
 
-				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getLoadPriceCalculator(), sourcePurchasePort, baseSalesMarketPort, originalLoadTime, loadVolumeInM3, vessel, cargoCVValue,
-						route);
+				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getLoadPriceCalculator(), sourcePurchasePort, baseSalesMarketPort, originalLoadTime, loadVolumeInM3, vessel,
+						cargoCVValue, route);
 				if (plan == null) {
 					continue;
 				}
@@ -159,8 +142,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			String notionalRoute = null;
 			for (final String route : distanceProvider.getKeys()) {
 
-				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getLoadPriceCalculator(), sourcePurchasePort, dischargeSlot.getPort(), originalLoadTime, loadVolumeInM3, vessel, cargoCVValue,
-						route);
+				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getLoadPriceCalculator(), sourcePurchasePort, dischargeSlot.getPort(), originalLoadTime, loadVolumeInM3, vessel,
+						cargoCVValue, route);
 				if (plan == null) {
 					continue;
 				}
@@ -199,15 +182,15 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public int calculateLoadPricePerMMBTu(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int actualSalesPricePerMMBTu, final long transferVolumeInM3,
-			final IDetailTree annotations) {
+	public int calculateLoadPricePerMMBTu(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int actualSalesPricePerMMBTu,
+			final long transferVolumeInM3, final IDetailTree annotations) {
 
 		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(transferTime);
 		final int cargoCVValue = loadOption.getCargoCVValue();
 
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadOption);
-		final int originalLoadTime = originalDateProvider.getOriginalDate(loadElement);
-
+		final ITimeWindow baseTimeWindow = shippingHoursRestrictionProvider.getBaseTime(loadElement);
+		final IVessel vessel = nominatedVesselProvider.getNominatedVessel(loadElement);
 		if (baseSalesMarketPort.equals(dischargeOption.getPort())) {
 			return marketPurchasePricePerMMBTu;
 		} else {
@@ -250,8 +233,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			String notionalRoute = null;
 			for (final String route : distanceProvider.getKeys()) {
 
-				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getLoadPriceCalculator(), sourcePurchasePort, dischargeOption.getPort(), originalLoadTime, transferVolumeInM3, vessel,
-						cargoCVValue, route);
+				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getLoadPriceCalculator(), sourcePurchasePort, dischargeOption.getPort(), originalLoadTime, transferVolumeInM3,
+						vessel, cargoCVValue, route);
 				if (plan == null) {
 					continue;
 				}
