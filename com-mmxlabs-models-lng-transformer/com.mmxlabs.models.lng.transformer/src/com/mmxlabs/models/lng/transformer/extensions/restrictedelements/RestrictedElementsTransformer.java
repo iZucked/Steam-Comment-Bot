@@ -86,7 +86,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		// get the ISequenceElements associated with the source
 		final Collection<ISequenceElement> sourceElements = findAssociatedISequenceElements(object);
 		
-		if (sourceElements != null) {		
+		if (elements != null && sourceElements != null) {		
 			for (final EObject element : elements) {
 				// get the list of ISequenceElements associated with each restricted element
 				Collection<ISequenceElement> destinationElements = findAssociatedISequenceElements(element);
