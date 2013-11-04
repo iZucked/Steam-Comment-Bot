@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,15 +30,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.lng.transformer.extensions.redirection.providers.IOriginalDateProviderEditor;
-import com.mmxlabs.models.lng.transformer.inject.IDESPurchaseSlotBindingsGenerator;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -83,8 +79,8 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 	private final Class<? extends LNGPriceCalculatorParameters> redirectionPriceParamtersClass;
 
-	@Inject
-	private IRedirectionContractDetailsProvider redirectionContractDetailsProvider;
+//	@Inject
+//	private IRedirectionContractDetailsProvider redirectionContractDetailsProvider;
 	
 	protected RedirectionContractTransformer(final Class<? extends LNGPriceCalculatorParameters> redirectionPriceParamtersClass) {
 		this.redirectionPriceParamtersClass = redirectionPriceParamtersClass;
@@ -148,7 +144,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 				if (redirectionPriceParamtersClass.isInstance(purchaseContract.getPriceInfo() )) {
 //					final RedirectionPriceParameters redirectionPriceParameters = (RedirectionPriceParameters) purchaseContract.getPriceInfo();
 
-					Date originalDate = redirectionContractDetailsProvider.getOriginalDate(loadSlot);
+//					Date originalDate = redirectionContractDetailsProvider.getOriginalDate(loadSlot);
 //					for (final EObject obj : modelSlot.getExtensions()) {
 //						if (obj instanceof RedirectionContractOriginalDate) {
 //							final RedirectionContractOriginalDate redirectionContractOriginalDate = (RedirectionContractOriginalDate) obj;
@@ -157,9 +153,9 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 //						}
 //					}
 
-					final int originalLoadTime = originalDate == null ? optimiserSlot.getTimeWindow().getStart() : map.getHoursFromDate(originalDate);
+//					final int originalLoadTime = originalDate == null ? optimiserSlot.getTimeWindow().getStart() : map.getHoursFromDate(originalDate);
 					// TODO: Obtain directly or derive from slot data
-					final int shippingHours = 60 * 24; // redirectionContractDetailsProvider.getShippingHours....
+//					final int shippingHours = 60 * 24; // redirectionContractDetailsProvider.getShippingHours....
 					// TODO: Pass into
 					// Get from contract
 					boolean swappable = true;
@@ -186,8 +182,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 						if (loadSlot.isDESPurchase()) {
 							// Convert to FOB Purchase slot
 							final ITimeWindow window = builder.createTimeWindow(originalLoadTime, originalLoadTime + 24);
-							final IPort port = map.getOptimiserObject(redirectionContractDetailsProvider.getBaseLoadPort(loadSlot), IPort.class);
-							alternativeSlot = builder.createLoadSlot(id, port, window, minVolume, maxVolume, priceCalculator, cargoCVValue, 24, false, true, IPortSlot.NO_PRICING_DATE, slotIsOptional);
+							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, 24, false, true, IPortSlot.NO_PRICING_DATE, slotIsOptional);
 							generatedOptions.add(alternativeSlot);
 
 							// Create a fake model object to add in here;
@@ -198,7 +193,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							if (loadSlot.isSetCargoCV()) {
 								fobPurchaseSlot.setCargoCV(loadSlot.getCargoCV());
 							}
-							fobPurchaseSlot.setPort(redirectionContractDetailsProvider.getBaseLoadPort(loadSlot));
+							fobPurchaseSlot.setPort(loadSlot.getPort());
 							fobPurchaseSlot.setWindowStart(map.getDateFromHours(window.getStart()));
 							fobPurchaseSlot.setContract(loadSlot.getContract());
 							fobPurchaseSlot.setOptional(loadSlot.isOptional());
@@ -219,8 +214,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 						} else {
 							// Convert to DES Purchase
 							final ITimeWindow window = builder.createTimeWindow(currentWindow.getStart(), currentWindow.getEnd() + shippingHours);
-							final IPort port = map.getOptimiserObject(redirectionContractDetailsProvider.getBaseDestinationPort(loadSlot), IPort.class);
-							alternativeSlot = builder.createDESPurchaseLoadSlot(id, port, window, minVolume, maxVolume, priceCalculator, cargoCVValue, IPortSlot.NO_PRICING_DATE, slotIsOptional);
+							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, IPortSlot.NO_PRICING_DATE, slotIsOptional);
 
 							generatedOptions.add(alternativeSlot);
 
@@ -231,7 +225,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							desSlot.setArriveCold(true);
 							// Always set CV
 							desSlot.setCargoCV(loadSlot.getSlotOrPortCV());
-							desSlot.setPort(redirectionContractDetailsProvider.getBaseDestinationPort(loadSlot));
+							desSlot.setPort(loadSlot.getPort());
 							desSlot.setWindowStart(map.getDateFromHours(window.getStart()));
 							desSlot.setContract(loadSlot.getContract());
 							desSlot.setOptional(loadSlot.isOptional());
