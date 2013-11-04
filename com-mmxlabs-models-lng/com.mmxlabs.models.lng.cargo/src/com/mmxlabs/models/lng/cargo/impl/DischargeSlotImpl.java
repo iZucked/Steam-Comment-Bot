@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -14,8 +15,10 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,6 +31,8 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#isFOBSale <em>FOB Sale</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getTransferTo <em>Transfer To</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getMinCvValue <em>Min Cv Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -95,6 +100,59 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	 * @ordered
 	 */
 	protected LoadSlot transferTo;
+
+	/**
+	 * The default value of the '{@link #getMinCvValue() <em>Min Cv Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinCvValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MIN_CV_VALUE_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getMinCvValue() <em>Min Cv Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinCvValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected double minCvValue = MIN_CV_VALUE_EDEFAULT;
+	/**
+	 * This is true if the Min Cv Value attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean minCvValueESet;
+	/**
+	 * The default value of the '{@link #getMaxCvValue() <em>Max Cv Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxCvValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MAX_CV_VALUE_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getMaxCvValue() <em>Max Cv Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxCvValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected double maxCvValue = MAX_CV_VALUE_EDEFAULT;
+	/**
+	 * This is true if the Max Cv Value attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean maxCvValueESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -255,6 +313,125 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getMinCvValue() {
+		return minCvValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinCvValue(double newMinCvValue) {
+		double oldMinCvValue = minCvValue;
+		minCvValue = newMinCvValue;
+		boolean oldMinCvValueESet = minCvValueESet;
+		minCvValueESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE, oldMinCvValue, minCvValue, !oldMinCvValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMinCvValue() {
+		double oldMinCvValue = minCvValue;
+		boolean oldMinCvValueESet = minCvValueESet;
+		minCvValue = MIN_CV_VALUE_EDEFAULT;
+		minCvValueESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE, oldMinCvValue, MIN_CV_VALUE_EDEFAULT, oldMinCvValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMinCvValue() {
+		return minCvValueESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getMaxCvValue() {
+		return maxCvValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMaxCvValue(double newMaxCvValue) {
+		double oldMaxCvValue = maxCvValue;
+		maxCvValue = newMaxCvValue;
+		boolean oldMaxCvValueESet = maxCvValueESet;
+		maxCvValueESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE, oldMaxCvValue, maxCvValue, !oldMaxCvValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMaxCvValue() {
+		double oldMaxCvValue = maxCvValue;
+		boolean oldMaxCvValueESet = maxCvValueESet;
+		maxCvValue = MAX_CV_VALUE_EDEFAULT;
+		maxCvValueESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE, oldMaxCvValue, MAX_CV_VALUE_EDEFAULT, oldMaxCvValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMaxCvValue() {
+		return maxCvValueESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public double getSlotOrContractMinCv() {
+		return (Double) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public double getSlotOrContractMaxCv() {
+		return (Double) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public CargoDeliveryType getSlotOrContractDeliveryType() {
+		return (CargoDeliveryType) eGetWithDefault(CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE);	
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -295,6 +472,10 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 			case CargoPackage.DISCHARGE_SLOT__TRANSFER_TO:
 				if (resolve) return getTransferTo();
 				return basicGetTransferTo();
+			case CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE:
+				return getMinCvValue();
+			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
+				return getMaxCvValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -315,6 +496,12 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 				return;
 			case CargoPackage.DISCHARGE_SLOT__TRANSFER_TO:
 				setTransferTo((LoadSlot)newValue);
+				return;
+			case CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE:
+				setMinCvValue((Double)newValue);
+				return;
+			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
+				setMaxCvValue((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -337,6 +524,12 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 			case CargoPackage.DISCHARGE_SLOT__TRANSFER_TO:
 				setTransferTo((LoadSlot)null);
 				return;
+			case CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE:
+				unsetMinCvValue();
+				return;
+			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
+				unsetMaxCvValue();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -355,8 +548,30 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 				return isSetPurchaseDeliveryType();
 			case CargoPackage.DISCHARGE_SLOT__TRANSFER_TO:
 				return transferTo != null;
+			case CargoPackage.DISCHARGE_SLOT__MIN_CV_VALUE:
+				return isSetMinCvValue();
+			case CargoPackage.DISCHARGE_SLOT__MAX_CV_VALUE:
+				return isSetMaxCvValue();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MIN_CV:
+				return getSlotOrContractMinCv();
+			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MAX_CV:
+				return getSlotOrContractMaxCv();
+			case CargoPackage.DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE:
+				return getSlotOrContractDeliveryType();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
@@ -373,6 +588,10 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 		result.append(fobSale);
 		result.append(", PurchaseDeliveryType: ");
 		if (purchaseDeliveryTypeESet) result.append(purchaseDeliveryType); else result.append("<unset>");
+		result.append(", minCvValue: ");
+		if (minCvValueESet) result.append(minCvValue); else result.append("<unset>");
+		result.append(", maxCvValue: ");
+		if (maxCvValueESet) result.append(maxCvValue); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -384,8 +603,16 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 		}
 		
 		else if (feature == CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE) {
-			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE, (Integer) 0);			
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE, CargoDeliveryType.ANY);			
 		}
+				
+		else if (feature == CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MIN_CV_VALUE, 0);			
+		}
+		
+		else if (feature == CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MAX_CV_VALUE, 0);			
+		}	
 		
 		return super.getUnsetValueOrDelegate(feature);
 	}

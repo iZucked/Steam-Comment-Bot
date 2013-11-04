@@ -9,11 +9,24 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -21,6 +34,8 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.dates.DateInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -91,6 +106,10 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_pricingDateEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 		add_shippingDaysRestrictionEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
+		add_restrictedContractsEditor(detailComposite, topClass);
+		add_restrictedPortsEditor(detailComposite, topClass);
+		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -128,8 +147,43 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NO
 	 */
 	protected void add_notesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__NOTES));
 		detailComposite.addInlineEditor(new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
+	}
+
+	/**
+	 * Create the editor for the entity feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__ENTITY));
+	}
+
+	/**
+	 * Create the editor for the restrictedContracts feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS));
+	}
+
+	/**
+	 * Create the editor for the restrictedPorts feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_PORTS));
+	}
+
+	/**
+	 * Create the editor for the restrictedListsArePermissive feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE));
 	}
 
 	/**
