@@ -22,9 +22,11 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 public class ShippingHoursRestrictionChecker implements IPairwiseConstraintChecker {
 
@@ -43,6 +45,9 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	@Inject
 	private IElementDurationProvider durationProvider;
 
+	@Inject
+	private IVesselProvider vesselProvider;
+
 	@Override
 	public String getName() {
 		return "ShippingHoursRestrictionChecker";
@@ -55,13 +60,18 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 
 	@Override
 	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+
 		final ISequenceElement prevElement = null;
 		for (final IResource resource : sequences.getResources()) {
-			final ISequence sequence = sequences.getSequence(resource);
-			for (final ISequenceElement element : sequence) {
-				if (prevElement != null) {
-					if (!checkPairwiseConstraint(prevElement, element, resource)) {
-						return false;
+			final IVessel v = vesselProvider.getVessel(resource);
+			if (v.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || v.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+
+				final ISequence sequence = sequences.getSequence(resource);
+				for (final ISequenceElement element : sequence) {
+					if (prevElement != null) {
+						if (!checkPairwiseConstraint(prevElement, element, resource)) {
+							return false;
+						}
 					}
 				}
 			}
@@ -78,86 +88,89 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
-		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
-		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
+		final IVessel v = vesselProvider.getVessel(resource);
+		if (v.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || v.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
-		// Check if FOB/DES
-		// Check if ports are different
-		// Check distances using injected provider, or actual/max speed.
+			final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
+			final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 
-		if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeSlot) {
-			// DES Purchase
-			final ILoadOption desPurchase = (ILoadOption) firstSlot;
-			final IDischargeSlot desSlot = (IDischargeSlot) secondSlot;
+			// Check if FOB/DES
+			// Check if ports are different
+			// Check distances using injected provider, or actual/max speed.
 
-			if (desPurchase.getPort() != desSlot.getPort()) {
+			if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeSlot) {
+				// DES Purchase
+				final ILoadOption desPurchase = (ILoadOption) firstSlot;
+				final IDischargeSlot desSale = (IDischargeSlot) secondSlot;
 
-				// TODO: Take time windows into account
-				final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(first);
-				if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
-					// No
-					return false;
+				if (desPurchase.getPort() != desSale.getPort()) {
+
+					// TODO: Take time windows into account
+					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(first);
+					if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
+						// No
+						return false;
+					}
+					final ITimeWindow fobLoadDate = shippingHoursRestrictionProvider.getBaseTime(first);
+					if (fobLoadDate == null) {
+						// Should have a date!
+						return false;
+					}
+
+					// Check laden leg is within available time -> Add to lateness constraint checker
+					// Check load Time + laden leg + discharge time + ballast leg is <= shippingHours
+
+					final int ladenDistance = distanceProvider.getMinimumValue(desPurchase.getPort(), desSale.getPort());
+					if (ladenDistance < 0 || ladenDistance == Integer.MAX_VALUE) {
+						// Bad distance
+						return false;
+					}
+
+					final int ballastDistance = distanceProvider.getMinimumValue(desSale.getPort(), desPurchase.getPort());
+					if (ballastDistance < 0 || ballastDistance == Integer.MAX_VALUE) {
+						// Bad distance
+						return false;
+					}
+
+					final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(first);
+					if (nominatedVessel == null) {
+						return false;
+					}
+					// Get notional speed
+					final int maxSpeed = nominatedVessel.getVesselClass().getMaxSpeed();
+
+					final int loadDuration = durationProvider.getElementDuration(first, nominatedVessel);
+					final int dischargeDuration = durationProvider.getElementDuration(second, nominatedVessel);
+					final int ballastSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ballastDistance);
+
+					// This is the upper bound on laden travel time
+					final int availableLadenTime = shippingHours - loadDuration + dischargeDuration + ballastSailingTime;
+
+					// It will take at least this amount of time to get between ports - check shipping days is big enough
+					final int minLadenSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ladenDistance);
+					if (minLadenSailingTime > availableLadenTime) {
+						// Can't go fast enough
+						return false;
+					}
+
+					// It will take at least this amount of time to get between ports - check time windows
+					final int maxWindowLength = desSale.getTimeWindow().getEnd() - fobLoadDate.getStart();
+					if (minLadenSailingTime > maxWindowLength) {
+						// Lateness!
+						return false;
+					}
+					// Laden leg is at least this amount of time due to windows
+					final int minWindowLength = desSale.getTimeWindow().getStart() - fobLoadDate.getEnd();
+					if (minWindowLength > availableLadenTime) {
+						// Windows too far apart for shipping restriction
+						return false;
+					}
+
+					return true;
 				}
-				final ITimeWindow fobLoadDate = shippingHoursRestrictionProvider.getBaseTime(first);
-				if (fobLoadDate == null) {
-					// Should have a date!
-					return false;
-				}
-
-				// Check laden leg is within available time -> Add to lateness constraint checker
-				// Check load Time + laden leg + discharge time + ballast leg is <= shippingHours
-
-				final int ladenDistance = distanceProvider.getMinimumValue(desPurchase.getPort(), desSlot.getPort());
-				if (ladenDistance < 0 || ladenDistance == Integer.MAX_VALUE) {
-					// Bad distance
-					return false;
-				}
-
-				final int ballastDistance = distanceProvider.getMinimumValue(desSlot.getPort(), desPurchase.getPort());
-				if (ballastDistance < 0 || ballastDistance == Integer.MAX_VALUE) {
-					// Bad distance
-					return false;
-				}
-
-				final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(first);
-				if (nominatedVessel == null) {
-					return false;
-				}
-				// Get notional speed
-				final int maxSpeed = nominatedVessel.getVesselClass().getMaxSpeed();
-
-				final int loadDuration = durationProvider.getElementDuration(first, nominatedVessel);
-				final int dischargeDuration = durationProvider.getElementDuration(second, nominatedVessel);
-				final int ballastSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ballastDistance);
-
-				// This is the upper bound on laden travel time
-				final int availableLadenTime = shippingHours - loadDuration + dischargeDuration + ballastSailingTime;
-
-				// It will take at least this amount of time to get between ports - check shipping days is big enough
-				final int minLadenSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ladenDistance);
-				if (minLadenSailingTime > availableLadenTime) {
-					// Can't go fast enough
-					return false;
-				}
-
-				// It will take at least this amount of time to get between ports - check time windows
-				final int maxWindowLength = desSlot.getTimeWindow().getEnd() - fobLoadDate.getStart();
-				if (minLadenSailingTime > maxWindowLength) {
-					// Lateness!
-					return false;
-				}
-				// Laden leg is at least this amount of time due to windows
-				final int minWindowLength = desSlot.getTimeWindow().getStart() - fobLoadDate.getEnd();
-				if (minWindowLength > availableLadenTime) {
-					// Windows too far apart for shipping restriction
-					return false;
-				}
-
-				return true;
+				// TODO: FOB Sale
 			}
-			// TODO: FOB Sale
 		}
-
 		return true;
 	}
 
