@@ -887,13 +887,17 @@ public class CargoModelRowTransformer {
 					return result != null ? result : get(rowData.loadSlot, depth);
 
 				}
-				case CARGO_OR_SLOT: {
-					Object result = get(rowData.cargo, depth);
-					if (result == null) {
+				case SLOT_OR_CARGO: {
+					
+					Object result = null;
+					if (rowData.loadSlot != null &&rowData.loadSlot.isDESPurchase()) {
 						result = get(rowData.loadSlot, depth);
 					}
-					if (result == null) {
+					if (result == null && rowData.dischargeSlot != null &&rowData.dischargeSlot.isFOBSale()) {
 						result = get(rowData.dischargeSlot, depth);
+					}
+					if (result == null) {
+						result = get(rowData.cargo, depth);
 					}
 					return result;
 				}
@@ -932,7 +936,7 @@ public class CargoModelRowTransformer {
 		 */
 		CARGO_OR_MARKET_ALLOCATION,
 
-		CARGO_OR_SLOT
+		SLOT_OR_CARGO
 	}
 
 	/**
