@@ -108,4 +108,6 @@ public final class SchedulerConstants {
 	public static final String DCP_markToMarketElementProvider = "provider-mark-to-market";
 
 	public static final String DCP_nominatedVesselProvider = "provider-nominated-vessel";
+
+	public static final String DCP_shippingHoursRestrictionProvider = "provider-shipping-hours-restriction";
 }
