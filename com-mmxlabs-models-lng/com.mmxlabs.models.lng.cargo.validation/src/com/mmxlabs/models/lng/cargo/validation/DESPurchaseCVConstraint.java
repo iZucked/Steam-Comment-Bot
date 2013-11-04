@@ -29,7 +29,7 @@ public class DESPurchaseCVConstraint extends AbstractModelMultiConstraint {
 			final LoadSlot loadSlot = (LoadSlot) target;
 			if (!loadSlot.isSetCargoCV()) {
 				final Port port = loadSlot.getPort();
-				if (!port.getCapabilities().contains(PortCapability.LOAD)) {
+				if (port != null && !port.getCapabilities().contains(PortCapability.LOAD)) {
 					final String format = "[DES Purchase|%s] needs a CV set or be linked to a load port.";
 					final String failureMessage = String.format(format, loadSlot.getName());
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
