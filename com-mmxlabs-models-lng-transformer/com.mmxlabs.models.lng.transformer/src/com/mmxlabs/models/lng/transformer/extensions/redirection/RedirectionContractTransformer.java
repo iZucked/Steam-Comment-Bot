@@ -84,9 +84,6 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 	@Inject
 	private RedirectionInformationProvider redirectionGroupProvider;
 
-	@Inject
-	private IDESPurchaseSlotBindingsGenerator desPurchaseSlotBindingsGenerator;
-
 	private final Class<? extends LNGPriceCalculatorParameters> redirectionPriceParamtersClass;
 
 	@Inject
