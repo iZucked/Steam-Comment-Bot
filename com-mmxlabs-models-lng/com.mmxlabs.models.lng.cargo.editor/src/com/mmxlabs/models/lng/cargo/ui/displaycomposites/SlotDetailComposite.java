@@ -6,17 +6,24 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.internal.win32.WNDCLASS;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -37,6 +44,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
@@ -54,13 +62,14 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
 
-	private static final SimpleDateFormat WindowDateFormat = new SimpleDateFormat("dd MMM YYYY");
+	private static final String WindowDateFormatString = "dd MMM YYYY";
 
 	Composite contentComposite;
 	private final Map<EStructuralFeature, IInlineEditor> feature2Editor;
 	final ExpandableSet esPricing;
 	private final ExpandableSet esWindow;
 	private final ExpandableSet esTerms;
+	private ExpandableSet esOther;
 	private ArrayList<EStructuralFeature[]> nameFeatures;
 	private ArrayList<EStructuralFeature[]> pricingFeatures;
 	private HashSet<EStructuralFeature> pricingTitleFeatures;
@@ -69,40 +78,50 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private HashSet<EStructuralFeature> windowTitleFeatures;
 	private ArrayList<EStructuralFeature[]> loadTermsFeatures;
 	private ArrayList<EStructuralFeature[]> dischargeTermsFeatures;
-	private ArrayList<EStructuralFeature> missedFeatures;
+	private ArrayList<EStructuralFeature[]> missedFeatures;
 	private ArrayList<EStructuralFeature[]> noteFeatures;
-
+	private HashSet<EStructuralFeature> allFeatures;
+	
 	{
+		allFeatures = new HashSet<EStructuralFeature>();
+
 		nameFeatures = new ArrayList<EStructuralFeature[]>();
 		nameFeatures.add(new EStructuralFeature[] { MMXCorePackage.eINSTANCE.getNamedObject_Name(), CargoFeatures.getSlot_Optional() });
+		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<EStructuralFeature[]>();
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port() });
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity() });
+		allFeatures.addAll(getAllFeatures(mainFeatures));
 
 		pricingFeatures = new ArrayList<EStructuralFeature[]>();
 		pricingFeatures.add(new EStructuralFeature[] { Contract });
 		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingDate() });
 		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
+		allFeatures.addAll(getAllFeatures(pricingFeatures));
 
 		windowFeatures = new ArrayList<EStructuralFeature[]>();
 		windowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
 		windowFeatures.add(new EStructuralFeature[] { WindowSize, CargoFeatures.getSlot_Duration() });
 		windowFeatures.add(new EStructuralFeature[] {});
 		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize);
+		allFeatures.addAll(getAllFeatures(windowFeatures));
 
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_CargoCV() });
+		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
-
-		missedFeatures = new ArrayList<EStructuralFeature>();
+		allFeatures.addAll(getAllFeatures(dischargeTermsFeatures));
 
 		noteFeatures = new ArrayList<EStructuralFeature[]>();
 		noteFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
+		allFeatures.addAll(getAllFeatures(noteFeatures));
+		
+		missedFeatures = new ArrayList<EStructuralFeature[]>();		
 	}
 
 	public SlotDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
@@ -128,20 +147,26 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			}
 		};
 
+
 		esWindow = new ExpandableSet("Window", this) {
 
 			@Override
 			protected void updateTextClient(final EObject eo) {
 
-				final MMXObject mmxEo = (MMXObject) eo;
-				final Date d = (Date) mmxEo.eGet(CargoFeatures.getSlot_WindowStart());
-				final int time = (Integer) mmxEo.eGetWithDefault(CargoFeatures.getSlot_WindowStartTime());
-				final int wsize = (Integer) mmxEo.eGetWithDefault(CargoFeatures.getSlot_WindowSize());
-				textClient.setText(WindowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours");
+				final SimpleDateFormat windowDateFormat = new SimpleDateFormat(WindowDateFormatString);
+				windowDateFormat.setTimeZone(LocalDateUtil.getTimeZone(eo, null));
+
+				final MMXObject mmxEo = (MMXObject) eo;				
+				final Date d = (Date) mmxEo.eGet(WindowStart);
+				final int time = (Integer) mmxEo.eGetWithDefault(WindowStartTime);
+				final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
+				textClient.setText(windowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours");
 			}
 		};
 
 		esTerms = new ExpandableSet("Terms", this);
+		
+		esOther = new ExpandableSet("Other", this);
 	}
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
@@ -177,8 +202,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		if (editor != null) {
 			final EStructuralFeature f = editor.getFeature();
 			feature2Editor.put(f, editor);
-			if (!mainFeatures.contains(f) && !windowFeatures.contains(f) && !loadTermsFeatures.contains(f)) {
-				missedFeatures.add(f);
+			if (!allFeatures.contains(f)) {
+				missedFeatures.add(new EStructuralFeature[] {f});
 			}
 		}
 
@@ -222,27 +247,36 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		createSpacer();
-		esPricing.setFeatures(pricingFeatures, pricingTitleFeatures);
-		esPricing.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
-		esPricing.setExpanded(false);
+		makeExpandable(root, object, dbc, esPricing, pricingFeatures, pricingTitleFeatures, false);
 
 		createSpacer();
-		esWindow.setFeatures(windowFeatures, windowTitleFeatures);
-		esWindow.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
-		esWindow.setExpanded(false);
+		makeExpandable(root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, false);
 
 		createSpacer();
-		esTerms.setFeatures(isLoad ? loadTermsFeatures : dischargeTermsFeatures, null);
-		esTerms.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
-		esTerms.setExpanded(false);
+		makeExpandable(root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, false);
 
-		for (final EStructuralFeature f : missedFeatures) {
+		if(!missedFeatures.isEmpty()) {		
+//			System.out.println(object);
+//			System.out.println(missedFeatures.size());
+//			for (EStructuralFeature[] eStructuralFeatures : missedFeatures) {
+//				for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+//					System.out.println(eStructuralFeature);
+//				}
+//			}
+			createSpacer();
+			makeExpandable(root, object, dbc, esOther, missedFeatures, null, false);
 		}
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
 
 		for (final EStructuralFeature[] fs : noteFeatures) {
 			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
+	}
+
+	private void makeExpandable(final MMXRootObject root, final EObject object,
+			final EMFDataBindingContext dbc, ExpandableSet expandable, List<EStructuralFeature[]> features, Set<EStructuralFeature> titleFeatures, boolean expanded) {
+		expandable.setFeatures(features, titleFeatures);
+		expandable.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
+		expandable.setExpanded(expanded);
 	}
 
 	private void createSpacer() {
@@ -276,5 +310,15 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			return (SharedScrolledComposite) parent;
 		}
 		return null;
+	}
+	
+	private HashSet<EStructuralFeature> getAllFeatures(ArrayList<EStructuralFeature[]> list){
+		HashSet<EStructuralFeature> fs = new HashSet<EStructuralFeature>();
+		for (EStructuralFeature[] eStructuralFeatures : list) {
+			for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+				fs.add(eStructuralFeature);
+			}
+		}
+		return fs;
 	}
 }
