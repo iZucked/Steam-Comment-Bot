@@ -607,11 +607,11 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 		}
 				
 		else if (feature == CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE) {
-			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MIN_CV_VALUE, 0);			
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MIN_CV_VALUE, 0.0);			
 		}
 		
 		else if (feature == CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE) {
-			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MAX_CV_VALUE, 0);			
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MAX_CV_VALUE, 0.0);			
 		}	
 		
 		return super.getUnsetValueOrDelegate(feature);
