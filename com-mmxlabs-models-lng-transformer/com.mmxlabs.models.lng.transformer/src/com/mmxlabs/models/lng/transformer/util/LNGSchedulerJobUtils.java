@@ -329,16 +329,13 @@ public class LNGSchedulerJobUtils {
 				}
 			}
 
-			// "Load port" is the discharge port for DES purchases
-			if (desPurchaseSlot != null) {
-				// if (load.isDESPurchase()) {
-				final Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
-				cmd.append(SetCommand.create(domain, desPurchaseSlot, CargoPackage.eINSTANCE.getSlot_Port(), discharge.getPort()));
-			}
 			// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
 			if (fobSaleSlot != null) {
 				// Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
-				cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, loadCargo));
+				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
+				if (elementAssignment !=null) {
+					cmd.append(DeleteCommand.create(domain, elementAssignment));
+				}
 			}
 
 			// Remove references to slots no longer in the cargo
