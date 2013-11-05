@@ -172,4 +172,14 @@ public class FieldMap implements IFieldMap {
 	public FieldMap getSuperMap() {
 		return superMap;
 	}
+
+	@Override
+	public boolean containsPrefix(String keyPrefix) {
+		for (final String key : delegate.keySet()) {
+			if (key.startsWith(keyPrefix)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

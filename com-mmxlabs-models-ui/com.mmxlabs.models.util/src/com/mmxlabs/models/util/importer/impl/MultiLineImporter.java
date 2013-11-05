@@ -73,15 +73,14 @@ public class MultiLineImporter extends DefaultClassImporter {
 		final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
 		
 		final Collection<EObject> values;
-		
-		values = classImporter.importObject(instance, reference.getEReferenceType(), map, context).createdObjects;
-		
+		final ImportResults importResults = classImporter.importObject(instance, reference.getEReferenceType(), map, context);
+		// first object in the collection is the direct sub-object for the specified field  
+		final EObject importObject = importResults.importedObject;		
+				
 
-		final Iterator<EObject> iterator = values.iterator();
-		if (iterator.hasNext()) {
-			// first object in the collection is the direct sub-object for the specified field  
-			final EObject importObject = iterator.next();
+		if (importObject != null) {
 
+			final Iterator<EObject> iterator = importResults.createdObjects.iterator();
 			// when attaching an object to a multiple reference list, we append it to the list
 			if (reference.isMany()) {
 				((List<EObject>) instance.eGet(reference)).add(importObject);
@@ -142,7 +141,17 @@ public class MultiLineImporter extends DefaultClassImporter {
 
 						context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 					} else {
-						importReference(reference, instance, subKeys, context, results);
+						// multiple elements can be imported within a single row, if they are preceded by consecutive digits beginning with 0
+						if (subKeys.containsPrefix("0" + DOT)) {
+							Integer i = 0;
+							while (subKeys.containsPrefix(i.toString() + DOT)) {
+								importReference(reference, instance, subKeys.getSubMap(i.toString() + DOT), context, results);
+								i++;
+							}
+						}
+						else {
+							importReference(reference, instance, subKeys, context, results);
+						}
 					}
 				}
 			}
@@ -159,6 +168,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 	 * @return
 	 */
 	public String getIndexField(final EObject parent, final EClass eClass) {
+		// TODO: 
 		return null;
 	}
 	
