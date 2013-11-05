@@ -128,6 +128,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
+import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -212,6 +213,9 @@ public class LNGScenarioTransformer {
 
 	private OptimiserSettings optimiserParameters;
 
+	@Inject
+	private IPortVisitDurationProviderEditor portVisitDurationProviderEditor;
+	
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
@@ -433,6 +437,10 @@ public class LNGScenarioTransformer {
 			entities.addModelObject(ePort, port);
 
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
+			
+			// Set port default values
+			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Load, ePort.getLoadDuration());
+			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Discharge, ePort.getDischargeDuration());
 		}
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation,
