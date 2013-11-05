@@ -83,4 +83,9 @@ public class Port extends IndexedObject implements IPort {
 	public void setCooldownPriceCalculator(final ICooldownPriceCalculator cooldownPriceCalculator) {
 		this.cooldownPriceCalculator = cooldownPriceCalculator;
 	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
 }
