@@ -65,4 +65,9 @@ public final class XYPort extends Port implements IXYPort {
 
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
 }
