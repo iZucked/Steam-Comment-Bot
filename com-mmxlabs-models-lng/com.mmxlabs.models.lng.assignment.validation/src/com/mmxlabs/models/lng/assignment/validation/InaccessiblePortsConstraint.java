@@ -62,7 +62,22 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 					final Set<Port> inaccessiblePortSet = SetUtils.getObjects(inaccessiblePorts);
 					if (!inaccessiblePortSet.isEmpty()) {
 
-						final UUIDObject object = elementAssignment.getAssignedObject();
+						UUIDObject object = elementAssignment.getAssignedObject();
+						if (object instanceof Slot) {
+							final Slot slot = (Slot) object;
+							if (slot.getCargo() != null) {
+								object = slot.getCargo();
+							} else {
+								if (inaccessiblePortSet.contains(slot.getPort())) {
+									final String msg = String.format("The port %s is not an accessible port for the assigned vessel", slot.getPort().getName());
+									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+									dsd.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+									dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
+									statues.add(dsd);
+								}
+							}
+						}
+						
 						if (object instanceof Cargo) {
 							final Cargo cargo = (Cargo) object;
 							for (final Slot slot : cargo.getSlots()) {

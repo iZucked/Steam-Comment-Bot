@@ -46,8 +46,9 @@ public class ContractCvValueConstraint extends AbstractModelMultiConstraint {
 								final double cv = loadSlot.getSlotOrPortCV();
 								final String format = "[Cargo|%s] Purchase CV %.2f is %s than the %s CV (%.2f) for sales contract '%s'.";
 								if (salesContract.isSetMinCvValue()) {
-									final double minCvValue = salesContract.getMinCvValue();
-									if (cv < minCvValue) {
+									final Double minCvValue = dischargeSlot.getSlotOrContractMinCv();
+									
+									if (minCvValue != null && cv < minCvValue) {
 										final String failureMessage = String.format(format, cargo.getName(), cv, "less", "minimum", minCvValue, contract.getName());
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
 										dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
@@ -56,8 +57,8 @@ public class ContractCvValueConstraint extends AbstractModelMultiConstraint {
 									}
 								}
 								if (salesContract.isSetMaxCvValue()) {
-									final double maxCvValue = salesContract.getMaxCvValue();
-									if (cv > maxCvValue) {
+									final Double maxCvValue = dischargeSlot.getSlotOrContractMaxCv();
+									if (maxCvValue != null && cv > maxCvValue) {
 										final String failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, contract.getName());
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
 										dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());

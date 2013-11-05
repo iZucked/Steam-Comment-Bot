@@ -39,7 +39,7 @@ public class AssignmentModelImporter implements ISubmodelImporter {
 
 	@Override
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
-		final AssignmentModel input = AssignmentFactory.eINSTANCE.createAssignmentModel();
+		final AssignmentModel assignmentModel = AssignmentFactory.eINSTANCE.createAssignmentModel();
 		if (inputs.containsKey(ASSIGNMENTS)) {
 
 			// final Collection<EObject> importObjects = importer.importObjects(AssignmentPackage.eINSTANCE.getAssignment(), inputs.get(ASSIGNMENTS), context);
@@ -47,7 +47,7 @@ public class AssignmentModelImporter implements ISubmodelImporter {
 			importer.importAssignments(inputs.get(ASSIGNMENTS), context);
 		}
 
-		return input;
+		return assignmentModel;
 	}
 
 	@Override

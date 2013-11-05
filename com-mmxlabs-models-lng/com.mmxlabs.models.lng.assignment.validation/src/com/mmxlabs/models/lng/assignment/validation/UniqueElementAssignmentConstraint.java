@@ -5,14 +5,11 @@
 package com.mmxlabs.models.lng.assignment.validation;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -21,21 +18,18 @@ import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-public class UniqueElementAssignmentConstraint extends AbstractModelConstraint {
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
-	 */
-	@Override
-	public IStatus validate(final IValidationContext ctx) {
-		final EObject object = ctx.getTarget();
+public class UniqueElementAssignmentConstraint extends AbstractModelMultiConstraint {
 
-		final List<IStatus> failures = new LinkedList<IStatus>();
+	@Override
+	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+		final EObject object = ctx.getTarget();
 
 		if (object instanceof AssignmentModel) {
 			final AssignmentModel assignmentModel = (AssignmentModel) object;
@@ -51,6 +45,10 @@ public class UniqueElementAssignmentConstraint extends AbstractModelConstraint {
 					final String message;
 					if (assignedObject instanceof Cargo) {
 						message = String.format("Element Assignment already exists for Cargo %s.", ((Cargo) assignedObject).getName());
+					} else if (assignedObject instanceof LoadSlot) {
+						message = String.format("Element Assignment already exists for DES Purchase Slot %s.", ((LoadSlot) assignedObject).getName());
+					} else if (assignedObject instanceof DischargeSlot) {
+						message = String.format("Element Assignment already exists for FOB Sale Slot %s.", ((DischargeSlot) assignedObject).getName());
 					} else if (assignedObject instanceof VesselEvent) {
 						message = String.format("Element Assignment already exists for Vessel Event %s.", ((VesselEvent) assignedObject).getName());
 					} else {
@@ -65,16 +63,6 @@ public class UniqueElementAssignmentConstraint extends AbstractModelConstraint {
 				seenObjects.put(elementAssignment.getAssignedObject(), elementAssignment);
 			}
 		}
-		if (failures.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
-		}
+		return Activator.PLUGIN_ID;
 	}
 }

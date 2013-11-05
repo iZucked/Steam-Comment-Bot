@@ -36,7 +36,7 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 		{
 			dp.setName("Profit and Loss");
 			dp.setDescription("Profit and Loss");
-			dp.setUnits("$");
+			dp.setUnitsPrefix("$");
 			dp.setObject(groupProfitAndLoss.getProfitAndLoss());
 			dp.setLabelProvider(new StringFormatLabelProvider("%,d"));
 		}

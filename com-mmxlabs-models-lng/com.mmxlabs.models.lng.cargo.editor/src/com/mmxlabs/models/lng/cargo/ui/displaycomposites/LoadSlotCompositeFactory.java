@@ -29,8 +29,8 @@ public class LoadSlotCompositeFactory extends DefaultDisplayCompositeFactory {
 		return new LoadSlotTopLevelComposite(composite, SWT.NONE, location, toolkit);
 	}
 
-//	@Override
-//	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
-//		return new SlotDetailComposite(parent, SWT.NONE, toolkit);
-//	}
+	@Override
+	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+		return new SlotDetailComposite(parent, SWT.NONE, toolkit);
+	}
 }

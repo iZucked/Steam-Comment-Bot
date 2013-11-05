@@ -4,52 +4,64 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-public class CargoTypeConstraint extends AbstractModelConstraint {
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
-	 */
+public class CargoTypeConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		final List<IStatus> failures = new LinkedList<IStatus>();
 		if (object instanceof Cargo) {
-//			final Cargo cargo = (Cargo) object;
-//			if (cargo.isAllowRewiring() && cargo.getCargoType() != CargoType.FLEET) {
-//
-//				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Non-shipped cargo  " + cargo.getName()
-//						+ " cannot be re-wired."));
-//
-//				failure.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring());
-//
-//				failures.add(failure);
-//			}
+			final Cargo cargo = (Cargo) object;
+
+			if (cargo.getCargoType() != CargoType.FLEET) {
+
+				for (final Slot s : cargo.getSlots()) {
+					if (s instanceof LoadSlot) {
+						final LoadSlot loadSlot = (LoadSlot) s;
+						if (loadSlot.isDESPurchase()) {
+							if (cargo.getCargoType() == CargoType.FOB) {
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo|" + cargo.getName()
+										+ " Cannot pair a DES Purchase to a FOB Sale."));
+								failure.addEObjectAndFeature(loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE);
+								failures.add(failure);
+							}
+						}
+					} else if (s instanceof DischargeSlot) {
+						final DischargeSlot dischargeSlot = (DischargeSlot) s;
+						if (dischargeSlot.isFOBSale()) {
+							if (cargo.getCargoType() == CargoType.DES) {
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo|" + cargo.getName()
+										+ " Cannot pair a DES Purchase to a FOB Sale."));
+								failure.addEObjectAndFeature(dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE);
+								failures.add(failure);
+							}
+						}
+					}
+
+				}
+
+			}
+
+			//
+			// }
 		}
 
-		if (failures.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
-		}
+		return Activator.PLUGIN_ID;
 	}
 }

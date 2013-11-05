@@ -388,6 +388,32 @@
                      class="Slot">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.DESPurchaseCVConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.DESPurchaseCVConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="DES Purchase CV Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.SlotContractTypeConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.SlotContractTypeConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="SlotContractTypeConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
         </constraints>
       </constraintProvider>
    </extension>

@@ -16,6 +16,8 @@ import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -66,8 +68,8 @@ public class AssignmentImporter {
 							if (root instanceof LNGScenarioModel) {
 								final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) root;
 
-								final AssignmentModel im = lngScenarioModel.getPortfolioModel().getAssignmentModel();
-								if (im != null) {
+								final AssignmentModel assignmentModel = lngScenarioModel.getPortfolioModel().getAssignmentModel();
+								if (assignmentModel != null) {
 									// Loop over all named objects and find the first object which can be used.
 									for (NamedObject o : context.getNamedObjects(aon.trim())) {
 
@@ -118,14 +120,14 @@ public class AssignmentImporter {
 											if (v != null) {
 												ea.setAssignment((Vessel) v);
 											} else {
+												// ...then generic set
 												final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
-												// Then generic set
 												if (v2 instanceof VesselClass) {
 													ea.setSpotIndex(spotIndex);
 													ea.setAssignment((VesselClass) v2);
 												}
 											}
-											im.getElementAssignments().add(ea);
+											assignmentModel.getElementAssignments().add(ea);
 											break;
 										}
 									}
@@ -142,6 +144,60 @@ public class AssignmentImporter {
 			}
 		} catch (final IOException e) {
 		}
+
+		// Ensure an element assignment exists for all valid Cargoes & slots
+		context.doLater(new IDeferment() {
+			@Override
+			public void run(final IImportContext context) {
+				final MMXRootObject root = context.getRootObject();
+				if (root instanceof LNGScenarioModel) {
+					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) root;
+
+					final CargoModel cargoModel = lngScenarioModel.getPortfolioModel().getCargoModel();
+					final AssignmentModel assignmentModel = lngScenarioModel.getPortfolioModel().getAssignmentModel();
+					if (assignmentModel != null && cargoModel != null) {
+
+						for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
+							if (loadSlot.isDESPurchase()) {
+								final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadSlot);
+								if (elementAssignment == null) {
+									final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
+									ea.setAssignedObject(loadSlot);
+									assignmentModel.getElementAssignments().add(ea);
+								}
+							}
+						}
+						for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
+							if (dischargeSlot.isFOBSale()) {
+								final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, dischargeSlot);
+								if (elementAssignment == null) {
+									final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
+									ea.setAssignedObject(dischargeSlot);
+									assignmentModel.getElementAssignments().add(ea);
+								}
+							}
+						}
+						for (final Cargo cargo : cargoModel.getCargoes()) {
+							if (cargo.getCargoType() == CargoType.FLEET) {
+								final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
+								if (elementAssignment == null) {
+									final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
+									ea.setAssignedObject(cargo);
+									assignmentModel.getElementAssignments().add(ea);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			@Override
+			public int getStage() {
+				// Delay - we want the previous deferments created above to run first
+				return IImportContext.STAGE_MODIFY_SUBMODELS + 10;
+			}
+		});
+
 	}
 
 	public List<Map<String, String>> exportAssignments(final AssignmentModel assignmentModel, final FleetModel fleetModel, final ScenarioFleetModel scenarioFleetModel) {
@@ -154,6 +210,8 @@ public class AssignmentImporter {
 			result.add(row);
 			row.put("vessels", ca.getVesselOrClass().getName());
 			final StringBuilder sb = new StringBuilder();
+
+			// TODO: Export column "type" to indicate Vessel or Vessel Class?
 
 			boolean comma = false;
 			for (final UUIDObject u : ca.getAssignedObjects()) {

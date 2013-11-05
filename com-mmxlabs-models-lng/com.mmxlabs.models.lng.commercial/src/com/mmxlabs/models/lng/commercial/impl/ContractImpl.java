@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.port.Port;
@@ -41,6 +42,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -214,6 +216,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected String notes = NOTES_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getContractType() <em>Contract Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContractType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ContractType CONTRACT_TYPE_EDEFAULT = ContractType.BOTH;
+
+	/**
+	 * The cached value of the '{@link #getContractType() <em>Contract Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContractType()
+	 * @generated
+	 * @ordered
+	 */
+	protected ContractType contractType = CONTRACT_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -510,6 +532,27 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ContractType getContractType() {
+		return contractType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setContractType(ContractType newContractType) {
+		ContractType oldContractType = contractType;
+		contractType = newContractType == null ? CONTRACT_TYPE_EDEFAULT : newContractType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__CONTRACT_TYPE, oldContractType, contractType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -551,6 +594,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getPriceInfo();
 			case CommercialPackage.CONTRACT__NOTES:
 				return getNotes();
+			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
+				return getContractType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -600,6 +645,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__NOTES:
 				setNotes((String)newValue);
 				return;
+			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
+				setContractType((ContractType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -645,6 +693,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
+				setContractType(CONTRACT_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -679,6 +730,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return priceInfo != null;
 			case CommercialPackage.CONTRACT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
+			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
+				return contractType != CONTRACT_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -735,6 +788,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(restrictedListsArePermissive);
 		result.append(", notes: ");
 		result.append(notes);
+		result.append(", contractType: ");
+		result.append(contractType);
 		result.append(')');
 		return result.toString();
 	}

@@ -35,6 +35,8 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -48,7 +50,6 @@ import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -58,12 +59,16 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -244,9 +249,12 @@ public class CargoEditorMenuHelper {
 				}
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
-				if (dischargeSlot.getCargo() != null) {
+				if (dischargeSlot.isFOBSale()) {
+					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), dischargeSlot);
+					createAssignmentMenus(manager, elementAssignment);
+				} else if (dischargeSlot.getCargo() != null) {
 					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), dischargeSlot.getCargo());
-					createAssignmentMenus(manager, dischargeSlot.getCargo(), elementAssignment);
+					createAssignmentMenus(manager, elementAssignment);
 				}
 			}
 
@@ -269,7 +277,7 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void createAssignmentMenus(final IMenuManager menuManager, final Cargo cargo, final ElementAssignment elementAssignment) {
+	private void createAssignmentMenus(final IMenuManager menuManager, final ElementAssignment elementAssignment) {
 		menuManager.add(new Separator());
 
 		{
@@ -278,23 +286,30 @@ public class CargoEditorMenuHelper {
 
 			final ScenarioFleetModel fleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
 			class AssignAction extends Action {
-				private final Vessel vessel;
+				private final AVesselSet<Vessel> vessel;
 
-				public AssignAction(final Vessel vessel) {
-					super(vessel.getName());
+				public AssignAction(String label, final AVesselSet<Vessel> vessel) {
+					super(label);
 					this.vessel = vessel;
 				}
 
 				public void run() {
-					final Command cmd = AssignmentEditorHelper.reassignElement(scenarioEditingLocation.getEditingDomain(), vessel, elementAssignment);
+
+					final Command cmd = vessel == null ? AssignmentEditorHelper.unassignElement(scenarioEditingLocation.getEditingDomain(), elementAssignment) : AssignmentEditorHelper
+							.reassignElement(scenarioEditingLocation.getEditingDomain(), vessel, elementAssignment);
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 				}
 			}
+
+			IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
+					.getValueProviderFactory(AssignmentPackage.eINSTANCE.getElementAssignment(), AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+			IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(AssignmentPackage.eINSTANCE.getElementAssignment(),
+					AssignmentPackage.eINSTANCE.getElementAssignment_Assignment(), scenarioModel);
+
 			if (elementAssignment != null) {
-				for (final VesselAvailability vesselAvailability : fleetModel.getVesselAvailabilities()) {
-					final Vessel vessel = vesselAvailability.getVessel();
-					if (vessel != elementAssignment.getAssignment()) {
-						reassignMenuManager.add(new AssignAction(vessel));
+				for (Pair<String, EObject> p : valueProvider.getAllowedValues(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment())) {
+					if (p.getSecond() != elementAssignment.getAssignment()) {
+						reassignMenuManager.add(new AssignAction(p.getFirst(), (AVesselSet<Vessel>) p.getSecond()));
 					}
 				}
 			}
@@ -355,9 +370,12 @@ public class CargoEditorMenuHelper {
 				}
 				createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 				createDeleteSlotMenu(manager, loadSlot);
-				if (loadSlot.getCargo() != null) {
+				if (loadSlot.isDESPurchase()) {
+					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), loadSlot);
+					createAssignmentMenus(manager, elementAssignment);
+				} else if (loadSlot.getCargo() != null) {
 					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), loadSlot.getCargo());
-					createAssignmentMenus(manager, loadSlot.getCargo(), elementAssignment);
+					createAssignmentMenus(manager, elementAssignment);
 				}
 			}
 		};
@@ -536,22 +554,22 @@ public class CargoEditorMenuHelper {
 	 * @return
 	 */
 	private boolean checkSourceContractConstraints(final Slot source, final Slot target) {
-		if (source.getContract() != null) {
-			final Contract sourceContract = source.getContract();
-			if (!sourceContract.getRestrictedPorts().isEmpty()) {
-				if (sourceContract.getRestrictedPorts().contains(target.getPort()) != sourceContract.isRestrictedListsArePermissive()) {
-					// Trying to pair to a restricted port - skip
-					return false;
-				}
-			}
-
-			if (!sourceContract.getRestrictedContracts().isEmpty() && target.getContract() != null) {
-				if (sourceContract.getRestrictedContracts().contains(target.getContract()) != sourceContract.isRestrictedListsArePermissive()) {
-					// Trying to pair to a restricted contract - skip
-					return false;
-				}
+		final EList<Port> restrictedPorts = source.getRestrictedPorts();
+		final EList<Contract> restrictedContracts = source.getRestrictedContracts();
+		final boolean areRestrictedListsPermissive = source.getSlotOrContractRestrictedListsArePermissive();
+		
+		if (restrictedContracts != null) {
+			if (restrictedContracts.contains(target.getContract()) != areRestrictedListsPermissive) {
+				return false;
 			}
 		}
+		
+		if (restrictedPorts != null) {
+			if (restrictedPorts.contains(target.getPort()) != areRestrictedListsPermissive) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 

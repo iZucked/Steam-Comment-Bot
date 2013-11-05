@@ -65,6 +65,7 @@ public class VesselStateAttributesItemProvider
 			addIdleNBORatePropertyDescriptor(object);
 			addIdleBaseRatePropertyDescriptor(object);
 			addInPortBaseRatePropertyDescriptor(object);
+			addServiceSpeedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -158,6 +159,28 @@ public class VesselStateAttributesItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Service Speed feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addServiceSpeedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselStateAttributes_serviceSpeed_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselStateAttributes_serviceSpeed_feature", "_UI_VesselStateAttributes_type"),
+				 FleetPackage.Literals.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -226,6 +249,7 @@ public class VesselStateAttributesItemProvider
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE:
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:

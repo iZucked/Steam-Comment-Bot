@@ -31,6 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getIdleBaseRate <em>Idle Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getInPortBaseRate <em>In Port Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getFuelConsumption <em>Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getServiceSpeed <em>Service Speed</em>}</li>
  * </ul>
  * </p>
  *
@@ -126,6 +127,26 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @ordered
 	 */
 	protected EList<FuelConsumption> fuelConsumption;
+
+	/**
+	 * The default value of the '{@link #getServiceSpeed() <em>Service Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getServiceSpeed()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double SERVICE_SPEED_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getServiceSpeed() <em>Service Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getServiceSpeed()
+	 * @generated
+	 * @ordered
+	 */
+	protected double serviceSpeed = SERVICE_SPEED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -247,6 +268,27 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getServiceSpeed() {
+		return serviceSpeed;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setServiceSpeed(double newServiceSpeed) {
+		double oldServiceSpeed = serviceSpeed;
+		serviceSpeed = newServiceSpeed;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED, oldServiceSpeed, serviceSpeed));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -274,6 +316,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return getInPortBaseRate();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
 				return getFuelConsumption();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
+				return getServiceSpeed();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -303,6 +347,9 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				getFuelConsumption().clear();
 				getFuelConsumption().addAll((Collection<? extends FuelConsumption>)newValue);
 				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
+				setServiceSpeed((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -330,6 +377,9 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
 				getFuelConsumption().clear();
 				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
+				setServiceSpeed(SERVICE_SPEED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -352,6 +402,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return inPortBaseRate != IN_PORT_BASE_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
 				return fuelConsumption != null && !fuelConsumption.isEmpty();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
+				return serviceSpeed != SERVICE_SPEED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -374,6 +426,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 		result.append(idleBaseRate);
 		result.append(", inPortBaseRate: ");
 		result.append(inPortBaseRate);
+		result.append(", serviceSpeed: ");
+		result.append(serviceSpeed);
 		result.append(')');
 		return result.toString();
 	}

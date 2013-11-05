@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.cargo;
 import java.util.Date;
 
+import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -32,6 +34,11 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  * </ul>
  * </p>
  *
@@ -639,6 +646,216 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	void setNotes(String value);
 
 	/**
+	 * Returns the value of the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Shipping Days Restriction</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Shipping Days Restriction</em>' attribute.
+	 * @see #setShippingDaysRestriction(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ShippingDaysRestriction()
+	 * @model
+	 * @generated
+	 */
+	int getShippingDaysRestriction();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Shipping Days Restriction</em>' attribute.
+	 * @see #getShippingDaysRestriction()
+	 * @generated
+	 */
+	void setShippingDaysRestriction(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Entity</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Entity</em>' reference.
+	 * @see #isSetEntity()
+	 * @see #unsetEntity()
+	 * @see #setEntity(LegalEntity)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Entity()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	LegalEntity getEntity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Entity</em>' reference.
+	 * @see #isSetEntity()
+	 * @see #unsetEntity()
+	 * @see #getEntity()
+	 * @generated
+	 */
+	void setEntity(LegalEntity value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetEntity()
+	 * @see #getEntity()
+	 * @see #setEntity(LegalEntity)
+	 * @generated
+	 */
+	void unsetEntity();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Entity</em>' reference is set.
+	 * @see #unsetEntity()
+	 * @see #getEntity()
+	 * @see #setEntity(LegalEntity)
+	 * @generated
+	 */
+	boolean isSetEntity();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.Contract}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Contracts</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Contracts</em>' reference list.
+	 * @see #isSetRestrictedContracts()
+	 * @see #unsetRestrictedContracts()
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedContracts()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	EList<Contract> getRestrictedContracts();
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRestrictedContracts()
+	 * @see #getRestrictedContracts()
+	 * @generated
+	 */
+	void unsetRestrictedContracts();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}' reference list is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Restricted Contracts</em>' reference list is set.
+	 * @see #unsetRestrictedContracts()
+	 * @see #getRestrictedContracts()
+	 * @generated
+	 */
+	boolean isSetRestrictedContracts();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.Port}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Ports</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Ports</em>' reference list.
+	 * @see #isSetRestrictedPorts()
+	 * @see #unsetRestrictedPorts()
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedPorts()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	EList<Port> getRestrictedPorts();
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRestrictedPorts()
+	 * @see #getRestrictedPorts()
+	 * @generated
+	 */
+	void unsetRestrictedPorts();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}' reference list is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Restricted Ports</em>' reference list is set.
+	 * @see #unsetRestrictedPorts()
+	 * @see #getRestrictedPorts()
+	 * @generated
+	 */
+	boolean isSetRestrictedPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Lists Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedListsArePermissive()
+	 * @see #unsetRestrictedListsArePermissive()
+	 * @see #setRestrictedListsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedListsArePermissive()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	boolean isRestrictedListsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
+	 * @see #isSetRestrictedListsArePermissive()
+	 * @see #unsetRestrictedListsArePermissive()
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedListsArePermissive(boolean value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRestrictedListsArePermissive()
+	 * @see #isRestrictedListsArePermissive()
+	 * @see #setRestrictedListsArePermissive(boolean)
+	 * @generated
+	 */
+	void unsetRestrictedListsArePermissive();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Restricted Lists Are Permissive</em>' attribute is set.
+	 * @see #unsetRestrictedListsArePermissive()
+	 * @see #isRestrictedListsArePermissive()
+	 * @see #setRestrictedListsArePermissive(boolean)
+	 * @generated
+	 */
+	boolean isSetRestrictedListsArePermissive();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -685,6 +902,38 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	int getSlotOrPortWindowSize();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	LegalEntity getSlotOrContractEntity();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<Contract> getSlotOrContractRestrictedContracts();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<Port> getSlotOrContractRestrictedPorts();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean getSlotOrContractRestrictedListsArePermissive();
 
 } // end of  Slot
 

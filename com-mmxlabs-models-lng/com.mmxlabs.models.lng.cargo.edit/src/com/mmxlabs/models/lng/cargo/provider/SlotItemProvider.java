@@ -74,6 +74,11 @@ public class SlotItemProvider
 			addCargoPropertyDescriptor(object);
 			addPricingDatePropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
+			addShippingDaysRestrictionPropertyDescriptor(object);
+			addEntityPropertyDescriptor(object);
+			addRestrictedContractsPropertyDescriptor(object);
+			addRestrictedPortsPropertyDescriptor(object);
+			addRestrictedListsArePermissivePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -392,6 +397,116 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Shipping Days Restriction feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShippingDaysRestrictionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_shippingDaysRestriction_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_shippingDaysRestriction_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__SHIPPING_DAYS_RESTRICTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Entity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEntityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_entity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_entity_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Contracts feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedContractsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedContracts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedContracts_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedPorts_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Lists Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedListsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_restrictedListsArePermissive_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_restrictedListsArePermissive_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -439,6 +554,8 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 			case CargoPackage.SLOT__PRICING_DATE:
 			case CargoPackage.SLOT__NOTES:
+			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
+			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
