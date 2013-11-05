@@ -110,4 +110,6 @@ public final class SchedulerConstants {
 	public static final String DCP_nominatedVesselProvider = "provider-nominated-vessel";
 
 	public static final String DCP_shippingHoursRestrictionProvider = "provider-shipping-hours-restriction";
+
+	public static final String DCP_portVisitDurationProvider = "provider-port-visit-durations";
 }

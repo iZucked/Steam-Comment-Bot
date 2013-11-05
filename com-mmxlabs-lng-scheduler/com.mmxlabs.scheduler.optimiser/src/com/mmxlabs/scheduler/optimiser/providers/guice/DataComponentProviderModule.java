@@ -68,6 +68,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -97,6 +99,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShipToShipBindingProviderEditor;
@@ -288,6 +291,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapShippingHoursRestrictionProviderEditor shippingHoursRestrictionProviderEditor = new HashMapShippingHoursRestrictionProviderEditor(SchedulerConstants.DCP_shippingHoursRestrictionProvider);
 		bind(IShippingHoursRestrictionProvider.class).toInstance(shippingHoursRestrictionProviderEditor);
 		bind(IShippingHoursRestrictionProviderEditor.class).toInstance(shippingHoursRestrictionProviderEditor);
+
+		final HashMapPortVisitDurationProviderEditor portVisitDurationProviderEditor = new HashMapPortVisitDurationProviderEditor(SchedulerConstants.DCP_portVisitDurationProvider);
+		bind(IPortVisitDurationProvider.class).toInstance(portVisitDurationProviderEditor);
+		bind(IPortVisitDurationProviderEditor.class).toInstance(portVisitDurationProviderEditor);
 
 	}
 
