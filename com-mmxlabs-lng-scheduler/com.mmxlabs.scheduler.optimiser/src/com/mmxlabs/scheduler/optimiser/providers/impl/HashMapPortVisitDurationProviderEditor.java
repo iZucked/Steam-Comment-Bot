@@ -62,6 +62,7 @@ public class HashMapPortVisitDurationProviderEditor implements IPortVisitDuratio
 			m = visitDurationsMap.get(port);
 		} else {
 			m = new EnumMap<>(PortType.class);
+			visitDurationsMap.put(port, m);
 		}
 		m.put(portType, duration);
 	}
