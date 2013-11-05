@@ -28,7 +28,6 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -95,7 +94,6 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 				if (!scenarioVessels.contains(vessel)) {
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel event " + event.getName()
 							+ " is assigned to non-scenario vessel " + vessel.getName()));
-					failure.addEObjectAndFeature(event, MMXCorePackage.eINSTANCE.getNamedObject_Name());
 					failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
 
 					failures.add(failure);
@@ -105,9 +103,9 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 				if (cargo.getCargoType() == CargoType.FLEET) {
 					if (vessel instanceof Vessel) {
 						if (!scenarioVessels.contains(vessel)) {
-							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getName()
 									+ " is assigned to non-scenario vessel " + vessel.getName()));
-							failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+							failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 
 							failures.add(failure);
 						}
@@ -117,14 +115,13 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 						if (scenarioVessels.contains(vessel)) {
 							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
 									+ " is assigned to scenario vessel " + vessel.getName() + "."));
-							failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
-
+							failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 							failures.add(failure);
 						}
 					} else if (vessel != null) {
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
 								+ " can only be assigned to a specific vessel"));
-						failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+						failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 
 						failures.add(failure);
 					}
@@ -143,15 +140,13 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 						if (scenarioVessels.contains(vessel)) {
 							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot " + slot.getName()
 									+ " is assigned to scenario vessel " + vessel.getName() + "."));
-							failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
-
+							failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 							failures.add(failure);
 						}
 					} else if (vessel != null) {
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot " + slot.getName()
 								+ " can only be assigned to a specific vessel"));
-						failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
-
+						failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
 						failures.add(failure);
 					}
 				}
