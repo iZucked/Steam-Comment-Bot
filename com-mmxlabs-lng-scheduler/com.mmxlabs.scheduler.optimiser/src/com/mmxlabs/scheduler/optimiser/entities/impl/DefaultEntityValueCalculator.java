@@ -55,20 +55,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	@Inject
 	private IPortCostProvider portCostProvider;
 
-	public DefaultEntityValueCalculator() {
-
-	}
-
-	@Override
-	public void init(final IOptimisationData data) {
-
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
 	/**
 	 * evaluate the group value of the given cargo
 	 * 
