@@ -414,6 +414,19 @@
                   {0}
                </message>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.ShippingDaysRestrictionConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.ShippingDaysRestrictionConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="ShippingDaysRestrictionConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
         </constraints>
       </constraintProvider>
    </extension>

@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,15 +14,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.text.StyledEditorKit.ForegroundAction;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
-import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.internal.win32.WNDCLASS;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -40,6 +39,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.ExpandableSet.ExpansionListener;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -61,6 +61,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowSize = CargoFeatures.getSlot_WindowSize();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
+	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
 
 	private static final String WindowDateFormatString = "dd MMM YYYY";
 
@@ -78,9 +79,11 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private HashSet<EStructuralFeature> windowTitleFeatures;
 	private ArrayList<EStructuralFeature[]> loadTermsFeatures;
 	private ArrayList<EStructuralFeature[]> dischargeTermsFeatures;
-	private ArrayList<EStructuralFeature[]> missedFeatures;
 	private ArrayList<EStructuralFeature[]> noteFeatures;
 	private HashSet<EStructuralFeature> allFeatures;
+
+	private ArrayList<EStructuralFeature[]> missedFeatures;
+	private ArrayList<EStructuralFeature> missedFeaturesList;
 	
 	{
 		allFeatures = new HashSet<EStructuralFeature>();
@@ -121,6 +124,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		noteFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
 		allFeatures.addAll(getAllFeatures(noteFeatures));
 		
+		missedFeaturesList = new ArrayList<EStructuralFeature>();
 		missedFeatures = new ArrayList<EStructuralFeature[]>();		
 	}
 
@@ -203,7 +207,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			final EStructuralFeature f = editor.getFeature();
 			feature2Editor.put(f, editor);
 			if (!allFeatures.contains(f)) {
-				missedFeatures.add(new EStructuralFeature[] {f});
+				missedFeaturesList.add(f);
+				allFeatures.add(f);
 			}
 		}
 
@@ -247,6 +252,19 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		createSpacer();
+		
+		HashSet<EStructuralFeature> contractFeatures = new HashSet<EStructuralFeature>();
+		for (EStructuralFeature f : missedFeaturesList) {
+			
+			if(f.getEContainingClass().getEAllSuperTypes().contains(SlotContractParams)){
+				contractFeatures.add(f);
+			}
+		}		
+		for (EStructuralFeature f : contractFeatures) {
+			pricingFeatures.add(new EStructuralFeature[]{f});
+			missedFeaturesList.remove(f);
+		}
+
 		makeExpandable(root, object, dbc, esPricing, pricingFeatures, pricingTitleFeatures, false);
 
 		createSpacer();
@@ -255,7 +273,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		createSpacer();
 		makeExpandable(root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, false);
 
-		if(!missedFeatures.isEmpty()) {		
+		if(!missedFeaturesList.isEmpty()) {		
 //			System.out.println(object);
 //			System.out.println(missedFeatures.size());
 //			for (EStructuralFeature[] eStructuralFeatures : missedFeatures) {
@@ -263,7 +281,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 //					System.out.println(eStructuralFeature);
 //				}
 //			}
+			
 			createSpacer();
+			missedFeaturesList.size();
+			for (EStructuralFeature f : missedFeaturesList) {
+				missedFeatures.add(new EStructuralFeature[] {f});
+			}
 			makeExpandable(root, object, dbc, esOther, missedFeatures, null, false);
 		}
 

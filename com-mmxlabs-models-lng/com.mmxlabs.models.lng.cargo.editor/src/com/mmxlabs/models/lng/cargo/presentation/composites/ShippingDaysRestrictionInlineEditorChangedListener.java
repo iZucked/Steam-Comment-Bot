@@ -39,7 +39,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 			if (input instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) input;
 				if (loadSlot.isDESPurchase()) {
-					final Port port = loadSlot.getPort();
+					final Port port = notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Port() ? (Port) notification.getNewValue() : loadSlot.getPort();
 					if (port != null && port.getCapabilities().contains(PortCapability.LOAD)) {
 						editor.setEditorEnabled(true);
 						editor.setEditorVisible(true);
@@ -47,11 +47,14 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 						editor.setEditorEnabled(false);
 						editor.setEditorVisible(false);
 					}
+				} else {
+					editor.setEditorEnabled(false);
+					editor.setEditorVisible(false);
 				}
 			} else if (input instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) input;
 				if (dischargeSlot.isFOBSale()) {
-					final Port port = dischargeSlot.getPort();
+					final Port port = notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Port() ? (Port) notification.getNewValue() : dischargeSlot.getPort();
 					if (port != null && port.getCapabilities().contains(PortCapability.DISCHARGE)) {
 						editor.setEditorEnabled(true);
 						editor.setEditorVisible(true);
@@ -59,6 +62,9 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 						editor.setEditorEnabled(false);
 						editor.setEditorVisible(false);
 					}
+				} else {
+					editor.setEditorEnabled(false);
+					editor.setEditorVisible(false);
 				}
 			}
 		}
@@ -79,6 +85,9 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 					editor.setEditorEnabled(false);
 					editor.setEditorVisible(false);
 				}
+			} else {
+				editor.setEditorEnabled(false);
+				editor.setEditorVisible(false);
 			}
 		} else if (input instanceof DischargeSlot) {
 			final DischargeSlot dischargeSlot = (DischargeSlot) input;
@@ -91,6 +100,9 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 					editor.setEditorEnabled(false);
 					editor.setEditorVisible(false);
 				}
+			} else {
+				editor.setEditorEnabled(false);
+				editor.setEditorVisible(false);
 			}
 		}
 	}
