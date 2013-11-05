@@ -60,6 +60,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				final ElementAssignment elementAssignment = (ElementAssignment) dcsd.getTarget();
 				if (elementAssignment.getAssignedObject() instanceof Cargo) {
 					return true;
+				} else if (elementAssignment.getAssignedObject() instanceof LoadSlot) {
+					return true;
+				} else if (elementAssignment.getAssignedObject() instanceof DischargeSlot) {
+					return true;
 				}
 			} else if (dcsd.getTarget() instanceof AssignmentModel) {
 				for (final EObject object : dcsd.getObjects()) {
@@ -97,6 +101,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				final ElementAssignment elementAssignment = (ElementAssignment) dcsd.getTarget();
 				if (elementAssignment.getAssignedObject() instanceof Cargo) {
 					cargo = (Cargo) elementAssignment.getAssignedObject();
+				} else if (elementAssignment.getAssignedObject() instanceof LoadSlot) {
+					loadSlot = (LoadSlot) elementAssignment.getAssignedObject();
+				} else if (elementAssignment.getAssignedObject() instanceof DischargeSlot) {
+					dischargeSlot = (DischargeSlot) elementAssignment.getAssignedObject();
 				}
 			} else if (dcsd.getTarget() instanceof AssignmentModel) {
 				for (final EObject object : dcsd.getObjects()) {
