@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
  * Instances of this do the heavy lifting for import jobs. Some model elements do not fit into this form and should be
@@ -38,7 +39,7 @@ public interface IClassImporter {
 	 * @param context
 	 * @return
 	 */
-	public Collection<EObject> importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 	/**
 	 * Turn the given collection of objects into a bunch of key-value maps, for export to something like a CSV writer.
 	 * @param objects

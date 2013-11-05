@@ -74,7 +74,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 		
 		final Collection<EObject> values;
 		
-		values = classImporter.importObject(instance, reference.getEReferenceType(), map, context);
+		values = classImporter.importObject(instance, reference.getEReferenceType(), map, context).createdObjects;
 		
 
 		final Iterator<EObject> iterator = values.iterator();
@@ -175,42 +175,56 @@ public class MultiLineImporter extends DefaultClassImporter {
 	 */
 	public EObject getObject(final EObject parent, final EClass eClass, final Map<String, String> row) {
 		EObject result = null;
-		Pair<EObject, String> cacheKey = null; 				
 
 		final String indexField = getIndexField(parent, eClass);
 				
 		if (indexField != null) {
-			cacheKey = new Pair<EObject, String>(parent, row.get(indexField));
+			Pair<EObject, String> cacheKey = new Pair<EObject, String>(parent, row.get(indexField));
 			result = objectMap.get(cacheKey);  
-		}
-		
-		if (result == null) {
-			result = eClass.getEPackage().getEFactoryInstance().create(eClass);
-			if (cacheKey != null) {
-				objectMap.put(cacheKey, result);
-			}
 		}
 		
 		return result;
 	}
 	
-	public Collection<EObject> importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public EObject makeObject(final EObject parent, final EClass eClass, final Map<String, String> row) {
+		final EObject result = eClass.getEPackage().getEFactoryInstance().create(eClass);
+
+		final String indexField = getIndexField(parent, eClass);
+		
+		if (indexField != null) {
+			final Pair<EObject, String> cacheKey = new Pair<EObject, String>(parent, row.get(indexField));
+			objectMap.put(cacheKey, result);
+		}
+
+		return result;		
+	}
+	
+	@Override
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
 		try {
-			// make sure the instance is looked up instead of created if it already exists
-			final EObject instance = getObject(parent, rowClass, row);
-			final LinkedList<EObject> results = new LinkedList<EObject>();
-			results.add(instance);
+			boolean objectCreated = false;
+			// look up to see if the instance already exists
+			EObject instance = getObject(parent, rowClass, row);
+			if (instance == null) {
+				// otherwise, make a new one
+				instance = makeObject(parent, rowClass, row);
+				// and add it to the list of created objects
+				objectCreated = true;
+			}
+			
+			final ImportResults results = new ImportResults(instance, objectCreated);
+			
 			importAttributes(row, context, rowClass, instance);
 			if (row instanceof IFieldMap) {
-				importReferences((IFieldMap) row, context, rowClass, instance, results);
+				importReferences((IFieldMap) row, context, rowClass, instance, results.createdObjects);
 			} else {
-				importReferences(new FieldMap(row), context, rowClass, instance, results);
+				importReferences(new FieldMap(row), context, rowClass, instance, results.createdObjects);
 			}
 			return results;
 		} catch (final IllegalArgumentException illegal) {
 			context.addProblem(context.createProblem(row.get(KIND_KEY) + " is not a valid kind of " + rowClass.getName(), true, true, true));
-			return Collections.emptySet();
+			return new ImportResults(null);
 		}
 	}
 	

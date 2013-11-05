@@ -5,6 +5,7 @@
 package com.mmxlabs.models.util.importer.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -44,6 +45,31 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 public class DefaultClassImporter implements IClassImporter {
 	protected static final String KIND_KEY = "kind";
 	protected static final String DOT = ".";
+	
+	/**
+	 * Simple record structure class to hold results of importing
+	 * a row of CSV data.
+	 * @author Simon McGregor
+	 *
+	 * @param <T>
+	 */
+	public static class ImportResults {
+		final public EObject importedObject;
+		final public LinkedList<EObject> createdObjects = new LinkedList<EObject>();
+		
+		public ImportResults(EObject object, boolean created) {
+			importedObject = object;
+			if (created) {
+				createdObjects.add(object);
+			}
+		}
+		
+		public ImportResults(EObject object) {
+			this(object, true);
+		}
+		
+	}
+	
 	/**
 	 * @since 2.0
 	 */
@@ -63,13 +89,13 @@ public class DefaultClassImporter implements IClassImporter {
 
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
-		final LinkedList<EObject> results = new LinkedList<EObject>();
+		final List<EObject> results = new ArrayList<EObject>();
 		try {
 			try {
 				context.pushReader(reader);
 				Map<String, String> row;
 				while ((row = reader.readRow(true)) != null) {
-					results.addAll(importObject(null, importClass, row, context));
+					results.addAll(importObject(null, importClass, row, context).createdObjects);
 				}
 			} finally {
 				reader.close();
@@ -125,22 +151,21 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
 		try {
 			final EObject instance = rowClass.getEPackage().getEFactoryInstance().create(rowClass);
-			final LinkedList<EObject> results = new LinkedList<EObject>();
-			results.add(instance);
+			final ImportResults results = new ImportResults(instance);
 			importAttributes(row, context, rowClass, instance);
 			if (row instanceof IFieldMap) {
-				importReferences((IFieldMap) row, context, rowClass, instance, results);
+				importReferences((IFieldMap) row, context, rowClass, instance, results.createdObjects);
 			} else {
-				importReferences(new FieldMap(row), context, rowClass, instance, results);
+				importReferences(new FieldMap(row), context, rowClass, instance, results.createdObjects);
 			}
 			return results;
 		} catch (final IllegalArgumentException illegal) {
 			context.addProblem(context.createProblem(row.get(KIND_KEY) + " is not a valid kind of " + rowClass.getName(), true, true, true));
-			return Collections.emptySet();
+			return new ImportResults(null);
 		}
 	}
 
@@ -179,7 +204,8 @@ public class DefaultClassImporter implements IClassImporter {
 							for (int i = 0; i < count; ++i) {
 								final IFieldMap childMap = subKeys.getSubMap(i + DOT);
 								final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
-								final Collection<EObject> values = classImporter.importObject(instance, reference.getEReferenceType(), childMap, context);
+								final ImportResults importResults = classImporter.importObject(instance, reference.getEReferenceType(), childMap, context);
+								final Collection<EObject> values = importResults.createdObjects;
 								final Iterator<EObject> iterator = values.iterator();
 								final EObject importObject = iterator.next();
 								references.add(importObject);
@@ -209,7 +235,7 @@ public class DefaultClassImporter implements IClassImporter {
 						context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 					} else {
 						final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
-						final Collection<EObject> values = classImporter.importObject(instance, reference.getEReferenceType(), subKeys, context);
+						final Collection<EObject> values = classImporter.importObject(instance, reference.getEReferenceType(), subKeys, context).createdObjects;
 						final Iterator<EObject> iterator = values.iterator();
 						if (iterator.hasNext()) {
 							instance.eSet(reference, iterator.next());
