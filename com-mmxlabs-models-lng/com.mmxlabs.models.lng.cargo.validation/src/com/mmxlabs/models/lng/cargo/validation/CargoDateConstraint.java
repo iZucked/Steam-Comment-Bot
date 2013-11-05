@@ -210,7 +210,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) object;
 			// final Slot loadSlot = cargo.getLoadSlot();
 			// final Slot dischargeSlot = cargo.getDischargeSlot();
-//			if (cargo.getCargoType().equals(CargoType.FLEET)) {
+			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 
 				// && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
 				// }
@@ -240,7 +240,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					}
 					prevSlot = slot;
 				}
-//			}
+			}
 		}
 
 		return Activator.PLUGIN_ID;
