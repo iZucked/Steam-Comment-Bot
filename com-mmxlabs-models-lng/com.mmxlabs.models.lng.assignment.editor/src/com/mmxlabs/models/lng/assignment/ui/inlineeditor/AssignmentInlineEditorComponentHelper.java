@@ -418,10 +418,10 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 							} else if (vessel instanceof VesselClass) {
 								// assign to a new spot
 								if (rootObject instanceof LNGScenarioModel) {
-									final AssignmentModel im = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
-									if (im != null) {
+									final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
+									if (assignmentModel != null) {
 										int maxSpot = 0;
-										for (final ElementAssignment ea : im.getElementAssignments()) {
+										for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
 											maxSpot = Math.max(maxSpot, ea.getSpotIndex());
 										}
 										maxSpot++;
