@@ -587,6 +587,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		purchaseContractEClass.getESuperTypes().add(this.getContract());
 		lngPriceCalculatorParametersEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		expressionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		slotContractParamsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

@@ -151,6 +151,8 @@ public class CommercialSwitch<T> extends Switch<T> {
 			case CommercialPackage.SLOT_CONTRACT_PARAMS: {
 				SlotContractParams slotContractParams = (SlotContractParams)theEObject;
 				T result = caseSlotContractParams(slotContractParams);
+				if (result == null) result = caseUUIDObject(slotContractParams);
+				if (result == null) result = caseMMXObject(slotContractParams);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
