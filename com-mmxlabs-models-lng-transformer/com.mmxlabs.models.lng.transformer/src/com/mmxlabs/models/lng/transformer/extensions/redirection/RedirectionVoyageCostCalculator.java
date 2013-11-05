@@ -46,7 +46,7 @@ public class RedirectionVoyageCostCalculator implements IVoyageCostCalculator {
 
 		// Generate a notional voyage plan
 		final int travelTime = Calculator.getTimeFromSpeedDistance(notionalSpeed, distance);
-		// TODO: Extend API to contain port default
+		// TODO: Use actual if present
 		final int notionalLoadDuration = portVisitDurationProvider.getVisitDuration(loadPort, PortType.Load);
 		final int notionalDischargeDuration = portVisitDurationProvider.getVisitDuration(dischargePort, PortType.Discharge);
 
