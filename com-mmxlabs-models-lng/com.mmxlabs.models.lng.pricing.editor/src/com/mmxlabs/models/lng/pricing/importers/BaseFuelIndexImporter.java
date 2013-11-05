@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -16,6 +15,7 @@ import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
  * Custom import logic for loading a base fuel index.
@@ -28,7 +28,7 @@ public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 	private static final String NAME = "name";
 
 	@Override
-	public Collection<EObject> importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		BaseFuelIndex result = PricingFactory.eINSTANCE.createBaseFuelIndex();
 
 		if (row.containsKey(NAME)) {
@@ -42,7 +42,7 @@ public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 
 		context.registerNamedObject(result);
 
-		return Collections.singleton((EObject) result);
+		return new ImportResults(result);
 	}
 
 	protected Comparator<String> getFieldNameOrderComparator() {

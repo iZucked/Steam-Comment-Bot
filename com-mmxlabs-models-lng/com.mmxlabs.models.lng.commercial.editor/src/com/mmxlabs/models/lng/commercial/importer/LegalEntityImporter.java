@@ -86,14 +86,14 @@ public class LegalEntityImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(final EObject parent, EClass targetClass, Map<String, String> row, IImportContext context) {
+	public ImportResults importObject(final EObject parent, EClass targetClass, Map<String, String> row, IImportContext context) {
 
 		// use the default importer to import the object's usual attributes
-		final Collection<EObject> result = super.importObject(parent, targetClass, row, context);
+		final ImportResults result = super.importObject(parent, targetClass, row, context);
 
 		// pick the legal entity which was created by the default importer
 		LegalEntity entity = null;
-		for (final EObject object : result) {
+		for (final EObject object : result.createdObjects) {
 			if (object instanceof LegalEntity) {
 				if (entity != null) {
 					context.addProblem(context.createProblem("Multiple entities created for one import line.", true, true, true));

@@ -35,6 +35,7 @@ import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
  * Generic import logic for loading index data. 
@@ -58,7 +59,7 @@ abstract public class GenericIndexImporter<TargetClass> implements IClassImporte
 		try {
 			context.pushReader(reader);
 			while (null != (row = reader.readRow(true))) {
-				result.addAll(importObject(null, targetClass, row, context));
+				result.addAll(importObject(null, targetClass, row, context).createdObjects);
 			}
 		} catch (final IOException e) {
 			context.addProblem(context.createProblem("IO Error " + e.getMessage(), true, true, false));
@@ -151,7 +152,7 @@ abstract public class GenericIndexImporter<TargetClass> implements IClassImporte
 	}
 
 	@Override
-	abstract public Collection<EObject> importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
+	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 	
 	protected Comparator<String> getFieldNameOrderComparator() {
 		return new Comparator<String>() {

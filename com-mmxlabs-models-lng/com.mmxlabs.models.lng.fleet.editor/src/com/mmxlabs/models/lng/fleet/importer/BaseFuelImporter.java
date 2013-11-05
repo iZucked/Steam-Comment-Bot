@@ -33,9 +33,9 @@ public class BaseFuelImporter extends DefaultClassImporter {
 	private static String indexKey = "index";
 	
 	@Override
-	public Collection<EObject> importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
-		final Collection<EObject> result = super.importObject(parent, eClass, row, context);
-		final BaseFuel fuel = (BaseFuel) result.iterator().next();
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+		final ImportResults result = super.importObject(parent, eClass, row, context);
+		final BaseFuel fuel = (BaseFuel) result.importedObject;
 
 		if (row.containsKey(indexKey)) {
 			final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();

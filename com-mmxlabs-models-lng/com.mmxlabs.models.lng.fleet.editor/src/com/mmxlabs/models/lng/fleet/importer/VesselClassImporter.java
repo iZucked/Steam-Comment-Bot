@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.importer;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -67,9 +66,9 @@ public class VesselClassImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(final EObject parent, EClass eClass, Map<String, String> row, IImportContext context) {
-		final Collection<EObject> result = super.importObject(parent, eClass, row, context);
-		final VesselClass vc = (VesselClass) result.iterator().next();
+	public ImportResults importObject(final EObject parent, EClass eClass, Map<String, String> row, IImportContext context) {
+		final ImportResults result = super.importObject(parent, eClass, row, context);
+		final VesselClass vc = (VesselClass) result.importedObject;
 		final HashSet<String> pricedCanals = new HashSet<String>();
 		final HashSet<String> parameterisedCanals = new HashSet<String>();
 		for (final String key : row.keySet()) {
@@ -94,7 +93,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 						subMap.put("route", canalName);
 						if (row.containsKey("name"))
 							subMap.put("vesselclass", row.get("name"));
-						final RouteCost cost = (RouteCost) routeCostImporter.importObject(parent, PricingPackage.eINSTANCE.getRouteCost(), subMap, context).iterator().next();
+						final RouteCost cost = (RouteCost) routeCostImporter.importObject(parent, PricingPackage.eINSTANCE.getRouteCost(), subMap, context).importedObject;
 
 						context.doLater(new IDeferment() {
 							@Override
@@ -134,7 +133,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 						subMap.put("route", canalName);
 
 						final VesselClassRouteParameters parameters = (VesselClassRouteParameters) parameterImporter
-								.importObject(parent, FleetPackage.eINSTANCE.getVesselClassRouteParameters(), subMap, context).iterator().next();
+								.importObject(parent, FleetPackage.eINSTANCE.getVesselClassRouteParameters(), subMap, context).importedObject;
 
 						context.doLater(new IDeferment() {
 							@Override

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
@@ -24,9 +22,9 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  */
 public class PortCostImporter extends DefaultClassImporter {
 	@Override
-	public Collection<EObject> importObject(final EObject parent, EClass eClass,
+	public ImportResults importObject(final EObject parent, EClass eClass,
 			Map<String, String> row, IImportContext context) {
-		final PortCost cost = (PortCost) super.importObject(parent, eClass, row, context).iterator().next();
+		final PortCost cost = (PortCost) super.importObject(parent, eClass, row, context).importedObject;
 		
 		for (final PortCapability pc : PortCapability.values()) {
 			final PortCostEntry pce = PricingFactory.eINSTANCE.createPortCostEntry();
@@ -43,7 +41,7 @@ public class PortCostImporter extends DefaultClassImporter {
 			cost.getEntries().add(pce);
 		}
 		
-		return Collections.singleton((EObject)cost);
+		return new ImportResults((EObject)cost);
 	}
 
 	@Override

@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -34,6 +33,7 @@ import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
  * Custom import logic for loading a {@link CharterIndex}.
@@ -56,7 +56,7 @@ public class CharterIndexImporter implements IClassImporter {
 		try {
 			context.pushReader(reader);
 			while (null != (row = reader.readRow(true))) {
-				result.addAll(importObject(null, targetClass, row, context));
+				result.addAll(importObject(null, targetClass, row, context).createdObjects);
 			}
 		} catch (final IOException e) {
 			context.addProblem(context.createProblem("IO Error " + e.getMessage(), true, true, false));
@@ -68,7 +68,7 @@ public class CharterIndexImporter implements IClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		CharterIndex result = PricingFactory.eINSTANCE.createCharterIndex();
 
 		final Index<Integer> indexData;
@@ -139,7 +139,7 @@ public class CharterIndexImporter implements IClassImporter {
 
 		context.registerNamedObject(result);
 
-		return Collections.singleton((EObject) result);
+		return new ImportResults((EObject) result);
 	}
 
 	@Override

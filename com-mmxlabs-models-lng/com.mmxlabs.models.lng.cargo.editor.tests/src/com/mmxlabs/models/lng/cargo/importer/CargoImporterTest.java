@@ -59,7 +59,7 @@ public class CargoImporterTest {
 		}
 		final CargoImporter cargoImporter = new CargoImporter();
 		final IImportContext context = Mockito.mock(IImportContext.class);
-		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context);
+		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context).createdObjects;
 
 		Assert.assertEquals(2, importedObjects.size());
 
@@ -123,7 +123,7 @@ public class CargoImporterTest {
 		}
 		final CargoImporter cargoImporter = new CargoImporter();
 		final IImportContext context = Mockito.mock(IImportContext.class);
-		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context);
+		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context).createdObjects;
 
 		Assert.assertEquals(2, importedObjects.size());
 
