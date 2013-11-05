@@ -87,8 +87,8 @@ public class CargoSlotOrderConstraintTest {
 		final CargoSlotOrderConstraint constraint = new CargoSlotOrderConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertNotSame(successStatus, status);
-		Assert.assertFalse("Expect failure status", status.isOK());
+		Assert.assertSame(successStatus, status);
+		Assert.assertTrue("Expect success status", status.isOK());
 	}
 
 	@Test
@@ -161,8 +161,8 @@ public class CargoSlotOrderConstraintTest {
 		final CargoSlotOrderConstraint constraint = new CargoSlotOrderConstraint();
 		final IStatus status = constraint.validate(ctx);
 
-		Assert.assertNotSame(successStatus, status);
-		Assert.assertFalse("Expect failure status", status.isOK());
+		Assert.assertSame(successStatus, status);
+		Assert.assertTrue("Expect success status", status.isOK());
 	}
 
 	@Test
