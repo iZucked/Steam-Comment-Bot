@@ -568,7 +568,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final EndPortSlot slot = new EndPortSlot(name, port, null);
 		final SequenceElement element = new SequenceElement(indexingContext, "return-to-" + port.getName());
 
-		// set element duration to 1 hour, just so it's visible on the chart
 		elementDurationsProvider.setElementDuration(element, 0);
 
 		portProvider.setPortForElement(port, element);
