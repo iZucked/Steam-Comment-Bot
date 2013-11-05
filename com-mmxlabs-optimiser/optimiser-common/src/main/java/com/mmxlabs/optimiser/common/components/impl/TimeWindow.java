@@ -54,4 +54,9 @@ public final class TimeWindow implements ITimeWindow {
 		// Based on Arrays.hashCode(int[])
 		return (31 * start) + end;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("[%d, %d)", start, end);
+	}
 }
