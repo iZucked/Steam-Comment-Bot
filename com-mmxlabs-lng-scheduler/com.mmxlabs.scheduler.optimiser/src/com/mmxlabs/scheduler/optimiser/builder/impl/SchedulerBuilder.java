@@ -1853,7 +1853,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setNominatedVessel(@NonNull final IPortSlot slot, @NonNull final IVessel vessel) {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
-		nominatedVesselProviderEditor.setNominatedVessel(element, vessel);
+		IVessel resourceVessel = virtualVesselMap.get(element);
+		IResource resource = vesselProvider.getResource(resourceVessel);
+		nominatedVesselProviderEditor.setNominatedVessel(element, resource, vessel);
 	}
 
 	@Override
