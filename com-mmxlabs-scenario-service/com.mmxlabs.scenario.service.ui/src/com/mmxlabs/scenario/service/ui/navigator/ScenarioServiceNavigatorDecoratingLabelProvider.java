@@ -31,7 +31,7 @@ import org.eclipse.ui.internal.navigator.NavigatorDecoratingLabelProvider;
  * Fork of the {@link NavigatorDecoratingLabelProvider} to override {@link #getColumnImage(Object, int)};
  */
 @SuppressWarnings("restriction")
-public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingStyledCellLabelProvider implements IPropertyChangeListener, ILabelProvider, ITableLabelProvider, ITableFontProvider {
+public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingStyledCellLabelProvider implements IPropertyChangeListener, ILabelProvider, IColorProvider, ITableLabelProvider, ITableFontProvider {
 
 	private static class StyledLabelProviderAdapter implements IStyledLabelProvider, ITableLabelProvider, IColorProvider, IFontProvider, ITableFontProvider {
 
@@ -304,5 +304,10 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	@Override
 	public Font getFont(final Object element, final int columnIndex) {
 		return ((StyledLabelProviderAdapter) getStyledStringProvider()).getFont(element, columnIndex);
+	}
+	
+	@Override
+	public Color getForeground(Object element) {
+		return ((StyledLabelProviderAdapter) getStyledStringProvider()).getForeground(element);
 	}
 }

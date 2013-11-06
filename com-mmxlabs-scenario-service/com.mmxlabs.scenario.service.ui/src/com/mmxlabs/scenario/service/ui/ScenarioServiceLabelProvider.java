@@ -6,12 +6,14 @@ package com.mmxlabs.scenario.service.ui;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -21,12 +23,16 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 import com.mmxlabs.scenario.service.ui.navigator.PieChartRenderer;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
-public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider implements IFontProvider {
+public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider implements IFontProvider, IColorProvider {
+	
+	private final Color Grey = new Color(Display.getCurrent(), new RGB(64, 64, 64));
+
 	private final ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> selectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(
 			Activator.getDefault().getBundle().getBundleContext(), IScenarioServiceSelectionProvider.class, null);
 
@@ -44,6 +50,8 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 	private final Image pinImage;
 
+	private Font boldFont;
+
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		selectionProviderTracker.open();
@@ -54,6 +62,13 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		jobComplete = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/complete_job.gif").createImage();
 		majorColor = new Color(Display.getDefault(), 240, 80, 85);
 		defaultMinorColour = new Color(Display.getDefault(), 100, 230, 120);
+		
+		final Font systemFont = Display.getDefault().getSystemFont();
+		// Clone the font data
+		final FontData fd = new FontData(systemFont.getFontData()[0].toString());
+		// Set the bold bit.
+		fd.setStyle(fd.getStyle() | SWT.BOLD);
+		boldFont = new Font(Display.getDefault(), fd);
 	}
 
 	@Override
@@ -68,6 +83,8 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 		defaultMinorColour.dispose();
 		majorColor.dispose();
+
+		boldFont.dispose();
 
 		super.dispose();
 	}
@@ -140,9 +157,20 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	}
 
 	@Override
-	public Font getFont(final Object object) {
-		// TODO Auto-generated method stub
+	public Color getForeground(Object object) {
+
+		if (object instanceof ScenarioService) {
+			return Grey;
+		}
+		return super.getForeground(object);
+	}
+	
+	@Override
+	public Font getFont(Object object) {
+
+		if (object instanceof ScenarioService) {
+			return boldFont;
+		}
 		return super.getFont(object);
 	}
-
 }
