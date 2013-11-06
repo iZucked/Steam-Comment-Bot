@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.schedule.properties;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -34,11 +35,24 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 
 		// Create standard details
 		{
-			dp.setName("Profit and Loss");
-			dp.setDescription("Profit and Loss");
+			dp.setName("Group Profit and Loss");
+			dp.setDescription("Taxed Group Profit and Loss");
 			dp.setUnitsPrefix("$");
 			dp.setObject(groupProfitAndLoss.getProfitAndLoss());
 			dp.setLabelProvider(new StringFormatLabelProvider("%,d"));
+		}
+
+		// Per Entity Details
+		for (final EntityProfitAndLoss e : groupProfitAndLoss.getEntityProfitAndLosses()) {
+			final DetailProperty entityDP = PropertiesFactory.eINSTANCE.createDetailProperty();
+
+			entityDP.setName(e.getEntity().getName() + " Profit and Loss");
+			entityDP.setDescription("Taxed Profit and Loss for " + e.getEntity().getName());
+			entityDP.setUnitsPrefix("$");
+			entityDP.setObject(e.getProfitAndLoss());
+			entityDP.setLabelProvider(new StringFormatLabelProvider("%,d"));
+
+			dp.getChildren().add(entityDP);
 		}
 
 		// Query the registry for extensions
