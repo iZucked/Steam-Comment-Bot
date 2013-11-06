@@ -328,6 +328,11 @@ public class TradingExporterExtension implements IExporterExtension {
 	}
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container, final boolean includeTimeCharterRate) {
+		
+		if (profitAndLoss == null) {
+			return;
+		}
+		
 		int totalGroupValue = 0;
 		final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
 		if (includeTimeCharterRate) {
