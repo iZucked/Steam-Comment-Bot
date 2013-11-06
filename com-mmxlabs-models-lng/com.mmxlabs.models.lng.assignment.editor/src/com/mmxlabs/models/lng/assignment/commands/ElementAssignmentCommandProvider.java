@@ -145,18 +145,7 @@ public class ElementAssignmentCommandProvider extends AbstractModelCommandProvid
 
 	private void deleteAssignments(final CompoundCommand cmd, final EditingDomain domain, final AssignmentModel assignmentModel, final UUIDObject uuidObject) {
 
-		for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
-			if (ea != null) {
-				// General clean up...
-				if (ea.getAssignedObject() == null && ea.getAssignment() == null) {
-					cmd.append(DeleteCommand.create(domain, ea));
-				}
+		cmd.append(new DeleteElementAssignmentCommand(domain, assignmentModel, uuidObject));
 
-				// Real check
-				if (ea.getAssignedObject() == uuidObject) {
-					cmd.append(DeleteCommand.create(domain, ea));
-				}
-			}
-		}
 	}
 }
