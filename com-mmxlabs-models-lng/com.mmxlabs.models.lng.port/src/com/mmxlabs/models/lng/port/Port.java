@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getLoadDuration <em>Load Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDischargeDuration <em>Discharge Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getBerths <em>Berths</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#isAllowCooldown <em>Allow Cooldown</em>}</li>
@@ -136,6 +137,33 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @generated
 	 */
 	void setDischargeDuration(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Berths</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Berths</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Berths</em>' attribute.
+	 * @see #setBerths(int)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_Berths()
+	 * @model default="1"
+	 * @generated
+	 */
+	int getBerths();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getBerths <em>Berths</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Berths</em>' attribute.
+	 * @see #getBerths()
+	 * @generated
+	 */
+	void setBerths(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Cv Value</b></em>' attribute.
