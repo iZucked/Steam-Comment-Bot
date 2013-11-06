@@ -67,6 +67,7 @@ public class PortItemProvider
 			addTimeZonePropertyDescriptor(object);
 			addLoadDurationPropertyDescriptor(object);
 			addDischargeDurationPropertyDescriptor(object);
+			addBerthsPropertyDescriptor(object);
 			addCvValuePropertyDescriptor(object);
 			addDefaultStartTimePropertyDescriptor(object);
 			addAllowCooldownPropertyDescriptor(object);
@@ -183,6 +184,28 @@ public class PortItemProvider
 				 getString("_UI_Port_dischargeDuration_feature"),
 				 getString("_UI_Port_dischargeDuration_description"),
 				 PortPackage.Literals.PORT__DISCHARGE_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Berths feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBerthsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_berths_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_berths_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__BERTHS,
 				 true,
 				 false,
 				 false,
@@ -466,6 +489,7 @@ public class PortItemProvider
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__LOAD_DURATION:
 			case PortPackage.PORT__DISCHARGE_DURATION:
+			case PortPackage.PORT__BERTHS:
 			case PortPackage.PORT__CV_VALUE:
 			case PortPackage.PORT__DEFAULT_START_TIME:
 			case PortPackage.PORT__ALLOW_COOLDOWN:
