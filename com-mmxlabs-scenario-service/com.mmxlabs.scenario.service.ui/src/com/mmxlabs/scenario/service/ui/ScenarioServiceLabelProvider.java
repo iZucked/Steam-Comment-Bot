@@ -6,8 +6,11 @@ package com.mmxlabs.scenario.service.ui;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IFontProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -23,23 +26,23 @@ import com.mmxlabs.scenario.service.ui.navigator.PieChartRenderer;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
-public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider {
+public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider implements IFontProvider {
 	private final ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> selectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(
 			Activator.getDefault().getBundle().getBundleContext(), IScenarioServiceSelectionProvider.class, null);
 
 	private IEclipseJobManager jobManager = null;
-	private Image showEnabledImage;
-	private Image showDisabledImage;
+	private final Image showEnabledImage;
+	private final Image showDisabledImage;
 
-	private Image noJobImage;
+	private final Image noJobImage;
 
-	private Image jobComplete;
+	private final Image jobComplete;
 
-	private Color majorColor;
+	private final Color majorColor;
 
-	private Color defaultMinorColour;
+	private final Color defaultMinorColour;
 
-	private Image pinImage;
+	private final Image pinImage;
 
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
@@ -134,6 +137,12 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider {
 			return super.getColumnImage(object, columnIndex);
 		}
 		return null;
+	}
+
+	@Override
+	public Font getFont(final Object object) {
+		// TODO Auto-generated method stub
+		return super.getFont(object);
 	}
 
 }

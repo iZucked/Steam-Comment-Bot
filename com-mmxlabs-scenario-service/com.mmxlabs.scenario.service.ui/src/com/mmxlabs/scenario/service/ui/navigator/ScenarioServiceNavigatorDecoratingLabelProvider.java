@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelDecorator;
 import org.eclipse.jface.viewers.StyledString;
@@ -30,9 +31,9 @@ import org.eclipse.ui.internal.navigator.NavigatorDecoratingLabelProvider;
  * Fork of the {@link NavigatorDecoratingLabelProvider} to override {@link #getColumnImage(Object, int)};
  */
 @SuppressWarnings("restriction")
-public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingStyledCellLabelProvider implements IPropertyChangeListener, ILabelProvider, ITableLabelProvider {
+public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingStyledCellLabelProvider implements IPropertyChangeListener, ILabelProvider, ITableLabelProvider, ITableFontProvider {
 
-	private static class StyledLabelProviderAdapter implements IStyledLabelProvider, ITableLabelProvider, IColorProvider, IFontProvider {
+	private static class StyledLabelProviderAdapter implements IStyledLabelProvider, ITableLabelProvider, IColorProvider, IFontProvider, ITableFontProvider {
 
 		private final ILabelProvider provider;
 
@@ -143,6 +144,12 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 				return ((IFontProvider) provider).getFont(element);
 			}
 			return null;
+		}
+
+		@Override
+		public Font getFont(final Object element, final int columnIndex) {
+			// While we implement ITableFontProvider, the common navigator label provider does not, so just call getFont. We need to implement ITableFontProvider so getFont will be called at all.
+			return getFont(element);
 		}
 
 		/*
@@ -292,5 +299,10 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
 		return ((StyledLabelProviderAdapter) getStyledStringProvider()).getColumnText(element, columnIndex);
+	}
+
+	@Override
+	public Font getFont(final Object element, final int columnIndex) {
+		return ((StyledLabelProviderAdapter) getStyledStringProvider()).getFont(element, columnIndex);
 	}
 }
