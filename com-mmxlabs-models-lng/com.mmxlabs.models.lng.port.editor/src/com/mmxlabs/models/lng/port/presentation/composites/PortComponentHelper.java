@@ -92,6 +92,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_timeZoneEditor(detailComposite, topClass);
 		add_loadDurationEditor(detailComposite, topClass);
 		add_dischargeDurationEditor(detailComposite, topClass);
+		add_berthsEditor(detailComposite, topClass);
 		add_cvValueEditor(detailComposite, topClass);
 		add_defaultStartTimeEditor(detailComposite, topClass);
 		add_allowCooldownEditor(detailComposite, topClass);
@@ -187,6 +188,15 @@ public class PortComponentHelper extends BaseComponentHelper {
 	protected void add_dischargeDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DISCHARGE_DURATION);
 		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.DISCHARGE, editor));
+	}
+
+	/**
+	 * Create the editor for the berths feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_berthsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__BERTHS));
 	}
 
 	/**

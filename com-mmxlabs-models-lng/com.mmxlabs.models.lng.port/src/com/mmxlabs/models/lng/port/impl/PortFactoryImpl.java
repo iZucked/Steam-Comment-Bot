@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
+import com.mmxlabs.models.lng.port.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -35,7 +36,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	 */
 	public static PortFactory init() {
 		try {
-			PortFactory thePortFactory = (PortFactory)EPackage.Registry.INSTANCE.getEFactory(PortPackage.eNS_URI);
+			PortFactory thePortFactory = (PortFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/port/1/"); 
 			if (thePortFactory != null) {
 				return thePortFactory;
 			}
