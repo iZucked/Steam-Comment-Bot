@@ -43,6 +43,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private IVessel vessel;
 
+	private int baseFuelPricePerMT;
+	
 	private int vesselStartTime;
 
 	private int bestProblemCount = Integer.MAX_VALUE;
@@ -404,13 +406,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		final int feasibility = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, arrivalTimes, currentSequence.toArray());
+		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray());
 
-		if (feasibility >= 0) {
-			return currentPlan;
-		} else {
-			return currentPlan;//null;
-		}
+		return currentPlan;
 	}
 
 	private List<Integer> arrivalTimes;
@@ -458,9 +456,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @since 2.0
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, final int vesselStartTime) {
+	public void setVessel(final IVessel vessel, final int vesselStartTime, int baseFuelPricePerMT) {
 		this.vessel = vessel;
 		this.vesselStartTime = vesselStartTime;
+		this.baseFuelPricePerMT = baseFuelPricePerMT;
 	}
 
 	/**

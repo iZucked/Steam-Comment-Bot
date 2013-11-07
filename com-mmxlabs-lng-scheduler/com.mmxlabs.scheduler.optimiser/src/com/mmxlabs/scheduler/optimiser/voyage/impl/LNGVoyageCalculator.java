@@ -407,7 +407,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * Calculates the fuel consumptions for a sequence of alternating PortDetails / VoyageDetails objects, populating the fuel price fields of those objects and returning a total consumption array.
+	 * Calculates the fuel consumptions for a sequence of alternating PortDetails / VoyageDetails objects, returning a total consumption array.
 	 * 
 	 * @param vessel
 	 * @param sequence
@@ -416,7 +416,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @author Simon McGregor
 	 */
 	public long[] calculateVoyagePlanFuelConsumptions(final IVessel vessel, final Object... sequence) {
-		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
 		final long[] fuelConsumptions = new long[FuelComponent.values().length];
 
 		for (int i = 0; i < sequence.length; ++i) {
@@ -429,7 +428,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					for (final FuelComponent fc : FuelComponent.values()) {
 						fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc);
 					}
-					details.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
 				}
 
 			} else {
@@ -441,13 +439,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc, fc.getDefaultFuelUnit());
 					fuelConsumptions[fc.ordinal()] += details.getRouteAdditionalConsumption(fc, fc.getDefaultFuelUnit());
 				}
-
-				details.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
-				details.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricePerMT);
-				details.setFuelUnitPrice(FuelComponent.IdleBase, baseFuelPricePerMT);
-				details.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricePerMT);
-				details.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricePerMT);
-
 			}
 		}
 		return fuelConsumptions;
@@ -609,7 +600,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @since 5.0
 	 */
 	@Override
-	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final List<Integer> arrivalTimes, final Object... sequence) {
+	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final int baseFuelPricePerMT, final List<Integer> arrivalTimes, final Object... sequence) {
 		/*
 		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
 		 * VoyageDetails as separate parameters. Worth doing at some point?
@@ -627,8 +618,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		long availableHeelinM3 = Long.MAX_VALUE;
 
 		final long[] fuelConsumptions = calculateVoyagePlanFuelConsumptions(vessel, sequence);
-
-		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
 
 		/**
 		 * Accumulates route costs due to canal decisions.
@@ -760,23 +749,45 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final int[] pricesPerMMBTu = getLngEffectivePrices(loadIndices, dischargeIndices, arrivalTimes, sequence);
 
 		// set the LNG values for the voyages
-		final int numVoyages = sequence.length / 2;
-		for (int i = 0; i < numVoyages; i++) {
-			final int index = i * 2 + 1;
-			final VoyageDetails details = (VoyageDetails) sequence[index];
-			for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
-				// Existing consumption data is in M3, also store the MMBtu values
-				final long consumptionInM3 = details.getFuelConsumption(fc, fc.getDefaultFuelUnit()) + details.getRouteAdditionalConsumption(fc, fc.getDefaultFuelUnit());
-				final long consumptionInMMBTu = Calculator.convertM3ToMMBTu(consumptionInM3, cargoCVValue);
-				details.setFuelConsumption(fc, FuelUnit.MMBTu, consumptionInMMBTu);
+		// final int numVoyages = sequence.length / 2;
+		for (int i = 0; i < sequence.length - 1; ++i) {
+			Object element = sequence[i];
+			if (element instanceof VoyageDetails) {
+				final VoyageDetails details = (VoyageDetails) element;
+				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
+					// Existing consumption data is in M3, also store the MMBtu values
+					final long consumptionInM3 = details.getFuelConsumption(fc, fc.getDefaultFuelUnit()) + details.getRouteAdditionalConsumption(fc, fc.getDefaultFuelUnit());
+					final long consumptionInMMBTu = Calculator.convertM3ToMMBTu(consumptionInM3, cargoCVValue);
+					details.setFuelConsumption(fc, FuelUnit.MMBTu, consumptionInMMBTu);
 
-				if (pricesPerMMBTu != null) {
-					// Set the LNG unit price
-					final int unitPrice = pricesPerMMBTu[index];
-					details.setFuelUnitPrice(fc, unitPrice);
-					// Sum up the voyage costs
-					final long currentTotal = voyagePlan.getTotalFuelCost(fc);
-					voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMMBTu, unitPrice));
+					if (pricesPerMMBTu != null) {
+						// Set the LNG unit price
+						final int unitPrice = pricesPerMMBTu[i];
+						details.setFuelUnitPrice(fc, unitPrice);
+						// Sum up the voyage costs
+						final long currentTotal = voyagePlan.getTotalFuelCost(fc);
+						voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMMBTu, unitPrice));
+					}
+				}
+				for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
+					//
+					details.setFuelUnitPrice(fc, baseFuelPricePerMT);
+					// // Sum up the voyage costs - breaks ITS
+					// final long consumptionInMT = details.getFuelConsumption(fc, fc.getDefaultFuelUnit()) + details.getRouteAdditionalConsumption(fc, fc.getDefaultFuelUnit());
+					// final long currentTotal = voyagePlan.getTotalFuelCost(fc);
+					// voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMT, baseFuelPricePerMT));
+				}
+			} else {
+				assert element instanceof PortDetails;
+				PortDetails details = (PortDetails) element;
+				// NO LNG Consumption in Port
+				for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
+
+					details.setFuelUnitPrice(fc, baseFuelPricePerMT);
+					// Sum up the voyage costs - breaks ITS
+					// final long consumptionInMT = details.getFuelConsumption(fc);
+					// final long currentTotal = voyagePlan.getTotalFuelCost(fc);
+					// voyagePlan.setTotalFuelCost(fc, currentTotal + Calculator.costFromConsumption(consumptionInMT, baseFuelPricePerMT));
 				}
 			}
 		}
@@ -794,6 +805,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		}
 		// .. but costs need to be calculated differently
 
+		// Could be performed above, but ITS fails :( - possibly rounding in calcs, may be a real bug?
 		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
 			final long c = fuelConsumptions[fc.ordinal()];
 			voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(c, baseFuelPricePerMT));

@@ -187,7 +187,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 						vp.setSequence(newSequence);
 					} else {
-						voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
+						voyageCalculator.calculateVoyagePlan(vp, vessel, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newSequence);
 					}
 				} else if (originalDischarge != null) {
 

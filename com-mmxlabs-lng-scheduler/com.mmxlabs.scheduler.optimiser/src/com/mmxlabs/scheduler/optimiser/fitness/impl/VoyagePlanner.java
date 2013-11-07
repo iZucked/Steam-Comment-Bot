@@ -208,7 +208,9 @@ public class VoyagePlanner {
 	final public List<VoyagePlan> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		voyagePlanOptimiser.setVessel(vessel, arrivalTimes[0]);
+		// TODO: Extract out further for custom base fuel pricing logic?
+		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
+		voyagePlanOptimiser.setVessel(vessel, arrivalTimes[0], baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
@@ -338,10 +340,11 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final List<Integer>  arrivalTimes) {
+	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final List<Integer> arrivalTimes) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		voyagePlanOptimiser.setVessel(vessel, startTime);
+		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
+		voyagePlanOptimiser.setVessel(vessel, startTime, baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
@@ -373,7 +376,7 @@ public class VoyagePlanner {
 
 				if (!isShortCargoEnd) {
 					// Available time, as determined by inputs.
-					availableTime = arrivalTimes.get(idx) - arrivalTimes.get(idx-1) - prevVisitDuration;
+					availableTime = arrivalTimes.get(idx) - arrivalTimes.get(idx - 1) - prevVisitDuration;
 				} else { // shorts cargo end on shorts sequence
 					int minTravelTime = Integer.MAX_VALUE;
 					for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, prev2Port)) {

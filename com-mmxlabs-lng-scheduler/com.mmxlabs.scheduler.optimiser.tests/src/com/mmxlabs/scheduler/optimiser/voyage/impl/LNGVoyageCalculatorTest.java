@@ -571,7 +571,7 @@ public class LNGVoyageCalculatorTest {
 			arrivalTimes.add(0);
 		}
 
-		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -594,7 +594,6 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
-
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
@@ -641,7 +640,7 @@ public class LNGVoyageCalculatorTest {
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
 			arrivalTimes.add(0);
 		}
-		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -716,7 +715,7 @@ public class LNGVoyageCalculatorTest {
 			arrivalTimes.add(0);
 		}
 		final VoyagePlan plan = new VoyagePlan();
-		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
 
 	}
 
@@ -730,7 +729,6 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
-
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
@@ -796,7 +794,7 @@ public class LNGVoyageCalculatorTest {
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
 			arrivalTimes.add(0);
 		}
-		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -874,7 +872,7 @@ public class LNGVoyageCalculatorTest {
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
 			arrivalTimes.add(0);
 		}
-		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -957,7 +955,7 @@ public class LNGVoyageCalculatorTest {
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
 			arrivalTimes.add(0);
 		}
-		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);

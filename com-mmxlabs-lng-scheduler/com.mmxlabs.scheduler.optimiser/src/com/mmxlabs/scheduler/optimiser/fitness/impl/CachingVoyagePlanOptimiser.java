@@ -41,6 +41,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private final class CacheKey {
 		private final IVessel vessel;
 		private final int vesselStartTime;
+		private final int baseFuelPricePerMT;
 		private final int[] times;
 		private final IPortSlot[] slots;
 		private final List<Object> sequence;
@@ -50,10 +51,12 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		protected List<Integer> arrivalTimes;
 
-		public CacheKey(final IVessel vessel, final int vesselStartTime, final List<Object> sequence, final List<Integer> arrivalTimes, final List<IVoyagePlanChoice> choices) {
+		public CacheKey(final IVessel vessel, final int vesselStartTime, final int baseFuelPricePerMT, final List<Object> sequence, final List<Integer> arrivalTimes,
+				final List<IVoyagePlanChoice> choices) {
 			super();
 			this.vessel = vessel;
 			this.vesselStartTime = vesselStartTime;
+			this.baseFuelPricePerMT = baseFuelPricePerMT;
 			final int sz = sequence.size();
 			this.times = new int[sz / 2];
 			this.slots = new IPortSlot[(sz / 2) + 1];
@@ -100,7 +103,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 			// result = prime * result + loadPrice;
 			result = (prime * result) + dischargePrice;
-			result = (prime * result) + (int)vessel.getHourlyCharterInPrice().getValueAtPoint(vesselStartTime);
+			result = (prime * result) + vessel.getHourlyCharterInPrice().getValueAtPoint(vesselStartTime);
 
 			result = (prime * result) + ((vessel == null) ? 0 : vessel.hashCode());
 
@@ -140,10 +143,10 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private List<Object> basicSequence;
 	private IVessel vessel;
 	private int vesselStartTime;
+	private int baseFuelPricePerMT;
 	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
 
 	private List<Integer> arrivalTimes;
-
 
 	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
@@ -158,7 +161,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				for (final IVoyagePlanChoice c : arg.choices) {
 					delegate.addChoice(c);
 				}
-				delegate.setVessel(arg.vessel, arg.vesselStartTime);
+				delegate.setVessel(arg.vessel, arg.vesselStartTime, arg.baseFuelPricePerMT);
 
 				delegate.setBasicSequence(arg.sequence);
 				delegate.setArrivalTimes(arg.arrivalTimes);
@@ -178,7 +181,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	@Override
 	public VoyagePlan optimise() {
 
-		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, vesselStartTime, basicSequence, arrivalTimes, choices));
+		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, vesselStartTime, baseFuelPricePerMT, basicSequence, arrivalTimes, choices));
 
 		// bestPlan = (VoyagePlan) best.getFirst().clone();
 		bestPlan = best.getFirst();
@@ -221,9 +224,10 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @since 2.0
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, final int vesselStartTime) {
+	public void setVessel(final IVessel vessel, final int vesselStartTime, final int baseFuelPricePerMT) {
 		this.vessel = vessel;
 		this.vesselStartTime = vesselStartTime;
+		this.baseFuelPricePerMT = baseFuelPricePerMT;
 	}
 
 	@Override

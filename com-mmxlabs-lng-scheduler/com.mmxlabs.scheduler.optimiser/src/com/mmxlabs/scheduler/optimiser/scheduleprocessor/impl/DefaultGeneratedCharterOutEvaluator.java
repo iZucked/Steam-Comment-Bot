@@ -172,7 +172,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				// Construct a new VPO instance (TODO - use injection provider)
 				final VoyagePlanOptimiser vpo = new VoyagePlanOptimiser(voyageCalculator);
-				vpo.setVessel(vessel, seq.getStartTime());
+				vpo.setVessel(vessel, seq.getStartTime(), vessel.getVesselClass().getBaseFuelUnitPrice());
 
 				// Install our new alternative sequence
 				vpo.setBasicSequence(newRawSequence);
@@ -224,7 +224,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					// Keep
 				} else {
 					// Overwrite details
-					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newVoyagePlan.getSequence());
+					voyageCalculator.calculateVoyagePlan(vp, vessel, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newVoyagePlan.getSequence());
 				}
 			}
 		}

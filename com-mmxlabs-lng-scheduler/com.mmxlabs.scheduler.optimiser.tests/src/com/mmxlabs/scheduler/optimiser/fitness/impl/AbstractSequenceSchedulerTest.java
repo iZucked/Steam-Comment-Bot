@@ -164,7 +164,6 @@ public final class AbstractSequenceSchedulerTest {
 		portTypeProvider.setPortType(element3, PortType.Load);
 		portTypeProvider.setPortType(element4, PortType.Discharge);
 
-
 		final IResource resource = new Resource(index);
 		final Vessel vessel = new Vessel(index);
 		vessel.setName("Schedule1Vessel");
@@ -215,7 +214,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions1.setVesselState(VesselState.Laden);
 		expectedVoyageOptions1.setNBOSpeed(15000);
 		expectedVoyageOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
-
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
@@ -316,7 +314,7 @@ public final class AbstractSequenceSchedulerTest {
 		final ScheduledSequence plans = scheduler.schedule(resource, sequence, arrivalTimes);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5);
+		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
 
 		// Set expected list of VPO choices
 		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
@@ -461,7 +459,6 @@ public final class AbstractSequenceSchedulerTest {
 		// Init scheduler and ensure all required components are in place
 		injector.injectMembers(scheduler);
 
-		
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
 		expectedVoyageOptions1.setFromPortSlot(loadSlot1);
@@ -544,7 +541,7 @@ public final class AbstractSequenceSchedulerTest {
 		final ScheduledSequence plansAndTime = scheduler.schedule(resource, sequence, arrivalTimes);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5);
+		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
 		// Set expected list of VPO choices
 		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
 

@@ -73,7 +73,7 @@ public interface IVoyagePlanOptimiser {
 	 * @param vessel
 	 * @since 2.0
 	 */
-	void setVessel(final IVessel vessel, final int vesselStartTime);
+	void setVessel(final IVessel vessel, final int vesselStartTime, int baseFuelPricePerMT);
 
 	/**
 	 * Once optimised, returns the best {@link VoyagePlan} cost.
