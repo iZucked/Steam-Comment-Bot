@@ -19,10 +19,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-public class RedirectionVoyageCostCalculator implements IVoyageCostCalculator {
+public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
@@ -35,7 +34,7 @@ public class RedirectionVoyageCostCalculator implements IVoyageCostCalculator {
 
 	@Override
 	public VoyagePlan calculateShippingCosts(final IPort loadPort, final IPort dischargePort, final int loadTime, final int dischargeTime, final IVessel vessel, final int notionalSpeed,
-			final int cargoCVValue, final String route, final ISalesPriceCalculator salesPrice) {
+			final int cargoCVValue, final String route, final int baseFuelPricePerMT, final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 
@@ -73,10 +72,10 @@ public class RedirectionVoyageCostCalculator implements IVoyageCostCalculator {
 
 		// Calculate new voyage requirements
 		{
-			final VoyageDetails ladenDetails = calcLadenVoyageDetails(VesselState.Laden, vessel, route, distance, notionalSpeed, dischargeTime - notionalLoadDuration - loadTime, notionalLoadSlot,
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - notionalLoadDuration - loadTime, notionalLoadSlot,
 					notionalDischargeSlot);
 
-			final VoyageDetails ballastDetails = calcLadenVoyageDetails(VesselState.Ballast, vessel, route, distance, notionalSpeed, notionalReturnTime - notionalDischargeDuration - dischargeTime,
+			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, notionalReturnTime - notionalDischargeDuration - dischargeTime,
 					notionalDischargeSlot, notionalReturnSlot);
 
 			final PortDetails loadDetails = new PortDetails();
@@ -96,36 +95,9 @@ public class RedirectionVoyageCostCalculator implements IVoyageCostCalculator {
 
 			final Object[] sequence = new Object[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, CollectionsUtil.toArrayList(arrivalTimes), sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
 
 			return notionalPlan;
 		}
-
-	}
-
-	public VoyageDetails calcLadenVoyageDetails(final VesselState vesselState, final IVessel vessel, final String route, final int distance, final int speed, final int availableTime,
-			final PortSlot from, final PortSlot to) {
-		final VoyageDetails ladenDetails = new VoyageDetails();
-		{
-			final VoyageOptions ladenOptions = new VoyageOptions();
-			ladenOptions.setAvailableTime(availableTime);
-			ladenOptions.setAllowCooldown(false);
-			ladenOptions.setAvailableLNG(vessel.getCargoCapacity());
-			ladenOptions.setDistance(distance);
-			ladenOptions.setFromPortSlot(from);
-			ladenOptions.setNBOSpeed(vessel.getVesselClass().getMinNBOSpeed(vesselState));
-			ladenOptions.setRoute(route);
-			ladenOptions.setShouldBeCold(true);
-			ladenOptions.setToPortSlot(to);
-			ladenOptions.setUseFBOForSupplement(true);
-			ladenOptions.setUseNBOForIdle(true);
-			ladenOptions.setUseNBOForTravel(true);
-			ladenOptions.setVessel(vessel);
-			ladenOptions.setVesselState(vesselState);
-			ladenOptions.setWarm(false);
-
-			voyageCalculator.calculateVoyageFuelRequirements(ladenOptions, ladenDetails);
-		}
-		return ladenDetails;
 	}
 }
