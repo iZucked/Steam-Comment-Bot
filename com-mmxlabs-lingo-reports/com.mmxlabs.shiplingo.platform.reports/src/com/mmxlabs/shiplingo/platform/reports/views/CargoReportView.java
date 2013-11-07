@@ -61,9 +61,9 @@ public class CargoReportView extends AbstractCargoReportView {
 			}
 		}, cargoAllocationRef, s.getCargoAllocation_Sequence());
 
-		addColumn("Load Port", objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Buy Port", objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
 
-		addColumn("Discharge Port", objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Sell Port", objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
 
 		addColumn("Load Date", datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
 		addColumn("Load Time", timePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
@@ -71,9 +71,9 @@ public class CargoReportView extends AbstractCargoReportView {
 		addColumn("Discharge Date", datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
 		addColumn("Discharge Time", timePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
 
-		addColumn("Load Volume", integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeTransferred());
+		addColumn("Buy Volume", integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeTransferred());
 
-		addColumn("Discharge Volume", integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred());
+		addColumn("Sell Volume", integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred());
 
 		addColumn("Laden Cost", new IntegerFormatter() {
 			@Override
