@@ -25,12 +25,6 @@ public class PortDetailsTest {
 		Assert.assertEquals(value, details.getFuelConsumption(c));
 	}
 
-	@Test(expected = UnsupportedOperationException.class)
-	public void testGetPortCost() {
-		final PortDetails details = new PortDetails();
-		details.getPortCost(null);
-	}
-
 	@Test
 	public void testGetSetCapacityViolationType() {
 		final CapacityViolationType cvt = CapacityViolationType.FORCED_COOLDOWN;

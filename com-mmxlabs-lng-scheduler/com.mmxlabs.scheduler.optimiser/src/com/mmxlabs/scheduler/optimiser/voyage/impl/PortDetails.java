@@ -79,10 +79,6 @@ public final class PortDetails implements IProfitAndLossDetails, Cloneable {
 		capacityViolations.put(type, quantity);
 	}
 
-	public final long getPortCost(final Object key) {
-		throw new UnsupportedOperationException("Undefined API");
-	}
-
 	/**
 	 * @since 2.0
 	 */
