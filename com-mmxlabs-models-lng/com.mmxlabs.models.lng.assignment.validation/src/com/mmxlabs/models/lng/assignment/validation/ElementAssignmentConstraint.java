@@ -52,7 +52,7 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 				return Activator.PLUGIN_ID;
 			}
 
-			if (!isValidObject(uuidObject)) {
+			if (uuidObject != null && !isValidObject(uuidObject)) {
 				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
 						"Element Assignment has unexpected assigned object of type %s.", uuidObject.eClass().getName())));
 				failure.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_AssignedObject());
