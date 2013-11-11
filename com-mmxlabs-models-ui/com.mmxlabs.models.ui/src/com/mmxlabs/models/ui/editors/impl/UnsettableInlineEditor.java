@@ -219,7 +219,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (input instanceof MMXObject) {
 			MMXObject mmxinput = (MMXObject) input;
 			DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
-			if (di.delegate == changedFeature) {
+			if (di.delegatesTo(changedFeature)) {
 				return true;
 			}
 			
