@@ -182,9 +182,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		case CANCELLING:
 		case CANCELLED:
 			return;
-		}
-
-		switch (getJobState()) {
 		case PAUSED:
 			resume();
 		case RUNNING:
