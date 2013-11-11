@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.importer;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;

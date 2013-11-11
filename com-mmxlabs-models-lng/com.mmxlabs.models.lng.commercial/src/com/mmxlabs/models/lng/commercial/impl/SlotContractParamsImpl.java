@@ -8,8 +8,6 @@ import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Slot Contract Params</b></em>'.

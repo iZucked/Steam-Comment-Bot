@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
@@ -49,18 +48,24 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 		int minDuration = Integer.MAX_VALUE;
 		for (final Route route : lngScenarioModel.getPortModel().getRoutes()) {
-			final int distance = getDistance(route, from.getPort(), to.getPort());
+			assert route != null;
+			final Port fromPort = from.getPort();
+			final Port toPort = to.getPort();
+			if (fromPort != null && toPort != null) {
 
-			int extraTime = 0;
-			for (final VesselClassRouteParameters vcrp : vessel.getVesselClass().getRouteParameters()) {
-				if (vcrp.getRoute().equals(route)) {
-					extraTime = vcrp.getExtraTransitTime();
+				final int distance = getDistance(route, fromPort, toPort);
+
+				int extraTime = 0;
+				for (final VesselClassRouteParameters vcrp : vessel.getVesselClass().getRouteParameters()) {
+					if (vcrp.getRoute().equals(route)) {
+						extraTime = vcrp.getExtraTransitTime();
+					}
 				}
-			}
-			final double travelTime = distance / maxSpeedKnots;
-			final int totalTime = (int) (Math.round(travelTime) + extraTime);
-			if (totalTime < minDuration) {
-				minDuration = totalTime;
+				final double travelTime = distance / maxSpeedKnots;
+				final int totalTime = (int) (Math.round(travelTime) + extraTime);
+				if (totalTime < minDuration) {
+					minDuration = totalTime;
+				}
 			}
 		}
 		return minDuration;
@@ -79,6 +84,38 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	protected String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
+		// Valid slot data checks
+		if (object instanceof Slot) {
+			if (object instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) object;
+				if (loadSlot.isDESPurchase()) {
+					if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
+						if (loadSlot.getShippingDaysRestriction() > 90) {
+							final String message = String.format("DES Purchase|%s shipping days restriction is too big.", loadSlot.getName());
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+							failures.add(dsd);
+						}
+					}
+				}
+			} else if (object instanceof DischargeSlot) {
+				final DischargeSlot dischargeSlot = (DischargeSlot) object;
+				if (dischargeSlot.isFOBSale()) {
+					if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+						if (dischargeSlot.getShippingDaysRestriction() > 90) {
+							final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
+							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+							failures.add(dsd);
+						}
+					}
+				}
+			}
+		}
+
+		// Shipping checks
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
@@ -87,7 +124,6 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 				if (scenario instanceof LNGScenarioModel) {
 
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
-					final FleetModel fleetModel = lngScenarioModel.getFleetModel();
 					final AssignmentModel assignmentModel = lngScenarioModel.getPortfolioModel().getAssignmentModel();
 
 					if (cargo.getCargoType() == CargoType.DES) {
@@ -104,7 +140,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 							}
 						}
 						// Found a slot to validate
-						if (desPurchase != null) {
+						if (desPurchase != null && dischargeSlot != null) {
 
 							final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, desPurchase);
 							if (elementAssignment != null && elementAssignment.getAssignment() instanceof Vessel) {
