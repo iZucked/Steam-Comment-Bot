@@ -176,7 +176,7 @@ public class CargoEditor
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected List<PropertySheetPage> propertySheetPages = new ArrayList<PropertySheetPage>();
+	protected PropertySheetPage propertySheetPage;
 
 	/**
 	 * This is the viewer that shadows the selection in the content outline.
@@ -245,7 +245,7 @@ public class CargoEditor
 					}
 				}
 				else if (p instanceof PropertySheet) {
-					if (propertySheetPages.contains(((PropertySheet)p).getCurrentPage())) {
+					if (((PropertySheet)p).getCurrentPage() == propertySheetPage) {
 						getActionBarContributor().setActiveEditor(CargoEditor.this);
 						handleActivate();
 					}
@@ -357,15 +357,6 @@ public class CargoEditor
 			@Override
 			protected void unsetTarget(Resource target) {
 				basicUnsetTarget(target);
-				resourceToDiagnosticMap.remove(target);
-				if (updateProblemIndication) {
-					getSite().getShell().getDisplay().asyncExec
-						(new Runnable() {
-							 public void run() {
-								 updateProblemIndication();
-							 }
-						 });
-				}
 			}
 		};
 
@@ -399,7 +390,6 @@ public class CargoEditor
 										}
 									}
 								}
-								return false;
 							}
 
 							return true;
@@ -643,14 +633,8 @@ public class CargoEditor
 								  if (mostRecentCommand != null) {
 									  setSelectionToViewer(mostRecentCommand.getAffectedObjects());
 								  }
-								  for (Iterator<PropertySheetPage> i = propertySheetPages.iterator(); i.hasNext(); ) {
-									  PropertySheetPage propertySheetPage = i.next();
-									  if (propertySheetPage.getControl().isDisposed()) {
-										  i.remove();
-									  }
-									  else {
-										  propertySheetPage.refresh();
-									  }
+								  if (propertySheetPage != null && !propertySheetPage.getControl().isDisposed()) {
+									  propertySheetPage.refresh();
 								  }
 							  }
 						  });
@@ -1115,22 +1099,23 @@ public class CargoEditor
 	 * @generated
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		PropertySheetPage propertySheetPage =
-			new ExtendedPropertySheetPage(editingDomain) {
-				@Override
-				public void setSelectionToViewer(List<?> selection) {
-					CargoEditor.this.setSelectionToViewer(selection);
-					CargoEditor.this.setFocus();
-				}
+		if (propertySheetPage == null) {
+			propertySheetPage =
+				new ExtendedPropertySheetPage(editingDomain) {
+					@Override
+					public void setSelectionToViewer(List<?> selection) {
+						CargoEditor.this.setSelectionToViewer(selection);
+						CargoEditor.this.setFocus();
+					}
 
-				@Override
-				public void setActionBars(IActionBars actionBars) {
-					super.setActionBars(actionBars);
-					getActionBarContributor().shareGlobalActions(this, actionBars);
-				}
-			};
-		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
-		propertySheetPages.add(propertySheetPage);
+					@Override
+					public void setActionBars(IActionBars actionBars) {
+						super.setActionBars(actionBars);
+						getActionBarContributor().shareGlobalActions(this, actionBars);
+					}
+				};
+			propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
+		}
 
 		return propertySheetPage;
 	}
@@ -1237,7 +1222,7 @@ public class CargoEditor
 
 	/**
 	 * This returns whether something has been persisted to the URI of the specified resource.
-	 * The implementation uses the URI converter from the editor's resource set to try to open an input stream.
+	 * The implementation uses the URI converter from the editor's resource set to try to open an input stream. 
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1309,9 +1294,20 @@ public class CargoEditor
 	 * @generated
 	 */
 	public void gotoMarker(IMarker marker) {
-		List<?> targetObjects = markerHelper.getTargetObjects(editingDomain, marker);
-		if (!targetObjects.isEmpty()) {
-			setSelectionToViewer(targetObjects);
+		try {
+			if (marker.getType().equals(EValidator.MARKER)) {
+				String uriAttribute = marker.getAttribute(EValidator.URI_ATTRIBUTE, null);
+				if (uriAttribute != null) {
+					URI uri = URI.createURI(uriAttribute);
+					EObject eObject = editingDomain.getResourceSet().getEObject(uri, true);
+					if (eObject != null) {
+					  setSelectionToViewer(Collections.singleton(editingDomain.getWrapper(eObject)));
+					}
+				}
+			}
+		}
+		catch (CoreException exception) {
+			CargoEditorPlugin.INSTANCE.log(exception);
 		}
 	}
 
@@ -1497,7 +1493,7 @@ public class CargoEditor
 			getActionBarContributor().setActiveEditor(null);
 		}
 
-		for (PropertySheetPage propertySheetPage : propertySheetPages) {
+		if (propertySheetPage != null) {
 			propertySheetPage.dispose();
 		}
 

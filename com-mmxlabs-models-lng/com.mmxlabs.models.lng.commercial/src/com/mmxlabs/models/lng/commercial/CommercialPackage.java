@@ -661,13 +661,22 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
 
 	/**
+	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__CARGO_CV = CONTRACT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
@@ -1118,6 +1127,17 @@ public interface CommercialPackage extends EPackage {
 	EClass getPurchaseContract();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo CV</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV()
+	 * @see #getPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getPurchaseContract_CargoCV();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.TaxRate <em>Tax Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1438,6 +1458,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PURCHASE_CONTRACT = eINSTANCE.getPurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo CV</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PURCHASE_CONTRACT__CARGO_CV = eINSTANCE.getPurchaseContract_CargoCV();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.

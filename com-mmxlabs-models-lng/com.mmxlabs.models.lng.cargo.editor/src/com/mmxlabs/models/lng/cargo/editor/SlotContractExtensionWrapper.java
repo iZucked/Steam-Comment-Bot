@@ -55,17 +55,17 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 						for (final EObject r : slot.getExtensions()) {
 							if (slotContractParamsClass.isInstance(r)) {
 								enabled = true;
-//								setEditorEnabled(enabled);
-//								setEditorVisible(enabled);
+								// setEditorEnabled(enabled);
+								// setEditorVisible(enabled);
 								super.display(location, scenario, r, range);
-//								setEditorEnabled(enabled);
-//								setEditorVisible(enabled);
+								// setEditorEnabled(enabled);
+								// setEditorVisible(enabled);
 							}
 						}
 					}
 				}
 
-//				setEditorVisible(enabled);
+				// setEditorVisible(enabled);
 				return true;
 			}
 		} else if (notification.getFeature() == MMXCorePackage.eINSTANCE.getMMXObject_Extensions()) {
@@ -75,7 +75,7 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 					enabled = true;
 					// FIXME: Almost works correctly, first time round the label is not visible, but the text is set correctly.
 					//
-//					setEditorVisible(true);
+					// setEditorVisible(true);
 					super.display(location, scenario, paramsClass.cast(notification.getNewValue()), range);
 				}
 			}
@@ -109,11 +109,13 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 		}
 
 		if (enabled) {
-			for (final EObject r : range) {
-				if (slotContractParamsClass.isInstance(r)) {
-					super.display(location, scenario, r, range);
-					setEditorVisible(true);
-					return;
+			if (range != null) {
+				for (final EObject r : range) {
+					if (slotContractParamsClass.isInstance(r)) {
+						super.display(location, scenario, r, range);
+						setEditorVisible(true);
+						return;
+					}
 				}
 			}
 			super.display(location, scenario, null, range);

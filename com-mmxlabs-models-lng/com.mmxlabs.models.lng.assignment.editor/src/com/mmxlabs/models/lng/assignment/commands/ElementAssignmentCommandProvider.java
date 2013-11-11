@@ -25,8 +25,6 @@ import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
@@ -145,18 +143,7 @@ public class ElementAssignmentCommandProvider extends AbstractModelCommandProvid
 
 	private void deleteAssignments(final CompoundCommand cmd, final EditingDomain domain, final AssignmentModel assignmentModel, final UUIDObject uuidObject) {
 
-		for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
-			if (ea != null) {
-				// General clean up...
-				if (ea.getAssignedObject() == null && ea.getAssignment() == null) {
-					cmd.append(DeleteCommand.create(domain, ea));
-				}
+		cmd.append(new DeleteElementAssignmentCommand(domain, assignmentModel, uuidObject));
 
-				// Real check
-				if (ea.getAssignedObject() == uuidObject) {
-					cmd.append(DeleteCommand.create(domain, ea));
-				}
-			}
-		}
 	}
 }

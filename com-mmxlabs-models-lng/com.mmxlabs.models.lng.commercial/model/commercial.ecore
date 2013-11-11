@@ -52,7 +52,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="Any"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" eSuperTypes="#//Contract"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" eSuperTypes="#//Contract">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCV" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TaxRate">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>

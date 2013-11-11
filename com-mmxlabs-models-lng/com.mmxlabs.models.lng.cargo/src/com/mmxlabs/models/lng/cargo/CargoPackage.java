@@ -912,13 +912,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Port CV</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_PORT_CV = SLOT_OPERATION_COUNT + 0;
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = SLOT_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
@@ -1915,13 +1915,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Port CV</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_PORT_CV = LOAD_SLOT___GET_SLOT_OR_PORT_CV;
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV;
 
 	/**
 	 * The number of operations of the '<em>Spot Load Slot</em>' class.
@@ -2899,14 +2899,14 @@ public interface CargoPackage extends EPackage {
 	EReference getLoadSlot_TransferFrom();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrPortCV() <em>Get Slot Or Port CV</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegatedCV() <em>Get Slot Or Delegated CV</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Port CV</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrPortCV()
+	 * @return the meta object for the '<em>Get Slot Or Delegated CV</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegatedCV()
 	 * @generated
 	 */
-	EOperation getLoadSlot__GetSlotOrPortCV();
+	EOperation getLoadSlot__GetSlotOrDelegatedCV();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.DischargeSlot <em>Discharge Slot</em>}'.
@@ -3487,12 +3487,12 @@ public interface CargoPackage extends EPackage {
 		EReference LOAD_SLOT__TRANSFER_FROM = eINSTANCE.getLoadSlot_TransferFrom();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Port CV</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Slot Or Delegated CV</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation LOAD_SLOT___GET_SLOT_OR_PORT_CV = eINSTANCE.getLoadSlot__GetSlotOrPortCV();
+		EOperation LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = eINSTANCE.getLoadSlot__GetSlotOrDelegatedCV();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.

@@ -70,8 +70,8 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				if (cargo != null) {
 					final Slot s = cargo.getSortedSlots().get(0);
 					if (s instanceof LoadSlot) {
-						final double cv = ((LoadSlot) s).getSlotOrPortCV();
-						if (cv != transferTo.getSlotOrPortCV()) {
+						final double cv = ((LoadSlot) s).getSlotOrDelegatedCV();
+						if (cv != transferTo.getSlotOrDelegatedCV()) {
 							final String failureMessage = String.format("Ship to Ship %s must be in sync", "CV");
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 							dsd.addEObjectAndFeature(transferTo, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());

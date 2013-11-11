@@ -1327,7 +1327,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	@SuppressWarnings("unchecked")
 	public EList<Port> getSlotOrContractRestrictedPorts() {
-		return (EList<Port>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_PORTS);
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
