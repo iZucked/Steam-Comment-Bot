@@ -146,6 +146,9 @@ public class AbstractOptimisationResultTester {
 		if (false) {
 			final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 			final String context = migrationRegistry.getDefaultMigrationContext();
+			if (context == null) {
+				throw new NullPointerException("Context cannot be null");
+			}
 			final int version = migrationRegistry.getLastReleaseVersion(context);
 			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
 		}
@@ -220,6 +223,9 @@ public class AbstractOptimisationResultTester {
 			final LNGScenarioModel copy = duplicate(originalScenario);
 			final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 			final String context = migrationRegistry.getDefaultMigrationContext();
+			if (context == null) {
+				throw new NullPointerException("Context cannot be null");
+			}
 			final int version = migrationRegistry.getLastReleaseVersion(context);
 			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
 		}
