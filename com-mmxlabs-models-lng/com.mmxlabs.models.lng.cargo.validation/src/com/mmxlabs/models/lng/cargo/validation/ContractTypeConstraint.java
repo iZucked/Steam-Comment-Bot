@@ -50,7 +50,7 @@ public class ContractTypeConstraint extends AbstractModelMultiConstraint {
 			} else if (object instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) object;
 				if (dischargeSlot.isFOBSale()) {
-					if (contract.getContractType() == ContractType.FOB) {
+					if (contract.getContractType() == ContractType.DES) {
 						message = String.format("FOB Sale|%s contract is DES Sale only!", slot.getName());
 					}
 				} else {
