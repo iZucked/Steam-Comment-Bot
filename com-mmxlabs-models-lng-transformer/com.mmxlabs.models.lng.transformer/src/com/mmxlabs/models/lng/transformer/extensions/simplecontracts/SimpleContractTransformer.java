@@ -10,6 +10,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
@@ -76,7 +77,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, final LNGPriceCalculatorParameters priceParameters) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return instantiate(priceParameters);
 	}
 
@@ -84,12 +85,12 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, final LNGPriceCalculatorParameters priceParameters) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return instantiate(priceParameters);
 	}
 
 	@Override
-	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
+	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
 
 	}
 

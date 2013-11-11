@@ -22,16 +22,16 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	@Override
 	public @Nullable
-	VoyagePlan calculateShippingCosts(final IPort loadPort, final IPort dischargePort, final int loadTime, final int dischargeTime, final IVessel vessel, final int notionalBallastSpeed,
-			final int cargoCVValue, final String route, final int basePricePerMT, final int salesPricePerMMBTu) {
+	VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int dischargeTime, @NonNull final IVessel vessel,
+			final int notionalBallastSpeed, final int cargoCVValue, @NonNull final String route, final int basePricePerMT, final int salesPricePerMMBTu) {
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, dischargeTime, vessel, notionalBallastSpeed, cargoCVValue, route, basePricePerMT,
 				createSalesPriceCalculator(salesPricePerMMBTu));
 	}
 
 	@Override
 	public abstract @Nullable
-	VoyagePlan calculateShippingCosts(final IPort loadPort, final IPort dischargePort, final int loadTime, final int dischargeTime, final IVessel vessel, final int notionalBallastSpeed,
-			final int cargoCVValue, final String route, final int basePricePerMT, final ISalesPriceCalculator salesPriceCalculator);
+	VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int dischargeTime, @NonNull final IVessel vessel,
+			final int notionalBallastSpeed, final int cargoCVValue, @NonNull final String route, final int basePricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator);
 
 	protected @NonNull
 	VoyageDetails calculateVoyageDetails(@NonNull final VesselState vesselState, @NonNull final IVessel vessel, @NonNull final String route, final int distance, final int availableTime,
@@ -45,8 +45,8 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		return voyageDetails;
 	}
 
-	protected VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final String route, final int distance, final int availableTime, final PortSlot from,
-			final PortSlot to) {
+	protected @NonNull
+	VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final String route, final int distance, final int availableTime, final PortSlot from, final PortSlot to) {
 		final VoyageOptions voyageOptions = new VoyageOptions();
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
@@ -66,7 +66,8 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		return voyageOptions;
 	}
 
-	protected ISalesPriceCalculator createSalesPriceCalculator(final int salesPricePerMMBTu) {
+	protected @NonNull
+	ISalesPriceCalculator createSalesPriceCalculator(final int salesPricePerMMBTu) {
 		return new SimpleContract() {
 
 			@Override

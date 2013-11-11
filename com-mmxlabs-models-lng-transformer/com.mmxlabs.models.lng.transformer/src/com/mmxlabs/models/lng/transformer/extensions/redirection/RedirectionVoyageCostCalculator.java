@@ -1,5 +1,7 @@
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
@@ -33,8 +35,8 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 	private IPortVisitDurationProvider portVisitDurationProvider;
 
 	@Override
-	public VoyagePlan calculateShippingCosts(final IPort loadPort, final IPort dischargePort, final int loadTime, final int dischargeTime, final IVessel vessel, final int notionalSpeed,
-			final int cargoCVValue, final String route, final int baseFuelPricePerMT, final ISalesPriceCalculator salesPrice) {
+	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int dischargeTime, @NonNull final IVessel vessel,
+			final int notionalSpeed, final int cargoCVValue, @NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 

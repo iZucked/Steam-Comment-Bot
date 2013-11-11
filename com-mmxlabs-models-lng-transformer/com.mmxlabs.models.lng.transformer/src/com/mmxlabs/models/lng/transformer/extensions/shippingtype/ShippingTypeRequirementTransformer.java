@@ -10,12 +10,12 @@ import java.util.Collections;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -52,7 +52,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	 * @since 3.0
 	 */
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, final LNGPriceCalculatorParameters priceParameters) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
@@ -60,12 +60,12 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	 * @since 3.0
 	 */
 	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, final LNGPriceCalculatorParameters priceParameters) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
 	@Override
-	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
+	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
 		if (modelSlot instanceof LoadSlot) {
@@ -79,7 +79,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 		else if (modelSlot instanceof DischargeSlot) {
 			DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
 			CargoDeliveryType cargoType = CargoDeliveryType.ANY;
-			
+
 			cargoType = dischargeSlot.getSlotOrContractDeliveryType();
 
 			if (cargoType != CargoDeliveryType.ANY) {

@@ -32,7 +32,6 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -213,7 +212,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	}
 
 	@Override
-	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
+	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 		allElements.add(sequenceElement);
 		{
