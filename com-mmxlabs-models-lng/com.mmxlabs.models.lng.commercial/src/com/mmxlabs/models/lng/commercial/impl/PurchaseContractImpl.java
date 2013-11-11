@@ -198,7 +198,7 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	@Override
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		if (feature == CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV) {
-			return new DelegateInformation(CommercialPackage.Literals.CONTRACT__PREFERRED_PORT, PortPackage.Literals.PORT__CV_VALUE, (Double) 0.0);
+			return new DelegateInformation(CommercialPackage.Literals.CONTRACT__PREFERRED_PORT, PortPackage.Literals.PORT__CV_VALUE, null);
 		} 
 		return super.getUnsetValueOrDelegate(feature);
 	}
