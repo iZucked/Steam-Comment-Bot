@@ -181,6 +181,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				addEntityProfit(entityProfit, entity, value);
 
 				// Base entity gets the profit
+				assert baseEntity != null;
 				addEntityProfit(entityProfit, baseEntity, value);
 
 				if (annotatedSolution != null && exportElement != null) {
@@ -223,7 +224,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		// Solution Export branch - should called infrequently
-		if (annotatedSolution != null && exportElement != null) {
+		if (annotatedSolution != null && exportElement != null && entityDetailsMap != null) {
 			{
 				for (boolean includeTimeCharterRates : new boolean[] { true, false }) {
 					final List<IProfitAndLossEntry> entries = new LinkedList<>();
