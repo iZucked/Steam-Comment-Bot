@@ -275,7 +275,7 @@ public class CargoEconsReport extends ViewPart {
 						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 
 						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
-						final double cv = loadSlot.getSlotOrPortCV();
+						final double cv = loadSlot.getSlotOrDelegatedCV();
 						final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
 						cost += volumeInMMBTu * allocation.getPrice();
 					}
@@ -290,7 +290,7 @@ public class CargoEconsReport extends ViewPart {
 						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 
 						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
-						final double cv = loadSlot.getSlotOrPortCV();
+						final double cv = loadSlot.getSlotOrDelegatedCV();
 						final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
 						cost += volumeInMMBTu;
 					}
@@ -319,7 +319,7 @@ public class CargoEconsReport extends ViewPart {
 						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 
 						// TODO: Avg CV
-						cv = loadSlot.getSlotOrPortCV();
+						cv = loadSlot.getSlotOrDelegatedCV();
 						break;
 					}// cooldowncooldownviolationsCountviolationsCountviolationsCount violationsCount += cc;
 				}
@@ -341,7 +341,7 @@ public class CargoEconsReport extends ViewPart {
 						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 
 						// TODO: Avg CV
-						cv = loadSlot.getSlotOrPortCV();
+						cv = loadSlot.getSlotOrDelegatedCV();
 						break;
 					}
 				}
@@ -455,7 +455,7 @@ public class CargoEconsReport extends ViewPart {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				if (allocation.getSlot() instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-					cv = loadSlot.getSlotOrPortCV();
+					cv = loadSlot.getSlotOrDelegatedCV();
 					price = allocation.getPrice();
 				} else {
 					cv = getMarketCV(marketAllocation.getMarket());
@@ -472,7 +472,7 @@ public class CargoEconsReport extends ViewPart {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				if (allocation.getSlot() instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-					cv = loadSlot.getSlotOrPortCV();
+					cv = loadSlot.getSlotOrDelegatedCV();
 				} else {
 					cv = getMarketCV(marketAllocation.getMarket());
 				}
@@ -505,7 +505,7 @@ public class CargoEconsReport extends ViewPart {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				if (allocation.getSlot() instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-					cv = loadSlot.getSlotOrPortCV();
+					cv = loadSlot.getSlotOrDelegatedCV();
 					price = marketAllocation.getPrice();
 				} else {
 					cv = getMarketCV(marketAllocation.getMarket());
@@ -523,7 +523,7 @@ public class CargoEconsReport extends ViewPart {
 				if (allocation.getSlot() instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
 					// TODO: Avg CV
-					cv = loadSlot.getSlotOrPortCV();
+					cv = loadSlot.getSlotOrDelegatedCV();
 				} else {
 					cv = getMarketCV(marketAllocation.getMarket());
 				}
