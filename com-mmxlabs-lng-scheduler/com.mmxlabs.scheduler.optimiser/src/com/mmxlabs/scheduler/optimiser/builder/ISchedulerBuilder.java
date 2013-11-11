@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -86,6 +87,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 5.0
 	 */
+	@NonNull
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
 			int warmupTimeInHours, long cooldownVolumeInM3);
 
@@ -109,7 +111,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @since 2.0
 	 */
-	void setVesselClassStateParameters(IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
+	void setVesselClassStateParameters(@NonNull IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed, int serviceSpeed);
 
 	/**
@@ -131,7 +133,7 @@ public interface ISchedulerBuilder {
 	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling. * @param serviceSpeed Service speed of vessel in scaled knots
 	 * @since 2.0
 	 */
-	void setVesselClassStateParameters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
+	void setVesselClassStateParameters(@NonNull IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int serviceSpeed);
 
 	/**
@@ -143,7 +145,7 @@ public interface ISchedulerBuilder {
 	 *            Hourly scale MT of base fuel consumption when in port.
 	 * @since 2.0
 	 */
-	void setVesselClassPortTypeParameters(IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerHour);
+	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerHour);
 
 	/**
 	 * Create a charter out event
@@ -165,6 +167,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
+	@NonNull
 	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice,
 			final long hireCost, final long repositioning);
 
@@ -181,6 +184,7 @@ public interface ISchedulerBuilder {
 	 *            the number of hours the dry dock will take
 	 * @return
 	 */
+	@NonNull
 	IVesselEventPortSlot createDrydockEvent(String id, ITimeWindow arrivalTimeWindow, IPort port, int durationHours);
 
 	/**
@@ -196,6 +200,7 @@ public interface ISchedulerBuilder {
 	 *            the number of hours the maintenance will take
 	 * @return
 	 */
+	@NonNull
 	IVesselEventPortSlot createMaintenanceEvent(String id, ITimeWindow arrival, IPort port, int durationHours);
 
 	/**
@@ -204,7 +209,7 @@ public interface ISchedulerBuilder {
 	 * @param charterOut
 	 * @param vessel
 	 */
-	void addVesselEventVessel(IVesselEventPortSlot event, IVessel vessel);
+	void addVesselEventVessel(@NonNull IVesselEventPortSlot event, IVessel vessel);
 
 	/**
 	 * Add all the vessels in a given class to the vessels which can service the given event slot.
@@ -212,7 +217,7 @@ public interface ISchedulerBuilder {
 	 * @param event
 	 * @param vesselClass
 	 */
-	void addVesselEventVesselClass(IVesselEventPortSlot event, IVesselClass vesselClass);
+	void addVesselEventVesselClass(@NonNull IVesselEventPortSlot event, IVesselClass vesselClass);
 
 	/**
 	 * Create a core fleet vessel with the given name and class.
@@ -222,7 +227,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 5.0
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint, final long heelLimit,
+	@NonNull
+	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, ICurve hourlyCharterInRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint, final long heelLimit,
 			final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
 
 	/**
@@ -236,7 +242,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 5.0
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
+	@NonNull
+	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, ICurve hourlyCharterInRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
 			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
 
 	/**
@@ -244,6 +251,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IStartEndRequirement createStartEndRequirement();
 
 	/**
@@ -252,6 +260,7 @@ public interface ISchedulerBuilder {
 	 * @param fixedPort
 	 * @return
 	 */
+	@NonNull
 	IStartEndRequirement createStartEndRequirement(IPort fixedPort);
 
 	/**
@@ -260,6 +269,7 @@ public interface ISchedulerBuilder {
 	 * @param fixedTime
 	 * @return
 	 */
+	@NonNull
 	IStartEndRequirement createStartEndRequirement(ITimeWindow timeWindow);
 
 	/**
@@ -269,6 +279,7 @@ public interface ISchedulerBuilder {
 	 * @param fixedTime
 	 * @return
 	 */
+	@NonNull
 	IStartEndRequirement createStartEndRequirement(IPort fixedPort, ITimeWindow timeWindow);
 
 	/**
@@ -277,6 +288,7 @@ public interface ISchedulerBuilder {
 	 * @param portSet
 	 * @return
 	 */
+	@NonNull
 	IStartEndRequirement createStartEndRequirement(Collection<IPort> portSet);
 
 	/**
@@ -286,6 +298,7 @@ public interface ISchedulerBuilder {
 	 * @param fixedTime
 	 * @return
 	 */
+	@NonNull
 	IStartEndRequirement createStartEndRequirement(Collection<IPort> portSet, ITimeWindow timeWindow);
 
 	/**
@@ -294,6 +307,7 @@ public interface ISchedulerBuilder {
 	 * @param name
 	 * @return
 	 */
+	@NonNull
 	IPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator);
 
 	/**
@@ -304,6 +318,7 @@ public interface ISchedulerBuilder {
 	 * @param y
 	 * @return
 	 */
+	@NonNull
 	IXYPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, float x, float y);
 
 	/**
@@ -314,11 +329,13 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 5.0
 	 */
+	@NonNull
 	ICargo createCargo(final Collection<IPortSlot> slots, final boolean allowRewiring);
 
 	/**
 	 * @since 5.0
 	 */
+	@NonNull
 	ICargo createCargo(final boolean allowRewiring, final IPortSlot... slots);
 
 	/**
@@ -343,6 +360,7 @@ public interface ISchedulerBuilder {
 	 *            Time window end
 	 * @return
 	 */
+	@NonNull
 	ITimeWindow createTimeWindow(int start, int end);
 
 	/**
@@ -352,7 +370,7 @@ public interface ISchedulerBuilder {
 	 * @param to
 	 * @param distance
 	 */
-	void setPortToPortDistance(IPort from, IPort to, String route, int distance);
+	void setPortToPortDistance(@NonNull IPort from, @NonNull IPort to, @NonNull String route, int distance);
 
 	/**
 	 * Set a toll for sending a given vessel class + state via a given route
@@ -363,7 +381,7 @@ public interface ISchedulerBuilder {
 	 * @param tollPrice
 	 * @since 2.0
 	 */
-	void setVesselClassRouteCost(final String route, final IVesselClass vesselClass, final VesselState state, final long tollPrice);
+	void setVesselClassRouteCost(final String route, @NonNull final IVesselClass vesselClass, final VesselState state, final long tollPrice);
 
 	/**
 	 * Set the default toll associated with passing by a given route
@@ -390,7 +408,7 @@ public interface ISchedulerBuilder {
 	 * @param nboRateInScaledM3
 	 *            the NBO rate in up-scaled M3 (see {@link Calculator#ScaleFactor})
 	 */
-	void setVesselClassRouteFuel(String name, IVesselClass vc, VesselState vesselState, long baseFuelInScaledMT, long nboRateInScaledM3);
+	void setVesselClassRouteFuel(String name, @NonNull IVesselClass vc, VesselState vesselState, long baseFuelInScaledMT, long nboRateInScaledM3);
 
 	/**
 	 * Set the extra time required for the given vessel class to travel by the given route
@@ -411,7 +429,7 @@ public interface ISchedulerBuilder {
 	 * @param resource
 	 * @param duration
 	 */
-	void setElementDurations(ISequenceElement element, IResource resource, int duration);
+	void setElementDurations(@NonNull ISequenceElement element, @NonNull IResource resource, int duration);
 
 	/**
 	 * Create a new {@link ILoadSlot} instance. This is currently expected to be assigned to a cargo.
@@ -430,13 +448,15 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 6.0
 	 */
-	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet,
-			boolean cooldownForbidden, int pricingDate, boolean slotIsOptional);
+	@NonNull
+	ILoadSlot createLoadSlot(String id, @NonNull IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours,
+			boolean cooldownSet, boolean cooldownForbidden, int pricingDate, boolean slotIsOptional);
 
 	/**
 	 * @since 6.0
 	 */
-	ILoadOption createDESPurchaseLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int pricingDate,
+	@NonNull
+	ILoadOption createDESPurchaseLoadSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int pricingDate,
 			boolean slotIsOptional);
 
 	/**
@@ -454,8 +474,9 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 6.0
 	 */
-	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue, ISalesPriceCalculator pricePerMMBTu,
-			int durationHours, int pricingDate, boolean optional);
+	@NonNull
+	IDischargeSlot createDischargeSlot(String id, @NonNull IPort port, ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue,
+			ISalesPriceCalculator pricePerMMBTu, int durationHours, int pricingDate, boolean optional);
 
 	/**
 	 * 
@@ -469,8 +490,9 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 6.0
 	 */
-	IDischargeOption createFOBSaleDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue, ISalesPriceCalculator priceCalculator,
-			int pricingDate, boolean slotIsOptional);
+	@NonNull
+	IDischargeOption createFOBSaleDischargeSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue,
+			ISalesPriceCalculator priceCalculator, int pricingDate, boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
@@ -492,7 +514,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
-	List<IVessel> createSpotVessels(String namePrefix, IVesselClass vesselClass, int count, ICurve hourlyCharterInPrice);
+	List<IVessel> createSpotVessels(String namePrefix, @NonNull IVesselClass vesselClass, int count, ICurve hourlyCharterInPrice);
 
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
@@ -504,7 +526,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
-	IVessel createSpotVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInPrice);
+	@NonNull
+	IVessel createSpotVessel(String name, @NonNull IVesselClass vesselClass, ICurve hourlyCharterInPrice);
 
 	/**
 	 * Set the list of ports this vessel is not permitted to travel to.
@@ -513,7 +536,7 @@ public interface ISchedulerBuilder {
 	 * @param inaccessiblePorts
 	 * @since 6.0
 	 */
-	void setVesselInaccessiblePorts(IVessel vessel, Set<IPort> inaccessiblePorts);
+	void setVesselInaccessiblePorts(@NonNull IVessel vessel, Set<IPort> inaccessiblePorts);
 
 	/**
 	 * Set the list of ports vessels of this class are not permitted to travel to.
@@ -521,7 +544,7 @@ public interface ISchedulerBuilder {
 	 * @param vessel
 	 * @param inaccessiblePorts
 	 */
-	void setVesselClassInaccessiblePorts(IVesselClass vc, Set<IPort> inaccessiblePorts);
+	void setVesselClassInaccessiblePorts(@NonNull IVesselClass vc, Set<IPort> inaccessiblePorts);
 
 	/**
 	 * Add a global total volume limit
@@ -552,7 +575,7 @@ public interface ISchedulerBuilder {
 	 * @param vessel
 	 *            the vessel to keep this slot on
 	 */
-	void constrainSlotToVessels(IPortSlot slot, Set<IVessel> vessels);
+	void constrainSlotToVessels(@NonNull IPortSlot slot, Set<IVessel> vessels);
 
 	/**
 	 * Constrains the given slot to lie only on vessels with the given classes.
@@ -566,7 +589,7 @@ public interface ISchedulerBuilder {
 	 * @param slot
 	 * @param vesselClasses
 	 */
-	void constrainSlotToVesselClasses(IPortSlot slot, Set<IVesselClass> vesselClasses);
+	void constrainSlotToVesselClasses(@NonNull IPortSlot slot, Set<IVesselClass> vesselClasses);
 
 	/**
 	 * <p>
@@ -590,7 +613,7 @@ public interface ISchedulerBuilder {
 	 * @param secondSlot
 	 *            this slot will always after firstSlot
 	 */
-	void constrainSlotAdjacency(IPortSlot firstSlot, IPortSlot secondSlot);
+	void constrainSlotAdjacency(@Nullable IPortSlot firstSlot, @Nullable IPortSlot secondSlot);
 
 	/**
 	 * Set a discount curve for the given fitness component name
@@ -608,7 +631,7 @@ public interface ISchedulerBuilder {
 	 * @param portType
 	 * @param cost
 	 */
-	void setPortCost(IPort port, IVessel vessel, PortType portType, long cost);
+	void setPortCost(@NonNull IPort port, @NonNull IVessel vessel, PortType portType, long cost);
 
 	/**
 	 * Generate x y distance matrix. Note, this will overwrite any data set via {@link #setPortToPortDistance(IPort, IPort, String, int)} for the {@link IMultiMatrixProvider#Default_Key} route.
@@ -621,7 +644,7 @@ public interface ISchedulerBuilder {
 	 * @param desPurchase
 	 * @param dischargePorts
 	 */
-	void bindDischargeSlotsToDESPurchase(ILoadOption desPurchase, Collection<IPort> dischargePorts);
+	void bindDischargeSlotsToDESPurchase(@NonNull ILoadOption desPurchase, Collection<IPort> dischargePorts);
 
 	/**
 	 * Permit all real load slots at the given {@link IPort}s to be re-wired to the given FOB Sale.
@@ -630,7 +653,7 @@ public interface ISchedulerBuilder {
 	 * @param dischargePorts
 	 * @since 6.0
 	 */
-	void bindLoadSlotsToFOBSale(IDischargeOption fobSale, Collection<IPort> loadPorts);
+	void bindLoadSlotsToFOBSale(@NonNull IDischargeOption fobSale, Collection<IPort> loadPorts);
 
 	/**
 	 * Place a {@link Collection} of {@link IPortSlot}s into a "count" group - that is a group in which only the count number of elements may be used.
@@ -645,7 +668,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @since 2.0
 	 */
-	void setEarliestDate(Date earliestTime);
+	void setEarliestDate(@NonNull Date earliestTime);
 
 	/**
 	 * @param vesselClass
@@ -656,7 +679,7 @@ public interface ISchedulerBuilder {
 	 *            The minimum duration in hours a charter out can be.
 	 * @since 2.0
 	 */
-	void createCharterOutCurve(IVesselClass vesselClass, ICurve charterOutCurve, int minDuration);
+	void createCharterOutCurve(@NonNull IVesselClass vesselClass, ICurve charterOutCurve, int minDuration);
 
 	/**
 	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such
@@ -665,7 +688,7 @@ public interface ISchedulerBuilder {
 	 * @param slot
 	 * @since 2.0
 	 */
-	void setSoftRequired(IPortSlot slot);
+	void setSoftRequired(@NonNull IPortSlot slot);
 
 	/**
 	 * Set the default CV value for a port.
@@ -675,13 +698,14 @@ public interface ISchedulerBuilder {
 	 *            value
 	 * @since 2.0
 	 */
-	void setPortCV(IPort port, int convertToInternalConversionFactor);
+	void setPortCV(@NonNull IPort port, int convertToInternalConversionFactor);
 
 	/**
 	 * Create a Mark-To-Market market for DES Purchases valid against the given set of {@link IPort}s
 	 * 
 	 * @since 6.0
 	 */
+	@NonNull
 	IMarkToMarket createDESPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator);
 
 	/**
@@ -689,6 +713,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @since 6.0
 	 */
+	@NonNull
 	IMarkToMarket createFOBSaleMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
 
 	/**
@@ -698,6 +723,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @since 6.0
 	 */
+	@NonNull
 	IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator);
 
 	/**
@@ -705,6 +731,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @since 6.0
 	 */
+	@NonNull
 	IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
 
 	/**

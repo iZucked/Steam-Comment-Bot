@@ -174,7 +174,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					baseEntity = entity;
 				}
 			} else if (slot instanceof IDischargeOption) {
-				final IDischargeOption dischargeOption = (IDischargeOption) slot;
+//				final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				// Buy/Sell at same quantity.
 				// TODO: Transfer price
 				addEntityProfit(entityProfit, entity, -value);
