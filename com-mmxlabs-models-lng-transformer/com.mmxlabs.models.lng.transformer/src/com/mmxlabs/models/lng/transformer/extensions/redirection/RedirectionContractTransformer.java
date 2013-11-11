@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -41,13 +42,15 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 
 /**
- * An abstract contract transformer for redirection contracts which can switch between FOB and DES purchase within the optimisation.
- * TODO: 
+ * An abstract contract transformer for redirection contracts which can switch between FOB and DES purchase within the optimisation. TODO:
  * 
  * @author Simon Goodall
  * 
+ * 
+ *         TODO: Roll this directly in to the transformer!
  */
 public abstract class RedirectionContractTransformer implements IContractTransformer {
 
@@ -79,13 +82,13 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 	private final Class<? extends LNGPriceCalculatorParameters> redirectionPriceParamtersClass;
 
-//	@Inject
-//	private IRedirectionContractDetailsProvider redirectionContractDetailsProvider;
-	
+	@Inject
+	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
+
 	protected RedirectionContractTransformer(final Class<? extends LNGPriceCalculatorParameters> redirectionPriceParamtersClass) {
 		this.redirectionPriceParamtersClass = redirectionPriceParamtersClass;
 	}
-	
+
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 		this.map = map;
@@ -99,37 +102,15 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 	}
 
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, final LNGPriceCalculatorParameters sc) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters sc) {
 		return null;
 	}
 
 	@Override
-	public abstract ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, final LNGPriceCalculatorParameters pc);
-//	{
-//		if (redirectionPriceParamtersClass.isInstance(pc)) {
-//			return createRedirectionContract(redirectionPriceParamtersClass.cast(pc));
-//		}
-//		return null;
-//	}
-
-//	private <T extends LNGPriceCalculatorParameters> RedirectionContract createRedirectionContract(final T  contract) {
-//		final IPort baseSalesMarketPort = map.getOptimiserObject(contract.getBaseSalesMarketPort(), IPort.class);
-//		final IPort sourcePurchasePort = map.getOptimiserObject(contract.getSourcePurchasePort(), IPort.class);
-//
-//		final ICurve purchasePriceCurve = generateExpressionCurve(contract.getBasePurchasePriceExpression());
-//		final ICurve salesPriceCurve = generateExpressionCurve(contract.getBaseSalesPriceExpression());
-//
-//		final int notionalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(contract.getNotionalSpeed());
-//
-//		final IVesselClass vesselClass = map.getOptimiserObject(contract.getVesselClass(), IVesselClass.class);
-//		final ICurve hireCurve = new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalHourlyRate(contract.getHireCost()));
-//		final RedirectionContract redirectionContract = new RedirectionContract(purchasePriceCurve, salesPriceCurve, notionalSpeed, baseSalesMarketPort, sourcePurchasePort, vesselClass, hireCurve);
-//		injector.injectMembers(redirectionContract);
-//		return redirectionContract;
-//	}
+	public abstract ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters pc);
 
 	@Override
-	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
+	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
 		// Avoid recursion with generated slots
 		if (generatedOptions.contains(optimiserSlot)) {
 			return;
@@ -141,21 +122,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 			if (loadSlot.getContract() instanceof PurchaseContract) {
 				final PurchaseContract purchaseContract = (PurchaseContract) loadSlot.getContract();
 
-				if (redirectionPriceParamtersClass.isInstance(purchaseContract.getPriceInfo() )) {
-//					final RedirectionPriceParameters redirectionPriceParameters = (RedirectionPriceParameters) purchaseContract.getPriceInfo();
-
-//					Date originalDate = redirectionContractDetailsProvider.getOriginalDate(loadSlot);
-//					for (final EObject obj : modelSlot.getExtensions()) {
-//						if (obj instanceof RedirectionContractOriginalDate) {
-//							final RedirectionContractOriginalDate redirectionContractOriginalDate = (RedirectionContractOriginalDate) obj;
-//							originalDate = redirectionContractOriginalDate.getDate();
-//							break;
-//						}
-//					}
-
-//					final int originalLoadTime = originalDate == null ? optimiserSlot.getTimeWindow().getStart() : map.getHoursFromDate(originalDate);
-					// TODO: Obtain directly or derive from slot data
-//					final int shippingHours = 60 * 24; // redirectionContractDetailsProvider.getShippingHours....
+				if (redirectionPriceParamtersClass.isInstance(purchaseContract.getPriceInfo())) {
 					// TODO: Pass into
 					// Get from contract
 					boolean swappable = true;
@@ -180,9 +147,11 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 						final ITimeWindow currentWindow = loadOption.getTimeWindow();
 						final String id = loadOption.getId() + "-alt";
 						if (loadSlot.isDESPurchase()) {
+							final ITimeWindow baseTimeWindow = shippingHoursRestrictionProvider.getBaseTime(elementA);
+
 							// Convert to FOB Purchase slot
-							final ITimeWindow window = builder.createTimeWindow(originalLoadTime, originalLoadTime + 24);
-							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, 24, false, true, IPortSlot.NO_PRICING_DATE, slotIsOptional);
+							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), baseTimeWindow, minVolume, maxVolume, priceCalculator, cargoCVValue, 24, false, true,
+									IPortSlot.NO_PRICING_DATE, slotIsOptional);
 							generatedOptions.add(alternativeSlot);
 
 							// Create a fake model object to add in here;
@@ -194,7 +163,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 								fobPurchaseSlot.setCargoCV(loadSlot.getCargoCV());
 							}
 							fobPurchaseSlot.setPort(loadSlot.getPort());
-							fobPurchaseSlot.setWindowStart(map.getDateFromHours(window.getStart()));
+							fobPurchaseSlot.setWindowStart(map.getDateFromHours(baseTimeWindow.getStart()));
 							fobPurchaseSlot.setContract(loadSlot.getContract());
 							fobPurchaseSlot.setOptional(loadSlot.isOptional());
 							fobPurchaseSlot.setWindowSize((int) 24);
@@ -213,8 +182,11 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							transformSlot(fobPurchaseSlot, alternativeSlot);
 						} else {
 							// Convert to DES Purchase
+							final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(elementA);
+
 							final ITimeWindow window = builder.createTimeWindow(currentWindow.getStart(), currentWindow.getEnd() + shippingHours);
-							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, IPortSlot.NO_PRICING_DATE, slotIsOptional);
+							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue, IPortSlot.NO_PRICING_DATE,
+									slotIsOptional);
 
 							generatedOptions.add(alternativeSlot);
 
@@ -239,8 +211,8 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							// Key piece of information
 							map.addModelObject(desSlot, alternativeSlot);
 
-							// Reuse RedirectionDESPurchaseBindingsGenerator
-							desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, desSlot, alternativeSlot);
+							// TODO Reuse RedirectionDESPurchaseBindingsGenerator
+							// desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, desSlot, alternativeSlot);
 
 							redirectionGroup.add(desSlot);
 
