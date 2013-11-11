@@ -97,11 +97,11 @@ public class ScheduleCalculator {
 	public void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-			shippingCalculator.prepareEvaluation(sequences);
+			shippingCalculator.prepareEvaluation(sequences, scheduledSequences);
 		}
 		// Prime the load price calculators with the scheduled result
 		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
-			calculator.prepareEvaluation(sequences);
+			calculator.prepareEvaluation(sequences, scheduledSequences);
 		}
 
 		// FIXME: This should be more customisable

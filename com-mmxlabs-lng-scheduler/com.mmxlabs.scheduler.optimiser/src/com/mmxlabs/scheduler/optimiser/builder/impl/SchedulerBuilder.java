@@ -89,6 +89,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
@@ -328,7 +329,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE", false, new ICooldownPriceCalculator() {
 			@Override
-			public void prepareEvaluation(final ISequences sequences) {
+			public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 			}
 
 			@Override
@@ -1853,8 +1854,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setNominatedVessel(@NonNull final IPortSlot slot, @NonNull final IVessel vessel) {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
-		IVessel resourceVessel = virtualVesselMap.get(element);
-		IResource resource = vesselProvider.getResource(resourceVessel);
+		final IVessel resourceVessel = virtualVesselMap.get(element);
+		final IResource resource = vesselProvider.getResource(resourceVessel);
 		nominatedVesselProviderEditor.setNominatedVessel(element, resource, vessel);
 	}
 

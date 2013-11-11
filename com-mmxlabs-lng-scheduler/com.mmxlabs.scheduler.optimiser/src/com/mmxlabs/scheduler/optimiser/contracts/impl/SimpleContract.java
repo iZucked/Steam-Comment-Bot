@@ -17,6 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -26,7 +27,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
 
 	@Override
-	public void prepareEvaluation(final ISequences sequences) {
+	public void prepareEvaluation(final ISequences sequences, ScheduledSequences scheduledSequences) {
+
 	}
 
 	/**
@@ -73,7 +75,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			final IDetailTree annotations) {
 		return calculateSimpleUnitPrice(transferTime);
 	}
-	
+
 	@Override
 	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumes, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
 			IDetailTree annotations) {

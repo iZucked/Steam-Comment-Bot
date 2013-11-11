@@ -28,9 +28,12 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * This will be called with a {@link ISequences} instance once before any of the load slots therein contained have their prices calculated with the
 	 * {@link #calculateLoadUnitPrice(ILoadSlot, IDischargeSlot, int, int, int)} method.
 	 * 
+	 * Note the {@link ScheduledSequences} object will be in an incomplete state at this point in time.
+	 * 
 	 * @param sequences
+	 * @param scheduledSequences
 	 */
-	public void prepareEvaluation(ISequences sequences);
+	public void prepareEvaluation(ISequences sequences, ScheduledSequences scheduledSequences);
 
 	/**
 	 * Find the price (in $/M3) for loading at the given slot. Although every argument here except loadSlot and loadVolume can be found in the previous call to
@@ -95,8 +98,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * TODO: Could break out into Cargo, FOB, DES API's TODO: Check array/list in API pass through for least amount of conversions (see base volume allocator & default enitiy value calculator)
 	 * 
-	 * @return Positive value for profit, negative value for loss (Normal scale factor)
-	 * // TODO: Copy API for calulcateLoadPrice 
+	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
 	 */
 	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumes, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
 			IDetailTree annotations);
