@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.lng.cargo.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -37,7 +38,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 */
 	public static CargoFactory init() {
 		try {
-			CargoFactory theCargoFactory = (CargoFactory)EPackage.Registry.INSTANCE.getEFactory(CargoPackage.eNS_URI);
+			CargoFactory theCargoFactory = (CargoFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/cargo/1/"); 
 			if (theCargoFactory != null) {
 				return theCargoFactory;
 			}

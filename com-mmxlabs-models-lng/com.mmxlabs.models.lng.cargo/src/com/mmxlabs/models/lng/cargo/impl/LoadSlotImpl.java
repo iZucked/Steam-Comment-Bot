@@ -9,14 +9,18 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -325,14 +329,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public double getSlotOrPortCV() {
-		if (isSetCargoCV()) {
-			return getCargoCV();
-		} else if (getPort() != null) {
-			return getPort().getCvValue();
-		} else {
-			return 0.0;
-		}
+	public double getSlotOrDelegatedCV() {
+		return (double) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__CARGO_CV);
 	}
 
 	/**
@@ -462,8 +460,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_PORT_CV:
-				return getSlotOrPortCV();
+			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV:
+				return getSlotOrDelegatedCV();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -493,7 +491,27 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		if (feature == CargoPackage.Literals.SLOT__DURATION) {
 			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__LOAD_DURATION, (Integer) 12);
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__CARGO_CV) {
-			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__CV_VALUE, (Double) 24.0);
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT || changedFeature == CargoPackage.Literals.SLOT__PORT);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					PurchaseContract purchaseContract = (PurchaseContract) getContract();
+					if (purchaseContract != null) {
+						result = purchaseContract.eGetWithDefault(CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV);						
+					}
+					if (result == null) {
+						result =  port.eGetWithDefault(PortPackage.Literals.PORT__CV_VALUE);
+					}
+					if (result == null) {
+						result = (Double) 0.0;
+					}
+					return result;
+					
+				}				
+			};
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD) {
 			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__ALLOW_COOLDOWN, Boolean.TRUE);
 		}
