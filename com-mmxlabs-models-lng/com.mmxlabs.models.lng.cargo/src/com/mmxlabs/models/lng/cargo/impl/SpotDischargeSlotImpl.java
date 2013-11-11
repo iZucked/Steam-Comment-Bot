@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -12,6 +13,8 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 
 /**
  * <!-- begin-user-doc -->
@@ -188,6 +191,17 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		if (feature == CargoPackage.Literals.SLOT__ENTITY) {
+			// delegate entity information to the spot market, not the contract
+			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__ENTITY, null);			
+		}
+		return null;
+	}	
 } // end of SpotDischargeSlotImpl
 
 // finish type fixing

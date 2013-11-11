@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import com.mmxlabs.models.lng.spotmarkets.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -38,7 +39,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	 */
 	public static SpotMarketsFactory init() {
 		try {
-			SpotMarketsFactory theSpotMarketsFactory = (SpotMarketsFactory)EPackage.Registry.INSTANCE.getEFactory(SpotMarketsPackage.eNS_URI);
+			SpotMarketsFactory theSpotMarketsFactory = (SpotMarketsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/spotmarkets/1/"); 
 			if (theSpotMarketsFactory != null) {
 				return theSpotMarketsFactory;
 			}

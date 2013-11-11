@@ -48,6 +48,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="priceInfo" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//LNGPriceCalculatorParameters"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//LegalEntity"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DESPurchaseMarket" eSuperTypes="#//SpotMarket">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>

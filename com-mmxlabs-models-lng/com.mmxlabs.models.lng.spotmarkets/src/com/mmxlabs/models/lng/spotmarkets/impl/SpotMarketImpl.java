@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -28,6 +29,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPriceInfo <em>Price Info</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getEntity <em>Entity</em>}</li>
  * </ul>
  * </p>
  *
@@ -115,6 +117,16 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @ordered
 	 */
 	protected LNGPriceCalculatorParameters priceInfo;
+
+	/**
+	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected LegalEntity entity;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -291,6 +303,44 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public LegalEntity getEntity() {
+		if (entity != null && entity.eIsProxy()) {
+			InternalEObject oldEntity = (InternalEObject)entity;
+			entity = (LegalEntity)eResolveProxy(oldEntity);
+			if (entity != oldEntity) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.SPOT_MARKET__ENTITY, oldEntity, entity));
+			}
+		}
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LegalEntity basicGetEntity() {
+		return entity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEntity(LegalEntity newEntity) {
+		LegalEntity oldEntity = entity;
+		entity = newEntity;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__ENTITY, oldEntity, entity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -320,6 +370,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return getMaxQuantity();
 			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				return getPriceInfo();
+			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
+				if (resolve) return getEntity();
+				return basicGetEntity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -348,6 +401,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				setPriceInfo((LNGPriceCalculatorParameters)newValue);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
+				setEntity((LegalEntity)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -375,6 +431,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				setPriceInfo((LNGPriceCalculatorParameters)null);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
+				setEntity((LegalEntity)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -397,6 +456,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
 			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				return priceInfo != null;
+			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
+				return entity != null;
 		}
 		return super.eIsSet(featureID);
 	}

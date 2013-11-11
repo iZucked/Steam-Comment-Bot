@@ -344,13 +344,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKET__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
@@ -424,6 +433,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DES_PURCHASE_MARKET__PRICE_INFO = SPOT_MARKET__PRICE_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__ENTITY = SPOT_MARKET__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -526,6 +544,15 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__PRICE_INFO = SPOT_MARKET__PRICE_INFO;
 
 	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__ENTITY = SPOT_MARKET__ENTITY;
+
+	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -625,6 +652,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_PURCHASES_MARKET__PRICE_INFO = SPOT_MARKET__PRICE_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__ENTITY = SPOT_MARKET__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
@@ -735,6 +771,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_SALES_MARKET__PRICE_INFO = SPOT_MARKET__PRICE_INFO;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__ENTITY = SPOT_MARKET__ENTITY;
 
 	/**
 	 * The feature id for the '<em><b>Load Port</b></em>' reference.
@@ -1038,6 +1083,17 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSpotMarket_PriceInfo();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#getEntity()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EReference getSpotMarket_Entity();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket <em>DES Purchase Market</em>}'.
@@ -1421,6 +1477,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPOT_MARKET__PRICE_INFO = eINSTANCE.getSpotMarket_PriceInfo();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET__ENTITY = eINSTANCE.getSpotMarket_Entity();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
