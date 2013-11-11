@@ -61,18 +61,19 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	@Override
 	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 
-		final ISequenceElement prevElement = null;
 		for (final IResource resource : sequences.getResources()) {
 			final IVessel v = vesselProvider.getVessel(resource);
 			if (v.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || v.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
 				final ISequence sequence = sequences.getSequence(resource);
+				ISequenceElement prevElement = null;
 				for (final ISequenceElement element : sequence) {
 					if (prevElement != null) {
 						if (!checkPairwiseConstraint(prevElement, element, resource)) {
 							return false;
 						}
 					}
+					prevElement = element;
 				}
 			}
 		}
