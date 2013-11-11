@@ -9,13 +9,15 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.PortPackage;
 
 /**
@@ -493,7 +495,11 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		if (feature == CargoPackage.Literals.SLOT__DURATION) {
 			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__LOAD_DURATION, (Integer) 12);
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__CARGO_CV) {
-			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__CV_VALUE, (Double) 24.0);
+			PurchaseContract contract = (PurchaseContract) getContract();
+			if (contract == null || contract.isSetCargoCV() == false) {
+				return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__CV_VALUE, (Double) 0.0);
+			}
+			return new DelegateInformation(CargoPackage.Literals.SLOT__CONTRACT, CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV, (Double) 0.0);
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD) {
 			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__ALLOW_COOLDOWN, Boolean.TRUE);
 		}

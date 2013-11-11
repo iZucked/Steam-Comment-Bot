@@ -77,5 +77,15 @@ public class PurchaseContractComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_cargoCVEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the cargoCV feature on PurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_cargoCVEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV));
 	}
 }
