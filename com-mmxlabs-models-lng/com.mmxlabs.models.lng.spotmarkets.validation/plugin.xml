@@ -47,7 +47,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  {0}
+                  The attribute(s) {0} must be set.
                </message>
                <target
                      class="SpotMarket">
