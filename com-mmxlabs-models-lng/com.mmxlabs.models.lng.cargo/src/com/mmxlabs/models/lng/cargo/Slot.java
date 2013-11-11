@@ -909,7 +909,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	LegalEntity getSlotOrContractEntity();
+	LegalEntity getSlotOrDelegatedEntity();
 
 	/**
 	 * <!-- begin-user-doc -->

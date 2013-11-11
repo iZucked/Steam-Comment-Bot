@@ -1306,7 +1306,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public LegalEntity getSlotOrContractEntity() {
+	public LegalEntity getSlotOrDelegatedEntity() {
 		return (LegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);
 	}
 
@@ -1707,8 +1707,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowStartWithSlotOrPortTime();
 			case CargoPackage.SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE:
 				return getSlotOrPortWindowSize();
-			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_ENTITY:
-				return getSlotOrContractEntity();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_ENTITY:
+				return getSlotOrDelegatedEntity();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS:
 				return getSlotOrContractRestrictedContracts();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS:

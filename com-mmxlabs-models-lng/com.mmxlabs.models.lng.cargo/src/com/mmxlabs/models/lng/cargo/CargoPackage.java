@@ -493,13 +493,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Entity</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_CONTRACT_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+	int SLOT___GET_SLOT_OR_DELEGATED_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
@@ -876,13 +876,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Entity</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_ENTITY = SLOT___GET_SLOT_OR_CONTRACT_ENTITY;
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
@@ -1278,13 +1278,13 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Entity</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_ENTITY = SLOT___GET_SLOT_OR_CONTRACT_ENTITY;
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
@@ -1879,13 +1879,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Entity</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_ENTITY = LOAD_SLOT___GET_SLOT_OR_CONTRACT_ENTITY;
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
@@ -2291,13 +2291,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Contract Entity</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_ENTITY = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_ENTITY;
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
@@ -2804,14 +2804,14 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrPortWindowSize();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractEntity() <em>Get Slot Or Contract Entity</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedEntity() <em>Get Slot Or Delegated Entity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Contract Entity</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractEntity()
+	 * @return the meta object for the '<em>Get Slot Or Delegated Entity</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedEntity()
 	 * @generated
 	 */
-	EOperation getSlot__GetSlotOrContractEntity();
+	EOperation getSlot__GetSlotOrDelegatedEntity();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedContracts() <em>Get Slot Or Contract Restricted Contracts</em>}' operation.
@@ -3412,12 +3412,12 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = eINSTANCE.getSlot__GetSlotOrPortWindowSize();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Contract Entity</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Slot Or Delegated Entity</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation SLOT___GET_SLOT_OR_CONTRACT_ENTITY = eINSTANCE.getSlot__GetSlotOrContractEntity();
+		EOperation SLOT___GET_SLOT_OR_DELEGATED_ENTITY = eINSTANCE.getSlot__GetSlotOrDelegatedEntity();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Contracts</b></em>' operation.

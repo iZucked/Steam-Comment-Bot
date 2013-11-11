@@ -463,7 +463,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractEntity() {
+	public EOperation getSlot__GetSlotOrDelegatedEntity() {
 		return slotEClass.getEOperations().get(6);
 	}
 
@@ -800,7 +800,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE);
-		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_ENTITY);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATED_ENTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE);
@@ -938,7 +938,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSlotOrPortWindowSize(), ecorePackage.getEInt(), "getSlotOrPortWindowSize", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetSlotOrContractEntity(), theCommercialPackage.getLegalEntity(), "getSlotOrContractEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetSlotOrDelegatedEntity(), theCommercialPackage.getLegalEntity(), "getSlotOrDelegatedEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrContractRestrictedContracts(), theCommercialPackage.getContract(), "getSlotOrContractRestrictedContracts", 0, -1, IS_UNIQUE, IS_ORDERED);
 
