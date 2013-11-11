@@ -44,7 +44,12 @@ public class DialogEcoreCopier {
 
 		final List<EObject> newCopies = new ArrayList<EObject>(theOriginals.size());
 		for (final EObject original : theOriginals) {
-			newCopies.add(copy(original));
+			// Check to see if object has already been copied to avoid duplicate copies
+			if (copier.get(original) != null) {
+				newCopies.add(copier.get(original));
+			} else {
+				newCopies.add(copy(original));
+			}
 		}
 
 		return newCopies;

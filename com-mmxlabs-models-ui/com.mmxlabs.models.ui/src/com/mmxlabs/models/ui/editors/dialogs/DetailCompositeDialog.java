@@ -9,8 +9,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.runtime.IStatus;
@@ -153,7 +155,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private EObject getDuplicate(final EObject input, final IDisplayComposite displayComposite) {
 		final EObject original = input;
 		if (!originalToDuplicate.containsKey(original)) {
-			final List<EObject> range = new ArrayList<EObject>(displayCompositeFactory.getExternalEditingRange(rootObject, original));
+			// Use a set to avoid duplicates in the list
+			final Set<EObject> range = new LinkedHashSet<EObject>(displayCompositeFactory.getExternalEditingRange(rootObject, original));
 			range.add(original);
 			// range is the full set of objects which the display composite
 			// might touch; we need to duplicate all of these
