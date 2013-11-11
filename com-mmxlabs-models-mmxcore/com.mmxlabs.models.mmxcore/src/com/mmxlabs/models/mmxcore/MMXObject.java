@@ -31,16 +31,30 @@ public interface MMXObject extends EObject {
 	 */
 	public class DelegateInformation {
 		// The subfield of the object to delegate to when a field is unset
-		public final EStructuralFeature delegate;
+		private final EStructuralFeature delegate;
 		// The subfield of the delegate to use when a field is unset
-		public final EStructuralFeature delegateFeature;
+		private final EStructuralFeature delegateFeature;
 		// The value to use when a delegate is absent or there is no delegation
-		public final Object absentDelegateValue;
+		private final Object absentDelegateValue;
 		
 		public DelegateInformation(EStructuralFeature delegate, EStructuralFeature delegateFeature, Object value) {
 			this.delegate = delegate;
 			this.delegateFeature = delegateFeature;
 			this.absentDelegateValue = value;
+		}
+		
+		public boolean delegatesTo(final Object changedFeature) {
+			return delegate == changedFeature;
+		}
+		
+		public Object getValue(final EObject object) {
+			if (delegate != null) {
+				MMXObject delegateObject = (MMXObject) object.eGet(delegate);
+				if (delegateObject != null) {
+					return delegateObject.eGet(delegateFeature);
+				}
+			}
+			return absentDelegateValue;
 		}
 		
 	}

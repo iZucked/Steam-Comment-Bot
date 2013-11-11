@@ -96,13 +96,7 @@ public abstract class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	public Object getUnsetValue(EStructuralFeature feature) {
 		DelegateInformation dfi = getUnsetValueOrDelegate(feature);
 		if (dfi != null) {
-			if (dfi.delegate != null) {
-				MMXObject delegate = (MMXObject) eGet(dfi.delegate);
-				if (delegate != null)
-					return delegate.eGet(dfi.delegateFeature);
-			}
-			
-			return dfi.absentDelegateValue;
+			return dfi.getValue(this);
 		}
 		else {
 			return eGet(feature);
