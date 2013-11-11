@@ -34,10 +34,4 @@
             class="com.mmxlabs.models.lng.scenario.model.provider.LNGScenarioItemProviderAdapterFactory$CommercialChildCreationExtender"/>
    </extension>
 
-   <extension point="org.eclipse.emf.edit.childCreationExtenders">
-      <extender
-            uri="http://www.mmxlabs.com/models/lng/commercial/1/"
-            class="com.mmxlabs.models.lng.scenario.model.provider.LNGScenarioItemProviderAdapterFactory$CommercialChildCreationExtender"/>
-   </extension>
-
 </plugin>
