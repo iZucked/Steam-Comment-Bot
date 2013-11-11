@@ -75,7 +75,7 @@
 <unit id="com.mmxlabs.optimiser.optimiser-core" version="0.0.0"/>
 <unit id="com.mmxlabs.optimiser.optimiser-ga" version="0.0.0"/>
 <unit id="com.mmxlabs.optimiser.optimiser-lso" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/optimiser/optimiser-p2/1.1.1.RELEASE/optimiser-p2-1.1.1.RELEASE-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/optimiser/optimiser-p2/1.1.2/optimiser-p2-1.1.2-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 </locations>
 </target>
