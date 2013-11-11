@@ -7,7 +7,8 @@
   <genPackages prefix="MMXCore" basePackage="com.mmxlabs.models" disposableProviderFactory="true"
       extensibleProviderFactory="true" childCreationExtenders="true" ecorePackage="mmxcore.ecore#/">
     <genClasses ecoreClass="mmxcore.ecore#//MMXObject">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mmxcore.ecore#//MMXObject/extensions"/>
+      <genFeatures children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference mmxcore.ecore#//MMXObject/extensions"/>
       <genOperations ecoreOperation="mmxcore.ecore#//MMXObject/getUnsetValue">
         <genParameters ecoreParameter="mmxcore.ecore#//MMXObject/getUnsetValue/feature"/>
       </genOperations>
