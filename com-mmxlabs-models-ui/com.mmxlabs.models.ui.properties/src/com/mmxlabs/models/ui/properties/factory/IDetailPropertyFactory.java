@@ -15,9 +15,9 @@ import com.mmxlabs.models.ui.properties.DetailProperty;
  */
 public interface IDetailPropertyFactory {
 
-	@NonNull
+	@Nullable
 	DetailProperty createProperties(@NonNull EObject eObject);
 
-	@NonNull
+	@Nullable
 	DetailProperty createProperties(@NonNull EObject eObject, @Nullable MMXRootObject rootObject);
 }
