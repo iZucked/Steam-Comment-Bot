@@ -196,7 +196,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							desSlot.setName(loadOption.getId());
 							desSlot.setArriveCold(true);
 							// Always set CV
-							desSlot.setCargoCV(loadSlot.getSlotOrPortCV());
+							desSlot.setCargoCV(loadSlot.getSlotOrDelegatedCV());
 							desSlot.setPort(loadSlot.getPort());
 							desSlot.setWindowStart(map.getDateFromHours(window.getStart()));
 							desSlot.setContract(loadSlot.getContract());
