@@ -11,8 +11,6 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.common.detailtree.impl.UnitPriceDetailElement;
-import com.mmxlabs.common.indexedobjects.IIndexingContext;
-import com.mmxlabs.models.lng.transformer.extensions.redirection.providers.IOriginalDataProvider;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -27,10 +25,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -46,7 +43,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class RedirectionContract implements ILoadPriceCalculator {
 
-	private RedirectionVoyageCostCalculator redirVCC;
+	@Inject
+	private IVoyageCostCalculator redirVCC;
 
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
@@ -82,9 +80,6 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			final IVesselClass templateClass, final ICurve charterInCurve) {
 		super();
 		this.purchasePriceCurve = purchasePriceCurve;
-		// this.salesPriceCurve = salesPriceCurve;
-
-		redirVCC = new RedirectionVoyageCostCalculator(salesPriceCurve);
 
 		this.notionalSpeed = notionalSpeed;
 		this.baseSalesMarketPort = baseSalesMarketPort;
@@ -104,6 +99,9 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		if (baseSalesMarketPort.equals(dischargeSlot.getPort())) {
 			return marketPurchasePricePerMMBTu;
 		} else {
+
+			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getStart();
+
 			long baseShippingCosts = Long.MAX_VALUE;
 			String baseRoute = null;
 
@@ -114,10 +112,12 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				currentRouteAnnotation = annotation.addChild("Redirect Route", "");
 			}
 
+			// TODO: E.g. Model based on distance @ max speed?
+			final int baseDischargeTime = dischargeTime;
 			for (final String route : distanceProvider.getKeys()) {
 
-				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getLoadPriceCalculator(), sourcePurchasePort, baseSalesMarketPort, originalLoadTime, loadVolumeInM3, vessel,
-						cargoCVValue, route);
+				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), baseSalesMarketPort, originalLoadTime, baseDischargeTime, vessel, vessel.getVesselClass().getMaxSpeed(),
+						loadSlot.getCargoCVValue(), route, vessel.getVesselClass().getBaseFuelUnitPrice(), dischargePricePerMMBTu);
 				if (plan == null) {
 					continue;
 				}
@@ -142,8 +142,9 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			String notionalRoute = null;
 			for (final String route : distanceProvider.getKeys()) {
 
-				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getLoadPriceCalculator(), sourcePurchasePort, dischargeSlot.getPort(), originalLoadTime, loadVolumeInM3, vessel,
-						cargoCVValue, route);
+				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), dischargeSlot.getPort(), originalLoadTime, dischargeTime, vessel, vessel.getVesselClass().getMaxSpeed(),
+						loadSlot.getCargoCVValue(), route, vessel.getVesselClass().getBaseFuelUnitPrice(), dischargePricePerMMBTu);
+
 				if (plan == null) {
 					continue;
 				}
@@ -194,6 +195,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		if (baseSalesMarketPort.equals(dischargeOption.getPort())) {
 			return marketPurchasePricePerMMBTu;
 		} else {
+			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getStart();
+
 			long baseShippingCosts = Long.MAX_VALUE;
 			String baseRoute = null;
 
@@ -204,11 +207,12 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				currentRouteAnnotation = annotations.addChild("Redirect Route", "");
 			}
 
+			// TODO: E.g. Model based on distance @ max speed?
+			final int baseDischargeTime = transferTime;
 			for (final String route : distanceProvider.getKeys()) {
-				// Notional Costs - Hammerfest -> Dragon
-
-				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getLoadPriceCalculator(), sourcePurchasePort, baseSalesMarketPort, originalLoadTime, transferVolumeInM3, vessel,
-						cargoCVValue, route);
+				// Notional Costs - Purchase port to base destination
+				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), baseSalesMarketPort, originalLoadTime, baseDischargeTime, vessel, vessel.getVesselClass().getMaxSpeed(),
+						loadOption.getCargoCVValue(), route, vessel.getVesselClass().getBaseFuelUnitPrice(), actualSalesPricePerMMBTu);
 				if (plan == null) {
 					continue;
 				}
@@ -233,8 +237,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			String notionalRoute = null;
 			for (final String route : distanceProvider.getKeys()) {
 
-				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getLoadPriceCalculator(), sourcePurchasePort, dischargeOption.getPort(), originalLoadTime, transferVolumeInM3,
-						vessel, cargoCVValue, route);
+				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), dischargeOption.getPort(), originalLoadTime, transferTime, vessel, vessel.getVesselClass().getMaxSpeed(),
+						loadOption.getCargoCVValue(), route, vessel.getVesselClass().getBaseFuelUnitPrice(), actualSalesPricePerMMBTu);
 				if (plan == null) {
 					continue;
 				}
@@ -273,7 +277,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public void prepareEvaluation(final ISequences sequences) {
+	public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 
 	}
 
@@ -282,8 +286,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumes, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
-			IDetailTree annotations) {
+	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final List<IPortSlot> slots, final int[] arrivalTimes, final long[] volumes, final int[] dischargePricesPerMMBTu,
+			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
