@@ -176,7 +176,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								if (totalRoundTripTimeInHours > desPurchase.getShippingDaysRestriction() * 24) {
 									final String message = String.format(
 											"DES Purchase|%s is paired with a sale at %s. However the round trip time (%s) is greater than the permitted restriction (%s).", desPurchase.getName(),
-											dischargeSlot.getPort().getName(), formatHours(totalRoundTripTimeInHours), formatHours(desPurchase.getShippingDaysRestriction()));
+											dischargeSlot.getPort().getName(), formatHours(totalRoundTripTimeInHours), formatHours(desPurchase.getShippingDaysRestriction()*24));
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 									dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
