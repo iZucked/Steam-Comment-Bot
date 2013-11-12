@@ -47,7 +47,10 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
+import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
+import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -111,7 +114,7 @@ public class CargoEditorMenuHelper {
 		public void run() {
 
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(shell, scenarioEditingLocation.getDefaultCommandHandler());
-			ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 			try {
 				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
@@ -256,6 +259,10 @@ public class CargoEditorMenuHelper {
 					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), dischargeSlot.getCargo());
 					createAssignmentMenus(manager, elementAssignment);
 				}
+				final Contract contract = dischargeSlot.getContract();
+				if (contract != null && contract.getContractType() == ContractType.BOTH) {
+					createFOBDESSwitchMenu(manager, dischargeSlot);
+				}
 			}
 
 		};
@@ -288,7 +295,7 @@ public class CargoEditorMenuHelper {
 			class AssignAction extends Action {
 				private final AVesselSet<Vessel> vessel;
 
-				public AssignAction(String label, final AVesselSet<Vessel> vessel) {
+				public AssignAction(final String label, final AVesselSet<Vessel> vessel) {
 					super(label);
 					this.vessel = vessel;
 				}
@@ -301,13 +308,13 @@ public class CargoEditorMenuHelper {
 				}
 			}
 
-			IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
+			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
 					.getValueProviderFactory(AssignmentPackage.eINSTANCE.getElementAssignment(), AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
-			IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(AssignmentPackage.eINSTANCE.getElementAssignment(),
+			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(AssignmentPackage.eINSTANCE.getElementAssignment(),
 					AssignmentPackage.eINSTANCE.getElementAssignment_Assignment(), scenarioModel);
 
 			if (elementAssignment != null) {
-				for (Pair<String, EObject> p : valueProvider.getAllowedValues(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment())) {
+				for (final Pair<String, EObject> p : valueProvider.getAllowedValues(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment())) {
 					if (p.getSecond() != elementAssignment.getAssignment()) {
 						reassignMenuManager.add(new AssignAction(p.getFirst(), (AVesselSet<Vessel>) p.getSecond()));
 					}
@@ -377,7 +384,12 @@ public class CargoEditorMenuHelper {
 					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), loadSlot.getCargo());
 					createAssignmentMenus(manager, elementAssignment);
 				}
+				final Contract contract = loadSlot.getContract();
+				if (contract != null && contract.getContractType() == ContractType.BOTH) {
+					createFOBDESSwitchMenu(manager, loadSlot);
+				}
 			}
+
 		};
 		return l;
 
@@ -557,13 +569,13 @@ public class CargoEditorMenuHelper {
 		final EList<Port> restrictedPorts = source.getRestrictedPorts();
 		final EList<Contract> restrictedContracts = source.getRestrictedContracts();
 		final boolean areRestrictedListsPermissive = source.getSlotOrContractRestrictedListsArePermissive();
-		
+
 		if (restrictedContracts != null) {
 			if (restrictedContracts.contains(target.getContract()) != areRestrictedListsPermissive) {
 				return false;
 			}
 		}
-		
+
 		if (restrictedPorts != null) {
 			if (restrictedPorts.contains(target.getPort()) != areRestrictedListsPermissive) {
 				return false;
@@ -1018,6 +1030,59 @@ public class CargoEditorMenuHelper {
 			}
 
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+		}
+	}
+
+	private void createFOBDESSwitchMenu(final IMenuManager manager, final Slot slot) {
+
+		final Contract contract = slot.getContract();
+		assert (contract != null && contract.getContractType() == ContractType.BOTH);
+
+		if (slot instanceof LoadSlot) {
+			final LoadSlot loadSlot = (LoadSlot) slot;
+			if (SlotClassifier.classify(loadSlot) == SlotType.FOB_Buy) {
+				manager.add(new FOBDESSwitchAction("Convert to DES Purchase", slot));
+			} else if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy_AnyDisPort) {
+				manager.add(new FOBDESSwitchAction("Convert to FOB Purchase", slot));
+			}
+		} else if (slot instanceof DischargeSlot) {
+//			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+//			if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
+//				manager.add(new FOBDESSwitchAction("Convert to DES Sale", slot));
+//			} else if (SlotClassifier.classify(dischargeSlot) == SlotType.DES_Sale_Any) {
+//				manager.add(new FOBDESSwitchAction("Convert to FOB Sale", slot));
+//			}
+		}
+	}
+
+	private class FOBDESSwitchAction extends Action {
+		private final Slot slot;
+
+		public FOBDESSwitchAction(final String label, final Slot slot) {
+			super(label);
+			this.slot = slot;
+		}
+
+		@Override
+		public void run() {
+
+			final CompoundCommand cmd = new CompoundCommand(getText());
+			if (slot instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) slot;
+				if (SlotClassifier.classify(loadSlot) != SlotType.DES_Buy) {
+					cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, !loadSlot.isDESPurchase()));
+				}
+			} else if (slot instanceof DischargeSlot) {
+				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				if (SlotClassifier.classify(dischargeSlot) != SlotType.FOB_Sale) {
+					cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, !dischargeSlot.isFOBSale()));
+				}
+			}
+
+			if (cmd.canExecute()) {
+				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+			}
+
 		}
 	}
 
