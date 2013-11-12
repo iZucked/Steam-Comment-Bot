@@ -72,22 +72,13 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 				while(ii.hasNext()){
 					Slot overlapSlot = ii.next();
 					SlotType overlapSlotType = classify(overlapSlot);
-					if (overlapSlot instanceof LoadSlot) {
-						final LoadSlot overlapLoad = (LoadSlot) overlapSlot;
-						if (overlapLoad.isDESPurchase()) {
-							if (overlapSlotType==SlotType.DES_Sale && slotType==SlotType.DES_Buy){
-								ii.remove();
-							}
-						}
-					} else if (slot instanceof DischargeSlot) {
-						final DischargeSlot overlapDischarge = (DischargeSlot) slot;
-						if (overlapDischarge.isFOBSale()) {
-							if (overlapSlotType==SlotType.FOB_Sale && slotType==SlotType.FOB_Buy){
-								ii.remove();
-							}
-						}
-					}		
-				}	
+					if (overlapSlotType == SlotType.DES_Buy && slotType==SlotType.DES_Sale
+						||(overlapSlotType == SlotType.DES_Sale && slotType==SlotType.DES_Buy)
+						||(overlapSlotType == SlotType.FOB_Sale && slotType==SlotType.FOB_Buy)						
+						||(overlapSlotType == SlotType.FOB_Buy && slotType==SlotType.FOB_Sale)){
+						ii.remove();
+					}					
+				}
 				// final boolean overlaps = slots.contains(slot) ? slots.size() > 1 : slots.size() > 0;
 				// if (overlaps) {
 				overlappingSlots.addAll(potentialOverlaps);
