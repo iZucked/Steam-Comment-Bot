@@ -111,7 +111,7 @@
                   lang="java"
                   mode="Batch"
                   name="PurchaseContractCvConstraint"
-                  severity="ERROR"
+                  severity="WARNING"
                   statusCode="1">
                <message>
                   {0}
