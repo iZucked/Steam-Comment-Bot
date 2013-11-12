@@ -147,10 +147,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 						final int transferTime = dischargeTime;
 						final long transferVolumeInM3 = dischargeVolumeInM3;
-						if (loadOption instanceof ILoadSlot) {
+						if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
 							final ILoadSlot loadSlot = (ILoadSlot) loadOption;
-							loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, (IDischargeSlot) dischargeOption, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3,
-									dischargeVolumeInM3, vessel, plan, entityDetails);
+							final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeOption;
+							loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3,
+									vessel, plan, entityDetails);
 						} else {
 							loadOption.getLoadPriceCalculator().calculateLoadPricePerMMBTu(loadOption, dischargeOption, transferTime, dischargePricePerMMBTu, transferVolumeInM3, entityDetails);
 						}
@@ -174,7 +175,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					baseEntity = entity;
 				}
 			} else if (slot instanceof IDischargeOption) {
-//				final IDischargeOption dischargeOption = (IDischargeOption) slot;
+				// final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				// Buy/Sell at same quantity.
 				// TODO: Transfer price
 				addEntityProfit(entityProfit, entity, -value);
@@ -226,7 +227,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null && exportElement != null && entityDetailsMap != null) {
 			{
-				for (boolean includeTimeCharterRates : new boolean[] { true, false }) {
+				for (final boolean includeTimeCharterRates : new boolean[] { true, false }) {
 					final List<IProfitAndLossEntry> entries = new LinkedList<>();
 					for (final IEntity entity : seenEntities) {
 						final Long profit = entityProfit.get(entity);
