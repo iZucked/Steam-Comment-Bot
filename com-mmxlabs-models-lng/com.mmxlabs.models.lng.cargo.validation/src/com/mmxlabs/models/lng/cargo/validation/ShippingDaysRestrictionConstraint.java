@@ -44,6 +44,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstraint {
 
+	private static final int MAX_SHIPPING_DAYS = 90;
+
 	private int getMinRouteTimeInHours(final Slot from, final Slot to, final LNGScenarioModel lngScenarioModel, final Vessel vessel, final double maxSpeedKnots) {
 
 		int minDuration = Integer.MAX_VALUE;
@@ -90,10 +92,10 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 				final LoadSlot loadSlot = (LoadSlot) object;
 				if (loadSlot.isDESPurchase()) {
 					if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
-						if (loadSlot.getShippingDaysRestriction() > 90) {
+						if (loadSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
 							final String message = String.format("DES Purchase|%s shipping days restriction is too big.", loadSlot.getName());
 							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 							failures.add(dsd);
 						}
@@ -103,10 +105,10 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 				final DischargeSlot dischargeSlot = (DischargeSlot) object;
 				if (dischargeSlot.isFOBSale()) {
 					if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
-						if (dischargeSlot.getShippingDaysRestriction() > 90) {
+						if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
 							final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
 							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 							dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 							failures.add(dsd);
 						}
