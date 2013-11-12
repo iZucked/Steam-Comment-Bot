@@ -106,7 +106,6 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 
 				if (desPurchase.getPort() != desSale.getPort()) {
 
-					// TODO: Take time windows into account
 					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(first);
 					if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
 						// No
@@ -145,7 +144,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					final int ballastSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ballastDistance);
 
 					// This is the upper bound on laden travel time
-					final int availableLadenTime = shippingHours - loadDuration + dischargeDuration + ballastSailingTime;
+					final int availableLadenTime = shippingHours - loadDuration - dischargeDuration - ballastSailingTime;
 
 					// It will take at least this amount of time to get between ports - check shipping days is big enough
 					final int minLadenSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ladenDistance);
@@ -155,15 +154,20 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					}
 
 					// It will take at least this amount of time to get between ports - check time windows
-					final int maxWindowLength = desSale.getTimeWindow().getEnd() - fobLoadDate.getStart();
+					final int maxWindowLength = desSale.getTimeWindow().getEnd() - fobLoadDate.getStart() - loadDuration;
 					if (minLadenSailingTime > maxWindowLength) {
 						// Lateness!
 						return false;
 					}
 					// Laden leg is at least this amount of time due to windows
-					final int minWindowLength = desSale.getTimeWindow().getStart() - fobLoadDate.getEnd();
+					final int minWindowLength = desSale.getTimeWindow().getStart() - fobLoadDate.getEnd() - loadDuration;
 					if (minWindowLength > availableLadenTime) {
 						// Windows too far apart for shipping restriction
+						return false;
+					}
+
+					if (Math.max(minLadenSailingTime, minWindowLength) + loadDuration + dischargeDuration + ballastSailingTime > shippingHours) {
+						// Total time is greater than shipping hours!
 						return false;
 					}
 

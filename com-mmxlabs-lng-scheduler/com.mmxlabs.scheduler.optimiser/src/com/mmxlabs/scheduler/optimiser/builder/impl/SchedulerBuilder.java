@@ -380,7 +380,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ILoadOption createDESPurchaseLoadSlot(final String id, @Nullable IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
-			final ILoadPriceCalculator priceCalculator, final int cargoCVValue, final int pricingDate, final boolean slotIsOptional) {
+			final ILoadPriceCalculator priceCalculator, final int cargoCVValue, final int durationHours, final int pricingDate, final boolean slotIsOptional) {
 
 		if (port == null) {
 			port = ANYWHERE;
@@ -388,6 +388,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final LoadOption slot = new LoadOption();
 		final ISequenceElement element = configureLoadOption(slot, id, port, window, minVolume, maxVolume, priceCalculator, cargoCVValue, pricingDate, slotIsOptional);
+
+		elementDurationsProvider.setElementDuration(element, durationHours);
 
 		unshippedElements.add(element);
 
@@ -441,7 +443,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IDischargeOption createFOBSaleDischargeSlot(final String id, @Nullable IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final long minCvValue,
-			final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int pricingDate, final boolean slotIsOptional) {
+			final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int durationHours, final int pricingDate, final boolean slotIsOptional) {
 
 		if (port == null) {
 			port = ANYWHERE;
@@ -450,6 +452,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final DischargeOption slot = new DischargeOption();
 
 		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, pricingDate, slotIsOptional);
+
+		elementDurationsProvider.setElementDuration(element, durationHours);
 
 		unshippedElements.add(element);
 
