@@ -34,6 +34,8 @@ import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -150,6 +152,15 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 						}
 					}
 
+					final Set<VesselClass> availableSpotVesselClasses = new HashSet<>();
+					final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
+					if (spotMarketsModel != null) {
+						for (final CharterCostModel charteringSpotMarket : spotMarketsModel.getCharteringSpotMarkets()) {
+							if (charteringSpotMarket.getSpotCharterCount() > 0) {
+								availableSpotVesselClasses.addAll(charteringSpotMarket.getVesselClasses());
+							}
+						}
+					}
 					// create list to populate
 					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
 
@@ -179,7 +190,7 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 							if (vessel instanceof Vessel) {
 								display = useScenarioVessel == scenarioVessels.contains(vessel);
 							} else if (vessel instanceof VesselClass) {
-								display = useScenarioVessel;
+								display = useScenarioVessel && availableSpotVesselClasses.contains(vessel);
 							}
 						}
 
