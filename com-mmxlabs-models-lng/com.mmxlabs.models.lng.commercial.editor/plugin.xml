@@ -195,5 +195,16 @@
             contributorClass="com.mmxlabs.models.lng.commercial.presentation.CommercialActionBarContributor">
       </editor>
    </extension>
+   <extension
+         point="com.mmxlabs.models.util.import.attributes">
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.commercial.ContractType.importer"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="ContractType"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+         </dataType>
+      </attributeImporter>
+   </extension>
 
 </plugin>
