@@ -104,6 +104,22 @@
                   {0}
                </message>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.PurchaseContractCvConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.PurchaseContractCvConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="PurchaseContractCvConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PurchaseContract">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
