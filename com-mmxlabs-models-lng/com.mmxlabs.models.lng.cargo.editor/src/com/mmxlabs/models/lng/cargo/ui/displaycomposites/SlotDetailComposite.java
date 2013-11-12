@@ -259,6 +259,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}		
 		for (EStructuralFeature f : contractFeatures) {
 			pricingFeatures.add(new EStructuralFeature[]{f});
+			System.out.println("Adding pricing feature: " + f);
 			missedFeaturesList.remove(f);
 		}
 
@@ -271,19 +272,19 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		makeExpandable(root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, false);
 
 		if(!missedFeaturesList.isEmpty()) {		
-//			System.out.println(object);
-//			System.out.println(missedFeatures.size());
-//			for (EStructuralFeature[] eStructuralFeatures : missedFeatures) {
-//				for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
-//					System.out.println(eStructuralFeature);
-//				}
-//			}
 			
 			createSpacer();
 			missedFeaturesList.size();
 			for (EStructuralFeature f : missedFeaturesList) {
 				missedFeatures.add(new EStructuralFeature[] {f});
 			}
+//			System.out.println(object);
+//			System.out.println(missedFeaturesList.size());
+//			for (EStructuralFeature[] eStructuralFeatures : missedFeatures) {
+//				for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+//					System.out.println(eStructuralFeature);
+//				}
+//			}
 			makeExpandable(root, object, dbc, esOther, missedFeatures, null, false);
 		}
 
