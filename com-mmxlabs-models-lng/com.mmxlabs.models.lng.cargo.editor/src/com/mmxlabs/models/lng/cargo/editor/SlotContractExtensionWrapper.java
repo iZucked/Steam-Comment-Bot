@@ -3,8 +3,12 @@ package com.mmxlabs.models.lng.cargo.editor;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -34,6 +38,8 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 	private final Class<T> paramsClass;
 	private final Class<U> slotContractParamsClass;
 
+	private Control control;
+
 	public SlotContractExtensionWrapper(@NonNull final IInlineEditor wrapped, @NonNull final Class<T> paramsClass, @NonNull final Class<U> slotContractParamsClass) {
 		super(wrapped);
 		this.paramsClass = paramsClass;
@@ -58,12 +64,14 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 								// setEditorEnabled(enabled);
 								// setEditorVisible(enabled);
 								super.display(location, scenario, r, range);
-								// setEditorEnabled(enabled);
-								// setEditorVisible(enabled);
+								setEditorVisible(enabled);
+								return true;
 							}
 						}
 					}
 				}
+
+				setEditorVisible(false);
 
 				// setEditorVisible(enabled);
 				return true;
@@ -77,7 +85,12 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 					//
 					// setEditorVisible(true);
 					super.display(location, scenario, paramsClass.cast(notification.getNewValue()), range);
+					setEditorVisible(enabled);
+					return true;
+
 				}
+				setEditorVisible(false);
+				return true;
 			}
 
 		}
@@ -125,5 +138,11 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 			super.display(location, scenario, null, range);
 			setEditorVisible(false);
 		}
+	}
+
+	@Override
+	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+		control = super.createControl(parent, dbc, toolkit);
+		return control;
 	}
 }
