@@ -18,37 +18,30 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
+import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
-		
-		if (true) {
-			return ctx.createSuccessStatus();
-		}
-		
+
 		final EObject object = ctx.getTarget();
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
-			// START WIHT SIZE CHECK
-
-			// ADD IN UTILS TO GET SORTED SLOT ORDER
-			// SORT BY DATE< THEN BY TYPE>
-			//
 			if (cargo.getCargoType() == CargoType.FOB || cargo.getCargoType() == CargoType.DES) {
 
 				if (cargo.getSlots().size() > 2) {
-					// Error really,but that is for another validation constraint....
+					// Error really, but that is for another validation constraint....
 					return ctx.createSuccessStatus();
 				}
 
 				LoadSlot loadSlot = null;
 				DischargeSlot dischargeSlot = null;
 
-				for (Slot slot : cargo.getSlots()) {
+				for (final Slot slot : cargo.getSlots()) {
 
 					if (slot instanceof LoadSlot) {
 						if (loadSlot != null) {
@@ -66,17 +59,21 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 				}
 
 				if (loadSlot != null && dischargeSlot != null) {
-					if (!(checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime())
-							|| checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime())
-							|| checkDates(dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowStartWithSlotOrPortTime()) || checkDates(
-								dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime()))) {
+					// Check this is the correct type of DES Purchase and FOB Sale
+					if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy || SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
 
-						final String message = String.format("[Cargo|%s] Incompatible slot windows.", cargo.getName());
+						if (!(checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime())
+								|| checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime())
+								|| checkDates(dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowStartWithSlotOrPortTime()) || checkDates(
+									dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime()))) {
 
-						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-						status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-						status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-						return status;
+							final String message = String.format("[Cargo|%s] Incompatible slot windows.", cargo.getName());
+
+							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+							status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+							status.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+							return status;
+						}
 					}
 				}
 			}
