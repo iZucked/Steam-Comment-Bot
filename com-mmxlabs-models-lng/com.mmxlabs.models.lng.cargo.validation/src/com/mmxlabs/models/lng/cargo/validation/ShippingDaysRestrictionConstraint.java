@@ -35,8 +35,10 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * Check that the end of any cargo's discharge window is not before the start of its load window.
@@ -124,7 +126,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 			final Cargo cargo = (Cargo) object;
 
 			if (cargo.getCargoType() != CargoType.FLEET) {
-				final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
+				IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
+				final MMXRootObject scenario = extraValidationContext.getRootObject();
 				if (scenario instanceof LNGScenarioModel) {
 
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
@@ -146,7 +149,9 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						// Found a slot to validate
 						if (desPurchase != null && dischargeSlot != null) {
 
-							final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, desPurchase);
+							
+							
+							final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, (UUIDObject) extraValidationContext.getOriginal(desPurchase));
 							if (elementAssignment != null && elementAssignment.getAssignment() instanceof Vessel) {
 								final Vessel vessel = (Vessel) elementAssignment.getAssignment();
 								final double maxSpeedKnots = vessel.getVesselClass().getMaxSpeed();
@@ -164,7 +169,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									// TODO: check overlaps
 									final Date loadDateStart = desPurchase.getWindowStartWithSlotOrPortTime();
 									final Date loadDateEnd = desPurchase.getWindowEndWithSlotOrPortTime();
-									final Date dischargeDateStart = dischargeSlot.getWindowEndWithSlotOrPortTime();
+									final Date dischargeDateStart = dischargeSlot.getWindowStartWithSlotOrPortTime();
 									final Date dischargeDateEnd = dischargeSlot.getWindowEndWithSlotOrPortTime();
 
 									if (loadDateStart != null && dischargeDateEnd != null) {
