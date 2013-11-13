@@ -107,7 +107,7 @@ public class RedirectionPostExportProcessor implements IPostExportProcessor {
 							final Cargo c = slot.getCargo();
 							// TODO: Need to delete assignment
 							commands.append(AssignmentEditorHelper.unassignElement(ed, assignmentModel, c));
-							commands.append(DeleteCommand.create(ed, c));
+//							commands.append(DeleteCommand.create(ed, c));
 						}
 					}
 				}

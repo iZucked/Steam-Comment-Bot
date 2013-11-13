@@ -329,14 +329,14 @@ public class LNGSchedulerJobUtils {
 				}
 			}
 
-			// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
-			if (fobSaleSlot != null) {
-				// Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
-				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
-				if (elementAssignment !=null) {
-					cmd.append(DeleteCommand.create(domain, elementAssignment));
-				}
-			}
+//			// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
+//			if (fobSaleSlot != null) {
+//				// Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
+//				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
+//				if (elementAssignment !=null) {
+//					cmd.append(DeleteCommand.create(domain, elementAssignment));
+//				}
+//			}
 
 			// Remove references to slots no longer in the cargo
 			final Set<Slot> oldSlots = new HashSet<Slot>();
@@ -385,7 +385,7 @@ public class LNGSchedulerJobUtils {
 					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 					// }
 					cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
-					cmd.append(DeleteCommand.create(domain, c));
+//					cmd.append(DeleteCommand.create(domain, c));
 				}
 			}
 			if (eObj instanceof SpotSlot) {
@@ -412,7 +412,7 @@ public class LNGSchedulerJobUtils {
 				// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 				// }
 				cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
-				cmd.append(DeleteCommand.create(domain, c));
+//				cmd.append(DeleteCommand.create(domain, c));
 			}
 		}
 
