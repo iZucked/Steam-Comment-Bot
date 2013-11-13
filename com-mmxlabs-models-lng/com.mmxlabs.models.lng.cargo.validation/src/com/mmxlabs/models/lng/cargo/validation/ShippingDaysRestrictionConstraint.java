@@ -33,7 +33,6 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -94,28 +93,36 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 		if (object instanceof Slot) {
 			if (object instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) object;
-				if (loadSlot.isDESPurchase()) {
-					if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
-						if (loadSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
-							final String message = String.format("DES Purchase|%s shipping days restriction is too big.", loadSlot.getName());
-							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-							dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
-							failures.add(dsd);
-						}
+				if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy_AnyDisPort) {
+					if (loadSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
+						final String message = String.format("DES Purchase|%s shipping days restriction is too big.", loadSlot.getName());
+						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+						failures.add(dsd);
+					} else if (loadSlot.getShippingDaysRestriction() == 0) {
+						final String message = String.format("DES Purchase|%s shipping days restriction is set to zero - unable to ship anywhere!", loadSlot.getName());
+						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+						failures.add(dsd);
 					}
 				}
 			} else if (object instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) object;
-				if (dischargeSlot.isFOBSale()) {
-					if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
-						if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
-							final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
-							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-							dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
-							failures.add(dsd);
-						}
+				if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
+					if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
+						final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
+						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+						failures.add(dsd);
+					} else if (dischargeSlot.getShippingDaysRestriction() == 0) {
+						final String message = String.format("FOB Sale|%s shipping days restriction is set to zero - unable to ship anywhere!", dischargeSlot.getName());
+						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+						failures.add(dsd);
 					}
 				}
 			}
@@ -126,7 +133,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 			final Cargo cargo = (Cargo) object;
 
 			if (cargo.getCargoType() != CargoType.FLEET) {
-				IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
+				final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
 				final MMXRootObject scenario = extraValidationContext.getRootObject();
 				if (scenario instanceof LNGScenarioModel) {
 
@@ -149,8 +156,6 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						// Found a slot to validate
 						if (desPurchase != null && dischargeSlot != null) {
 
-							
-							
 							final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, (UUIDObject) extraValidationContext.getOriginal(desPurchase));
 							if (elementAssignment != null && elementAssignment.getAssignment() instanceof Vessel) {
 								final Vessel vessel = (Vessel) elementAssignment.getAssignment();
