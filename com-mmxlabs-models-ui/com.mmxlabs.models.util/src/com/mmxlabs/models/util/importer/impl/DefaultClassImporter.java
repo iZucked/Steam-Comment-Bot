@@ -45,31 +45,31 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 public class DefaultClassImporter implements IClassImporter {
 	protected static final String KIND_KEY = "kind";
 	protected static final String DOT = ".";
-	
+
 	/**
-	 * Simple record structure class to hold results of importing
-	 * a row of CSV data.
+	 * Simple record structure class to hold results of importing a row of CSV data.
+	 * 
 	 * @author Simon McGregor
-	 *
+	 * 
 	 * @param <T>
 	 */
 	public static class ImportResults {
 		final public EObject importedObject;
 		final public LinkedList<EObject> createdObjects = new LinkedList<EObject>();
-		
+
 		public ImportResults(EObject object, boolean created) {
 			importedObject = object;
 			if (created) {
 				createdObjects.add(object);
 			}
 		}
-		
+
 		public ImportResults(EObject object) {
 			this(object, true);
 		}
-		
+
 	}
-	
+
 	/**
 	 * @since 2.0
 	 */
@@ -199,24 +199,33 @@ public class DefaultClassImporter implements IClassImporter {
 				if (reference.isMany()) {
 					if (reference == MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS) {
 						if (subKeys.containsKey("count")) {
-							final int count = Integer.parseInt(subKeys.get("count"));
-							final List<EObject> references = new LinkedList<EObject>();
-							for (int i = 0; i < count; ++i) {
-								final IFieldMap childMap = subKeys.getSubMap(i + DOT);
-								final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
-								final ImportResults importResults = classImporter.importObject(instance, reference.getEReferenceType(), childMap, context);
-								final Collection<EObject> values = importResults.createdObjects;
-								final Iterator<EObject> iterator = values.iterator();
-								final EObject importObject = iterator.next();
-								references.add(importObject);
-								if (reference.isContainment() == false) {
-									results.add(importObject);
+							String countStr = subKeys.get("count");
+							if (countStr != null && !countStr.isEmpty()) {
+								final int count;
+								try {
+									count = Integer.parseInt(countStr);
+								} catch (NumberFormatException e) {
+									context.addProblem(context.createProblem(String.format("Error parsing %s as an integer for %s field", countStr, reference.getName()), true, true, true));
+									continue;
 								}
-								while (iterator.hasNext()) {
-									results.add(importObject);
+								final List<EObject> references = new LinkedList<EObject>();
+								for (int i = 0; i < count; ++i) {
+									final IFieldMap childMap = subKeys.getSubMap(i + DOT);
+									final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
+									final ImportResults importResults = classImporter.importObject(instance, reference.getEReferenceType(), childMap, context);
+									final Collection<EObject> values = importResults.createdObjects;
+									final Iterator<EObject> iterator = values.iterator();
+									final EObject importObject = iterator.next();
+									references.add(importObject);
+									if (reference.isContainment() == false) {
+										results.add(importObject);
+									}
+									while (iterator.hasNext()) {
+										results.add(importObject);
+									}
 								}
+								instance.eSet(reference, references);
 							}
-							instance.eSet(reference, references);
 						}
 					} else {
 						continue;
