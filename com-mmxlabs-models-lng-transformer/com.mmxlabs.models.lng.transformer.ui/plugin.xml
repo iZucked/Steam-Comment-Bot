@@ -290,77 +290,6 @@
          <menuContribution
                allPopups="false"
                locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=optimisation">
-               <command
-                     commandId="com.mmxlabs.commands.optimisation.play"
-                     disabledIcon="icons/dlcl16/resume_co.gif"
-                     icon="icons/elcl16/resume_co.gif"
-                     id="com.mmxlabs.scenario.service.toolbars.optimisation.play"
-                     label="Optimise"
-                     style="push"
-                     tooltip="Start or resume optimisation">
-                  <visibleWhen
-                        checkEnabled="false">
-                     <and>
-                        <with
-                              variable="selection">
-                           <iterate
-                                 ifEmpty="false">
-                              <instanceof
-                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                              </instanceof>
-                                                   <not><test
-                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
-                          forcePluginActivation="true">
-                     </test></not>
-                              <not>
-                                 <test
-                                       forcePluginActivation="true"
-                                       property="com.mmxlabs.scenario.service.ui.properties.pinned">
-                                 </test>
-                              </not>
-                           </iterate>
-                        </with>
-                        <count
-                              value="1">
-                        </count>
-                     </and>
-                  </visibleWhen>
-               </command>
-               <command
-                     commandId="com.mmxlabs.commands.optimisation.forkandplay"
-                     icon="icons/forkandoptimise.gif"
-                     id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
-                     label="Fork and Optimise"
-                     style="push"
-                     tooltip="Fork and Optimise">
-                  <visibleWhen
-                        checkEnabled="false">
-                     <and>
-                        <with
-                              variable="selection">
-                           <iterate
-                                 ifEmpty="false">
-                              <instanceof
-                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                              </instanceof>
-	 							                     <test
-                          property="com.mmxlabs.scenario.service.ui.caps.forking"
-                          forcePluginActivation="true">
-                     </test>
-                              <not>
-                                 <test
-                                       forcePluginActivation="true"
-                                       property="com.mmxlabs.scenario.service.ui.properties.pinned">
-                                 </test>
-                              </not>
-                           </iterate>
-                        </with>
-                        <count
-                              value="1">
-                        </count>
-                     </and>
-                  </visibleWhen>
-               </command>
          </menuContribution>
       </extension>
       <extension
@@ -387,47 +316,6 @@
                   label="Evaluate"
                   toolbarPath="additions"
                   tooltip="Evaluate scenario">
-            </action>
-            <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StopOptimisationEditorActionDelegate"
-                  definitionId="com.mmxlabs.commands.optimisation.terminate"
-                  disabledIcon="icons/dlcl16/terminate_co.gif"
-                  icon="icons/elcl16/terminate_co.gif"
-                  id="com.mmxlabs.shiplingo.platform.models.optimisation.stop"
-                  label="Stop Optimisation"
-                  style="push"
-                  toolbarPath="additions"
-                  tooltip="Terminate optimisation">
-            </action>
-            <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.PauseOptimisationEditorActionDelegate"
-                  definitionId="com.mmxlabs.commands.optimisation.pause"
-                  disabledIcon="icons/dlcl16/suspend_co.gif"
-                  icon="icons/elcl16/suspend_co.gif"
-                  id="com.mmxlabs.shiplingo.platform.models.optimisation.pause"
-                  label="Pause Optimisation"
-                  style="push"
-                  toolbarPath="additions"
-                  tooltip="Pause optimisation">
-            </action>
-            <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
-                  definitionId="com.mmxlabs.commands.optimisation.play"
-                  disabledIcon="icons/dlcl16/resume_co.gif"
-                  icon="icons/elcl16/resume_co.gif"
-                  id="com.mmxlabs.shiplingo.platform.models.optimisation.play"
-                  label="Start/Resume Optimisation"
-                  toolbarPath="additions"
-                  tooltip="Start or Resume optimisation">
-            </action>
-            <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartEditorActionDelegate"
-                  definitionId="com.mmxlabs.commands.optimisation.forkandplay"
-                  icon="icons/forkandoptimise.gif"
-                  id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
-                  label="Fork and Optimise"
-                  toolbarPath="additions"
-                  tooltip="Fork scenario and optimise the fork">
             </action>
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkScenarioEditorActionDelegate"
