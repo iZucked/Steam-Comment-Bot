@@ -56,8 +56,10 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 			if (status.isMultiStatus()) {
 				final List<Object> ret = new LinkedList<>();
 				for (final IStatus c1 : status.getChildren()) {
-					if (c1.isMultiStatus()) {
+					parentsMap.put(c1, inputElement);
+					if (c1.isMultiStatus()) {						
 						for (final Object c2 : getChildren(c1)) {
+							
 							ret.add(c2);
 						}
 					} else {
@@ -98,6 +100,7 @@ public class FlatValidationStatusContentProvider implements ITreeContentProvider
 			if (status.isMultiStatus()) {
 				final List<Object> ret = new LinkedList<>();
 				for (final IStatus c1 : status.getChildren()) {
+					parentsMap.put(c1, parentElement);
 					if (c1.isMultiStatus()) {
 						for (final Object c2 : getChildren(c1)) {
 							ret.add(c2);
