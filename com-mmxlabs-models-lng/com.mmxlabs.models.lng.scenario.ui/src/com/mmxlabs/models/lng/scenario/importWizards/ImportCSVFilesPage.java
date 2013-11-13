@@ -56,6 +56,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -242,6 +243,11 @@ public class ImportCSVFilesPage extends WizardPage {
 		context.setRootObject(scenarioModel);
 
 		context.run();
+
+		for (final IPostModelImporter postModelImporter : Activator.getDefault().getImporterRegistry().getPostModelImporters()) {
+			postModelImporter.onPostModelImport(context, scenarioModel);
+		}
+
 		return scenarioModel;
 	}
 
@@ -289,7 +295,7 @@ public class ImportCSVFilesPage extends WizardPage {
 
 						final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 
-						LNGScenarioModel scenarioModel = doImport(context);
+						final LNGScenarioModel scenarioModel = doImport(context);
 						if (scenarioModel != null) {
 
 							monitor.worked(1);
