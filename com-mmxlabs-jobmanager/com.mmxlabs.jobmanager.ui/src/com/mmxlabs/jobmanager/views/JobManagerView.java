@@ -84,7 +84,6 @@ public class JobManagerView extends ViewPart {
 	private Action pauseAction;
 	private Action stopAction;
 	private Action removeAction;
-	private Action toggleDisplayAction;
 
 	private Action doubleClickAction;
 
@@ -477,7 +476,6 @@ public class JobManagerView extends ViewPart {
 		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
-		manager.add(toggleDisplayAction);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -485,7 +483,6 @@ public class JobManagerView extends ViewPart {
 		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
-		manager.add(toggleDisplayAction);
 
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -493,7 +490,6 @@ public class JobManagerView extends ViewPart {
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packAction);
-		manager.add(toggleDisplayAction);
 		manager.add(startAction);
 		manager.add(pauseAction);
 		manager.add(stopAction);
@@ -668,7 +664,6 @@ public class JobManagerView extends ViewPart {
 			pauseAction.setEnabled(false);
 			stopAction.setEnabled(false);
 			removeAction.setEnabled(false);
-			toggleDisplayAction.setEnabled(false);
 		} else {
 			boolean startEnabled = false;
 			boolean pauseEnabled = false;
@@ -733,7 +728,6 @@ public class JobManagerView extends ViewPart {
 			startAction.setEnabled(startEnabled);
 			pauseAction.setEnabled(pauseEnabled);
 			stopAction.setEnabled(stopEnabled);
-			toggleDisplayAction.setEnabled(toogleDisplayEnabled);
 
 			removeAction.setEnabled(true);
 		}
