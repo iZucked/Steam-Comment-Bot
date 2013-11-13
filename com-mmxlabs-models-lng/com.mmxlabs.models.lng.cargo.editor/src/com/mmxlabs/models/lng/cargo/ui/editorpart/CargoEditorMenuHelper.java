@@ -1046,12 +1046,12 @@ public class CargoEditorMenuHelper {
 				manager.add(new FOBDESSwitchAction("Convert to FOB Purchase", slot));
 			}
 		} else if (slot instanceof DischargeSlot) {
-//			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-//			if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
-//				manager.add(new FOBDESSwitchAction("Convert to DES Sale", slot));
-//			} else if (SlotClassifier.classify(dischargeSlot) == SlotType.DES_Sale_Any) {
-//				manager.add(new FOBDESSwitchAction("Convert to FOB Sale", slot));
-//			}
+			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
+				manager.add(new FOBDESSwitchAction("Convert to DES Sale", slot));
+			} else if (SlotClassifier.classify(dischargeSlot) == SlotType.DES_Sale) {
+				manager.add(new FOBDESSwitchAction("Convert to FOB Sale", slot));
+			}
 		}
 	}
 
