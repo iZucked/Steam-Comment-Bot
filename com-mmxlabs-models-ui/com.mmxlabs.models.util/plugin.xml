@@ -10,6 +10,7 @@
    <extension-point id="com.mmxlabs.models.util.import.attributes" name="Attribute Importers" schema="schema/com.mmxlabs.models.util.import.attributes.exsd"/>
    <extension-point id="com.mmxlabs.models.util.import.classes" name="Class Importer Extensions" schema="schema/com.mmxlabs.models.util.import.classes.exsd"/>
    <extension-point id="com.mmxlabs.models.util.import.submodels" name="Submodel Importer Extensions" schema="schema/com.mmxlabs.models.util.import.submodels.exsd"/>
+   <extension-point id="com.mmxlabs.models.util.import.postmodelimporters" name="Post Model Importers" schema="schema/com.mmxlabs.models.util.import.postmodelimporters.exsd"/>
    <extension
          point="com.mmxlabs.models.util.import.attributes">
       <attributeImporter
