@@ -44,10 +44,10 @@ import org.eclipse.ui.part.ViewPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.ui.validation.gui.FlatValidationStatusContentProvider;
 import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusColumnLabelProvider;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusComparator;
-import com.mmxlabs.models.ui.validation.gui.ValidationStatusContentProvider;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusLabelProvider;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -161,7 +161,7 @@ public class ValidationProblemsView extends ViewPart {
 		// viewer.getTree().setHeaderVisible(true);
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
-		final ValidationStatusContentProvider contentProvider = new ValidationStatusContentProvider();
+		final FlatValidationStatusContentProvider contentProvider = new FlatValidationStatusContentProvider();
 		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(new ValidationStatusLabelProvider());
 		viewer.setComparator(new ValidationStatusComparator());
