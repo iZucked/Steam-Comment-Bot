@@ -443,7 +443,7 @@
                namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
          </package>
          <constraints
-               categories="http://www.mmxlabs.com/models/lng/cargo/1/">
+               categories="com.mmxlabs.models.lng.cargo.validation.optimisation">
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.ShippingDaysRestrictionConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.ShippingDaysRestrictionConstraint"
