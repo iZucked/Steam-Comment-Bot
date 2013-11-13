@@ -13,7 +13,6 @@ import org.osgi.framework.BundleContext;
 
 import com.google.inject.AbstractModule;
 import com.mmxlabs.models.migration.IMigrationRegistry;
-import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
 
 /**
