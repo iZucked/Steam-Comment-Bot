@@ -182,8 +182,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		}
 	}
 
-	@Override
-	public int calculateLoadPricePerMMBTu(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int actualSalesPricePerMMBTu,
+	private int calculateLoadPricePerMMBTu(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int actualSalesPricePerMMBTu,
 			final long transferVolumeInM3, final IDetailTree annotations) {
 
 		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(transferTime);
@@ -290,5 +289,15 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, IDischargeSlot dischargeSlot, int transferTime, int dischargePricePerMMBTu, long transferVolumeInM3, IDetailTree annotations) {
+		return calculateLoadPricePerMMBTu(loadOption, dischargeSlot, transferTime, dischargePricePerMMBTu, transferVolumeInM3, annotations);
+	}
+
+	@Override
+	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, IDischargeOption dischargeOption, int transferTime, int dischargePricePerMMBTu, long transferVolumeInM3, IDetailTree annotations) {
+		return calculateLoadPricePerMMBTu(loadSlot, dischargeOption, transferTime, dischargePricePerMMBTu, transferVolumeInM3, annotations);
 	}
 }
