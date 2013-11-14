@@ -54,13 +54,25 @@ public interface ILoadPriceCalculator extends ICalculator {
 	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePricePerMMBTu, long loadVolumeInM3, long dischargeVolumeInM3,
 			IVessel vessel, VoyagePlan plan, IDetailTree annotations);
 
-	//
-	//
-	// public int calculateFOBPricePerM3(ILoadSlot slot, IPortSlot[] slots ?, IVessel vessel, VoyagePlan plan, int[] arrivalTimes, long [] volumes, IDetailTree annotations);
+	/**
+	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when the cargo is a DES Purchase
+	 * 
+	 * 
+	 * @param loadOption
+	 * @param dischargeSlot
+	 * @param transferTime
+	 * @param transferVolumeInM3
+	 *            The volume transfered between counter-parties
+	 * @param annotations
+	 *            Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
+	 * @return
+	 * @since 2.0
+	 */
+	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
+			IDetailTree annotations);
 
 	/**
-	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a third-party is handling shipping
-	 * 
+	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a the cargo is a FOB Sale
 	 * 
 	 * @param loadOption
 	 * @param dischargeOption
@@ -72,26 +84,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 * @since 2.0
 	 */
-	public int calculateLoadPricePerMMBTu(ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
+	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
 			IDetailTree annotations);
-
-	// /**
-	// * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a third-party is handling shipping
-	// *
-	// *
-	// * @param loadOption
-	// * @param dischargeOption
-	// * @param transferTime
-	// * @param transferVolumeInM3
-	// * The volume transfered between counter-parties
-	// * @param annotations
-	// * Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
-	// * @return
-	// * @since 2.0
-	// */
-	// public int calculateFOBSalePricePerM3(ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
-	// IDetailTree annotations);
-	//
 
 	/**
 	 * Questions -> Volume allocator interaction? -> EntityValueCalcuator interaction -> Statefull/less?

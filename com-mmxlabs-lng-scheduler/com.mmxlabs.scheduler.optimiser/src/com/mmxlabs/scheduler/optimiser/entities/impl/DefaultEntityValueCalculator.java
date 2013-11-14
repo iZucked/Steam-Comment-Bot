@@ -147,13 +147,21 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 						final int transferTime = dischargeTime;
 						final long transferVolumeInM3 = dischargeVolumeInM3;
+						// FOB Purchase to DES Sale
 						if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
 							final ILoadSlot loadSlot = (ILoadSlot) loadOption;
 							final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeOption;
 							loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3,
 									vessel, plan, entityDetails);
+						} else if (loadOption instanceof ILoadSlot) {
+							// FOB Sale
+							loadOption.getLoadPriceCalculator().calculatePriceForFOBSalePerMMBTu((ILoadSlot) loadOption, dischargeOption, transferTime, dischargePricePerMMBTu, transferVolumeInM3,
+									entityDetails);
 						} else {
-							loadOption.getLoadPriceCalculator().calculateLoadPricePerMMBTu(loadOption, dischargeOption, transferTime, dischargePricePerMMBTu, transferVolumeInM3, entityDetails);
+							// DES Purchase
+							assert dischargeOption instanceof IDischargeSlot;
+							loadOption.getLoadPriceCalculator().calculateDESPurchasePricePerMMBTu(loadOption, (IDischargeSlot) dischargeOption, transferTime, dischargePricePerMMBTu,
+									transferVolumeInM3, entityDetails);
 						}
 					}
 					{

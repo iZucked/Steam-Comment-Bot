@@ -67,18 +67,19 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		return calculateSimpleUnitPrice(time);
 	}
 
-	/**
-	 * @since 2.0
-	 */
-	@Override
-	public int calculateLoadPricePerMMBTu(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int salesPricePerMMBTu, final long transferVolume,
-			final IDetailTree annotations) {
-		return calculateSimpleUnitPrice(transferTime);
-	}
-
 	@Override
 	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumes, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
 			IDetailTree annotations) {
 		return 0;
+	}
+
+	@Override
+	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, IDischargeSlot dischargeSlot, int transferTime, int dischargePricePerMMBTu, long transferVolumeInM3, IDetailTree annotations) {
+		return calculateSimpleUnitPrice(transferTime);
+	}
+
+	@Override
+	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, IDischargeOption dischargeOption, int transferTime, int dischargePricePerMMBTu, long transferVolumeInM3, IDetailTree annotations) {
+		return calculateSimpleUnitPrice(transferTime);
 	}
 }
