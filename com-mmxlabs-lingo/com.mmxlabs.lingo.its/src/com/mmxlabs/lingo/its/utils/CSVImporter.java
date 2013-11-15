@@ -5,8 +5,10 @@
 package com.mmxlabs.lingo.its.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
@@ -67,6 +69,7 @@ import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
@@ -181,6 +184,9 @@ public class CSVImporter {
 					classImporters.put(FleetPackage.eINSTANCE.getVesselClass(), new VesselClassImporter());
 					classImporters.put(PricingPackage.eINSTANCE.getDataIndex(), new DataIndexImporter());
 
+					final List<IPostModelImporter> portModelImporters = new ArrayList<>();
+
+					
 					final DateAttributeImporter dateAttributeImporter = new DateAttributeImporter();
 					final DefaultClassImporter defaultClassImporter = new DefaultClassImporter();
 					final DefaultAttributeImporter defaultAttributeImporter = new DefaultAttributeImporter();
@@ -215,6 +221,11 @@ public class CSVImporter {
 						@Override
 						public Collection<ISubmodelImporter> getAllSubModelImporters() {
 							return subModelImporters.values();
+						}
+
+						@Override
+						public Collection<IPostModelImporter> getPostModelImporters() {
+							return portModelImporters;
 						}
 					};
 
