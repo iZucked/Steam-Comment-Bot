@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Reports" link_to="../com.mmxlabs.lingo.doc/toc.xml#reports"> 
+	<topic label="Cargo Report">
+    <topic href="html/views/cargoreport.html" label="General">
+    </topic> 
+	</topic>
+	
+	<topic label="Port Rotations Report">
+    <topic href="html/views/portrotationsreport.html.html" label="General">
+    </topic> 
+	</topic>
+	
+	<topic label="Totals Report">
+    <topic href="html/views/totalsreport.html" label="General">
+    </topic> 
+	</topic>
+</toc>
