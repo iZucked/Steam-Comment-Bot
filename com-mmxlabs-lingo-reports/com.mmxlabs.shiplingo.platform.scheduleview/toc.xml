@@ -7,7 +7,7 @@
 -->
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Reports" link_to="../com.mmxlabs.demo.doc/toc.xml#reports"> 
+<toc label="Reports" link_to="../com.mmxlabs.lingo.doc/toc.xml#reports"> 
 	<topic label="Scheduler View">
     <topic href="html/views/scheduleview.html" label="General">
     </topic> 
