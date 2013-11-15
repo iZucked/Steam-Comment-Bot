@@ -54,7 +54,7 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 		 */
 		public Collection<Slot> slotOverlaps(final Slot slot) {
 
-			final Date windowStart = slot.getWindowStart();
+			final Date windowStart = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStart == null) {
 				return Collections.emptySet();
 			}
@@ -65,19 +65,48 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			final Set<Slot> overlappingSlots = new LinkedHashSet<Slot>();
 			SlotType slotType = classify(slot);
 			do {
-				final String dateKey = dateToString(cal.getTime());
-				final Collection<Slot> potentialOverlaps = getOverlappingSlots(slot, dateKey);
 				
+				System.out.println("");
+				final String dateKey = dateToString(cal.getTime());
+				final Collection<Slot> potentialOverlaps = getOverlappingSlots(slot, dateKey);				
 				Iterator<Slot> ii = potentialOverlaps.iterator();
 				while(ii.hasNext()){
 					Slot overlapSlot = ii.next();
 					SlotType overlapSlotType = classify(overlapSlot);
+					// The combinations below are OK, let them pass
 					if (overlapSlotType == SlotType.DES_Buy && slotType==SlotType.DES_Sale
 						||(overlapSlotType == SlotType.DES_Sale && slotType==SlotType.DES_Buy)
 						||(overlapSlotType == SlotType.FOB_Sale && slotType==SlotType.FOB_Buy)						
 						||(overlapSlotType == SlotType.FOB_Buy && slotType==SlotType.FOB_Sale)){
 						ii.remove();
+						continue;
+					}
+					
+					Date slotStart = slot.getWindowStartWithSlotOrPortTime();
+					Date overlapSlotStart = overlapSlot.getWindowStartWithSlotOrPortTime();					
+					int slotDur = slot.getDuration();
+					int overlapSlotDur = overlapSlot.getDuration();
+					Date olEnd = overlapSlot.getWindowEndWithSlotOrPortTime();
+					Date slotEnd = slot.getWindowEndWithSlotOrPortTime();
+					
+					// if slot start + duration is before the end of the overlapSlot window, it can be OK so let them pass
+					Calendar slotCal = Calendar.getInstance();
+					slotCal.setTime(slotStart);
+					slotCal.add(Calendar.HOUR_OF_DAY, slotDur);
+					Date slotFinish = slotCal.getTime();
+					if(slotFinish.before(olEnd)){
+						ii.remove();
+						continue;						
 					}					
+
+					Calendar overlapSlotCal = Calendar.getInstance();
+					overlapSlotCal.setTime(overlapSlotStart);
+					overlapSlotCal.add(Calendar.HOUR_OF_DAY, overlapSlotDur);
+					Date overlapSlotFinish = overlapSlotCal.getTime();					
+					if(overlapSlotFinish.before(slotEnd)){
+						ii.remove();
+						continue;																		
+					}
 				}
 				// final boolean overlaps = slots.contains(slot) ? slots.size() > 1 : slots.size() > 0;
 				// if (overlaps) {
@@ -112,20 +141,21 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 				return;
 			}
 
-			final Date windowStart = slot.getWindowStart();
+			final Date windowStart = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStart == null) {
 				return;
 			}
 			final Calendar cal = Calendar.getInstance();
 			cal.setTime(windowStart);
-			int windowSize = slot.getWindowSize();
+			int windowPlusDurationSize = slot.getWindowSize();// + slot.getDuration();
 			do {
 				final String dateKey = dateToString(cal.getTime());
 				final Collection<Slot> slots = getOverlappingSlots(slot, dateKey);
 				slots.add(slot);
-				windowSize -= 24;
+//				if(Calendar.get(Calendar.HOUR_OF_DAY, slot.getWindowStartWithSlotOrPortTime()) == 0)
+				windowPlusDurationSize -= 24;
 				cal.add(Calendar.DAY_OF_MONTH, 1);
-			} while (windowSize > 0);
+			} while (windowPlusDurationSize > 0);
 		}
 
 		private Collection<Slot> getOverlappingSlots(final Slot slot, final String dateKey) {
