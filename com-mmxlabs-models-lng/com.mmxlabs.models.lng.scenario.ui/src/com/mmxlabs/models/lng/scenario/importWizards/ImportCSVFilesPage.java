@@ -55,6 +55,7 @@ import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
@@ -71,16 +72,14 @@ public class ImportCSVFilesPage extends WizardPage {
 
 	private static final Logger log = LoggerFactory.getLogger(ImportCSVFilesPage.class);
 
-	private class Chunk {
-		public final ISubmodelImporter importer;
+	private abstract class Chunk {
 		public final Map<String, String> keys;
 		public final Map<String, String> friendlyNames = new HashMap<String, String>();
 
 		public final Map<String, FileFieldEditor> editors = new HashMap<String, FileFieldEditor>();
 
-		public Chunk(final ISubmodelImporter importer) {
+		public Chunk() {
 			super();
-			this.importer = importer;
 			this.keys = new HashMap<String, String>();
 		}
 
@@ -99,7 +98,26 @@ public class ImportCSVFilesPage extends WizardPage {
 		}
 	}
 
-	private final List<Chunk> chunks = new LinkedList<Chunk>();
+	private class SubModelChunk extends Chunk {
+		public final ISubmodelImporter importer;
+
+		public SubModelChunk(final ISubmodelImporter importer) {
+			super();
+			this.importer = importer;
+		}
+	}
+
+	private class ExtraModelChunk extends Chunk {
+		public final IExtraModelImporter importer;
+
+		public ExtraModelChunk(final IExtraModelImporter importer) {
+			super();
+			this.importer = importer;
+		}
+	}
+
+	private final List<SubModelChunk> subModelChunks = new LinkedList<SubModelChunk>();
+	private final List<ExtraModelChunk> extraModelChunks = new LinkedList<ExtraModelChunk>();
 
 	private IImportContext importContext;
 
@@ -147,7 +165,10 @@ public class ImportCSVFilesPage extends WizardPage {
 				if (d != null) {
 					final File dir = new File(d);
 					if (dir.exists() && dir.isDirectory()) {
-						for (final Chunk c : chunks) {
+						for (final Chunk c : subModelChunks) {
+							c.setFromDirectory(dir);
+						}
+						for (final Chunk c : extraModelChunks) {
 							c.setFromDirectory(dir);
 						}
 					}
@@ -167,9 +188,9 @@ public class ImportCSVFilesPage extends WizardPage {
 				continue;
 			}
 			final EClass subModelClass = importer.getEClass();
-			final Chunk chunk = new Chunk(importer);
+			final SubModelChunk chunk = new SubModelChunk(importer);
 			final Map<String, String> parts = importer.getRequiredInputs();
-			chunks.add(chunk);
+			subModelChunks.add(chunk);
 			chunk.friendlyNames.putAll(parts);
 			if (parts.keySet().isEmpty())
 				continue;
@@ -177,6 +198,37 @@ public class ImportCSVFilesPage extends WizardPage {
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
 			g.setText(EditorUtils.unmangle(subModelClass.getName()));
+			for (final Map.Entry<String, String> entry : parts.entrySet()) {
+				final FileFieldEditor ffe = new FileFieldEditor(entry.getKey(), entry.getValue(), g);
+				ffe.getTextControl(g).addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(final ModifyEvent e) {
+						final String stringValue = ffe.getStringValue();
+						if (stringValue.isEmpty()) {
+							chunk.keys.remove(entry.getKey());
+						} else {
+							chunk.keys.put(entry.getKey(), stringValue);
+						}
+					}
+				});
+				chunk.editors.put(entry.getKey(), ffe);
+			}
+		}
+
+		for (final IExtraModelImporter importer : Activator.getDefault().getImporterRegistry().getExtraModelImporters()) {
+			if (importer == null) {
+				continue;
+			}
+			final ExtraModelChunk chunk = new ExtraModelChunk(importer);
+			final Map<String, String> parts = importer.getRequiredInputs();
+			extraModelChunks.add(chunk);
+			chunk.friendlyNames.putAll(parts);
+			if (parts.keySet().isEmpty())
+				continue;
+			final Group g = new Group(top, SWT.NONE);
+			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			g.setLayout(new RowLayout(SWT.VERTICAL));
+//			g.setText(EditorUtils.unmangle(subModelClass.getName()));
 			for (final Map.Entry<String, String> entry : parts.entrySet()) {
 				final FileFieldEditor ffe = new FileFieldEditor(entry.getKey(), entry.getValue(), g);
 				ffe.getTextControl(g).addModifyListener(new ModifyListener() {
@@ -210,7 +262,7 @@ public class ImportCSVFilesPage extends WizardPage {
 
 		context.setRootObject(scenarioModel);
 
-		for (final Chunk c : chunks) {
+		for (final SubModelChunk c : subModelChunks) {
 			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
 			try {
 				for (final String key : c.keys.keySet()) {
@@ -225,6 +277,34 @@ public class ImportCSVFilesPage extends WizardPage {
 				try {
 					final UUIDObject subModel = c.importer.importModel(readers, context);
 					setSubModel(scenarioModel, subModel);
+				} catch (final Throwable th) {
+					log.error(th.getMessage(), th);
+				}
+			} finally {
+				for (final CSVReader r : readers.values()) {
+					try {
+						r.close();
+					} catch (final IOException e) {
+
+					}
+				}
+			}
+		}
+
+		for (final ExtraModelChunk c : extraModelChunks) {
+			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
+			try {
+				for (final String key : c.keys.keySet()) {
+					try {
+						@SuppressWarnings("resource")
+						final CSVReader r = new CSVReader(new File(c.keys.get(key)));
+						readers.put(key, r);
+					} catch (final IOException e) {
+						log.error(e.getMessage(), e);
+					}
+				}
+				try {
+					c.importer.importModel(scenarioModel, readers, context);
 				} catch (final Throwable th) {
 					log.error(th.getMessage(), th);
 				}
