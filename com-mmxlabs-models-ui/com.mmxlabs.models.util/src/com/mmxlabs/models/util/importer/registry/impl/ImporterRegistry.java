@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EDataType;
 
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
@@ -20,10 +21,16 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 public class ImporterRegistry implements IImporterRegistry {
 	@Inject
 	private AttributeImporterRegistry attributeRegistry;
+
 	@Inject
 	private ClassImporterRegistry classRegistry;
+
 	@Inject
 	private SubmodelImporterRegistry submodelRegistry;
+
+	@Inject
+	private ExtraModelImporterRegistry extramodelRegistry;
+
 	@Inject
 	private PostModelImporterRegistry postmodelRegistry;
 
@@ -56,5 +63,10 @@ public class ImporterRegistry implements IImporterRegistry {
 	@Override
 	public Collection<IPostModelImporter> getPostModelImporters() {
 		return postmodelRegistry.getPostModelImporters();
+	}
+
+	@Override
+	public Collection<IExtraModelImporter> getExtraModelImporters() {
+		return extramodelRegistry.getExtraModelImporters();
 	}
 }

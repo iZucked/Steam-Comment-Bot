@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EDataType;
 
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
@@ -20,6 +21,8 @@ public interface IImporterRegistry {
 	public ISubmodelImporter getSubmodelImporter(final EClass subModelClass);
 
 	public IClassImporter getClassImporter(final EClass eClass);
+
+	public Collection<IExtraModelImporter> getExtraModelImporters();
 
 	public Collection<IPostModelImporter> getPostModelImporters();
 

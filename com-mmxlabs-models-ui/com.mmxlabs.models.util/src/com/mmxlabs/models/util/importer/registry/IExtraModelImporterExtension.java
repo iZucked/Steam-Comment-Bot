@@ -7,11 +7,11 @@ package com.mmxlabs.models.util.importer.registry;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
-import com.mmxlabs.models.util.importer.IPostModelImporter;
+import com.mmxlabs.models.util.importer.IExtraModelImporter;
 
-@ExtensionBean("com.mmxlabs.models.util.import.postmodelimporters")
-public interface PostModelImporterExtension {
+@ExtensionBean("com.mmxlabs.models.util.import.extramodelimporters")
+public interface IExtraModelImporterExtension {
 
 	@MapName("class")
-	public IPostModelImporter createInstance();
+	public IExtraModelImporter createInstance();
 }

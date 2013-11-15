@@ -11,16 +11,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.mmxlabs.models.util.importer.IPostModelImporter;
-import com.mmxlabs.models.util.importer.registry.PostModelImporterExtension;
+import com.mmxlabs.models.util.importer.registry.IPostModelImporterExtension;
 
 public class PostModelImporterRegistry {
 
 	@Inject
-	private Iterable<PostModelImporterExtension> extensions;
+	private Iterable<IPostModelImporterExtension> extensions;
 
 	public Collection<IPostModelImporter> getPostModelImporters() {
 		final List<IPostModelImporter> l = new ArrayList<IPostModelImporter>();
-		for (final PostModelImporterExtension extension : extensions) {
+		for (final IPostModelImporterExtension extension : extensions) {
 			l.add(extension.createInstance());
 		}
 

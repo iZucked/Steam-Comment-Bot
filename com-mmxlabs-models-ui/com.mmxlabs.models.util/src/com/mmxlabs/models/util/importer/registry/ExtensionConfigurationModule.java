@@ -39,7 +39,8 @@ public class ExtensionConfigurationModule extends AbstractModule {
 		bind(iterable(IClassImporterExtension.class)).toProvider(service(IClassImporterExtension.class).multiple());
 		bind(iterable(ISubmodelImporterExtension.class)).toProvider(service(ISubmodelImporterExtension.class).multiple());
 		
-		bind(iterable(PostModelImporterExtension.class)).toProvider(service(PostModelImporterExtension.class).multiple());
+		bind(iterable(IExtraModelImporterExtension.class)).toProvider(service(IExtraModelImporterExtension.class).multiple());
+		bind(iterable(IPostModelImporterExtension.class)).toProvider(service(IPostModelImporterExtension.class).multiple());
 
 		//registry implementation bindings; they all have extensions injected by the above bindings.
 		bind(IImporterRegistry.class).to(ImporterRegistry.class);
