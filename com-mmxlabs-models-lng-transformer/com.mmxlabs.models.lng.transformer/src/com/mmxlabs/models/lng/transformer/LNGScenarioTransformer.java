@@ -391,11 +391,6 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		// set up the contract transformers
-		for (final ITransformerExtension extension : allTransformerExtensions) {
-			extension.startTransforming(rootObject, entities, builder);
-		}
-
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
@@ -441,6 +436,11 @@ public class LNGScenarioTransformer {
 			// Set port default values
 			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Load, ePort.getLoadDuration());
 			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Discharge, ePort.getDischargeDuration());
+		}
+
+		// set up the contract transformers
+		for (final ITransformerExtension extension : allTransformerExtensions) {
+			extension.startTransforming(rootObject, entities, builder);
 		}
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation,
