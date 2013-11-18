@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * @author Simon Goodall
  * 
  */
-public final class VoyageDetails implements IProfitAndLossDetails, Cloneable {
+public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSequenceElement, Cloneable {
 
 	private VoyageOptions options;
 
