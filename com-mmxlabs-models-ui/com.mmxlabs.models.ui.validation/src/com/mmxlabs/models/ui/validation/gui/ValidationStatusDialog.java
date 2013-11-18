@@ -66,7 +66,7 @@ public class ValidationStatusDialog extends Dialog {
 		final TreeViewer viewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 		viewer.getTree().setLinesVisible(true);
 
-		viewer.setContentProvider(new ValidationStatusContentProvider());
+		viewer.setContentProvider(new FlatValidationStatusContentProvider());
 		viewer.setLabelProvider(new ValidationStatusLabelProvider());
 		viewer.setComparator(new ValidationStatusComparator());
 
