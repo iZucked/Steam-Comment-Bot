@@ -61,19 +61,24 @@ public abstract class DetailPropertiesView extends ViewPart {
 
 		ColumnViewerToolTipSupport.enableFor(viewer);
 
+		
+		// TODO: Units presentation options probably need to be refactored and customisable at the concrete instance.
+		boolean showDimensionedValue = !showUnitsInColumn;
 		// Create columns
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Attribute");
 			gvc.getColumn().setTree(true);
 			gvc.getColumn().setWidth(100);
-			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.ATTRIBUTE, gvc));
+			gvc.setLabelProvider(createLabelProvider(DetailPropertyColumnType.ATTRIBUTE_WITH_DIMENSIONS, gvc));
+			showDimensionedValue = false;
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Value");
 			gvc.getColumn().setWidth(100);
-			gvc.setLabelProvider(createLabelProvider(showUnitsInColumn ? DetailPropertyColumnType.VALUE: DetailPropertyColumnType.DIMENSIONED_VALUE, gvc));
+			
+			gvc.setLabelProvider(createLabelProvider(showDimensionedValue ? DetailPropertyColumnType.DIMENSIONED_VALUE : DetailPropertyColumnType.VALUE, gvc));
 		}
 		if(showUnitsInColumn){
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);

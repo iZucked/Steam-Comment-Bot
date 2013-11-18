@@ -24,6 +24,8 @@ public class DetailPropertyLabelProvider extends ColumnLabelProvider {
 			switch (columnType) {
 			case ATTRIBUTE:
 				return dp.getName();
+			case ATTRIBUTE_WITH_DIMENSIONS:
+				return dp.getName() + (!(pre+post).isEmpty() ? " (" + pre + post + ")" : "");
 			case UNIT:
 				return pre + post;
 			case VALUE:
