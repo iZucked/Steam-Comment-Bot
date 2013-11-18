@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -285,7 +286,7 @@ public class ScheduleCalculator {
 				dischargeOptions.setVisitDuration(0);
 				dischargeOptions.setPortSlot(dischargeOption);
 
-				voyagePlan.setSequence(new Object[] { loadDetails, dischargeDetails });
+				voyagePlan.setSequence(new IDetailsSequenceElement[] { loadDetails, dischargeDetails });
 			}
 
 			// Create an allocation annotation.

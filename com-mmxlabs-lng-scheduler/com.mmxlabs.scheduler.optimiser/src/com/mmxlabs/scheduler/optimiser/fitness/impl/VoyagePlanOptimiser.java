@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -401,12 +402,12 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private VoyagePlan calculateVoyagePlan() {
 		// For each voyage options, calculate new Details.
 
-		final List<Object> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(basicSequence.toArray());
+		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(basicSequence.toArray());
 
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray());
+		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		return currentPlan;
 	}

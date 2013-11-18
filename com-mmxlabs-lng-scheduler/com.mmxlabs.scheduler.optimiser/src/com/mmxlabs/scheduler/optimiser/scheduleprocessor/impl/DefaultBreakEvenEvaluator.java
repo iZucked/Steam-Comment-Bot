@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -82,7 +83,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				// 5 as we know that is the max we need (currently - a single cargo)
 				final List<Integer> arrivalTimes = new ArrayList<Integer>();
 				int dischargeIdx = -1;
-				final Object[] currentSequence = vp.getSequence();
+				final IDetailsSequenceElement[] currentSequence = vp.getSequence();
 				List<ISequenceElement> sequenceElements = new LinkedList<>();
 
 				ILoadOption originalLoad = null;
@@ -141,7 +142,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					throw new IllegalStateException("Unable to breakeven with more than one missing price");
 				}
 
-				final Object[] newSequence = currentSequence.clone();
+				final IDetailsSequenceElement[] newSequence = currentSequence.clone();
 				final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
 
 				if (originalLoad != null) {

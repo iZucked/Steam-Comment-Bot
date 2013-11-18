@@ -600,7 +600,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @since 5.0
 	 */
 	@Override
-	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final int baseFuelPricePerMT, final List<Integer> arrivalTimes, final Object... sequence) {
+	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final int baseFuelPricePerMT, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
 		/*
 		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
 		 * VoyageDetails as separate parameters. Worth doing at some point?
@@ -951,8 +951,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * 
 	 */
 	@Override
-	public final List<Object> generateFuelCostCalculatedSequence(final Object... baseSequence) {
-		final List<Object> result = new ArrayList<Object>(baseSequence.length);
+	public final List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(final Object... baseSequence) {
+		final List<IDetailsSequenceElement> result = new ArrayList<IDetailsSequenceElement>(baseSequence.length);
 		for (final Object element : baseSequence) {
 
 			// Loop through basic elements, calculating voyage requirements
@@ -973,7 +973,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				result.add(details);
 			} else {
 				System.err.println("Warning: non-Option type in option sequence: " + element);
-				result.add(element);
+				result.add((IDetailsSequenceElement) element);
 			}
 		}
 
