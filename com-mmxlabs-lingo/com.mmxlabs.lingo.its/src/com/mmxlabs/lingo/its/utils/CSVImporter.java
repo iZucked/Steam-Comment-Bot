@@ -68,6 +68,7 @@ import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
@@ -185,6 +186,7 @@ public class CSVImporter {
 					classImporters.put(PricingPackage.eINSTANCE.getDataIndex(), new DataIndexImporter());
 
 					final List<IPostModelImporter> portModelImporters = new ArrayList<>();
+					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();
 
 					
 					final DateAttributeImporter dateAttributeImporter = new DateAttributeImporter();
@@ -226,6 +228,11 @@ public class CSVImporter {
 						@Override
 						public Collection<IPostModelImporter> getPostModelImporters() {
 							return portModelImporters;
+						}
+
+						@Override
+						public Collection<IExtraModelImporter> getExtraModelImporters() {
+							return extraModelImporters;
 						}
 					};
 
