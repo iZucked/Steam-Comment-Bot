@@ -64,9 +64,7 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 
 			final Set<Slot> overlappingSlots = new LinkedHashSet<Slot>();
 			SlotType slotType = classify(slot);
-			do {
-				
-				System.out.println("");
+			do {				
 				final String dateKey = dateToString(cal.getTime());
 				final Collection<Slot> potentialOverlaps = getOverlappingSlots(slot, dateKey);				
 				Iterator<Slot> ii = potentialOverlaps.iterator();
