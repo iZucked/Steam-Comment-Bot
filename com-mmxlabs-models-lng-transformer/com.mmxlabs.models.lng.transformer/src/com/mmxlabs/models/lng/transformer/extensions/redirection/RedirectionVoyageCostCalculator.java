@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -87,7 +88,7 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 			returnDetails.getOptions().setPortSlot(notionalReturnSlot);
 			returnDetails.getOptions().setVisitDuration(0);
 
-			final Object[] sequence = new Object[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
+			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
 			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
 
