@@ -9,6 +9,7 @@ import java.util.List;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -48,7 +49,7 @@ public interface IVoyagePlanOptimiser {
 	 * 
 	 * @return
 	 */
-	List<Object> getBasicSequence();
+	List<IOptionsSequenceElement> getBasicSequence();
 
 	/**
 	 * Sets the basic voyage plan sequence. This should be {@link IPortSlot} instances separated by {@link VoyageOptions} instances implementing {@link Cloneable}. The {@link VoyageOptions} objects
@@ -56,7 +57,7 @@ public interface IVoyagePlanOptimiser {
 	 * 
 	 * @param basicSequence
 	 */
-	void setBasicSequence(final List<Object> basicSequence);
+	void setBasicSequence(final List<IOptionsSequenceElement> basicSequence);
 
 	void setArrivalTimes(final List<Integer> currentTimes);
 

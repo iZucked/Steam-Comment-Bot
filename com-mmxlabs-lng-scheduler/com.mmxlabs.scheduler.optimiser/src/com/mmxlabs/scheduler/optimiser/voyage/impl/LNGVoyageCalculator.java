@@ -951,7 +951,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * 
 	 */
 	@Override
-	public final List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(final Object... baseSequence) {
+	public final List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(final IOptionsSequenceElement... baseSequence) {
 		final List<IDetailsSequenceElement> result = new ArrayList<IDetailsSequenceElement>(baseSequence.length);
 		for (final Object element : baseSequence) {
 

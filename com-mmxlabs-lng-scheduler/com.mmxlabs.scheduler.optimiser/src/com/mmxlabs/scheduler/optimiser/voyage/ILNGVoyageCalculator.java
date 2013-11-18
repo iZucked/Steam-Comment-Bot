@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -60,5 +61,5 @@ public interface ILNGVoyageCalculator {
 	 * @return Returns a new sequence of appropriate Details objects with fuel cost information attached
 	 * @since 2.0
 	 */
-	List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(Object... sequence);
+	List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(IOptionsSequenceElement... sequence);
 }

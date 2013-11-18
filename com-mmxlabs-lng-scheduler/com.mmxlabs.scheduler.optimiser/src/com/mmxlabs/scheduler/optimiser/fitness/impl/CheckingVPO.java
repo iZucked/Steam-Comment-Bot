@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CheckingVPO implements IVoyagePlanOptimiser {
@@ -60,12 +61,12 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public List<Object> getBasicSequence() {
+	public List<IOptionsSequenceElement> getBasicSequence() {
 		return delegate.getBasicSequence();
 	}
 
 	@Override
-	public void setBasicSequence(final List<Object> basicSequence) {
+	public void setBasicSequence(final List<IOptionsSequenceElement> basicSequence) {
 		delegate.setBasicSequence(basicSequence);
 		reference.setBasicSequence(basicSequence);
 	}

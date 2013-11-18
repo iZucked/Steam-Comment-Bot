@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -44,14 +45,14 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final int baseFuelPricePerMT;
 		private final int[] times;
 		private final IPortSlot[] slots;
-		private final List<Object> sequence;
+		private final List<IOptionsSequenceElement> sequence;
 		private final List<IVoyagePlanChoice> choices;
 
 		private final int dischargePrice;
 
 		protected List<Integer> arrivalTimes;
 
-		public CacheKey(final IVessel vessel, final int vesselStartTime, final int baseFuelPricePerMT, final List<Object> sequence, final List<Integer> arrivalTimes,
+		public CacheKey(final IVessel vessel, final int vesselStartTime, final int baseFuelPricePerMT, final List<IOptionsSequenceElement> sequence, final List<Integer> arrivalTimes,
 				final List<IVoyagePlanChoice> choices) {
 			super();
 			this.vessel = vessel;
@@ -140,7 +141,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	VoyagePlan bestPlan;
 	long bestCost;
 
-	private List<Object> basicSequence;
+	private List<IOptionsSequenceElement> basicSequence;
 	private IVessel vessel;
 	private int vesselStartTime;
 	private int baseFuelPricePerMT;
@@ -206,12 +207,12 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public List<Object> getBasicSequence() {
+	public List<IOptionsSequenceElement> getBasicSequence() {
 		return basicSequence;
 	}
 
 	@Override
-	public void setBasicSequence(final List<Object> basicSequence) {
+	public void setBasicSequence(final List<IOptionsSequenceElement> basicSequence) {
 		this.basicSequence = basicSequence;
 	}
 
