@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
@@ -653,6 +654,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	public int open(final IScenarioEditingLocation editorPart, final MMXRootObject rootObject, final List<EObject> objects) {
 		return open(editorPart, rootObject, objects, false);
+
 	}
 
 	private boolean lockedForEditing = false;
@@ -778,7 +780,13 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 							((UUIDObject) duplicate).eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						}
 
-						adder.append(AddCommand.create(commandHandler.getEditingDomain(), original.eContainer(), original.eContainingFeature(), Collections.singleton(duplicate)));
+						EObject eContainer = original.eContainer();
+						if (originalToDuplicate.containsKey(eContainer)) {
+							// Already part of another duplicated object - skip as container will be parented
+							continue;
+						}
+
+						adder.append(AddCommand.create(commandHandler.getEditingDomain(), eContainer, original.eContainingFeature(), Collections.singleton(duplicate)));
 					}
 					final boolean isExecutable = adder.canExecute();
 					if (isExecutable) {
