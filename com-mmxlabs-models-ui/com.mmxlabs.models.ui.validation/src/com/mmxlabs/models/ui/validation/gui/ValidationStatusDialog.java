@@ -67,7 +67,7 @@ public class ValidationStatusDialog extends Dialog {
 		final TreeViewer viewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 
 		{
-			final GridData gdViewer = new GridData(SWT.FILL, SWT.END, true, false);
+			final GridData gdViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
 			gdViewer.heightHint = 200;
 			viewer.getControl().setLayoutData(gdViewer);
 		}
