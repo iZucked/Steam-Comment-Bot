@@ -56,6 +56,7 @@ public class ValidationStatusDialog extends Dialog {
 		newShell.setText("Validation");
 
 		super.configureShell(newShell);
+
 	}
 
 	@Override
@@ -64,9 +65,16 @@ public class ValidationStatusDialog extends Dialog {
 		final Composite composite = (Composite) super.createDialogArea(parent);
 
 		final TreeViewer viewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
+
+		{
+			final GridData gdViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
+			gdViewer.heightHint = 200;
+			viewer.getControl().setLayoutData(gdViewer);
+		}
+
 		viewer.getTree().setLinesVisible(true);
 
-		viewer.setContentProvider(new ValidationStatusContentProvider());
+		viewer.setContentProvider(new FlatValidationStatusContentProvider());
 		viewer.setLabelProvider(new ValidationStatusLabelProvider());
 		viewer.setComparator(new ValidationStatusComparator());
 
@@ -74,10 +82,11 @@ public class ValidationStatusDialog extends Dialog {
 
 		// Sometimes the message is too long for the table, so show full text in the text field at the bottom of the dialog
 		final Text text = new Text(composite, SWT.BORDER | SWT.WRAP);
-		final GridData gdText = new GridData(SWT.FILL, SWT.END, true, false);
-		gdText.heightHint = 50;
-		text.setLayoutData(gdText);
-
+		{
+			final GridData gdText = new GridData(SWT.FILL, SWT.END, true, false);
+			gdText.heightHint = 50;
+			text.setLayoutData(gdText);
+		}
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
