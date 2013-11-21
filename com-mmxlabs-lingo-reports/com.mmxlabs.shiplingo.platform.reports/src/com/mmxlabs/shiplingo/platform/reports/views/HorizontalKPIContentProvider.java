@@ -156,11 +156,17 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			for (final Object o : synchOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
 					final RowData rd = createRowData((Schedule) o, synchOutput.getScenarioInstance(o));
-					rowDataList.add(rd);
+					// Exclude pin to avoid multiple rows....
 					if (synchOutput.isPinned(o)) {
 						pinnedData = rd;
+					} else {
+						rowDataList.add(rd);
 					}
 				}
+			}
+			// ...but add it in if it is the only row!
+			if (rowDataList.isEmpty() && pinnedData != null) {
+				rowDataList.add(pinnedData);
 			}
 			rowData = rowDataList.toArray(rowData);
 		}
