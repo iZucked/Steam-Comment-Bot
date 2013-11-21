@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Reports
 Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.reports;singleton:=true
-Bundle-Version: 5.0.3.qualifier
+Bundle-Version: 5.0.4.qualifier
 Bundle-Activator: com.mmxlabs.shiplingo.platform.reports.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
