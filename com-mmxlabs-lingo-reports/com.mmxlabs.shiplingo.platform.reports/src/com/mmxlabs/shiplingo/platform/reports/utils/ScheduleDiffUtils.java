@@ -9,7 +9,9 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -25,6 +27,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  */
 public class ScheduleDiffUtils {
 	public static boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
+
+		// oops - dynamic eobjects coming here...
 
 		if (pinnedObject == null || otherObject == null) {
 			return true;
@@ -47,7 +51,8 @@ public class ScheduleDiffUtils {
 				return true;
 			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
 				return true;
-			} else if (ca.getSequence().getVesselAvailability() != null && (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
+			} else if (ca.getSequence().getVesselAvailability() != null
+					&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
 				return true;
 			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
 				return true;
@@ -64,8 +69,26 @@ public class ScheduleDiffUtils {
 				SlotAllocation caAllocation = caSlotAllocations.get(i);
 				SlotAllocation refAllocation = refSlotAllocations.get(i);
 
-				if (!caAllocation.getPort().getName().equals(refAllocation.getPort().getName())) {
-					return true;
+				{
+					final Slot caSlot = caAllocation.getSlot();
+					final Slot refSlot = refAllocation.getSlot();
+					final String caName = caSlot == null ? null : caSlot.getName();
+					final String refName = refSlot == null ? null : refSlot.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
+				}
+
+				{
+					final Port caPort = caAllocation.getPort();
+					final Port refPort = refAllocation.getPort();
+					final String caName = caPort == null ? null : caPort.getName();
+					final String refName = refPort == null ? null : refPort.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
 				}
 
 				{
@@ -90,23 +113,44 @@ public class ScheduleDiffUtils {
 				return true;
 			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
 				return true;
-			} else if (ca.getSequence().getVesselAvailability() != null && (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
+			} else if (ca.getSequence().getVesselAvailability() != null
+					&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
 				return true;
 			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
 				return true;
 			}
 
-			if (!ca.getPort().getName().equals(ref.getPort().getName())) {
-				return true;
+			{
+				final Slot caSlot = ca.getSlotAllocation().getSlot();
+				final Slot refSlot = ref.getSlotAllocation().getSlot();
+				final String caName = caSlot == null ? null : caSlot.getName();
+				final String refName = refSlot == null ? null : refSlot.getName();
+
+				if (!Equality.isEqual(caName, refName)) {
+					return true;
+				}
 			}
 
-			final Contract caContract = ca.getSlotAllocation().getContract();
-			final Contract refContract = ref.getSlotAllocation().getContract();
-			final String caName = caContract == null ? null : caContract.getName();
-			final String refName = refContract == null ? null : refContract.getName();
+			{
+				final Port caPort = ca.getSlotAllocation().getPort();
+				final Port refPort = ref.getSlotAllocation().getPort();
+				final String caName = caPort == null ? null : caPort.getName();
+				final String refName = refPort == null ? null : refPort.getName();
 
-			if (!Equality.isEqual(caName, refName)) {
-				return true;
+				if (!Equality.isEqual(caName, refName)) {
+					return true;
+				}
+			}
+
+			{
+				final Contract caContract = ca.getSlotAllocation().getContract();
+				final Contract refContract = ref.getSlotAllocation().getContract();
+				final String caName = caContract == null ? null : caContract.getName();
+				final String refName = refContract == null ? null : refContract.getName();
+
+				if (!Equality.isEqual(caName, refName)) {
+					return true;
+				}
 			}
 			return isElementDifferent(ref.getSlotAllocation().getCargoAllocation(), ca.getSlotAllocation().getCargoAllocation());
 		} else if (pinnedObject instanceof Event && otherObject instanceof Event) {

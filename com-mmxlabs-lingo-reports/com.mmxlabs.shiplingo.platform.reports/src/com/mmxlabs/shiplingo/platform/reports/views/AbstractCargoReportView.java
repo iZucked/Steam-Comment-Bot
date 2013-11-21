@@ -82,7 +82,7 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 
 	@Override
 	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-		return ScheduleDiffUtils.isElementDifferent(pinnedObject, otherObject);
+		return ScheduleDiffUtils.isElementDifferent((EObject)pinnedObject.eGet(cargoAllocationRef), (EObject)otherObject.eGet(cargoAllocationRef));
 	}
 
 	@Override
