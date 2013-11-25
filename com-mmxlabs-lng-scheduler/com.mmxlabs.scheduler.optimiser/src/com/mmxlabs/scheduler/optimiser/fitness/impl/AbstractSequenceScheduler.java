@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -73,7 +74,7 @@ public abstract class AbstractSequenceScheduler extends AbstractLoggingSequenceS
 		// Virtual vessels are those operated by a third party, for FOB and DES situations.
 		// Should we compute a schedule for them anyway? The arrival times don't mean much,
 		// but contracts need this kind of information to make up numbers with.
-		final List<Object> currentSequence = new ArrayList<Object>(5);
+		final List<IDetailsSequenceElement> currentSequence = new ArrayList<IDetailsSequenceElement>(5);
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		boolean startSet = false;
@@ -97,7 +98,7 @@ public abstract class AbstractSequenceScheduler extends AbstractLoggingSequenceS
 		}
 		final int times[] = new int[sequence.size()];
 		Arrays.fill(times, startTime);
-		currentPlan.setSequence(currentSequence.toArray());
+		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
 		return new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
 	}
 

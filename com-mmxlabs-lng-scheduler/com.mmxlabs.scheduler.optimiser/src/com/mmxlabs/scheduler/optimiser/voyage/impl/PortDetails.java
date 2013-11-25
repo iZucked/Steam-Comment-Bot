@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * 
  */
 
-public final class PortDetails implements IProfitAndLossDetails, Cloneable {
+public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequenceElement, Cloneable {
 
 	private PortOptions options;
 

@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -145,7 +146,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				}
 
 				// We will use the VPO to optimise fuel and route choices
-				final List<Object> newRawSequence = new ArrayList<Object>(currentSequence.length);
+				final List<IOptionsSequenceElement> newRawSequence = new ArrayList<IOptionsSequenceElement>(currentSequence.length);
 				for (final Object o : currentSequence) {
 					if (o instanceof PortDetails) {
 						newRawSequence.add(((PortDetails) o).getOptions());

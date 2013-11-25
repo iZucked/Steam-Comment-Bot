@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
  * @since 2.0
  * 
  */
-public final class PortOptions implements Cloneable {
+public final class PortOptions implements Cloneable, IOptionsSequenceElement {
 	private int visitDuration;
 	private IVessel vessel;
 	private IPortSlot portSlot;
