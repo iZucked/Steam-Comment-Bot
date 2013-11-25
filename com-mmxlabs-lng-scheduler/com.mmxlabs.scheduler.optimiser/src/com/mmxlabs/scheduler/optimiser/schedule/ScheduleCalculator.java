@@ -61,6 +61,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ScheduleCalculator {
 
+	@Inject(optional=true)
+	private ScheduledDataLookupProvider scheduledDataLookupProvider;
+	
 	@Inject
 	private IVolumeAllocator volumeAllocator;
 
@@ -97,6 +100,11 @@ public class ScheduleCalculator {
 
 	public void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
+		if (scheduledDataLookupProvider != null) {
+			scheduledDataLookupProvider.reset();
+		}
+		
+		
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences, scheduledSequences);
 		}
@@ -155,6 +163,10 @@ public class ScheduleCalculator {
 			}
 		}
 
+		if (scheduledDataLookupProvider != null) {
+			scheduledDataLookupProvider.setInputs(sequences, scheduledSequences);
+		}
+		
 		calculateProfitAndLoss(sequences, scheduledSequences, allocations, annotatedSolution);
 	}
 
