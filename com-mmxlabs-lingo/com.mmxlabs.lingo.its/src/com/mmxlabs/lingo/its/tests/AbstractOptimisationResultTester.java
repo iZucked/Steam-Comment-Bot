@@ -61,8 +61,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class AbstractOptimisationResultTester {
 
 	/**
-	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Note if this value is true, this should be run as part of a
-	 * JUnit test rather than a plugin test as the URL to File conversion may not work as expected.
+	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. 
+	 * Should be run as part of a plugin test. 
 	 */
 	private static final boolean storeFitnessMap = false;
 
