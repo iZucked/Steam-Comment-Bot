@@ -22,7 +22,11 @@ import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
@@ -72,6 +76,35 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 				doCreateFormContent();
 			}
 		});
+	}
+
+	protected Control createButtonBar(Composite parent) {
+		
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		Label sep = new Label(parent, SWT.HORIZONTAL|SWT.SEPARATOR);
+		sep.setLayoutData(gd);
+				
+		Composite composite = new Composite(parent, SWT.NONE);
+		// create a layout with spacing and margins appropriate for the font
+		// size.
+
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 0; // this is incremented by createButton
+		layout.makeColumnsEqualWidth = true;
+//		layout.marginWidth = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
+//		layout.marginHeight = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_MARGIN);
+//		layout.horizontalSpacing = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
+//		layout.verticalSpacing = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_SPACING);
+		composite.setLayout(layout);
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_END
+				| GridData.VERTICAL_ALIGN_CENTER);
+		composite.setLayoutData(data);
+		composite.setFont(parent.getFont());
+		
+//		 Add the buttons to the button bar.
+		createButtonsForButtonBar(composite);
+		return composite;
+//		return super.createButtonBar(parent);
 	}
 
 	@Override

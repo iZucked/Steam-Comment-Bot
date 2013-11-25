@@ -515,7 +515,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					toolkit.adapt(tb, true, true);
 					final GridData gd = new GridData();
 					// TODO fix magic number - measure width properly and set everywhere
-					gd.minimumWidth = gd.widthHint = 64;
+//					gd.minimumWidth = gd.widthHint = ;
 					tb.setLayoutData(gd);
 
 					return composite;
