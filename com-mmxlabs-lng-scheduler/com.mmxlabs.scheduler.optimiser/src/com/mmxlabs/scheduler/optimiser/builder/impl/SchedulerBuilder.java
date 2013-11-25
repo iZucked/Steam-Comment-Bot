@@ -405,7 +405,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setPort(port);
 		slot.setTimeWindow(window);
 		slot.setMinLoadVolume(minVolumeInM3);
-		slot.setMaxLoadVolume(maxVolumeInM3);
+		slot.setMaxLoadVolume(maxVolumeInM3 == 0 ? Long.MAX_VALUE : maxVolumeInM3);
 		// slot.setPurchasePriceCurve(pricePerMMBTu);
 		slot.setLoadPriceCalculator(priceCalculator);
 		slot.setCargoCVValue(cargoCVValue);
@@ -469,7 +469,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slot.setPort(port);
 		slot.setTimeWindow(window);
 		slot.setMinDischargeVolume(minVolumeInM3);
-		slot.setMaxDischargeVolume(maxVolumeInM3);
+		slot.setMaxDischargeVolume(maxVolumeInM3 == 0 ? Long.MAX_VALUE : maxVolumeInM3);
 		slot.setMinCvValue(minCvValue);
 		slot.setMaxCvValue(maxCvValue);
 		slot.setDischargePriceCalculator(priceCalculator);
