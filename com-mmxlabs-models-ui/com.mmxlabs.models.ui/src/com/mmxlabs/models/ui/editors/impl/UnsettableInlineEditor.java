@@ -79,7 +79,14 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			this.lastSetValue = getInitialUnsetValue();
 //			final Composite sub = new Composite(parent, SWT.NONE);
 			final Composite sub = toolkit.createComposite(parent);
-			sub.setLayout(new GridLayout(2, false));
+			GridLayout gl = new GridLayout(2, false);
+			gl.marginLeft = 0;
+			gl.marginBottom = 0;
+			gl.marginHeight = 0;
+			gl.marginTop = 0;
+			gl.marginRight = 0;
+			gl.marginWidth= 0;
+			sub.setLayout(gl);
 //			this.setButton = new Button(sub, SWT.CHECK);
 			this.setButton = toolkit.createButton(sub, "", SWT.CHECK);
 			this.inner = createValueControl(sub);
