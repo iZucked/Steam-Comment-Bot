@@ -856,12 +856,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		int violationsCount = 0;
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
-		final long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
-		final long maxDischargeVolumeInM3 = dischargeSlot.getMaxDischargeVolume();
+		long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
+		long maxDischargeVolumeInM3 = dischargeSlot.getMaxDischargeVolume();
 
+		if (maxLoadVolumeInM3 == 0) maxLoadVolumeInM3 = Long.MAX_VALUE; 
+		if (maxDischargeVolumeInM3 == 0) maxDischargeVolumeInM3 = Long.MAX_VALUE; 
 		// We cannot load more than is available or which would exceed
 		// vessel capacity.
-		final long upperLoadLimitInM3 = Math.min(cargoCapacityInM3, loadSlot.getMaxLoadVolume());
+		final long upperLoadLimitInM3 = Math.min(cargoCapacityInM3, maxLoadVolumeInM3);
 
 		if (minLoadVolumeInM3 > cargoCapacityInM3) {
 			loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - cargoCapacityInM3);
