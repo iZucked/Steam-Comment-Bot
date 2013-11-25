@@ -107,7 +107,7 @@ public class DateAndCurveHelper {
 	public StepwiseIntegerCurve generateExpressionCurve(final String priceExpression, SeriesParser indices) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
-			return new StepwiseIntegerCurve();
+			return null;
 		}
 
 		final IExpression<ISeries> expression = indices.parse(priceExpression);
