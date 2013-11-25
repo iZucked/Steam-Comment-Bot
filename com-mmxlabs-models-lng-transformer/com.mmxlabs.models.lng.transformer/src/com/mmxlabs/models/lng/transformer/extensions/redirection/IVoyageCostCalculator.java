@@ -17,4 +17,12 @@ public interface IVoyageCostCalculator {
 	@Nullable
 	VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, @NonNull IVessel vessel,
 			int notionalBallastSpeed, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, int salesPricePerMMBTu);
+
+	@Nullable
+	VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, int returnTime,
+			@NonNull IVessel vessel, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, @NonNull ISalesPriceCalculator salesPrice);
+
+	@Nullable
+	VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, int returnTime,
+			@NonNull IVessel vessel, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, int salesPricePerMMBTu);
 }

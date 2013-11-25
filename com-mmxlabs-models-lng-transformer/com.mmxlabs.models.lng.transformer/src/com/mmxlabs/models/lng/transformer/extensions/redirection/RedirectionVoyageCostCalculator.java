@@ -1,6 +1,7 @@
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
@@ -94,5 +95,13 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 
 			return notionalPlan;
 		}
+	}
+
+	@Override
+	@Nullable
+	public VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, int returnTime,
+			@NonNull IVessel vessel, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, @NonNull ISalesPriceCalculator salesPrice) {
+		
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }
