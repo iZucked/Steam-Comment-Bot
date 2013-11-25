@@ -415,7 +415,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * 
 	 * @author Simon McGregor
 	 */
-	public long[] calculateVoyagePlanFuelConsumptions(final IVessel vessel, final Object... sequence) {
+	public long[] calculateVoyagePlanFuelConsumptions(final IVessel vessel, final IDetailsSequenceElement... sequence) {
 		final long[] fuelConsumptions = new long[FuelComponent.values().length];
 
 		for (int i = 0; i < sequence.length; ++i) {
@@ -471,7 +471,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @return
 	 * @since 5.0
 	 */
-	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, final Object... sequence) {
+	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
 		int cooldownM3Price = 0;
 
 		int arrivalTimeIndex = -1;
@@ -529,7 +529,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
 	 * @since 5.0
 	 */
-	final public int[] getLngEffectivePrices(final List<Integer> loadIndices, final List<Integer> dischargeIndices, final List<Integer> arrivalTimes, final Object... sequence) {
+	final public int[] getLngEffectivePrices(final List<Integer> loadIndices, final List<Integer> dischargeIndices, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
 		// TODO: does not need to be this long
 		final int[] resultPerMMBtu = new int[sequence.length];
 
@@ -916,7 +916,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return violationsCount;
 	}
 
-	protected int checkCooldownViolations(final int loadIdx, final int dischargeIdx, final Object... sequence) {
+	protected int checkCooldownViolations(final int loadIdx, final int dischargeIdx, final IDetailsSequenceElement... sequence) {
 		int cooldownViolations = 0;
 		// check for cooldown violations
 		for (int i = 0; i < sequence.length; ++i) {
@@ -1038,7 +1038,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	/**
 	 * @since 5.0
 	 */
-	final public int findFirstLoadIndex(final Object... sequence) {
+	final public int findFirstLoadIndex(final IDetailsSequenceElement... sequence) {
 		// ignore the last element in the sequence, to avoid double-counting (it will be included in the next sequence)
 		for (int i = 0; i < sequence.length - 1; ++i) {
 			if (sequence[i] instanceof PortDetails) {
@@ -1057,7 +1057,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	/**
 	 * @since 5.0
 	 */
-	final public int findFirstDischargeIndex(final Object... sequence) {
+	final public int findFirstDischargeIndex(final IDetailsSequenceElement... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
 			if (sequence[i] instanceof PortDetails) {
 				// Port Slot
@@ -1075,7 +1075,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	/**
 	 * @since 5.0
 	 */
-	final public List<Integer> findLoadIndices(final Object... sequence) {
+	final public List<Integer> findLoadIndices(final IDetailsSequenceElement... sequence) {
 		final List<Integer> storage = new ArrayList<Integer>();
 
 		// ignore the last element in the sequence, to avoid double-counting (it will be included in the next sequence)
@@ -1095,7 +1095,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	/**
 	 * @since 5.0
 	 */
-	final public List<Integer> findDischargeIndices(final Object... sequence) {
+	final public List<Integer> findDischargeIndices(final IDetailsSequenceElement... sequence) {
 		final List<Integer> storage = new ArrayList<Integer>();
 
 		for (int i = 0; i < sequence.length; i++) {
