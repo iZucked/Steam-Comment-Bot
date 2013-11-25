@@ -65,6 +65,8 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -284,21 +286,21 @@ public final class AbstractSequenceSchedulerTest {
 		// expectedVoyageDetails3.setStartTime(16);
 		expectedVoyageDetails3.setTravelTime(4);
 
-		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
+		final List<IOptionsSequenceElement> expectedBasicSequence1 = new LinkedList<IOptionsSequenceElement>();
 		expectedBasicSequence1.add(expectedPortOptions1);
 		expectedBasicSequence1.add(expectedVoyageOptions1a);
 		expectedBasicSequence1.add(expectedPortOptions2);
 		expectedBasicSequence1.add(expectedVoyageOptions2a);
 		expectedBasicSequence1.add(expectedPortOptions3);
 
-		final List<Object> expectedBasicSequence2 = new LinkedList<Object>();
+		final List<IOptionsSequenceElement> expectedBasicSequence2 = new LinkedList<IOptionsSequenceElement>();
 		expectedBasicSequence2.add(expectedPortOptions3);
 		expectedBasicSequence2.add(expectedVoyageOptions3a);
 		expectedBasicSequence2.add(expectedPortOptions4);
 
 		// Return "empty" plan from optimiser
 		final VoyagePlan testVoyagePlan = new VoyagePlan();
-		final Object[] testSequence = new Object[] {};
+		final IDetailsSequenceElement[] testSequence = new IDetailsSequenceElement[] {};
 		testVoyagePlan.setSequence(testSequence);
 
 		Mockito.when(voyagePlanOptimiser.optimise()).thenReturn(testVoyagePlan);
@@ -515,7 +517,7 @@ public final class AbstractSequenceSchedulerTest {
 		// expectedVoyageDetails2.setStartTime(11);
 		expectedVoyageDetails2.setTravelTime(4);
 
-		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
+		final List<IOptionsSequenceElement> expectedBasicSequence1 = new LinkedList<IOptionsSequenceElement>();
 		expectedBasicSequence1.add(expectedPortOptions1);
 		expectedBasicSequence1.add(expectedVoyageOptions1a);
 		expectedBasicSequence1.add(expectedPortOptions2);
@@ -523,7 +525,7 @@ public final class AbstractSequenceSchedulerTest {
 		expectedBasicSequence1.add(expectedPortOptions3);
 
 		final VoyagePlan testVoyagePlan = new VoyagePlan();
-		final Object[] testSequence = new Object[] { expectedPortDetails1, expectedVoyageDetails1, expectedPortDetails2, expectedVoyageDetails2, expectedPortDetails3 };
+		final IDetailsSequenceElement[] testSequence = new IDetailsSequenceElement[] { expectedPortDetails1, expectedVoyageDetails1, expectedPortDetails2, expectedVoyageDetails2, expectedPortDetails3 };
 		testVoyagePlan.setSequence(testSequence);
 
 		testVoyagePlan.setTotalFuelCost(FuelComponent.Base, 100);

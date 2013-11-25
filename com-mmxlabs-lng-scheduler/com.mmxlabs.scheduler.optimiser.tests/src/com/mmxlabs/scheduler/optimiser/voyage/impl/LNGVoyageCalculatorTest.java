@@ -564,7 +564,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		final Object[] sequence = new Object[] { loadDetails, details, dischargeDetails };
+		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details, dischargeDetails };
 
 		final List<Integer> arrivalTimes = new ArrayList<Integer>();
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
@@ -635,7 +635,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		final Object[] sequence = new Object[] { loadDetails, details, dischargeDetails };
+		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details, dischargeDetails };
 
 		final List<Integer> arrivalTimes = new ArrayList<Integer>();
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
@@ -707,7 +707,7 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		final Object[] sequence = new Object[] { loadDetails, details, dischargeDetails };
+		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details, dischargeDetails };
 
 		// Expect to throw a RuntimeException here for a capacity violation
 		fail("Better to return object, recording the error");
@@ -790,7 +790,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		final Object[] sequence = new Object[] { loadDetails, details1, dischargeDetails, details2, otherDetails };
+		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details1, dischargeDetails, details2, otherDetails };
 
 		final List<Integer> arrivalTimes = new ArrayList<Integer>();
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
@@ -868,7 +868,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		final Object[] sequence = new Object[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
+		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
 
 		final List<Integer> arrivalTimes = new ArrayList<Integer>();
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
@@ -952,7 +952,7 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		final Object[] sequence = new Object[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
+		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
 
 		final List<Integer> arrivalTimes = new ArrayList<Integer>();
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {

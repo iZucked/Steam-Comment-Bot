@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class VoyagePlanTest {
@@ -34,7 +35,7 @@ public class VoyagePlanTest {
 
 	@Test
 	public void testGetSetSequence() {
-		final Object[] value = new Object[0];
+		final IDetailsSequenceElement[] value = new IDetailsSequenceElement[0];
 		final VoyagePlan plan = new VoyagePlan();
 		Assert.assertNull(plan.getSequence());
 		plan.setSequence(value);
@@ -43,7 +44,7 @@ public class VoyagePlanTest {
 
 	@Test
 	public void testEquals() {
-		final Object[] seq1 = new Object[0];
+		final IDetailsSequenceElement[] seq1 = new IDetailsSequenceElement[0];
 
 		final FuelComponent fuel1 = FuelComponent.Base;
 		final FuelComponent fuel2 = FuelComponent.Base_Supplemental;
@@ -78,7 +79,7 @@ public class VoyagePlanTest {
 		Assert.assertFalse(plan1.equals(new Object()));
 	}
 
-	VoyagePlan make(final Object[] sequence, final FuelComponent fuel1, final long consumption, final FuelComponent fuel2, final long cost, final int cvtQty) {
+	VoyagePlan make(final IDetailsSequenceElement[] sequence, final FuelComponent fuel1, final long consumption, final FuelComponent fuel2, final long cost, final int cvtQty) {
 
 		final VoyagePlan p = new VoyagePlan();
 
