@@ -4,27 +4,59 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
-import com.mmxlabs.models.util.importer.impl.SetReference;
 
 /**
  *  Class to permit the generic import of multi-line data from a CSV file.
- *  Where a CSV importer is 
+ *  
+ *  Semantics work as follows:
+ *    The first line of the CSV file is mapped to a list of field names. These names
+ *    mostly correspond to fields in the EMF model, although some of them are magic
+ *    fields used by the importer (or by specialised importer sub-classes).
+ *    
+ *    Following conventional object-oriented notation, the field names may be 
+ *    delimited by one or more dots to indicate that they are sub-fields of 
+ *    structured objects (e.g. slot.name denotes the "name" field of the "slot" field
+ *    of the base object).
+ *    
+ *    This class permits the use of more than one convention for importing multiple
+ *    objects into a single field:
+ *    	1) A particular sub-field may be used as an index field to identify unique 
+ *      imported objects within a hierarchical context. The index serves to identify
+ *      unique children of a particular EMF object, and need not be globally unique.
+ *      When a specific index string is re-encountered in the same hierarchical context,
+ *      this allows new children to be added to the existing object.
+ *      
+ * 		2) Sub-fields which are designated as multiple value fields may take multiple
+ * 		numeric suffixes within the same line (e.g. car.door.1 and car.door.2 denote 
+ * 		data for two door objects to be added to the car).  
+ * 
+ *	Index fields for particular EMF classes must currently be specified by importer 
+ *  sub-classes, although there is an EKeys property in the EMF model which has a 
+ *  similar semantics.  
+ *  
+ *  N.B. Behaviour of this class is unspecified when a single object has more than 
+ *  one direct multi-valued field.
  *  
  * @author Simon McGregor
  *
@@ -32,6 +64,58 @@ import com.mmxlabs.models.util.importer.impl.SetReference;
 public class MultiLineImporter extends DefaultClassImporter {
 	// cache for objects which might occur in the file multiple times 
 	private Map<Pair<EObject, String>, EObject> objectMap = new HashMap<>();
+
+	/*
+	@Override
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
+		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
+
+		if (objects.isEmpty()) {
+			return result;
+		}
+
+		for (final EObject object : objects) {
+			final Map<String, String> flattened = exportObject(object, root);
+			flattened.put(KIND_KEY, object.eClass().getName());
+			result.add(flattened);
+		}
+		return result;
+	}
+	*/
+	
+	/*
+	 * When exporting an object, the entire branching tree of multiple-content sub-fields 
+	 * needs to be written as successive lines to the file. 
+	 *  
+	 * Exporting a multi-value attribute should work like:
+	 *   for each value, copy the row fields for objects higher up the hierarchy
+	 *    
+	 * (Unfinished code)
+	 */
+
+	protected Collection<Map<String, String>> multiExportObject(final EObject object, final MMXRootObject root) {
+
+		final Collection<Map<String, String>> result = new LinkedList<Map<String, String>>();
+		final Map<String, String> row = new LinkedHashMap<String, String>();
+
+		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
+			if (shouldExportFeature(attribute)) {
+				exportAttribute(object, attribute, row);
+			}
+		}
+
+		for (final EReference reference : object.eClass().getEAllReferences()) {
+			if (shouldExportFeature(reference)) {
+				final Collection<Map<String, String>> subResult;
+				subResult = multiExportReference(object, reference, row, root);
+			}
+		}
+
+		return result;
+
+		
+	}
+
 	
 	/*
 	 * Every time a sub-object is imported, a separate importer object will be invoked. 
@@ -39,7 +123,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 	 * when they are encountered again, they will be looked up rather than instantiated. 
 	 * 
 	 */
-
+	
 	/*
 	 * Each data row will normally contain data for several levels of nested objects
 	 * - Some of that data will be data which does not appear on any other row,
@@ -52,6 +136,67 @@ public class MultiLineImporter extends DefaultClassImporter {
 	 * @see com.mmxlabs.models.util.importer.impl.DefaultClassImporter#importObjects(org.eclipse.emf.ecore.EClass, com.mmxlabs.models.util.importer.CSVReader, com.mmxlabs.models.util.importer.IImportContext)
 	 */
 	
+	
+	/*
+	 * (Unfinished code)
+	 */
+	protected Collection<Map<String, String>> multiExportReference(final EObject object, final EReference reference, final Map<String, String> row, final MMXRootObject root) {
+		Collection<Map<String, String>> result = null;
+		
+		if (shouldFlattenReference(reference)) {
+			final EObject value = (EObject) object.eGet(reference);
+			if (value != null) {
+				final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(value.eClass());
+				if (importer != null) {
+					final Map<String, String> subMap = importer.exportObjects(Collections.singleton(value), root).iterator().next();
+					for (final Map.Entry<String, String> e : subMap.entrySet()) {
+						row.put(reference.getName() + DOT + e.getKey(), e.getValue());
+					}
+				}
+			}
+		} else {
+			if (reference.isMany()) {
+				if (reference == MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS) {
+
+					final List<EObject> extensions = ((MMXObject) object).getExtensions();
+					if (extensions != null) {
+						int count = 0;
+						for (final EObject extension : extensions) {
+							final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(extension.eClass());
+							if (importer != null) {
+								final Map<String, String> subMap = importer.exportObjects(Collections.singleton(extension), root).iterator().next();
+								for (final Map.Entry<String, String> e : subMap.entrySet()) {
+									row.put(reference.getName() + DOT + count + DOT + e.getKey(), e.getValue());
+								}
+								++count;
+							}
+						}
+						if (count > 0) {
+							row.put(reference.getName() + DOT + "count", Integer.toString(count));
+						}
+					}
+				} else {
+					@SuppressWarnings("unchecked")
+					final List<? extends EObject> values = (List<? extends EObject>) object.eGet(reference);
+					for (EObject o: values) {
+						final LinkedHashMap<String, String> newRow = new LinkedHashMap<String, String>();
+						newRow.putAll(row);
+						
+					}
+				}
+			} else {
+				final Object o = object.eGet(reference);
+				if (o instanceof NamedObject) {
+					final NamedObject no = (NamedObject) o;
+					row.put(reference.getName(), no.getName());
+				}
+			}
+		}
+		
+		return result;
+	}
+
+
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
 		objectMap.clear();
