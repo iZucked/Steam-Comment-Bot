@@ -396,6 +396,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 
 	/**
 	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
+	 * The default value is <code>"140000"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Max Quantity</em>' attribute isn't clear,
@@ -407,7 +408,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @see #unsetMaxQuantity()
 	 * @see #setMaxQuantity(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_MaxQuantity()
-	 * @model unsettable="true" required="true"
+	 * @model default="140000" unsettable="true" required="true"
 	 * @generated
 	 */
 	int getMaxQuantity();
