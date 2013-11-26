@@ -145,6 +145,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				text += pe != null ? pe : "";
 				textClient.setText(text);
 				textClient.update();
+//				ec.setText(baseTitle + ":   " + text);
 			}
 		};
 
@@ -161,7 +162,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				final Date d = (Date) mmxEo.eGet(WindowStart);
 				final int time = (Integer) mmxEo.eGetWithDefault(WindowStartTime);
 				final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
-				textClient.setText(windowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours");
+				String text = windowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours";
+				textClient.setText(text);
+//				ec.setText(baseTitle + ":   " + text);
 			}
 		};
 
@@ -187,7 +190,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					gd.widthHint = 80 + 64;
+//					gd.widthHint = 80;
+					return gd;
+				}
+				if (feature == CargoPackage.Literals.SLOT__NOTES) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					gd.widthHint = 100;
 					return gd;
 				}
 
@@ -238,7 +246,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		contentComposite = toolkit.createComposite(this);
-		contentComposite.setLayout(new GridLayout(2, false));
+		Layout l = layoutProvider.createDetailLayout(root, object);
+//		contentComposite.setLayout(new GridLayout(2, false));
+		 
+		GridLayout layout = new GridLayout(2, false);
+		layout.verticalSpacing = 8;
+		contentComposite.setLayout(layout);
 
 		for (final EStructuralFeature[] fs : nameFeatures) {
 			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
@@ -259,7 +272,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}		
 		for (EStructuralFeature f : contractFeatures) {
 			pricingFeatures.add(new EStructuralFeature[]{f});
-			System.out.println("Adding pricing feature: " + f);
+//			System.out.println("Adding pricing feature: " + f);
 			missedFeaturesList.remove(f);
 		}
 
@@ -301,10 +314,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	private void createSpacer() {
-		final Composite spacer = toolkit.createComposite(contentComposite);
-		final GridData gd = new GridData();
-		gd.heightHint = 3;
-		spacer.setLayoutData(gd);
+//		final Composite spacer = toolkit.createComposite(contentComposite);
+//		final GridData gd = new GridData();
+//		gd.heightHint = 3;
+//		spacer.setLayoutData(gd);
 	}
 
 	@Override
