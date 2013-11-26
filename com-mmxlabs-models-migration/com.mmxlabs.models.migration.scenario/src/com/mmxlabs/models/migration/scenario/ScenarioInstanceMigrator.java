@@ -70,6 +70,7 @@ public class ScenarioInstanceMigrator {
 			// Copy data files for manipulation
 			assert originalURI != null;
 			final File f = File.createTempFile("migration", ".xmi");
+			tmpFiles.add(f);
 			// Create a temp file and generate a URI to it to pass into migration code.
 			final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
 			assert tmpURI != null;
