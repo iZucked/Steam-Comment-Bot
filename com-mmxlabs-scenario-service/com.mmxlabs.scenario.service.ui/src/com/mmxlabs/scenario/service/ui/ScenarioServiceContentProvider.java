@@ -6,8 +6,10 @@ package com.mmxlabs.scenario.service.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -18,6 +20,7 @@ import org.eclipse.ui.Saveable;
 import org.eclipse.ui.navigator.SaveablesProvider;
 
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
@@ -31,6 +34,66 @@ import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterF
 
 public class ScenarioServiceContentProvider extends AdapterFactoryContentProvider implements IAdaptable {
 
+	private final Set<IScenarioService> listeningScenarioServices = new HashSet<>();
+	private final IScenarioServiceListener scenarioServiceListener = new IScenarioServiceListener() {
+
+		@Override
+		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			cleanUp(scenarioInstance);
+		}
+
+		public void cleanUp(final ScenarioInstance scenarioInstance) {
+			if (saveablesMap.values().contains(scenarioInstance)) {
+				for (final Map.Entry<ScenarioInstanceSavable, ScenarioInstance> e : saveablesMap.entrySet()) {
+					if (e.getValue() == scenarioInstance) {
+						final ScenarioInstanceSavable saveable = e.getKey();
+						saveablesMap.remove(saveable);
+						if (provider != null) {
+							saveable.setDeleted();
+							provider.fireDirtyChange(saveable);
+							provider.fireClosed(saveable);
+						}
+					}
+				}
+			}
+		}
+
+		@Override
+		public void onPreScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+
+		@Override
+		public void onPreScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+
+		@Override
+		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			cleanUp(scenarioInstance);
+		}
+
+		@Override
+		public void onPostScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+
+		@Override
+		public void onPostScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+
+		@Override
+		public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+
+		@Override
+		public void onPostScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+	};
+
 	private final class InternalSaveablesProvider extends SaveablesProvider {
 		@Override
 		public Saveable[] getSaveables() {
@@ -39,7 +102,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 		@Override
 		public Saveable getSaveable(final Object element) {
-			for (final Map.Entry<Saveable, ScenarioInstance> e : saveablesMap.entrySet()) {
+			for (final Map.Entry<ScenarioInstanceSavable, ScenarioInstance> e : saveablesMap.entrySet()) {
 				if (e.getValue() == element) {
 					return e.getKey();
 				}
@@ -57,6 +120,17 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 		public void fireOpened(final Saveable... models) {
 			fireSaveablesOpened(models);
+
+			fireSaveablesClosed(models);
+		}
+
+		public void fireClosed(final Saveable... models) {
+			fireSaveablesDirtyChanged(models);
+			fireSaveablesClosed(models);
+		}
+
+		public void fireDirtyChange(final Saveable... models) {
+			fireSaveablesDirtyChanged(models);
 		}
 	}
 
@@ -72,7 +146,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
 
-	Map<Saveable, ScenarioInstance> saveablesMap = new HashMap<Saveable, ScenarioInstance>();
+	private final Map<ScenarioInstanceSavable, ScenarioInstance> saveablesMap = new HashMap<>();
 	private InternalSaveablesProvider provider;
 
 	public ScenarioServiceContentProvider() {
@@ -165,10 +239,19 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 				if (isShowScenarioInstances()) {
 					filtered = !mayBeShow;
 					if (!saveablesMap.values().contains(scenarioInstance)) {
-						final ScenarioInstanceSavable savable = new ScenarioInstanceSavable(scenarioInstance);
-						saveablesMap.put(savable, scenarioInstance);
-						if (provider != null) {
-							provider.fireOpened(savable);
+
+						final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+						if (scenarioService != null) {
+							// Register a scenario service listener if required to clean up the saveables.
+							if (listeningScenarioServices.contains(scenarioService) == false) {
+								scenarioService.addScenarioServiceListener(scenarioServiceListener);
+								listeningScenarioServices.add(scenarioService);
+							}
+							final ScenarioInstanceSavable savable = new ScenarioInstanceSavable(scenarioInstance);
+							saveablesMap.put(savable, scenarioInstance);
+							if (provider != null) {
+								provider.fireOpened(savable);
+							}
 						}
 					}
 				}
@@ -340,5 +423,15 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	 */
 	public void setShowOnlyCapsForking(final boolean showCapsForking) {
 		this.showOnlyCapsForking = showCapsForking;
+	}
+
+	@Override
+	public void dispose() {
+		while (!listeningScenarioServices.isEmpty()) {
+			final IScenarioService ss = listeningScenarioServices.iterator().next();
+			listeningScenarioServices.remove(ss);
+			ss.removeScenarioServiceListener(scenarioServiceListener);
+		}
+		super.dispose();
 	}
 }
