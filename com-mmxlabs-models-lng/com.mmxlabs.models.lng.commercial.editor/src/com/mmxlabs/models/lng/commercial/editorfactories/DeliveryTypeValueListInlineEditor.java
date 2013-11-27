@@ -102,10 +102,11 @@ public class DeliveryTypeValueListInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
+		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
-		combo.setEnabled(enabled);
+		combo.setEnabled(controlsEnabled);
 
-		super.setControlsEnabled(enabled);
+		super.setControlsEnabled(controlsEnabled);
 	}
 
 	@Override

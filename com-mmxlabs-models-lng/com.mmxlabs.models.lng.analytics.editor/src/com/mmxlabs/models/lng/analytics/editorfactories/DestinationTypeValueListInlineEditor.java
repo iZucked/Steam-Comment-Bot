@@ -55,10 +55,10 @@ public class DestinationTypeValueListInlineEditor extends BasicAttributeInlineEd
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
+		boolean controlsEnabled = !isFeatureReadonly() && enabled;
+		combo.setEnabled(controlsEnabled);
 
-		combo.setEnabled(enabled);
-
-		super.setControlsEnabled(enabled);
+		super.setControlsEnabled(controlsEnabled);
 	}
 
 	@Override
