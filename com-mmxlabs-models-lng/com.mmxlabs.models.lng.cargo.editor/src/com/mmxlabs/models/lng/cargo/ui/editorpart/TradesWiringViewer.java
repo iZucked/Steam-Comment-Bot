@@ -472,7 +472,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							if (contextMenuExtensions != null) {
 								final Slot slot = rootData.getLoadSlots().get(idx);
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(getEditingDomain(), slot, mgr);
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
 							}
 						} else {
@@ -481,7 +481,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							if (contextMenuExtensions != null) {
 								final Slot slot = rootData.getDischargeSlots().get(idx);
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(getEditingDomain(), slot, mgr);
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
 							}
 						}
@@ -493,7 +493,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							if (contextMenuExtensions != null) {
 								final Slot slot = rootData.getDischargeSlots().get(idx);
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(getEditingDomain(), slot, mgr);
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
 							}
 						} else if (rowDataItem.loadSlot != null) {
@@ -502,7 +502,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							if (contextMenuExtensions != null) {
 								final Slot slot = rootData.getLoadSlots().get(idx);
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(getEditingDomain(), slot, mgr);
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
 							}
 						}
