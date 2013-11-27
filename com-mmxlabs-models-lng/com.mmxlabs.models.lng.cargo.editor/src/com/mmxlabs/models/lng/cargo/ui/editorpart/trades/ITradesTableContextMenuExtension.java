@@ -4,7 +4,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.MenuManager;
 
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 /**

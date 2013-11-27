@@ -70,7 +70,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int LADEN_CONSUMPTION_RATE_EDEFAULT = 0;
+	protected static final double LADEN_CONSUMPTION_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getLadenConsumptionRate() <em>Laden Consumption Rate</em>}' attribute.
@@ -80,7 +80,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * @generated
 	 * @ordered
 	 */
-	protected int ladenConsumptionRate = LADEN_CONSUMPTION_RATE_EDEFAULT;
+	protected double ladenConsumptionRate = LADEN_CONSUMPTION_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getLadenNBORate() <em>Laden NBO Rate</em>}' attribute.
@@ -90,7 +90,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int LADEN_NBO_RATE_EDEFAULT = 0;
+	protected static final double LADEN_NBO_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getLadenNBORate() <em>Laden NBO Rate</em>}' attribute.
@@ -100,7 +100,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * @generated
 	 * @ordered
 	 */
-	protected int ladenNBORate = LADEN_NBO_RATE_EDEFAULT;
+	protected double ladenNBORate = LADEN_NBO_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getBallastConsumptionRate() <em>Ballast Consumption Rate</em>}' attribute.
@@ -110,7 +110,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int BALLAST_CONSUMPTION_RATE_EDEFAULT = 0;
+	protected static final double BALLAST_CONSUMPTION_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getBallastConsumptionRate() <em>Ballast Consumption Rate</em>}' attribute.
@@ -120,7 +120,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * @generated
 	 * @ordered
 	 */
-	protected int ballastConsumptionRate = BALLAST_CONSUMPTION_RATE_EDEFAULT;
+	protected double ballastConsumptionRate = BALLAST_CONSUMPTION_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getBallastNBORate() <em>Ballast NBO Rate</em>}' attribute.
@@ -130,7 +130,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int BALLAST_NBO_RATE_EDEFAULT = 0;
+	protected static final double BALLAST_NBO_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getBallastNBORate() <em>Ballast NBO Rate</em>}' attribute.
@@ -140,7 +140,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * @generated
 	 * @ordered
 	 */
-	protected int ballastNBORate = BALLAST_NBO_RATE_EDEFAULT;
+	protected double ballastNBORate = BALLAST_NBO_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -225,7 +225,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getLadenConsumptionRate() {
+	public double getLadenConsumptionRate() {
 		return ladenConsumptionRate;
 	}
 
@@ -234,8 +234,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLadenConsumptionRate(int newLadenConsumptionRate) {
-		int oldLadenConsumptionRate = ladenConsumptionRate;
+	public void setLadenConsumptionRate(double newLadenConsumptionRate) {
+		double oldLadenConsumptionRate = ladenConsumptionRate;
 		ladenConsumptionRate = newLadenConsumptionRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE, oldLadenConsumptionRate, ladenConsumptionRate));
@@ -246,7 +246,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getLadenNBORate() {
+	public double getLadenNBORate() {
 		return ladenNBORate;
 	}
 
@@ -255,8 +255,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLadenNBORate(int newLadenNBORate) {
-		int oldLadenNBORate = ladenNBORate;
+	public void setLadenNBORate(double newLadenNBORate) {
+		double oldLadenNBORate = ladenNBORate;
 		ladenNBORate = newLadenNBORate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE, oldLadenNBORate, ladenNBORate));
@@ -267,7 +267,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getBallastConsumptionRate() {
+	public double getBallastConsumptionRate() {
 		return ballastConsumptionRate;
 	}
 
@@ -276,8 +276,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setBallastConsumptionRate(int newBallastConsumptionRate) {
-		int oldBallastConsumptionRate = ballastConsumptionRate;
+	public void setBallastConsumptionRate(double newBallastConsumptionRate) {
+		double oldBallastConsumptionRate = ballastConsumptionRate;
 		ballastConsumptionRate = newBallastConsumptionRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE, oldBallastConsumptionRate, ballastConsumptionRate));
@@ -288,7 +288,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getBallastNBORate() {
+	public double getBallastNBORate() {
 		return ballastNBORate;
 	}
 
@@ -297,8 +297,8 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setBallastNBORate(int newBallastNBORate) {
-		int oldBallastNBORate = ballastNBORate;
+	public void setBallastNBORate(double newBallastNBORate) {
+		double oldBallastNBORate = ballastNBORate;
 		ballastNBORate = newBallastNBORate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE, oldBallastNBORate, ballastNBORate));
@@ -344,16 +344,16 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 				setExtraTransitTime((Integer)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_CONSUMPTION_RATE:
-				setLadenConsumptionRate((Integer)newValue);
+				setLadenConsumptionRate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__LADEN_NBO_RATE:
-				setLadenNBORate((Integer)newValue);
+				setLadenNBORate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_CONSUMPTION_RATE:
-				setBallastConsumptionRate((Integer)newValue);
+				setBallastConsumptionRate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE:
-				setBallastNBORate((Integer)newValue);
+				setBallastNBORate((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

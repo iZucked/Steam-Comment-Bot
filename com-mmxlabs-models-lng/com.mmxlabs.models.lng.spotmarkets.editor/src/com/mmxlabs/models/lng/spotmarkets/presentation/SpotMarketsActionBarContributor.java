@@ -196,7 +196,8 @@ public class SpotMarketsActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
-				 public void menuAboutToShow(IMenuManager menuManager) {
+				 @Override
+				public void menuAboutToShow(IMenuManager menuManager) {
 					 menuManager.updateAll(true);
 				 }
 			 });

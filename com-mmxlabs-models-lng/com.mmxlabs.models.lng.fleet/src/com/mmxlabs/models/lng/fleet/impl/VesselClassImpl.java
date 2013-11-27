@@ -253,7 +253,7 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int PILOT_LIGHT_RATE_EDEFAULT = 0;
+	protected static final double PILOT_LIGHT_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getPilotLightRate() <em>Pilot Light Rate</em>}' attribute.
@@ -263,7 +263,7 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @generated
 	 * @ordered
 	 */
-	protected int pilotLightRate = PILOT_LIGHT_RATE_EDEFAULT;
+	protected double pilotLightRate = PILOT_LIGHT_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -584,7 +584,7 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getPilotLightRate() {
+	public double getPilotLightRate() {
 		return pilotLightRate;
 	}
 
@@ -593,8 +593,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPilotLightRate(int newPilotLightRate) {
-		int oldPilotLightRate = pilotLightRate;
+	public void setPilotLightRate(double newPilotLightRate) {
+		double oldPilotLightRate = pilotLightRate;
 		pilotLightRate = newPilotLightRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE, oldPilotLightRate, pilotLightRate));
@@ -727,7 +727,7 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				getRouteParameters().addAll((Collection<? extends VesselClassRouteParameters>)newValue);
 				return;
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
-				setPilotLightRate((Integer)newValue);
+				setPilotLightRate((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

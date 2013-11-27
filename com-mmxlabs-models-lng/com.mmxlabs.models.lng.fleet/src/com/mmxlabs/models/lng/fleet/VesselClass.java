@@ -351,13 +351,13 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Pilot Light Rate</em>' attribute.
-	 * @see #setPilotLightRate(int)
+	 * @see #setPilotLightRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_PilotLightRate()
 	 * @model required="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
 	 * @generated
 	 */
-	int getPilotLightRate();
+	double getPilotLightRate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}' attribute.
@@ -367,7 +367,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #getPilotLightRate()
 	 * @generated
 	 */
-	void setPilotLightRate(int value);
+	void setPilotLightRate(double value);
 
 } // end of  VesselClass
 

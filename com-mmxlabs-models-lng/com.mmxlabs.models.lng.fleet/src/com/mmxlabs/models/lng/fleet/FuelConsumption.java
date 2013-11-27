@@ -58,12 +58,12 @@ public interface FuelConsumption extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Consumption</em>' attribute.
-	 * @see #setConsumption(int)
+	 * @see #setConsumption(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFuelConsumption_Consumption()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getConsumption();
+	double getConsumption();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.FuelConsumption#getConsumption <em>Consumption</em>}' attribute.
@@ -73,7 +73,7 @@ public interface FuelConsumption extends EObject {
 	 * @see #getConsumption()
 	 * @generated
 	 */
-	void setConsumption(int value);
+	void setConsumption(double value);
 
 } // end of  FuelConsumption
 
