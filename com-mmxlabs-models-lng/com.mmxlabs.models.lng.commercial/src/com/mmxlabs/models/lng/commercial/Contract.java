@@ -133,6 +133,7 @@ public interface Contract extends UUIDObject, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
+	 * The default value is <code>"140000"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Max Quantity</em>' attribute isn't clear,
@@ -142,7 +143,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Max Quantity</em>' attribute.
 	 * @see #setMaxQuantity(int)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_MaxQuantity()
-	 * @model required="true"
+	 * @model default="140000" required="true"
 	 * @generated
 	 */
 	int getMaxQuantity();

@@ -128,7 +128,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MAX_QUANTITY_EDEFAULT = 0;
+	protected static final int MAX_QUANTITY_EDEFAULT = 140000;
 
 	/**
 	 * The cached value of the '{@link #getMaxQuantity() <em>Max Quantity</em>}' attribute.

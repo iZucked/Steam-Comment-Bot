@@ -29,7 +29,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="140000"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedListsArePermissive"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedContracts" upperBound="-1"
