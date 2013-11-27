@@ -32,6 +32,8 @@ public class ScenarioInstanceSavable extends Saveable {
 
 	private final ScenarioInstance scenarioInstance;
 
+	private boolean deleted = false;
+	
 	public ScenarioInstanceSavable(final ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
 	}
@@ -56,6 +58,11 @@ public class ScenarioInstanceSavable extends Saveable {
 	@Override
 	public void doSave(final IProgressMonitor monitor) throws CoreException {
 		final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+		if (scenarioService == null) {
+			// Unable to save
+			log.error("No scenario service, unable to save " + scenarioInstance.getName());
+			return;
+		}
 		try {
 			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
 				@Override
@@ -83,6 +90,9 @@ public class ScenarioInstanceSavable extends Saveable {
 	@Override
 	public boolean isDirty() {
 
+		if (deleted) {
+			return false;
+		}
 		return scenarioInstance.isDirty();
 	}
 
@@ -100,6 +110,13 @@ public class ScenarioInstanceSavable extends Saveable {
 		final int PRIME = 31;
 		final int hash = scenarioInstance.hashCode();
 		return hash * PRIME + Activator.PLUGIN_ID.hashCode();
+	}
+
+	/**
+	 * Call before deleting a scenario to pretend we are no longer dirty.
+	 */
+	public void setDeleted() {
+		this.deleted = true;
 	}
 
 }
