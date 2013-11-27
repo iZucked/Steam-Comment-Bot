@@ -184,10 +184,12 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
-		theLabel.setEnabled(enabled);
-		button.setEnabled(enabled);
+		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
-		super.setControlsEnabled(enabled);
+		theLabel.setEnabled(controlsEnabled);
+		button.setEnabled(controlsEnabled);
+
+		super.setControlsEnabled(controlsEnabled);
 	}
 
 	@Override

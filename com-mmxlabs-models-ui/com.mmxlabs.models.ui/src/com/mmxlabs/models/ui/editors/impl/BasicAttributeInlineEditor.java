@@ -126,6 +126,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	private final boolean editorVisible = true;
 	private boolean editorLocked = false;
 
+	private IItemPropertyDescriptor propertyDescriptor;
+
 	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
 	}
@@ -152,6 +154,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			}
 		}
 
+		this.propertyDescriptor = null;
+
 		// Update control tool-tips using IItemPropertyDescriptor
 		if (input != null && tooltipControl != null) {
 			// Set to blank by default - and replace below if the feature is
@@ -168,6 +172,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 				if (feature.equals(descriptor.getFeature(input))) {
 					// Found match
 
+					this.propertyDescriptor = descriptor;
+
 					toolTip = descriptor.getDescription(input).replace("{0}", EditorUtils.unmangle(input.eClass().getName()).toLowerCase());
 
 					labelText = descriptor.getDisplayName(input);
@@ -180,6 +186,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			if (label != null)
 				label.setText(labelText);
 		}
+
+		setControlsEnabled(!isFeatureReadonly() && isEditorEnabled());
 
 		firePostDisplay(location, context, input, range);
 	}
@@ -509,7 +517,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 */
 	protected void setControlsEnabled(final boolean enabled) {
 		if (label != null && !label.isDisposed()) {
-			label.setEnabled(enabled);
+			label.setEnabled(!isFeatureReadonly() && enabled);
 		}
 	}
 
@@ -554,5 +562,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 				log.error(e.getMessage(), e);
 			}
 		}
+	}
+
+	protected boolean isFeatureReadonly() {
+		return propertyDescriptor == null ? false : !propertyDescriptor.canSetProperty(input);
 	}
 }
