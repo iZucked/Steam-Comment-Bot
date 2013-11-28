@@ -73,7 +73,6 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 			}
 		}
 		super.display(location, context, input, range);
-		setControlsEnabled(!isFeatureReadonly() && isEditorEnabled());
 	}
 
 	@Override
