@@ -12,13 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -67,7 +66,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
@@ -331,14 +329,14 @@ public class LNGSchedulerJobUtils {
 				}
 			}
 
-			// // If the cargo is to become a FOB Sale - then we remove the vessel assignment.
-			// if (fobSaleSlot != null) {
-			// // Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
-			// final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
-			// if (elementAssignment !=null) {
-			// cmd.append(DeleteCommand.create(domain, elementAssignment));
-			// }
-			// }
+//			// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
+//			if (fobSaleSlot != null) {
+//				// Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
+//				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
+//				if (elementAssignment !=null) {
+//					cmd.append(DeleteCommand.create(domain, elementAssignment));
+//				}
+//			}
 
 			// Remove references to slots no longer in the cargo
 			final Set<Slot> oldSlots = new HashSet<Slot>();
@@ -387,7 +385,7 @@ public class LNGSchedulerJobUtils {
 					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 					// }
 					cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
-					// cmd.append(DeleteCommand.create(domain, c));
+//					cmd.append(DeleteCommand.create(domain, c));
 				}
 			}
 			if (eObj instanceof SpotSlot) {
@@ -414,7 +412,7 @@ public class LNGSchedulerJobUtils {
 				// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 				// }
 				cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
-				// cmd.append(DeleteCommand.create(domain, c));
+//				cmd.append(DeleteCommand.create(domain, c));
 			}
 		}
 
@@ -510,25 +508,7 @@ public class LNGSchedulerJobUtils {
 			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
 		}
 
-		// Get a ScheduleCalculator to pr
-		class tmpC {
-			@Inject
-			public List<IConstraintChecker> constraintCheckers;
-		}
-		tmpC c = new tmpC();
-		injector.injectMembers(c);
-
-		// Apply hard constraint checkers
-		for (final IConstraintChecker checker : c.constraintCheckers) {
-			if (checker.checkConstraints(sequences) == false) {
-				// Reject Move
-				checker.checkConstraints(sequences);
-			}
-		}
-
-		// Test move and updat
-
-		// ocess the schedule and obtain output data
+		// Get a ScheduleCalculator to process the schedule and obtain output data
 		final ScheduleCalculator scheduleCalculator = injector.getInstance(ScheduleCalculator.class);
 
 		// The output data structured, a solution with all the output data as annotations
@@ -537,4 +517,5 @@ public class LNGSchedulerJobUtils {
 		solution.setContext(new OptimisationContext(data, null, null, null, null, null, null, null));
 		return solution;
 	}
+
 }

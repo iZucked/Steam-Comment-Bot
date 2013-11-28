@@ -27,8 +27,7 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 
 			final LNGSchedulerJobDescriptor descriptor = (LNGSchedulerJobDescriptor) adaptableObject;
 			if (descriptor.isOptimising()) {
-				throw new RuntimeException("Optimisation is currently disabled"); 
-//				return new LNGSchedulerOptimiserJobControl(descriptor);
+				return new LNGSchedulerOptimiserJobControl(descriptor);
 			} else {
 				return new LNGSchedulerEvaluationJobControl(descriptor);
 			}
