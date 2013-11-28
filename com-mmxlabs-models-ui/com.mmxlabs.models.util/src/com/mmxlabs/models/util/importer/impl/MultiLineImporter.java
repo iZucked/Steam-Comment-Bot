@@ -280,8 +280,9 @@ public class MultiLineImporter extends DefaultClassImporter {
 					// Complain if there was no data for the reference (unless the reference is a multiple / list type)   
 					if (subKeys.isEmpty() && reference.isMany()) {
 						if (reference.isContainment()) {
-							populateWithBlank(instance, reference);
-							notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
+							// SUSPECT CODE - This applies to the isMany == false case
+//							populateWithBlank(instance, reference);
+//							notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
 						}
 
 						context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
