@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.components;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
+ * A "Sell" option at a given port.
+ * 
  * @author hinton
  * 
  */
