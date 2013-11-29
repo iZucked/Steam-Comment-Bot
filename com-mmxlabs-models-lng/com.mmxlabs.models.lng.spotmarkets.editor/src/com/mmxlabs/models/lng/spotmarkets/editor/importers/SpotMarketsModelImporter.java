@@ -46,7 +46,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	public static final String SPOT_CARGO_MARKETS_AVAILABILITY_KEY = "SPOT_CARGO_MARKETS_AVAILABILITY";
 
 	static {
-		inputs.put(CHARTER_PRICING_KEY, "Charter Rates");
+		inputs.put(CHARTER_PRICING_KEY, "Charter Markets");
 		inputs.put(SPOT_CARGO_MARKETS_KEY, "Spot Cargo Markets");
 		// inputs.put(SPOT_CARGO_MARKETS_AVAILABILITY_KEY, "Spot Cargo Markets Availability");
 	}
