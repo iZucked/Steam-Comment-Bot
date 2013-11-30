@@ -112,7 +112,7 @@ public class CSVImporter {
 		dataMap.put(PortModelImporter.SUEZ_KEY, baseFileName + "/" + "Suez Distance Matrix.csv");
 
 		dataMap.put(PricingModelImporter.CHARTER_CURVE_KEY, baseFileName + "/" + "Charter Curves.csv");
-		dataMap.put(SpotMarketsModelImporter.CHARTER_PRICING_KEY, baseFileName + "/" + "Charter Rates.csv");
+		dataMap.put(SpotMarketsModelImporter.CHARTER_PRICING_KEY, baseFileName + "/" + "Charter Markets.csv");
 		dataMap.put(PricingModelImporter.COOLDOWN_PRICING_KEY, baseFileName + "/" + "Cooldown Prices.csv");
 		dataMap.put(PricingModelImporter.PORT_COSTS_KEY, baseFileName + "/" + "Port Costs.csv");
 		dataMap.put(PricingModelImporter.PRICE_CURVE_KEY, baseFileName + "/" + "Commodity Curves.csv");
