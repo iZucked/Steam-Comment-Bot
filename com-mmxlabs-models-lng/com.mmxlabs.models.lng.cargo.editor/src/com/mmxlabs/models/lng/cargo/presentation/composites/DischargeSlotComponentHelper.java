@@ -147,6 +147,7 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 			if (dischargeSlot.getTransferTo() != null) {
 				external.add(dischargeSlot.getTransferTo());
 			}
+			external.addAll(dischargeSlot.getExtensions());
 		}
 		external.addAll(super.getExternalEditingRange(root, value));
 
