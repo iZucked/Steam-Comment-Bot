@@ -28,7 +28,6 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 				createSalesPriceCalculator(salesPricePerMMBTu));
 	}
 
-	@Override
 	public @Nullable
 	VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime, final int dischargeDuration,
 			final int returnTime, @NonNull final IVessel vessel, final int cargoCVValue, @NonNull final String route, final int basePricePerMT, final int salesPricePerMMBTu) {
@@ -36,7 +35,10 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 				createSalesPriceCalculator(salesPricePerMMBTu));
 	}
 
-	@Override
+	@Nullable
+	protected abstract VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, int returnTime,
+			@NonNull IVessel vessel, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, @NonNull ISalesPriceCalculator salesPrice);
+
 	public abstract @Nullable
 	VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime, final int dischargeDuration,
 			@NonNull final IVessel vessel, final int notionalBallastSpeed, final int cargoCVValue, @NonNull final String route, final int basePricePerMT,
