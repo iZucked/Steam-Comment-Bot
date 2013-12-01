@@ -52,7 +52,7 @@ public final class ScheduleTools {
 		return 0;
 	}
 
-	public static int getFuelConsumption(@NonNull List<FuelConsumption> consumptions, double speed) {
+	public static double getFuelConsumption(@NonNull List<FuelConsumption> consumptions, double speed) {
 
 		double lowerBound = 0.0;
 		double upperBound = Double.MAX_VALUE;
@@ -80,7 +80,7 @@ public final class ScheduleTools {
 			double relative = (speed - lowerBound) / diff;
 
 			double consumption = (upperConsumption.getConsumption() - lowerConsumption.getConsumption()) * relative + lowerConsumption.getConsumption();
-			return (int) Math.round(consumption);
+			return Math.round(consumption);
 		}
 
 		return 0;
