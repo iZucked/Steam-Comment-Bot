@@ -1145,6 +1145,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public void run() {
+				// TODO: Race conditions in the app can cause this command to fail. If two editing command happen too quickly, the first command could have executed but the second command is created
+				// before the UI state has refreshed properly (due to various asyncExec calls).
 				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 			}
 		};
