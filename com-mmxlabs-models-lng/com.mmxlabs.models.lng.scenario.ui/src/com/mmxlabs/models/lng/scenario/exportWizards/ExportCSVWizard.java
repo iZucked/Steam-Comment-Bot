@@ -24,8 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
+import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -88,6 +90,20 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 							// export CSV for this file
 							writeCSV(rows, outputFile);
 						}
+					}
+				}
+				
+				Collection<IExtraModelImporter> extra = Activator.getDefault().getImporterRegistry().getExtraModelImporters();
+				for (IExtraModelImporter importer: extra) {					
+					Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
+					importer.exportModel((MMXRootObject) rootObject, outputs);
+					for (final String key : outputs.keySet()) {
+						final Collection<Map<String, String>> rows = outputs.get(key);
+						final String friendlyName = importer.getRequiredInputs().get(key);
+						final File outputFile = new File(directory, friendlyName + ".csv");
+
+						// export CSV for this file
+						writeCSV(rows, outputFile);
 					}
 				}
 			}
