@@ -239,6 +239,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 						if (warmingTimeInHours > vesselClass.getWarmupTime()) {
 							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime() /* + vesselClass.getCooldownTime() */))) {
+								// Set this on the voyage rather than the port details as the final port details is usually ignored in further processing
 								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
 								// don't use any idle base during the cooldown
 								// remainingIdleTimeInHours -= vesselClass.getCooldownTime();
@@ -723,9 +724,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// was not a Cargo sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 			if (lngCommitmentInM3 > availableHeelinM3) {
-				// TODO: FIXME: Magic constant index!
-				final PortDetails portDetails = (PortDetails) sequence[0];
-				portDetails.setCapacityViolation(CapacityViolationType.MAX_HEEL, lngCommitmentInM3 - availableHeelinM3);
 				++violationsCount;
 			}
 
@@ -859,19 +857,21 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
 		long maxDischargeVolumeInM3 = dischargeSlot.getMaxDischargeVolume();
 
-		if (maxLoadVolumeInM3 == 0) maxLoadVolumeInM3 = Long.MAX_VALUE; 
-		if (maxDischargeVolumeInM3 == 0) maxDischargeVolumeInM3 = Long.MAX_VALUE; 
+		if (maxLoadVolumeInM3 == 0) {
+			maxLoadVolumeInM3 = Long.MAX_VALUE;
+		}
+		if (maxDischargeVolumeInM3 == 0) {
+			maxDischargeVolumeInM3 = Long.MAX_VALUE;
+		}
 		// We cannot load more than is available or which would exceed
 		// vessel capacity.
 		final long upperLoadLimitInM3 = Math.min(cargoCapacityInM3, maxLoadVolumeInM3);
 
 		if (minLoadVolumeInM3 > cargoCapacityInM3) {
-			loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - cargoCapacityInM3);
 			++violationsCount;
 		}
 
 		if (lngCommitmentInM3 > maxLoadVolumeInM3) {
-			// loadDetails.setCapacityViolation(CapacityViolationType.MAX_LOAD, lngCommitmentInM3 - maxLoadVolumeInM3);
 			// ++violationsCount;
 		}
 
@@ -883,37 +883,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			 */
 
 			// load breach -- need to load less than we are permitted
-
-			loadDetails.setCapacityViolation(CapacityViolationType.MIN_LOAD, minLoadVolumeInM3 - (maxDischargeVolumeInM3 + lngCommitmentInM3));
 			++violationsCount;
 		}
 
 		// The load should cover at least the fuel usage plus the heel (or the min discharge, whichever is greater)
 		if (Math.max(minDischargeVolumeInM3, heelToDischarge) + lngCommitmentInM3 > upperLoadLimitInM3) {
 			final long fuelRequirements = lngCommitmentInM3 + heelToDischarge;
-
-			// When the load constraint doesn't even cover the fuel requirements, we are going to have to violate the load constraint
-			if (upperLoadLimitInM3 - fuelRequirements < 0) {
-				// load breach -- need to load more than we are permitted -- determine what the violation is
-
-				if (maxLoadVolumeInM3 < fuelRequirements) {
-					loadDetails.setCapacityViolation(CapacityViolationType.MAX_LOAD, fuelRequirements - upperLoadLimitInM3);
-					++violationsCount;
-				} else {
-					assert cargoCapacityInM3 < fuelRequirements;
-					loadDetails.setCapacityViolation(CapacityViolationType.VESSEL_CAPACITY, fuelRequirements - upperLoadLimitInM3);
-					++violationsCount;
-				}
-			}
-			/*
-			 * When the load constraint covers the fuel requirements, we assert a discharge breach. Max load constraints are more likely to be hard physical constraints than min discharge, so we make
-			 * the safer assumption.
-			 */
-			else {
-				// discharge breach -- need to discharge less than we are permitted
-				dischargeDetails.setCapacityViolation(CapacityViolationType.MIN_DISCHARGE, minDischargeVolumeInM3 + lngCommitmentInM3 - upperLoadLimitInM3);
-				++violationsCount;
-			}
+			++violationsCount;
 		}
 		return violationsCount;
 	}
@@ -932,11 +908,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (shouldBeCold && (fuelConsumption > 0)) {
 
 					if ((loadIdx != -1) && (dischargeIdx != -1)) {
-						// Cooldown violation! -- Assume index 4 is next load
-						// TODO: THIS IS NOT A VALID ASSUMPTION!
-
-						final PortDetails portDetails = (PortDetails) sequence[4];
-						portDetails.setCapacityViolation(CapacityViolationType.FORCED_COOLDOWN, 1);
 						++cooldownViolations;
 					}
 

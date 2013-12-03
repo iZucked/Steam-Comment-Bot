@@ -61,9 +61,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ScheduleCalculator {
 
-	@Inject(optional=true)
+	@Inject(optional = true)
 	private ScheduledDataLookupProvider scheduledDataLookupProvider;
-	
+
+	@Inject
+	private CapacityViolationChecker capacityViolationChecker;
+
 	@Inject
 	private IVolumeAllocator volumeAllocator;
 
@@ -77,9 +80,6 @@ public class ScheduleCalculator {
 	private IBreakEvenEvaluator breakEvenEvaluator;
 
 	@Inject
-	private IVesselProvider vesselProvider;
-
-	@Inject
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject(optional = true)
@@ -90,6 +90,9 @@ public class ScheduleCalculator {
 
 	@Inject(optional = true)
 	private IMarkToMarketProvider markToMarketProvider;
+
+	@Inject
+	private IVesselProvider vesselProvider;
 
 	public IAnnotatedSolution calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
@@ -103,8 +106,7 @@ public class ScheduleCalculator {
 		if (scheduledDataLookupProvider != null) {
 			scheduledDataLookupProvider.reset();
 		}
-		
-		
+
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences, scheduledSequences);
 		}
@@ -166,8 +168,11 @@ public class ScheduleCalculator {
 		if (scheduledDataLookupProvider != null) {
 			scheduledDataLookupProvider.setInputs(sequences, scheduledSequences);
 		}
-		
+
 		calculateProfitAndLoss(sequences, scheduledSequences, allocations, annotatedSolution);
+
+		// Perform capacity violations analysis
+		capacityViolationChecker.calculateCapacityViolations(sequences, scheduledSequences, allocations, annotatedSolution);
 	}
 
 	// TODO: Push into entity value calculator?
@@ -326,5 +331,4 @@ public class ScheduleCalculator {
 		}
 		return planDuration;
 	}
-
 }
