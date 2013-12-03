@@ -94,6 +94,6 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
 	 */
-	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumes, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
+	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumesInM3, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
 			IDetailTree annotations);
 }
