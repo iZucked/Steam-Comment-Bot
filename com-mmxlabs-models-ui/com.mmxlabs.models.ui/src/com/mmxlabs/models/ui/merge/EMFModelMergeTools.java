@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -22,17 +20,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
-import org.eclipse.emf.edit.EMFEditPlugin;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.ReplaceCommand;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.google.common.base.Preconditions;
@@ -435,13 +427,12 @@ public class EMFModelMergeTools {
 			}
 			objectsOfInterest.addAll(bigMapOfDestinationToSource.keySet());
 
-			final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(objectsOfInterest, emfObjectsToSearch);
 			// Perform replacements
 			for (final Map.Entry<EObject, EObject> e : bigMapOfDestinationToSource.entrySet()) {
 				final EObject source = e.getValue();
 				final EObject dest = e.getKey();
 				// Update cross-references
-				final Collection<EStructuralFeature.Setting> usages = usagesByCopy.get(dest);
+				final Collection<EStructuralFeature.Setting> usages = EcoreUtil.UsageCrossReferencer.find(source, emfObjectsToSearch);
 				if (usages != null) {
 					for (final EStructuralFeature.Setting setting : usages) {
 						if (setting.getEStructuralFeature().isMany()) {
