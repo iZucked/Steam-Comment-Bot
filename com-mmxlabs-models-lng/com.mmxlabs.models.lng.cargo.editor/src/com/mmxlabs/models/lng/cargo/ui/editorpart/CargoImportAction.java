@@ -70,7 +70,7 @@ public final class CargoImportAction extends SimpleImportAction {
 		final List<EObject> cargoes = new ArrayList<EObject>();
 		final List<EObject> loads = new ArrayList<EObject>();
 		final List<EObject> discharges = new ArrayList<EObject>();
-		final CompoundCommand mergeAll = new CompoundCommand();
+		final CompoundCommand mergeAll = new CompoundCommand("Import Cargoes");
 
 		// Create maps of Cargo/Slot ID to Object instance
 		final CargoModel cargoModel = (CargoModel) container;
@@ -209,6 +209,17 @@ public final class CargoImportAction extends SimpleImportAction {
 
 		// Handle re-wiring of cargoes
 		mergeAll.append(rewireCargoes(cargoModel, cargoes, loads, discharges));
+
+		// FIXME: Disable UNDO as this action is broken in some way.
+		// I (SG) suspect the code which adds the new cargoes is conflicting with the later code to remove cargoes with less than 2 slots.
+		// It is also likely that manipulating cargo.getSlots() is broken.
+		// Perhaps better to not use imported objects at all and create copies of the new objects as getSlots() will start empty?
+		mergeAll.append(new IdentityCommand() {
+			@Override
+			public boolean canUndo() {
+				return false;
+			}
+		});
 
 		return mergeAll;
 	}
