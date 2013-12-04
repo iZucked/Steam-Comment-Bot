@@ -164,7 +164,7 @@ public class EMFModelMergeTools {
 			// Find containment path from object to root
 			{
 				EObject tmpObj = eObj.eContainer();
-				while (tmpObj != sourceRoot && tmpObj != null) {
+				while (tmpObj != sourceRoot && tmpObj != destinationRoot && tmpObj != null) {
 					final EReference eContainmentFeature = tmpObj.eContainmentFeature();
 					if (eContainmentFeature.isMany()) {
 						throw new IllegalStateException("Unable to handle multiple containments in path to sourceRoot.");
@@ -174,6 +174,12 @@ public class EMFModelMergeTools {
 				}
 				if (tmpObj == null) {
 					throw new IllegalStateException("Object is not contained under sourceRoot");
+				}
+
+				if (tmpObj == destinationRoot) {
+					// Already using a destination reference.
+					remainingObjects.remove(eObj);
+					continue;
 				}
 			}
 
