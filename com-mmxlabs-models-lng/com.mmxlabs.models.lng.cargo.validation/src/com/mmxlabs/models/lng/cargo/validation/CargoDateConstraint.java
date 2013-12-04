@@ -186,7 +186,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 */
 	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, Slot slot, final int availableTime, final boolean inDialog, List<IStatus> failures) {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
-			final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
+			final int severity = inDialog ? IStatus.WARNING : IStatus.WARNING;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName() + "'", availableTime / 24,
 					SENSIBLE_TRAVEL_TIME), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
