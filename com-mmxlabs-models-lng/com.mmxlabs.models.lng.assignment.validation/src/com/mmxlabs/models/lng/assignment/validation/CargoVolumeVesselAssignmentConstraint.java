@@ -34,8 +34,6 @@ public class CargoVolumeVesselAssignmentConstraint extends AbstractModelMultiCon
 		if (object instanceof ElementAssignment) {
 			final ElementAssignment assignment = (ElementAssignment) object;
 
-			final UUIDObject assignedObject = assignment.getAssignedObject();
-
 			if (assignment.getAssignment() == null) {
 				return Activator.PLUGIN_ID;
 			}
@@ -53,16 +51,33 @@ public class CargoVolumeVesselAssignmentConstraint extends AbstractModelMultiCon
 			}
 
 			final UUIDObject obj = assignment.getAssignedObject();
-			if (obj instanceof Cargo) {
-				final Cargo cargo = (Cargo) obj;
-				for (final Slot slot : cargo.getSlots()) {
+			Cargo cargo = null;
+			Slot slot = null;
+			if (obj instanceof Slot) {
+				slot = (Slot) obj;
+				cargo = slot.getCargo();
+			} else if (obj instanceof Cargo) {
+				cargo = (Cargo) obj;
+			}
 
-					if (slot.getSlotOrContractMinQuantity() > capacity) {
+			if (cargo != null) {
+				for (final Slot s : cargo.getSlots()) {
 
-						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Slot|" + slot.getName() +"] has a minimum volume greater than the capacity of current vessel assignment"));
-						failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					if (s.getSlotOrContractMinQuantity() > capacity) {
+
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Slot|" + s.getName()
+								+ "] has a minimum volume greater than the capacity of current vessel assignment"));
+						failure.addEObjectAndFeature(s, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 						failures.add(failure);
 					}
+				}
+			} else if (slot != null) {
+				if (slot.getSlotOrContractMinQuantity() > capacity) {
+
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Slot|" + slot.getName()
+							+ "] has a minimum volume greater than the capacity of current vessel assignment"));
+					failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
+					failures.add(failure);
 				}
 			}
 		}
