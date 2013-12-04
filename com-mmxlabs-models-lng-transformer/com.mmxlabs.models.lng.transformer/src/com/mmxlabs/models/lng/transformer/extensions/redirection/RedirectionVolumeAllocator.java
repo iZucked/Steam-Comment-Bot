@@ -13,10 +13,10 @@ public class RedirectionVolumeAllocator implements ICustomVolumeAllocator {
 		if (constraint.slots.length == 2) {
 			if (constraint.slots[0] instanceof ILoadOption) {
 				final ILoadOption iLoadOption = (ILoadOption) constraint.slots[0];
-				if (iLoadOption instanceof ILoadSlot) {
-					// Only handle DES Purchases
-					return false;
-				}
+//				if (iLoadOption instanceof ILoadSlot) {
+//					// Only handle DES Purchases
+//					return false;
+//				}
 				if (iLoadOption.getLoadPriceCalculator() instanceof IRedirectionVolumeCalculator) {
 					return true;
 				}
@@ -33,10 +33,10 @@ public class RedirectionVolumeAllocator implements ICustomVolumeAllocator {
 		if (constraint.slots.length == 2) {
 			if (constraint.slots[0] instanceof ILoadOption) {
 				final ILoadOption iLoadOption = (ILoadOption) constraint.slots[0];
-				if (iLoadOption instanceof ILoadSlot) {
-					// Only handle DES Purchases
-					return;
-				}
+//				if (iLoadOption instanceof ILoadSlot) {
+//					// Only handle DES Purchases
+//					return;
+//				}
 				// Instance of
 				if (iLoadOption.getLoadPriceCalculator() instanceof IRedirectionVolumeCalculator) {
 					final IRedirectionVolumeCalculator calc = (IRedirectionVolumeCalculator) iLoadOption.getLoadPriceCalculator();
