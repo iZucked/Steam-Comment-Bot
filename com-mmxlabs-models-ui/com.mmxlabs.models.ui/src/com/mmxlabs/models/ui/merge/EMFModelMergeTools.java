@@ -438,7 +438,7 @@ public class EMFModelMergeTools {
 				final EObject source = e.getValue();
 				final EObject dest = e.getKey();
 				// Update cross-references
-				final Collection<EStructuralFeature.Setting> usages = EcoreUtil.UsageCrossReferencer.find(source, emfObjectsToSearch);
+				final Collection<EStructuralFeature.Setting> usages = EcoreUtil.UsageCrossReferencer.find(dest, emfObjectsToSearch);
 				if (usages != null) {
 					for (final EStructuralFeature.Setting setting : usages) {
 						if (setting.getEStructuralFeature().isMany()) {
