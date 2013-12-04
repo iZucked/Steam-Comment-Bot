@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -97,19 +98,22 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		public final VoyagePlan voyagePlan;
 
-		public AllocationRecord(final long capacity, final long forced, final long heel, final long dischargeHeel, final IPortSlot[] slots, final int[] pricesPerM3, final int[] pricesPerMMBTu,
-				final int[] times, final VoyagePlan plan) {
-			vesselCapacityInM3 = capacity;
-			requiredFuelVolumeInM3 = forced;
-			minEndVolumeInM3 = heel;
-			dischargeHeelInM3 = dischargeHeel;
-			slotPricesPerM3 = pricesPerM3;
-			slotPricesPerMMBTu = pricesPerMMBTu;
-			slotTimes = times;
-			this.slots = slots;
-			voyagePlan = plan;
+		public IVessel vessel;
 
-			allocations = new long[slots.length];
+		public AllocationRecord(IVessel vessel, final long capacity, final long forced, final long heel, final long dischargeHeel, final IPortSlot[] slots, final int[] pricesPerM3, final int[] pricesPerMMBTu,
+				final int[] times, final VoyagePlan plan) {
+			this.vessel = vessel;
+			this.vesselCapacityInM3 = capacity;
+			this.requiredFuelVolumeInM3 = forced;
+			this.minEndVolumeInM3 = heel;
+			this.dischargeHeelInM3 = dischargeHeel;
+			this.slotPricesPerM3 = pricesPerM3;
+			this.slotPricesPerMMBTu = pricesPerMMBTu;
+			this.slotTimes = times;
+			this.slots = slots;
+			this.voyagePlan = plan;
+
+			this.allocations = new long[slots.length];
 		}
 
 		public AllocationAnnotation createAllocationAnnotation() {
@@ -148,8 +152,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			return annotation;
 		}
 
-		public AllocationRecord(long vesselCapacityInM3, final IPortSlot[] slots, final int[] pricesPerM3, final int[] pricesPerMMBTu, final int[] times, final VoyagePlan plan) {
-			this(vesselCapacityInM3, 0l, 0l, 0l, slots, pricesPerM3, pricesPerMMBTu, times, plan);
+		public AllocationRecord(IVessel vessel, long vesselCapacityInM3, final IPortSlot[] slots, final int[] pricesPerM3, final int[] pricesPerMMBTu, final int[] times, final VoyagePlan plan) {
+			this(vessel, vesselCapacityInM3, 0l, 0l, 0l, slots, pricesPerM3, pricesPerMMBTu, times, plan);
 		}
 	}
 
@@ -530,7 +534,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int[] pricesPerMMBTu = { loadPricePerMMBTu, dischargePricePerMMBtu };
 		final int[] times = { loadTime, dischargeTime };
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, pricesPerMMBTu, times, plan));
+		constraints.add(new AllocationRecord(vessel, vesselCapacityInM3, requiredFuelVolumeInM3, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, pricesPerMMBTu, times, plan));
 
 		cargoCount++;
 	}
@@ -579,17 +583,18 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		// If there is a nominated vessel, then use it's capacity to clamp transfer volume.
 		// TODO: Note BOG may in reality further restrict the transfer volume
 		long vesselCapacityInM3 = Long.MAX_VALUE;
+		IVessel nominatedVessel = null;
 		{
 			// DES Purchase?
 			if (!(loadOption instanceof LoadSlot)) {
-				final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(loadOption));
+				nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(loadOption));
 				if (nominatedVessel != null) {
 					vesselCapacityInM3 = nominatedVessel.getCargoCapacity();
 				}
 			}
 			// FOB Sale?
-			if (!(dischargeOption instanceof DischargeOption)) {
-				final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(dischargeOption));
+			if (!(dischargeOption instanceof DischargeSlot)) {
+				nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(dischargeOption));
 				if (nominatedVessel != null) {
 					vesselCapacityInM3 = nominatedVessel.getCargoCapacity();
 				}
@@ -617,7 +622,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int[] pricesPerMMBTu = { loadPricePerMMBTu, dischargePricePerMMBTu };
 		final int[] times = { time, time };
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, slots, pricesPerM3, pricesPerMMBTu, times, plan));
+		constraints.add(new AllocationRecord(nominatedVessel, vesselCapacityInM3, slots, pricesPerM3, pricesPerMMBTu, times, plan));
 
 		cargoCount++;
 	}
@@ -685,7 +690,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			pricesPerMMBTu[0] = loadPricePerMMBTu;
 		}
 
-		constraints.add(new AllocationRecord(vesselCapacityInM3, requiredFuelVolumeInM3, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, pricesPerMMBTu, slotTimes, plan));
+		constraints.add(new AllocationRecord(vessel, vesselCapacityInM3, requiredFuelVolumeInM3, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, pricesPerMMBTu, slotTimes, plan));
 		cargoCount++;
 	}
 
