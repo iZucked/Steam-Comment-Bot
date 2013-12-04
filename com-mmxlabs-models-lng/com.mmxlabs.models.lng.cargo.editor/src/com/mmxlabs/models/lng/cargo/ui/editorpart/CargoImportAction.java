@@ -4,20 +4,19 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -64,7 +63,7 @@ public final class CargoImportAction extends SimpleImportAction {
 	@Override
 	public Command mergeImports(final EObject container, final EReference containment, final Collection<EObject> imports) {
 
-		CargoModel tmpCargoModel = CargoFactory.eINSTANCE.createCargoModel();
+		final CargoModel tmpCargoModel = CargoFactory.eINSTANCE.createCargoModel();
 
 		for (final EObject o : imports) {
 			if (o instanceof Cargo) {
@@ -72,10 +71,10 @@ public final class CargoImportAction extends SimpleImportAction {
 				// Filter out broken cargoes - those with less than two slots
 				for (final Slot slot : cargo.getSlots()) {
 					if (slot instanceof LoadSlot) {
-						LoadSlot loadSlot = (LoadSlot) slot;
+						final LoadSlot loadSlot = (LoadSlot) slot;
 						tmpCargoModel.getLoadSlots().add(loadSlot);
 					} else if (slot instanceof DischargeSlot) {
-						DischargeSlot dischargeSlot = (DischargeSlot) slot;
+						final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 						tmpCargoModel.getDischargeSlots().add(dischargeSlot);
 					}
 				}
@@ -99,54 +98,33 @@ public final class CargoImportAction extends SimpleImportAction {
 			}
 		}
 
-		// /////////////////////////////////////////////////////////////
-//
-		EditingDomain destEditingDomain = importHooksProvider.getEditingDomain();
-//		if (destEditingDomain instanceof CommandProviderAwareEditingDomain) {
-//			final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) destEditingDomain;
-//
-//			// Normally we disable command providers, but in this can we will not. Specifically for canal cost maintenance. The user can not add or remove these objects should the number of vessel
-//			// classes or the number of route change. These are intended to be maintained by a command provider.
-//
-//			// commandProviderAwareEditingDomain.setCommandProvidersDisabled(true);
-//
-//			commandProviderAwareEditingDomain.setAdaptersEnabled(false);
-//			commandProviderAwareEditingDomain.startBatchCommand();
-//		}
-//
-//		try {
-			final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();
-			final LNGScenarioModel importModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			importModel.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(tmpCargoModel);
+		final EditingDomain destEditingDomain = importHooksProvider.getEditingDomain();
 
-			LNGScenarioModel destScenarioModel = (LNGScenarioModel) importHooksProvider.getRootObject();
+		final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();
+		final LNGScenarioModel importModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
+		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+		importModel.setPortfolioModel(portfolioModel);
+		portfolioModel.setCargoModel(tmpCargoModel);
 
-			descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_Cargoes()));
-			descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()));
-			descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots()));
+		final LNGScenarioModel destScenarioModel = (LNGScenarioModel) importHooksProvider.getRootObject();
 
-			// Fix up the descriptor data references to point to destination objects in the cases where the source is not being transferred across
-			EMFModelMergeTools.rewriteMappingDescriptors(descriptors, importModel, destScenarioModel);
+		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_Cargoes()));
+		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()));
+		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots()));
 
-			// TODO: If multiple stages, then add into a compound command
-			return  EMFModelMergeTools.applyMappingDescriptors(destEditingDomain, destScenarioModel, descriptors);
-//			if (cmd != null) {
-//				if (cmd.canExecute()) {
-//
-//					destEditingDomain.getCommandStack().execute(cmd);
-//				} else {
-//					log.error("Unable to execute merge command", new RuntimeException());
-//				}
-//			}
-//		} finally {
-//			if (destEditingDomain instanceof CommandProviderAwareEditingDomain) {
-//				final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) destEditingDomain;
-//				// commandProviderAwareEditingDomain.setCommandProvidersDisabled(false);
-//				commandProviderAwareEditingDomain.endBatchCommand();
-//				commandProviderAwareEditingDomain.setAdaptersEnabled(true);
-//			}
-//		}
+		// Fix up the descriptor data references to point to destination objects in the cases where the source is not being transferred across
+		EMFModelMergeTools.rewriteMappingDescriptors(descriptors, importModel, destScenarioModel);
+
+		final CompoundCommand cmd = new CompoundCommand("Import caroges");
+
+		cmd.append(EMFModelMergeTools.applyMappingDescriptors(destEditingDomain, destScenarioModel, descriptors));
+		cmd.append(new IdentityCommand() {
+			@Override
+			public boolean canUndo() {
+				return false;
+			}
+		});
+
+		return cmd;
 	}
 }
