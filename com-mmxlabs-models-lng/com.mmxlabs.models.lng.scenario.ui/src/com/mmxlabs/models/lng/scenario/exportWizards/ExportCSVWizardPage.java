@@ -54,7 +54,7 @@ public class ExportCSVWizardPage extends WizardPage {
 
 	@Override
 	public boolean isPageComplete() {
-		return super.isPageComplete() && new File(editor.getStringValue()).exists();
+		return super.isPageComplete();
 	}
 
 	/**
@@ -105,14 +105,14 @@ public class ExportCSVWizardPage extends WizardPage {
 				dialogChanged();
 			}
 		});
-		
+
 		// get the default export directory from the settings
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
-		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);		
+		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
 		final String filter = section == null ? null : section.get(FILTER_KEY);
 		// use it to populate the editor
 		editor.setStringValue(filter);
-		
+
 		initialize();
 		dialogChanged();
 		setControl(container);
@@ -149,12 +149,6 @@ public class ExportCSVWizardPage extends WizardPage {
 			return;
 		}
 
-		// TODO: Create automatically?
-		if (!new File(editor.getStringValue()).exists()) {
-			updateStatus("Output directory must exist");
-			return;
-		}
-
 		updateStatus(null);
 	}
 
@@ -166,7 +160,7 @@ public class ExportCSVWizardPage extends WizardPage {
 	public Collection<ScenarioInstance> getScenarioInstance() {
 		return Collections.singleton((ScenarioInstance) scenarioServiceSelectionGroup.getSelectedContainer());
 	}
-	
+
 	/**
 	 * Saves the value of the directory editor field to persistent storage
 	 */
@@ -176,7 +170,7 @@ public class ExportCSVWizardPage extends WizardPage {
 		if (section == null) {
 			section = dialogSettings.addNewSection(SECTION_NAME);
 		}
-		section.put(FILTER_KEY, editor.getStringValue());		
+		section.put(FILTER_KEY, editor.getStringValue());
 	}
 
 }
