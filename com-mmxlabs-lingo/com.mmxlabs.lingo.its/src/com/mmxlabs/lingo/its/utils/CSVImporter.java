@@ -81,7 +81,7 @@ import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
 
 public class CSVImporter {
 
-	public static LNGScenarioModel importCSVScenario(final String baseFileName) {
+	public static LNGScenarioModel importCSVScenario(final String baseFileName, final String... extraMapEntries) {
 
 		final Map<String, String> dataMap = new HashMap<String, String>();
 
@@ -118,8 +118,15 @@ public class CSVImporter {
 		dataMap.put(PricingModelImporter.PRICE_CURVE_KEY, baseFileName + "/" + "Commodity Curves.csv");
 		dataMap.put(PricingModelImporter.BASEFUEL_PRICING_KEY, baseFileName + "/" + "Base Fuel Curves.csv");
 		dataMap.put(SpotMarketsModelImporter.SPOT_CARGO_MARKETS_KEY, baseFileName + "/" + "Spot Cargo Markets.csv");
-
 		// No schedule importers
+
+		for (int i = 0; i < extraMapEntries.length; i += 2) {
+			if (i + 1 < extraMapEntries.length) {
+				final String key = extraMapEntries[i];
+				final String value = extraMapEntries[i + 1];
+				dataMap.put(key, value);
+			}
+		}
 
 		final DefaultImportContext context = new DefaultImportContext();
 
@@ -131,7 +138,7 @@ public class CSVImporter {
 		scenarioModel.setPricingModel((PricingModel) importSubModel(importerRegistry, context, baseFileName, dataMap, PricingPackage.eINSTANCE.getPricingModel()));
 		scenarioModel.setCommercialModel((CommercialModel) importSubModel(importerRegistry, context, baseFileName, dataMap, CommercialPackage.eINSTANCE.getCommercialModel()));
 		scenarioModel.setSpotMarketsModel((SpotMarketsModel) importSubModel(importerRegistry, context, baseFileName, dataMap, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel()));
-//		scenarioModel.setParametersModel((ParametersModel) importSubModel(importerRegistry, context, baseFileName, dataMap, ParametersPackage.eINSTANCE.getParametersModel()));
+		// scenarioModel.setParametersModel((ParametersModel) importSubModel(importerRegistry, context, baseFileName, dataMap, ParametersPackage.eINSTANCE.getParametersModel()));
 		scenarioModel.setAnalyticsModel(((AnalyticsModel) importSubModel(importerRegistry, context, baseFileName, dataMap, AnalyticsPackage.eINSTANCE.getAnalyticsModel())));
 
 		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
@@ -142,9 +149,16 @@ public class CSVImporter {
 		portfolioModel.setAssignmentModel((AssignmentModel) importSubModel(importerRegistry, context, baseFileName, dataMap, AssignmentPackage.eINSTANCE.getAssignmentModel()));
 		portfolioModel.setScheduleModel((ScheduleModel) importSubModel(importerRegistry, context, baseFileName, dataMap, SchedulePackage.eINSTANCE.getScheduleModel()));
 
+		importExtraModels(scenarioModel, importerRegistry, context, baseFileName, dataMap);
+
 		context.setRootObject(scenarioModel);
 
 		context.run();
+
+		for (final IPostModelImporter postModelImporter : importerRegistry.getPostModelImporters()) {
+			postModelImporter.onPostModelImport(context, scenarioModel);
+		}
+
 		return scenarioModel;
 	}
 
@@ -188,7 +202,6 @@ public class CSVImporter {
 					final List<IPostModelImporter> portModelImporters = new ArrayList<>();
 					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();
 
-					
 					final DateAttributeImporter dateAttributeImporter = new DateAttributeImporter();
 					final DefaultClassImporter defaultClassImporter = new DefaultClassImporter();
 					final DefaultAttributeImporter defaultAttributeImporter = new DefaultAttributeImporter();
@@ -294,5 +307,40 @@ public class CSVImporter {
 			}
 		}
 		return null;
+	}
+
+	private static void importExtraModels(final LNGScenarioModel scenarioModel, final IImporterRegistry importerRegistry, final IImportContext context, final String baseFileName,
+			final Map<String, String> dataMap) {
+		for (final IExtraModelImporter importer : importerRegistry.getExtraModelImporters()) {
+			if (importer == null) {
+				continue;
+			}
+			final Map<String, String> parts = importer.getRequiredInputs();
+			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
+			try {
+				for (final String key : parts.keySet()) {
+					try {
+						@SuppressWarnings("resource")
+						final CSVReader r = new CSVReader(baseFileName, dataMap.get(key));
+						readers.put(key, r);
+					} catch (final IOException e) {
+						// Assert.fail(e.getMessage());
+					}
+				}
+				try {
+					importer.importModel(scenarioModel, readers, context);
+				} catch (final Throwable th) {
+					Assert.fail(th.getMessage());
+				}
+			} finally {
+				for (final CSVReader r : readers.values()) {
+					try {
+						r.close();
+					} catch (final IOException e) {
+
+					}
+				}
+			}
+		}
 	}
 }
