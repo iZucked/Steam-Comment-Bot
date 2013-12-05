@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -63,6 +64,7 @@ public class ScheduleCalculatorTest {
 		final IEntityValueCalculator entityValueCalculator = mock(IEntityValueCalculator.class);
 		final ICalculatorProvider calculatorProvider = mock(ICalculatorProvider.class);
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
+		final INominatedVesselProvider nominatedVesselProvider = mock(INominatedVesselProvider.class);
 		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
 
 		class TestModule extends AbstractModule {
@@ -75,6 +77,7 @@ public class ScheduleCalculatorTest {
 				bind(ICalculatorProvider.class).toInstance(calculatorProvider);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(IPortCostProvider.class).toInstance(portCostProvider);
+				bind(INominatedVesselProvider.class).toInstance(nominatedVesselProvider);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());
