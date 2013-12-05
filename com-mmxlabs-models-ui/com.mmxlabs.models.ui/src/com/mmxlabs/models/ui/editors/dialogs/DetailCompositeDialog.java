@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
@@ -46,7 +45,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -346,6 +347,29 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), scenarioEditingLocation, toolkit);
+
+		/**
+		 * Allow the child composites to trigger a complete redisplay of the editor components. E.g.
+		 * 
+		 * <code>
+		 * for (final Listener l : this.getListeners(SWT.CLOSE)) { 
+		 * 		l.handleEvent(new Event()); 
+		 * }
+		 * </code>
+		 * 
+		 * A recursive listener & firing code will need to be present in the top-level and sub-level composites
+		 * 
+		 * FIXME: Expose a proper API for this!
+		 * 
+		 */
+		displayComposite.getComposite().addListener(SWT.CLOSE, new Listener() {
+
+			@Override
+			public void handleEvent(final Event event) {
+				updateEditor();
+			}
+		});
+
 		// Create a new instance with the current adapter factory.
 		// TODO: Dispose?
 		copyDialogToClipboardEditorWrapper = new CopyDialogToClipboard(scenarioEditingLocation.getAdapterFactory());
