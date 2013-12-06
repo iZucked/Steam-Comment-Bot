@@ -18,6 +18,7 @@ public final class SettingsOverride {
 	private int seed = 1;
 
 	private String scenario;
+	private String output;
 
 	public final String getScenario() {
 		return scenario;
@@ -41,6 +42,14 @@ public final class SettingsOverride {
 
 	public final void setSeed(final int seed) {
 		this.seed = seed;
+	}
+
+	protected String getOutput() {
+		return output;
+	}
+
+	protected void setOutput(String output) {
+		this.output = output;
 	}
 
 }

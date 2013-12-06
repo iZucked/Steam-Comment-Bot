@@ -8,6 +8,12 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -18,6 +24,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -51,6 +58,9 @@ public class ScenarioRunner {
 	public final Injector getInjector() {
 		return injector;
 	}
+	
+	private LNGTransformer transformer;
+
 
 	public ScenarioRunner(final LNGScenarioModel scenario, final SettingsOverride settings) {
 		this.scenario = scenario;
@@ -79,7 +89,7 @@ public class ScenarioRunner {
 		final EnumMap<ModuleType, List<Module>> localOverrides = Maps.newEnumMap(IOptimiserInjectorService.ModuleType.class);
 		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(settings)));
 
-		final LNGTransformer transformer = new LNGTransformer(scenario, optimiserSettings, localOverrides);
+		transformer = new LNGTransformer(scenario, optimiserSettings, localOverrides);
 
 		injector = transformer.getInjector();
 
@@ -113,4 +123,19 @@ public class ScenarioRunner {
 
 		return schedule;
 	}
+
+	/**
+	 * Update the Scenario with the best solution. Note: This {@link ScenarioRunner} should not be used again.
+	 */
+	public void updateScenario() {
+
+		// Construct internal command stack to generate correct output schedule
+		final BasicCommandStack commandStack = new BasicCommandStack();
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+
+		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, entities, optimiser.getBestSolution(true), 0);
+	}
+
 }
