@@ -224,10 +224,12 @@ public class HeadlessApplication implements IApplication {
 		options.addOption(SEED, true, "Random seed");
 
 		// Options for OSGi/Eclipse compat - not used, but needs to be specified
-		options.addOption("product", true, "Product ID");
-		options.addOption("console", false, "Enable OSGi Console");
-		options.addOption("consoleLog", false, "Enable logging to console");
-		options.addOption("nosplash", false, "Disable splash screen");
+		options.addOption("application", true, "(OSGi) Application ID");
+		options.addOption("product", true, "(OSGi) Product ID");
+		options.addOption("console", false, "(OSGi) Enable OSGi Console");
+		options.addOption("consoleLog", false, "(OSGi) Enable logging to console");
+		options.addOption("nosplash", false, "(OSGi) Disable splash screen");
+		options.addOption("noExit", false, "(OSGi) Do not exit");
 
 		// Enable Fitness Exporter
 		options.addOption(OptionBuilder.withLongOpt(FITNESS_TRACE).isRequired(false).withDescription("Export fitness trace to a file").hasArg().create());
