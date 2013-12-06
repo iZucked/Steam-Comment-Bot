@@ -84,7 +84,7 @@ public abstract class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	 * @since 3.1
 	 */
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
-		return new DelegateInformation(null, null, eGet(feature));
+		return new DelegateInformation(null, null, null);
 	}
 
 	
