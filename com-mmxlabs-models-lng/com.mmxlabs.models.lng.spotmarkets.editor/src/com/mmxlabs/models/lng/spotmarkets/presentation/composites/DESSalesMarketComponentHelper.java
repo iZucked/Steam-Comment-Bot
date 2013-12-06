@@ -78,9 +78,10 @@ public class DESSalesMarketComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the marketPorts feature on DESSalesMarket
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_marketPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.DES_SALES_MARKET__MARKET_PORTS));
+		// Deprecated field
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.DES_SALES_MARKET__MARKET_PORTS));
 	}
 }

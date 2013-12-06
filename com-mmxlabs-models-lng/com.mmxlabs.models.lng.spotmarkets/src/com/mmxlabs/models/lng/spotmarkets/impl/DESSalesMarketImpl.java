@@ -114,7 +114,9 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @deprecated
 	 */
+	@Deprecated
 	public EList<APortSet<Port>> getMarketPorts() {
 		if (marketPorts == null) {
 			marketPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.DES_SALES_MARKET__MARKET_PORTS);
