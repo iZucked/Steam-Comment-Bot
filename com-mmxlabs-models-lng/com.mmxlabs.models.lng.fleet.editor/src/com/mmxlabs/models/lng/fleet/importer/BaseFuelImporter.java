@@ -30,7 +30,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  */
 public class BaseFuelImporter extends DefaultClassImporter {
 	private static String indexKey = "index";
-	
+
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final ImportResults result = super.importObject(parent, eClass, row, context);
@@ -40,21 +40,21 @@ public class BaseFuelImporter extends DefaultClassImporter {
 			final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
 			cost.setFuel(fuel);
 			final String indexName = row.get(indexKey);
-			//cost.setPrice(Double.parseDouble(row.get("price")));
+			// cost.setPrice(Double.parseDouble(row.get("price")));
+			final MMXRootObject rootObject = context.getRootObject();
+			final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
+			if (rootObject instanceof LNGScenarioModel) {
+				if (pricingModel != null) {
+					pricingModel.getFleetCost().getBaseFuelPrices().add(cost);
+				}
+			}
 
 			context.doLater(new IDeferment() {
 
 				@Override
 				public void run(final IImportContext context) {
-					final MMXRootObject rootObject = context.getRootObject();
-					if (rootObject instanceof LNGScenarioModel) {
-						final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
-						BaseFuelIndex index = (BaseFuelIndex) context.getNamedObject(indexName, PricingPackage.Literals.BASE_FUEL_INDEX);
-						cost.setIndex(index);
-						if (pricingModel != null) {
-							pricingModel.getFleetCost().getBaseFuelPrices().add(cost);
-						}
-					}
+					final BaseFuelIndex index = (BaseFuelIndex) context.getNamedObject(indexName, PricingPackage.Literals.BASE_FUEL_INDEX);
+					cost.setIndex(index);
 				}
 
 				@Override
@@ -73,7 +73,7 @@ public class BaseFuelImporter extends DefaultClassImporter {
 	protected Map<String, String> exportObject(final EObject object, final MMXRootObject rootObject) {
 		final BaseFuel bf = (BaseFuel) object;
 		final Map<String, String> result = super.exportObject(object, rootObject);
-		 if (rootObject instanceof LNGScenarioModel) {
+		if (rootObject instanceof LNGScenarioModel) {
 			final PricingModel pm = ((LNGScenarioModel) rootObject).getPricingModel();
 			if (pm != null) {
 				for (final BaseFuelCost cost : pm.getFleetCost().getBaseFuelPrices()) {
