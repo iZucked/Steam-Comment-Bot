@@ -501,7 +501,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 					if (purchaseContract != null) {
 						result = purchaseContract.eGetWithDefault(CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV);						
 					}
-					if (result == null) {
+					if (result == null && port != null) {
 						result =  port.eGetWithDefault(PortPackage.Literals.PORT__CV_VALUE);
 					}
 					if (result == null) {
