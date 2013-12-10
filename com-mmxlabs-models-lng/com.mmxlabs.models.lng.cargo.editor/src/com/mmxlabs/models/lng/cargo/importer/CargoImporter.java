@@ -237,19 +237,18 @@ public class CargoImporter extends DefaultClassImporter {
 		// TODO: sort out this hack. Is the identity of the "row object" important
 		// when returning from this method?
 		final ImportResults newResult = new ImportResults(null);
-		final List<EObject> newResults = newResult.createdObjects;
 		
 		
 		boolean keepCargo = true;
 		if (load == null || load.getWindowStart() == null) {
 			keepCargo = false;
 		} else {
-			newResults.add(load);
+			newResult.add(load);
 		}
 		if (discharge == null || discharge.getWindowStart() == null) {
 			keepCargo = false;
 		} else {
-			newResults.add(discharge);
+			newResult.add(discharge);
 		}
 
 		if (!keepCargo) {
@@ -259,7 +258,7 @@ public class CargoImporter extends DefaultClassImporter {
 			cargo.getSlots().add(discharge);
 		}
 		// Always return cargo object for LDD style cargo import
-		newResults.add(cargo);
+		newResult.add(cargo);
 
 		return newResult;
 	}
@@ -273,8 +272,9 @@ public class CargoImporter extends DefaultClassImporter {
 				Map<String, String> row;
 				final Map<String, Cargo> cargoMap = new HashMap<String, Cargo>();
 				while ((row = reader.readRow(true)) != null) {
+
 					// Import Row Data
-					final Collection<EObject> result = importObject(null, importClass, row, context).createdObjects;
+					final Collection<EObject> result = importObject(null, importClass, row, context).getCreatedObjects();
 
 					// Find the individual objects
 					LoadSlot load = null;
@@ -384,7 +384,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
-		objects.addAll(super.importObject(parent, eClass, row, context).createdObjects);
+		objects.addAll(super.importObject(parent, eClass, row, context).getCreatedObjects());
 
 		// Special case for load and discharge slots. These are not under the correct reference type string - so fake it here
 		final IFieldMap fieldMap = new FieldMap(row);
@@ -395,7 +395,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 			final EClass referenceType = CargoPackage.eINSTANCE.getLoadSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
-			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).createdObjects;
+			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).getCreatedObjects();
 			objects.addAll(values);
 		}
 		{
@@ -404,7 +404,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 			final EClass referenceType = CargoPackage.eINSTANCE.getDischargeSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
-			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).createdObjects;
+			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).getCreatedObjects();
 			objects.addAll(values);
 		}
 		return objects;

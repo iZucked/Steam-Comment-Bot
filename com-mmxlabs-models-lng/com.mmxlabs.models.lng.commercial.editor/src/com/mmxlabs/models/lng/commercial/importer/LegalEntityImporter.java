@@ -93,7 +93,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 
 		// pick the legal entity which was created by the default importer
 		LegalEntity entity = null;
-		for (final EObject object : result.createdObjects) {
+		for (final EObject object : result.getCreatedObjects()) {
 			if (object instanceof LegalEntity) {
 				if (entity != null) {
 					context.addProblem(context.createProblem("Multiple entities created for one import line.", true, true, true));
