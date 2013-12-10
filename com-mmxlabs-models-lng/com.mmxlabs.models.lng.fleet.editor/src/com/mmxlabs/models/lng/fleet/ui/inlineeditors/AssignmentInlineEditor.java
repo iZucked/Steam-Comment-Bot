@@ -287,8 +287,7 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 			}
 		}
 
-		valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(FleetPackage.eINSTANCE.getAssignableElement(),
-				FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+		valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(FleetPackage.eINSTANCE.getAssignableElement(), FleetPackage.eINSTANCE.getAssignableElement_Assignment());
 
 		updateDisplay(object);
 
@@ -324,13 +323,17 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 
 	public void updateDisplay(final EObject object) {
 		AssignableElement assignment = null;
-		for (final EObject r : range) {
-			if (r instanceof AssignableElement) {
-				assignment = (AssignableElement) r;
-				if (assignment == object) {
-					break;
-				} else {
-					assignment = null;
+		if (object instanceof AssignableElement) {
+			assignment = (AssignableElement) object;
+		} else if (range != null) {
+			for (final EObject r : range) {
+				if (r instanceof AssignableElement) {
+					assignment = (AssignableElement) r;
+					if (assignment == object) {
+						break;
+					} else {
+						assignment = null;
+					}
 				}
 			}
 		}
@@ -380,8 +383,8 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 		lock.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				handler.handleCommand(SetCommand.create(handler.getEditingDomain(), elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Locked(), lock.getSelection()),
-						elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Locked());
+				handler.handleCommand(SetCommand.create(handler.getEditingDomain(), elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Locked(), lock.getSelection()), elementAssignment,
+						FleetPackage.eINSTANCE.getAssignableElement_Locked());
 			}
 		});
 
@@ -405,8 +408,8 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 								final ScenarioFleetModel scenarioFleetModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getScenarioFleetModel();
 								int maxSpot = AssignmentEditorHelper.getMaxSpot(cargoModel, scenarioFleetModel);
 								;
-								handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet<Vessel>) vessel, elementAssignment, maxSpot),
-										elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+								handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet<Vessel>) vessel, elementAssignment, maxSpot), elementAssignment,
+										FleetPackage.eINSTANCE.getAssignableElement_Assignment());
 								return;
 							}
 						} else if (vessel instanceof Vessel) {
