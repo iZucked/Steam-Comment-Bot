@@ -71,7 +71,6 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 		add_annealingSettingsEditor(detailComposite, topClass);
 		add_seedEditor(detailComposite, topClass);
 		add_argumentsEditor(detailComposite, topClass);
-		add_rewireEditor(detailComposite, topClass);
 		add_generateCharterOutsEditor(detailComposite, topClass);
 		add_shippingOnlyEditor(detailComposite, topClass);
 	}
@@ -122,15 +121,6 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_argumentsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__ARGUMENTS));
-	}
-
-	/**
-	 * Create the editor for the rewire feature on OptimiserSettings
-	 *
-	 * @generated
-	 */
-	protected void add_rewireEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__REWIRE));
 	}
 
 	/**

@@ -13,12 +13,12 @@ import com.mmxlabs.models.lng.assignment.AssignmentFactory;
 import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 public class UpdateElementAssignmentCommand extends CompoundCommand {

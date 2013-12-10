@@ -217,7 +217,7 @@ public class DistanceLineViewer extends GridTableViewer {
 
 					final Pair<Port, Map<Port, RouteLine>> e = (Pair<Port, Map<Port, RouteLine>>) element;
 					final RouteLine dl = e.getSecond().get(p);
-					return dl.getVias().isEmpty();
+					return dl == null || dl.getVias().isEmpty();
 				}
 			});
 		}

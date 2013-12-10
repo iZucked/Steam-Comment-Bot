@@ -39,7 +39,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getAnnealingSettings <em>Annealing Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getSeed <em>Seed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getArguments <em>Arguments</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isRewire <em>Rewire</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isShippingOnly <em>Shipping Only</em>}</li>
  * </ul>
@@ -137,26 +136,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * @ordered
 	 */
 	protected EList<Argument> arguments;
-
-	/**
-	 * The default value of the '{@link #isRewire() <em>Rewire</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRewire()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean REWIRE_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isRewire() <em>Rewire</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRewire()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean rewire = REWIRE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isGenerateCharterOuts() <em>Generate Charter Outs</em>}' attribute.
@@ -398,29 +377,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isRewire() {
-		return rewire;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRewire(boolean newRewire) {
-		boolean oldRewire = rewire;
-		rewire = newRewire;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__REWIRE, oldRewire, rewire));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -513,8 +469,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return getSeed();
 			case ParametersPackage.OPTIMISER_SETTINGS__ARGUMENTS:
 				return getArguments();
-			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
-				return isRewire();
 			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
 				return isGenerateCharterOuts();
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
@@ -556,9 +510,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				getArguments().clear();
 				getArguments().addAll((Collection<? extends Argument>)newValue);
 				return;
-			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
-				setRewire((Boolean)newValue);
-				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
 				setGenerateCharterOuts((Boolean)newValue);
 				return;
@@ -598,9 +549,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__ARGUMENTS:
 				getArguments().clear();
 				return;
-			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
-				setRewire(REWIRE_EDEFAULT);
-				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
 				setGenerateCharterOuts(GENERATE_CHARTER_OUTS_EDEFAULT);
 				return;
@@ -633,8 +581,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return seed != SEED_EDEFAULT;
 			case ParametersPackage.OPTIMISER_SETTINGS__ARGUMENTS:
 				return arguments != null && !arguments.isEmpty();
-			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
-				return rewire != REWIRE_EDEFAULT;
 			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
 				return generateCharterOuts != GENERATE_CHARTER_OUTS_EDEFAULT;
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
@@ -689,8 +635,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		result.append(name);
 		result.append(", seed: ");
 		result.append(seed);
-		result.append(", rewire: ");
-		result.append(rewire);
 		result.append(", generateCharterOuts: ");
 		result.append(generateCharterOuts);
 		result.append(", shippingOnly: ");

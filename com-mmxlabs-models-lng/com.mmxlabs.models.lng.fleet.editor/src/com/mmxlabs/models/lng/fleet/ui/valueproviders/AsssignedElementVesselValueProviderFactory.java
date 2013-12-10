@@ -17,7 +17,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.models.ui.valueproviders.MergedReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
-public class VesselValueProviderFactory implements IReferenceValueProviderFactory {
+public class AsssignedElementVesselValueProviderFactory implements IReferenceValueProviderFactory {
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		if (rootObject instanceof LNGScenarioModel) {

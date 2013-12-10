@@ -246,11 +246,12 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public EAttribute getOptimiserSettings_Rewire() {
+	public EAttribute getOptimiserSettings_GenerateCharterOuts() {
 		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -261,19 +262,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getOptimiserSettings_GenerateCharterOuts() {
-		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getOptimiserSettings_ShippingOnly() {
-		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -476,7 +466,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__ANNEALING_SETTINGS);
 		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__SEED);
 		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__ARGUMENTS);
-		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__REWIRE);
 		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS);
 		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__SHIPPING_ONLY);
 
@@ -551,7 +540,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEReference(getOptimiserSettings_AnnealingSettings(), this.getAnnealingSettings(), null, "annealingSettings", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptimiserSettings_Seed(), ecorePackage.getEInt(), "seed", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimiserSettings_Arguments(), this.getArgument(), null, "arguments", null, 0, -1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getOptimiserSettings_Rewire(), ecorePackage.getEBoolean(), "rewire", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptimiserSettings_GenerateCharterOuts(), ecorePackage.getEBoolean(), "generateCharterOuts", null, 0, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptimiserSettings_ShippingOnly(), ecorePackage.getEBoolean(), "shippingOnly", null, 0, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

@@ -867,8 +867,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
-		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
+		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
@@ -880,9 +880,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Add supertypes to classes
 		cargoEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		cargoEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		cargoEClass.getESuperTypes().add(theFleetPackage.getAssignableElement());
 		slotEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		slotEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		slotEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
+		slotEClass.getESuperTypes().add(theFleetPackage.getAssignableElement());
 		loadSlotEClass.getESuperTypes().add(this.getSlot());
 		dischargeSlotEClass.getESuperTypes().add(this.getSlot());
 		cargoModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());

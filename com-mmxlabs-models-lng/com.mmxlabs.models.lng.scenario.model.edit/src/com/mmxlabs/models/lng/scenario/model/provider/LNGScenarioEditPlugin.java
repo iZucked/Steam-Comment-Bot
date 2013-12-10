@@ -10,7 +10,6 @@ import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import com.mmxlabs.models.lng.analytics.provider.AnalyticsEditPlugin;
-import com.mmxlabs.models.lng.assignment.provider.AssignmentEditPlugin;
 import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
 import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
@@ -55,7 +54,6 @@ public final class LNGScenarioEditPlugin extends EMFPlugin {
 		super
 		  (new ResourceLocator [] {
 		     AnalyticsEditPlugin.INSTANCE,
-		     AssignmentEditPlugin.INSTANCE,
 		     CargoEditPlugin.INSTANCE,
 		     CommercialEditPlugin.INSTANCE,
 		     FleetEditPlugin.INSTANCE,

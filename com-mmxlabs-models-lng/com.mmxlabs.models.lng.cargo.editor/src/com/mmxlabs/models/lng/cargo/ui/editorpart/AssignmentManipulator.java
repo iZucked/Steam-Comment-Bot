@@ -5,11 +5,11 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.CellEditor;
@@ -18,18 +18,14 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -45,8 +41,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	public AssignmentManipulator(final IScenarioEditingLocation location) {
 		this.location = location;
-		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(AssignmentPackage.eINSTANCE.getElementAssignment(),
-				AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(FleetPackage.eINSTANCE.getAssignableElement(), FleetPackage.eINSTANCE.getAssignableElement_Assignment());
 	}
 
 	private List<Pair<String, EObject>> getAllowedValues(final EObject target, List<Pair<String, EObject>> storage) {
@@ -55,7 +50,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		} else {
 			storage.clear();
 		}
-		storage.addAll(valueProvider.getAllowedValues(target, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment()));
+		storage.addAll(valueProvider.getAllowedValues(target, FleetPackage.eINSTANCE.getAssignableElement_Assignment()));
 
 		return storage;
 	}
@@ -63,21 +58,14 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public void setValue(final Object object, final Object value) {
 		// grar.
-		final AssignmentModel assignmentModel = getAssignmentModel();
-		if (assignmentModel != null) {
-			//
-			if (value == null || value.equals(-1)) {
-				return;
-			}
+		AssignableElement target = getTarget(object);
+		allowedValues = getAllowedValues(target, allowedValues);
 
-			allowedValues = getAllowedValues(getTarget(object), allowedValues);
+		// locate the appropriate value in the list of options
+		final AVesselSet<Vessel> set = (AVesselSet<Vessel>) (allowedValues.get((Integer) value).getSecond());
+		final EditingDomain ed = location.getEditingDomain();
 
-			// locate the appropriate value in the list of options
-			final AVesselSet<Vessel> set = (AVesselSet<Vessel>) (allowedValues.get((Integer) value).getSecond());
-			final EditingDomain ed = location.getEditingDomain();
-
-			ed.getCommandStack().execute(AssignmentEditorHelper.reassignElement(ed, assignmentModel, (UUIDObject) object, set));
-		}
+		ed.getCommandStack().execute(SetCommand.create(ed, target, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, set));
 	}
 
 	@Override
@@ -90,45 +78,13 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		return new ComboBoxCellEditor(parent, items);
 	}
 
-	public AVesselSet<Vessel> getVessel(final UUIDObject object) {
-		if (object != null) {
-
-			final AssignmentModel input = getAssignmentModel();
-			if (input != null) {
-				final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, object);
-				if (assignment != null) {
-					return assignment.getAssignment();
-				}
-			}
-		}
-
-		return null;
-
-	}
-
-	protected AssignmentModel getAssignmentModel() {
-		if (location.getRootObject() instanceof LNGScenarioModel) {
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) location.getRootObject();
-			return lngScenarioModel.getPortfolioModel().getAssignmentModel();
-		}
-		return null;
-	}
-
 	@Override
 	public Integer getValue(final Object object) {
-		final AssignmentModel assignmentModel = getAssignmentModel();
-		if (assignmentModel != null) {
-			final UUIDObject target = getTarget(object);
-			if (target != null) {
-				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, target);
-				if (elementAssignment != null) {
-					allowedValues = getAllowedValues((EObject) target, allowedValues);
-					for (int i = 0; i < allowedValues.size(); i++) {
-						if (Equality.isEqual(allowedValues.get(i).getSecond(), elementAssignment.getAssignment())) {
-							return i;
-						}
-					}
-				}
+		final AssignableElement assignableElement = getTarget(object);
+		allowedValues = getAllowedValues((EObject) assignableElement, allowedValues);
+		for (int i = 0; i < allowedValues.size(); i++) {
+			if (Equality.isEqual(allowedValues.get(i).getSecond(), assignableElement.getAssignment())) {
+				return i;
 			}
 		}
 
@@ -144,13 +100,13 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public String render(final Object object) {
 
-		final UUIDObject target = getTarget(object);
+		final AssignableElement target = getTarget(object);
 		if (target == null) {
 			return "";
 		}
 
 		// get the VesselSet currently attached to the cargo
-		final AVesselSet<Vessel> vs = getVessel(target);
+		final AVesselSet<? extends Vessel> vs = target.getAssignment();
 		// by preference, find the string attached to this object by the value provider
 		for (final Pair<String, EObject> pair : getAllowedValues(target, allowedValues)) {
 			if (pair.getSecond() == vs) {
@@ -179,11 +135,6 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		return render(object);
 	}
 
-	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
-		return Collections.singleton(new Pair<Notifier, List<Object>>(getAssignmentModel(), Collections.emptyList()));
-	}
-
 	/**
 	 * Returns the object we expect the ElementAssignment to be linked to.
 	 * 
@@ -191,7 +142,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	 * @return
 	 */
 	protected @Nullable
-	UUIDObject getTarget(@Nullable final Object object) {
+	AssignableElement getTarget(@Nullable final Object object) {
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 
@@ -220,6 +171,11 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 				return dischargeSlot;
 			}
 		}
+		return null;
+	}
+
+	@Override
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
 		return null;
 	}
 }

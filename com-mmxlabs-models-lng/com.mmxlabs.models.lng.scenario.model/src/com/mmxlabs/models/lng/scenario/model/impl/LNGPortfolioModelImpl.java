@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -30,7 +29,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getScenarioFleetModel <em>Scenario Fleet Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getCargoModel <em>Cargo Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getAssignmentModel <em>Assignment Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getParameters <em>Parameters</em>}</li>
  * </ul>
@@ -58,16 +56,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @ordered
 	 */
 	protected CargoModel cargoModel;
-
-	/**
-	 * The cached value of the '{@link #getAssignmentModel() <em>Assignment Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAssignmentModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected AssignmentModel assignmentModel;
 
 	/**
 	 * The cached value of the '{@link #getScheduleModel() <em>Schedule Model</em>}' containment reference.
@@ -246,72 +234,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssignmentModel getAssignmentModel() {
-		if (assignmentModel != null && assignmentModel.eIsProxy()) {
-			InternalEObject oldAssignmentModel = (InternalEObject)assignmentModel;
-			assignmentModel = (AssignmentModel)eResolveProxy(oldAssignmentModel);
-			if (assignmentModel != oldAssignmentModel) {
-				InternalEObject newAssignmentModel = (InternalEObject)assignmentModel;
-				NotificationChain msgs = oldAssignmentModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL, null, null);
-				if (newAssignmentModel.eInternalContainer() == null) {
-					msgs = newAssignmentModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL, oldAssignmentModel, assignmentModel));
-			}
-		}
-		return assignmentModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AssignmentModel basicGetAssignmentModel() {
-		return assignmentModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetAssignmentModel(AssignmentModel newAssignmentModel, NotificationChain msgs) {
-		AssignmentModel oldAssignmentModel = assignmentModel;
-		assignmentModel = newAssignmentModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL, oldAssignmentModel, newAssignmentModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAssignmentModel(AssignmentModel newAssignmentModel) {
-		if (newAssignmentModel != assignmentModel) {
-			NotificationChain msgs = null;
-			if (assignmentModel != null)
-				msgs = ((InternalEObject)assignmentModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL, null, msgs);
-			if (newAssignmentModel != null)
-				msgs = ((InternalEObject)newAssignmentModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL, null, msgs);
-			msgs = basicSetAssignmentModel(newAssignmentModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL, newAssignmentModel, newAssignmentModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public ScheduleModel getScheduleModel() {
 		if (scheduleModel != null && scheduleModel.eIsProxy()) {
 			InternalEObject oldScheduleModel = (InternalEObject)scheduleModel;
@@ -455,8 +377,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return basicSetScenarioFleetModel(null, msgs);
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				return basicSetCargoModel(null, msgs);
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL:
-				return basicSetAssignmentModel(null, msgs);
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				return basicSetScheduleModel(null, msgs);
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
@@ -479,9 +399,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				if (resolve) return getCargoModel();
 				return basicGetCargoModel();
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL:
-				if (resolve) return getAssignmentModel();
-				return basicGetAssignmentModel();
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				if (resolve) return getScheduleModel();
 				return basicGetScheduleModel();
@@ -505,9 +422,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				setCargoModel((CargoModel)newValue);
-				return;
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL:
-				setAssignmentModel((AssignmentModel)newValue);
 				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)newValue);
@@ -533,9 +447,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				setCargoModel((CargoModel)null);
 				return;
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL:
-				setAssignmentModel((AssignmentModel)null);
-				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				setScheduleModel((ScheduleModel)null);
 				return;
@@ -558,8 +469,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return scenarioFleetModel != null;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				return cargoModel != null;
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL:
-				return assignmentModel != null;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 				return scheduleModel != null;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:

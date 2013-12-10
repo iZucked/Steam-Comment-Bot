@@ -5,19 +5,19 @@
 package com.mmxlabs.models.lng.assignment.validation;
 
 import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -31,33 +31,31 @@ public class CargoVolumeVesselAssignmentConstraint extends AbstractModelMultiCon
 	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof ElementAssignment) {
-			final ElementAssignment assignment = (ElementAssignment) object;
+		if (object instanceof AssignableElement) {
+			final AssignableElement assignableElement = (AssignableElement) object;
 
-			if (assignment.getAssignment() == null) {
+			if (assignableElement.getAssignment() == null) {
 				return Activator.PLUGIN_ID;
 			}
 
 			int capacity = -1;
-			if (assignment.getAssignment() instanceof Vessel) {
-				final Vessel vessel = (Vessel) assignment.getAssignment();
+			if (assignableElement.getAssignment() instanceof Vessel) {
+				final Vessel vessel = (Vessel) assignableElement.getAssignment();
 				capacity = vessel.getVesselOrVesselClassCapacity();
-			} else if (assignment.getAssignment() instanceof VesselClass) {
-				final VesselClass vesselClass = (VesselClass) assignment.getAssignment();
+			} else if (assignableElement.getAssignment() instanceof VesselClass) {
+				final VesselClass vesselClass = (VesselClass) assignableElement.getAssignment();
 				capacity = vesselClass.getCapacity();
 			} else {
 				// Can't do much here, no capacity...
 				return Activator.PLUGIN_ID;
 			}
-
-			final UUIDObject obj = assignment.getAssignedObject();
 			Cargo cargo = null;
 			Slot slot = null;
-			if (obj instanceof Slot) {
-				slot = (Slot) obj;
+			if (assignableElement instanceof Slot) {
+				slot = (Slot) assignableElement;
 				cargo = slot.getCargo();
-			} else if (obj instanceof Cargo) {
-				cargo = (Cargo) obj;
+			} else if (assignableElement instanceof Cargo) {
+				cargo = (Cargo) assignableElement;
 			}
 
 			if (cargo != null) {

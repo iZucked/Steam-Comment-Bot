@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -85,6 +86,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				T result = caseCargo(cargo);
 				if (result == null) result = caseUUIDObject(cargo);
 				if (result == null) result = caseNamedObject(cargo);
+				if (result == null) result = caseAssignableElement(cargo);
 				if (result == null) result = caseMMXObject(cargo);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -95,6 +97,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(slot);
 				if (result == null) result = caseNamedObject(slot);
 				if (result == null) result = caseITimezoneProvider(slot);
+				if (result == null) result = caseAssignableElement(slot);
 				if (result == null) result = caseMMXObject(slot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -106,6 +109,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(loadSlot);
 				if (result == null) result = caseNamedObject(loadSlot);
 				if (result == null) result = caseITimezoneProvider(loadSlot);
+				if (result == null) result = caseAssignableElement(loadSlot);
 				if (result == null) result = caseMMXObject(loadSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -117,6 +121,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(dischargeSlot);
 				if (result == null) result = caseNamedObject(dischargeSlot);
 				if (result == null) result = caseITimezoneProvider(dischargeSlot);
+				if (result == null) result = caseAssignableElement(dischargeSlot);
 				if (result == null) result = caseMMXObject(dischargeSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -145,6 +150,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(spotLoadSlot);
 				if (result == null) result = caseNamedObject(spotLoadSlot);
 				if (result == null) result = caseITimezoneProvider(spotLoadSlot);
+				if (result == null) result = caseAssignableElement(spotLoadSlot);
 				if (result == null) result = caseMMXObject(spotLoadSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -158,6 +164,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(spotDischargeSlot);
 				if (result == null) result = caseNamedObject(spotDischargeSlot);
 				if (result == null) result = caseITimezoneProvider(spotDischargeSlot);
+				if (result == null) result = caseAssignableElement(spotDischargeSlot);
 				if (result == null) result = caseMMXObject(spotDischargeSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -351,6 +358,21 @@ public class CargoSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Assignable Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Assignable Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAssignableElement(AssignableElement object) {
 		return null;
 	}
 

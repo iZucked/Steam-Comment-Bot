@@ -263,27 +263,6 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.models.lng.assignment"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.assignment.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.assignment.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.mmxlabs.models.lng.assignment.validation"
          download-size="0"
          install-size="0"

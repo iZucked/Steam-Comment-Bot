@@ -20,7 +20,7 @@
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.assignment.helpers.AssignmentModel"
-			helperClass="com.mmxlabs.models.lng.assignment.presentation.composites.AssignmentModelComponentHelper"
+			helperClass="com.mmxlabs.models.lng.assignment. "
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.assignment.AssignmentModel" />
 	</extension>

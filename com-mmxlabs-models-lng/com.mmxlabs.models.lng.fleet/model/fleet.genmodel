@@ -82,6 +82,7 @@
       <genFeatures createChild="false" propertyDescription="The rate at which base fuel is used in a port"
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselStateAttributes/inPortBaseRate"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselStateAttributes/fuelConsumption"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselStateAttributes/serviceSpeed"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//FuelConsumption">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//FuelConsumption/speed"/>

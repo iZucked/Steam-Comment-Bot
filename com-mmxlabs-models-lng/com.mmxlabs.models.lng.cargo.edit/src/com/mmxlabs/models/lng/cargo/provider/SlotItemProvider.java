@@ -22,6 +22,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
@@ -61,6 +62,10 @@ public class SlotItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addAssignmentPropertyDescriptor(object);
+			addSpotIndexPropertyDescriptor(object);
+			addSequenceHintPropertyDescriptor(object);
+			addLockedPropertyDescriptor(object);
 			addContractPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addWindowStartPropertyDescriptor(object);
@@ -102,6 +107,94 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Assignment feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAssignmentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_assignment_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_assignment_feature", "_UI_AssignableElement_type"),
+				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Spot Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSpotIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_spotIndex_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_spotIndex_feature", "_UI_AssignableElement_type"),
+				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sequence Hint feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSequenceHintPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_sequenceHint_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_sequenceHint_feature", "_UI_AssignableElement_type"),
+				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Locked feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLockedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_locked_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_locked_feature", "_UI_AssignableElement_type"),
+				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -544,6 +637,9 @@ public class SlotItemProvider
 
 		switch (notification.getFeatureID(Slot.class)) {
 			case CargoPackage.SLOT__NAME:
+			case CargoPackage.SLOT__SPOT_INDEX:
+			case CargoPackage.SLOT__SEQUENCE_HINT:
+			case CargoPackage.SLOT__LOCKED:
 			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 			case CargoPackage.SLOT__WINDOW_SIZE:

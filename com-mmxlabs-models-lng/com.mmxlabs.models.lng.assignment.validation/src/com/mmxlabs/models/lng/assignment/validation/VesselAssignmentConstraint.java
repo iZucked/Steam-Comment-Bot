@@ -20,16 +20,15 @@ import org.eclipse.emf.query.statements.WHERE;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -39,16 +38,15 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof ElementAssignment) {
-			final ElementAssignment assignment = (ElementAssignment) object;
+		if (object instanceof AssignableElement) {
+			final AssignableElement assignment = (AssignableElement) object;
 
-			final UUIDObject assignedObject = assignment.getAssignedObject();
 
 			if (assignment.getAssignment() == null) {
 				return Activator.PLUGIN_ID;
 			}
 
-			final Set<Vessel> vessels = SetUtils.getObjects(assignment.getAssignment());
+			final Set<? extends Vessel> vessels = SetUtils.getObjects(assignment.getAssignment());
 
 			final Set<Port> restrictedPorts = new HashSet<Port>();
 			boolean firstPass = true;
@@ -75,7 +73,7 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 
 			// Next stage, check the cargoes, slots and events to see if they contain a restricted port.
 			for (final Port port : restrictedPorts) {
-				final SELECT query = new SELECT(new FROM(assignedObject), new WHERE(new EObjectReferencerCondition(port)));
+				final SELECT query = new SELECT(new FROM(assignment), new WHERE(new EObjectReferencerCondition(port)));
 				final IQueryResult result = query.execute();
 
 				if (!result.isEmpty()) {

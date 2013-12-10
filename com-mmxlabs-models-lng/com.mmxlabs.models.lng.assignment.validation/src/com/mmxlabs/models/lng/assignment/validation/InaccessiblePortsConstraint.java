@@ -12,12 +12,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -27,7 +26,6 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -36,10 +34,10 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 	@Override
 	public String validate(final IValidationContext ctx, final List<IStatus> statues) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof ElementAssignment) {
-			final ElementAssignment elementAssignment = (ElementAssignment) target;
+		if (target instanceof AssignableElement) {
+			final AssignableElement assignableElement = (AssignableElement) target;
 
-			final AVesselSet<Vessel> assignment = elementAssignment.getAssignment();
+			final AVesselSet<? extends Vessel> assignment = assignableElement.getAssignment();
 			if (assignment != null) {
 
 				List<APortSet<Port>> inaccessiblePorts = null;
@@ -61,40 +59,39 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 				if (inaccessiblePorts != null) {
 					final Set<Port> inaccessiblePortSet = SetUtils.getObjects(inaccessiblePorts);
 					if (!inaccessiblePortSet.isEmpty()) {
-
-						UUIDObject object = elementAssignment.getAssignedObject();
-						if (object instanceof Slot) {
-							final Slot slot = (Slot) object;
+						EObject currentTarget = assignableElement;
+						if (currentTarget instanceof Slot) {
+							final Slot slot = (Slot) currentTarget;
 							if (slot.getCargo() != null) {
-								object = slot.getCargo();
+								currentTarget = slot.getCargo();
 							} else {
 								if (inaccessiblePortSet.contains(slot.getPort())) {
 									final String msg = String.format("The port %s is not an accessible port for the assigned vessel", slot.getPort().getName());
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-									dsd.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+									dsd.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
 									dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 									statues.add(dsd);
 								}
 							}
 						}
 						
-						if (object instanceof Cargo) {
-							final Cargo cargo = (Cargo) object;
+						if (currentTarget instanceof Cargo) {
+							final Cargo cargo = (Cargo) currentTarget;
 							for (final Slot slot : cargo.getSlots()) {
 								if (inaccessiblePortSet.contains(slot.getPort())) {
 									final String msg = String.format("The port %s is not an accessible port for the assigned vessel", slot.getPort().getName());
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-									dsd.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+									dsd.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
 									dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 									statues.add(dsd);
 								}
 							}
-						} else if (object instanceof VesselEvent) {
-							final VesselEvent vesselEvent = (VesselEvent) object;
+						} else if (currentTarget instanceof VesselEvent) {
+							final VesselEvent vesselEvent = (VesselEvent) currentTarget;
 							if (inaccessiblePortSet.contains(vesselEvent.getPort())) {
 								final String msg = String.format("The port %s is not an accessible port for the assigned vessel", vesselEvent.getPort().getName());
 								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-								dsd.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+								dsd.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
 								dsd.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_Port());
 								statues.add(dsd);
 							}
@@ -103,7 +100,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 								if (inaccessiblePortSet.contains(charterOutEvent.getRelocateTo())) {
 									final String msg = String.format("The port %s is not an accessible port for the assigned vessel", charterOutEvent.getRelocateTo().getName());
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-									dsd.addEObjectAndFeature(elementAssignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+									dsd.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
 									dsd.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getCharterOutEvent_RelocateTo());
 									statues.add(dsd);
 								}

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -90,6 +91,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	private EClass charterOutEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass assignableElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -584,6 +592,51 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAssignableElement() {
+		return assignableElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAssignableElement_Assignment() {
+		return (EReference)assignableElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAssignableElement_SpotIndex() {
+		return (EAttribute)assignableElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAssignableElement_SequenceHint() {
+		return (EAttribute)assignableElementEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAssignableElement_Locked() {
+		return (EAttribute)assignableElementEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getHeelOptions() {
 		return heelOptionsEClass;
 	}
@@ -1070,6 +1123,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__REPOSITIONING_FEE);
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__HIRE_RATE);
 
+		assignableElementEClass = createEClass(ASSIGNABLE_ELEMENT);
+		createEReference(assignableElementEClass, ASSIGNABLE_ELEMENT__ASSIGNMENT);
+		createEAttribute(assignableElementEClass, ASSIGNABLE_ELEMENT__SPOT_INDEX);
+		createEAttribute(assignableElementEClass, ASSIGNABLE_ELEMENT__SEQUENCE_HINT);
+		createEAttribute(assignableElementEClass, ASSIGNABLE_ELEMENT__LOCKED);
+
 		// Create enums
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
 	}
@@ -1134,6 +1193,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		vesselEventEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		vesselEventEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		vesselEventEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
+		vesselEventEClass.getESuperTypes().add(this.getAssignableElement());
 		maintenanceEventEClass.getESuperTypes().add(this.getVesselEvent());
 		dryDockEventEClass.getESuperTypes().add(this.getVesselEvent());
 		charterOutEventEClass.getESuperTypes().add(this.getVesselEvent());
@@ -1253,6 +1313,17 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getCharterOutEvent_HireRate(), ecorePackage.getEInt(), "hireRate", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(charterOutEventEClass, thePortPackage.getPort(), "getEndPort", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(assignableElementEClass, AssignableElement.class, "AssignableElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(theTypesPackage.getAVesselSet());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		EGenericType g3 = createEGenericType(this.getVessel());
+		g2.setEUpperBound(g3);
+		initEReference(getAssignableElement_Assignment(), g1, null, "assignment", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAssignableElement_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAssignableElement_SequenceHint(), ecorePackage.getEInt(), "sequenceHint", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAssignableElement_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(vesselTypeEEnum, VesselType.class, "VesselType");

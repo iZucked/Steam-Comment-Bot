@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.ui.editorpart.VesselClassViewerPane;
@@ -44,9 +45,11 @@ public class VesselClassView extends ScenarioTableViewerView<VesselClassViewerPa
 		if (status instanceof DetailConstraintStatusDecorator) {
 
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
-			VesselClass object = null;
+			Object object = null;
 			if (dcsd.getTarget() instanceof VesselClass) {
-				object = (VesselClass) dcsd.getTarget();
+				object = dcsd.getTarget();
+			} else if (dcsd.getTarget() instanceof BaseFuel) {
+				object = dcsd.getTarget();
 			}
 			if (object != null) {
 				getSite().getPage().activate(this);

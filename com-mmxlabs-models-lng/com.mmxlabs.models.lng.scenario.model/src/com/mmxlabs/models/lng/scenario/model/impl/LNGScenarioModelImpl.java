@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -36,7 +35,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPricingModel <em>Pricing Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getCommercialModel <em>Commercial Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getSpotMarketsModel <em>Spot Markets Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getParametersModel <em>Parameters Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPortfolioModel <em>Portfolio Model</em>}</li>
  * </ul>
@@ -94,16 +92,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected SpotMarketsModel spotMarketsModel;
-
-	/**
-	 * The cached value of the '{@link #getParametersModel() <em>Parameters Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getParametersModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected ParametersModel parametersModel;
 
 	/**
 	 * The cached value of the '{@link #getAnalyticsModel() <em>Analytics Model</em>}' containment reference.
@@ -479,72 +467,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ParametersModel getParametersModel() {
-		if (parametersModel != null && parametersModel.eIsProxy()) {
-			InternalEObject oldParametersModel = (InternalEObject)parametersModel;
-			parametersModel = (ParametersModel)eResolveProxy(oldParametersModel);
-			if (parametersModel != oldParametersModel) {
-				InternalEObject newParametersModel = (InternalEObject)parametersModel;
-				NotificationChain msgs = oldParametersModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL, null, null);
-				if (newParametersModel.eInternalContainer() == null) {
-					msgs = newParametersModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL, oldParametersModel, parametersModel));
-			}
-		}
-		return parametersModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ParametersModel basicGetParametersModel() {
-		return parametersModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetParametersModel(ParametersModel newParametersModel, NotificationChain msgs) {
-		ParametersModel oldParametersModel = parametersModel;
-		parametersModel = newParametersModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL, oldParametersModel, newParametersModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setParametersModel(ParametersModel newParametersModel) {
-		if (newParametersModel != parametersModel) {
-			NotificationChain msgs = null;
-			if (parametersModel != null)
-				msgs = ((InternalEObject)parametersModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL, null, msgs);
-			if (newParametersModel != null)
-				msgs = ((InternalEObject)newParametersModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL, null, msgs);
-			msgs = basicSetParametersModel(newParametersModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL, newParametersModel, newParametersModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public AnalyticsModel getAnalyticsModel() {
 		if (analyticsModel != null && analyticsModel.eIsProxy()) {
 			InternalEObject oldAnalyticsModel = (InternalEObject)analyticsModel;
@@ -690,8 +612,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetCommercialModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
 				return basicSetSpotMarketsModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL:
-				return basicSetParametersModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				return basicSetAnalyticsModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
@@ -723,9 +643,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
 				if (resolve) return getSpotMarketsModel();
 				return basicGetSpotMarketsModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL:
-				if (resolve) return getParametersModel();
-				return basicGetParametersModel();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				if (resolve) return getAnalyticsModel();
 				return basicGetAnalyticsModel();
@@ -758,9 +675,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
 				setSpotMarketsModel((SpotMarketsModel)newValue);
-				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL:
-				setParametersModel((ParametersModel)newValue);
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				setAnalyticsModel((AnalyticsModel)newValue);
@@ -795,9 +709,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
 				setSpotMarketsModel((SpotMarketsModel)null);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL:
-				setParametersModel((ParametersModel)null);
-				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				setAnalyticsModel((AnalyticsModel)null);
 				return;
@@ -826,8 +737,6 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return commercialModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
 				return spotMarketsModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL:
-				return parametersModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 				return analyticsModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
