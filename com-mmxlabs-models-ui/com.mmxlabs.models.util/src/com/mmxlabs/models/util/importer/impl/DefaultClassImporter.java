@@ -42,7 +42,7 @@ import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
-public class DefaultClassImporter implements IClassImporter {
+public class DefaultClassImporter extends AbstractClassImporter {
 	protected static final String KIND_KEY = "kind";
 	protected static final String DOT = ".";
 
@@ -55,17 +55,28 @@ public class DefaultClassImporter implements IClassImporter {
 	 */
 	public static class ImportResults {
 		final public EObject importedObject;
-		final public LinkedList<EObject> createdObjects = new LinkedList<EObject>();
+		private final LinkedList<EObject> createdExtraObjects = new LinkedList<EObject>();
+		private final boolean wasObjectCreated;
 
 		public ImportResults(EObject object, boolean created) {
 			importedObject = object;
+			wasObjectCreated = created;
 			if (created) {
-				createdObjects.add(object);
+				createdExtraObjects.add(object);
 			}
 		}
 
 		public ImportResults(EObject object) {
 			this(object, true);
+		}
+		
+		public void add(EObject object) {
+			createdExtraObjects.add(object);
+		}
+
+		public List<EObject> getCreatedObjects() {
+			return createdExtraObjects;
+			
 		}
 
 	}
@@ -95,7 +106,7 @@ public class DefaultClassImporter implements IClassImporter {
 				context.pushReader(reader);
 				Map<String, String> row;
 				while ((row = reader.readRow(true)) != null) {
-					results.addAll(importObject(null, importClass, row, context).createdObjects);
+					results.addAll(importObject(null, importClass, row, context).createdExtraObjects);
 				}
 			} finally {
 				reader.close();
@@ -158,9 +169,9 @@ public class DefaultClassImporter implements IClassImporter {
 			final ImportResults results = new ImportResults(instance);
 			importAttributes(row, context, rowClass, instance);
 			if (row instanceof IFieldMap) {
-				importReferences((IFieldMap) row, context, rowClass, instance, results.createdObjects);
+				importReferences((IFieldMap) row, context, rowClass, instance);
 			} else {
-				importReferences(new FieldMap(row), context, rowClass, instance, results.createdObjects);
+				importReferences(new FieldMap(row), context, rowClass, instance);
 			}
 			return results;
 		} catch (final IllegalArgumentException illegal) {
@@ -179,22 +190,43 @@ public class DefaultClassImporter implements IClassImporter {
 		return reference.getEReferenceType();
 	}
 
-	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance, final LinkedList<EObject> results) {
-		for (final EReference reference : rowClass.getEAllReferences()) {
+	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance) {
+ 		for (final EReference reference : rowClass.getEAllReferences()) {
 			if (!shouldImportReference(reference)) {
 				continue;
 			}
+			
 			final String lcrn = reference.getName().toLowerCase();
+			
+			// If the reference is marked in the EMF model as "not contained", we expect 
+			// a field for the reference directly in the data as a REF_NAME field, which we will use for lookup later
+			//if (!reference.isContainment()) {
 			if (row.containsKey(lcrn)) {
+				if (reference.isContainment()) {
+					System.err.println("Got " + reference.getContainerClass().getName() + "." + reference.getName() + " as direct CSV data");
+				}
+
+				if (!row.containsKey(lcrn)) {
+					notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
+					continue;
+				}
+				
 				// The reference itself is present, so do a lookup later
 				final String referentName = row.get(lcrn).trim();
 				if (!referentName.isEmpty()) {
 					context.doLater(new SetReference(instance, reference, getEReferenceLinkType(reference), row.get(lcrn), context));
 				}
-			} else {
-				// The reference is missing entirely
-				// Maybe it is a sub-object; find any sub-keys
+			} 
+			// If the reference is marked in the EMF model as "contained" by its parent, we expect the child object's fields in the CSV data
+			// under hierarchical REF_NAME.FIELD fields
+			else {
+				// The CSV data should not contain REF_NAME as a direct field; it will be ignored if present
+				
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
+
+				if (!reference.isContainment() && !subKeys.isEmpty()) {
+					System.err.println("Got " + lcrn + " as direct CSV data");
+				}
 
 				if (reference.isMany()) {
 					if (reference == MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS) {
@@ -213,16 +245,10 @@ public class DefaultClassImporter implements IClassImporter {
 									final IFieldMap childMap = subKeys.getSubMap(i + DOT);
 									final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
 									final ImportResults importResults = classImporter.importObject(instance, reference.getEReferenceType(), childMap, context);
-									final Collection<EObject> values = importResults.createdObjects;
+									final Collection<EObject> values = importResults.createdExtraObjects;
 									final Iterator<EObject> iterator = values.iterator();
 									final EObject importObject = iterator.next();
 									references.add(importObject);
-									if (reference.isContainment() == false) {
-										results.add(importObject);
-									}
-									while (iterator.hasNext()) {
-										results.add(importObject);
-									}
 								}
 								instance.eSet(reference, references);
 							}
@@ -244,16 +270,10 @@ public class DefaultClassImporter implements IClassImporter {
 						context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 					} else {
 						final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
-						final Collection<EObject> values = classImporter.importObject(instance, reference.getEReferenceType(), subKeys, context).createdObjects;
+						final Collection<EObject> values = classImporter.importObject(instance, reference.getEReferenceType(), subKeys, context).createdExtraObjects;
 						final Iterator<EObject> iterator = values.iterator();
 						if (iterator.hasNext()) {
 							instance.eSet(reference, iterator.next());
-							if (reference.isContainment() == false) {
-								results.add((EObject) instance.eGet(reference));
-							}
-							while (iterator.hasNext()) {
-								results.add(iterator.next());
-							}
 						}
 					}
 				}

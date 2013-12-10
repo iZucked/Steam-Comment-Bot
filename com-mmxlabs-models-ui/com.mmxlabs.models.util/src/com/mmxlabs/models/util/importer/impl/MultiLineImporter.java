@@ -3,7 +3,6 @@ package com.mmxlabs.models.util.importer.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +56,8 @@ import com.mmxlabs.models.util.importer.IImportContext;
  *  
  *  N.B. Behaviour of this class is unspecified when a single object has more than 
  *  one direct multi-valued field.
+ *  
+ *  This class is intended as an eventual replacement for the DefaultClassImporter
  *  
  * @author Simon McGregor
  *
@@ -213,19 +214,18 @@ public class MultiLineImporter extends DefaultClassImporter {
 	 * @param results
 	 */
 	@SuppressWarnings("unchecked")
-	private void importReference(final EReference reference, final EObject instance, final IFieldMap map, final IImportContext context, final LinkedList<EObject> results) {
+	private void importReference(final EReference reference, final EObject instance, final IFieldMap map, final IImportContext context) {
 		// get the appropriate sub-importer from the importer registry and invoke it
 		final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
 		
-		final Collection<EObject> values;
 		final ImportResults importResults = classImporter.importObject(instance, reference.getEReferenceType(), map, context);
-		// first object in the collection is the direct sub-object for the specified field  
+
 		final EObject importObject = importResults.importedObject;		
 				
 
 		if (importObject != null) {
 
-			final Iterator<EObject> iterator = importResults.createdObjects.iterator();
+			//final Iterator<EObject> iterator = importResults.createdExtraObjects.iterator();
 			// when attaching an object to a multiple reference list, we append it to the list
 			if (reference.isMany()) {
 				((List<EObject>) instance.eGet(reference)).add(importObject);
@@ -235,21 +235,12 @@ public class MultiLineImporter extends DefaultClassImporter {
 				instance.eSet(reference, importObject);
 			}
 
-			// if the imported sub-object is not contained in the base object, we need to add it to the list of
-			// additional objects created.
-			if (reference.isContainment() == false) {
-				results.add(importObject);
-			}
-			// add any other recursively created sub-objects to the list of additional objects created
-			while (iterator.hasNext()) {
-				results.add(iterator.next());
-			}
 		}
 		
 	}
 
 	@Override
-	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance, final LinkedList<EObject> results) {
+	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
 			if (!shouldImportReference(reference)) {
 				continue;
@@ -272,7 +263,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 						final int count = Integer.parseInt(subKeys.get("count"));
 						for (int i = 0; i < count; ++i) {
 							final IFieldMap childMap = subKeys.getSubMap(i + DOT);
-							importReference(reference, instance, childMap, context, results);
+							importReference(reference, instance, childMap, context);
 						}
 					}
 				} 
@@ -291,12 +282,12 @@ public class MultiLineImporter extends DefaultClassImporter {
 						if (subKeys.containsPrefix("0" + DOT)) {
 							Integer i = 0;
 							while (subKeys.containsPrefix(i.toString() + DOT)) {
-								importReference(reference, instance, subKeys.getSubMap(i.toString() + DOT), context, results);
+								importReference(reference, instance, subKeys.getSubMap(i.toString() + DOT), context);
 								i++;
 							}
 						}
 						else {
-							importReference(reference, instance, subKeys, context, results);
+							importReference(reference, instance, subKeys, context);
 						}
 					}
 				}
@@ -373,9 +364,9 @@ public class MultiLineImporter extends DefaultClassImporter {
 			
 			importAttributes(row, context, rowClass, instance);
 			if (row instanceof IFieldMap) {
-				importReferences((IFieldMap) row, context, rowClass, instance, results.createdObjects);
+				importReferences((IFieldMap) row, context, rowClass, instance);
 			} else {
-				importReferences(new FieldMap(row), context, rowClass, instance, results.createdObjects);
+				importReferences(new FieldMap(row), context, rowClass, instance);
 			}
 			return results;
 		} catch (final IllegalArgumentException illegal) {
