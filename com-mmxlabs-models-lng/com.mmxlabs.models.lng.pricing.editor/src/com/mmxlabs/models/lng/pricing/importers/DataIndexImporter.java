@@ -30,8 +30,8 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
@@ -41,7 +41,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
  * @since 2.0
  * 
  */
-public class DataIndexImporter implements IClassImporter {
+public class DataIndexImporter extends AbstractClassImporter {
 	private static final String EXPRESSION = "expression";
 	boolean parseAsInt = false;
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -60,25 +60,6 @@ public class DataIndexImporter implements IClassImporter {
 	 */
 	public void setParseAsInt(final boolean parseAsInt) {
 		this.parseAsInt = parseAsInt;
-	}
-
-	@Override
-	public Collection<EObject> importObjects(final EClass targetClass, final CSVReader reader, final IImportContext context) {
-		final List<EObject> result = new LinkedList<EObject>();
-
-		Map<String, String> row;
-		try {
-			context.pushReader(reader);
-			while (null != (row = reader.readRow(true))) {
-				result.addAll(importObject(null, targetClass, row, context).createdObjects);
-			}
-		} catch (final IOException e) {
-			context.addProblem(context.createProblem("IO Error " + e.getMessage(), true, true, false));
-		} finally {
-			context.popReader();
-		}
-
-		return result;
 	}
 
 	@Override
