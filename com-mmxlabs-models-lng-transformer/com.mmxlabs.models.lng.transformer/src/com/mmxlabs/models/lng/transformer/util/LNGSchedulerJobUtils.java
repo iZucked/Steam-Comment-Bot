@@ -17,7 +17,6 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -27,11 +26,6 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
-import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -40,6 +34,8 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -115,7 +111,6 @@ public class LNGSchedulerJobUtils {
 
 		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
 		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
-		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
 		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");
@@ -141,7 +136,7 @@ public class LNGSchedulerJobUtils {
 				postExportProcessors = null;
 			}
 
-			command.append(derive(editingDomain, scenario, schedule, assignmentModel, cargoModel, postExportProcessors));
+			command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
 			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 			command.append(SetCommand.create(editingDomain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(), optimiserSettings));
 		} finally {
@@ -201,7 +196,7 @@ public class LNGSchedulerJobUtils {
 	 * @return
 	 * @since 4.0
 	 */
-	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final AssignmentModel assignmentModel, final CargoModel cargoModel,
+	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
@@ -379,12 +374,13 @@ public class LNGSchedulerJobUtils {
 				if (loadSlot.getCargo() != null) {
 					final Cargo c = loadSlot.getCargo();
 					possibleUnusedCargoes.remove(c);
+					
 					// Sanity check
 					// Unused non-optional slots now handled by optimiser
 					// if (!loadSlot.isOptional()) {
 					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 					// }
-					cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
+					cmd.append(SetCommand.create(domain, c, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
 //					cmd.append(DeleteCommand.create(domain, c));
 				}
 			}
@@ -403,34 +399,13 @@ public class LNGSchedulerJobUtils {
 
 		}
 
-		// TODO: We do not expect to get here!
-		if (!possibleUnusedCargoes.isEmpty()) {
-			for (final Cargo c : possibleUnusedCargoes) {
-				// Sanity check
-				// Unused non-optional slots now handled by optimiser
-				// if (!c.getLoadSlot().isOptional()) {
-				// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
-				// }
-				cmd.append(AssignmentEditorHelper.unassignElement(domain, assignmentModel, c));
-//				cmd.append(DeleteCommand.create(domain, c));
-			}
-		}
-
-		for (final ElementAssignment ai : assignmentModel.getElementAssignments()) {
-			if (ai.isLocked()) {
-				previouslyLocked.add(ai.getAssignedObject());
-			}
-		}
-
 		// Create all the new vessel assignment objects.
-		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
-
 		for (final Sequence sequence : schedule.getSequences()) {
 
 			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
-				UUIDObject object = null;
+				AssignableElement object = null;
 				if (event instanceof SlotVisit) {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
 
@@ -447,33 +422,18 @@ public class LNGSchedulerJobUtils {
 				}
 
 				if (object != null) {
-					final ElementAssignment ea = AssignmentFactory.eINSTANCE.createElementAssignment();
-					ea.setAssignedObject(object);
-					ea.setAssignment(assignment);
-					ea.setSequence(index++);
+					object.setAssignment(assignment);
+					object.setSequenceHint(index++);
 					if (sequence.isSetSpotIndex()) {
-						ea.setSpotIndex(sequence.getSpotIndex());
+						object.setSpotIndex(sequence.getSpotIndex());
 					}
-					ea.setLocked(previouslyLocked.contains(object));
-					reassigned.add(object);
-					newElementAssignments.add(ea);
 				}
 			}
 		}
 
-		// copy through assignments which were not present in the schedule
-		// TODO this will probably need some thought around optional elements
-		for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
-			if (ea.getAssignedObject() != null && !reassigned.contains(ea.getAssignedObject())) {
-				newElementAssignments.add(ea);
-			}
-		}
-
-		cmd.append(SetCommand.create(domain, assignmentModel, AssignmentPackage.eINSTANCE.getAssignmentModel_ElementAssignments(), newElementAssignments));
-
 		if (postExportProcessors != null) {
 			for (final IPostExportProcessor processor : postExportProcessors) {
-				processor.postProcess(domain, scenario, schedule, assignmentModel, cmd);
+				processor.postProcess(domain, scenario, schedule, cmd);
 			}
 		}
 		return cmd;

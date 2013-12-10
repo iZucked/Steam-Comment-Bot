@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
@@ -51,7 +50,7 @@ public class ExhaustiveLNGScenarioChecker extends ExhaustiveModelChecker {
 	protected List<EStructuralFeature> createExcludedFeatures() {
 		List<EStructuralFeature> result = super.createExcludedFeatures();
 		result.add(MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS);
-		result.add(AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNED_OBJECT);
+		result.add(FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 		return result;
 	}
 	

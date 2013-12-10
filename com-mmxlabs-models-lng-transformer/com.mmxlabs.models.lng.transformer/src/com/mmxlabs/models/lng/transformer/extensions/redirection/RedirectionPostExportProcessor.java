@@ -12,14 +12,13 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.google.inject.Inject;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -40,7 +39,7 @@ public class RedirectionPostExportProcessor implements IPostExportProcessor {
 	private RedirectionGroupProvider redirectionGroupProvider;
 
 	@Override
-	public void postProcess(final EditingDomain ed, final MMXRootObject rootObject, final Schedule scheduleModel, final AssignmentModel assignmentModel, final CompoundCommand commands) {
+	public void postProcess(final EditingDomain ed, final MMXRootObject rootObject, final Schedule scheduleModel, final CompoundCommand commands) {
 
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
@@ -103,12 +102,12 @@ public class RedirectionPostExportProcessor implements IPostExportProcessor {
 							commands.append(DeleteCommand.create(ed, slot));
 						}
 
-						if (slot.getCargo() != null) {
-							final Cargo c = slot.getCargo();
-							// TODO: Need to delete assignment
-							commands.append(AssignmentEditorHelper.unassignElement(ed, assignmentModel, c));
-//							commands.append(DeleteCommand.create(ed, c));
-						}
+//						if (slot.getCargo() != null) {
+//							final Cargo c = slot.getCargo();
+//							// TODO: Need to delete assignment
+////							commands.append(AssignmentEditorHelper.unassignElement(ed, assignmentModel, c));
+//							// commands.append(DeleteCommand.create(ed, c));
+//						}
 					}
 				}
 			}

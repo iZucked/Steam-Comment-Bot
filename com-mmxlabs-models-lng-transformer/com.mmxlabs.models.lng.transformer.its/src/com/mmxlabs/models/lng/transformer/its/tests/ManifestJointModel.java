@@ -11,8 +11,6 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -68,7 +66,7 @@ public class ManifestJointModel {
 		modelClassKeys.put(CargoPackage.eINSTANCE.getCargoModel(), CARGO_MODEL_KEY);
 		modelClassKeys.put(CommercialPackage.eINSTANCE.getCommercialModel(), COMMERCIAL_MODEL_KEY);
 		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
-		modelClassKeys.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), ASSIGNMENT_MODEL_KEY);
+//		modelClassKeys.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), ASSIGNMENT_MODEL_KEY);
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
 //		modelClassKeys.put(ParametersPackage.eINSTANCE.getParametersModel(), PARAMETERS_MODEL_KEY);
 		// modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
@@ -98,7 +96,7 @@ public class ManifestJointModel {
 		rootObject.setPortfolioModel(portfolioModel);
 
 		portfolioModel.setCargoModel(CargoFactory.eINSTANCE.createCargoModel());
-		portfolioModel.setAssignmentModel(AssignmentFactory.eINSTANCE.createAssignmentModel());
+//		portfolioModel.setAssignmentModel(AssignmentFactory.eINSTANCE.createAssignmentModel());
 		portfolioModel.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		portfolioModel.setScenarioFleetModel(FleetFactory.eINSTANCE.createScenarioFleetModel());
 

@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -19,5 +18,5 @@ public interface IPostExportProcessor {
 	/**
 	 * @since 4.0
 	 */
-	void postProcess(EditingDomain ed, MMXRootObject rootObject, Schedule scheduleModel, AssignmentModel assignmentModel, CompoundCommand commands);
+	void postProcess(EditingDomain ed, MMXRootObject rootObject, Schedule scheduleModel, CompoundCommand commands);
 }

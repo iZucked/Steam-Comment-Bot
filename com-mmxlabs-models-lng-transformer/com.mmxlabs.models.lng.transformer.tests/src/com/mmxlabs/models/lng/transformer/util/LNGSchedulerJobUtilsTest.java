@@ -12,9 +12,6 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -38,11 +35,10 @@ public class LNGSchedulerJobUtilsTest {
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		final EditingDomain domain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
 		final Schedule schedule;
-		final AssignmentModel assignmentModel;
 		final CargoModel cargoModel;
 
-		final ElementAssignment elementAssignment;
 		final Vessel vessel2;
+		final Cargo cargo;
 		// Build simple single cargo scenario
 		{
 			cargoModel = CargoFactory.eINSTANCE.createCargoModel();
@@ -50,7 +46,7 @@ public class LNGSchedulerJobUtilsTest {
 			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
 			final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 
-			final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
+			cargo = CargoFactory.eINSTANCE.createCargo();
 
 			cargo.getSlots().add(loadSlot);
 			cargo.getSlots().add(dischargeSlot);
@@ -65,12 +61,7 @@ public class LNGSchedulerJobUtilsTest {
 			vessel2 = FleetFactory.eINSTANCE.createVessel();
 			vessel2.setName("VESSEL2");
 
-			assignmentModel = AssignmentFactory.eINSTANCE.createAssignmentModel();
-			elementAssignment = AssignmentFactory.eINSTANCE.createElementAssignment();
-			elementAssignment.setAssignedObject(cargo);
-			elementAssignment.setAssignment(vessel1);
-
-			assignmentModel.getElementAssignments().add(elementAssignment);
+			cargo.setAssignment(vessel1);
 
 			schedule = ScheduleFactory.eINSTANCE.createSchedule();
 
@@ -114,13 +105,12 @@ public class LNGSchedulerJobUtilsTest {
 			}
 
 		}
-		final Command cmd = LNGSchedulerJobUtils.derive(domain, null, schedule, assignmentModel, cargoModel, null);
+		final Command cmd = LNGSchedulerJobUtils.derive(domain, null, schedule, cargoModel, null);
 		Assert.assertTrue(cmd.canExecute());
 		domain.getCommandStack().execute(cmd);
 
 		// Check output
-		Assert.assertEquals(1, assignmentModel.getElementAssignments().size());
-		Assert.assertEquals(vessel2, assignmentModel.getElementAssignments().get(0).getAssignment());
+		Assert.assertEquals(vessel2, cargo.getAssignment());
 
 	}
 }

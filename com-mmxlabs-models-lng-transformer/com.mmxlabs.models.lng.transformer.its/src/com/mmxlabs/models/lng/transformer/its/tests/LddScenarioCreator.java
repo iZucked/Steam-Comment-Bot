@@ -6,9 +6,6 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.util.Date;
 
-import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -114,13 +111,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 
 		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessel, originPort, startDate, originPort, endDate);
 
-		// complete hack: forcibly assign the cargo to the vessel
-		final ElementAssignment assignment = AssignmentFactory.eINSTANCE.createElementAssignment();
-		assignment.setAssignedObject(cargo);
-		assignment.setAssignment(vessel);
-		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
-		assignmentModel.getElementAssignments().add(assignment);
-
+		cargo.setAssignment(vessel);
 	}
 
 }

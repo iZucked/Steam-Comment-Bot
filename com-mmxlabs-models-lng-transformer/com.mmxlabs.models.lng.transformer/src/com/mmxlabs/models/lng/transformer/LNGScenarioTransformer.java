@@ -41,8 +41,6 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -56,6 +54,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -105,7 +104,6 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -568,18 +566,23 @@ public class LNGScenarioTransformer {
 
 	private void setNominatedVessels(final ISchedulerBuilder builder, final ModelEntityMap entities) {
 
-		final AssignmentModel assignmentModel = rootObject.getPortfolioModel().getAssignmentModel();
-		if (assignmentModel != null) {
+		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		if (cargoModel != null) {
 
-			for (final ElementAssignment assignment : assignmentModel.getElementAssignments()) {
-				final UUIDObject o = assignment.getAssignedObject();
+			for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
 
-				if (o instanceof Slot) {
-					final IPortSlot portSlot = entities.getOptimiserObject(o, IPortSlot.class);
-					final IVessel vessel = allReferenceVessels.get(assignment.getAssignment());
-					if (vessel != null && portSlot != null) {
-						builder.setNominatedVessel(portSlot, vessel);
-					}
+				final IPortSlot portSlot = entities.getOptimiserObject(loadSlot, IPortSlot.class);
+				final IVessel vessel = allReferenceVessels.get(loadSlot.getAssignment());
+				if (vessel != null && portSlot != null) {
+					builder.setNominatedVessel(portSlot, vessel);
+				}
+			}
+			for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
+
+				final IPortSlot portSlot = entities.getOptimiserObject(dischargeSlot, IPortSlot.class);
+				final IVessel vessel = allReferenceVessels.get(dischargeSlot.getAssignment());
+				if (vessel != null && portSlot != null) {
+					builder.setNominatedVessel(portSlot, vessel);
 				}
 			}
 		}
@@ -593,77 +596,80 @@ public class LNGScenarioTransformer {
 			freezeDate = range.getOptimiseAfter();
 		}
 
-		final AssignmentModel assignmentModel = rootObject.getPortfolioModel().getAssignmentModel();
-		if (assignmentModel != null) {
+		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getLoadSlots());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getDischargeSlots());
+		assignableElements.addAll(rootObject.getPortfolioModel().getScenarioFleetModel().getVesselEvents());
 
-			for (final ElementAssignment assignment : assignmentModel.getElementAssignments()) {
-				final UUIDObject o = assignment.getAssignedObject();
+		for (final AssignableElement assignableElement : assignableElements) {
+			if (assignableElement.getAssignment() == null) {
+				continue;
+			}
+			boolean freeze = assignableElement.isLocked();
 
-				boolean freeze = assignment.isLocked();
-
-				if (!freeze && freezeDate != null) {
-					if (o instanceof Cargo) {
-						final Cargo cargo = (Cargo) o;
-						if (!cargo.getSortedSlots().isEmpty()) {
-							if (cargo.getSortedSlots().get(0).getWindowStart().before(freezeDate)) {
-								freeze = true;
-							}
-						}
-					} else if (o instanceof VesselEvent) {
-						final VesselEvent vesselEvent = (VesselEvent) o;
-						if (vesselEvent.getStartBy().before(freezeDate)) {
+			if (!freeze && freezeDate != null) {
+				if (assignableElement instanceof Cargo) {
+					final Cargo cargo = (Cargo) assignableElement;
+					if (!cargo.getSortedSlots().isEmpty()) {
+						if (cargo.getSortedSlots().get(0).getWindowStart().before(freezeDate)) {
 							freeze = true;
 						}
 					}
-				}
-
-				if (!freeze) {
-					continue;
-				}
-
-				final AVesselSet<Vessel> vesselSet = assignment.getAssignment();
-				final IVessel vessel;
-				if (vesselSet instanceof VesselClass) {
-					final List<IVessel> spots = spotVesselsByClass.get(vesselSet);
-					if (spots != null && spots.isEmpty() == false) {
-						vessel = spots.get(0);
-						spots.remove(0);
-					} else {
-						vessel = null;
+				} else if (assignableElement instanceof VesselEvent) {
+					final VesselEvent vesselEvent = (VesselEvent) assignableElement;
+					if (vesselEvent.getStartBy().before(freezeDate)) {
+						freeze = true;
 					}
+				}
+			}
 
-				} else if (vesselSet instanceof Vessel) {
-					final VesselAvailability vesselAvailability = vesselAvailabiltyMap.get(vesselSet);
-					vessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
+			if (!freeze) {
+				continue;
+			}
+
+			final AVesselSet<? extends Vessel> vesselSet = assignableElement.getAssignment();
+			final IVessel vessel;
+			if (vesselSet instanceof VesselClass) {
+				final List<IVessel> spots = spotVesselsByClass.get(vesselSet);
+				if (spots != null && spots.isEmpty() == false) {
+					vessel = spots.get(0);
+					spots.remove(0);
 				} else {
 					vessel = null;
 				}
 
-				if (vessel == null) {
-					continue;
-				}
+			} else if (vesselSet instanceof Vessel) {
+				final VesselAvailability vesselAvailability = vesselAvailabiltyMap.get(vesselSet);
+				vessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
+			} else {
+				vessel = null;
+			}
 
-				if (o instanceof Cargo) {
-					final Cargo cargo = (Cargo) o;
-					IPortSlot prevSlot = null;
-					for (final Slot slot : cargo.getSortedSlots()) {
-						final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
-						if (cargo != null) {
-							// bind slots to vessel
-							builder.constrainSlotToVessels(portSlot, Collections.singleton(vessel));
-							// bind sequencing as well - this forces
-							// previousSlot to come before currentSlot.
-							if (prevSlot != null) {
-								builder.constrainSlotAdjacency(prevSlot, portSlot);
-							}
-							prevSlot = portSlot;
+			if (vessel == null) {
+				continue;
+			}
+
+			if (assignableElement instanceof Cargo) {
+				final Cargo cargo = (Cargo) assignableElement;
+				IPortSlot prevSlot = null;
+				for (final Slot slot : cargo.getSortedSlots()) {
+					final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+					if (cargo != null) {
+						// bind slots to vessel
+						builder.constrainSlotToVessels(portSlot, Collections.singleton(vessel));
+						// bind sequencing as well - this forces
+						// previousSlot to come before currentSlot.
+						if (prevSlot != null) {
+							builder.constrainSlotAdjacency(prevSlot, portSlot);
 						}
+						prevSlot = portSlot;
 					}
-				} else if (o instanceof VesselEvent) {
-					final IVesselEventPortSlot slot = entities.getOptimiserObject(o, IVesselEventPortSlot.class);
-					if (slot != null) {
-						builder.constrainSlotToVessels(slot, Collections.singleton(vessel));
-					}
+				}
+			} else if (assignableElement instanceof VesselEvent) {
+				final IVesselEventPortSlot slot = entities.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);
+				if (slot != null) {
+					builder.constrainSlotToVessels(slot, Collections.singleton(vessel));
 				}
 			}
 		}
