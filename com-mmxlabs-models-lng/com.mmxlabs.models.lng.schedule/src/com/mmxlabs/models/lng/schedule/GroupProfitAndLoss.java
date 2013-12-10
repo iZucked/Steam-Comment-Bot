@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}</li>
  * </ul>
  * </p>
@@ -53,6 +54,32 @@ public interface GroupProfitAndLoss extends EObject {
 	 * @generated
 	 */
 	void setProfitAndLoss(long value);
+
+	/**
+	 * Returns the value of the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Profit And Loss Pre Tax</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Profit And Loss Pre Tax</em>' attribute.
+	 * @see #setProfitAndLossPreTax(long)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getGroupProfitAndLoss_ProfitAndLossPreTax()
+	 * @model
+	 * @generated
+	 */
+	long getProfitAndLossPreTax();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Profit And Loss Pre Tax</em>' attribute.
+	 * @see #getProfitAndLossPreTax()
+	 * @generated
+	 */
+	void setProfitAndLossPreTax(long value);
 
 	/**
 	 * Returns the value of the '<em><b>Entity Profit And Losses</b></em>' containment reference list.

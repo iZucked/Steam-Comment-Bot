@@ -3607,6 +3607,15 @@ public interface SchedulePackage extends EPackage {
 	int GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 1;
+
+	/**
 	 * The feature id for the '<em><b>Entity Profit And Losses</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3614,7 +3623,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = 1;
+	int GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = 2;
 
 	/**
 	 * The number of structural features of the '<em>Group Profit And Loss</em>' class.
@@ -3624,7 +3633,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_PROFIT_AND_LOSS_FEATURE_COUNT = 2;
+	int GROUP_PROFIT_AND_LOSS_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Group Profit And Loss</em>' class.
@@ -3668,6 +3677,15 @@ public interface SchedulePackage extends EPackage {
 	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 2;
+
+	/**
 	 * The number of structural features of the '<em>Entity Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3675,7 +3693,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 2;
+	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Entity Profit And Loss</em>' class.
@@ -4934,6 +4952,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getGroupProfitAndLoss_ProfitAndLoss();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit And Loss Pre Tax</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax()
+	 * @see #getGroupProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getGroupProfitAndLoss_ProfitAndLossPreTax();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -4979,6 +5008,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getEntityProfitAndLoss_ProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit And Loss Pre Tax</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax()
+	 * @see #getEntityProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getEntityProfitAndLoss_ProfitAndLossPreTax();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
@@ -6012,6 +6052,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss();
 
 		/**
+		 * The meta object literal for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = eINSTANCE.getGroupProfitAndLoss_ProfitAndLossPreTax();
+
+		/**
 		 * The meta object literal for the '<em><b>Entity Profit And Losses</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * @since 4.0
@@ -6048,6 +6096,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getEntityProfitAndLoss_ProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = eINSTANCE.getEntityProfitAndLoss_ProfitAndLossPreTax();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

@@ -1344,12 +1344,21 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGroupProfitAndLoss_ProfitAndLossPreTax() {
+		return (EAttribute)groupProfitAndLossEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EReference getGroupProfitAndLoss_EntityProfitAndLosses() {
-		return (EReference)groupProfitAndLossEClass.getEStructuralFeatures().get(1);
+		return (EReference)groupProfitAndLossEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1380,6 +1389,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getEntityProfitAndLoss_ProfitAndLoss() {
 		return (EAttribute)entityProfitAndLossEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEntityProfitAndLoss_ProfitAndLossPreTax() {
+		return (EAttribute)entityProfitAndLossEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1605,11 +1623,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		groupProfitAndLossEClass = createEClass(GROUP_PROFIT_AND_LOSS);
 		createEAttribute(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
+		createEAttribute(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX);
 		createEReference(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES);
 
 		entityProfitAndLossEClass = createEClass(ENTITY_PROFIT_AND_LOSS);
 		createEReference(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__ENTITY);
 		createEAttribute(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
+		createEAttribute(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX);
 
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
@@ -1845,11 +1865,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(groupProfitAndLossEClass, GroupProfitAndLoss.class, "GroupProfitAndLoss", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGroupProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGroupProfitAndLoss_ProfitAndLossPreTax(), ecorePackage.getELong(), "profitAndLossPreTax", null, 0, 1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGroupProfitAndLoss_EntityProfitAndLosses(), this.getEntityProfitAndLoss(), null, "entityProfitAndLosses", null, 0, -1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(entityProfitAndLossEClass, EntityProfitAndLoss.class, "EntityProfitAndLoss", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEntityProfitAndLoss_Entity(), theCommercialPackage.getLegalEntity(), null, "entity", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getEntityProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEntityProfitAndLoss_ProfitAndLossPreTax(), ecorePackage.getELong(), "profitAndLossPreTax", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
