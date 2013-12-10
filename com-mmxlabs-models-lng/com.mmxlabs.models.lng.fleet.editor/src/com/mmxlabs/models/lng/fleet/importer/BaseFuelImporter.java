@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.fleet.importer;
 
 import java.util.Map;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
@@ -37,24 +38,34 @@ public class BaseFuelImporter extends DefaultClassImporter {
 		final BaseFuel fuel = (BaseFuel) result.importedObject;
 
 		if (row.containsKey(indexKey)) {
-			final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
-			cost.setFuel(fuel);
+
 			final String indexName = row.get(indexKey);
 			// cost.setPrice(Double.parseDouble(row.get("price")));
-			final MMXRootObject rootObject = context.getRootObject();
-			final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
-			if (rootObject instanceof LNGScenarioModel) {
-				if (pricingModel != null) {
-					pricingModel.getFleetCost().getBaseFuelPrices().add(cost);
-				}
-			}
 
 			context.doLater(new IDeferment() {
 
 				@Override
 				public void run(final IImportContext context) {
-					final BaseFuelIndex index = (BaseFuelIndex) context.getNamedObject(indexName, PricingPackage.Literals.BASE_FUEL_INDEX);
-					cost.setIndex(index);
+					final MMXRootObject rootObject = context.getRootObject();
+					if (rootObject instanceof LNGScenarioModel) {
+						final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
+						final BaseFuelIndex index = (BaseFuelIndex) context.getNamedObject(indexName, PricingPackage.Literals.BASE_FUEL_INDEX);
+						if (pricingModel != null) {
+
+							final EList<BaseFuelCost> baseFuelPrices = pricingModel.getFleetCost().getBaseFuelPrices();
+							for (final BaseFuelCost baseFuelCost : baseFuelPrices) {
+								if (baseFuelCost.getFuel() == fuel) {
+									baseFuelCost.setIndex(index);
+									return;
+								}
+							}
+							final BaseFuelCost baseFuelCost = PricingFactory.eINSTANCE.createBaseFuelCost();
+							baseFuelCost.setFuel(fuel);
+							baseFuelCost.setIndex(index);
+
+							baseFuelPrices.add(baseFuelCost);
+						}
+					}
 				}
 
 				@Override
