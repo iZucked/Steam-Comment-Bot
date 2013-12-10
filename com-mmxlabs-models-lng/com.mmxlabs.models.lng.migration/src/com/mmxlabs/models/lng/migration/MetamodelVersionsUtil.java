@@ -306,7 +306,7 @@ public class MetamodelVersionsUtil {
 	public static MetamodelLoader createV6Loader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
 
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v1.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes-v6.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v6.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v6.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PricingModel);
