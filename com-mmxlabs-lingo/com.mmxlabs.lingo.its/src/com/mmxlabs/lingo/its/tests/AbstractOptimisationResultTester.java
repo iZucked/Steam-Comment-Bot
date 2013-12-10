@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -76,7 +75,6 @@ public class AbstractOptimisationResultTester {
 		instance = CargoPackage.eINSTANCE;
 		instance = CommercialPackage.eINSTANCE;
 		instance = FleetPackage.eINSTANCE;
-		instance = AssignmentPackage.eINSTANCE;
 		instance = ParametersPackage.eINSTANCE;
 		instance = PortPackage.eINSTANCE;
 		instance = PricingPackage.eINSTANCE;
