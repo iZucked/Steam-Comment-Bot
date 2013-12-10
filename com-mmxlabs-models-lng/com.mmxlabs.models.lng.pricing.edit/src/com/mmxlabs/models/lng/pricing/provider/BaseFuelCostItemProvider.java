@@ -17,9 +17,6 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-
-import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
@@ -59,7 +56,6 @@ public class BaseFuelCostItemProvider
 			super.getPropertyDescriptors(object);
 
 			addFuelPropertyDescriptor(object);
-			addPricePropertyDescriptor(object);
 			addIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -83,28 +79,6 @@ public class BaseFuelCostItemProvider
 				 false,
 				 true,
 				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_BaseFuelCost_price_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BaseFuelCost_price_feature", "_UI_BaseFuelCost_type"),
-				 PricingPackage.Literals.BASE_FUEL_COST__PRICE,
-				 true,
-				 false,
-				 true,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -151,8 +125,7 @@ public class BaseFuelCostItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		BaseFuelCost baseFuelCost = (BaseFuelCost)object;
-		return getString("_UI_BaseFuelCost_type") + " " + baseFuelCost.getPrice();
+		return getString("_UI_BaseFuelCost_type");
 	}
 
 	/**

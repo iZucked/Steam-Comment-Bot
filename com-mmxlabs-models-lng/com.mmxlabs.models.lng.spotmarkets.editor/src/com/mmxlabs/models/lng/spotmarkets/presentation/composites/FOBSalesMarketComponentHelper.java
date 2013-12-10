@@ -63,7 +63,6 @@ public class FOBSalesMarketComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_loadPortEditor(detailComposite, topClass);
 		add_originPortsEditor(detailComposite, topClass);
 	}
 	/**

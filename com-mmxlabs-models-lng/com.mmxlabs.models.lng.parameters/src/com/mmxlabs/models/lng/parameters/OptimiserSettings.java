@@ -22,7 +22,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getAnnealingSettings <em>Annealing Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSeed <em>Seed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getArguments <em>Arguments</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isRewire <em>Rewire</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}</li>
  * </ul>
@@ -158,36 +157,6 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<Argument> getArguments();
-
-	/**
-	 * Returns the value of the '<em><b>Rewire</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rewire</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rewire</em>' attribute.
-	 * @see #setRewire(boolean)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings_Rewire()
-	 * @model required="true"
-	 * @generated
-	 */
-	@Deprecated
-	boolean isRewire();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isRewire <em>Rewire</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rewire</em>' attribute.
-	 * @see #isRewire()
-	 * @generated
-	 */
-	@Deprecated
-	void setRewire(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Generate Charter Outs</b></em>' attribute.

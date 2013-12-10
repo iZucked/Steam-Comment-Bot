@@ -3,12 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
@@ -23,7 +19,6 @@ import java.util.Collection;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl#getLoadPort <em>Load Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl#getOriginPorts <em>Origin Ports</em>}</li>
  * </ul>
  * </p>
@@ -31,16 +26,6 @@ import java.util.Collection;
  * @generated
  */
 public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket {
-	/**
-	 * The cached value of the '{@link #getLoadPort() <em>Load Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLoadPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port loadPort;
-
 	/**
 	 * The cached value of the '{@link #getOriginPorts() <em>Origin Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -73,44 +58,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port getLoadPort() {
-		if (loadPort != null && loadPort.eIsProxy()) {
-			InternalEObject oldLoadPort = (InternalEObject)loadPort;
-			loadPort = (Port)eResolveProxy(oldLoadPort);
-			if (loadPort != oldLoadPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT, oldLoadPort, loadPort));
-			}
-		}
-		return loadPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port basicGetLoadPort() {
-		return loadPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setLoadPort(Port newLoadPort) {
-		Port oldLoadPort = loadPort;
-		loadPort = newLoadPort;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT, oldLoadPort, loadPort));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -130,9 +77,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
-				if (resolve) return getLoadPort();
-				return basicGetLoadPort();
 			case SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS:
 				return getOriginPorts();
 		}
@@ -148,9 +92,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
-				setLoadPort((Port)newValue);
-				return;
 			case SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS:
 				getOriginPorts().clear();
 				getOriginPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
@@ -167,9 +108,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
-				setLoadPort((Port)null);
-				return;
 			case SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS:
 				getOriginPorts().clear();
 				return;
@@ -185,8 +123,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
-				return loadPort != null;
 			case SpotMarketsPackage.FOB_SALES_MARKET__ORIGIN_PORTS:
 				return originPorts != null && !originPorts.isEmpty();
 		}

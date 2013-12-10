@@ -493,17 +493,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSequence_DailyHireRate() {
-		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getSequence_SpotIndex() {
-		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -513,7 +504,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	public EAttribute getSequence_SequenceType() {
-		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1523,7 +1514,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(sequenceEClass, SEQUENCE__VESSEL_AVAILABILITY);
 		createEReference(sequenceEClass, SEQUENCE__VESSEL_CLASS);
 		createEReference(sequenceEClass, SEQUENCE__FITNESSES);
-		createEAttribute(sequenceEClass, SEQUENCE__DAILY_HIRE_RATE);
 		createEAttribute(sequenceEClass, SEQUENCE__SPOT_INDEX);
 		createEAttribute(sequenceEClass, SEQUENCE__SEQUENCE_TYPE);
 		createEOperation(sequenceEClass, SEQUENCE___GET_NAME);
@@ -1753,7 +1743,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSequence_VesselAvailability(), theFleetPackage.getVesselAvailability(), null, "vesselAvailability", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSequence_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSequence_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSequence_DailyHireRate(), ecorePackage.getEInt(), "dailyHireRate", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_SequenceType(), this.getSequenceType(), "sequenceType", null, 0, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

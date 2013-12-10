@@ -56,32 +56,9 @@ public class FOBSalesMarketItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLoadPortPropertyDescriptor(object);
 			addOriginPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Load Port feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLoadPortPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_FOBSalesMarket_loadPort_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_FOBSalesMarket_loadPort_feature", "_UI_FOBSalesMarket_type"),
-				 SpotMarketsPackage.Literals.FOB_SALES_MARKET__LOAD_PORT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**

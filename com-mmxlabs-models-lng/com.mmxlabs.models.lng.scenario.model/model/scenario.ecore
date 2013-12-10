@@ -13,8 +13,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="spotMarketsModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarketsModel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parametersModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.parameters/model/parameters.ecore#//ParametersModel"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="analyticsModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.analytics/model/analytics.ecore#//AnalyticsModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portfolioModel" eType="#//LNGPortfolioModel"

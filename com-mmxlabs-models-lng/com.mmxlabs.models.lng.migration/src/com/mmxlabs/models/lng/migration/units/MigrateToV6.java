@@ -67,13 +67,19 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 		// Step 1:
 		// Perform AssingmentModel migration.
 		migrateAssignmentModel(model);
-		
+
 		// Step 2: Clean out old deprecated fields
 		// DES Purchase Spot Market / FOB Sale origin ports
+		removeSpotMarketFields(model);
 		// OptimiserSettings
-		// Base fuel cost/index fields
-		// LNG ScenarioModel (params, assignment)
-		// Values on Sequence
+		removeOptimiserSettingsFields(model);
+
+		// LNG ScenarioModel (params)
+		removeScenario_ParamsModel(model);
+		// Daily Hire rate on Sequence
+		removeDailyHireRate(model);
+		// Base fuel price fields
+		removeBaseFuelCost_Price(model);
 
 		// Next step - clean up the ecore models - add v7
 	}
@@ -114,21 +120,187 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 		final EObject assignmentModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_assignmentModel);
 		if (assignmentModel != null) {
 			final EList<EObject> elementAssignments = MetamodelUtils.getValueAsTypedList(assignmentModel, reference_AssignableModel_elementAssignments);
-			for (final EObject elementAssignment : elementAssignments) {
-				final EObject assignedObject = (EObject) elementAssignment.eGet(reference_ElementAssignment_assignedObject);
-				if (assignedObject != null) {
-					// Check cast
-					if (class_AssignableElement.isInstance(assignedObject)) {
-						// Copy data across
-						assignedObject.eSet(reference_AssignableElement_assignment, elementAssignment.eGet(reference_ElementAssignment_assignment));
-						assignedObject.eSet(attribute_AssignableElement_locked, elementAssignment.eGet(attribute_ElementAssignment_locked));
-						assignedObject.eSet(attribute_AssignableElement_sequenceHint, elementAssignment.eGet(attribute_ElementAssignment_sequence));
-						assignedObject.eSet(attribute_AssignableElement_spotIndex, elementAssignment.eGet(attribute_ElementAssignment_spotIndex));
+			if (elementAssignments != null) {
+				for (final EObject elementAssignment : elementAssignments) {
+					final EObject assignedObject = (EObject) elementAssignment.eGet(reference_ElementAssignment_assignedObject);
+					if (assignedObject != null) {
+						// Check cast
+						if (class_AssignableElement.isInstance(assignedObject)) {
+							// Copy data across
+							assignedObject.eSet(reference_AssignableElement_assignment, elementAssignment.eGet(reference_ElementAssignment_assignment));
+							assignedObject.eSet(attribute_AssignableElement_locked, elementAssignment.eGet(attribute_ElementAssignment_locked));
+							assignedObject.eSet(attribute_AssignableElement_sequenceHint, elementAssignment.eGet(attribute_ElementAssignment_sequence));
+							assignedObject.eSet(attribute_AssignableElement_spotIndex, elementAssignment.eGet(attribute_ElementAssignment_spotIndex));
+						}
 					}
 				}
 			}
 			// Clear assignment model refernce
 			portfolioModel.eUnset(reference_LNGPortfolioModel_assignmentModel);
 		}
+	}
+
+	private void removeDailyHireRate(final EObject model) {
+
+		// This should get the cached loader instance
+		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EPackage package_ScheduleModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EClass class_LNGPortfolioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGPortfolioModel");
+
+		final EReference reference_LNGScenarioModel_portfolioModel = MetamodelUtils.getReference(class_LNGScenarioModel, "portfolioModel");
+		final EReference reference_LNGPortfolioModel_scheduleModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "scheduleModel");
+
+		final EClass class_ScheduleModel = MetamodelUtils.getEClass(package_ScheduleModel, "ScheduleModel");
+		final EClass class_Schedule = MetamodelUtils.getEClass(package_ScheduleModel, "Schedule");
+		final EClass class_Sequence = MetamodelUtils.getEClass(package_ScheduleModel, "Sequence");
+
+		final EReference reference_ScheduleModel_schedule = MetamodelUtils.getReference(class_ScheduleModel, "schedule");
+		final EReference reference_Schedule_sequences = MetamodelUtils.getReference(class_Schedule, "sequences");
+		final EAttribute attribute_Sequence_dailyHireRate = MetamodelUtils.getAttribute(class_Sequence, "dailyHireRate");
+
+		final EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
+		if (portfolioModel != null) {
+			final EObject scheduleModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_scheduleModel);
+			if (scheduleModel != null) {
+				final EObject schedule = (EObject) scheduleModel.eGet(reference_ScheduleModel_schedule);
+				if (schedule != null) {
+					final EList<EObject> sequences = MetamodelUtils.getValueAsTypedList(schedule, reference_Schedule_sequences);
+					if (sequences != null) {
+						for (final EObject sequence : sequences) {
+							sequence.eUnset(attribute_Sequence_dailyHireRate);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void removeScenario_ParamsModel(final EObject model) {
+
+		// This should get the cached loader instance
+		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EReference reference_LNGScenarioModel_parametersModel = MetamodelUtils.getReference(class_LNGScenarioModel, "parametersModel");
+
+		model.eUnset(reference_LNGScenarioModel_parametersModel);
+	}
+
+	private void removeBaseFuelCost_Price(final EObject model) {
+
+		// This should get the cached loader instance
+		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EPackage package_PricingModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
+
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+
+		final EReference reference_LNGScenarioModel_pricingModel = MetamodelUtils.getReference(class_LNGScenarioModel, "pricingModel");
+
+		final EClass class_PricingModel = MetamodelUtils.getEClass(package_PricingModel, "PricingModel");
+		final EClass class_FleetCostModel = MetamodelUtils.getEClass(package_PricingModel, "FleetCostModel");
+		final EClass class_BaseFuelCost = MetamodelUtils.getEClass(package_PricingModel, "BaseFuelCost");
+
+		final EReference reference_class_PricingModel_fleetCost = MetamodelUtils.getReference(class_PricingModel, "fleetCost");
+		final EReference reference_FleetCostModel_baseFuelPrices = MetamodelUtils.getReference(class_FleetCostModel, "baseFuelPrices");
+		final EAttribute attribute_BaseFuelCost_price = MetamodelUtils.getAttribute(class_BaseFuelCost, "price");
+
+		final EObject pricingModel = (EObject) model.eGet(reference_LNGScenarioModel_pricingModel);
+		if (pricingModel != null) {
+			final EObject fleetCostModel = (EObject) pricingModel.eGet(reference_class_PricingModel_fleetCost);
+			if (fleetCostModel != null) {
+				final EList<EObject> baseFuelCosts = MetamodelUtils.getValueAsTypedList(fleetCostModel, reference_FleetCostModel_baseFuelPrices);
+				if (baseFuelCosts != null) {
+					for (final EObject baseFuelCost : baseFuelCosts) {
+						baseFuelCost.eUnset(attribute_BaseFuelCost_price);
+					}
+				}
+			}
+		}
+	}
+
+	private void removeSpotMarketFields(final EObject model) {
+
+		// This should get the cached loader instance
+		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EPackage package_SpotMarketsModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+
+		final EReference reference_LNGScenarioModel_spotMarketsModel = MetamodelUtils.getReference(class_LNGScenarioModel, "spotMarketsModel");
+
+		final EClass class_SpotMarketsModel = MetamodelUtils.getEClass(package_SpotMarketsModel, "SpotMarketsModel");
+		final EClass class_SpotMarketGroup = MetamodelUtils.getEClass(package_SpotMarketsModel, "SpotMarketGroup");
+		final EClass class_DESSalesMarket = MetamodelUtils.getEClass(package_SpotMarketsModel, "DESSalesMarket");
+		final EClass class_FOBSalesMarket = MetamodelUtils.getEClass(package_SpotMarketsModel, "FOBSalesMarket");
+
+		final EReference reference_class_class_SpotMarketsModel_desSalesSpotMarket = MetamodelUtils.getReference(class_SpotMarketsModel, "desSalesSpotMarket");
+		final EReference reference_class_class_SpotMarketsModel_fobSalesSpotMarket = MetamodelUtils.getReference(class_SpotMarketsModel, "fobSalesSpotMarket");
+		final EReference reference_SpotMarketGroup_markets = MetamodelUtils.getReference(class_SpotMarketGroup, "markets");
+
+		final EReference reference_DESSalesMarket_marketPorts = MetamodelUtils.getReference(class_DESSalesMarket, "marketPorts");
+		final EReference reference_FOBSalesMarket_loadPort = MetamodelUtils.getReference(class_FOBSalesMarket, "loadPort");
+
+		final EObject spotMarketsModel = (EObject) model.eGet(reference_LNGScenarioModel_spotMarketsModel);
+		if (spotMarketsModel != null) {
+			final EObject desSalesMarketGroup = (EObject) spotMarketsModel.eGet(reference_class_class_SpotMarketsModel_desSalesSpotMarket);
+			if (desSalesMarketGroup != null) {
+				final EList<EObject> markets = MetamodelUtils.getValueAsTypedList(desSalesMarketGroup, reference_SpotMarketGroup_markets);
+				if (markets != null) {
+					for (final EObject market : markets) {
+						if (class_DESSalesMarket.isInstance(market)) {
+							market.eUnset(reference_DESSalesMarket_marketPorts);
+						}
+					}
+				}
+			}
+
+			final EObject fobSalesMarketGroup = (EObject) spotMarketsModel.eGet(reference_class_class_SpotMarketsModel_fobSalesSpotMarket);
+			if (fobSalesMarketGroup != null) {
+				final EList<EObject> markets = MetamodelUtils.getValueAsTypedList(fobSalesMarketGroup, reference_SpotMarketGroup_markets);
+				if (markets != null) {
+					for (final EObject market : markets) {
+						if (class_FOBSalesMarket.isInstance(market)) {
+							market.eUnset(reference_FOBSalesMarket_loadPort);
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	private void removeOptimiserSettingsFields(final EObject model) {
+
+		// This should get the cached loader instance
+		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EPackage package_ParametersModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ParametersModel);
+
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EClass class_LNGPortfolioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGPortfolioModel");
+		final EClass class_OptimiserSettings = MetamodelUtils.getEClass(package_ParametersModel, "OptimiserSettings");
+
+		final EReference reference_LNGScenarioModel_portfolioModel = MetamodelUtils.getReference(class_LNGScenarioModel, "portfolioModel");
+		final EReference reference_LNGPortfolioModel_parameters = MetamodelUtils.getReference(class_LNGPortfolioModel, "parameters");
+
+		final EAttribute attribute_OptimiserSettings_rewire = MetamodelUtils.getAttribute(class_OptimiserSettings, "rewire");
+
+		final EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
+		if (portfolioModel != null) {
+			final EObject optimiserSettings = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_parameters);
+			if (optimiserSettings != null) {
+				optimiserSettings.eUnset(attribute_OptimiserSettings_rewire);
+			}
+		}
+
 	}
 }

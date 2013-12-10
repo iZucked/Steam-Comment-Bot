@@ -64,7 +64,6 @@ public class DESSalesMarketComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_notionalPortEditor(detailComposite, topClass);
-		add_marketPortsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the notionalPort feature on DESSalesMarket

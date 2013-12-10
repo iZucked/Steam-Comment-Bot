@@ -65,7 +65,6 @@ public class BaseFuelCostComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_fuelEditor(detailComposite, topClass);
-		add_priceEditor(detailComposite, topClass);
 		add_indexEditor(detailComposite, topClass);
 	}
 	/**
