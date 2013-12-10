@@ -18,9 +18,7 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.slf4j.Logger;
@@ -132,7 +130,6 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 
 		subModels.add(scenarioModel.getPortfolioModel().getScenarioFleetModel());
 		subModels.add(scenarioModel.getPortfolioModel().getCargoModel());
-		subModels.add(scenarioModel.getPortfolioModel().getAssignmentModel());
 		subModels.add(scenarioModel.getPortfolioModel().getScheduleModel());
 
 		// Remove any null references

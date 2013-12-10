@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
+import com.mmxlabs.models.lng.fleet.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -199,6 +200,7 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(vesselEvent);
 				if (result == null) result = caseNamedObject(vesselEvent);
 				if (result == null) result = caseITimezoneProvider(vesselEvent);
+				if (result == null) result = caseAssignableElement(vesselEvent);
 				if (result == null) result = caseMMXObject(vesselEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -210,6 +212,7 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(maintenanceEvent);
 				if (result == null) result = caseNamedObject(maintenanceEvent);
 				if (result == null) result = caseITimezoneProvider(maintenanceEvent);
+				if (result == null) result = caseAssignableElement(maintenanceEvent);
 				if (result == null) result = caseMMXObject(maintenanceEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -221,6 +224,7 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(dryDockEvent);
 				if (result == null) result = caseNamedObject(dryDockEvent);
 				if (result == null) result = caseITimezoneProvider(dryDockEvent);
+				if (result == null) result = caseAssignableElement(dryDockEvent);
 				if (result == null) result = caseMMXObject(dryDockEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -232,7 +236,14 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(charterOutEvent);
 				if (result == null) result = caseNamedObject(charterOutEvent);
 				if (result == null) result = caseITimezoneProvider(charterOutEvent);
+				if (result == null) result = caseAssignableElement(charterOutEvent);
 				if (result == null) result = caseMMXObject(charterOutEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.ASSIGNABLE_ELEMENT: {
+				AssignableElement assignableElement = (AssignableElement)theEObject;
+				T1 result = caseAssignableElement(assignableElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -342,6 +353,21 @@ public class FleetSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseCharterOutEvent(CharterOutEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Assignable Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Assignable Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseAssignableElement(AssignableElement object) {
 		return null;
 	}
 

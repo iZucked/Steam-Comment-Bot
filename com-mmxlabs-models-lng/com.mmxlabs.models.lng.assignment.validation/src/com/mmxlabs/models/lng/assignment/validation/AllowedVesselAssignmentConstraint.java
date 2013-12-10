@@ -16,18 +16,16 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -43,17 +41,15 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof ElementAssignment) {
-			final ElementAssignment assignment = (ElementAssignment) object;
+		if (object instanceof AssignableElement) {
+			final AssignableElement assignableElement = (AssignableElement) object;
 
-			final UUIDObject assignedObject = assignment.getAssignedObject();
-
-			final AVesselSet<Vessel> vesselAssignment = assignment.getAssignment();
+			final AVesselSet<? extends Vessel> vesselAssignment = assignableElement.getAssignment();
 			if (vesselAssignment == null) {
-				if (assignedObject instanceof VesselEvent) {
+				if (assignableElement instanceof VesselEvent) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("Vessel events must have a vessel assigned to them."));
-					status.addEObjectAndFeature(assignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
+					status.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
 					failures.add(status);
 					return Activator.PLUGIN_ID;
 				} else
@@ -68,11 +64,11 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 			}
 
 			EList<AVesselSet<Vessel>> allowedVessels = null;
-			if (assignedObject instanceof Cargo) {
-				final Cargo cargo = (Cargo) assignedObject;
+			if (assignableElement instanceof Cargo) {
+				final Cargo cargo = (Cargo) assignableElement;
 				allowedVessels = cargo.getAllowedVessels();
-			} else if (assignedObject instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) assignedObject;
+			} else if (assignableElement instanceof VesselEvent) {
+				final VesselEvent vesselEvent = (VesselEvent) assignableElement;
 				allowedVessels = vesselEvent.getAllowedVessels();
 			}
 			if (allowedVessels == null || allowedVessels.isEmpty()) {
@@ -109,20 +105,20 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 			if (!permitted) {
 
 				final String message;
-				if (assignedObject instanceof Cargo) {
-					message = String.format("Cargo '%s': Assignment '%s' is not in the allowed vessels list.", ((Cargo) assignedObject).getName(), vesselAssignment.getName());
-				} else if (assignedObject instanceof VesselEvent) {
-					message = String.format("Vessel Event '%s': Assignment requires vessel(s) not in the allowed vessels list.", ((VesselEvent) assignedObject).getName());
+				if (assignableElement instanceof Cargo) {
+					message = String.format("Cargo '%s': Assignment '%s' is not in the allowed vessels list.", ((Cargo) assignableElement).getName(), vesselAssignment.getName());
+				} else if (assignableElement instanceof VesselEvent) {
+					message = String.format("Vessel Event '%s': Assignment requires vessel(s) not in the allowed vessels list.", ((VesselEvent) assignableElement).getName());
 				} else {
 					throw new IllegalStateException("Unexpected code branch.");
 				}
 				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-				failure.addEObjectAndFeature(assignment, AssignmentPackage.eINSTANCE.getElementAssignment_Assignment());
-				if (assignedObject instanceof Cargo) {
-					failure.addEObjectAndFeature(assignedObject, CargoPackage.eINSTANCE.getCargo_AllowedVessels());
-				} else if (assignedObject instanceof VesselEvent) {
-					failure.addEObjectAndFeature(assignedObject, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
+				failure.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+				if (assignableElement instanceof Cargo) {
+					failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getCargo_AllowedVessels());
+				} else if (assignableElement instanceof VesselEvent) {
+					failure.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
 				}
 
 				failures.add(failure);

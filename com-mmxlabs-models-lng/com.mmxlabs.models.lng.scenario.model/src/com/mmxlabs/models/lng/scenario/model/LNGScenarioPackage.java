@@ -253,22 +253,13 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_PORTFOLIO_MODEL__CARGO_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Assignment Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PORTFOLIO_MODEL__ASSIGNMENT_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
@@ -278,7 +269,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__PARAMETERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int LNG_PORTFOLIO_MODEL__PARAMETERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>LNG Portfolio Model</em>' class.
@@ -287,7 +278,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -455,17 +446,6 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLNGPortfolioModel_CargoModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getAssignmentModel <em>Assignment Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Assignment Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getAssignmentModel()
-	 * @see #getLNGPortfolioModel()
-	 * @generated
-	 */
-	EReference getLNGPortfolioModel_AssignmentModel();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScheduleModel <em>Schedule Model</em>}'.

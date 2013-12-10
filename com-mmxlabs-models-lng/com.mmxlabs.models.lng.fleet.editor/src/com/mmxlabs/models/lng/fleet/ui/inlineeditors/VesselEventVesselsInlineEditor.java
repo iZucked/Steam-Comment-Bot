@@ -11,15 +11,11 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.impl.MultiReferenceInlineEditor;
 
@@ -45,28 +41,20 @@ public class VesselEventVesselsInlineEditor extends MultiReferenceInlineEditor {
 		cmd.append(super.createSetCommand(value));
 
 		// Might be a duplicate..
-		ElementAssignment elementAssignment = null;
+		AssignableElement elementAssignment = null;
 		for (final EObject r : range) {
-			if (r instanceof ElementAssignment) {
-				elementAssignment = (ElementAssignment) r;
-			}
-		}
-		// .. otherwise lookup the assignment
-		if (elementAssignment == null) {
-			MMXRootObject rootObject = location.getRootObject();
-			if (rootObject instanceof LNGScenarioModel) {
-				final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
-				elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, (UUIDObject) input);
+			if (r instanceof AssignableElement) {
+				elementAssignment = (AssignableElement) r;
 			}
 		}
 		final List<?> list = (List<?>) value;
 		if (elementAssignment != null) {
 			if (list.size() == 1) {
 				final Object newAssignment = list.get(0);
-				cmd.append(AssignmentEditorHelper.reassignElement(this.commandHandler.getEditingDomain(), (AVesselSet<Vessel>) newAssignment, elementAssignment));
+				cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, newAssignment));
 			} else {
 				if (!list.contains(elementAssignment.getAssignment())) {
-					cmd.append(AssignmentEditorHelper.unassignElement(this.commandHandler.getEditingDomain(), elementAssignment));
+					cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
 				}
 			}
 		}

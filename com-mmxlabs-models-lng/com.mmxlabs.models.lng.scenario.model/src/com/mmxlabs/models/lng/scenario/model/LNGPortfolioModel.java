@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.scenario.model;
 
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -23,7 +22,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScenarioFleetModel <em>Scenario Fleet Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getCargoModel <em>Cargo Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getAssignmentModel <em>Assignment Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters <em>Parameters</em>}</li>
  * </ul>
@@ -85,32 +83,6 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @generated
 	 */
 	void setCargoModel(CargoModel value);
-
-	/**
-	 * Returns the value of the '<em><b>Assignment Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Assignment Model</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Assignment Model</em>' containment reference.
-	 * @see #setAssignmentModel(AssignmentModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_AssignmentModel()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	AssignmentModel getAssignmentModel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getAssignmentModel <em>Assignment Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Assignment Model</em>' containment reference.
-	 * @see #getAssignmentModel()
-	 * @generated
-	 */
-	void setAssignmentModel(AssignmentModel value);
 
 	/**
 	 * Returns the value of the '<em><b>Schedule Model</b></em>' containment reference.

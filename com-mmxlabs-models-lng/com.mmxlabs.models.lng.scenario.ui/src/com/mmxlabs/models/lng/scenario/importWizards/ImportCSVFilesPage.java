@@ -37,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -349,8 +348,6 @@ public class ImportCSVFilesPage extends WizardPage {
 			portfolioModel.setScenarioFleetModel((ScenarioFleetModel) subModel);
 		} else if (subModel instanceof CargoModel) {
 			portfolioModel.setCargoModel((CargoModel) subModel);
-		} else if (subModel instanceof AssignmentModel) {
-			portfolioModel.setAssignmentModel((AssignmentModel) subModel);
 		} else if (subModel instanceof ScheduleModel) {
 			portfolioModel.setScheduleModel((ScheduleModel) subModel);
 		} else {

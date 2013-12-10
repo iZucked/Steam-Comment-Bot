@@ -8,7 +8,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Assert;
@@ -16,11 +15,10 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.AllowedVesselAssignmentConstraint;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -36,11 +34,9 @@ public class AllowedVesselAssignmentConstraintTest {
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
-		target.setAssignment(vessel);
+		cargo.setAssignment(vessel);
 
-		checkConstraint(target, true);
+		checkConstraint(cargo, true);
 	}
 
 	@Test
@@ -55,12 +51,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		cargo.getAllowedVessels().add(vessel1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
 		// Permitted!
-		target.setAssignment(vessel1);
+		cargo.setAssignment(vessel1);
 
-		checkConstraint(target, true);
+		checkConstraint(cargo, true);
 	}
 
 	@Test
@@ -75,12 +69,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		cargo.getAllowedVessels().add(vessel1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
 		// Not permitted!
-		target.setAssignment(vessel2);
+		cargo.setAssignment(vessel2);
 
-		checkConstraint(target, false);
+		checkConstraint(cargo, false);
 	}
 
 	@Test
@@ -93,12 +85,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		cargo.getAllowedVessels().add(vesselClass1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
 		// Permitted!
-		target.setAssignment(vessel1);
+		cargo.setAssignment(vessel1);
 
-		checkConstraint(target, true);
+		checkConstraint(cargo, true);
 	}
 
 	@Test
@@ -112,12 +102,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		cargo.getAllowedVessels().add(vesselClass2);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
 		// Not permitted!
-		target.setAssignment(vessel1);
+		cargo.setAssignment(vessel1);
 
-		checkConstraint(target, false);
+		checkConstraint(cargo, false);
 	}
 
 	@Test
@@ -130,12 +118,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		cargo.getAllowedVessels().add(vesselClass1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
 		// Permitted!
-		target.setAssignment(vesselClass1);
+		cargo.setAssignment(vesselClass1);
 
-		checkConstraint(target, true);
+		checkConstraint(cargo, true);
 	}
 
 	@Test
@@ -149,12 +135,10 @@ public class AllowedVesselAssignmentConstraintTest {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		cargo.getAllowedVessels().add(vesselClass2);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
 		// Not permitted!
-		target.setAssignment(vesselClass1);
+		cargo.setAssignment(vesselClass1);
 
-		checkConstraint(target, false);
+		checkConstraint(cargo, false);
 	}
 
 	/**
@@ -170,15 +154,12 @@ public class AllowedVesselAssignmentConstraintTest {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		cargo.getAllowedVessels().add(vessel1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
-		// Not permitted!
-		target.setAssignment(vesselClass1);
+		cargo.setAssignment(vesselClass1);
 
-		checkConstraint(target, false);
+		checkConstraint(cargo, false);
 	}
 
-	private void checkConstraint(final EObject target, final boolean expectSuccess) {
+	private void checkConstraint(final AssignableElement target, final boolean expectSuccess) {
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 		when(successStatus.isOK()).thenReturn(Boolean.TRUE);
 

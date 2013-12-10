@@ -12,7 +12,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -72,11 +71,6 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 				return true;
 			} else if (target instanceof VesselEvent) {
 				return true;
-			} else if (target instanceof ElementAssignment) {
-				final ElementAssignment elementAssignment = (ElementAssignment) dcsd.getTarget();
-				if (elementAssignment.getAssignedObject() instanceof VesselEvent) {
-					return true;
-				}
 			} else if (target instanceof HeelOptions) {
 				return true;
 			}
@@ -90,31 +84,26 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 			editorPart.setActivePage(eventPage);
-			
+
 			EObject target = dcsd.getTarget();
-			
+
 			// extract viewable target from a faulty HeelOptions object
 			if (target instanceof HeelOptions) {
-				EObject container = target.eContainer(); 
+				EObject container = target.eContainer();
 				if (container instanceof VesselAvailability) {
 					target = ((VesselAvailability) container).getVessel();
 				} else if (container instanceof CharterOutEvent) {
 					target = container;
 				}
 			}
-			
+
 			if (target instanceof Vessel) {
 				final Vessel vessel = (Vessel) target;
 				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vessel), true);
 			} else if (target instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) target;
 				eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselEvent), true);
-			} else if (target instanceof ElementAssignment) {
-				final ElementAssignment elementAssignment = (ElementAssignment) target;
-				if (elementAssignment.getAssignedObject() instanceof VesselEvent) {
-					eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(elementAssignment.getAssignedObject()), true);
-				}
-			} 
+			}
 		}
 	}
 }

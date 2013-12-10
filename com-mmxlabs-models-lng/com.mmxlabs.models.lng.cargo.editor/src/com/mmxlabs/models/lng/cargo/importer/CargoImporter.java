@@ -23,17 +23,11 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.google.common.collect.Sets;
-import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
@@ -42,8 +36,6 @@ import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
-import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -53,8 +45,6 @@ public class CargoImporter extends DefaultClassImporter {
 	private static final String KEY_LOADSLOT = "buy";
 
 	private static final String KEY_DISCHARGESLOT = "sell";
-
-	private static final String ASSIGNMENT = "assignment";
 
 	// List of column names to filter out of export. UUID is confusing to the user, othernames is not used by cargo or slots. Fixed Price is deprecated.
 	private static final Set<String> filteredColumns = Sets.newHashSet("uuid", "otherNames", "loadSlot.uuid", "loadSlot.fixedPrice", "loadSlot.otherNames", "dischargeSlot.uuid",
@@ -356,49 +346,6 @@ public class CargoImporter extends DefaultClassImporter {
 							final DischargeSlot discharge2 = discharge;
 							discharge2.setName("d-" + cargoName);
 						}
-					}
-
-					// Setup vessel assignments
-					if (keepCargo && row.containsKey(ASSIGNMENT)) {
-						final Cargo cargo_ = realCargo;
-						final String assignedTo = row.get(ASSIGNMENT);
-						final IImportProblem noVessel = context.createProblem("Cannot find vessel " + assignedTo, true, true, true);
-						context.doLater(new IDeferment() {
-							@Override
-							public void run(final IImportContext context) {
-								final MMXRootObject rootObject = context.getRootObject();
-								if (rootObject instanceof LNGScenarioModel) {
-									final AssignmentModel assignmentModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getAssignmentModel();
-									if (assignmentModel != null) {
-										ElementAssignment existing = null;
-										for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
-											if (ea.getAssignedObject() == cargo_) {
-												existing = ea;
-												break;
-											}
-										}
-										if (existing == null) {
-											existing = AssignmentFactory.eINSTANCE.createElementAssignment();
-											assignmentModel.getElementAssignments().add(existing);
-											existing.setAssignedObject(cargo_);
-										}
-
-										// attempt to find vessel
-										final NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
-										if (vessel instanceof Vessel) {
-											existing.setAssignment((Vessel) vessel);
-										} else {
-											context.addProblem(noVessel);
-										}
-									}
-								}
-							}
-
-							@Override
-							public int getStage() {
-								return IImportContext.STAGE_MODIFY_SUBMODELS + 10;
-							}
-						});
 					}
 
 					results.addAll(newResults);

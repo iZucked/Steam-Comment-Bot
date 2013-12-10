@@ -5,19 +5,12 @@
 package com.mmxlabs.models.lng.fleet.presentation.composites;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
@@ -69,17 +62,4 @@ public class DryDockEventComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 	}
-
-	@Override
-	public List<EObject> getExternalEditingRange(final MMXRootObject rootObject, final EObject value) {
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-			final EObject assignment = (EObject) AssignmentEditorHelper.getElementAssignment(scenarioModel.getPortfolioModel().getAssignmentModel(), (UUIDObject) value);
-			if (assignment != null) {
-				return Collections.singletonList(assignment);
-			}
-		}
-		return super.getExternalEditingRange(rootObject, value);
-	}
-
 }

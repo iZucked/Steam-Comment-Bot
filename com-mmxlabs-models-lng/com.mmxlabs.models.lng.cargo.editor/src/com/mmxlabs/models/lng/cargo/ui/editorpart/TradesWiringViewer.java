@@ -89,9 +89,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -112,6 +109,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenu
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -306,10 +304,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					public Object[] getElements(final Object inputElement) {
 
 						final CargoModel cargoModel = getPortfolioModel().getCargoModel();
-						final AssignmentModel assignmentModel = getPortfolioModel().getAssignmentModel();
 						final ScheduleModel scheduleModel = getPortfolioModel().getScheduleModel();
 
-						final RootData root = setCargoes(assignmentModel, cargoModel, scheduleModel, referenceRootData);
+						final RootData root = setCargoes(cargoModel, scheduleModel, referenceRootData);
 
 						TradesWiringViewer.this.rootData = root;
 
@@ -419,8 +416,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return source;
 				} else if (source instanceof Cargo) {
 					return source;
-				} else if (source instanceof ElementAssignment) {
-					return ((ElementAssignment) source).getAssignedObject();
 				}
 
 				return super.getElementForNotificationTarget(source);
@@ -545,7 +540,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					aSet.add(rd.cargo);
 					aSet.add(rd.loadSlot);
 					aSet.add(rd.dischargeSlot);
-					aSet.add(rd.elementAssignment);
 					aSet.remove(null);
 				} else if (a instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) a;
@@ -776,8 +770,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					if (element instanceof RowData) {
 						final RowData rowDataItem = (RowData) element;
-						if (rowDataItem.elementAssignment != null) {
-							if (rowDataItem.elementAssignment != null && rowDataItem.elementAssignment.isLocked()) {
+						Object object = assignmentPath.get(rowDataItem);
+						if (object instanceof AssignableElement) {
+							AssignableElement assignableElement = (AssignableElement) object;
+
+							if (assignableElement.isLocked()) {
 								return lockedImage;
 							}
 						}
@@ -947,9 +944,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * @param newCargoes
 	 * @since 5.0
 	 */
-	public RootData setCargoes(final AssignmentModel assignmentModel, final CargoModel cargoModel, final ScheduleModel scheduleModel, final RootData existingData) {
+	public RootData setCargoes(final CargoModel cargoModel, final ScheduleModel scheduleModel, final RootData existingData) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
-		return transformer.transform(assignmentModel, cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors(), existingData);
+		return transformer.transform(cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors(), existingData);
 	}
 
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack) {
@@ -1026,7 +1023,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final List<Command> deleteCommands = new LinkedList<Command>();
 
 		final CargoModel cargoModel = getPortfolioModel().getCargoModel();
-		final AssignmentModel assignmentModel = getPortfolioModel().getAssignmentModel();
 
 		final Set<Slot> slotsToRemove = new HashSet<Slot>();
 		final Set<Slot> slotsToKeep = new HashSet<Slot>();
@@ -1071,8 +1067,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
 
 					setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSide.dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-
-					cec.appendFOBDESCommands(setCommands, deleteCommands, scenarioEditingLocation.getEditingDomain(), assignmentModel, c, loadSide.loadSlot, dischargeSide.getDischargeSlot());
 
 					{
 						Cargo dischargeCargo = null;
@@ -1312,7 +1306,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			final EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
 			final EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
-			final EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.ASSIGNMENT, AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
+			final EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 
 			final Action clearAction = new Action("Clear Filter") {
 				@Override

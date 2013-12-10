@@ -251,10 +251,6 @@
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider">
-    </ModelCommandProvider>
-    <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider">
     </ModelCommandProvider>

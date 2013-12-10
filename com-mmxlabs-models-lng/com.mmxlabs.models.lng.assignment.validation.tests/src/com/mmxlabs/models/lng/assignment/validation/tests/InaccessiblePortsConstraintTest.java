@@ -16,8 +16,6 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.assignment.validation.InaccessiblePortsConstraint;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -46,12 +44,9 @@ public class InaccessiblePortsConstraintTest {
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
+		cargo.setAssignment(vessel1);
 
-		target.setAssignment(vessel1);
-
-		checkConstraint(target, true);
+		checkConstraint(cargo, true);
 	}
 
 	@Test
@@ -68,14 +63,11 @@ public class InaccessiblePortsConstraintTest {
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
-
 		vessel1.getInaccessiblePorts().add(port1);
 
-		target.setAssignment(vessel1);
+		cargo.setAssignment(vessel1);
 
-		checkConstraint(target, false);
+		checkConstraint(cargo, false);
 	}
 
 	@Test
@@ -92,16 +84,13 @@ public class InaccessiblePortsConstraintTest {
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
-
 		// Test restriction on vessel class
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		target.setAssignment(vessel1);
+		cargo.setAssignment(vessel1);
 
-		checkConstraint(target, false);
+		checkConstraint(cargo, false);
 	}
 
 	@Test
@@ -115,18 +104,14 @@ public class InaccessiblePortsConstraintTest {
 		LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
-		
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(cargo);
 
 		// Test restriction on vessel class
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Test vessel class as assignment
+		cargo.setAssignment(vesselClass1);
 
-		target.setAssignment(vesselClass1);
-
-		checkConstraint(target, false);
+		checkConstraint(cargo, false);
 	}
 
 	@Test
@@ -141,12 +126,9 @@ public class InaccessiblePortsConstraintTest {
 		final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(event);
+		event.setAssignment(vessel1);
 
-		target.setAssignment(vessel1);
-
-		checkConstraint(target, true);
+		checkConstraint(event, true);
 	}
 
 	@Test
@@ -161,14 +143,11 @@ public class InaccessiblePortsConstraintTest {
 		final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(event);
-
 		vessel1.getInaccessiblePorts().add(port1);
 
-		target.setAssignment(vessel1);
+		event.setAssignment(vessel1);
 
-		checkConstraint(target, false);
+		checkConstraint(event, false);
 	}
 
 	@Test
@@ -182,17 +161,14 @@ public class InaccessiblePortsConstraintTest {
 
 		final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
-		
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(event);
 
 		// Test restriction on vessel class
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		target.setAssignment(vessel1);
+		event.setAssignment(vessel1);
 
-		checkConstraint(target, false);
+		checkConstraint(event, false);
 	}
 
 	@Test
@@ -205,17 +181,13 @@ public class InaccessiblePortsConstraintTest {
 		final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(event);
-
 		// Test restriction on vessel class
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Test vessel class as assignment
+		event.setAssignment(vesselClass1);
 
-		target.setAssignment(vesselClass1);
-
-		checkConstraint(target, false);
+		checkConstraint(event, false);
 	}
 	
 	
@@ -232,12 +204,9 @@ public class InaccessiblePortsConstraintTest {
 		final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(event);
+		event.setAssignment(vessel1);
 
-		target.setAssignment(vessel1);
-
-		checkConstraint(target, true);
+		checkConstraint(event, true);
 	}
 
 	@Test
@@ -252,14 +221,11 @@ public class InaccessiblePortsConstraintTest {
 		final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(event);
-
 		vessel1.getInaccessiblePorts().add(port1);
 
-		target.setAssignment(vessel1);
+		event.setAssignment(vessel1);
 
-		checkConstraint(target, false);
+		checkConstraint(event, false);
 	}
 
 	@Test
@@ -274,16 +240,13 @@ public class InaccessiblePortsConstraintTest {
 		final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(event);
-
 		// Test restriction on vessel class
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		target.setAssignment(vessel1);
+		event.setAssignment(vessel1);
 
-		checkConstraint(target, false);
+		checkConstraint(event, false);
 	}
 
 	@Test
@@ -296,17 +259,13 @@ public class InaccessiblePortsConstraintTest {
 		final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		final ElementAssignment target = AssignmentFactory.eINSTANCE.createElementAssignment();
-		target.setAssignedObject(event);
-
 		// Test restriction on vessel class
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Test vessel class as assignment
+		event.setAssignment(vesselClass1);
 
-		target.setAssignment(vesselClass1);
-
-		checkConstraint(target, false);
+		checkConstraint(event, false);
 	}
 
 	

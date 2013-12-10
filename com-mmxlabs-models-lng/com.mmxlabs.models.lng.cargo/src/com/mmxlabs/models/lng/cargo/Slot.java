@@ -8,6 +8,7 @@ import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -46,7 +47,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
+public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, AssignableElement {
 	/**
 	 * Returns the value of the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->

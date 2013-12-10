@@ -15,9 +15,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -34,7 +31,6 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -138,7 +134,6 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 				if (scenario instanceof LNGScenarioModel) {
 
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
-					final AssignmentModel assignmentModel = lngScenarioModel.getPortfolioModel().getAssignmentModel();
 
 					if (cargo.getCargoType() == CargoType.DES) {
 						LoadSlot desPurchase = null;
@@ -156,9 +151,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						// Found a slot to validate
 						if (desPurchase != null && dischargeSlot != null) {
 
-							final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, (UUIDObject) extraValidationContext.getOriginal(desPurchase));
-							if (elementAssignment != null && elementAssignment.getAssignment() instanceof Vessel) {
-								final Vessel vessel = (Vessel) elementAssignment.getAssignment();
+							if (desPurchase.getAssignment() instanceof Vessel) {
+								final Vessel vessel = (Vessel) desPurchase.getAssignment();
 								final double maxSpeedKnots = vessel.getVesselClass().getMaxSpeed();
 
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();

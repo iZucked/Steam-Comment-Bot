@@ -99,13 +99,49 @@ public interface CargoPackage extends EPackage {
 	int CARGO__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__ASSIGNMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__SPOT_INDEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__SEQUENCE_HINT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOW_REWIRING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int CARGO__ALLOW_REWIRING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -114,7 +150,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int CARGO__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -124,7 +160,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -133,7 +169,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -228,13 +264,49 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__ASSIGNMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SPOT_INDEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SEQUENCE_HINT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int SLOT__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -243,7 +315,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SLOT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
@@ -252,7 +324,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SLOT__WINDOW_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Window Start Time</b></em>' attribute.
@@ -261,7 +333,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SLOT__WINDOW_START_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -270,7 +342,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SLOT__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -279,7 +351,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -288,7 +360,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -297,7 +369,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -306,7 +378,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -316,7 +388,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -326,7 +398,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
@@ -336,7 +408,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICING_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SLOT__PRICING_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
@@ -346,7 +418,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -355,7 +427,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -364,7 +436,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
@@ -373,7 +445,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
@@ -382,7 +454,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -391,7 +463,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -400,7 +472,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -573,6 +645,42 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__NAME = SLOT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ASSIGNMENT = SLOT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SPOT_INDEX = SLOT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SEQUENCE_HINT = SLOT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__LOCKED = SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -965,6 +1073,42 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__NAME = SLOT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__ASSIGNMENT = SLOT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SPOT_INDEX = SLOT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SEQUENCE_HINT = SLOT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__LOCKED = SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -1569,6 +1713,42 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NAME = LOAD_SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__ASSIGNMENT = LOAD_SLOT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SPOT_INDEX = LOAD_SLOT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SEQUENCE_HINT = LOAD_SLOT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__LOCKED = LOAD_SLOT__LOCKED;
+
+	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1968,6 +2148,42 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__NAME = DISCHARGE_SLOT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__ASSIGNMENT = DISCHARGE_SLOT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SPOT_INDEX = DISCHARGE_SLOT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SEQUENCE_HINT = DISCHARGE_SLOT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__LOCKED = DISCHARGE_SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.

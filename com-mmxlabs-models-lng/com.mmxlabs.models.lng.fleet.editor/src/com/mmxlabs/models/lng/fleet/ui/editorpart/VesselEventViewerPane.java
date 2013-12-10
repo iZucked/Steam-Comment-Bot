@@ -74,7 +74,7 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) jointModelEditor.getRootObject();
 			addTypicalColumn("Vessels",
 					new VesselEventVesselsManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
-							MMXCorePackage.eINSTANCE.getNamedObject_Name(), lngScenarioModel.getPortfolioModel().getAssignmentModel()));
+							MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 		}
 		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
