@@ -317,7 +317,7 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 		final Object layoutData = control.getLayoutData();
 		if (layoutData instanceof GridData) {
 			final GridData gridData = (GridData) layoutData;
-			gridData.exclude = !editorAppliesToObject;
+//			gridData.exclude = !editorAppliesToObject;
 		}
 	}
 
