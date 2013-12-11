@@ -242,7 +242,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 						final IDetailTree entityDetails = entityDetailsMap.get(entity);
 
-						final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity, entity.getTaxedProfit(profit, taxTime), entityDetails);
+						final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity, entity.getTaxedProfit(profit, taxTime), profit, entityDetails);
 						entries.add(entry);
 
 					}
@@ -503,7 +503,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IDetailTree[] detailsRef = new IDetailTree[1];
 			getShippingCosts(plan, vessel, true, true, vesselStartTime, detailsRef);
 
-			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingDetails);
+			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingTotalPretaxProfit, shippingDetails);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
 			final String label = includeTimeCharterRates ? SchedulerConstants.AI_profitAndLoss : SchedulerConstants.AI_profitAndLossNoTimeCharterRate;
 			annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
@@ -546,7 +546,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IDetailTree[] detailsRef = new IDetailTree[1];
 			getShippingCosts(plan, vessel, true, true, vesselStartTime, detailsRef);
 
-			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingDetails);
+			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingTotalPretaxProfit, shippingDetails);
 
 			for (final IPortSlot slot : slots) {
 
@@ -574,7 +574,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			details.addChild(new DetailTree("Charter Out", new TotalCostDetailElement(generatedCharterOutRevenue)));
 
-			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, charterOutProfit, details);
+			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, charterOutProfit, charterOutCosts, details);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
 			final ISequenceElement element = slotProvider.getElement(firstSlot);
 			final String label = includeTimeCharterRates ? SchedulerConstants.AI_charterOutProfitAndLoss : SchedulerConstants.AI_charterOutProfitAndLossNoTimeCharterRate;
