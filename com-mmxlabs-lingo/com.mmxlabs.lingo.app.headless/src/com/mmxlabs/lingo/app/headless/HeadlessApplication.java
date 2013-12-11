@@ -233,9 +233,9 @@ public class HeadlessApplication implements IApplication {
 		options.addOption("data", true, "(OSGi) OSGi instance area");
 		options.addOption(OptionBuilder.withLongOpt("debug").withDescription("[options file] (OSGi) debug mode").hasOptionalArg().create());
 		options.addOption(OptionBuilder.withLongOpt("dev").withDescription("[entires] (OSGi) dev mode").hasOptionalArg().create());
-		options.addOption("eclipse.keyring", true, "(Equinox) Set to override location of the default secure storage");
-		options.addOption("eclipse.password", true,
-				"(Equinox) If specified, the secure storage treats contents of the file as a default password. When not set, password providers are used to obtain a password.");
+//		options.addOption("eclipse.keyring", true, "(Equinox) Set to override location of the default secure storage");
+//		options.addOption("eclipse.password", true,
+//				"(Equinox) If specified, the secure storage treats contents of the file as a default password. When not set, password providers are used to obtain a password.");
 		options.addOption("feature", true, "(Equinox) equivalent to setting eclipse.product to <feature id>");
 		options.addOption("framework", true, "(Equinox) equivalent to setting osgi.framework to <location>");
 		options.addOption(
