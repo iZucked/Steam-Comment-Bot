@@ -203,7 +203,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 			//if (!reference.isContainment()) {
 			if (row.containsKey(lcrn)) {
 				if (reference.isContainment()) {
-					System.err.println("Got " + reference.getContainerClass().getName() + "." + reference.getName() + " as direct CSV data");
+//					System.err.println("Got " + reference.getContainerClass().getName() + "." + reference.getName() + " as direct CSV data");
 				}
 
 				if (!row.containsKey(lcrn)) {
@@ -225,7 +225,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 
 				if (!reference.isContainment() && !subKeys.isEmpty()) {
-					System.err.println("Got " + lcrn + " as direct CSV data");
+//					System.err.println("Got " + lcrn + " as direct CSV data");
 				}
 
 				if (reference.isMany()) {
