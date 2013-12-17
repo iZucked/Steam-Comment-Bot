@@ -10,12 +10,14 @@ import java.util.Collections;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -50,7 +52,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	 * @since 3.0
 	 */
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(final LNGPriceCalculatorParameters priceParameters) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
@@ -58,12 +60,12 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	 * @since 3.0
 	 */
 	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(final LNGPriceCalculatorParameters priceParameters) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
 	@Override
-	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
+	public void slotTransformed(@NonNull final Slot modelSlot, @NonNull final IPortSlot optimiserSlot) {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
 		if (modelSlot instanceof LoadSlot) {
@@ -78,14 +80,8 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 			DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
 			CargoDeliveryType cargoType = CargoDeliveryType.ANY;
 
-			if (dischargeSlot.isSetPurchaseDeliveryType()) {
-				cargoType = dischargeSlot.getPurchaseDeliveryType();
-			} else {
-				Contract contract = dischargeSlot.getContract();
-				if (contract instanceof SalesContract) {
-					cargoType = ((SalesContract) contract).getPurchaseDeliveryType();
-				}
-			}
+			cargoType = dischargeSlot.getSlotOrContractDeliveryType();
+
 			if (cargoType != CargoDeliveryType.ANY) {
 				desPermissionProviderEditor.setSalesSlotRequiredPurchaseType(sequenceElement, cargoType);
 			}

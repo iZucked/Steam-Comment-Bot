@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -30,7 +29,6 @@ import javax.inject.Named;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,12 +41,9 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -59,6 +54,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -108,7 +104,6 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -131,6 +126,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
+import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -168,6 +164,9 @@ public class LNGScenarioTransformer {
 	@Inject(optional = true)
 	private List<ITransformerExtension> transformerExtensions;
 
+	// @Inject(optional = true)
+	// private ISlotTimeWindowGenerator slotTimeWindowGenerator;
+
 	@Inject
 	private ISchedulerBuilder builder;
 
@@ -192,6 +191,7 @@ public class LNGScenarioTransformer {
 	private final Map<VesselClass, List<IVessel>> spotVesselsByClass = new HashMap<VesselClass, List<IVessel>>();
 
 	private final ArrayList<IVessel> allVessels = new ArrayList<IVessel>();
+	private final Map<Vessel, IVessel> allReferenceVessels = new HashMap<>();
 
 	// private OptimiserSettings defaultSettings = null;
 
@@ -210,6 +210,9 @@ public class LNGScenarioTransformer {
 	private final Map<Vessel, VesselAvailability> vesselAvailabiltyMap = new HashMap<Vessel, VesselAvailability>();
 
 	private OptimiserSettings optimiserParameters;
+
+	@Inject
+	private IPortVisitDurationProviderEditor portVisitDurationProviderEditor;
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
@@ -386,11 +389,6 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		// set up the contract transformers
-		for (final ITransformerExtension extension : allTransformerExtensions) {
-			extension.startTransforming(rootObject, entities, builder);
-		}
-
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
@@ -432,6 +430,15 @@ public class LNGScenarioTransformer {
 			entities.addModelObject(ePort, port);
 
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
+
+			// Set port default values
+			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Load, ePort.getLoadDuration());
+			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Discharge, ePort.getDischargeDuration());
+		}
+
+		// set up the contract transformers
+		for (final ITransformerExtension extension : allTransformerExtensions) {
+			extension.startTransforming(rootObject, entities, builder);
 		}
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation,
@@ -441,24 +448,24 @@ public class LNGScenarioTransformer {
 
 		// Any NPE's in the following code are likely due to missing associations between a IContractTransformer and the EMF AContract object. IContractTransformer instances are typically OSGi
 		// services. Ensure their bundles have been started!
-		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
-			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
-			if (transformer == null) {
-				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
-			}
-			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c.getPriceInfo());
-			entities.addModelObject(c, calculator);
-		}
-
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
 			if (transformer == null) {
 				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
 			}
-			final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(c.getPriceInfo());
+			final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(c, c.getPriceInfo());
 			if (calculator == null) {
 				throw new IllegalStateException("Unable to transform contract");
 			}
+			entities.addModelObject(c, calculator);
+		}
+
+		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
+			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
+			if (transformer == null) {
+				throw new IllegalStateException("No Price Parameters transformer registered for  " + c.getPriceInfo().eClass().getName());
+			}
+			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c, c.getPriceInfo());
 			entities.addModelObject(c, calculator);
 		}
 
@@ -491,6 +498,12 @@ public class LNGScenarioTransformer {
 										entry.getActivity()));
 								builder.setPortCost(portAssociation.lookup((Port) port), v, type, activityCost);
 							}
+							for (final IVessel v : allReferenceVessels.values()) {
+								// TODO should the builder handle the application of costs to vessel classes?
+								final VesselClass reverseLookup = vesselAssociations.getFirst().reverseLookup(v.getVesselClass());
+								final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(reverseLookup, entry.getActivity()));
+								builder.setPortCost(portAssociation.lookup((Port) port), v, type, activityCost);
+							}
 						}
 					}
 				}
@@ -506,6 +519,8 @@ public class LNGScenarioTransformer {
 		buildSpotCargoMarkets(builder, portAssociation, contractTransformers, entities);
 
 		buildMarkToMarkets(builder, portAssociation, contractTransformers, entities);
+
+		setNominatedVessels(builder, entities);
 
 		// buildDiscountCurves(builder);
 
@@ -549,6 +564,30 @@ public class LNGScenarioTransformer {
 		}
 	}
 
+	private void setNominatedVessels(final ISchedulerBuilder builder, final ModelEntityMap entities) {
+
+		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		if (cargoModel != null) {
+
+			for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
+
+				final IPortSlot portSlot = entities.getOptimiserObject(loadSlot, IPortSlot.class);
+				final IVessel vessel = allReferenceVessels.get(loadSlot.getAssignment());
+				if (vessel != null && portSlot != null) {
+					builder.setNominatedVessel(portSlot, vessel);
+				}
+			}
+			for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
+
+				final IPortSlot portSlot = entities.getOptimiserObject(dischargeSlot, IPortSlot.class);
+				final IVessel vessel = allReferenceVessels.get(dischargeSlot.getAssignment());
+				if (vessel != null && portSlot != null) {
+					builder.setNominatedVessel(portSlot, vessel);
+				}
+			}
+		}
+	}
+
 	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
 
 		Date freezeDate = null;
@@ -557,78 +596,80 @@ public class LNGScenarioTransformer {
 			freezeDate = range.getOptimiseAfter();
 		}
 
-		final AssignmentModel assignmentModel = rootObject.getPortfolioModel().getAssignmentModel();
-		if (assignmentModel != null) {
+		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getLoadSlots());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getDischargeSlots());
+		assignableElements.addAll(rootObject.getPortfolioModel().getScenarioFleetModel().getVesselEvents());
 
-			for (final ElementAssignment assignment : assignmentModel.getElementAssignments()) {
-				final UUIDObject o = assignment.getAssignedObject();
+		for (final AssignableElement assignableElement : assignableElements) {
+			if (assignableElement.getAssignment() == null) {
+				continue;
+			}
+			boolean freeze = assignableElement.isLocked();
 
-				boolean freeze = assignment.isLocked();
-
-				if (!freeze && freezeDate != null) {
-					if (o instanceof Cargo) {
-						final Cargo cargo = (Cargo) o;
-						if (!cargo.getSortedSlots().isEmpty()) {
-							if (cargo.getSortedSlots().get(0).getWindowStart().before(freezeDate)) {
-								freeze = true;
-							}
-						}
-					} else if (o instanceof VesselEvent) {
-						final VesselEvent vesselEvent = (VesselEvent) o;
-						if (vesselEvent.getStartBy().before(freezeDate)) {
+			if (!freeze && freezeDate != null) {
+				if (assignableElement instanceof Cargo) {
+					final Cargo cargo = (Cargo) assignableElement;
+					if (!cargo.getSortedSlots().isEmpty()) {
+						if (cargo.getSortedSlots().get(0).getWindowStart().before(freezeDate)) {
 							freeze = true;
 						}
 					}
-				}
-
-				if (!freeze) {
-					continue;
-				}
-
-				final AVesselSet<Vessel> vesselSet = assignment.getAssignment();
-				final IVessel vessel;
-				if (vesselSet instanceof VesselClass) {
-					final List<IVessel> spots = spotVesselsByClass.get(vesselSet);
-					if (spots != null && spots.isEmpty() == false) {
-						vessel = spots.get(0);
-						spots.remove(0);
-					} else {
-						vessel = null;
+				} else if (assignableElement instanceof VesselEvent) {
+					final VesselEvent vesselEvent = (VesselEvent) assignableElement;
+					if (vesselEvent.getStartBy().before(freezeDate)) {
+						freeze = true;
 					}
+				}
+			}
 
-				} else if (vesselSet instanceof Vessel) {
-					final VesselAvailability vesselAvailability = vesselAvailabiltyMap.get(vesselSet);
-					vessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
+			if (!freeze) {
+				continue;
+			}
+
+			final AVesselSet<? extends Vessel> vesselSet = assignableElement.getAssignment();
+			final IVessel vessel;
+			if (vesselSet instanceof VesselClass) {
+				final List<IVessel> spots = spotVesselsByClass.get(vesselSet);
+				if (spots != null && spots.isEmpty() == false) {
+					vessel = spots.get(0);
+					spots.remove(0);
 				} else {
 					vessel = null;
 				}
 
-				if (vessel == null) {
-					continue;
-				}
+			} else if (vesselSet instanceof Vessel) {
+				final VesselAvailability vesselAvailability = vesselAvailabiltyMap.get(vesselSet);
+				vessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
+			} else {
+				vessel = null;
+			}
 
-				if (o instanceof Cargo) {
-					final Cargo cargo = (Cargo) o;
-					IPortSlot prevSlot = null;
-					for (final Slot slot : cargo.getSortedSlots()) {
-						final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
-						if (cargo != null) {
-							// bind slots to vessel
-							builder.constrainSlotToVessels(portSlot, Collections.singleton(vessel));
-							// bind sequencing as well - this forces
-							// previousSlot to come before currentSlot.
-							if (prevSlot != null) {
-								builder.constrainSlotAdjacency(prevSlot, portSlot);
+			if (vessel == null) {
+				continue;
+			}
 
-							}
-							prevSlot = portSlot;
+			if (assignableElement instanceof Cargo) {
+				final Cargo cargo = (Cargo) assignableElement;
+				IPortSlot prevSlot = null;
+				for (final Slot slot : cargo.getSortedSlots()) {
+					final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+					if (cargo != null) {
+						// bind slots to vessel
+						builder.constrainSlotToVessels(portSlot, Collections.singleton(vessel));
+						// bind sequencing as well - this forces
+						// previousSlot to come before currentSlot.
+						if (prevSlot != null) {
+							builder.constrainSlotAdjacency(prevSlot, portSlot);
 						}
+						prevSlot = portSlot;
 					}
-				} else if (o instanceof VesselEvent) {
-					final IVesselEventPortSlot slot = entities.getOptimiserObject(o, IVesselEventPortSlot.class);
-					if (slot != null) {
-						builder.constrainSlotToVessels(slot, Collections.singleton(vessel));
-					}
+				}
+			} else if (assignableElement instanceof VesselEvent) {
+				final IVesselEventPortSlot slot = entities.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);
+				if (slot != null) {
+					builder.constrainSlotToVessels(slot, Collections.singleton(vessel));
 				}
 			}
 		}
@@ -786,17 +827,25 @@ public class LNGScenarioTransformer {
 	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
 			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean shippingOnly) {
 
+		// All Discharge ports - for use with
+		final Set<IPort> allDischargePorts = new HashSet<IPort>();
+		final Set<IPort> allLoadPorts = new HashSet<IPort>();
+		{
+			final Collection<Port> allModelObjects = entities.getAllModelObjects(Port.class);
+			for (final Port p : allModelObjects) {
+				if (p.getCapabilities().contains(PortCapability.DISCHARGE)) {
+					allDischargePorts.add(entities.getOptimiserObject(p, IPort.class));
+				}
+				if (p.getCapabilities().contains(PortCapability.LOAD)) {
+					allLoadPorts.add(entities.getOptimiserObject(p, IPort.class));
+				}
+			}
+		}
+
 		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
 
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
-
-		final Collection<IPort> dischargePorts = new ArrayList<IPort>();
-		for (final Port o : entities.getAllModelObjects(Port.class)) {
-			if (o.getCapabilities().contains(PortCapability.DISCHARGE)) {
-				dischargePorts.add(entities.getOptimiserObject(o, IPort.class));
-			}
-		}
 
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 		final Map<Slot, IPortSlot> transferSlotMap = new HashMap<Slot, IPortSlot>();
@@ -843,49 +892,12 @@ public class LNGScenarioTransformer {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					// Bind FOB/DES slots to resource
 					final ILoadOption load = (ILoadOption) slotMap.get(loadSlot);
-					if (loadSlot.isDESPurchase()) {
-						if (loadSlot instanceof SpotLoadSlot) {
-							final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
-							final Set<IPort> marketPorts = new HashSet<IPort>();
-							{
-								final SpotMarket market = spotLoadSlot.getMarket();
-								if (market instanceof DESPurchaseMarket) {
-									final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
-									final Set<Port> portSet = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
-									for (final Port ap : portSet) {
-										final IPort ip = portAssociation.lookup(ap);
-										if (ip != null) {
-											marketPorts.add(ip);
-										}
-									}
-								}
-
-							}
-							builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
-						} else {
-							if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
-								// Redirection contracts can go to anywhere
-								builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
-							} else {
-								// final Set<IPort> ports = new LinkedHashSet<IPort>();
-								// for (final IDischargeOption discharge : dischargeOptions) {
-								// ports.add(discharge.getPort());
-								// }
-								final Set<IPort> ports = Collections.singleton(load.getPort());
-								builder.bindDischargeSlotsToDESPurchase(load, ports);
-								// // Bind to this port -- TODO: Fix to discharge?
-								// builder.constrainSlotAdjacency(load, secondSlot);
-							}
-						}
-					}
+					configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
 					isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					if (dischargeSlot.isFOBSale()) {
-						for (final IPortSlot load : loadOptions) {
-							builder.bindLoadSlotsToFOBSale((IDischargeOption) slotMap.get(dischargeSlot), Collections.singleton(load.getPort()));
-						}
-					}
+					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
+					configureDischargeSlotRestrictions(builder, allDischargePorts, dischargeSlot, discharge);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
 				}
 
@@ -946,36 +958,8 @@ public class LNGScenarioTransformer {
 					builder.setSoftRequired(load);
 				}
 			}
-			// Bind FOB/DES slots to resource
-			if (loadSlot.isDESPurchase()) {
-				if (loadSlot instanceof SpotLoadSlot) {
-					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
-					final Set<IPort> marketPorts = new HashSet<IPort>();
-					{
-						final SpotMarket market = spotLoadSlot.getMarket();
-						if (market instanceof DESPurchaseMarket) {
-							final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
-							final Set<Port> portSet = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
-							for (final Port ap : portSet) {
-								final IPort ip = portAssociation.lookup((Port) ap);
-								if (ip != null) {
-									marketPorts.add(ip);
-								}
-							}
-						}
 
-					}
-					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
-				} else {
-					if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
-						// Redirection contracts can go to anywhere
-						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
-					} else {
-						// Bind to this port -- TODO: Fix to discharge?
-						builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(load.getPort()));
-					}
-				}
-			}
+			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
 		}
 
 		for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
@@ -995,11 +979,58 @@ public class LNGScenarioTransformer {
 					builder.setSoftRequired(discharge);
 				}
 			}
-			// Bind FOB/DES slots to resource
-			if (dischargeSlot.isFOBSale()) {
-				builder.bindLoadSlotsToFOBSale(discharge, Collections.singleton(discharge.getPort()));
-			}
 
+			configureDischargeSlotRestrictions(builder, allDischargePorts, dischargeSlot, discharge);
+		}
+	}
+
+	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allDischargePorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge) {
+		if (dischargeSlot.isFOBSale()) {
+			if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+				// Bind to all loads
+				// TODO: Take into account shipping days restriction
+				builder.bindLoadSlotsToFOBSale(discharge, allDischargePorts);
+			} else {
+				// Bind to current port only
+				builder.bindLoadSlotsToFOBSale(discharge, Collections.<IPort> singleton(discharge.getPort()));
+			}
+		}
+	}
+
+	public void configureLoadSlotRestrictions(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Set<IPort> allDischargePorts, final LoadSlot loadSlot,
+			final ILoadOption load) {
+
+		if (loadSlot.isDESPurchase()) {
+			if (loadSlot instanceof SpotLoadSlot) {
+				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
+				final Set<IPort> marketPorts = new HashSet<IPort>();
+				{
+					final SpotMarket market = spotLoadSlot.getMarket();
+					if (market instanceof DESPurchaseMarket) {
+						final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+						final Set<Port> portSet = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
+						for (final Port ap : portSet) {
+							final IPort ip = portAssociation.lookup(ap);
+							if (ip != null) {
+								marketPorts.add(ip);
+							}
+						}
+					}
+
+				}
+				// Bind FOB/DES slots to resource
+				builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
+			} else {
+				// Bind FOB/DES slots to resource
+				if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
+					// Bind to all discharges
+					// TODO: Take into account shipping days restriction
+					builder.bindDischargeSlotsToDESPurchase(load, allDischargePorts);
+				} else {
+					// Bind to current port only
+					builder.bindDischargeSlotsToDESPurchase(load, Collections.<IPort> singleton(load.getPort()));
+				}
+			}
 		}
 	}
 
@@ -1050,34 +1081,42 @@ public class LNGScenarioTransformer {
 			final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
 
 			final long minCv;
-			final long maxCv;
+			long maxCv;
 
 			if (dischargeSlot.isSetPricingDate()) {
 				dischargeSlot.getPricingDate();
 			}
 			final int pricingDate = dischargeSlot.isSetPricingDate() ? convertTime(earliestTime, dischargeSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
 
-			if (dischargeSlot.isSetContract()) {
-				final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
-
-				if (salesContract.isSetMinCvValue()) {
-					minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
-				} else {
-					minCv = 0;
-				}
-
-				if (salesContract.isSetMaxCvValue()) {
-					maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMaxCvValue());
-				} else {
-					maxCv = Long.MAX_VALUE;
-				}
-			} else {
-				minCv = 0;
+			minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMinCv());
+			maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMaxCv());
+			if (maxCv == 0) {
 				maxCv = Long.MAX_VALUE;
 			}
 
+			/*
+			 * if (dischargeSlot.isSetContract()) { final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
+			 * 
+			 * if (salesContract.isSetMinCvValue()) { minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue()); } else { minCv = 0; }
+			 * 
+			 * if (salesContract.isSetMaxCvValue()) { maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMaxCvValue()); } else { maxCv = Long.MAX_VALUE; } } else { minCv
+			 * = 0; maxCv = Long.MAX_VALUE; }
+			 */
+
 			if (dischargeSlot.isFOBSale()) {
-				discharge = builder.createFOBSaleDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, pricingDate, dischargeSlot.isOptional());
+				final ITimeWindow localTimeWindow;
+				if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+					// Extend window out to cover whole shipping days restriction
+					localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
+				} else {
+					localTimeWindow = dischargeWindow;
+				}
+				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
+						pricingDate, dischargeSlot.isOptional());
+
+				if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
+				}
 			} else {
 				discharge = builder.createDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(), pricingDate,
 						dischargeSlot.isOptional());
@@ -1137,36 +1176,26 @@ public class LNGScenarioTransformer {
 		final int slotPricingDate = loadSlot.isSetPricingDate() ? convertTime(earliestTime, loadSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
 
 		if (loadSlot.isDESPurchase()) {
-
 			final ITimeWindow localTimeWindow;
-			// FIXME: This should not really be in the builder, but need better API to permit this kind of transformation.
-			if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
-				// Redirection contracts can go to anywhere, so need larger window for compatibility
-				final int extraTime = 24 * 60; // approx 2 months
-				Date originalDate = null;
-				for (final UUIDObject ext : loadSlot.getExtensions()) {
-					if (ext.getClass().getSimpleName().equals("RedirectionContractOriginalDate")) {
-						// final RedirectionContractOriginalDate originalDateExt = (RedirectionContractOriginalDate) ext;
-						final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(loadSlot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-						final EStructuralFeature feature = ext.eClass().getEStructuralFeature("date");
-						final Date originalDateExt = (Date) ext.eGet(feature);
-						calendar.setTime(originalDateExt);
-						originalDate = calendar.getTime();
-					}
-				}
-				final Date startTime = originalDate == null ? loadSlot.getWindowStart() : originalDate;
-
-				localTimeWindow = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, startTime) + extraTime);
+			if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
+				// Extend window out to cover whole shipping days restriction
+				localTimeWindow = builder.createTimeWindow(loadWindow.getStart(), loadWindow.getEnd() + loadSlot.getShippingDaysRestriction() * 24);
 			} else {
 				localTimeWindow = loadWindow;
 			}
+
 			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), localTimeWindow,
 					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
-					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrPortCV()), slotPricingDate, loadSlot.isOptional());
+					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate,
+					loadSlot.isOptional());
+
+			if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
+				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
+			}
 		} else {
 			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow,
 					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
-					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(),
+					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(),
 					loadSlot.isArriveCold(), slotPricingDate, loadSlot.isOptional());
 		}
 		// Store market slots for lookup when building spot markets.
@@ -1251,7 +1280,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final IContractTransformer transformer = contractTransformersByEClass.get(desPurchaseMarket.getPriceInfo().eClass());
-						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(desPurchaseMarket.getPriceInfo());
+						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(null, desPurchaseMarket.getPriceInfo());
 
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
@@ -1272,7 +1301,7 @@ public class LNGScenarioTransformer {
 								usedIDStrings.add(id);
 
 								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, IPortSlot.NO_PRICING_DATE, true);
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, 0, IPortSlot.NO_PRICING_DATE, true);
 
 								// Create a fake model object to add in here;
 								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
@@ -1370,7 +1399,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final IContractTransformer transformer = contractTransformersByEClass.get(fobSaleMarket.getPriceInfo().eClass());
-						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(fobSaleMarket.getPriceInfo());
+						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(null, fobSaleMarket.getPriceInfo());
 
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
@@ -1391,7 +1420,7 @@ public class LNGScenarioTransformer {
 								final long maxCv = Long.MAX_VALUE;
 
 								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, null, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, IPortSlot.NO_PRICING_DATE, true);
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, 0, IPortSlot.NO_PRICING_DATE, true);
 
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
@@ -1481,7 +1510,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final IContractTransformer transformer = contractTransformersByEClass.get(desSalesMarket.getPriceInfo().eClass());
-						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(desSalesMarket.getPriceInfo());
+						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(null, desSalesMarket.getPriceInfo());
 
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
@@ -1598,7 +1627,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final IContractTransformer transformer = contractTransformersByEClass.get(fobPurchaseMarket.getPriceInfo().eClass());
-						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(fobPurchaseMarket.getPriceInfo());
+						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(null, fobPurchaseMarket.getPriceInfo());
 
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
@@ -1720,7 +1749,7 @@ public class LNGScenarioTransformer {
 					}
 
 					final IContractTransformer transformer = contractTransformersByEClass.get(desPurchaseMarket.getPriceInfo().eClass());
-					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(desPurchaseMarket.getPriceInfo());
+					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(null, desPurchaseMarket.getPriceInfo());
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
@@ -1754,7 +1783,7 @@ public class LNGScenarioTransformer {
 					}
 
 					final IContractTransformer transformer = contractTransformersByEClass.get(desSalesMarket.getPriceInfo().eClass());
-					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(desSalesMarket.getPriceInfo());
+					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(null, desSalesMarket.getPriceInfo());
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
@@ -1786,7 +1815,7 @@ public class LNGScenarioTransformer {
 					}
 
 					final IContractTransformer transformer = contractTransformersByEClass.get(fobSalesMarket.getPriceInfo().eClass());
-					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(fobSalesMarket.getPriceInfo());
+					final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(null, fobSalesMarket.getPriceInfo());
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
@@ -1816,7 +1845,7 @@ public class LNGScenarioTransformer {
 					}
 
 					final IContractTransformer transformer = contractTransformersByEClass.get(fobPurchaseMarket.getPriceInfo().eClass());
-					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(fobPurchaseMarket.getPriceInfo());
+					final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(null, fobPurchaseMarket.getPriceInfo());
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
@@ -1969,9 +1998,12 @@ public class LNGScenarioTransformer {
 		 * Now create each vessel
 		 */
 		// for (final VesselAvailability vesselAvailability : fleetModel.getScenarioFleetModel().getVesselAvailabilities()) {
+
+		final Set<Vessel> seenVessels = new HashSet<>();
+
 		for (final VesselAvailability vesselAvailability : sortedAvailabilities) {
 			final Vessel eV = vesselAvailability.getVessel();
-
+			seenVessels.add(eV);
 			vesselAvailabiltyMap.put(eV, vesselAvailability);
 
 			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, vesselAvailability.isSetStartAfter() ? vesselAvailability.getStartAfter() : null,
@@ -1998,6 +2030,40 @@ public class LNGScenarioTransformer {
 
 			entities.addModelObject(vesselAvailability, vessel);
 			allVessels.add(vessel);
+
+			/*
+			 * set up inaccessible ports by applying resource allocation constraints
+			 */
+			final Set<IPort> inaccessiblePorts = new HashSet<IPort>();
+			for (final Port ePort : SetUtils.getObjects(eV.getInaccessiblePorts())) {
+				inaccessiblePorts.add(portAssociation.lookup((Port) ePort));
+			}
+
+			if (inaccessiblePorts.isEmpty() == false) {
+				builder.setVesselInaccessiblePorts(vessel, inaccessiblePorts);
+			}
+		}
+
+		// Reference vessels
+		for (final Vessel eV : fleetModel.getVessels()) {
+			if (seenVessels.contains(eV)) {
+				continue;
+			}
+
+			// TODO: Hook up once charter out opt implemented
+			final int dailyCharterInPrice = 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
+
+			final long heelLimit = 0;
+
+			final int hourlyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalHourlyCost(dailyCharterInPrice);
+			final ICurve hourlyCharterInCurve = new ConstantValueCurve(hourlyCharterInRate);
+
+			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), hourlyCharterInCurve, VesselInstanceType.REFERENCE, null, null, heelLimit, 0,
+					0, OptimiserUnitConvertor.convertToInternalVolume((int) (eV.getVesselOrVesselClassCapacity() * eV.getVesselOrVesselClassFillCapacity())));
+			vesselAssociation.add(eV, vessel);
+
+			entities.addModelObject(eV, vessel);
+			allReferenceVessels.put(eV, vessel);
 
 			/*
 			 * set up inaccessible ports by applying resource allocation constraints

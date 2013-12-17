@@ -13,7 +13,6 @@ import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /**
@@ -32,8 +31,9 @@ public class ShippingTypeRequirementModule extends PeaberryActivationModule {
 	@Override
 	protected void configure() {
 
-		bindService(RestrictedElementsConstraintCheckerFactory.class).export();
+		bindService(ShippingTypeRequirementConstraintCheckerFactory.class).export();
 		bindService(DesPermissionInjectorService.class).export();
+		bindService(ShippingTypeRequirementTransformerFactory.class).export();
 	}
 
 	/**

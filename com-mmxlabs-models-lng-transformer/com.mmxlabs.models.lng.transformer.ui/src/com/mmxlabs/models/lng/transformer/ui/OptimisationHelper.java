@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
@@ -58,7 +60,7 @@ public final class OptimisationHelper {
 
 	private static final Logger log = LoggerFactory.getLogger(OptimisationHelper.class);
 
-	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, String parameterMode, final boolean promptForOptimiserSettings,
+	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings,
 			final boolean optimising, final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
@@ -264,7 +266,7 @@ public final class OptimisationHelper {
 		return true;
 	}
 
-	public static OptimiserSettings getOptimiserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, String parameterMode, final boolean promptUser) {
+	public static OptimiserSettings getOptimiserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final String parameterMode, final boolean promptUser) {
 
 		OptimiserSettings previousSettings = null;
 		if (scenario != null) {
@@ -283,7 +285,7 @@ public final class OptimisationHelper {
 			return null;
 		}
 
-		IParameterModesRegistry parameterModesRegistry = Activator.getDefault().getParameterModesRegistry();
+		final IParameterModesRegistry parameterModesRegistry = Activator.getDefault().getParameterModesRegistry();
 
 		if (parameterMode != null) {
 
@@ -291,7 +293,7 @@ public final class OptimisationHelper {
 				// Nothing...
 			} else {
 
-				IParameterModeCustomiser customiser = parameterModesRegistry.getCustomiser(parameterMode);
+				final IParameterModeCustomiser customiser = parameterModesRegistry.getCustomiser(parameterMode);
 				if (customiser != null) {
 					customiser.customise(previousSettings);
 				}
@@ -340,6 +342,16 @@ public final class OptimisationHelper {
 		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
 		mergeFields(previousSettings, defaultSettings);
 
+		
+		
+		final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
+		if (extenders != null) {
+			for (final IParameterModeExtender  extender : extenders) {
+				extender.extend(defaultSettings, parameterMode);
+			}
+		}
+		
+		
 		return defaultSettings;
 	}
 

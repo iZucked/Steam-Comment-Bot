@@ -19,6 +19,8 @@ public interface ITransformerExtension {
 	 * This method will be called by the {@link LNGScenarioTransformer} before any transformation has happened. The contract transformer should take this opportunity to install any
 	 * {@link IBuilderExtension}s it needs in the builder, and take a note of the {@link ModelEntityMap} and scenario if it needs them later on
 	 * 
+	 * This will be called *after* basic port and curve data has been configured .
+	 * 
 	 * @param scenario
 	 * @param map
 	 * @param builder

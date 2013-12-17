@@ -20,6 +20,7 @@ public class ParameterModesExtensionModule extends AbstractModule {
 
 		// Extension points
 		bind(iterable(ParameterModeExtension.class)).toProvider(service(ParameterModeExtension.class).multiple());
+		bind(iterable(ParameterModeExtenderExtension.class)).toProvider(service(ParameterModeExtenderExtension.class).multiple());
 
 		// Bind implementation as a singleton to our service interface
 		bind(TypeLiterals.export(IParameterModesRegistry.class)).toProvider(service(ParameterModesRegistry.class).export());

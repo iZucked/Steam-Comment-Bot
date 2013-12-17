@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.ui.parametermodes.impl;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 
 /**
@@ -29,12 +32,13 @@ public class ParameterModesRegistry implements IParameterModesRegistry {
 	private static final Logger log = LoggerFactory.getLogger(ParameterModesRegistry.class);
 
 	private final Map<String, IParameterModeCustomiser> parameterModes = new HashMap<String, IParameterModeCustomiser>();
+	private final List<IParameterModeExtender> extenders = new LinkedList<IParameterModeExtender>();
 
 	@Inject
-	 Iterable<ParameterModeExtension> parameterModeExtensions;
-	
+	Iterable<ParameterModeExtension> parameterModeExtensions;
+
 	@Inject
-	public void init(final Iterable<ParameterModeExtension> parameterModeExtensions) {
+	public void init(final Iterable<ParameterModeExtension> parameterModeExtensions, final Iterable<ParameterModeExtenderExtension> parameterModeExtenderExtensions) {
 
 		for (final ParameterModeExtension ext : parameterModeExtensions) {
 			if (ext != null) {
@@ -44,6 +48,13 @@ public class ParameterModesRegistry implements IParameterModesRegistry {
 					registerParameterMode(name, proxy);
 				}
 
+			}
+		}
+
+		for (final ParameterModeExtenderExtension ext : parameterModeExtenderExtensions) {
+			if (ext != null) {
+				final ParameterModeExtenderProxy proxy = new ParameterModeExtenderProxy(ext);
+				registerExtender(proxy);
 			}
 		}
 	}
@@ -61,12 +72,19 @@ public class ParameterModesRegistry implements IParameterModesRegistry {
 		}
 	}
 
-	@SuppressWarnings("null")
+	/**
+	 * Register an {@link IPModeCustomiser} with this registry
+	 * 
+	 * @param unit
+	 */
+	public void registerExtender(@NonNull final IParameterModeExtender extender) {
+		extenders.add(extender);
+	}
+
 	@Override
 	@NonNull
 	public Collection<String> getParameterModes() {
-		
-		
+
 		return parameterModes.keySet();
 	}
 
@@ -74,6 +92,11 @@ public class ParameterModesRegistry implements IParameterModesRegistry {
 	@Nullable
 	public IParameterModeCustomiser getCustomiser(final String name) {
 		return parameterModes.get(name);
+	}
+
+	@Override
+	public Collection<IParameterModeExtender> getExtenders() {
+		return extenders;
 	}
 
 }

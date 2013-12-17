@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 /**
  * This is a PeaberryActivationModule to hook in the restricted elements constraints into the optimisation. This in not intended to be registered directly in the MANIFEST.MF file, but installed in a
  * 
- * @link{TransformerActivatorModule}
+ * @link{TransformerActivatorModule
  * 
  * @author Simon Goodall
  * @since 2.0
@@ -33,6 +33,7 @@ public class RestrictedElementsModule extends PeaberryActivationModule {
 
 		bindService(RestrictedElementsConstraintCheckerFactory.class).export();
 		bindService(RestrictedElementsInjectorService.class).export();
+		bindService(RestrictedElementsTransformerFactory.class).export();
 	}
 
 	/**

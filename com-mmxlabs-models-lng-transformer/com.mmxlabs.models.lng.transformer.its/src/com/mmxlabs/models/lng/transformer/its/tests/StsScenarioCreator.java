@@ -6,9 +6,6 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.util.Date;
 
-import com.mmxlabs.models.lng.assignment.AssignmentFactory;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -128,13 +125,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		//final Date postDischargeDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
 		//fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[1], transferPort, postLoadDate, originPort, postDischargeDate);		
 		
-		// complete hack: forcibly assign the cargoes to the vessels
-		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
-
-		ElementAssignment assignment = AssignmentFactory.eINSTANCE.createElementAssignment();
-		assignment.setAssignedObject(loadCargo);
-		assignment.setAssignment(vessels[0]);
-		assignmentModel.getElementAssignments().add(assignment);
+		loadCargo.setAssignment(vessels[0]);
 
 		/*
 		assignment = AssignmentFactory.eINSTANCE.createElementAssignment();

@@ -18,22 +18,21 @@ import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
-import com.mmxlabs.models.lng.assignment.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.fleet.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -90,7 +89,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.
 		 */
 		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
-		final AssignmentModel assignmentModel = rootObject.getPortfolioModel().getAssignmentModel();
 
 		final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
@@ -211,62 +209,59 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
 		final FleetModel fleetModel = rootObject.getFleetModel();
 		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
+		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 		for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
 			vesselAvailabilityMap.put(va.getVessel(), va);
 		}
 
 		// Process initial vessel assignments list
-		if (!assignmentModel.getElementAssignments().isEmpty()) {
-			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(assignmentModel, fleetModel, scenarioFleetModel);
-			for (final CollectedAssignment seq : assignments) {
-				IVessel vessel = null;
-				log.debug("Processing assignment " + seq.getVesselOrClass().getName());
-				if (seq.isSpotVessel()) {
-					final IVesselClass vesselClass = mem.getOptimiserObject(seq.getVesselOrClass(), IVesselClass.class);
+		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel, scenarioFleetModel);
+		for (final CollectedAssignment seq : assignments) {
+			IVessel vessel = null;
+			log.debug("Processing assignment " + seq.getVesselOrClass().getName());
+			if (seq.isSpotVessel()) {
+				final IVesselClass vesselClass = mem.getOptimiserObject(seq.getVesselOrClass(), IVesselClass.class);
 
-					final List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
-					if (!(vesselsOfClass == null || vesselsOfClass.isEmpty())) {
-						// Assign to same spot index if possible
-						int idx = 0;
-						if (vesselsOfClass.size() > seq.getSpotIndex()) {
-							idx = seq.getSpotIndex();
-						}
-						vessel = vesselsOfClass.get(idx);
+				final List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
+				if (!(vesselsOfClass == null || vesselsOfClass.isEmpty())) {
+					// Assign to same spot index if possible
+					int idx = 0;
+					if (vesselsOfClass.size() > seq.getSpotIndex()) {
+						idx = seq.getSpotIndex();
 					}
-				} else {
-					final Vessel seqVessel = (Vessel) seq.getVesselOrClass();
-					vessel = mem.getOptimiserObject(vesselAvailabilityMap.get(seqVessel), IVessel.class);
+					vessel = vesselsOfClass.get(idx);
 				}
-				if (vessel != null) {
-					final IResource resource = vp.getResource(vessel);
-					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-
-					for (final UUIDObject assignedObject : seq.getAssignedObjects()) {
-						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) {
-							continue;
-						}
-						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
-							sequence.add(element);
-						}
-					}
-				} else {
-					log.debug("Vessel is missing: " + seq.getVesselOrClass().getName());
-				}
+			} else {
+				final Vessel seqVessel = (Vessel) seq.getVesselOrClass();
+				vessel = mem.getOptimiserObject(vesselAvailabilityMap.get(seqVessel), IVessel.class);
 			}
-
-			if (shortCargoVessel != null) {
-				final IResource resource = vp.getResource(shortCargoVessel);
+			if (vessel != null) {
+				final IResource resource = vp.getResource(vessel);
 				final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-				for (final ElementAssignment ea : assignmentModel.getElementAssignments()) {
-					if (ea.getAssignment() == null) {
 
-						final UUIDObject assignedObject = ea.getAssignedObject();
-						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) {
-							continue;
-						}
-						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
-							sequence.add(element);
-						}
+				for (final AssignableElement assignedObject : seq.getAssignedObjects()) {
+					if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) {
+						continue;
+					}
+					for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
+						sequence.add(element);
+					}
+				}
+			} else {
+				log.debug("Vessel is missing: " + seq.getVesselOrClass().getName());
+			}
+		}
+
+		if (shortCargoVessel != null) {
+			final IResource resource = vp.getResource(shortCargoVessel);
+			final IModifiableSequence sequence = advice.getModifiableSequence(resource);
+			for (Cargo cargo : cargoModel.getCargoes()) {
+				if (cargo.getAssignment() == null) {
+					if (cargo.getCargoType() != CargoType.FLEET) {
+						continue;
+					}
+					for (final ISequenceElement element : getElements(cargo, psp, mem)) {
+						sequence.add(element);
 					}
 				}
 			}
@@ -282,7 +277,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	/**
 	 * @since 2.0
 	 */
-	protected ISequenceElement[] getElements(final UUIDObject modelObject, final IPortSlotProvider psp, final ModelEntityMap mem) {
+	protected ISequenceElement[] getElements(final AssignableElement modelObject, final IPortSlotProvider psp, final ModelEntityMap mem) {
 		if (modelObject instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) modelObject;
 			final IVesselEventPortSlot eventSlot = mem.getOptimiserObject(event, IVesselEventPortSlot.class);
