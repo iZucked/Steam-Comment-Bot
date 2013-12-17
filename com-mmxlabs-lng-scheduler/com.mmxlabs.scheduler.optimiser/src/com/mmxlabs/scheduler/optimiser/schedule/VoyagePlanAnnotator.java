@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,10 +28,6 @@ import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.PortVisitEventImpl;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityEntry;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl.PortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -41,7 +36,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
