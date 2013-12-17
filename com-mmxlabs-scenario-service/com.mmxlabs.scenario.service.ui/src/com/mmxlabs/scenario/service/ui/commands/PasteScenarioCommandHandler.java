@@ -6,7 +6,9 @@ package com.mmxlabs.scenario.service.ui.commands;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -25,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -78,6 +81,16 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	private boolean pasteLocal(final Clipboard clipboard, final Container container) throws IOException {
 		final Object localData = clipboard.getContents(LocalTransfer.getInstance());
 		final IScenarioService service = container.getScenarioService();
+
+		final Set<String> existingNames = new HashSet<String>();
+		for (final Container c : container.getElements()) {
+			if (c instanceof Folder) {
+				existingNames.add(((Folder) c).getName());
+			} else if (c instanceof ScenarioInstance) {
+				existingNames.add(((ScenarioInstance) c).getName());
+			}
+		}
+
 		if (localData instanceof Iterable) {
 			for (final Object o : (Iterable<?>) localData) {
 				if (o instanceof ScenarioInstance) {
@@ -86,7 +99,16 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 
 					final ScenarioInstance duplicate = service.duplicate(scenarioInstance, container);
 					if (duplicate != null) {
-						duplicate.setName("Copy of " + scenarioInstance.getName());
+
+						final String namePrefix = "Copy of " + scenarioInstance.getName();
+						String newName = namePrefix;
+						int counter = 1;
+						while (existingNames.contains(newName)) {
+							newName = namePrefix + " (" + counter++ + ")";
+						}
+
+						duplicate.setName(newName);
+						existingNames.add(newName);
 					} else {
 						log.error("Unable to paste scenario: " + scenarioInstance.getName(), new RuntimeException());
 					}

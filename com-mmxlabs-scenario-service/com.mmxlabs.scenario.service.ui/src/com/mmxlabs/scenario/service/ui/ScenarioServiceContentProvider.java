@@ -95,6 +95,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		}
 	};
 
+
 	private final class InternalSaveablesProvider extends SaveablesProvider {
 		@Override
 		public Saveable[] getSaveables() {

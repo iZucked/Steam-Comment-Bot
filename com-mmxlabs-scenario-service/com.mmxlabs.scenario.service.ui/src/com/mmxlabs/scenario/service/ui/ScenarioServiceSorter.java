@@ -43,7 +43,7 @@ public class ScenarioServiceSorter extends ViewerSorter {
 				} else if (n2 == null) {
 					return 1;
 				}
-				return n1.compareTo(n2);
+				return n1.toLowerCase().compareTo(n2.toLowerCase());
 			}
 
 			return super.compare(viewer, e1Type, e2Type);
